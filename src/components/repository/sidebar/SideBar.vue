@@ -56,11 +56,7 @@
           :placeholder="getNameVersion"
           v-model="selectedVersion"
         >
-          <option
-            v-for="(version, index) in allVersions"
-            :key="index"
-            size="sm"
-          >
+          <option v-for="(version, index) in allVersions" :key="index" size="sm">
             {{ version.name }}
           </option>
           <div
@@ -604,13 +600,7 @@ export default {
         padding-bottom: $unnnic-spacing-stack-sm;
       }
       &__versions {
-        // font-size: $unnnic-font-size-body-md;
-        // text-decoration: underline;
-
-        // text-align: right;
-        // cursor: pointer;
-        // font-family: $unnnic-font-family-secondary;
-        // color: $unnnic-color-neutral-cloudy;
+        cursor: pointer;
       }
       &__field {
         &__back {
