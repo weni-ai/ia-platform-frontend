@@ -14,6 +14,9 @@ describe('EmailInput.vue', () => {
         max_length: null,
         initialData: '',
       },
+      stubs: {
+        'b-input': true
+      }
     });
   });
 

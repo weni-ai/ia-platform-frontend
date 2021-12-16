@@ -13,6 +13,7 @@ describe('EntitiesList.vue', () => {
   let wrapper;
   let store;
   let getters;
+
   beforeEach(() => {
     const intent = 'health';
     getters = {

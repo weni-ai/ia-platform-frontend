@@ -15,6 +15,9 @@ describe('ChoiceInput.vue', () => {
       propsData: {
         choices: ['En', 'Pt', 'Pt-Br'],
       },
+      stubs: {
+        'b-select': true
+      }
     });
   });
 
