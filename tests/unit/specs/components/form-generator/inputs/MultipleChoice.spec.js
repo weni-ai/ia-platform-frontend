@@ -1,4 +1,3 @@
-
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import MultipleChoice from '@/components/form-generator/inputs/MultipleChoice';
 import Buefy from 'buefy';
@@ -14,6 +13,10 @@ describe('MultipleChoice.vue', () => {
       propsData: {
         choices: ['pt', 'pt-br', 'en'],
       },
+      stubs: {
+        transition: false,
+        'b-taginput': true
+      }
     });
   });
 
