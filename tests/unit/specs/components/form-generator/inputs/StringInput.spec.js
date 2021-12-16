@@ -10,7 +10,11 @@ localVue.use(Buefy);
 describe('StringInput.vue', () => {
   let wrapper;
   beforeEach(() => {
-    wrapper = shallowMount(StringInput);
+    wrapper = shallowMount(StringInput, {
+      stubs: {
+        'b-input': true
+      }
+    });
   });
 
   test('renders correctly', () => {

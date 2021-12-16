@@ -10,7 +10,11 @@ localVue.use(Buefy);
 describe('PasswordInput.vue', () => {
   let wrapper;
   beforeEach(() => {
-    wrapper = shallowMount(PasswordInput);
+    wrapper = shallowMount(PasswordInput, {
+      stubs: {
+        'b-input': true
+      }
+    });
   });
 
   test('renders correctly', () => {

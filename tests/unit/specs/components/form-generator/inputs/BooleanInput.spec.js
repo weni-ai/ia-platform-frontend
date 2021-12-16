@@ -14,6 +14,7 @@ describe('BooleanInput.vue', () => {
       mocks: {
         $t: () => 'some specific text',
       },
+
     });
   });
 
