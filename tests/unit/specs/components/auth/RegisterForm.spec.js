@@ -8,7 +8,7 @@ import Buefy from 'buefy';
 
 const localVue = createLocalVue();
 localVue.use(Buefy);
-
+jest.spyOn(RegisterForm, 'mounted').mockImplementation(() => {})
 describe('RegisterForm.spec.js', () => {
   let wrapper;
   beforeEach(() => {

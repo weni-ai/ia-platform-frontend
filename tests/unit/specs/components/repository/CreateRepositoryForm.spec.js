@@ -8,6 +8,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import CreateRepositoryForm from '@/components/repository/CreateRepository/CreateRepositoryForm';
 import unnic from '@weni/unnnic-system';
 
+jest.spyOn(CreateRepositoryForm, 'mounted').mockImplementation(() => {})
 const localVue = createLocalVue();
 localVue.use(Buefy);
 localVue.use(VueRouter);
@@ -25,6 +26,7 @@ describe('CreateRepositoryForm', () => {
     };
     getters = {
       activeTutorial: jest.fn(() => ''),
+      getOrgSelected: jest.fn(),
     };
     store = new Vuex.Store({
       modules: {
