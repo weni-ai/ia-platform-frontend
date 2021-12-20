@@ -9,6 +9,7 @@ import Buefy from 'buefy';
 const localVue = createLocalVue();
 localVue.use(Buefy);
 
+jest.spyOn(ChangePasswordForm, 'mounted').mockImplementation(() => {})
 describe('ChangePasswordForm.vue', () => {
   let wrapper;
   beforeEach(() => {

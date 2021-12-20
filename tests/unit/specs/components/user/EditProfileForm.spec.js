@@ -6,6 +6,7 @@ import store from '@/store';
 import EditProfileForm from '@/components/user/EditProfileForm';
 import Buefy from 'buefy';
 
+jest.spyOn(EditProfileForm, 'mounted').mockImplementation(() => {})
 const localVue = createLocalVue();
 localVue.use(Buefy);
 
