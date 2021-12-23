@@ -10,6 +10,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(Buefy);
 
+jest.spyOn(SideBar, 'mounted').mockImplementation(() => {})
 const currentRepository = {
   name: 'bothub',
   owner__nickname: 'weni',
