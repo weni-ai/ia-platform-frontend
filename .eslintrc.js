@@ -7,6 +7,9 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint'
   },
+  "globals": {
+    "runtimeVariables": true
+  },
   plugins: ['import'],
   settings: {
     'import/resolver': {

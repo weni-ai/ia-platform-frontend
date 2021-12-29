@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/browser';
 import store from '../store';
 
 
+
 export default {
   get $http() {
     const client = axios.create({
