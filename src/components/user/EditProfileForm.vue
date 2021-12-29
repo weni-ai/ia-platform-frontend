@@ -48,6 +48,7 @@ import FormGenerator from '@/components/form-generator/FormGenerator';
 import Loading from '@/components/shared/Loading';
 import ChangePasswordForm from '@/components/user/ChangePasswordForm';
 
+
 const components = {
   FormGenerator,
   Loading,
@@ -84,14 +85,14 @@ export default {
       return { ...this.data, ...this.groupData };
     },
     filteredSchema() {
-      if (config.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')) return this.formSchema;
+      if (runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')) return this.formSchema;
 
       if (!this.formSchema) return {};
       const { biography, ...schema } = this.formSchema;
       return schema;
     },
     groupSchema() {
-      if (!this.formSchema || config.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')) return {};
+      if (!this.formSchema || runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')) return {};
       const { biography } = this.formSchema;
       return {
         biography,

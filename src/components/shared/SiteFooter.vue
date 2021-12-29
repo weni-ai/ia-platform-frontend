@@ -50,12 +50,11 @@
 
 <script>
 import I18n from '@/utils/plugins/i18n';
-
 export default {
   name: 'SiteFooter',
   data() {
     return {
-      version: config.get('VUE_APP_VERSION'),
+      version: runtimeVariables.get('VUE_APP_VERSION'),
     };
   },
   components: {

@@ -87,7 +87,7 @@ export default {
   watch: {
     authenticated() {
       this.$router.push({
-        name: this.authenticated && config.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED') ? 'payment-options' : 'home',
+        name: this.authenticated && runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED') ? 'payment-options' : 'home',
       });
     },
   },

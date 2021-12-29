@@ -46,6 +46,7 @@
 /* eslint-disable global-require */
 import { mapGetters, mapActions } from 'vuex';
 
+
 const info = require('../assets/news/info.json');
 
 export default {
@@ -70,7 +71,7 @@ export default {
       'authenticated',
     ]),
     currentVersion() {
-      return config.get('VUE_APP_VERSION');
+      return runtimeVariables.get('VUE_APP_VERSION');
     },
     shouldShow() {
       return this.authenticated
@@ -104,7 +105,7 @@ export default {
     onClose() {
       this.active = false;
       this.setLastVersionSeen(this.currentVersion);
-      // if (config.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
+      // if (runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
       //   this.setTutorialMenuActive();
       // }
     },

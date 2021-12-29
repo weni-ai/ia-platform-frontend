@@ -26,10 +26,10 @@ Vue.config.productionTip = false;
 
 applyFilters(Vue);
 
-if ((config.get('VUE_APP_BOTHUB_WEBAPP_USE_SENTRY'))
-&& config.get('VUE_APP_BOTHUB_WEBAPP_SENTRY')) {
+if ((runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_USE_SENTRY'))
+&& runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_SENTRY')) {
   Sentry.init({
-    dsn: config.get('VUE_APP_BOTHUB_WEBAPP_SENTRY'),
+    dsn: runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_SENTRY'),
     integrations: [new VueIntegration({ Vue, attachProps: true })],
     environment: process.env.NODE_ENV,
     logErrors: true,

@@ -25,7 +25,7 @@ export const languageListToDict = list => (list.reduce((current, lang) => {
   return current;
 }, {}));
 
-export const LANGUAGES = languageListToDict((config.get('VUE_APP_SUPPORTED_LANGUAGES')).split('|')
+export const LANGUAGES = languageListToDict((runtimeVariables.get('VUE_APP_SUPPORTED_LANGUAGES')).split('|')
   .map(v => v.split(':')[0]));
 
 export const ROLE_NOT_SETTED = 0;

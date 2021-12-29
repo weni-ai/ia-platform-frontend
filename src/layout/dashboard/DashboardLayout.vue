@@ -25,6 +25,7 @@ import { mapActions, mapGetters } from 'vuex';
 import Tour from '@/components/Tour';
 import Analytics from '@/utils/plugins/analytics';
 
+
 export default {
   name: 'DashboardLayout',
   components: {
@@ -62,7 +63,7 @@ export default {
       return Object.keys(this.getRequirements.languages_warnings).length;
     },
     tutorialEnabled() {
-      return config.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED');
+      return runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED');
     },
     categoryIcon() {
       if (!this.getCurrentRepository
@@ -89,7 +90,7 @@ export default {
       'resetRepositoryVersion'
     ]),
     openBeginnerTutorialModal() {
-      if (config.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
+      if (runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
         this.setTutorialMenuActive();
         Analytics.send({ category: 'Tutorial', event: 'tutorial open event' });
       }

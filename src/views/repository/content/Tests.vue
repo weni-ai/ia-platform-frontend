@@ -119,7 +119,7 @@ export default {
         window.WebChat.send(message);
       } else {
         const script = document.createElement('script');
-        const flowsUUID = config.get('VUE_APP_QA_FLOW_CHANNEL');
+        const flowsUUID = runtimeVariables.get('VUE_APP_QA_FLOW_CHANNEL');
         script.setAttribute('src', 'https://storage.googleapis.com/push-webchat/wwc-latest.js');
         script.setAttribute('id', 'removeScript');
         document.body.appendChild(script);
