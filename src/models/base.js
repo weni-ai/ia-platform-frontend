@@ -6,7 +6,7 @@ class ModelBase extends Model {
     return super.getRequest(
       {
         ...config,
-        baseURL: process.env.VUE_APP_API_BASE_URL,
+        baseURL: config.get('VUE_APP_API_BASE_URL'),
         headers: store.getters.authenticated
           ? { Authorization: `${store.getters.authToken}` }
           : {},
@@ -18,7 +18,7 @@ class ModelBase extends Model {
     return super.getRequest(
       {
         ...config,
-        baseURL: process.env.VUE_APP_API_BASE_URL,
+        baseURL: config.get('VUE_APP_API_BASE_URL'),
         headers: store.getters.authenticated
           ? { Authorization: `Translator ${token}` }
           : {},

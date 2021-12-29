@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     profileURL() {
-      return `${process.env.VUE_APP_BOTHUB_WEBAPP_BASE_URL}
+      return `${config.get('VUE_APP_BOTHUB_WEBAPP_BASE_URL')}
       ${this.profile.nickname}/`;
     },
   },

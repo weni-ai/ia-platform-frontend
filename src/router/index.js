@@ -242,7 +242,7 @@ const router = new Router({
           name: 'repository-result',
           component: RepositoryResult,
         },
-        ...((process.env.VUE_APP_VERSION_ENABLED)
+        ...((config.get('VUE_APP_VERSION_ENABLED'))
           ? [{
             path: ':ownerNickname/:slug/versions/',
             name: 'repository-versions',
@@ -250,7 +250,7 @@ const router = new Router({
           }] : []),
       ],
     },
-    ...(process.env.VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED
+    ...(config.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')
       ? [{
         path: '/payment-options',
         name: 'payment-options',

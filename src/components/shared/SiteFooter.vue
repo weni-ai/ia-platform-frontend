@@ -55,7 +55,7 @@ export default {
   name: 'SiteFooter',
   data() {
     return {
-      version: process.env.VUE_APP_VERSION,
+      version: config.get('VUE_APP_VERSION'),
     };
   },
   components: {

@@ -70,7 +70,7 @@ export default {
       'authenticated',
     ]),
     currentVersion() {
-      return process.env.VUE_APP_VERSION;
+      return config.get('VUE_APP_VERSION');
     },
     shouldShow() {
       return this.authenticated
@@ -104,7 +104,7 @@ export default {
     onClose() {
       this.active = false;
       this.setLastVersionSeen(this.currentVersion);
-      // if (process.env.VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED) {
+      // if (config.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
       //   this.setTutorialMenuActive();
       // }
     },

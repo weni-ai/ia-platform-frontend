@@ -168,7 +168,7 @@ export default {
         && this.errors.non_field_errors.map(text => ({ text, class: 'error' }))) || [];
     },
     helpArticleId() {
-      return process.env.VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_ALGORITHM_ARTICLE_ID;
+      return config.get('VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_ALGORITHM_ARTICLE_ID');
     },
   },
   mounted() {

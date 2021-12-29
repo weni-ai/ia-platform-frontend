@@ -29,6 +29,6 @@ export default {
     return state.repositoryIsTraining;
   },
   versionEnabled() {
-    return process.env.VUE_APP_VERSION_ENABLED;
+    return config.get('VUE_APP_VERSION_ENABLED');
   },
 };

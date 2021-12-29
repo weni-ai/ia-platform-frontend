@@ -62,7 +62,7 @@ export default {
       return Object.keys(this.getRequirements.languages_warnings).length;
     },
     tutorialEnabled() {
-      return process.env.VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED;
+      return config.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED');
     },
     categoryIcon() {
       if (!this.getCurrentRepository
@@ -89,7 +89,7 @@ export default {
       'resetRepositoryVersion'
     ]),
     openBeginnerTutorialModal() {
-      if (process.env.VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED) {
+      if (config.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
         this.setTutorialMenuActive();
         Analytics.send({ category: 'Tutorial', event: 'tutorial open event' });
       }
