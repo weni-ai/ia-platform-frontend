@@ -5,10 +5,11 @@ import Buefy from 'buefy';
 Vue.use(Buefy);
 Vue.config.productionTip = false;
 
-runtimeVariables.get('VUE_APP_SUPPORTED_LANGUAGES') = 'en|pt';
-runtimeVariables.get('VUE_APP_VERSION') = '0.0.0';
-runtimeVariables.get('VUE_APP_BOTHUB_NLP_BASE_URL') = 'http://localhost:2657/';
-runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_BASE_URL') = 'http://localhost:8080/';
+
+runtimeVariables.VUE_APP_SUPPORTED_LANGUAGES = 'en|pt'
+runtimeVariables.VUE_APP_VERSION = '0.0.0'
+runtimeVariables.VUE_APP_BOTHUB_NLP_BASE_URL = 'http://localhost:2657/'
+runtimeVariables.VUE_APP_BOTHUB_WEBAPP_BASE_URL = 'http://localhost:8080/'
 
 MockDate.set(1534341842684);
 
