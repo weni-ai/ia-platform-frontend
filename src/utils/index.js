@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import VERBOSE_LANGUAGES from './verbose_languages';
+import runtimeVariables from '../../public/config';
 
 export function generateTemporaryId() {
   return uuidv4();
@@ -24,6 +25,7 @@ export const languageListToDict = list => (list.reduce((current, lang) => {
   Object.assign(current, { [lang]: VERBOSE_LANGUAGES[lang] || lang });
   return current;
 }, {}));
+
 
 export const LANGUAGES = languageListToDict((runtimeVariables.get('VUE_APP_SUPPORTED_LANGUAGES')).split('|')
   .map(v => v.split(':')[0]));

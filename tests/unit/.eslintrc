@@ -3,6 +3,6 @@
     "jest": true
   },
   "globals": {
-    "runtimeVariables": "readonly" 
+    "runtimeVariables": true
   }
 }

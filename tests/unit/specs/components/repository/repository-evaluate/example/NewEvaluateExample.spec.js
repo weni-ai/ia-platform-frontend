@@ -1,10 +1,9 @@
+
 /* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-
 import Vuex from 'vuex';
-
 import NewEvaluateExample from '@/components/repository/repository-evaluate/example/NewEvaluateExample';
 import getters from '@/store/repository/getters';
 import actions from '@/store/evaluate-example/actions';
@@ -12,8 +11,8 @@ import Buefy from 'buefy';
 
 const localVue = createLocalVue();
 localVue.use(Buefy);
-
 localVue.use(Vuex);
+
 
 describe('NewEvaluateExample.vue', () => {
   let wrapper;
@@ -26,7 +25,6 @@ describe('NewEvaluateExample.vue', () => {
         intents_list: ['affirm', 'cuisine', 'greet'],
       },
     };
-
     store = new Vuex.Store({
       modules: {
         Repository: {
