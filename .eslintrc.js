@@ -71,5 +71,10 @@ module.exports = {
         jest: true
       }
     }
-  ]
+  ],
+  moduleFileExtensions: [
+    'js',
+    'json',
+    'vue',
+  ],
 };
