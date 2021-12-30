@@ -3,6 +3,7 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable func-names */
+import runtimeVariables from '../../../public/config';
 
 export default {
   addHotjar() {

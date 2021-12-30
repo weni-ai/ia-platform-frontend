@@ -1,5 +1,7 @@
 /* eslint-disable global-require */
 /* eslint-disable func-names */
+import runtimeVariables from '../../../public/config';
+
 export default {
   addLighthouse() {
     if (window.hdlh || !runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_KEY')) return;
