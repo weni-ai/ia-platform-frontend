@@ -52,6 +52,7 @@ module.exports = {
     'import/extensions': [
       'error',
       'always',
+      'ignorePackages',
       {
         js: 'never',
         vue: 'never'

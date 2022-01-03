@@ -1,5 +1,5 @@
 import axios from 'axios';
-import runtimeVariables from '../../public/config.js';
+import runtimeVariables from '../../public/config';
 
 export default {
   $http(token) {

@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import VERBOSE_LANGUAGES from './verbose_languages';
-import runtimeVariables from '../../public/config.js';
+import runtimeVariables from '../../public/config';
 
 export function generateTemporaryId() {
   return uuidv4();

@@ -1,4 +1,4 @@
-import runtimeVariables from '../../../public/config.js';
+import runtimeVariables from '../../../public/config';
 
 export default {
   relatedUuid(state) {
