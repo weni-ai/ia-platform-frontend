@@ -36,7 +36,7 @@ import DashboardExternalLayout from '@/layout/dashboard/DashboardExternalLayout'
 import PaymentOptions from '@/views/payment/PaymentOptions';
 import PaymentInfo from '@/views/payment/PaymentInfo';
 import store from '../store';
-import runtimeVariables from '../../public/config';
+import runtimeVariables from '../../public/config.js';
 
 Vue.use(Router);
 

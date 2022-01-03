@@ -1,4 +1,4 @@
-import runtimeVariables from '../../../public/config';
+import runtimeVariables from '../../../public/config.js';
 
 export default {
   addStripe: (onFinish) => {

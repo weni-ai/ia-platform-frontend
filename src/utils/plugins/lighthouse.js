@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 /* eslint-disable func-names */
-import runtimeVariables from '../../../public/config';
+import runtimeVariables from '../../../public/config.js';
 
 export default {
   addLighthouse() {
