@@ -7,8 +7,8 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint'
   },
-  "globals": {
-    "runtimeVariables": true
+  globals: {
+    runtimeVariables: true
   },
   plugins: ['import'],
   settings: {
@@ -62,9 +62,6 @@ module.exports = {
       {
         optionalDependencies: ['test/unit/index.js']
       }
-    ],
-    'moduleFileExtensions': [
-      '.vue', '.json', '.js'
     ],
   },
   overrides: [

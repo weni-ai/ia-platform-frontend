@@ -13,9 +13,6 @@
         "js": "never",
         "vue": "never"
       }
-    ],
-    "moduleFileExtensions": [
-      ".vue", ".json", ".js"
     ]
   }
 }
