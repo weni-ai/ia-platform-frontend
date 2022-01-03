@@ -5,15 +5,14 @@
   "globals": {
     "runtimeVariables": true
   },
-  "import/extensions": [
-    "error",
-    "always",
-    {
-      "ignorePackages": true
-    },
-    {
-      "js": "never",
-      "vue": "never"
-    }
-  ]
+  "rules": {
+    "import/extensions": [
+      "error",
+      "always",
+      {
+        "js": "never",
+        "vue": "never"
+      }
+    ]
+  }
 }
