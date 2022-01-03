@@ -50,6 +50,7 @@
 
 <script>
 import I18n from '@/utils/plugins/i18n';
+
 export default {
   name: 'SiteFooter',
   data() {
