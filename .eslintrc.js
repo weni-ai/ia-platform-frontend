@@ -62,7 +62,10 @@ module.exports = {
       {
         optionalDependencies: ['test/unit/index.js']
       }
-    ]
+    ],
+    'moduleFileExtensions': [
+      '.vue', '.json', '.js'
+    ],
   },
   overrides: [
     {
