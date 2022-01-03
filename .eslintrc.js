@@ -53,9 +53,6 @@ module.exports = {
       'error',
       'always',
       {
-        'ignorePackages': true
-      },
-      {
         js: 'never',
         vue: 'never'
       }
