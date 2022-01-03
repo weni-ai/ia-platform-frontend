@@ -72,9 +72,4 @@ module.exports = {
       }
     }
   ],
-  moduleFileExtensions: [
-    'js',
-    'json',
-    'vue',
-  ],
 };
