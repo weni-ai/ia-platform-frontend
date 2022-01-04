@@ -66,3 +66,5 @@ COPY docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["nginx", "-g", "daemon off;"]
+
+COPY config.js.tmpl /usr/share/nginx/html/bothub-webapp/

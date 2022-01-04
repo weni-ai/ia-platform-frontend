@@ -1,11 +1,13 @@
 /* eslint-disable global-require */
 /* eslint-disable func-names */
+import runtimeVariables from '../../../public/config';
+
 export default {
   addLighthouse() {
-    if (window.hdlh || !process.env.VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_KEY) return;
+    if (window.hdlh || !runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_KEY')) return;
     const img = require('../../assets/imgs/mascot.svg');
     window.hdlh = {
-      widget_key: process.env.VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_KEY,
+      widget_key: runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_KEY'),
       primary_color: '#2BBFAC',
       logo: img,
       brand: 'BotHub',

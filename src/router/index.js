@@ -36,6 +36,7 @@ import DashboardExternalLayout from '@/layout/dashboard/DashboardExternalLayout'
 import PaymentOptions from '@/views/payment/PaymentOptions';
 import PaymentInfo from '@/views/payment/PaymentInfo';
 import store from '../store';
+import runtimeVariables from '../../public/config';
 
 Vue.use(Router);
 
@@ -242,7 +243,7 @@ const router = new Router({
           name: 'repository-result',
           component: RepositoryResult,
         },
-        ...((process.env.VUE_APP_VERSION_ENABLED)
+        ...((runtimeVariables.get('VUE_APP_VERSION_ENABLED'))
           ? [{
             path: ':ownerNickname/:slug/versions/',
             name: 'repository-versions',
@@ -250,7 +251,7 @@ const router = new Router({
           }] : []),
       ],
     },
-    ...(process.env.VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED
+    ...(runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')
       ? [{
         path: '/payment-options',
         name: 'payment-options',

@@ -1,9 +1,10 @@
 import axios from 'axios';
+import runtimeVariables from '../../public/config';
 
 export default {
   $http(token) {
     return axios.create({
-      baseURL: process.env.VUE_APP_API_BASE_URL,
+      baseURL: runtimeVariables.get('VUE_APP_API_BASE_URL'),
       headers: {
         ...(token
           ? { Authorization: `Translator ${token}` } : {}),

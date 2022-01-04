@@ -1,12 +1,13 @@
 import { Model } from 'vue-mc';
 import store from '../store';
+import runtimeVariables from '../../public/config';
 
 class ModelBase extends Model {
   getRequest(config) {
     return super.getRequest(
       {
         ...config,
-        baseURL: process.env.VUE_APP_API_BASE_URL,
+        baseURL: runtimeVariables.get('VUE_APP_API_BASE_URL'),
         headers: store.getters.authenticated
           ? { Authorization: `${store.getters.authToken}` }
           : {},
@@ -18,7 +19,7 @@ class ModelBase extends Model {
     return super.getRequest(
       {
         ...config,
-        baseURL: process.env.VUE_APP_API_BASE_URL,
+        baseURL: runtimeVariables.get('VUE_APP_API_BASE_URL'),
         headers: store.getters.authenticated
           ? { Authorization: `Translator ${token}` }
           : {},

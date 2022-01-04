@@ -1,3 +1,5 @@
+import runtimeVariables from '../../../public/config';
+
 export default {
   relatedUuid(state) {
     return state.relatedUuid;
@@ -29,6 +31,6 @@ export default {
     return state.repositoryIsTraining;
   },
   versionEnabled() {
-    return process.env.VUE_APP_VERSION_ENABLED;
+    return runtimeVariables.get('VUE_APP_VERSION_ENABLED');
   },
 };
