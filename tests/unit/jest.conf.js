@@ -24,6 +24,8 @@ module.exports = {
     'src/**/*.js',
     'src/**/*.vue',
     '!public/*.js',
+    '!**/public/*.js',
+    '!**/**/public/*.js',
     '!src/main.js',
     '!src/App.vue',
     '!src/api/**',
