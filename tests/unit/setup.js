@@ -18,6 +18,7 @@ const runtimeVariables = (() => ({
 
 }))();
 
+jest.mock('../../public/config.js', () => jest.fn());
 
 MockDate.set(1534341842684);
 
