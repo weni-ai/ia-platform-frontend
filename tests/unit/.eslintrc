@@ -6,6 +6,7 @@
   "globals": { 
   },
   "settings":{
+    "moduleFileExtensions": [".js", ".jsx", ".json", ".vue"],
     "import/resolver": {
       "alias": {
         "map": [
