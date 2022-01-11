@@ -4,7 +4,6 @@ const { defaults } = require('jest-conf');
 module.exports = {
   rootDir: path.resolve(__dirname, '../../'),
   moduleFileExtensions: [
-    ...defaults.moduleFileExtensions,
     'js',
     'json',
     'vue',
