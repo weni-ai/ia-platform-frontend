@@ -4,26 +4,26 @@
     "jasmine": true
   },
   "globals": { 
-  },
-  "settings":{
-    "moduleFileExtensions": [".js", ".jsx", ".json", ".vue"],
-    "import/resolver": {
-      "alias": {
-        "map": [
-          ["@", "./src"] 
-        ],
-        "extensions": [".vue", ".json", ".js"]
-      }
-    }
-  },
-  "rules":{
-    "import/extensions": [
-      "error",
-      "always",
-      {
-        "js": "never",
-        "vue": "never"
-      }
-    ]
   }
+  // "settings":{
+  //   "moduleFileExtensions": [".js", ".jsx", ".json", ".vue"],
+  //   "import/resolver": {
+  //     "alias": {
+  //       "map": [
+  //         ["@", "./src"] 
+  //       ],
+  //       "extensions": [".vue", ".json", ".js"]
+  //     }
+  //   }
+  // },
+  // "rules":{
+  //   "import/extensions": [
+  //     "error",
+  //     "always",
+  //     {
+  //       "js": "never",
+  //       "vue": "never"
+  //     }
+  //   ]
+  // }
 }
