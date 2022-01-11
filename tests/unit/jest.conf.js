@@ -4,6 +4,7 @@ const { defaults } = require('jest-conf');
 module.exports = {
   rootDir: path.resolve(__dirname, '../../'),
   moduleFileExtensions: [
+    ...defaults.moduleFileExtensions,
     'js',
     'json',
     'vue',
@@ -22,6 +23,7 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.js',
     'src/**/*.vue',
+    'public/*.js',
     '!src/main.js',
     '!src/App.vue',
     '!src/api/**',
