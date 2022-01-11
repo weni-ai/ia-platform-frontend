@@ -24,6 +24,7 @@ import CustomIcon from '@/components/shared/CustomIcon';
 import { mapActions, mapGetters } from 'vuex';
 import Tour from '@/components/Tour';
 import Analytics from '@/utils/plugins/analytics';
+import runtimeVariables from '../../../public/config';
 
 
 export default {

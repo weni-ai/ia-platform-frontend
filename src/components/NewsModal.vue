@@ -45,6 +45,7 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import { mapGetters, mapActions } from 'vuex';
+import runtimeVariables from '../../public/config';
 
 
 const info = require('../assets/news/info.json');

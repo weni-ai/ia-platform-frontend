@@ -19,7 +19,10 @@ describe('RepositoryCard.vue', () => {
       propsData: {
         authorizationUuid: '8511fd26-a3bc-4f74-9af1-176abca5401d',
         defaultLanguageField: 'en',
-
+      },
+      stubs: {
+        LanguageSelect: true,
+        HighlightedCode: true,
       },
     });
   });
