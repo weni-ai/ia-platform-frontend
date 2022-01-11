@@ -4,5 +4,15 @@
     "jasmine": true
   },
   "globals": { 
+  },
+  "settings":{
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["@", "./src"] 
+        ],
+        "extensions": [".vue", ".json", ".js"]
+      }
+    }
   }
 }
