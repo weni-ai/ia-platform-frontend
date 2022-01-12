@@ -6,6 +6,7 @@ Vue.use(Buefy);
 
 Vue.config.productionTip = false;
 
+
 MockDate.set(1534341842684);
 
 window.alert = () => {};

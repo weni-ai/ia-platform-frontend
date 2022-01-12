@@ -43,6 +43,7 @@
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import RepositoryBase from '../Base';
 import { mapActions, mapGetters } from 'vuex';
+import runtimeVariables from '../../../../public/config';
 
 export default {
   name: 'RepositoryContentTests',

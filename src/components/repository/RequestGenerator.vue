@@ -34,6 +34,7 @@
 <script>
 import LanguageSelect from '@/components/inputs/LanguageSelect';
 import HighlightedCode from '@/components/shared/HighlightedCode';
+import runtimeVariables from '../../../public/config';
 import { LANGUAGES } from '@/utils';
 
 

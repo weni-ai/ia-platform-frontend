@@ -64,6 +64,7 @@ import TextInput from './inputs/TextInput';
 import EmailInput from './inputs/EmailInput';
 import PasswordInput from './inputs/PasswordInput';
 import ImageInput from './inputs/ImageInput';
+import runtimeVariables from '../../../public/config';
 
 
 const relatedInputComponent = {
@@ -149,7 +150,6 @@ export default {
           const shouldShowSettings = this.settings && style && typeof style.only_settings === 'boolean' && style.only_settings;
 
           if (!shouldShowSettings && shouldHide) return false;
-
           return {
             type,
             name,

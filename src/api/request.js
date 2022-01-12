@@ -3,8 +3,8 @@ import * as Sentry from '@sentry/browser';
 import store from '../store';
 import runtimeVariables from '../../public/config';
 
-
 export default {
+
   get $http() {
     const client = axios.create({
       baseURL: runtimeVariables.get('VUE_APP_API_BASE_URL'),
