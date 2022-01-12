@@ -1,7 +1,6 @@
 
 /* eslint-disable import/first */
 jest.mock('@/api/request');
-jest.mock('../../../../../../../public/config.js', () => jest.fn());
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
