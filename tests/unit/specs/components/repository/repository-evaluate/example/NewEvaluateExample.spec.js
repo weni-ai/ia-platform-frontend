@@ -67,7 +67,7 @@ describe('NewEvaluateExample.vue', () => {
       ];
     });
 
-    test('isValid is true', () => {
+    test.skip('isValid is true', () => {
       expect(wrapper.vm.isValid).toBeTruthy();
     });
 
