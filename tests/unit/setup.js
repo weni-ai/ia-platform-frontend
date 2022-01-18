@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import MockDate from 'mockdate';
 import Buefy from 'buefy';
-import runtimeVariables from '../../public/config';
 
 Vue.use(Buefy);
 
