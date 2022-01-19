@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import runtimeVariables from '../../../public/config';
 
 export default {
   name: 'UserProfile',

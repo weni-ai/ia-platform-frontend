@@ -1,4 +1,3 @@
-import runtimeVariables from '../../../public/config';
 
 export default {
   addStripe: (onFinish) => {

@@ -61,7 +61,6 @@ import Analytics from '@/utils/plugins/analytics';
 import FormGenerator from '@/components/form-generator/FormGenerator';
 import Loading from '@/components/shared/Loading';
 import BoardingLayout from '@/components/user/BoardingLayout';
-import runtimeVariables from '../../../public/config';
 
 const components = {
   FormGenerator,

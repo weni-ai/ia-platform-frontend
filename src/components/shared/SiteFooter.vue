@@ -50,7 +50,6 @@
 
 <script>
 import I18n from '@/utils/plugins/i18n';
-import runtimeVariables from '../../../public/config';
 
 export default {
   name: 'SiteFooter',
