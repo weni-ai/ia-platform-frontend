@@ -3,6 +3,7 @@ module.exports = {
   collectCoverage: true,
   coverageReporters: ['lcov', 'text-summary'],
   coverageDirectory: '<rootDir>/tests/unit/coverage',
+  setupFilesAfterEnv: ['<rootDir>/tests/unit/setup'],
   collectCoverageFrom: [
     'src/**/*.js',
     'src/**/*.vue',

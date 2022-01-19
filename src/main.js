@@ -13,7 +13,7 @@ import i18n from './utils/plugins/i18n';
 import '@mdi/font/css/materialdesignicons.css';
 import hljs from 'highlight.js';
 import VueHighlightJS from 'vue-highlightjs';
-// import runtimeVariables from '../public/config';
+
 
 Vue.use(Buefy);
 Vue.use(VueMoment);
