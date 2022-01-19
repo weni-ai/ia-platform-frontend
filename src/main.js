@@ -18,7 +18,7 @@ import VueHighlightJS from 'vue-highlightjs';
 Vue.use(Buefy);
 Vue.use(VueMoment);
 Vue.use(API);
-Vue.use(VueTour); z
+Vue.use(VueTour);
 Vue.use(hljs.vuePlugin);
 Vue.use(VueHighlightJS);
 
