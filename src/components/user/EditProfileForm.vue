@@ -47,7 +47,6 @@ import { mapActions, mapGetters } from 'vuex';
 import FormGenerator from '@/components/form-generator/FormGenerator';
 import Loading from '@/components/shared/Loading';
 import ChangePasswordForm from '@/components/user/ChangePasswordForm';
-import runtimeVariables from '../../../public/config';
 
 
 const components = {

@@ -1,6 +1,5 @@
 import { Model } from 'vue-mc';
 import store from '../store';
-import runtimeVariables from '../../public/config';
 
 class ModelBase extends Model {
   getRequest(config) {

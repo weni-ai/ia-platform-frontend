@@ -1,7 +1,6 @@
 import axios from 'axios';
 import * as Sentry from '@sentry/browser';
 import store from '../store';
-import runtimeVariables from '../../public/config';
 
 export default {
 

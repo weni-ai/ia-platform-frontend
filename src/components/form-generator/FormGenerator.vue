@@ -64,7 +64,6 @@ import TextInput from './inputs/TextInput';
 import EmailInput from './inputs/EmailInput';
 import PasswordInput from './inputs/PasswordInput';
 import ImageInput from './inputs/ImageInput';
-import runtimeVariables from '../../../public/config';
 
 
 const relatedInputComponent = {
