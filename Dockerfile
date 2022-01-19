@@ -54,9 +54,7 @@ ENV VUE_APP_HELPHERO_ID "${VUE_APP_HELPHERO_ID}"
 ENV VUE_APP_HELPHERO_TOUR "${VUE_APP_HELPHERO_TOUR}"
 ENV VUE_APP_QA_FLOW_CHANNEL "${VUE_APP_QA_FLOW_CHANNEL}"
 
-RUN echo "" > public/config.js \
-  && yarn build \
-  && rm public/config.js
+RUN yarn build
 
 FROM nginx
 
@@ -70,3 +68,4 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
 
 COPY config.js.tmpl /usr/share/nginx/html/bothub-webapp/
+
