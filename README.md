@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/Ilhasoft/ia-platform-frontend/main/.github/images/Weni Logo.png" width="240" height="60" alt="Weni Logo" />
+    <img src="https://raw.githubusercontent.com/Ilhasoft/ia-platform-frontend/main/.github/images/logo.svg" width="240" height="60" alt="Weni Logo" />
 </p>
 
 <p>
