@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/5360835/65427083-1af35900-de01-11e9-86ef-59f1eee79a68.png" width="240" height="60" alt="Bothub" />
+    <img src="https://raw.githubusercontent.com/Ilhasoft/ia-platform-frontend/main/.github/images/Weni Logo.png" width="240" height="60" alt="Weni Logo" />
 </p>
 
 <p>
