@@ -23,7 +23,7 @@ These collaboration methods + integration options make it easier for the user to
 # Weni - Artificial Intelligence
 
 
-![bothub IMG](https://i.imgur.com/CJU75RB.png)
+![bothub IMG](https://raw.githubusercontent.com/Ilhasoft/ia-platform-frontend/main/.github/images/weni-ai.png)
 
 ## What's here
 
