@@ -66,7 +66,7 @@ To start running bothub, use these commands:
 
 ### Environment Variables
 
-You can set environment variables in your OS or write on .env file.
+You can set environment variables in your OS or write on config.js.tmpl file.
 
 | Variable | Type | Default | Description |
 |--|--|--|--|
