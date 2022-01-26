@@ -3,9 +3,9 @@
 </p>
 
 <p>
-BotHub is an open platform for predicting, training and sharing NLU (Natural Language Understanding) datasets in multiple languages in a cooperative way.
+Weni - Artificial Intelligence is an open platform for predicting, training and sharing NLU (Natural Language Understanding) datasets in multiple languages in a cooperative way.
 
-With BotHub, you can not only create NLP datasets, but you can also access, use and evolve datasets that were already built by other users in the community!
+With Weni - Artificial Intelligence, you can not only create NLP datasets, but you can also access, use and evolve datasets that were already built by other users in the community!
 
 These collaboration methods + integration options make it easier for the user to apply NLU concepts in different platforms and contexts.
 </p>
@@ -20,14 +20,14 @@ These collaboration methods + integration options make it easier for the user to
     <img alt="License" src="https://img.shields.io/badge/license-AGLP%203.0-yellow"></a>
 </p>
 
-# Bothub Webapp
+# Weni - Artificial Intelligence
 
 
 ![bothub IMG](https://i.imgur.com/CJU75RB.png)
 
 ## What's here
 
-This repo is the Front-end repo for all Bothub-related projects. It hosts the documentation and other misc. resources for Bothub. Code for other projects, like the [Engine](https://github.com/bothub-it/bothub-engine), [NLP Worker](https://github.com/bothub-it/bothub-nlp), [NLP API](https://github.com/bothub-it/bothub-nlp-api) and [NLP On Demand](https://github.com/bothub-it/bothub-nlp-on-demand), are hosted in other repositories.
+This repo is the Front-end repo for all Weni - Artificial Intelligence-related projects. It hosts the documentation and other misc. resources for  Weni - Artificial Intelligence. Code for other projects, like the [Engine](https://github.com/bothub-it/bothub-engine), [NLP Worker](https://github.com/bothub-it/bothub-nlp), [NLP API](https://github.com/bothub-it/bothub-nlp-api) and [NLP On Demand](https://github.com/bothub-it/bothub-nlp-on-demand), are hosted in other repositories.
 
 
 ##  Contents
@@ -46,11 +46,11 @@ All documentation available on [docs.bothub.it](https://docs.bothub.it/).
 ## Get Started
 
 First, clone this repository
- >git clone `git@github.com:bothub-it/bothub-webapp.git`
+ >git clone `git@github.com:Ilhasoft/ia-platform-frontend.git`
 
 ## Development Workflow
 
-To start running bothub, use these commands:
+To start running Weni - Artificial Intelligence, use these commands:
 
 > Use ```yarn``` commands to ```install```, ```start```, ```build```, ```lint``` and ```test-watch```.
 
