@@ -7,6 +7,9 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint'
   },
+  globals: {
+    runtimeVariables: true
+  },
   plugins: ['import'],
   settings: {
     'import/resolver': {
@@ -41,6 +44,7 @@ module.exports = {
     'object-curly-newline': 'off',
     'no-plusplus': 0,
     'comma-dangle': 'off',
+    'linebreak-style': 0,
     semi: 'off',
     camelcase: 'off',
     'no-param-reassign': 'off',
@@ -58,7 +62,7 @@ module.exports = {
       {
         optionalDependencies: ['test/unit/index.js']
       }
-    ]
+    ],
   },
   overrides: [
     {
@@ -67,5 +71,5 @@ module.exports = {
         jest: true
       }
     }
-  ]
+  ],
 };

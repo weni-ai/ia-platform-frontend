@@ -22,3 +22,6 @@ yarn-error.log*
 
 docker-compose.yml
 Dockerfile
+
+.env
+/public/config.js

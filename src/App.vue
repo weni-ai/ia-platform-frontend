@@ -15,6 +15,7 @@ import unnic from '@weni/unnnic-system';
 import I18n from '@/utils/plugins/i18n';
 import store from './store';
 
+
 const components = {
   NewsModal,
   I18n

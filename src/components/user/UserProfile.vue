@@ -15,6 +15,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'UserProfile',
   props: {
@@ -25,7 +26,7 @@ export default {
   },
   computed: {
     profileURL() {
-      return `${process.env.VUE_APP_BOTHUB_WEBAPP_BASE_URL}
+      return `${runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_BASE_URL')}
       ${this.profile.nickname}/`;
     },
   },

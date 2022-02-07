@@ -1,15 +1,17 @@
 const path = require('path');
+const { defaults } = require('jest-conf');
 
 module.exports = {
   rootDir: path.resolve(__dirname, '../../'),
   moduleFileExtensions: [
+    ...defaults.moduleFileExtensions,
     'js',
     'json',
     'vue',
   ],
   moduleNameMapper: {
     '.*\\.(svg)$': '<rootDir>/tests/__mocks__/fileMock.js',
-    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@/(.*)$': '<rootDir>/src/$1'
   },
   transform: {
     '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
@@ -21,6 +23,9 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.js',
     'src/**/*.vue',
+    '!public/*.js',
+    '!**/public/*.js',
+    '!**/**/public/*.js',
     '!src/main.js',
     '!src/App.vue',
     '!src/api/**',

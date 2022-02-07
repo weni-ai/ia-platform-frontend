@@ -14,7 +14,6 @@ import '@mdi/font/css/materialdesignicons.css';
 import hljs from 'highlight.js';
 import VueHighlightJS from 'vue-highlightjs';
 
-
 Vue.use(Buefy);
 Vue.use(VueMoment);
 Vue.use(API);
@@ -26,10 +25,10 @@ Vue.config.productionTip = false;
 
 applyFilters(Vue);
 
-if ((process.env.VUE_APP_BOTHUB_WEBAPP_USE_SENTRY)
-&& process.env.VUE_APP_BOTHUB_WEBAPP_SENTRY) {
+if ((runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_USE_SENTRY'))
+&& runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_SENTRY')) {
   Sentry.init({
-    dsn: process.env.VUE_APP_BOTHUB_WEBAPP_SENTRY,
+    dsn: runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_SENTRY'),
     integrations: [new VueIntegration({ Vue, attachProps: true })],
     environment: process.env.NODE_ENV,
     logErrors: true,

@@ -24,6 +24,7 @@ describe('TranslationsStatus.vue', () => {
       propsData: {
         ownerNickname: 'douglas',
         repositorySlug: 'repo1',
+        repositoryUuid: '1234'
       },
     });
     await wrapper.vm.updateTranslationsStatus();
