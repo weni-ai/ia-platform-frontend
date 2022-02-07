@@ -30,7 +30,9 @@ describe('EvaluateResultExampleList.vue', () => {
       modules: {
         Repository: {
           state,
-          getters,
+          getters: {
+            activeTutorial: jest.fn(),
+          },
           actions,
         },
       },

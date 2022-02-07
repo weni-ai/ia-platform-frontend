@@ -36,7 +36,6 @@ import LanguageSelect from '@/components/inputs/LanguageSelect';
 import HighlightedCode from '@/components/shared/HighlightedCode';
 import { LANGUAGES } from '@/utils';
 
-
 const components = {
   LanguageSelect,
   HighlightedCode,
@@ -83,7 +82,7 @@ export default {
           `  -H 'Authorization: ${this.authorizationUuid}' \\`,
           `  -F 'language=${this.language}' \\`,
           `  -F "text=${this.text_escaped.curl}" \\`,
-          `  ${process.env.VUE_APP_BOTHUB_NLP_BASE_URL}v2/parse/`,
+          `  ${runtimeVariables.get('VUE_APP_BOTHUB_NLP_BASE_URL')}v2/parse/`,
         ].join('\n'),
         python: [
           'import requests',
@@ -94,7 +93,7 @@ export default {
           '}',
           '',
           `headers = { 'Authorization': '${this.authorizationUuid}' }`,
-          `r = requests.post('${process.env.VUE_APP_BOTHUB_NLP_BASE_URL}v2/parse/', headers=headers, data=data)`,
+          `r = requests.post('${runtimeVariables.get('VUE_APP_BOTHUB_NLP_BASE_URL')}v2/parse/', headers=headers, data=data)`,
           'print(r.json())',
         ].join('\n'),
         javascript: [
@@ -107,7 +106,7 @@ export default {
           '  console.log(JSON.parse(request.response));',
           '};',
           '',
-          `request.open('POST', '${process.env.VUE_APP_BOTHUB_NLP_BASE_URL}v2/parse/');`,
+          `request.open('POST', '${runtimeVariables.get('VUE_APP_BOTHUB_NLP_BASE_URL')}v2/parse/');`,
           `request.setRequestHeader('Authorization', '${this.authorizationUuid}');`,
           'request.send(data);',
         ].join('\n'),

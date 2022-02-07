@@ -65,6 +65,7 @@ import EmailInput from './inputs/EmailInput';
 import PasswordInput from './inputs/PasswordInput';
 import ImageInput from './inputs/ImageInput';
 
+
 const relatedInputComponent = {
   field: StringInput,
   string: StringInput,
@@ -148,7 +149,6 @@ export default {
           const shouldShowSettings = this.settings && style && typeof style.only_settings === 'boolean' && style.only_settings;
 
           if (!shouldShowSettings && shouldHide) return false;
-
           return {
             type,
             name,
@@ -168,7 +168,7 @@ export default {
         && this.errors.non_field_errors.map(text => ({ text, class: 'error' }))) || [];
     },
     helpArticleId() {
-      return process.env.VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_ALGORITHM_ARTICLE_ID;
+      return runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_ALGORITHM_ARTICLE_ID');
     },
   },
   mounted() {
