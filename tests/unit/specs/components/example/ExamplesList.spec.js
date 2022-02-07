@@ -17,6 +17,7 @@ describe('ExamplesList.vue', () => {
   let wrapper;
   let state;
   let store;
+  let getters;
   beforeEach(() => {
     state = {
       selectedRepository: {
@@ -28,6 +29,9 @@ describe('ExamplesList.vue', () => {
       modules: {
         Repository: {
           state,
+          getters: {
+            getCurrentRepository: jest.fn(),
+          }
         },
       },
     });
