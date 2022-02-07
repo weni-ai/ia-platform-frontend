@@ -35,6 +35,7 @@ describe('AuthorizationItem.vue', () => {
         can_read: true,
         can_contribute: true,
         can_write: true,
+        user__is_organization: true,
       },
       store,
     });

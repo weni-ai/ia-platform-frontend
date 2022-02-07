@@ -20,6 +20,7 @@ describe('QuickTest.vue', () => {
         Repository: {
           getters: {
             authenticated: jest.fn(),
+            activeTutorial: jest.fn()
           },
         },
       },

@@ -26,6 +26,7 @@ describe('TranslationsStatus.vue', () => {
       propsData: {
         ownerNickname: 'douglas',
         repositorySlug: 'repo1',
+        repositoryUuid: '1234'
       },
     });
     await wrapper.vm.updateTranslationsStatus();
@@ -34,18 +35,6 @@ describe('TranslationsStatus.vue', () => {
   test('renders correctly', () => {
     expect(wrapper).toMatchSnapshot();
   });
-
-  // describe('click on DE status', () => {
-  //   beforeEach(() => {
-  //     const statusDe = wrapper.find({ ref: 'status-de' });
-  //     statusDe.trigger('click');
-  //   });
-
-  //   test('emit input', () => {
-  //     const event = wrapper.emitted('input')[0];
-  //     expect(event[0]).toBe('de');
-  //   });
-  // });
 
   describe('update ownerNickname and repositorySlug to invalid repository', () => {
     beforeEach(async () => {

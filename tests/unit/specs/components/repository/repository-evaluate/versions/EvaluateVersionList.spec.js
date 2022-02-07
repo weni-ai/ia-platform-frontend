@@ -20,7 +20,6 @@ describe('EvaluateVersionList.vue', () => {
         uuid: 'dbe1539c-88ba-43e0-bed5-54729218cec9',
       },
     };
-
     actions = {
       getAllResults: jest.fn(),
     };
@@ -29,7 +28,9 @@ describe('EvaluateVersionList.vue', () => {
       modules: {
         Repository: {
           state,
-          getters,
+          getters: {
+            getCurrentRepository: jest.fn(),
+          },
           actions,
         },
       },
