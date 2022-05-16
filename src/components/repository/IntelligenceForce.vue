@@ -1,22 +1,16 @@
 <template>
   <div class="intelligence-force">
     <div class="intelligence-force__title">
-    <h2>{{ $t('webapp.summary.intelligence_force') }}: </h2>
-      <span>{{ relevanceProgress }}</span>
+      <unnnic-card
+        type="title"
+        :title="$t('webapp.summary.intelligence_force')"
+        :hasInformationIcon="false"
+        icon="fitness-biceps-1"
+      />
     </div>
-    <div
-      class="intelligence-force__relevance__progress">
-      <div
-        :style="{ width: intelligenceForce + '%' }"
-        class="intelligence-force__relevance__bar-field">
-        <div class="intelligence-force__relevance__division">
-          <div
-            v-for="index in 5"
-            :key="index"
-            class="intelligence-force__relevance__division__stripe"/>
-        </div>
+      <div class="intelligence-force__chart-wrapper">
+        <unnnic-chart-rainbow :value="+intelligenceForce" :description="relevanceProgress" />
       </div>
-    </div>
   </div>
 </template>
 
@@ -33,7 +27,7 @@ export default {
       const scoreObject = this.getCurrentRepository.repository_score;
       const scoreResult = (scoreObject.evaluate_size_score
       + scoreObject.intents_balance_score + scoreObject.intents_size_score) / 3;
-      return scoreResult;
+      return scoreResult.toFixed(0);
     },
     relevanceProgress() {
       if (this.intelligenceForce <= 33) {
@@ -56,19 +50,35 @@ export default {
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
 
+ /deep/ .number {
+    align-items: unset;
+    background-color: unset;
+    border-radius: 0;
+    display: unset;
+    height: 0;
+    justify-content: unset;
+    margin-right: 0;
+    min-width: unset;
+    padding: 0;
+    text-align: unset;
+   vertical-align: bottom;
+ }
+
 .intelligence-force{
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        padding-left: 3rem;
-        margin-top: .8rem;
-        margin-left: 0.5rem;
-        border: 1px solid $color-border;
-        height: 147px;
+        // justify-content: center;
+        // padding-left: 3rem;
+        // margin-top: .8rem;
+        // margin-left: 0.5rem;
+        // border: 1px solid $color-border;
+        width: 50%;
+        // height: 75px;
 
         &__title{
             display: flex;
             font-size: 1.75rem;
+            margin-bottom: 1.2rem;
           h2 {
             font-family: $font-family;
             color: $color-fake-black;
@@ -85,7 +95,7 @@ export default {
 
       &__progress {
         height: 20px;
-        width: 80%;
+        width: 100%;
         background-color: #EAEAEA;
         box-shadow: 0px 3px 6px #00000029;
       }
@@ -100,7 +110,7 @@ export default {
       }
       &__division{
         display:flex;
-        width: 62%;
+        width: 42%;
         position:absolute;
 
         &__stripe{
@@ -109,6 +119,10 @@ export default {
           margin-left: 16%;
         }
       }
+    }
+    &__chart-wrapper{
+      display: flex;
+      justify-content: center;
     }
     @media screen and (max-width: 45em) {
         h2{

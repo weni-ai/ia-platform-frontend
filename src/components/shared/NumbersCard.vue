@@ -1,11 +1,11 @@
 <template>
-  <b-tooltip
+  <!-- <b-tooltip
     :active="!disabled && helpText && helpText.length > 0"
     :label="helpText"
     multilined
     type="is-dark"
-    position="is-bottom">
-    <div
+    position="is-bottom"> -->
+    <!-- <div
       :class="{ 'number-card': true,
                 'number-card--active': !disabled && active,
                 'number-card--hoverable': !disabled
@@ -13,11 +13,32 @@
                 'number-card--disabled': disabled,
                 'number-card--clickable': clickable && !disabled,
                 'number-card--clickable--inverted': !disabled && active && clickable }"
-      @click="onClick">
-      <h1 :class="['has-text-centered', `number-card__title--size-${size}`]">{{ count }}</h1>
-      <p :class="['has-text-centered', `number-card__subtitle--size-${size}`]">{{ label }} </p>
-    </div>
-  </b-tooltip>
+      @click="onClick"> -->
+        <unnnic-tool-tip :text="helpText"
+          :enabled="!disabled && helpText && helpText.length > 0"
+          side="bottom"
+          maxWidth="15rem"
+        >
+        <div
+          :class="{ 'number-card': true,
+                'number-card--active': !disabled && active,
+                'number-card--hoverable': !disabled
+                  && (clickable || (helpText && helpText.length > 0)),
+                'number-card--disabled': disabled,
+                'number-card--clickable': clickable && !disabled,
+                'number-card--clickable--inverted': !disabled && active && clickable }"
+            @click="onClick"
+        >
+          <unnnic-card-number
+            :description="label"
+            :number="`${count}`"
+          />
+        </div>
+        </unnnic-tool-tip>
+      <!-- <p :class="['has-text-centered', `number-card__subtitle--size-${size}`]">{{ label }} </p>
+      <h1 :class="['has-text-centered', `number-card__title--size-${size}`]">{{ count }}</h1> -->
+    <!-- </div> -->
+  <!-- </b-tooltip> -->
 </template>
 
 <script>
@@ -70,6 +91,8 @@ export default {
         flex-direction: column;
         justify-content: center;
         color: $color-fake-black;
+        width: 160px;
+        text-align: left;
 
         &--clickable {
             &:hover{
