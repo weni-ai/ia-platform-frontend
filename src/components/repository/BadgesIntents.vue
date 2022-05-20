@@ -10,6 +10,19 @@
           :count="item.examples__count"
           class="badges-card__wrapper__badge"
           @click.native="goToIntentList(item.id)"/>
+          <!-- <unnnic-tag
+            v-for="item in list"
+            :key="item.value"
+            type="indicator"
+            text="Label"
+            tooltipText="test"
+            clickable
+            :count="23"
+            hasCloseIcon
+            hasBackButton
+            enableTooltip
+            icon=""
+          /> -->
       </div>
     </div>
     <div v-if="examplesCount">

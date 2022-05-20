@@ -37,14 +37,4 @@ describe('EntityEdit', () => {
   test('renders correctly', () => {
     expect(wrapper).toMatchSnapshot();
   });
-
-  describe('editing button works', () => {
-    beforeEach(() => {
-      const editButton = wrapper.findComponent({ ref: 'editButton' });
-      editButton.trigger('click');
-    });
-    test('editing mode activates correctly', () => {
-      expect(wrapper.findComponent({ ref: 'editButton' })).toBeTruthy();
-    });
-  });
 });

@@ -3,10 +3,34 @@
     <div v-if="repository" class="repository-home">
       <div class="repository-home__description">
         <div class="repository-home__title">
-          {{ $t("webapp.home.description") }}
+          <unnnic-card
+            type="title"
+            :title="$t('webapp.home.description')"
+            :hasInformationIcon="false"
+            icon="paginate-filter-text-1"
+            scheme="aux-orange"
+          />
         </div>
         <div class="repository-home__description__header">
           <div>
+            <vue-markdown
+              :source="repository.description"
+              :show="show"
+              :html="html"
+              :breaks="breaks"
+              :linkify="linkify"
+              :emoji="emoji"
+              :typographer="typographer"
+              :toc="toc"
+              toc-id="toc"
+              class="repository-home__description__text markdown-body"
+            />
+            <p v-if="repository.description" class="repository-home__description__text" />
+            <p v-else>
+              <i class="text-color-grey-dark">{{ $t("webapp.home.no_description") }}</i>
+            </p>
+          </div>
+          <div class="repository-home__description__tags-wrapper">
             <b-tag
               v-for="(category, index) in getAllCategories"
               :key="index"
@@ -15,8 +39,7 @@
             >
               {{ category }}
             </b-tag>
-          </div>
-          <unnnic-button
+            <unnnic-button
             v-if="hasIntegration && !hasIntegrationCheckError"
             type="primary"
             :loading="!hasIntegrationDefined"
@@ -36,63 +59,57 @@
           >
             {{ $t("webapp.summary.integrate") }}
           </unnnic-button>
-        </div>
-
-        <div>
-          <vue-markdown
-            :source="repository.description"
-            :show="show"
-            :html="html"
-            :breaks="breaks"
-            :linkify="linkify"
-            :emoji="emoji"
-            :typographer="typographer"
-            :toc="toc"
-            toc-id="toc"
-            class="repository-home__description__text markdown-body"
-          />
-          <p v-if="repository.description" class="repository-home__description__text" />
-          <p v-else>
-            <i class="text-color-grey-dark">{{ $t("webapp.home.no_description") }}</i>
-          </p>
+          </div>
         </div>
       </div>
+
+      <div class="repository-home__divider"></div>
 
       <summary-information />
 
-      <div v-if="hasIntents" class="repository-home__intents-list">
-        <div id="intent-container" class="repository-home__title">
-          <p>
-            {{ $t("webapp.home.intents_list") }}
-          </p>
-          <div>
-            <b-tooltip
-              :label="$t('webapp.summary.intent_question')"
-              class="tooltipStyle"
-              multilined
-              type="is-dark"
-              position="is-right"
-            >
-              <b-icon custom-size="mdi-18px" type="is-dark" icon="help-circle" />
-            </b-tooltip>
+      <unnnic-tab class="repository-home__tabs" initialTab="first" :tabs='["first","second"]'>
+        <template slot="tab-head-first">{{ $t("webapp.home.intents_list") }}</template>
+        <template slot="tab-panel-first">
+          <div id="intent-container" v-if="hasIntents">
+            <!-- <div id="intent-container" class="repository-home__title">
+              <p>
+                {{ $t("webapp.home.intents_list") }}
+              </p>
+              <div>
+                <b-tooltip
+                  :label="$t('webapp.summary.intent_question')"
+                  class="tooltipStyle"
+                  multilined
+                  type="is-dark"
+                  position="is-right"
+                >
+                  <b-icon custom-size="mdi-18px" type="is-dark" icon="help-circle" />
+                </b-tooltip>
+              </div>
+            </div> -->
+
+            <badges-intents :list="repository.intents" />
           </div>
-        </div>
+        </template>
+        <template slot="tab-head-second">{{ $t("webapp.home.entities_list") }}</template>
+        <template slot="tab-panel-second">
+          <entity-edit
+            id="entity-container"
+            :groups="repository.groups || []"
+            :can-edit="repository.authorization.can_contribute"
+            :ungrouped="unlabeled"
+            :new-group="newGroup"
+            :repository-uuid="repository.uuid"
+            @updateGroup="updatedGroup"
+            @updateUngrouped="updateUngrouped"
+            @updateNewGroup="updateNewGroup"
+            @removeGroup="removeGroup"
+            @removeEntity="removeEntity"
+            @createdGroup="addedGroup"
+          />
+        </template>
+      </unnnic-tab>
 
-        <badges-intents :list="repository.intents" />
-      </div>
-
-      <entity-edit
-        id="entity-container"
-        :groups="repository.groups || []"
-        :can-edit="repository.authorization.can_contribute"
-        :ungrouped="unlabeled"
-        :repository-uuid="repository.uuid"
-        @updateGroup="updatedGroup"
-        @updateUngrouped="updateUngrouped"
-        @removeGroup="removeGroup"
-        @removeEntity="removeEntity"
-        @createdGroup="addedGroup"
-      />
     </div>
     <h1>{{ repositoryVersion }}</h1>
     <integration-modal
@@ -156,6 +173,10 @@ export default {
       if (!this.repository || !this.repository.other_group) return [];
       return this.repository.other_group.entities;
     },
+    newGroup() {
+      if (!this.repository || !this.repository.new_group) return [];
+      return this.repository.new_group.entities;
+    },
     hasIntegrationDefined() {
       return this.hasIntegration !== null;
     },
@@ -207,6 +228,9 @@ export default {
     },
     updateUngrouped({ entities }) {
       this.repository.other_group.entities = entities;
+    },
+    updateNewGroup({ entities }) {
+      this.repository.new_group.entities = entities;
     },
     changeIntegrateModalState(value) {
       if (this.integrationError !== null && value) {
@@ -282,7 +306,7 @@ export default {
     margin-bottom: 1rem;
 
     &__tag {
-      margin: 0.8rem 0.5rem 2.188rem 0;
+      margin: $unnnic-spacing-stack-xs;
       padding: 0 2rem;
       font-size: 15px;
     }
@@ -295,15 +319,18 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      flex-direction: column;
 
       &__integrate {
         background-color: $color-primary-soft;
+        margin-left: auto;
       }
       &__remove-integrate {
         border: 1px solid $unnnic-color-feedback-red;
         color: $unnnic-color-feedback-red;
         background-color: $color-white;
         transition: 0.1s;
+        margin-left: auto;
 
         &:hover {
           border: 1px solid $unnnic-color-feedback-red;
@@ -314,9 +341,16 @@ export default {
     }
 
     &__text {
+      margin: $unnnic-spacing-stack-sm 0;
       ul li {
         list-style-type: disc;
       }
+    }
+
+    &__tags-wrapper {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
     }
   }
 
@@ -329,6 +363,15 @@ export default {
       flex-wrap: wrap;
       align-items: center;
     }
+  }
+
+  &__divider {
+    border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+    margin: $unnnic-spacing-stack-md 0;
+  }
+
+  &__tabs {
+    margin-top: $unnnic-spacing-stack-lg;
   }
 }
 .tooltipStyle::after {

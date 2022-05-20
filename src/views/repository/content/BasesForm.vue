@@ -3,7 +3,7 @@
     <section class="repository-base-edit">
       <section class="repository-base-edit__header">
         <span @click="routerHandle('repository-content-bases')">
-          <unnnic-icon icon="keyboard-arrow-left-1" />
+          <unnnic-icon-svg icon="keyboard-arrow-left-1" />
         </span>
         <div>
           <div class="repository-base-edit__header--content">

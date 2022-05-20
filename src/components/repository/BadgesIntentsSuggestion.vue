@@ -5,10 +5,7 @@
       :key="item.value"
       :entity-name="item.value"
       :intent-count="false"
-      :class="{
-        'badges-container__badge': true,
-        'badges-container__style': checkselectedIntent(item.value)
-      }"
+      class="badges-container__badge"
       @click.native="addIntents(item.value, item.id)"/>
   </div>
 </template>
@@ -67,7 +64,6 @@ export default {
     margin-bottom: 3rem;
 
       &__badge {
-        min-width: 130px;
         height: 41px !important;
         margin: .4rem .5rem 0 0;
         padding: 0 1rem 0 1rem;
@@ -79,11 +75,6 @@ export default {
           font-family: $font-family;
           font-weight: $font-weight-normal;
         }
-    }
-
-    &__style{
-        background-color: $color-primary;
-        color: $color-white;
     }
 
 }
