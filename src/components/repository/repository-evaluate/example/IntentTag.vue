@@ -84,4 +84,8 @@ export default {
   //   }
   // }
 }
+
+/deep/ .unnnic-tag__icon {
+    margin-right: 0;
+}
 </style>

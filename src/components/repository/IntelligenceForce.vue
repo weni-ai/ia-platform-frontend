@@ -4,8 +4,10 @@
       <unnnic-card
         type="title"
         :title="$t('webapp.summary.intelligence_force')"
-        :hasInformationIcon="false"
+        :hasInformationIcon="true"
         icon="fitness-biceps-1"
+        :info="$t('webapp.summary.intelligence_force_info')"
+        infoPosition="left"
       />
     </div>
       <div class="intelligence-force__chart-wrapper">
@@ -49,6 +51,8 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
  /deep/ .number {
     align-items: unset;
@@ -76,7 +80,7 @@ export default {
         // height: 75px;
 
         &__title{
-            display: flex;
+            // display: flex;
             font-size: 1.75rem;
             margin-bottom: 1.2rem;
           h2 {
@@ -123,6 +127,7 @@ export default {
     &__chart-wrapper{
       display: flex;
       justify-content: center;
+      margin-top: 2rem;
     }
     @media screen and (max-width: 45em) {
         h2{
@@ -130,5 +135,14 @@ export default {
         }
     }
 }
+  /deep/ .unnnic-chart-rainbow .content .description {
+    font-size: $unnnic-font-size-title-sm;
+  }
+  /deep/ .unnnic-card-title .title {
+    margin-bottom: 0;
+  }
+  /deep/ .unnnic-tooltip-label {
+    max-width: 430px;
+  }
 
 </style>

@@ -1,45 +1,7 @@
 <template>
   <div class="entity-edit__entities-list">
     <div class="entity-edit__title entity-edit__entities-list__header">
-      <!-- <div class="entity-edit__title entity-edit__entities-list__header__container">
-        {{ $t('webapp.home.entities_list') }}
-        <div
-          class="entity-edit__title entity-edit__entities-list__header__question">
-          <b-tooltip
-            :label="$t('webapp.summary.entity_question')"
-            class="tooltipStyle"
-            multilined
-            type="is-dark"
-            position="is-right">
-            <b-icon
-              custom-size="mdi-18px"
-              type="is-dark"
-              icon="help-circle"
-            />
-          </b-tooltip>
-        </div>
-      </div> -->
       <b-loading :is-full-page="false" :active="loading" />
-      <!-- <b-field class="entity-edit__button-group" grouped>
-        <b-button
-          v-if="canEdit"
-          ref="editButton"
-          class="entity-edit__button"
-          type="is-primary"
-          @click.native="editing = !editing"
-        >
-          {{ editing ? $t("webapp.home.finish_editing") : $t("webapp.home.edit_groups") }}
-        </b-button>
-        <b-button
-          v-show="editing"
-          :disabled="creating"
-          class="entity-edit__button"
-          type="is-secondary"
-          @click="creating = true"
-        >
-          {{ $t("webapp.home.create_new_group") }}
-        </b-button>
-      </b-field> -->
     </div>
     <badges-card-drag-drop
       :key="`${newGroup}-${needsUpdate}`"
@@ -51,7 +13,7 @@
       identifier="newGroup"
       @onCloseTag="onRemoveEntity($event, null)"
       @onMove="moveEntity"
-      @onEditGroups="editing = !editing"
+      @onEditGroups="editGroups"
       format
       @close="creating = false"
       @finished="createGroup"
@@ -232,17 +194,6 @@ export default {
           this.$emit('updateGroup', { entities: targetList, groupId: to });
           break;
       }
-      // if (from !== 'ungrouped' || from !== 'newGroup') {
-      //   this.$emit('updateGroup', { entities: sourceList, groupId: from });
-      // } else {
-      //   this.$emit('updateUngrouped', { entities: sourceList });
-      // }
-
-      // if (to !== 'ungrouped' || to !== 'newGroup') {
-      //   this.$emit('updateGroup', { entities: targetList, groupId: to });
-      // } else {
-      //   this.$emit('updateUngrouped', { entities: targetList });
-      // }
     },
     async removeEntity(entity, groupId) {
       this.loading = true;
@@ -273,21 +224,25 @@ export default {
     },
     async moveEntity(event) {
       const { entity, from, to, targetList, sourceList } = event;
-      this.loading = true;
-      try {
-        await this.editEntity({
-          entityId: entity.entity_id,
-          name: entity.value,
-          repositoryVersion: this.version,
-          repositoryId: this.repositoryUuid,
-          groupId: to === 'ungrouped' || to === 'newGroup' ? null : to,
-        });
-        this.updateGroups(from, to, targetList, sourceList);
-      } catch (e) {
-        this.showError(e);
-        this.needsUpdate = !this.needsUpdate;
-      } finally {
-        this.loading = false;
+      if (to !== 'newGroup') {
+        this.loading = true;
+        try {
+          await this.editEntity({
+            entityId: entity.entity_id,
+            name: entity.value,
+            repositoryVersion: this.version,
+            repositoryId: this.repositoryUuid,
+            groupId: to === 'ungrouped' || to === 'newGroup' ? null : to,
+          });
+          this.updateGroups(from, to, targetList, sourceList);
+        } catch (e) {
+          this.showError(e);
+          this.needsUpdate = !this.needsUpdate;
+        } finally {
+          this.loading = false;
+        }
+      } else {
+        this.updateGroups(from, to, targetList, sourceList)
       }
     },
     onRemoveEntity(entity, groupId) {
@@ -312,21 +267,11 @@ export default {
       this.deleteMessage = this.$t('webapp.home.delete_group_message', {
         group: group.value
       })
-      // this.$buefy.dialog.alert({
-      //   title: this.$t('webapp.home.delete_group'),
-      //   message: this.$t('webapp.home.delete_group_message', {
-      //     group: group.value,
-      //   }),
-      //   confirmText: this.$t('webapp.home.delete'),
-      //   cancelText: this.$t('webapp.home.cancel'),
-      //   canCancel: true,
-      //   closeOnConfirm: true,
-      //   type: 'is-danger',
-      //   onConfirm: async () => {
-      //     this.removeGroup(group.group_id);
-      //   },
-      // });
     },
+    editGroups() {
+      this.editing = !this.editing
+      this.$emit('onEditGroups')
+    }
   },
 };
 </script>

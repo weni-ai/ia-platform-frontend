@@ -1,30 +1,5 @@
 <template>
   <div
-    :class="['badges-card', dark ? 'badges-card__dark' : '' ]">
-    <div class="badges-card__header">
-      <b-field
-        class="badges-card__title"
-        grouped>
-        <span>{{ title }}</span>
-        <b-input
-          v-model="text"
-          size="is-small"
-          class="badges-card__input"
-          @keyup.enter.native.prevent.stop="finished"/>
-        <b-button
-          :disabled="!canSubmit"
-          class="badges-card__button"
-          type="is-primary"
-          @click.prevent.stop="finished"> {{ $t('webapp.home.enter') }} </b-button>
-      </b-field>
-      <!-- <b-icon
-        class="badges-card__icon"
-        icon="close"
-        size="is-small"
-        @click.native="close" /> -->
-    </div>
-  </div>
-  <!-- <div
     ref="dropzone"
     :class="{
       'drag-area__dropzone': true,
@@ -74,7 +49,7 @@
         @click.native="goToEntity(item)"
       />
     </draggable>
-  </div> -->
+  </div>
 </template>
 
 <script>
@@ -138,7 +113,7 @@ export default {
       localList: this.list,
       hasError: false,
       isDragging: false,
-      dragEnterCounter: 0, // to handle dragenter/dragleave on child elements
+      dragEnterCounter: 0,
     };
   },
   computed: {
@@ -186,11 +161,6 @@ export default {
     },
     drop(event) {
       this.isDragging = false;
-      // console.log(event)
-      // const { files } = event.dataTransfer;
-      // if (this.validateFiles(files)) {
-      //   this.addFiles(files);
-      // }
     },
   },
 };
@@ -211,7 +181,6 @@ export default {
     background-color: $unnnic-color-background-carpet;
     padding: 1rem;
     margin: 1rem;
-    // Dashed border with increased dashes spacing and color neutral clean
     background-image: borderDashed($unnnic-color-neutral-clean);
     &__has-error {
       background-image: borderDashed($unnnic-color-feedback-red);
