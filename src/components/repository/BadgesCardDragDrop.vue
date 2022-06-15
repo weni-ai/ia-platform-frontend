@@ -20,7 +20,7 @@
           class="badges-card__link"
           @click.stop="finished()"
         >
-          Salvar e fechar
+          {{ $t("webapp.home.save_changes") }}
         </a>
         <!-- <a
           v-if="edit && identifier === 'newGroup'"
@@ -41,14 +41,14 @@
           class="badges-card__link"
           @click.stop="changeEditingInput()"
         >
-          Alterar nome
+          {{ $t("webapp.home.edit_group_name") }}
         </a>
         <a
           v-if="closable && edit"
           class="badges-card__link"
           @click.stop="onRemoveCard"
         >
-          Excluir grupo
+          {{ $t("webapp.home.delete_group") }}
         </a>
       </div>
       <div slot="body">
@@ -71,6 +71,9 @@
             :move="onMove"
             group="entities"
             class="badges-card__wrapper"
+            chosen-class="dragging"
+            drag-class="dragging"
+            ghost-class="dragging"
             @change="onChange"
           >
             <entity-tag
@@ -269,9 +272,9 @@ export default {
       this.to = relatedContext.component.$attrs['data-id-attr'];
       this.entity = draggedContext.element;
       this.targetList = [...relatedContext.list, this.entity];
-      console.log(this.to, this.entity, this.targetList)
     },
     onChange() {
+      // console.log(this.to, this.entity, this.targetList)
       if (this.entity == null || this.to == null) return;
       this.$emit('onMove', {
         from: this.identifier,
@@ -389,7 +392,9 @@ export default {
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
-    font-family: $font-family;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-gt;
+    color: $unnnic-color-neutral-cloudy;
 
     &__edit {
       text-align: left;
@@ -407,9 +412,11 @@ export default {
   }
 
   &__link {
-    color: $unnnic-color-neutral-cloudy;
     text-decoration: underline;
     margin: 1rem;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-gt;
+    color: $unnnic-color-neutral-cloudy;
   }
 
   &__wrapper {
@@ -425,7 +432,7 @@ export default {
       border-width: 1px;
 
       &--moving {
-        cursor: move;
+        cursor: grab;
       }
 
       &--locked {

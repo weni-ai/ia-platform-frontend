@@ -70,7 +70,7 @@ export default {
 @import '~@/assets/scss/colors.scss';
 
 .badges-without-styles{
-    padding-top: .75rem;
+    // padding-top: .75rem;
     margin: .75rem -0.4rem;
     margin-bottom: 3rem;
 }
@@ -86,7 +86,7 @@ export default {
 
       &__badge {
         height: 2.188rem;
-        margin: .4rem .5rem 0 0;
+        margin: 1rem 1rem 0 0;
         padding: 0 1rem 0 1rem;
         line-height: calc(1.5rem - 4px);
         border-width: 1px;

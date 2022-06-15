@@ -85,6 +85,8 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
     .number-card {
         display: flex;
@@ -148,6 +150,10 @@ export default {
         font-weight: $font-weight-bolder;
         font-family: $font-family;
         margin: 0;
+    }
+
+    /deep/ .unnnic-card-number h4 {
+      font-family: $unnnic-font-family-secondary;
     }
 
 </style>
