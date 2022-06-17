@@ -34,6 +34,16 @@ export const getEntityColor = (entity) => {
   return colorsList[i];
 };
 
+export const getRandomColor = () => {
+  const opacity = '0.16';
+  let color = 'rgba(';
+  for (let i = 0; i < 3; i++) {
+    color += `${Math.floor(Math.random() * 255)},`;
+  }
+  color += `${opacity})`;
+  return color;
+};
+
 // export const getEntityColor = (entity, entities, flexibleEntities) => {
 //   const entitiesList = getEntitiesList(entities, flexibleEntities);
 //   const i = entitiesList.indexOf(entity.entity || entity) % colorsList.length;

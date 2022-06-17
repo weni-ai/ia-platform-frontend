@@ -30,7 +30,7 @@
           :open.sync="dropdownOpen"
         >
           <div slot="trigger">
-            <unnnic-icon
+            <unnnic-icon-svg
               icon="navigation-menu-vertical-1"
               class="unnnic-card-intelligence__header__buttons__icon"
               size="sm"
@@ -41,7 +41,7 @@
 
           <unnnic-dropdown-item @click="showDetailModal(intentModal)">
             <div class="unnnic-card-intelligence__header__buttons__dropdown">
-              <unnnic-icon size="sm" icon="graph-stats-1" />
+              <unnnic-icon-svg size="sm" icon="graph-stats-1" />
               <div>
                 {{
                   $tc("webapp.intelligences_lib.show_intents", this.repositoryDetail.intents.length)
@@ -52,7 +52,7 @@
 
           <unnnic-dropdown-item @click="showDetailModal(laguagueModal)">
             <div class="unnnic-card-intelligence__header__buttons__dropdown">
-              <unnnic-icon size="sm" icon="translate-1" />
+              <unnnic-icon-svg size="sm" icon="translate-1" />
               <div>
                 {{
                   $tc(
@@ -75,20 +75,20 @@
                 'unnnic-card-intelligence__header__buttons__dropdown--reddish'
               ]"
             >
-              <unnnic-icon size="sm" icon="subtract-circle-1" />
+              <unnnic-icon-svg size="sm" icon="subtract-circle-1" />
               <div>
                 {{ $t("webapp.home.remove_integrate") }}
               </div>
             </div>
             <div v-else class="unnnic-card-intelligence__header__buttons__dropdown">
-              <unnnic-icon size="sm" icon="add-1" />
+              <unnnic-icon-svg size="sm" icon="add-1" />
               <div>{{ $t("webapp.home.integrate") }}</div>
             </div>
           </unnnic-dropdown-item>
 
           <unnnic-dropdown-item v-else-if="!hasIntegrationCheckError">
             <div class="unnnic-card-intelligence__header__buttons__dropdown__loading">
-              <unnnic-icon size="md" icon="loading-circle-1" class="rotation" />
+              <unnnic-icon-svg size="md" icon="loading-circle-1" class="rotation" />
             </div>
           </unnnic-dropdown-item>
         </unnnic-dropdown>
@@ -110,7 +110,7 @@
         side="bottom"
         max-width="17rem"
       >
-        <unnnic-icon
+        <unnnic-icon-svg
           icon="information-circle-4"
           class="unnnic-card-intelligence__type__icon"
           size="sm"
@@ -123,7 +123,7 @@
         side="bottom"
         max-width="17rem"
       >
-        <unnnic-icon
+        <unnnic-icon-svg
           icon="information-circle-4"
           class="unnnic-card-intelligence__type__icon"
           size="sm"
@@ -140,7 +140,7 @@
           {{ $tc("webapp.intelligences_lib.intent", this.repositoryDetail.intents.length) }}
         </div>
         <div class="unnnic-card-intelligence__detail__content__data__info">
-          <unnnic-icon
+          <unnnic-icon-svg
             icon="typing-1"
             class="unnnic-card-intelligence__detail__content__data__info__icon"
             size="sm"
@@ -164,7 +164,7 @@
           }}
         </div>
         <div class="unnnic-card-intelligence__detail__content__data__info">
-          <unnnic-icon
+          <unnnic-icon-svg
             icon="translate-1"
             class="unnnic-card-intelligence__detail__content__data__info__icon"
             size="sm"

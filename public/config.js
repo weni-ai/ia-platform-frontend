@@ -21,6 +21,8 @@ const runtimeVariables = (() => ({
   VUE_APP_HELPHERO_ID: 'm7dO0to4OK',
   VUE_APP_HELPHERO_TOUR: 'ZlUBE8O2Ik',
   VUE_APP_QA_FLOW_CHANNEL: '4c46585b-8393-415b-856a-280c7d9ca9af',
+  VUE_APP_LOGROCKET_ID: 'weni/develop',
+  VUE_APP_LOGROCKET_PARENT_DOMAIN: 'https://dash-develop.weni.ai/',
 
   get(name) {
     return this[name];
