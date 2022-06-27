@@ -25,21 +25,26 @@
               toc-id="toc"
               class="repository-home__description__text markdown-body"
             />
-            <p v-if="repository.description" class="repository-home__description__text" />
+            <p
+              v-if="repository.description"
+              class="repository-home__description__text"
+            />
             <p v-else>
-              <i class="text-color-grey-dark">{{ $t("webapp.home.no_description") }}</i>
+              <i class="text-color-grey-dark">{{
+                $t("webapp.home.no_description")
+              }}</i>
             </p>
           </div>
           <div class="repository-home__description__tags-wrapper">
             <div>
-              <b-tag
+              <unnnic-tag
                 v-for="(category, index) in getAllCategories"
                 :key="index"
+                :text="category"
+                disabled
+                scheme="background-sky"
                 class="repository-home__header__tag"
-                rounded
-              >
-                {{ category }}
-              </b-tag>
+              />
             </div>
             <div>
               <unnnic-button
@@ -48,7 +53,8 @@
                 :loading="!hasIntegrationDefined"
                 @click="changeIntegrateModalState(true)"
                 :class="{
-                  'repository-home__description__header__remove-integrate': hasIntegrationDefined
+                  'repository-home__description__header__remove-integrate':
+                    hasIntegrationDefined,
                 }"
               >
                 {{ $t("webapp.summary.remove_integrate") }}
@@ -59,7 +65,8 @@
                 :loading="!hasIntegrationDefined"
                 @click="changeIntegrateModalState(true)"
                 :class="{
-                   'repository-home__description__header__integrate': hasIntegrationDefined
+                  'repository-home__description__header__integrate':
+                    hasIntegrationDefined,
                 }"
               >
                 {{ $t("webapp.summary.integrate") }}
@@ -73,15 +80,16 @@
 
       <summary-information />
 
-      <unnnic-tab class="repository-home__tabs" initialTab="first" :tabs='["first","second"]'>
+      <unnnic-tab
+        class="repository-home__tabs"
+        initialTab="first"
+        :tabs="['first', 'second']"
+      >
         <template slot="tab-head-first">
           {{ $t("webapp.home.intents_list") }}
           <unnnic-tool-tip
             side="right"
-            text="Desejo que a inteligência percebe que o usuário tem
-            ao enviar uma mensagem.
-            Por exemplo: ao enviar um “obrigado” a intenção do usuário é agradecer.
-            Assim, a intenção poderia ser “agradecimento”."
+            :text="$t('webapp.summary.intents_list_info')"
             enabled
           >
             <unnnic-icon
@@ -94,33 +102,14 @@
         </template>
         <template slot="tab-panel-first">
           <div id="intent-container" v-if="hasIntents">
-            <!-- <div id="intent-container" class="repository-home__title">
-              <p>
-                {{ $t("webapp.home.intents_list") }}
-              </p>
-              <div>
-                <b-tooltip
-                  :label="$t('webapp.summary.intent_question')"
-                  class="tooltipStyle"
-                  multilined
-                  type="is-dark"
-                  position="is-right"
-                >
-                  <b-icon custom-size="mdi-18px" type="is-dark" icon="help-circle" />
-                </b-tooltip>
-              </div>
-            </div> -->
-
             <badges-intents :list="repository.intents" />
           </div>
         </template>
         <template slot="tab-head-second">
           {{ $t("webapp.home.entities_list") }}
-           <unnnic-tool-tip
+          <unnnic-tool-tip
             side="right"
-            text="Substantivo relacionado ao desejo que foi detectado pela inteligência.
-            Por exemplo: se a frase enviada pelo usuário for “gerar novo relatório”
-            a entidade pode ser “relatório” ou “novo relatório”."
+            :text="$t('webapp.summary.entity_groups_info')"
             enabled
           >
             <unnnic-icon
@@ -149,7 +138,6 @@
           />
         </template>
       </unnnic-tab>
-
     </div>
     <h1>{{ repositoryVersion }}</h1>
     <integration-modal
@@ -160,35 +148,41 @@
       @dispatchUpdateIntegration="changeIntegrationValue()"
     />
     <unnnic-modal
-        :showModal="openModal"
-        :text="$t('webapp.home.create_group_modal_title')"
-        scheme="feedback-yellow"
-        modal-icon="alert-circle-1"
-        @close="openModal = false"
-      >
-        <span slot="message" v-html="$t('webapp.home.create_group_modal_subtitle')" />
-        <div slot="message" class="modal-header">
-            <unnnic-input
-              :placeholder="$t('webapp.home.create_group_field_label')"
-              v-model="newGroupName"
-            >
-              <span slot="label" v-html="$t('webapp.home.create_group_field_title')" />
-            </unnnic-input>
-        </div>
-        <unnnic-button slot="options" type="terciary" @click="openModal = false">
-          {{ $t("webapp.home.cancel") }}
-        </unnnic-button>
-        <unnnic-button
-          slot="options"
-          class="create-repository__container__button"
-          type="primary"
-          scheme="feedback-yellow"
-          @click="createGroup()"
+      :showModal="openModal"
+      :text="$t('webapp.home.create_group_modal_title')"
+      scheme="feedback-yellow"
+      modal-icon="alert-circle-1"
+      @close="openModal = false"
+    >
+      <span
+        slot="message"
+        v-html="$t('webapp.home.create_group_modal_subtitle')"
+      />
+      <div slot="message" class="modal-header">
+        <unnnic-input
+          :placeholder="$t('webapp.home.create_group_field_label')"
+          v-model="newGroupName"
         >
-          {{ $t("webapp.home.save_changes") }}
-        </unnnic-button>
-      </unnnic-modal>
-      <b-loading :is-full-page="false" :active="loading" />
+          <span
+            slot="label"
+            v-html="$t('webapp.home.create_group_field_title')"
+          />
+        </unnnic-input>
+      </div>
+      <unnnic-button slot="options" type="terciary" @click="openModal = false">
+        {{ $t("webapp.home.cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        class="create-repository__container__button"
+        type="primary"
+        scheme="feedback-yellow"
+        @click="createGroup()"
+      >
+        {{ $t("webapp.home.save_changes") }}
+      </unnnic-button>
+    </unnnic-modal>
+    <b-loading :is-full-page="false" :active="loading" />
   </repository-view-base>
 </template>
 
@@ -210,7 +204,7 @@ export default {
     VueMarkdown,
     EntityEdit,
     SummaryInformation,
-    IntegrationModal
+    IntegrationModal,
   },
   extends: RepositoryBase,
   data() {
@@ -237,7 +231,7 @@ export default {
       integrationError: null,
       openModal: false,
       newGroupName: '',
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -246,7 +240,7 @@ export default {
       'getProjectSelected',
       'getOrgSelected',
       'getSelectedVersion',
-      'getSelectedVersionRepository'
+      'getSelectedVersionRepository',
     ]),
     unlabeled() {
       if (!this.repository || !this.repository.other_group) return [];
@@ -266,12 +260,17 @@ export default {
       return this.repository.intents_list.length > 0;
     },
     repositoryIcon() {
-      return (this.repository.categories[0] && this.repository.categories[0].icon) || 'botinho';
+      return (
+        (this.repository.categories[0] && this.repository.categories[0].icon)
+        || 'botinho'
+      );
     },
     getAllCategories() {
-      const categories = this.repository.categories_list.map(category => category.name);
+      const categories = this.repository.categories_list.map(
+        (category) => category.name
+      );
       return categories;
-    }
+    },
   },
   watch: {
     edit() {
@@ -281,7 +280,7 @@ export default {
       if (this.getCurrentRepository) {
         this.checkIfHasIntegration();
       }
-    }
+    },
   },
   methods: {
     ...mapActions(['getIntegrationRepository', 'addGroup', 'editEntity']),
@@ -291,7 +290,7 @@ export default {
           repository_version: this.getCurrentRepository.repository_version_id,
           repository_uuid: this.getCurrentRepository.uuid,
           project_uuid: this.getProjectSelected,
-          organization: this.getOrgSelected
+          organization: this.getOrgSelected,
         });
         this.hasIntegration = data.in_project;
       } catch (err) {
@@ -303,7 +302,7 @@ export default {
     },
     updatedGroup({ groupId, entities }) {
       const groupIndex = this.getGroupIndex(groupId);
-      if (groupIndex >= 0) this.repository.groups[groupIndex].entities = entities;
+      if (groupIndex >= 0) { this.repository.groups[groupIndex].entities = entities; }
     },
     updateUngrouped({ entities }) {
       this.repository.other_group.entities = entities;
@@ -315,7 +314,7 @@ export default {
       if (this.integrationError !== null && value) {
         this.$buefy.toast.open({
           message: this.integrationError.detail,
-          type: 'is-danger'
+          type: 'is-danger',
         });
         return;
       }
@@ -327,8 +326,10 @@ export default {
 
         if (groupIndex < 0) return;
 
-        const removeIndex = this.repository.groups[groupIndex].entities.findIndex(
-          listEntity => listEntity.entity_id === entity.entity_id
+        const removeIndex = this.repository.groups[
+          groupIndex
+        ].entities.findIndex(
+          (listEntity) => listEntity.entity_id === entity.entity_id
         );
 
         if (removeIndex < 0) return;
@@ -336,7 +337,7 @@ export default {
         this.repository.groups[groupIndex].entities.splice(removeIndex, 1);
       } else {
         const removeIndex = this.repository.other_group.entities.findIndex(
-          listEntity => listEntity.entity_id === entity.entity_id
+          (listEntity) => listEntity.entity_id === entity.entity_id
         );
         if (removeIndex < 0) return;
         this.repository.other_group.entities.splice(removeIndex, 1);
@@ -354,7 +355,9 @@ export default {
       this.repository.groups.push(group);
     },
     getGroupIndex(groupId) {
-      return this.repository.groups.findIndex(group => group.group_id === groupId);
+      return this.repository.groups.findIndex(
+        (group) => group.group_id === groupId
+      );
     },
     editGroups() {
       if (this.repository.new_group.entities.length > 0) {
@@ -375,7 +378,7 @@ export default {
           entities: this.repository.new_group.entities,
           group_id: newGroup.data.id,
         });
-        this.repository.new_group.entities.forEach(entity => {
+        this.repository.new_group.entities.forEach((entity) => {
           this.editEntity({
             entityId: entity.entity_id,
             name: entity.value,
@@ -385,7 +388,7 @@ export default {
           });
         });
         this.openModal = false;
-        this.repository.new_group.entities = []
+        this.repository.new_group.entities = [];
       } catch (e) {
         this.showError(e);
       } finally {
@@ -400,14 +403,16 @@ export default {
         && error.response.data
         && error.response.data.non_field_errors
         && error.response.data.non_field_errors.length > 0
-      ) { message = error.response.data.non_field_errors.join(', '); }
+      ) {
+        message = error.response.data.non_field_errors.join(', ');
+      }
 
       this.$buefy.toast.open({
         message,
         type: 'is-danger',
       });
     },
-  }
+  },
 };
 </script>
 
@@ -436,12 +441,12 @@ export default {
     margin-bottom: 1rem;
 
     &__tag {
-      margin: 1rem 2rem 1rem 0;
-      padding: 0 2rem;
+      margin: 0.5rem 2rem 1rem 0;
       font-size: 12px;
       font-family: $unnnic-font-family-secondary;
       color: $unnnic-color-neutral-cloudy;
       background: $unnnic-color-neutral-lightest;
+      display: inline-flex;
     }
   }
 
@@ -509,7 +514,6 @@ export default {
   &__tabs {
     margin-top: $unnnic-spacing-stack-lg;
   }
-
 }
 .tooltipStyle::after {
   font-size: 12px;
@@ -545,6 +549,6 @@ export default {
   }
 }
 /deep/ .tab-head > .unnnic-tooltip-label {
-    max-width: 360px;
+  max-width: 360px;
 }
 </style>

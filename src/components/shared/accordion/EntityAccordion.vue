@@ -147,8 +147,8 @@ export default {
   .expander {
     &__trigger {
       display: flex;
-      padding: .7rem;
-      // margin-top: 0.5rem;
+      padding: .7rem 0;
+      padding-bottom: 0;
 
       &--slim {
         padding: .35rem;
@@ -198,8 +198,7 @@ export default {
 
     &__body {
       padding: .5rem;
-      // background: #f5f5f5;
-      // border-radius: 4px;
+      padding-top: 0;
 
       &--pending{
         padding: .5rem 0;
