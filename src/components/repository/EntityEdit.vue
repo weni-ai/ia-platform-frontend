@@ -48,7 +48,7 @@
     </div>
     <unnnic-modal
         :showModal="openModal"
-        :text="$t('webapp.home.delete_group')"
+        :text="modalTitle"
         scheme="feedback-red"
         modal-icon="alert-circle-1"
         @close="openModal = false"
@@ -62,9 +62,9 @@
           class="create-repository__container__button"
           type="primary"
           scheme="feedback-red"
-          @click="removeGroup(group.group_id)"
+          @click="onDelete"
         >
-          {{ $t("webapp.home.delete_group") }}
+          {{ deleteButton }}
         </unnnic-button>
       </unnnic-modal>
   </div>
@@ -111,7 +111,12 @@ export default {
       needsUpdate: false,
       openModal: false,
       deleteMessage: '',
-      group: {}
+      modalTitle: '',
+      deleteButton: '',
+      group: {},
+      groupId: null,
+      entity: null,
+      isGroup: false
     };
   },
   computed: {
@@ -196,6 +201,7 @@ export default {
       }
     },
     async removeEntity(entity, groupId) {
+      this.openModal = false
       this.loading = true;
       try {
         await this.deleteEntity({
@@ -246,31 +252,36 @@ export default {
       }
     },
     onRemoveEntity(entity, groupId) {
-      this.$buefy.dialog.alert({
-        title: this.$t('webapp.home.delete_entity'),
-        message: this.$t('webapp.home.delete_entity_message', {
-          entity: entity.value,
-        }),
-        confirmText: this.$t('webapp.home.delete'),
-        cancelText: this.$t('webapp.home.cancel'),
-        canCancel: true,
-        closeOnConfirm: true,
-        type: 'is-danger',
-        onConfirm: async () => {
-          this.removeEntity(entity, groupId);
-        },
+      this.groupId = groupId
+      this.entity = entity
+      this.openModal = true;
+      this.modalTitle = this.$t('webapp.home.delete_entity');
+      this.deleteMessage = this.$t('webapp.home.delete_entity_message', {
+        entity: entity.value
       });
+      this.deleteButton = this.$t('webapp.home.delete');
+      this.isGroup = false
     },
     onRemoveGroup(group) {
       this.group = group
       this.openModal = true
+      this.modalTitle = this.$t('webapp.home.delete_group');
       this.deleteMessage = this.$t('webapp.home.delete_group_message', {
         group: group.value
       })
+      this.deleteButton = this.$t('webapp.home.delete_group');
+      this.isGroup = true
     },
     editGroups() {
       this.editing = !this.editing
       this.$emit('onEditGroups')
+    },
+    onDelete() {
+      if (this.isGroup) {
+        this.removeGroup(this.group.group_id)
+      } else {
+        this.removeEntity(this.entity, this.groupId);
+      }
     }
   },
 };

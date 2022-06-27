@@ -22,8 +22,7 @@
 
       <div class="drag-area__dropzone__content">
         <span class="drag-area__dropzone__content__title">
-          Arraste as entidades para alterar o seu grupo ou para <br />
-          esta área em cinza para criar um novo.
+          {{ $t('webapp.home.drag_new') }}
         </span>
       </div>
     </div>
