@@ -21,7 +21,7 @@
       "error_to_retrieve_bot": "Erro ao trazer sua inteligência",
       "yes": "Sim",
       "no": "Não",
-      "items_total": "{n} item no total | {n} itens no total",
+      "items_total": "1-{perPage} de {total}",
       "type_here": "Digite aqui...",
       "support": "Ajuda do Bothub",
       "search_bots": "Procurar inteligências",
@@ -392,13 +392,17 @@
       "see_more": "Saiba mais"
     },
     "intent":{
-      "title": "Intenção",
-      "description": "Essa intenção contém {n} frase | Essa intenção contém {n} frases.",
-      "edit_button": "Editar intenção",
+      "title": "Frases da intenção",
+      "description": "Essa intenção possui {n} frase | Essa intenção possui {n} frases no total.",
+      "edit_button": "Mudar nome da intenção",
       "save_button": "Salvar",
       "no_sentences": "Nenhuma frase.",
       "error_intent": "Algo de errado aconteceu, tente novamente mais tarde.",
-      "error_intent_exists": "Intenção já existe"
+      "edit_intent_modal_title": "Alterar nome da intenção",
+      "edit_intent_modal_subtitle": "Qual o novo nome que você quer dar para a intenção <strong>{intent}</strong>?",
+      "edit_intent_field_title": "Nome da intenção",
+      "edit_intent_field_label": "Escolha um novo nome para a intenção",
+      "edit_intent_button_label": "Alterar nome"
     },
     "settings": {
       "title_edit_repository": "Editar Inteligência",
@@ -756,13 +760,18 @@
       "entities": "Entidade | Entidades"
     },
     "entity":{
-      "title": "Entidade",
-      "description": "Essa entidade contém {n} frase | Essa entidade contém {n} frases.",
-      "edit_button": "Editar Entidade",
+      "title": "Frases da entidade",
+      "description": "Essa entidade possui {n} frase | Essa entidade possui {n} frases.",
+      "edit_button": "Mudar nome da entidade",
       "save_button": "Salvar",
       "no_sentences": "Nenhuma senteça.",
       "error_entity": "Algo de errado aconteceu, tente novamente mais tarde.",
-      "error_entity_exists": "Entidade já existe"
+      "error_entity_exists": "Entidade já existe",
+      "edit_entity_modal_title": "Alterar nome da entidade",
+      "edit_entity_modal_subtitle": "Qual o novo nome que você quer dar para a entidade <strong>{entity}</strong>?",
+      "edit_entity_field_title": "Nome da entidade",
+      "edit_entity_field_label": "Escolha um novo nome para a entidade",
+      "edit_entity_button_label": "Alterar nome"
     },
     "payment": {
       "options": {

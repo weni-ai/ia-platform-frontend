@@ -9,15 +9,40 @@
         <intents-list
           :intents-list="examplesList"
           :repository="repository"
-          @saveEdition="onItemSave()"/>
-        <paginated-list
+          :selected-items="selectedItems"
+          @saveEdition="onItemSave()"
+          @itemDeleted="onItemDeleted()"
+        />
+        <div class="entity-list__divider" />
+        <div class="is-flex is-justify-content-space-between">
+          <unnnic-input
+            placeholder="Busque por frase..."
+            iconLeft="search-1"
+            v-model="searchSentence"
+          />
+          <div class="is-flex is-align-items-center">
+            <span style="font: 14px 'Lato'; margin-right: 1rem">Frases exibidas por página:</span>
+            <unnnic-select
+              class="unnic--clickable"
+              size="md"
+              v-model="selectedOption"
+            >
+              <option v-for="(option, index) in options" :key="index" size="sm">
+                {{ option.value }}
+              </option>
+            </unnnic-select>
+          </div>
+        </div>
+        <intent-pagination
           v-if="examplesList"
           :item-component="sentencesIntenties"
           :list="examplesList"
           :repository="repository"
           :per-page="perPage"
           @itemDeleted="onItemDeleted()"
-          @itemSave="onItemSave()"/>
+          @itemSave="onItemSave()"
+          @onUpdateSelected="updateSelected"
+        />
         <p
           v-if="examplesList && examplesList.empty"
           class="no-examples">{{ $t('webapp.entity.no_sentences') }}</p>
@@ -60,9 +85,11 @@ import IntentsList from '@/components/repository/IntentsList';
 import PaginatedList from '@/components/shared/PaginatedList';
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import SentencesIntentList from '@/components/repository/SentencesIntentList';
+import SentencesIntentTable from '@/components/repository/SentencesIntentTable';
 import RequestAuthorizationModal from '@/components/repository/RequestAuthorizationModal';
 import Loading from '@/components/shared/Loading';
 import RepositoryBase from './Base';
+import IntentPagination from '@/components/shared/IntentPagination';
 
 export default {
   name: 'Intent',
@@ -72,14 +99,16 @@ export default {
     RequestAuthorizationModal,
     PaginatedList,
     SentencesIntentList,
+    SentencesIntentTable,
     IntentsList,
     Loading,
+    IntentPagination
   },
   extends: RepositoryBase,
   props: {
     perPage: {
       type: Number,
-      default: 12,
+      default: 10,
     },
     update: {
       type: Boolean,
@@ -95,9 +124,17 @@ export default {
         intent_id: this.$route.params.intent,
       },
       query: {},
-      sentencesIntenties: SentencesIntentList,
+      sentencesIntenties: SentencesIntentTable,
       requestAuthorizationModalOpen: false,
       querySchema: {},
+      selectedItems: [],
+      options: [
+        { value: 10 },
+        { value: 25 },
+        { value: 50 },
+      ],
+      selectedOption: `${this.perPage}`,
+      searchSentence: ''
     };
   },
   computed: {
@@ -119,6 +156,10 @@ export default {
     intentSearch() {
       this.updateExamples(true);
     },
+    selectedOption() {
+      this.perPage = +this.selectedOption
+      this.updateExamples(true)
+    }
   },
   mounted() {
     this.updateExamples();
@@ -156,6 +197,9 @@ export default {
       });
       this.updateRepository(false);
     },
+    updateSelected(params) {
+      this.selectedItems = params
+    },
   },
 };
 </script>
@@ -163,6 +207,9 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
   label {
     vertical-align: middle;
   }
@@ -174,6 +221,17 @@ export default {
     }
   .entity-list {
     margin: 0.4rem;
+
+    &__divider {
+      border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+      margin: 2rem 0;
+    }
+  }
+  /deep/ .icon-right {
+    transform: translateY(70%);
+  }
+  /deep/ .icon-left {
+    transform: translateY(60%);
   }
 
 
