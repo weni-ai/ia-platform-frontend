@@ -11,7 +11,7 @@
       <div slot="icon" class="level example-accordion__btns-wrapper">
         <unnnic-icon-svg
           :icon="`${isOpen ? 'arrow-button-down-1' : 'arrow-right-1-1'}`"
-          size="sm"
+          size="xs"
         />
       </div>
       <div slot="options">
@@ -413,23 +413,19 @@ export default {
 
   &__link {
     text-decoration: underline;
-    margin: 1rem;
+    margin: 2rem;
+    margin-right: 0;
     font-family: $unnnic-font-family-secondary;
     font-size: $unnnic-font-size-body-gt;
     color: $unnnic-color-neutral-cloudy;
   }
 
   &__wrapper {
-    margin: 0.75rem 0.5rem;
     display: flex;
     flex-wrap: wrap;
 
     &__badge {
-      height: 1.5rem;
-      margin: 0.4rem 0.5rem 0 0;
-      font-weight: bold;
-      line-height: calc(1.5rem - 4px);
-      border-width: 1px;
+      margin: 1rem 1rem 0 0;
 
       &--moving {
         cursor: grab;

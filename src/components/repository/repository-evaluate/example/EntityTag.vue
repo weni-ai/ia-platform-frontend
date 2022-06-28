@@ -84,4 +84,9 @@ export default {
       font-family: $font-family;
     }
 
+    /deep/ .unnnic-tag {
+      display: inline-flex;
+      color: inherit;
+    }
+
 </style>

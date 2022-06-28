@@ -174,7 +174,7 @@
           <section class="training-menu">
             <unnnic-sidebar-item
               :icon="
-                dropSelect === 'isTrainActive' ? 'graph-stats-circle-1-1' : 'graph-stats-circle-1'
+                dropSelect === 'isTrainActive' ? 'graph-status-circle-1' : 'graph-status-circle-1'
               "
               :text="$t('webapp.menu.training')"
               :enableTooltip="!collapse"
