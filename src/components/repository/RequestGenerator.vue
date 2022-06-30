@@ -36,7 +36,6 @@ import LanguageSelect from '@/components/inputs/LanguageSelect';
 import HighlightedCode from '@/components/shared/HighlightedCode';
 import { LANGUAGES } from '@/utils';
 
-
 const components = {
   LanguageSelect,
   HighlightedCode,

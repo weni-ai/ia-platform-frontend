@@ -7,7 +7,7 @@
       <section class="unnic--clickable sidebar-wrapper__header" slot="header">
         <div class="sidebar-wrapper__header__field">
           <div class="sidebar-wrapper__header__field__back" v-if="collapse">
-            <unnnic-icon icon="keyboard-arrow-left-1" size="xs" />
+            <unnnic-icon-svg icon="keyboard-arrow-left-1" size="xs" />
             <span
               class="sidebar-wrapper__header__field__back__text"
               @click="routerHandle('home')"
@@ -16,7 +16,7 @@
           </div>
           <div class="sidebar-wrapper__header__field__back--collapsed" v-else>
             <unnnic-tool-tip :text="$t('webapp.menu.back_text')" enabled side="right">
-              <unnnic-icon
+              <unnnic-icon-svg
                 icon="keyboard-arrow-left-1"
                 size="md"
                 @click.native="routerHandle('home')"
@@ -174,7 +174,7 @@
           <section class="training-menu">
             <unnnic-sidebar-item
               :icon="
-                dropSelect === 'isTrainActive' ? 'graph-stats-circle-1-1' : 'graph-stats-circle-1'
+                dropSelect === 'isTrainActive' ? 'graph-status-circle-1' : 'graph-status-circle-1'
               "
               :text="$t('webapp.menu.training')"
               :enableTooltip="!collapse"

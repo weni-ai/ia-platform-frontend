@@ -4,7 +4,7 @@
       <div class="modal-container__content">
         <div class="modal-container__content__background">
           <section class="modal-container__content__background__header">
-            <unnnic-icon
+            <unnnic-icon-svg
               size="lg"
               icon="keyboard-arrow-down-1"
               @click="closeModal()"

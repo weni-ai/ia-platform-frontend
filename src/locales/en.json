@@ -260,14 +260,14 @@
     "home": {
       "description": "Description",
       "no_description": "There is no description for this repository",
-      "intents_list": "Intents List",
-      "entities_list": "Entity Groups",
+      "intents_list": "Intents",
+      "entities_list": "Entities",
       "entities_label": "This intelligence has {n} entity group | This intelligence has {n} entity groups",
       "non-grouped_entities": "and {n} non-grouped entity. | and {n} non-grouped entities.",
       "only_non-grouped_entities": "This intelligence has {n} non-grouped entitie. | This intelligence has {n} non-grouped entities.",
       "bot_has_x_intents": "This bot has <strong>{intents}</strong> intents",
-      "labeled": "<strong>{n}</strong> entities grouped as <strong>{label_value}</strong> | <strong>{n}</strong> entity grouped as <strong>{label_value}</strong> | <strong>{n}</strong> entities grouped as <strong>{label_value}</strong>",
-      "unlabeled": "{n} ungrouped entities | <strong>{n}</strong> ungrouped entity | <strong>{n}</strong> ungrouped entities",
+      "labeled": "Group <strong>{label_value}</strong> ({n})",
+      "unlabeled": "Ungrouped entities ({n})",
       "all_categories": "All categories",
       "all_languages": "All languages",
       "no_repo": "No repositories found.",
@@ -276,6 +276,8 @@
       "finish_editing": "Finish editing",
       "enter": "Enter",
       "create_new_group": "Create new group",
+      "drag_new": "Drag entities to change their group or to this gray area to create a new one.",
+      "edit_group_name": "Change name",
       "new_group_named": "New entity group named {name}",
       "delete_entity": "Delete Entity",
       "delete_entity_message": "Are you sure you want to delete entity named \"{entity}\"?",
@@ -283,6 +285,16 @@
       "delete_group_message": "Are you sure you want to delete entity group named \"{group}\"?",
       "delete": "Delete",
       "cancel": "Cancel",
+      "edit_group_modal_title": "Change group name",
+      "edit_group_modal_subtitle": "What new name do you want to give the group <strong>{group}</strong>?",
+      "edit_group_field_title": "Group name",
+      "edit_group_field_label": "Choose a new name for the group",
+      "edit_group_button_label": "Change name",
+      "save_changes": "Save",
+      "create_group_modal_title": "Set the group name",
+      "create_group_modal_subtitle": "You have created a new group, what will its name be?",
+      "create_group_field_label": "Choose a name for the group",
+      "create_group_field_title": "Group name",
       "remove_integrate": "Remove from project",
       "integrate": "Integrate into the project",
       "integrate_modal_title": "Integrate \"{intelligence}\" intelligence to the project? ",
@@ -345,7 +357,9 @@
         "edit-base_modal_delete_text": "Deleting this base will remove its text. It is not possible to undo this action.",
         "edit-base_modal_delete_placeholder": "Confirm the knowledge base name to remove it",
         "edit-base_modal_delete_button_confirm": "Delete base",
-        "edit-base_modal_delete_button_cancel": "Cancel"
+        "edit-base_modal_delete_button_cancel": "Cancel",
+        "see-all_bases": "See all bases",
+        "add_base":"+ Add base"
       }
     },
     "summary": {
@@ -357,12 +371,15 @@
       "information_language": "Languages | Language | Languages",
       "information_contributors": "Contributors | Contributor | Contributors",
       "information_integrations": "Integrations | Integration | Integrations",
-      "intent_question": "INTENT is what the chatbot will detect as being the user's intention when sending a specific message. For example: when sending \"thank you\", the user's intention is to show gratitude. So the intent for that sentece could be \"thanks\".",
+      "intent_question": "INTENT is what the chatbot will detect as being the user's intention when sending a specific message. For example: when sending \"thank you\", the user's intention is to show gratitude. So the intent for that sentence could be \"thanks\".",
       "entity_question": "ENTITY is the noun related to the desire that was detected by the chatbot. For example: If the user-submitted phrase is \"generate new report,\" the entity could be \"report\" or \"new report\"",
+      "entity_groups_info": "Noun related to desire that was detected by intelligence. For example: if the phrase sent by the user is “generate new report”, the entity can be “report” or “new report”.",
+      "intents_list_info": "The desire that intelligence perceives that the user has when sending a message. For example: when sending “thank you” the user's intent is to show gratitude. Thus, the intent could be “thanks”.",
       "intelligence_force": "Intelligence force",
       "intelligence_force_low": "Low",
       "intelligence_force_regular": "Regular",
       "intelligence_force_high": "High",
+      "intelligence_force_info": "There are 3 levels of strength: weak, regular and strong. The greater the number of phrases per intent, the balance between the intents and the number of test phrases, the greater your strength, which represents how well the intelligence is trained.",
       "integrate": "Integrate to Flows",
       "remove_integrate": "Remove from Flows"
     },
@@ -403,7 +420,9 @@
       "search_user_org": "Enter a name or username",
       "no_locale": "No locale",
       "remove_user_confirm": "Are you sure you want to delete <strong>{user}</strong> as <strong>{role}</strong>?",
-      "remove": "Remove"
+      "remove": "Remove",
+      "cancel": "Cancel",
+      "default_error": "Something went wrong, try again later."
     },
     "roles": {
       "user": "User",
@@ -458,8 +477,10 @@
       "save_button": "Save",
       "train_progress": "{progress}% of training completed",
       "empty_text_error": "You need type a text to sentence",
+      "error_caracter_type": "The phrase must contain letters or numbers. Include them to proceed.", 
       "intent_error": "Intent is required",
-      "default_error": "Something went wrong, try again later."
+      "default_error": "Something went wrong, try again later.",
+      "more_than_200_words": "You reached the limit of 200 words per phrase. Adjust the text if necessary or break it into smaller phrases."
     },
     "train_modal": {
       "training_status": "Training Status",

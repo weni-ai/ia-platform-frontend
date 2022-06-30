@@ -1,5 +1,5 @@
 <template>
-  <b-tag
+  <!-- <b-tag
     :class="classes"
     :closable="closable"
     rounded
@@ -9,11 +9,20 @@
       v-html="$t('webapp.evaluate.entity_is_group',
                  { entity: entityName, group })" />
     <strong v-else>{{ entityName }} </strong>
-  </b-tag>
+  </b-tag> -->
+   <unnnic-tag
+      :hasCloseIcon="closable"
+      @close="$emit('close')"
+      type="default"
+      :text="group ? $t('webapp.evaluate.entity_is_group',
+        { entity: entityName, group }) : entityName"
+      clickable
+      :style="{backgroundColor: randomColor()}"
+    />
 </template>
 
 <script>
-import { getEntityColor } from '@/utils/entitiesColors';
+import { getEntityColor, getRandomColor } from '@/utils/entitiesColors';
 
 export default {
   name: 'EntityTag',
@@ -46,8 +55,16 @@ export default {
       return classList;
     },
     tagClass() {
-      return this.colorClass || `entity-${getEntityColor(this.entityName)}`;
+      return this.colorClass || `${getEntityColor(this.entityName)}`;
     },
+    document() {
+      return document
+    }
+  },
+  methods: {
+    randomColor() {
+      return getRandomColor()
+    }
   },
 };
 </script>
@@ -65,6 +82,11 @@ export default {
 
     span, strong{
       font-family: $font-family;
+    }
+
+    /deep/ .unnnic-tag {
+      display: inline-flex;
+      color: inherit;
     }
 
 </style>

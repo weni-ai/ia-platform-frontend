@@ -149,7 +149,6 @@ export default {
           const shouldShowSettings = this.settings && style && typeof style.only_settings === 'boolean' && style.only_settings;
 
           if (!shouldShowSettings && shouldHide) return false;
-
           return {
             type,
             name,
