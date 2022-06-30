@@ -1,11 +1,11 @@
-name: Build IA Platform Frontend (Push Tag)
+name: Build IA Platform Frontend (Push Branch)
 
 on:
   push:
-    tags:
-      - 'v*.*.*-develop*'
-      - 'v*.*.*-staging*'
-      - 'v*.*.*'
+    branches:
+      - develop
+      - staging
+      - production
 
 jobs:
   docker:
@@ -15,7 +15,7 @@ jobs:
       - name: Set variables
         run: |
             TAG=$(echo $GITHUB_REF|cut -d"/" -f3)
-            if $(echo  $TAG|grep --silent -e 'v*.*.*-develop*')
+            if $(echo  $TAG|grep --silent -e 'develop')
             then
               echo "Found environment: DEVELOP - $TAG"
               echo "MANIFESTS_ENVIRONMENT=develop" >> $GITHUB_ENV
@@ -27,9 +27,7 @@ jobs:
               echo "VERSION=$VERSION"
               echo "COMMIT_SHA=$GITHUB_SHA" >> $GITHUB_ENV
               echo "COMMIT_SHA=$GITHUB_SHA"
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG" >> $GITHUB_ENV
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG"
-            elif $(echo  $TAG|grep --silent -e 'v*.*.*-staging*')
+            elif $(echo  $TAG|grep --silent -e 'staging')
             then
               echo "Found environment: STAGING - $TAG"
               echo "MANIFESTS_ENVIRONMENT=staging" >> $GITHUB_ENV
@@ -41,9 +39,7 @@ jobs:
               echo "VERSION=$VERSION"
               echo "COMMIT_SHA=$GITHUB_SHA" >> $GITHUB_ENV
               echo "COMMIT_SHA=$GITHUB_SHA"
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG" >> $GITHUB_ENV
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG"
-            elif $(echo  $TAG|grep --silent -e 'v*.*.*')
+            elif $(echo  $TAG|grep --silent -e 'production')
             then
               echo "No environment found, assuming: PRODUCTION - $TAG"
               echo "MANIFESTS_ENVIRONMENT=production" >> $GITHUB_ENV
@@ -55,13 +51,12 @@ jobs:
               echo "VERSION=$VERSION"
               echo "COMMIT_SHA=$GITHUB_SHA" >> $GITHUB_ENV
               echo "COMMIT_SHA=$GITHUB_SHA"
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG" >> $GITHUB_ENV
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG"
             else
               echo 'Not a valid tag. Skipping...'
               exit 1
             fi
-            printenv
+            echo "IMAGE_TAG=bothubit/platform-frontend:$TAG-${GITHUB_SHA::7}" >> $GITHUB_ENV
+            echo "IMAGE_TAG=bothubit/platform-frontend:$TAG-${GITHUB_SHA::7}"
 
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -140,13 +135,14 @@ jobs:
               [ "$1" = "$2" ] && return 1 || verlte $1 $2
             }
             export PROJECT_DIR="platform-frontend" PATCH_TARGET="deployment-platform-frontend.json"
-            ENV_DIR=$(
-                find kubernetes-manifests/${PROJECT_DIR}/ -maxdepth 1 -mindepth 1 -type d \
-                  | egrep -v -e '.git' -e '/base$' \
-                  | while read dirname ; do
-                    test -r "${dirname}/kustomization.yaml" && echo "${dirname}"
-                  done
-              )
+            # ENV_DIR=$(
+            #     find kubernetes-manifests/${PROJECT_DIR}/ -maxdepth 1 -mindepth 1 -type d \
+            #       | egrep -v -e '.git' -e '/base$' \
+            #       | while read dirname ; do
+            #         test -r "${dirname}/kustomization.yaml" && echo "${dirname}"
+            #       done
+            #   )
+            ENV_DIR="${MANIFESTS_ENVIRONMENT}"
             for e in ${ENV_DIR}; do
               echo "Update ${e}:"
               if [ ! -d "${e}" ] ; then
