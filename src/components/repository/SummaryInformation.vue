@@ -133,9 +133,13 @@ export default {
 .summary-information{
   display: flex;
 
+  @media screen and (max-width: 70em) {
+        flex-direction: column;
+  }
+
     &__info{
-      margin-left: 0.5rem;
-      width: 60%;
+      // margin-left: 0.5rem;
+      width: 50%;
 
         &__title{
           color: $color-fake-black;
@@ -193,8 +197,6 @@ export default {
                 justify-content: center;
                 align-items: center;
                 height: 156px;
-                width: 49%;
-                // border: 1px solid $color-border;
                 cursor: pointer;
                 margin: 0 1rem 1rem 0;
 
@@ -223,6 +225,7 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        width: 100%;
       }
     }
 }
