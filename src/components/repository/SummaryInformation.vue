@@ -1,11 +1,19 @@
 <template>
   <div class="summary-information">
     <div class="summary-information__info">
-      <span class="summary-information__info__title">
+      <unnnic-card
+        type="title"
+        :title="$t('webapp.summary.general_information')"
+        :hasInformationIcon="false"
+        icon="gauge-dashboard-2"
+        scheme="aux-purple"
+      />
+      <!-- <span class="summary-information__info__title">
         {{ $t('webapp.summary.general_information') }}
-      </span>
+      </span> -->
       <div class="summary-information__info__container">
-        <div class="summary-information__info__container__training">
+        <div class="summary-information__info__container__general">
+          <div class="summary-information__info__container__general__data">
           <numbers-card
             :count="getCurrentRepository.examples__count"
             :label="$tc('webapp.summary.information_sentences',
@@ -13,6 +21,8 @@
             clickable
             @click="navigateToSentences"
           />
+          </div>
+          <div class="summary-information__info__container__general__data">
           <numbers-card
             :count="getCurrentRepository.intents_list.length"
             :label="$tc('webapp.summary.information_intents',
@@ -20,6 +30,8 @@
             clickable
             @click="scrollToIntent"
           />
+          </div>
+          <div class="summary-information__info__container__general__data">
           <numbers-card
             :count="getCurrentRepository.entities.length"
             :label="$tc('webapp.summary.information_entities',
@@ -27,6 +39,7 @@
             clickable
             @click="scrollToEntity"
           />
+          </div>
         </div>
         <div class="summary-information__info__container__general">
           <div class="summary-information__info__container__general__data">
@@ -118,9 +131,15 @@ export default {
 @import '~@/assets/scss/variables.scss';
 
 .summary-information{
+  display: flex;
+
+  @media screen and (max-width: 70em) {
+        flex-direction: column;
+  }
 
     &__info{
-      margin-left: 0.5rem;
+      // margin-left: 0.5rem;
+      width: 50%;
 
         &__title{
           color: $color-fake-black;
@@ -133,6 +152,7 @@ export default {
             width: 100%;
             display: flex;
             margin-top: 1.2rem;
+            flex-direction: column;
 
             &__training{
             display: flex;
@@ -158,8 +178,9 @@ export default {
             justify-content: space-between;
             align-items: center;
             text-align: center;
-            height: 156px;
-            width: 50%;
+            height: 110px;
+            width: 95%;
+            margin-top: 1rem;
 
             @media screen and (max-width: 60em) {
               width: 100%;
@@ -176,9 +197,8 @@ export default {
                 justify-content: center;
                 align-items: center;
                 height: 156px;
-                width: 49%;
-                border: 1px solid $color-border;
                 cursor: pointer;
+                margin: 0 1rem 1rem 0;
 
                   @media screen and (max-width: 40em) {
                     width:100%;
@@ -187,7 +207,7 @@ export default {
                   }
               }
               &__data:nth-child(2){
-                margin: 0 0.3rem;
+                // margin: 0 0.3rem;
 
                 @media screen and (max-width: 40em) {
                     margin-top: 0.6rem;
@@ -205,6 +225,7 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        width: 100%;
       }
     }
 }

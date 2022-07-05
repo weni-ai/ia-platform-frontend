@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <news-modal />
+    <!-- <news-modal /> -->
     <router-view />
     <!-- <tutorial-modal
       :open="activeMenu"/> -->

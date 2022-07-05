@@ -109,6 +109,7 @@ export default {
   }
 
   &-entities {
+      display: inline-flex;
 
     &__wrapper {
       margin: 0 0 0 0.8rem;
