@@ -302,6 +302,7 @@ export default {
             display: flex;
             margin-right: 1rem;
             text-align: right;
+            white-space: nowrap;
         }
 
         &__options {
@@ -315,5 +316,11 @@ export default {
               transition: 1s;
             }
         }
+    }
+    /deep/ .unnnic-tag {
+
+      strong {
+        margin: 0 .4rem !important;
+      }
     }
 </style>

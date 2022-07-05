@@ -376,9 +376,9 @@
       "entity_groups_info": "Noun related to desire that was detected by intelligence. For example: if the phrase sent by the user is “generate new report”, the entity can be “report” or “new report”.",
       "intents_list_info": "The desire that intelligence perceives that the user has when sending a message. For example: when sending “thank you” the user's intent is to show gratitude. Thus, the intent could be “thanks”.",
       "intelligence_force": "Intelligence force",
-      "intelligence_force_low": "Low",
+      "intelligence_force_low": "Weak",
       "intelligence_force_regular": "Regular",
-      "intelligence_force_high": "High",
+      "intelligence_force_high": "Strong",
       "intelligence_force_info": "There are 3 levels of strength: weak, regular and strong. The greater the number of phrases per intent, the balance between the intents and the number of test phrases, the greater your strength, which represents how well the intelligence is trained.",
       "integrate": "Integrate to Flows",
       "remove_integrate": "Remove from Flows"

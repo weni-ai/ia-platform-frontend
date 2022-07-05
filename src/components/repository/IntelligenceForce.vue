@@ -71,16 +71,13 @@ export default {
 .intelligence-force{
         display: flex;
         flex-direction: column;
-        // justify-content: center;
-        // padding-left: 3rem;
-        // margin-top: .8rem;
-        // margin-left: 0.5rem;
-        // border: 1px solid $color-border;
         width: 50%;
-        // height: 75px;
+
+        @media screen and (max-width: 70em) {
+        width: 100%;
+      }
 
         &__title{
-            // display: flex;
             font-size: 1.75rem;
             margin-bottom: 1.2rem;
           h2 {
