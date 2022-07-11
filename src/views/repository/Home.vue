@@ -139,7 +139,6 @@
         </template>
       </unnnic-tab>
     </div>
-    <h1>{{ repositoryVersion }}</h1>
     <integration-modal
       :openModal="integrateModal"
       :repository="getCurrentRepository"
@@ -460,7 +459,7 @@ export default {
       flex-direction: column;
 
       &__integrate {
-        background-color: $color-primary-soft;
+        background-color: $unnnic-color-brand-weni-soft;
         margin-left: auto;
       }
       &__remove-integrate {

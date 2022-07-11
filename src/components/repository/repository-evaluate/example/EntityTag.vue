@@ -1,20 +1,10 @@
 <template>
-  <!-- <b-tag
-    :class="classes"
-    :closable="closable"
-    rounded
-    @close="$emit('close')" >
-    <span
-      v-if="group"
-      v-html="$t('webapp.evaluate.entity_is_group',
-                 { entity: entityName, group })" />
-    <strong v-else>{{ entityName }} </strong>
-  </b-tag> -->
    <unnnic-tag
+      class="entity-tag"
       :hasCloseIcon="closable"
       @close="$emit('close')"
       type="default"
-      :text="group ? $t('webapp.evaluate.entity_is_group',
+      v-html="group ? $t('webapp.evaluate.entity_is_group',
         { entity: entityName, group }) : entityName"
       clickable
       :style="{backgroundColor: randomColor()}"
@@ -84,9 +74,14 @@ export default {
       font-family: $font-family;
     }
 
-    /deep/ .unnnic-tag {
-      display: inline-flex;
+    .entity-tag {
+      font-family: Lato;
+      font-size: .75rem;
+      font-weight: 400;
+      line-height: 1.25rem;
+      padding: .25rem .75rem;
       color: inherit;
+      display: inline-flex;
     }
 
 </style>
