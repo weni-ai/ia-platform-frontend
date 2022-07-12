@@ -394,7 +394,7 @@
     "intent":{
       "title": "Frases da intenção",
       "description": "Essa intenção possui {n} frase | Essa intenção possui {n} frases no total.",
-      "edit_button": "Mudar nome da intenção",
+      "edit_button": "Alterar nome da intenção",
       "save_button": "Salvar",
       "no_sentences": "Nenhuma frase.",
       "error_intent": "Algo de errado aconteceu, tente novamente mais tarde.",
@@ -402,7 +402,9 @@
       "edit_intent_modal_subtitle": "Qual o novo nome que você quer dar para a intenção <strong>{intent}</strong>?",
       "edit_intent_field_title": "Nome da intenção",
       "edit_intent_field_label": "Escolha um novo nome para a intenção",
-      "edit_intent_button_label": "Alterar nome"
+      "edit_intent_button_label": "Alterar nome",
+      "success_modal_title": "Nome alterado!",
+      "success_modal_subtitle": "O nome da intenção foi alterado com sucesso 😉"
     },
     "settings": {
       "title_edit_repository": "Editar Inteligência",
@@ -471,9 +473,9 @@
       "no_train_sentence": "Essa frase ainda não foi adicionada ao treinamento.",
       "failed": "Falhou",
       "intention_or_sentence_already_exist": "Intenção ou frase já existe",
-      "delete_title": "Deletar frase da entidade",
+      "delete_title": "Excluir frase(s)",
       "delete_phrase_modal_title":"Deletar frase",
-      "delete_phrase_modal":"Você tem certeza que deseja deletar essa frase?",
+      "delete_phrase_modal":"Deseja mesmo excluir a(s) frase(s) selecionadas? Uma vez realizada a ação não será possível revertê-la.",
       "delete_button":"Deletar",
       "cancel_button":"Cancelar",
       "save_button":"Salvar",
@@ -762,7 +764,7 @@
     "entity":{
       "title": "Frases da entidade",
       "description": "Essa entidade possui {n} frase | Essa entidade possui {n} frases.",
-      "edit_button": "Mudar nome da entidade",
+      "edit_button": "Alterar nome da entidade",
       "save_button": "Salvar",
       "no_sentences": "Nenhuma senteça.",
       "error_entity": "Algo de errado aconteceu, tente novamente mais tarde.",

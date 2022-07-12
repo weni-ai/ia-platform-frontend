@@ -15,14 +15,14 @@
           @itemDeleted="onItemDeleted()"
           />
         <div class="entity-list__divider" />
-        <div class="is-flex is-justify-content-space-between">
+        <div class="entity-list__search">
           <unnnic-input
             placeholder="Busque por frase..."
             iconLeft="search-1"
             v-model="searchSentence"
           />
           <div class="is-flex is-align-items-center">
-            <span style="font: 14px 'Lato'; margin-right: 1rem">Frases exibidas por página:</span>
+            <span class="entity-list__results">Frases exibidas por página:</span>
             <unnnic-select
               class="unnic--clickable"
               size="md"
@@ -227,6 +227,21 @@ export default {
     &__divider {
       border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
       margin: 2rem 0;
+    }
+
+    &__results {
+      font: 14px 'Lato';
+      margin-right: 1rem;
+      color: $unnnic-color-neutral-dark;
+    }
+
+    &__search {
+      display: flex;
+      justify-content: space-between;
+
+      & /deep/ .unnnic-form {
+        width: 50%;
+      }
     }
   }
   /deep/ .icon-right {

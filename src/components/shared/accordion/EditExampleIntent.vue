@@ -139,7 +139,12 @@
           </unnnic-button>
         </div>
         <div>
-          <a>Como adicionar novas entidades a partir da frase?</a>
+          <a
+            href="https://docs.weni.ai/l/pt/bothub/testando-seu-dataset#adicionando_entidades"
+            target="_blank"
+          >
+            Como adicionar novas entidades a partir da frase?
+          </a>
         </div>
       </div>
     </form>
