@@ -67,9 +67,9 @@ describe('EntitiesList.vue', () => {
   //     expect(wrapper.vm.editSentences).toBeTruthy();
   //   });
 
-  //   test('Entity should be de defined', () => {
-  //     expect(wrapper.vm.entityName).toBeDefined();
-  //   });
+  test('Entity should be de defined', () => {
+    expect(wrapper.vm.entityName).toBeDefined();
+  });
 
   //   test('total of sentences should be greater than 0', () => {
   //     expect(wrapper.vm.entitiesList.total).toBeGreaterThan(0);

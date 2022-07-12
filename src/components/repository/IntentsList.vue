@@ -23,8 +23,8 @@
           @click="openDeleteModal = true"
           type="secondary"
           size="large"
-          :text="`Excluir selecionados (${selectedItems.length})`"
-          :disabled="selectedItems.length === 0"
+          :text="`Excluir selecionados (${sentencesCounter})`"
+          :disabled="sentencesCounter.length === 0"
         />
       </div>
     </div>
@@ -145,6 +145,12 @@ export default {
       }
       return 0;
     },
+    sentencesCounter() {
+      if (this.selectedItems !== null) {
+        return this.selectedItems.length
+      }
+      return 0
+    }
   },
   watch: {
     intentSelected() {
