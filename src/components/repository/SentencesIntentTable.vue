@@ -1,4 +1,5 @@
 <template>
+<div>
   <unnnic-table :items="list.items" class="mt-4">
     <template v-slot:header>
       <unnnic-table-row :headers="table.headers">
@@ -19,7 +20,7 @@
         </template>
 
         <template v-slot:sentence>
-          <div :title="item.sentence" class="break-text">
+          <div :title="item.sentence" class="break-text example-accordion__sentence">
             <span class="example-accordion__tag">[{{ item.language }}]</span>
             <!-- <highlighted-text
               v-if="!editing || !open"
@@ -75,6 +76,29 @@
       />
     </template>
   </unnnic-table>
+  <unnnic-modal
+    :showModal="openModal"
+    :text="$t('webapp.trainings.delete_title')"
+    scheme="feedback-red"
+    modal-icon="alert-circle-1"
+    @close="openModal = false"
+  >
+    <span
+    slot="message"
+    v-html="$t('webapp.trainings.delete_phrase_modal')" />
+    <unnnic-button slot="options" type="terciary" @click="openModal = false">
+      {{ $t("webapp.home.cancel") }}
+    </unnnic-button>
+    <unnnic-button
+      slot="options"
+      type="primary"
+      scheme="feedback-red"
+      @click="confirmDelete()"
+    >
+      {{ $t("webapp.trainings.delete_title") }}
+    </unnnic-button>
+  </unnnic-modal>
+</div>
 </template>
 
 <script>
@@ -150,16 +174,18 @@ export default {
           {
             id: 'edit',
             text: 'Editar',
-            width: '55px',
+            width: '40px',
           },
           {
             id: 'delete',
             text: 'Excluir',
-            width: '55px',
+            width: '40px',
           },
         ],
       },
-      selectedItem: null
+      selectedItem: null,
+      openModal: false,
+      sentenceId: null
     };
   },
 
@@ -211,20 +237,13 @@ export default {
       return `entity-${color}`;
     },
     deleteThisExample(id) {
-      this.deleteDialog = this.$buefy.dialog.confirm({
-        title: this.$t('webapp.trainings.delete_title'),
-        message: this.$t('webapp.trainings.delete_phrase_modal'),
-        confirmText: this.$t('webapp.trainings.delete_button'),
-        cancelText: this.$t('webapp.trainings.cancel_button'),
-        inputAttrs: {
-          textAlign: 'center',
-        },
-        type: 'is-danger',
-        onConfirm: async () => {
-          await this.deleteExample({ id });
-          this.$emit('dispatchEvent', { event: 'itemDeleted' });
-        },
-      });
+      this.openModal = true;
+      this.sentenceId = id;
+    },
+    async confirmDelete() {
+      await this.deleteExample({ id: this.sentenceId });
+      this.$emit('dispatchEvent', { event: 'itemDeleted' });
+      this.openModal = false;
     },
     cancelEditSentence() {
       this.open = !this.open;
@@ -251,6 +270,8 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/scss/colors.scss";
 @import "~@/assets/scss/variables.scss";
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .example-accordion {
   &__text {
@@ -273,5 +294,17 @@ export default {
     display: flex;
     justify-content: flex-end;
   }
+
+  &__sentence {
+    color: $unnnic-color-neutral-darkest;
+  }
+}
+
+/deep/ .scroll {
+  padding-right: 0;
+}
+
+/deep/ .header .break-text {
+  overflow: initial;
 }
 </style>

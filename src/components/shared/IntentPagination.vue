@@ -197,15 +197,16 @@ export default {
       align-items: center;
 
       &__message {
-        color: $color-grey-dark;
         padding: 1rem 1rem 1rem 0;
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-body-md;
+        color: $unnnic-color-neutral-dark;
       }
     }
 
     &__divider {
-      border-bottom: $unnnic-border-width-thinner solid
-        $unnnic-color-neutral-soft;
-      margin: 2rem 0;
+      border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+      margin: 1rem 0;
     }
   }
 

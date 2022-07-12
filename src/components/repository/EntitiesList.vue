@@ -1,40 +1,4 @@
 <template>
-  <!-- <div class="entity-list">
-    <div class="entity-list__content">
-      <div class="entity-list__content__descriptions">
-        <h1> <strong>{{ $t('webapp.entity.title') }}</strong> </h1>
-        <b-tag
-          v-if="!editSentences"
-          :class="[
-            'entity-list__content__descriptions__tag',
-            getEntityClass(),
-          ]"
-          size="is-medium">
-          <div>{{ entitySelected }}</div>
-        </b-tag>
-        <b-field
-          v-else
-          class="entity-list__content__descriptions__editEntityName">
-          <b-input v-model="entitySelected"/>
-        </b-field>
-      </div>
-      <div>
-        <b-button
-          v-if="!editSentences"
-          ref="editEntityEvent"
-          class="entity-list__content__buttonEdit"
-          @click="editOptionsEntity()">{{ $t('webapp.entity.edit_button') }}</b-button>
-        <b-button
-          v-else
-          ref="saveEntityEvent"
-          class="entity-list__content__buttonSave"
-          @click="saveEdition()">{{ $t('webapp.entity.save_button') }}</b-button>
-      </div>
-    </div>
-    <div class="entity-list__header__options">
-      <p> {{ $tc('webapp.entity.description', totalSentences) }}</p>
-    </div>
-  </div> -->
   <div class="entity-list">
     <div class="entity-list__content">
       <div class="entity-list__content__descriptions">
@@ -46,7 +10,7 @@
           <span> "{{ entitySelected }}" </span>
         </h1>
       </div>
-      <div>
+      <div class="entity-list__buttons-wrapper">
         <unnnic-button
           ref="editEntityEvent"
           @click="editOptionsEntity()"
@@ -59,8 +23,8 @@
           @click="deleteSelectedItems"
           type="secondary"
           size="large"
-          :text="`Excluir selecionados (${selectedItems.length})`"
-          :disabled="selectedItems.length === 0"
+          :text="`Excluir selecionados (${sentencesCounter})`"
+          :disabled="sentencesCounter.length === 0"
         />
       </div>
     </div>
@@ -106,6 +70,39 @@
         {{ $t("webapp.entity.edit_entity_button_label") }}
       </unnnic-button>
     </unnnic-modal>
+    <unnnic-modal
+      :showModal="openSuccessModal"
+      :text="$t('webapp.intent.success_modal_title')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openSuccessModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.intent.success_modal_subtitle')" />
+    </unnnic-modal>
+    <unnnic-modal
+      :showModal="openDeleteModal"
+      :text="$t('webapp.trainings.delete_title')"
+      scheme="feedback-red"
+      modal-icon="alert-circle-1"
+      @close="openDeleteModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.trainings.delete_phrase_modal')" />
+      <unnnic-button slot="options" type="terciary" @click="openDeleteModal = false">
+        {{ $t("webapp.home.cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        type="primary"
+        scheme="feedback-red"
+        @click="deleteSelectedItems"
+      >
+        {{ $t("webapp.trainings.delete_title") }}
+      </unnnic-button>
+    </unnnic-modal>
   </div>
 </template>
 
@@ -143,6 +140,8 @@ export default {
       entitySelected: '',
       deleteDialog: null,
       openModal: false,
+      openSuccessModal: false,
+      openDeleteModal: false,
       newEntityName: '',
     };
   },
@@ -157,6 +156,12 @@ export default {
       }
       return 0;
     },
+    sentencesCounter() {
+      if (this.selectedItems !== null) {
+        return this.selectedItems.length
+      }
+      return 0
+    }
   },
   watch: {
     entitySelected() {
@@ -203,6 +208,7 @@ export default {
         this.$emit('saveEdition');
         this.entitySelected = this.newIntentName;
         this.openModal = false;
+        this.openSuccessModal = true
       } catch (error) {
         if (error.response.data.non_field_errors !== undefined) {
           this.$buefy.toast.open({
@@ -219,21 +225,10 @@ export default {
       // this.editOptionsEntity();
     },
     deleteSelectedItems() {
-      this.deleteDialog = this.$buefy.dialog.confirm({
-        title: this.$t('webapp.trainings.delete_title'),
-        message: this.$t('webapp.trainings.delete_phrase_modal'),
-        confirmText: this.$t('webapp.trainings.delete_button'),
-        cancelText: this.$t('webapp.trainings.cancel_button'),
-        inputAttrs: {
-          textAlign: 'center',
-        },
-        type: 'is-danger',
-        onConfirm: async () => {
-          this.selectedItems.forEach((item) => {
-            this.deleteExample({ id: item.id });
-            this.$emit('itemDeleted');
-          });
-        },
+      this.selectedItems.forEach((item) => {
+        this.deleteExample({ id: item.id });
+        this.$emit('itemDeleted');
+        this.openDeleteModal = false;
       });
     },
     goToSummary() {
@@ -250,8 +245,8 @@ export default {
 @import "~@/assets/scss/variables.scss";
 .entity-list {
   margin: 0.4rem;
-  margin-left: 2.8rem;
-  margin-bottom: 2rem;
+  margin-left: 2.8rem !important;
+  margin-bottom: 2rem !important;
   &__options {
     p {
       font-size: $font-size;
@@ -331,6 +326,11 @@ export default {
       justify-content: space-between;
       align-items: center;
     }
+  }
+
+  &__buttons-wrapper {
+    position: relative;
+    top: 16px;
   }
 }
 </style>

@@ -10,7 +10,7 @@
           <span> "{{ intentSelected }}" </span>
         </h1>
       </div>
-      <div>
+      <div class="intent-list__buttons-wrapper">
         <unnnic-button
           ref="editIntentEvent"
           @click="editOptionsIntent()"
@@ -20,11 +20,11 @@
           :text="$t('webapp.intent.edit_button')"
         />
         <unnnic-button
-          @click="deleteSelectedItems"
+          @click="openDeleteModal = true"
           type="secondary"
           size="large"
-          :text="`Excluir selecionados (${selectedItems.length})`"
-          :disabled="selectedItems.length === 0"
+          :text="`Excluir selecionados (${sentencesCounter})`"
+          :disabled="sentencesCounter.length === 0"
         />
       </div>
     </div>
@@ -65,6 +65,39 @@
         {{ $t("webapp.intent.edit_intent_button_label") }}
       </unnnic-button>
     </unnnic-modal>
+    <unnnic-modal
+      :showModal="openSuccessModal"
+      :text="$t('webapp.intent.success_modal_title')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openSuccessModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.intent.success_modal_subtitle')" />
+    </unnnic-modal>
+    <unnnic-modal
+      :showModal="openDeleteModal"
+      :text="$t('webapp.trainings.delete_title')"
+      scheme="feedback-red"
+      modal-icon="alert-circle-1"
+      @close="openDeleteModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.trainings.delete_phrase_modal')" />
+      <unnnic-button slot="options" type="terciary" @click="openDeleteModal = false">
+        {{ $t("webapp.home.cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        type="primary"
+        scheme="feedback-red"
+        @click="deleteSelectedItems"
+      >
+        {{ $t("webapp.trainings.delete_title") }}
+      </unnnic-button>
+    </unnnic-modal>
   </div>
 </template>
 
@@ -96,6 +129,8 @@ export default {
       intentSelected: '',
       deleteDialog: null,
       openModal: false,
+      openSuccessModal: false,
+      openDeleteModal: false,
       newIntentName: ''
     };
   },
@@ -110,6 +145,12 @@ export default {
       }
       return 0;
     },
+    sentencesCounter() {
+      if (this.selectedItems !== null) {
+        return this.selectedItems.length
+      }
+      return 0
+    }
   },
   watch: {
     intentSelected() {
@@ -141,6 +182,7 @@ export default {
         this.$emit('saveEdition');
         this.intentSelected = this.newIntentName
         this.openModal = false
+        this.openSuccessModal = true
       } catch (error) {
         this.$buefy.toast.open({
           message: this.$t('webapp.intent.error_intent'),
@@ -150,21 +192,10 @@ export default {
       this.$emit('setAllEntities', this.allEntities);
     },
     deleteSelectedItems() {
-      this.deleteDialog = this.$buefy.dialog.confirm({
-        title: this.$t('webapp.trainings.delete_title'),
-        message: this.$t('webapp.trainings.delete_phrase_modal'),
-        confirmText: this.$t('webapp.trainings.delete_button'),
-        cancelText: this.$t('webapp.trainings.cancel_button'),
-        inputAttrs: {
-          textAlign: 'center',
-        },
-        type: 'is-danger',
-        onConfirm: async () => {
-          this.selectedItems.forEach((item) => {
-            this.deleteExample({ id: item.id });
-            this.$emit('itemDeleted');
-          });
-        },
+      this.selectedItems.forEach((item) => {
+        this.deleteExample({ id: item.id });
+        this.$emit('itemDeleted');
+        this.openDeleteModal = false;
       });
     },
     goToSummary() {
@@ -269,6 +300,11 @@ export default {
       justify-content: space-between;
       align-items: center;
     }
+  }
+
+  &__buttons-wrapper {
+    position: relative;
+    top: 16px;
   }
 }
 </style>
