@@ -142,7 +142,7 @@ jobs:
             #         test -r "${dirname}/kustomization.yaml" && echo "${dirname}"
             #       done
             #   )
-            ENV_DIR="${MANIFESTS_ENVIRONMENT}"
+            ENV_DIR="kubernetes-manifests/platform-frontend/${MANIFESTS_ENVIRONMENT}"
             for e in ${ENV_DIR}; do
               echo "Update ${e}:"
               if [ ! -d "${e}" ] ; then
