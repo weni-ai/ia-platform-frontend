@@ -396,7 +396,7 @@
     },
     "intent":{
       "title": "Frases da intenção",
-      "description": "Essa intenção possui {n} frase | Essa intenção possui {n} frases no total.",
+      "description": "Essa intenção possui <strong>{n}</strong> frase | Essa intenção possui <strong>{n}</strong> frases no total.",
       "edit_button": "Alterar nome da intenção",
       "save_button": "Salvar",
       "no_sentences": "Nenhuma frase.",

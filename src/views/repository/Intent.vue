@@ -19,6 +19,7 @@
             placeholder="Busque por frase..."
             iconLeft="search-1"
             v-model="searchSentence"
+            size="md"
           />
           <div class="is-flex is-align-items-center">
             <span class="entity-list__results">Frases exibidas por página:</span>
@@ -247,6 +248,9 @@ export default {
   }
   /deep/ .icon-left {
     transform: translateY(60%);
+  }
+  /deep/ .input.size-md.has-icon-right {
+    width: 100px;
   }
 
 

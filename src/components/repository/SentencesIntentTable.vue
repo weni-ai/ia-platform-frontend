@@ -22,14 +22,13 @@
         <template v-slot:sentence>
           <div :title="item.sentence" class="break-text example-accordion__sentence">
             <span class="example-accordion__tag">[{{ item.language }}]</span>
-            <!-- <highlighted-text
-              v-if="!editing || !open"
+            <highlighted-text
               :text="item.text"
-              :highlighted="highlighted"
-              :entities="entities"
-              :color-only="entitySelected"
-            /> -->
-            {{ item.text }}
+              :highlighted="item.highlighted"
+              :entities="item.entities"
+              :color-only="item.entitySelected"
+            />
+            <!-- {{ item.text }} -->
           </div>
         </template>
 
@@ -297,6 +296,7 @@ export default {
 
   &__sentence {
     color: $unnnic-color-neutral-darkest;
+    display: flex;
   }
 }
 
