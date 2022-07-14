@@ -24,12 +24,12 @@
           type="secondary"
           size="large"
           :text="`Excluir selecionados (${sentencesCounter})`"
-          :disabled="sentencesCounter.length === 0"
+          :disabled="sentencesCounter === 0"
         />
       </div>
     </div>
     <div class="intent-list__subtitle">
-      <p>{{ $tc("webapp.intent.description", totalSentences) }}</p>
+      <p v-html="$tc('webapp.intent.description', totalSentences)" />
     </div>
     <unnnic-modal
       :showModal="openModal"
