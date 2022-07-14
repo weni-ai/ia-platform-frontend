@@ -2,7 +2,7 @@
   <div class="edit-sentence">
     <form>
       <div class="columns edit-sentence__wrapper">
-        <div class="column is-7">
+        <div class="column is-6">
           <unnnic-input
               :errors="errors.text || errors.language"
               :label="$t('webapp.example.sentence')"
@@ -26,7 +26,7 @@
             /> -->
           </unnnic-input>
         </div>
-        <div class="column is-5">
+        <div class="column is-6">
           <unnnic-input
             :message="errors.non_field_errors"
             :type="{ 'is-danger': errors.non_field_errors && errors.non_field_errors.length > 0 }"
@@ -54,7 +54,7 @@
           <div
             v-for="(entity, index) in entitiesToEdit"
             :key="`entity-${index}`"
-            class="edit-sentence__input column is-5">
+            class="edit-sentence__input column is-6">
             <unnnic-input >
               <span
                 slot="label"
@@ -75,7 +75,7 @@
           <div
             v-for="(entity, index) in pendingEntities"
             :key="`pending-entity-${index}`"
-            class="edit-sentence__input column is-5">
+            class="edit-sentence__input column is-6">
             <unnnic-input
                 v-model="entity.entity"
                 :placeholder="$t('webapp.example.entity')"
@@ -134,7 +134,7 @@
           </unnnic-button>
           <unnnic-button
             type="terciary"
-            @click="cancelEditSentence">
+            @click.prevent.stop="cancelEditSentence">
             {{ $t('webapp.trainings.cancel_button') }}
           </unnnic-button>
         </div>

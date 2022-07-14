@@ -54,15 +54,15 @@
           </div>
         </template>
       </unnnic-table-row>
-      <example-info
+      <!-- <example-info
         v-if="!editing"
         :entities-list="entitiesList"
         :highlighted.sync="highlighted"
         :intent="intent"
-      />
+      /> -->
 
       <edit-example-intent
-        v-else-if="item.id === selectedItem"
+        v-if="item.id === selectedItem"
         :entities="entitiesList"
         :intent-to-edit="item.intent"
         :edit-example="true"
@@ -307,4 +307,15 @@ export default {
 /deep/ .header .break-text {
   overflow: initial;
 }
+/deep/ .unnnic-table .header {
+  padding: 0.75rem 1.5rem;
+}
+/deep/ .unnnic-table .item {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid white;
+}
+/deep/ .unnnic-table .item:hover {
+  border: 1px solid $unnnic-color-neutral-soft;
+}
+
 </style>
