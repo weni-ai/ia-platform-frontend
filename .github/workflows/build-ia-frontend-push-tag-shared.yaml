@@ -182,7 +182,7 @@ jobs:
         with:
           github_token: ${{ secrets.DEVOPS_GITHUB_PERMANENT_TOKEN }}
           repository: Ilhasoft/kubernetes-manifests-artificial-intelligence
-          directory: ./kubernetes-manifests/
+          directory: ./platform-frontend/
           branch: main
           message: "From IA Frontend Build (Push-Tag)"
 
