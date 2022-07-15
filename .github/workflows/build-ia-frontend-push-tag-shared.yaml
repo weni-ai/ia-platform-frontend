@@ -163,7 +163,7 @@ jobs:
                     | head -n1
                 )
                 echo "Old image version to compare: ${OLD_VERSION}<=${{env.VERSION}}"
-                if verlte "${OLD_VERSION}" "${{env.VERSION}}" ; then
+                if verlte "${OLD_VERSION}" "${VERSION}" || [[ ! "${OLD_VERSION}" =~ [0-9]+\.[0-9]+\.[0-9]+ ]] ; then
                   echo 'New configurations:'
                   new_configuration=$(
                     cat "${e}/${PATCH_TARGET}" \
