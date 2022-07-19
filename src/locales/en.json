@@ -21,7 +21,7 @@
       "error_to_retrieve_bot": "Error retrieving intelligence",
       "yes": "Yes",
       "no": "No",
-      "items_total": "{n} item total | {n} items total",
+      "items_total": "{initialItem}-{lastItem} of {total}",
       "type_here": "Type here...",
       "support": "Bothub Support",
       "search_bots": "Search for bots",
@@ -385,7 +385,22 @@
       "save_button": "Save",
       "no_sentences": "No sentences.",
       "error_intent": "Something went wrong, try again later.",
-      "error_intent_exists": "Intent already exists"
+      "error_intent_exists": "Intent already exists",
+      "edit_intent_modal_title": "Change intent name",
+      "edit_intent_modal_subtitle": "What new name do you want to give the intent <strong>{intent}</strong>?",
+      "edit_intent_field_title": "Intent name",
+      "edit_intent_field_label": "Choose a new name for the intent",
+      "edit_intent_button_label": "Change name",
+      "success_modal_title": "Name changed!",
+      "success_modal_subtitle": "Intent name was changed successfully 😉",
+      "delete_success_title": "Deleted sentence(s)!",
+      "delete_success_subtitle": "The selected sentences were successfully deleted 😉",
+      "delete_selected": "Delete selected ({n})",
+      "sentences_perpage": "Sentences displayed per page:",
+      "search_sentence": "Search by sentence...",
+      "table_sentence": "Sentence",
+      "table_edit": "Edit",
+      "table_delete": "Delete"
     },
     "settings": {
       "title_edit_repository": "Edit Intelligence",
@@ -755,7 +770,14 @@
       "save_button": "Save",
       "no_sentences": "No sentences.",
       "error_entity": "Something went wrong, try again later.",
-      "error_entity_exists": "Entity already exists"
+      "error_entity_exists": "Entity already exists",
+      "edit_entity_modal_title": "Change entity name",
+      "edit_entity_modal_subtitle": "What new name do you want to give the entity <strong>{entity}</strong>?",
+      "edit_entity_field_title": "Entity name",
+      "edit_entity_field_label": "Choose a new name for the entity",
+      "edit_entity_button_label": "Change name",
+      "success_modal_title": "Name changed!",
+      "success_modal_subtitle": "The entity name was changed successfully 😉"
     },
     "payment": {
       "options": {

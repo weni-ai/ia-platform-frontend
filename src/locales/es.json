@@ -21,7 +21,7 @@
       "error_to_retrieve_bot": "Error al traer tu inteligencia",
       "yes": "Sí",
       "no": "No",
-      "items_total": "{n} Artículo en total | {n} artículos en total",
+      "items_total": "{initialItem}-{lastItem} de {total}",
       "type_here": "Digite aquí...",
       "support": "Ayuda de Bothub",
       "search_bots": "Buscar inteligencias",
@@ -387,7 +387,22 @@
       "save_button": "Ahorrar",
       "no_sentences": "Ni frase.",
       "error_intent": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
-      "error_intent_exists": "La intención ya existe"
+      "error_intent_exists": "La intención ya existe",
+      "edit_intent_modal_title": "Cambiar el nombre de la intención",
+      "edit_intent_modal_subtitle": "¿Qué nombre nuevo quieres darle a la intención <strong>{intent}</strong>?",
+      "edit_intent_field_title": "Nombre de la intención",
+      "edit_intent_field_label": "Elige un nuevo nombre para la intención",
+      "edit_intent_button_label": "Cambiar nombre",
+      "success_modal_title": "¡Nombre cambiado!",
+      "success_modal_subtitle": "El nombre de la intención se cambió con éxito 😉",
+      "delete_success_title": "¡Oraciones eliminadas!",
+      "delete_success_subtitle": "Las oraciones seleccionadas fueron eliminadas con éxito 😉",
+      "delete_selected": "Eliminar seleccionado ({n})",
+      "sentences_perpage": "Oraciones mostradas por página:",
+      "search_sentence": "Buscar por oración...",
+      "table_sentence": "Oración",
+      "table_edit": "Editar",
+      "table_delete": "Eliminar"
     },
     "settings": {
       "title_edit_repository": "Editar Inteligencia",
@@ -753,7 +768,14 @@
       "save_button": "Ahorrar",
       "no_sentences": "No hay oración.",
       "error_entity": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
-      "error_entity_exists": "La entidad ya existe"
+      "error_entity_exists": "La entidad ya existe",
+      "edit_entity_modal_title": "Cambiar nombre de entidad",
+      "edit_entity_modal_subtitle": "¿Qué nombre nuevo quieres darle a la entidad <strong>{entity}</strong>?",
+      "edit_entity_field_title": "Nombre de la entidad",
+      "edit_entity_field_label": "Elija un nuevo nombre para la entidad",
+      "edit_entity_button_label": "Cambiar nombre",
+      "success_modal_title": "¡Nombre cambiado!",
+      "success_modal_subtitle": "El nombre de la entidad se cambió con éxito 😉"
     },
     "payment": {
       "options": {

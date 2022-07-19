@@ -20,16 +20,16 @@
           :text="$t('webapp.entity.edit_button')"
         />
         <unnnic-button
-          @click="openDeleteModal"
+          @click="openDeleteModal = true"
           type="secondary"
           size="large"
-          :text="`Excluir selecionados (${sentencesCounter})`"
+          :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
           :disabled="sentencesCounter === 0"
         />
       </div>
     </div>
     <div class="entity-list__subtitle">
-      <p>{{ $tc("webapp.entity.description", totalSentences) }}</p>
+      <p v-html="$tc('webapp.entity.description', totalSentences)" />
     </div>
     <unnnic-modal
       :showModal="openModal"
@@ -72,14 +72,14 @@
     </unnnic-modal>
     <unnnic-modal
       :showModal="openSuccessModal"
-      :text="$t('webapp.intent.success_modal_title')"
+      :text="successModalTitle"
       scheme="feedback-green"
       modal-icon="check-circle-1-1"
       @close="openSuccessModal = false"
     >
       <span
       slot="message"
-      v-html="$t('webapp.intent.success_modal_subtitle')" />
+      v-html="successModalSubtitle" />
     </unnnic-modal>
     <unnnic-modal
       :showModal="openDeleteModal"
@@ -143,6 +143,8 @@ export default {
       openSuccessModal: false,
       openDeleteModal: false,
       newEntityName: '',
+      successModalTitle: '',
+      successModalSubtitle: ''
     };
   },
   computed: {
@@ -206,9 +208,11 @@ export default {
           repositoryVersion: this.repositoryVersion,
         });
         this.$emit('saveEdition');
-        this.entitySelected = this.newIntentName;
+        this.entitySelected = this.newEntityName;
         this.openModal = false;
         this.openSuccessModal = true
+        this.successModalTitle = this.$t('webapp.entity.success_modal_title')
+        this.successModalSubtitle = this.$t('webapp.entity.success_modal_subtitle')
       } catch (error) {
         if (error.response.data.non_field_errors !== undefined) {
           this.$buefy.toast.open({
@@ -229,6 +233,9 @@ export default {
         this.deleteExample({ id: item.id });
         this.$emit('itemDeleted');
         this.openDeleteModal = false;
+        this.openSuccessModal = true;
+        this.successModalTitle = this.$t('webapp.intent.delete_success_title')
+        this.successModalSubtitle = this.$t('webapp.intent.delete_success_subtitle')
       });
     },
     goToSummary() {
