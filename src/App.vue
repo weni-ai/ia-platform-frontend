@@ -219,6 +219,16 @@ $entities-colors: (
     color: $color;
     background-color: $bg;
   }
+
+  .entity-#{$name}--active {
+    background-color: $bg;
+  }
+  .entity-#{$name}--inactive {
+    background: transparent;
+    text-decoration: underline;
+    text-decoration-color: $bg;
+    text-decoration-thickness: 3px;
+  }
 }
 
 .clickable {

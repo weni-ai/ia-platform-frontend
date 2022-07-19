@@ -17,12 +17,12 @@
         <div class="entity-list__divider" />
         <div class="entity-list__search">
           <unnnic-input
-            placeholder="Busque por frase..."
+            :placeholder="$t('webapp.intent.search_sentence')"
             iconLeft="search-1"
             v-model="searchSentence"
           />
           <div class="is-flex is-align-items-center">
-            <span class="entity-list__results">Frases exibidas por página:</span>
+            <span class="entity-list__results">{{ $t('webapp.intent.sentences_perpage') }}</span>
             <unnnic-select
               class="unnic--clickable"
               size="md"
@@ -138,6 +138,7 @@ export default {
       ],
       selectedOption: `${this.perPage}`,
       searchSentence: '',
+      timeout: null
     };
   },
   computed: {
@@ -161,7 +162,14 @@ export default {
     },
     selectedOption() {
       this.perPage = +this.selectedOption
-      this.updateExamples(true)
+      this.filterBySentence();
+    },
+    searchSentence(newValue) {
+      this.query.search = newValue
+      if (this.timeout) clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        this.filterBySentence();
+      }, 750);
     }
   },
   mounted() {
@@ -202,6 +210,17 @@ export default {
     },
     updateSelected(params) {
       this.selectedItems = params
+    },
+    async filterBySentence() {
+      this.examplesList = await this.searchExamples({
+        repositoryUuid: this.repositoryList.uuid,
+        version: this.repositoryVersion,
+        query: {
+          entity_id: this.entitySearch.entity_id,
+          search: this.query.search
+        },
+        limit: this.perPage
+      });
     },
   },
 };

@@ -20,15 +20,28 @@
         </template>
 
         <template v-slot:sentence>
-          <div :title="item.sentence" class="break-text example-accordion__sentence">
+          <div
+            @mouseenter="activeSentence(item)"
+            @mouseleave="inactiveSentence(item)"
+            :title="item.sentence"
+            class="break-text example-accordion__sentence"
+          >
             <span class="example-accordion__tag">[{{ item.language }}]</span>
-            <highlighted-text
+            <highlighted-entity
+              :ref="item.id"
+              :id="item.id"
               :text="item.text"
               :highlighted="item.highlighted"
               :entities="item.entities"
               :color-only="item.entitySelected"
+              :state="isSentenceActive"
             />
-            <!-- {{ item.text }} -->
+            <span
+              v-if="$route.name.includes('entitylist')"
+              class="ml-4 intent-label"
+            >
+              Intenção: {{ item.intent }}
+            </span>
           </div>
         </template>
 
@@ -63,7 +76,7 @@
 
       <edit-example-intent
         v-if="item.id === selectedItem"
-        :entities="entitiesList"
+        :entities="item.entities"
         :intent-to-edit="item.intent"
         :edit-example="true"
         :text-to-edit="item.text"
@@ -97,6 +110,17 @@
       {{ $t("webapp.trainings.delete_title") }}
     </unnnic-button>
   </unnnic-modal>
+  <unnnic-modal
+    :showModal="openSuccessModal"
+    :text="$t('webapp.intent.delete_success_title')"
+    scheme="feedback-green"
+    modal-icon="check-circle-1-1"
+    @close="openSuccessModal = false"
+  >
+    <span
+    slot="message"
+    v-html="$t('webapp.intent.delete_success_subtitle')" />
+  </unnnic-modal>
 </div>
 </template>
 
@@ -105,8 +129,9 @@ import { mapState, mapActions } from 'vuex';
 import { getEntityColor } from '@/utils/entitiesColors';
 import ExampleInfo from '@/components/shared/accordion/ExampleInfo';
 import EditExampleIntent from '@/components/shared/accordion/EditExampleIntent';
+import EditExample from '@/components/shared/accordion/EditExample';
 import SentenceAccordion from '@/components/shared/accordion/SentenceAccordion';
-import HighlightedText from '@/components/shared/HighlightedText';
+import HighlightedEntity from '@/components/shared/HighlightedEntity';
 import LanguageBadge from '@/components/shared/LanguageBadge';
 import BadgesCard from '@/components/repository/BadgesCard';
 
@@ -116,7 +141,8 @@ export default {
     SentenceAccordion,
     ExampleInfo,
     EditExampleIntent,
-    HighlightedText,
+    EditExample,
+    HighlightedEntity,
     LanguageBadge,
     BadgesCard,
   },
@@ -167,24 +193,26 @@ export default {
           },
           {
             id: 'sentence',
-            text: 'Frase',
+            text: this.$t('webapp.intent.table_sentence'),
             flex: 1,
           },
           {
             id: 'edit',
-            text: 'Editar',
+            text: this.$t('webapp.intent.table_edit'),
             width: '40px',
           },
           {
             id: 'delete',
-            text: 'Excluir',
+            text: this.$t('webapp.intent.table_delete'),
             width: '40px',
           },
         ],
       },
       selectedItem: null,
       openModal: false,
-      sentenceId: null
+      sentenceId: null,
+      openSuccessModal: false,
+      isSentenceActive: false,
     };
   },
 
@@ -219,11 +247,18 @@ export default {
     },
     selectedItems() {
       return this.list.items.filter((item) => item.selected === true)
-    }
+    },
   },
   watch: {
     selectedItems() {
       this.$emit('dispatchEvent', { event: 'onUpdateSelected', value: this.selectedItems });
+    },
+    sentence(value) {
+      if (value) {
+        const { id } = value
+        // eslint-disable-next-line no-underscore-dangle
+        this.$refs[id]._data.active = this.isSentenceActive
+      }
     }
   },
   methods: {
@@ -240,13 +275,19 @@ export default {
       this.sentenceId = id;
     },
     async confirmDelete() {
-      await this.deleteExample({ id: this.sentenceId });
-      this.$emit('dispatchEvent', { event: 'itemDeleted' });
-      this.openModal = false;
+      try {
+        await this.deleteExample({ id: this.sentenceId });
+        this.$emit('dispatchEvent', { event: 'itemDeleted' });
+        this.openModal = false;
+        this.openSuccessModal = true;
+      } catch {
+        this.$emit('dispatchEvent', { event: 'error' });
+      }
     },
     cancelEditSentence() {
       this.open = !this.open;
       this.editing = false;
+      this.selectedItem = null;
     },
     editSentence(id) {
       this.selectedItem = id
@@ -262,6 +303,16 @@ export default {
         selected: value,
       }));
     },
+    activeSentence(item) {
+      const { id } = item
+      // eslint-disable-next-line no-underscore-dangle
+      this.$refs[id]._data.active = true
+    },
+    inactiveSentence(item) {
+      const { id } = item
+      // eslint-disable-next-line no-underscore-dangle
+      this.$refs[id]._data.active = false
+    }
   },
 };
 </script>
@@ -300,6 +351,13 @@ export default {
   }
 }
 
+.intent-label {
+  font-family: 'Lato';
+  font-size: 12px;
+  color: #67738B;
+  padding-top: 1px;
+}
+
 /deep/ .scroll {
   padding-right: 0;
 }
@@ -313,6 +371,10 @@ export default {
 /deep/ .unnnic-table .item {
   padding: 0.75rem 1.5rem;
   border: 1px solid white;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 /deep/ .unnnic-table .item:hover {
   border: 1px solid $unnnic-color-neutral-soft;

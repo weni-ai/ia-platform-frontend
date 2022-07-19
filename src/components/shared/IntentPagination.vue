@@ -1,7 +1,7 @@
 <template>
   <div v-if="list && !list.empty">
     <component
-      v-show="!isLoading && shouldShow(index)"
+      v-show="!isLoading"
       :key="itemKey && item[itemKey] ? item[itemKey] : index"
       :is="itemComponent"
       :list="list"
@@ -20,21 +20,10 @@
           v-if="list && list.total > 0"
           class="pagination__bottom__controls__message"
         >
-          {{ $t('webapp.layout.items_total', { perPage: perPage, total: list.total }) }}
-          <!-- 1-12 de 50 -->
+          {{ $t('webapp.layout.items_total',
+            { initialItem: initialItem, lastItem: lastItem, total: list.total }) }}
         </div>
-        <!-- <b-pagination
-          v-show="list.total > perPage"
-          :total="list.total"
-          :current.sync="page"
-          :per-page="perPage"
-          :range-before="4"
-          :range-after="4"
-          aria-next-label="Next page"
-          aria-previous-label="Previous page"
-          aria-page-label="Page"
-          aria-current-label="Current page"/> -->
-        <unnnic-pagination v-model="page" :max="(list.total / perPage) + 1" :show="5" />
+        <unnnic-pagination v-model="page" :max="maxPages" :show="5" />
       </div>
     </div>
   </div>
@@ -64,7 +53,7 @@ export default {
     },
     perPage: {
       type: Number,
-      default: 20,
+      default: 10,
     },
     addAttributes: {
       type: Object,
@@ -103,6 +92,24 @@ export default {
       if (!this.list) return null;
       return this.list.params;
     },
+    initialItem() {
+      if (this.lastItem === this.list.total) {
+        return ((this.page * this.perPage) - this.perPage) + 1
+      }
+      return (this.lastItem - this.perPage) + 1
+    },
+    lastItem() {
+      if ((this.list.total / (this.list.total / this.perPage)) * this.page > this.list.total) {
+        return this.list.total
+      }
+      return (this.list.total / (this.list.total / this.perPage)) * this.page
+    },
+    maxPages() {
+      if (Number.isInteger(this.list.total / this.perPage)) {
+        return this.list.total / this.perPage
+      }
+      return (this.list.total / this.perPage) + 1
+    }
   },
   watch: {
     list() {

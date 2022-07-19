@@ -23,7 +23,7 @@
           @click="openDeleteModal = true"
           type="secondary"
           size="large"
-          :text="`Excluir selecionados (${sentencesCounter})`"
+          :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
           :disabled="sentencesCounter === 0"
         />
       </div>
@@ -67,14 +67,14 @@
     </unnnic-modal>
     <unnnic-modal
       :showModal="openSuccessModal"
-      :text="$t('webapp.intent.success_modal_title')"
+      :text="successModalTitle"
       scheme="feedback-green"
       modal-icon="check-circle-1-1"
       @close="openSuccessModal = false"
     >
       <span
       slot="message"
-      v-html="$t('webapp.intent.success_modal_subtitle')" />
+      v-html="successModalSubtitle" />
     </unnnic-modal>
     <unnnic-modal
       :showModal="openDeleteModal"
@@ -131,7 +131,9 @@ export default {
       openModal: false,
       openSuccessModal: false,
       openDeleteModal: false,
-      newIntentName: ''
+      newIntentName: '',
+      successModalTitle: '',
+      successModalSubtitle: ''
     };
   },
   computed: {
@@ -183,6 +185,8 @@ export default {
         this.intentSelected = this.newIntentName
         this.openModal = false
         this.openSuccessModal = true
+        this.successModalTitle = this.$t('webapp.intent.success_modal_title')
+        this.successModalSubtitle = this.$t('webapp.intent.success_modal_subtitle')
       } catch (error) {
         this.$buefy.toast.open({
           message: this.$t('webapp.intent.error_intent'),
@@ -196,6 +200,9 @@ export default {
         this.deleteExample({ id: item.id });
         this.$emit('itemDeleted');
         this.openDeleteModal = false;
+        this.openSuccessModal = true;
+        this.successModalTitle = this.$t('webapp.intent.delete_success_title')
+        this.successModalSubtitle = this.$t('webapp.intent.delete_success_subtitle')
       });
     },
     goToSummary() {

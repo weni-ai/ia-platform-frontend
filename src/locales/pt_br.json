@@ -21,7 +21,7 @@
       "error_to_retrieve_bot": "Erro ao trazer sua inteligência",
       "yes": "Sim",
       "no": "Não",
-      "items_total": "1-{perPage} de {total}",
+      "items_total": "{initialItem}-{lastItem} de {total}",
       "type_here": "Digite aqui...",
       "support": "Ajuda do Bothub",
       "search_bots": "Procurar inteligências",
@@ -407,7 +407,15 @@
       "edit_intent_field_label": "Escolha um novo nome para a intenção",
       "edit_intent_button_label": "Alterar nome",
       "success_modal_title": "Nome alterado!",
-      "success_modal_subtitle": "O nome da intenção foi alterado com sucesso 😉"
+      "success_modal_subtitle": "O nome da intenção foi alterado com sucesso 😉",
+      "delete_success_title": "Frase(s) excluída(s)!",
+      "delete_success_subtitle": "As frases selecionadas foram excluídas com sucesso 😉",
+      "delete_selected": "Excluir selecionados ({n})",
+      "sentences_perpage": "Frases exibidas por página:",
+      "search_sentence": "Busque por frase...",
+      "table_sentence": "Frase",
+      "table_edit": "Editar",
+      "table_delete": "Excluir"
     },
     "settings": {
       "title_edit_repository": "Editar Inteligência",
@@ -766,7 +774,7 @@
     },
     "entity":{
       "title": "Frases da entidade",
-      "description": "Essa entidade possui {n} frase | Essa entidade possui {n} frases.",
+      "description": "Esta entidade está presente em <strong>{n}</strong> frase no total. | Esta entidade está presente em <strong>{n}</strong> frases no total.",
       "edit_button": "Alterar nome da entidade",
       "save_button": "Salvar",
       "no_sentences": "Nenhuma senteça.",
@@ -776,7 +784,9 @@
       "edit_entity_modal_subtitle": "Qual o novo nome que você quer dar para a entidade <strong>{entity}</strong>?",
       "edit_entity_field_title": "Nome da entidade",
       "edit_entity_field_label": "Escolha um novo nome para a entidade",
-      "edit_entity_button_label": "Alterar nome"
+      "edit_entity_button_label": "Alterar nome",
+      "success_modal_title": "Nome alterado!",
+      "success_modal_subtitle": "O nome da entidade foi alterado com sucesso 😉"
     },
     "payment": {
       "options": {
