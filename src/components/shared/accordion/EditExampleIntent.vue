@@ -185,7 +185,7 @@
             href="https://docs.weni.ai/l/pt/bothub/testando-seu-dataset#adicionando_entidades"
             target="_blank"
           >
-            Como adicionar novas entidades a partir da frase?
+            {{ $t('webapp.trainings.entities_info') }}
           </a>
         </div>
       </div>
