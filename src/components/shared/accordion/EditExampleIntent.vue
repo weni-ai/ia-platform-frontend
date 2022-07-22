@@ -165,7 +165,7 @@
           <unnnic-button
             type="secondary"
             size="small"
-            class="mr-6"
+            class="mr-3 edit-sentence__btn-wrapper__button"
             :disabled="!isValid || submitting"
             :tooltip-hover="!isValid ? validationErrors : null"
             :loading="submitting"
@@ -173,6 +173,7 @@
             <slot v-if="!submitting">{{ $t('webapp.trainings.save_button') }}</slot>
           </unnnic-button>
           <unnnic-button
+            class="edit-sentence__btn-wrapper__button"
             type="terciary"
             size="small"
             @click.prevent.stop="cancelEditSentence">
@@ -263,18 +264,8 @@ export default {
     align-items: center;
     margin: 1rem 1.7rem 0.7rem 1.7rem;
 
-    &__cancelButton{
-      height: 2.25rem;
-      width: 6rem;
-      background-color:$color-primary;
-      color: $color-white;
-    }
-
-    &__saveButton{
-      height: 2.25rem;
-      width: 6rem;
-      background-color:$color-secondary;
-      color: $color-white;
+    &__button{
+      width: 128px;
     }
 
     a {
@@ -306,5 +297,12 @@ export default {
 }
 /deep/ .hidden .unnnic-autocomplete__container-list{
   display: none;
+}
+/deep/ .unnnic-form__label {
+  font-family: Lato;
+}
+/deep/ .unnnic-form__label strong {
+  color: #67738B;
+  font-weight: 900;
 }
 </style>
