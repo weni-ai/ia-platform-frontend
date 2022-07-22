@@ -1,24 +1,31 @@
 <template>
   <div :class="['highlighted', `highlighted-text--size-${size}`]">
-    <div class="highlighted-base">{{ text }}</div>
-    <div class="highlighted-text">{{ text }}</div>
     <div
       v-for="(entity, i) in entitiesBlocks"
       :key="i"
-      class="highlighted-entity">
-      <span
-        :class="['highlighted-entity-before',
-                 `highlighted-text--size-${size}`]">{{ entity.before }}</span>
-      <span
-        :class="['highlighted-entity-text',
-                  state ? 'active-entity' : 'inactive-entity',
-                 `highlighted-text--size-${size}`,
-                 colorOnly && entity.entity !== colorOnly ? 'entity-selected' : entity.colorClass,
-                 failed,
-                 entity.entity === highlighted ? 'highlighted-selected' : '']">
-        {{ entity.text }}
-      </span>
+      :class="['highlighted-entity', entity.start === 0 ? 'first-word' : '']">
+        <span :class="['highlighted-entity-before', `highlighted-text--size-${size}`]">
+          {{ entity.before }}
+        </span>
+        <unnnic-tool-tip
+          side="top"
+          :text="entity.entity"
+          enabled
+        >
+          <span
+            :class="['highlighted-entity-text',
+                      state ? 'active-entity' : 'inactive-entity',
+                     `highlighted-text--size-${size}`,
+                     colorOnly &&
+                     entity.entity !== colorOnly ? 'entity-selected' : entity.colorClass,
+                     failed,
+                     entity.entity === highlighted ? 'highlighted-selected' : '']">
+            {{ entity.text }}
+          </span>
+        </unnnic-tool-tip>
     </div>
+    <div class="highlighted-base">{{ text }}</div>
+    <div class="highlighted-text">{{ text }}</div>
   </div>
 </template>
 
@@ -64,7 +71,8 @@ export default {
   },
   data(){
     return {
-      active: this.state
+      active: this.state,
+      forceActive: false
     }
   },
   computed: {
@@ -150,5 +158,8 @@ export default {
 }
 .failed {
   border: .120rem solid red;
+}
+.first-word {
+  z-index: 3;
 }
 </style>
