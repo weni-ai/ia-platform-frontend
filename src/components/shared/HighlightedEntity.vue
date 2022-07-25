@@ -1,28 +1,21 @@
 <template>
   <div :class="['highlighted', `highlighted-text--size-${size}`]">
-    <div
-      v-for="(entity, i) in entitiesBlocks"
-      :key="i"
-      :class="['highlighted-entity', entity.start === 0 ? 'first-word' : '']">
-        <span :class="['highlighted-entity-before', `highlighted-text--size-${size}`]">
-          {{ entity.before }}
-        </span>
-        <unnnic-tool-tip
-          side="top"
-          :text="entity.entity"
-          enabled
+    <div v-for="(entity, i) in entitiesBlocks" :key="i" class="highlighted-entity">
+      <span :class="['highlighted-entity-before', `highlighted-text--size-${size}`]">
+        {{ entity.before }}
+      </span>
+      <unnnic-tool-tip side="top" :text="entity.entity" enabled>
+        <span
+          :class="['highlighted-entity-text',
+          state ? 'active-entity' : 'inactive-entity',
+          `highlighted-text--size-${size}`,
+          colorOnly && entity.entity !== colorOnly ? 'entity-selected' : entity.colorClass,
+          failed,
+          entity.entity === highlighted ? 'highlighted-selected' : '']"
         >
-          <span
-            :class="['highlighted-entity-text',
-                      state ? 'active-entity' : 'inactive-entity',
-                     `highlighted-text--size-${size}`,
-                     colorOnly &&
-                     entity.entity !== colorOnly ? 'entity-selected' : entity.colorClass,
-                     failed,
-                     entity.entity === highlighted ? 'highlighted-selected' : '']">
-            {{ entity.text }}
-          </span>
-        </unnnic-tool-tip>
+          {{ entity.text }}
+        </span>
+      </unnnic-tool-tip>
     </div>
     <div class="highlighted-base">{{ text }}</div>
     <div class="highlighted-text">{{ text }}</div>
@@ -69,7 +62,7 @@ export default {
       default: 0
     }
   },
-  data(){
+  data() {
     return {
       active: this.state,
       forceActive: false
@@ -96,14 +89,14 @@ export default {
             entity,
             text,
           };
-        });
+        })
+        .sort((a, b) => b.start - a.start)
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .highlighted {
   position: relative;
 
@@ -151,15 +144,14 @@ export default {
       border-radius: 4px;
     }
   }
+
   &-selected {
-    box-shadow:0px 0px 0px 2px red inset;
+    box-shadow: 0px 0px 0px 2px red inset;
     opacity: .8;
   }
 }
+
 .failed {
   border: .120rem solid red;
-}
-.first-word {
-  z-index: 3;
 }
 </style>
