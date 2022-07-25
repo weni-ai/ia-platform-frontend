@@ -493,7 +493,8 @@
       "train_progress": "{progress}% do treinamento concluído",
       "empty_text_error": "Digite uma frase",
       "intent_error": "Digite uma intenção",
-      "default_error": "Algo de errado aconteceu, tente novamente mais tarde."
+      "default_error": "Algo de errado aconteceu, tente novamente mais tarde.",
+      "entities_info": "Como adicionar novas entidades a partir da frase?"
     },
     "train_modal": {
       "training_status": "Status do Treinamento",

@@ -497,7 +497,8 @@
       "empty_text_error": "Introduzca una oración",
       "intent_error": "Entrar en una intención",
       "default_error": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
-      "more_than_200_words": "Límite de 200 palabras por frase alcanzado. Ajuste el texto si es necesario o divídalo en frases más pequeñas."
+      "more_than_200_words": "Límite de 200 palabras por frase alcanzado. Ajuste el texto si es necesario o divídalo en frases más pequeñas.",
+      "entities_info": "¿Cómo agregar nuevas entidades desde la oración?"
     },
     "train_modal": {
       "training_status": "Estado de Entrenamiento",
