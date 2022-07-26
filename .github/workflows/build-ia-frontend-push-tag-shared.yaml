@@ -39,7 +39,7 @@ jobs:
               echo "VERSION=$VERSION"
               echo "COMMIT_SHA=$GITHUB_SHA" >> $GITHUB_ENV
               echo "COMMIT_SHA=$GITHUB_SHA"
-            elif $(echo  $TAG|grep --silent -e 'production')
+            elif $(echo  $TAG|grep --silent -e 'main')
             then
               echo "No environment found, assuming: PRODUCTION - $TAG"
               echo "MANIFESTS_ENVIRONMENT=production" >> $GITHUB_ENV
