@@ -263,13 +263,23 @@ export default {
     ]),
     async checkIfHasIntegration() {
       try {
-        const { data } = await this.getIntegrationRepository({
-          repository_version: this.repositoryDetail.version_default.id,
-          repository_uuid: this.repositoryDetail.uuid,
-          project_uuid: this.getProjectSelected,
-          organization: this.getOrgSelected
-        });
-        this.hasIntegration = data.in_project;
+        const inProject = JSON.parse(localStorage.getItem('in_project'));
+
+        this.hasIntegration = inProject.some(
+          (
+            {
+              repository_version,
+              repository_uuid,
+              project_uuid,
+              organization
+            }
+          ) => (
+            repository_version === this.repositoryDetail.version_default.id
+            && repository_uuid === this.repositoryDetail.uuid
+            && project_uuid === this.getProjectSelected
+            && organization === this.getOrgSelected
+          )
+        );
       } catch (err) {
         this.integrationError = err.response && err.response.data;
       }
