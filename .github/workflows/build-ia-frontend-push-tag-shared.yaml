@@ -44,8 +44,9 @@ jobs:
               echo "No environment found, assuming: PRODUCTION - $TAG"
               echo "MANIFESTS_ENVIRONMENT=production" >> $GITHUB_ENV
               echo "MANIFESTS_ENVIRONMENT=production"
-              echo "TAG=$TAG" >> $GITHUB_ENV
-              echo "TAG=$TAG"
+              echo "TAG=production" >> $GITHUB_ENV
+              echo "TAG=production"
+              TAG=production
               VERSION=${TAG#v}
               echo "VERSION=$VERSION" >> $GITHUB_ENV
               echo "VERSION=$VERSION"
