@@ -46,6 +46,7 @@ jobs:
               echo "MANIFESTS_ENVIRONMENT=production"
               echo "TAG=production" >> $GITHUB_ENV
               echo "TAG=production"
+              TAG=production
               VERSION=${TAG#v}
               echo "VERSION=$VERSION" >> $GITHUB_ENV
               echo "VERSION=$VERSION"
