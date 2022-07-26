@@ -1,11 +1,11 @@
-name: Build IA Platform Frontend (Push Tag)
+name: Build IA Platform Frontend (Push Branch)
 
 on:
   push:
-    tags:
-      - 'v*.*.*-develop*'
-      - 'v*.*.*-staging*'
-      - 'v*.*.*'
+    branches:
+      - develop
+      - staging
+      - production
 
 jobs:
   docker:
@@ -15,7 +15,7 @@ jobs:
       - name: Set variables
         run: |
             TAG=$(echo $GITHUB_REF|cut -d"/" -f3)
-            if $(echo  $TAG|grep --silent -e 'v*.*.*-develop*')
+            if $(echo  $TAG|grep --silent -e 'develop')
             then
               echo "Found environment: DEVELOP - $TAG"
               echo "MANIFESTS_ENVIRONMENT=develop" >> $GITHUB_ENV
@@ -27,9 +27,7 @@ jobs:
               echo "VERSION=$VERSION"
               echo "COMMIT_SHA=$GITHUB_SHA" >> $GITHUB_ENV
               echo "COMMIT_SHA=$GITHUB_SHA"
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG" >> $GITHUB_ENV
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG"
-            elif $(echo  $TAG|grep --silent -e 'v*.*.*-staging*')
+            elif $(echo  $TAG|grep --silent -e 'staging')
             then
               echo "Found environment: STAGING - $TAG"
               echo "MANIFESTS_ENVIRONMENT=staging" >> $GITHUB_ENV
@@ -41,9 +39,7 @@ jobs:
               echo "VERSION=$VERSION"
               echo "COMMIT_SHA=$GITHUB_SHA" >> $GITHUB_ENV
               echo "COMMIT_SHA=$GITHUB_SHA"
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG" >> $GITHUB_ENV
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG"
-            elif $(echo  $TAG|grep --silent -e 'v*.*.*')
+            elif $(echo  $TAG|grep --silent -e 'production')
             then
               echo "No environment found, assuming: PRODUCTION - $TAG"
               echo "MANIFESTS_ENVIRONMENT=production" >> $GITHUB_ENV
@@ -55,18 +51,18 @@ jobs:
               echo "VERSION=$VERSION"
               echo "COMMIT_SHA=$GITHUB_SHA" >> $GITHUB_ENV
               echo "COMMIT_SHA=$GITHUB_SHA"
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG" >> $GITHUB_ENV
-              echo "IMAGE_TAG=bothubit/platform-frontend:$TAG"
             else
               echo 'Not a valid tag. Skipping...'
               exit 1
             fi
+            echo "IMAGE_TAG=bothubit/platform-frontend:$TAG-${GITHUB_SHA::7}" >> $GITHUB_ENV
+            echo "IMAGE_TAG=bothubit/platform-frontend:$TAG-${GITHUB_SHA::7}"
 
       - name: Check out the repo
         uses: actions/checkout@v2
         with:
           ref: ${{env.GITHUB_SHA}}
-          repository: Ilhasoft/ia-platform-frontend
+          repository: weni-ai/ia-platform-frontend
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -92,7 +88,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          labels: branch=${{env.TAG}},commit=${{env.COMMIT_SHA}},repository=https://github.com/Ilhasoft/ia-platform-frontend
+          labels: branch=${{env.TAG}},commit=${{env.COMMIT_SHA}},repository=https://github.com/weni-ai/ia-platform-frontend
           file: Dockerfile
           push: true
           tags: ${{env.IMAGE_TAG}}
@@ -138,14 +134,15 @@ jobs:
             verlt(){
               [ "$1" = "$2" ] && return 1 || verlte $1 $2
             }
-            export PROJECT_DIR="inteligencia-artificial" PATCH_TARGET="deployment-platform-frontend.json"
-            ENV_DIR=$(
-                find kubernetes-manifests/${PROJECT_DIR}/ -maxdepth 1 -mindepth 1 -type d \
-                  | egrep -v -e '.git' -e '/base$' \
-                  | while read dirname ; do
-                    test -r "${dirname}/kustomization.yaml" && echo "${dirname}"
-                  done
-              )
+            export PROJECT_DIR="platform-frontend" PATCH_TARGET="deployment-platform-frontend.json"
+            # ENV_DIR=$(
+            #     find kubernetes-manifests/${PROJECT_DIR}/ -maxdepth 1 -mindepth 1 -type d \
+            #       | egrep -v -e '.git' -e '/base$' \
+            #       | while read dirname ; do
+            #         test -r "${dirname}/kustomization.yaml" && echo "${dirname}"
+            #       done
+            #   )
+            ENV_DIR="kubernetes-manifests/platform-frontend/${MANIFESTS_ENVIRONMENT}"
             for e in ${ENV_DIR}; do
               echo "Update ${e}:"
               if [ ! -d "${e}" ] ; then
@@ -166,7 +163,7 @@ jobs:
                     | head -n1
                 )
                 echo "Old image version to compare: ${OLD_VERSION}<=${{env.VERSION}}"
-                if verlte "${OLD_VERSION}" "${{env.VERSION}}" ; then
+                if verlte "${OLD_VERSION}" "${VERSION}" || [[ ! "${OLD_VERSION}" =~ [0-9]+\.[0-9]+\.[0-9]+ ]] ; then
                   echo 'New configurations:'
                   new_configuration=$(
                     cat "${e}/${PATCH_TARGET}" \
@@ -187,8 +184,9 @@ jobs:
           repository: Ilhasoft/kubernetes-manifests-artificial-intelligence
           directory: ./kubernetes-manifests/
           branch: main
-          message: "From IA Frontend Build (Push-Tag)"
+          message: "From IA Frontend Build (Push Branch)"
 
       - name: Generated Image
         run: |
             echo "IMAGE:      " ${{env.IMAGE_TAG}}
+

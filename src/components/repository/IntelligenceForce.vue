@@ -137,6 +137,12 @@ export default {
   }
   /deep/ .unnnic-card-title .title {
     margin-bottom: 0;
+    flex: initial;
+    margin-right: 6px;
+
+  }
+  /deep/ .information {
+    bottom: 2px;
   }
   /deep/ .unnnic-tooltip-label {
     max-width: 430px;

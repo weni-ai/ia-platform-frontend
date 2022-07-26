@@ -21,7 +21,7 @@
       "error_to_retrieve_bot": "Erro ao trazer sua inteligência",
       "yes": "Sim",
       "no": "Não",
-      "items_total": "{n} item no total | {n} itens no total",
+      "items_total": "{initialItem}-{lastItem} de {total}",
       "type_here": "Digite aqui...",
       "support": "Ajuda do Bothub",
       "search_bots": "Procurar inteligências",
@@ -395,13 +395,27 @@
       "see_more": "Saiba mais"
     },
     "intent":{
-      "title": "Intenção",
-      "description": "Essa intenção contém {n} frase | Essa intenção contém {n} frases.",
-      "edit_button": "Editar intenção",
+      "title": "Frases da intenção",
+      "description": "Essa intenção possui <strong>{n}</strong> frase | Essa intenção possui <strong>{n}</strong> frases no total.",
+      "edit_button": "Alterar nome da intenção",
       "save_button": "Salvar",
       "no_sentences": "Nenhuma frase.",
       "error_intent": "Algo de errado aconteceu, tente novamente mais tarde.",
-      "error_intent_exists": "Intenção já existe"
+      "edit_intent_modal_title": "Alterar nome da intenção",
+      "edit_intent_modal_subtitle": "Qual o novo nome que você quer dar para a intenção <strong>{intent}</strong>?",
+      "edit_intent_field_title": "Nome da intenção",
+      "edit_intent_field_label": "Escolha um novo nome para a intenção",
+      "edit_intent_button_label": "Alterar nome",
+      "success_modal_title": "Nome alterado!",
+      "success_modal_subtitle": "O nome da intenção foi alterado com sucesso 😉",
+      "delete_success_title": "Frase(s) excluída(s)!",
+      "delete_success_subtitle": "As frases selecionadas foram excluídas com sucesso 😉",
+      "delete_selected": "Excluir selecionados ({n})",
+      "sentences_perpage": "Frases exibidas por página:",
+      "search_sentence": "Busque por frase...",
+      "table_sentence": "Frase",
+      "table_edit": "Editar",
+      "table_delete": "Excluir"
     },
     "settings": {
       "title_edit_repository": "Editar Inteligência",
@@ -470,16 +484,17 @@
       "no_train_sentence": "Essa frase ainda não foi adicionada ao treinamento.",
       "failed": "Falhou",
       "intention_or_sentence_already_exist": "Intenção ou frase já existe",
-      "delete_title": "Deletar frase da entidade",
+      "delete_title": "Excluir frase(s)",
       "delete_phrase_modal_title":"Deletar frase",
-      "delete_phrase_modal":"Você tem certeza que deseja deletar essa frase?",
+      "delete_phrase_modal":"Deseja mesmo excluir a(s) frase(s) selecionadas? Uma vez realizada a ação não será possível revertê-la.",
       "delete_button":"Deletar",
       "cancel_button":"Cancelar",
       "save_button":"Salvar",
       "train_progress": "{progress}% do treinamento concluído",
       "empty_text_error": "Digite uma frase",
       "intent_error": "Digite uma intenção",
-      "default_error": "Algo de errado aconteceu, tente novamente mais tarde."
+      "default_error": "Algo de errado aconteceu, tente novamente mais tarde.",
+      "entities_info": "Como adicionar novas entidades a partir da frase?"
     },
     "train_modal": {
       "training_status": "Status do Treinamento",
@@ -759,13 +774,20 @@
       "entities": "Entidade | Entidades"
     },
     "entity":{
-      "title": "Entidade",
-      "description": "Essa entidade contém {n} frase | Essa entidade contém {n} frases.",
-      "edit_button": "Editar Entidade",
+      "title": "Frases da entidade",
+      "description": "Esta entidade está presente em <strong>{n}</strong> frase no total. | Esta entidade está presente em <strong>{n}</strong> frases no total.",
+      "edit_button": "Alterar nome da entidade",
       "save_button": "Salvar",
       "no_sentences": "Nenhuma senteça.",
       "error_entity": "Algo de errado aconteceu, tente novamente mais tarde.",
-      "error_entity_exists": "Entidade já existe"
+      "error_entity_exists": "Entidade já existe",
+      "edit_entity_modal_title": "Alterar nome da entidade",
+      "edit_entity_modal_subtitle": "Qual o novo nome que você quer dar para a entidade <strong>{entity}</strong>?",
+      "edit_entity_field_title": "Nome da entidade",
+      "edit_entity_field_label": "Escolha um novo nome para a entidade",
+      "edit_entity_button_label": "Alterar nome",
+      "success_modal_title": "Nome alterado!",
+      "success_modal_subtitle": "O nome da entidade foi alterado com sucesso 😉"
     },
     "payment": {
       "options": {
