@@ -53,7 +53,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getProjectSelected']),
+    ...mapGetters([
+      'getProjectSelected',
+      'getOrgSelected',
+    ]),
     ...mapState({
       projectListWasUpdated: state => state.Integration.updateProjects,
     }),
@@ -81,6 +84,13 @@ export default {
           projectUUID: this.getProjectSelected
         });
         this.projectList = data;
+
+        localStorage.setItem('in_project', JSON.stringify(data.map(({ uuid, version_default }) => ({
+          repository_uuid: uuid,
+          repository_version: version_default.id,
+          project_uuid: this.getProjectSelected,
+          organization: this.getOrgSelected,
+        }))));
       } catch (err) {
         this.error = err;
       } finally {
