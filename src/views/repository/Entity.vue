@@ -43,6 +43,8 @@
           :add-attributes="{ entitySelected }"
           @itemDeleted="onItemDeleted()"
           @itemSave="onItemSave()"
+          :show-intents="true"
+          @onUpdateSelected="updateSelected"
         />
         <p
           v-if="examplesList && examplesList.empty"
