@@ -1,38 +1,34 @@
 <template>
   <div>
-    <paginated-list
-      v-if="examplesList"
-      :item-component="exampleItemElem"
-      :list="examplesList"
-      :repository="repository"
-      :per-page="perPage"
-      :is-suggestion="true"
-      :is-accordion-open="pageWasChanged"
-      :is-searching="searchingExample"
-      @itemSave="dispatchSave"
-      @itemDeleted="onItemDeleted($event)"
-      @pageChanged="pageChanged()"/>
+      <intent-pagination
+        v-if="examplesList"
+        :item-component="sentencesTable"
+        :list="examplesList"
+        :repository="repository"
+        :per-page="perPage"
+        @itemDeleted="onItemDeleted()"
+        @itemSave="dispatchSave"
+        :show-intents="true"
+        :load-all="true"
+        @onUpdateSelected="updateSelected"
+      />
+      <div v-else>
+        <hr class="divider">
+        <p class="untrained">
+          {{ $t('webapp.trainings.database_untrained') }}
+        </p>
+      </div>
     <br>
-    <div v-if="examplesList && examplesList.empty">
-      <p
-        v-if="textData === ''"
-        class="no-examples"
-        v-html="$t('webapp.trainings.no_sentences')"/>
-      <p
-        v-else
-        v-html="$t('webapp.trainings.no_train_sentence')"/>
-    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import PaginatedList from '@/components/shared/PaginatedList';
-import ExampleItem from '@/components/example/ExampleItem';
-import ExampleAccordionWithTranslations from '@/components/shared/accordion/ExampleAccordionWithTranslations';
+import IntentPagination from '../shared/IntentPagination';
+import SentencesIntentTable from '@/components/repository/SentencesIntentTable';
 
 const components = {
-  PaginatedList,
+  IntentPagination
 };
 
 export default {
@@ -45,7 +41,7 @@ export default {
     },
     perPage: {
       type: Number,
-      default: 12,
+      default: 10,
     },
     update: {
       type: Boolean,
@@ -66,6 +62,7 @@ export default {
       dateLastTrain: '',
       pageWasChanged: false,
       searchingExample: false,
+      sentencesTable: SentencesIntentTable,
     };
   },
   computed: {
@@ -73,9 +70,6 @@ export default {
       repositoryVersion: 'getSelectedVersion',
       repository: 'getCurrentRepository',
     }),
-    exampleItemElem() {
-      return this.translationData ? ExampleAccordionWithTranslations : ExampleItem;
-    },
   },
   watch: {
     query() {
@@ -112,7 +106,7 @@ export default {
       await this.getRepositoryStatus();
       if (this.repositoryStatus.count !== 0) {
         if (this.repositoryStatus.results[0].status !== 2
-          && this.repositoryStatus.results[0].status !== 3) {
+                    && this.repositoryStatus.results[0].status !== 3) {
           if (this.repositoryStatus.results[1] !== undefined) {
             this.dateLastTrain = (this.repositoryStatus.results[1].created_at).replace(/[A-Za-z]/g, ' ');
           }
@@ -120,14 +114,14 @@ export default {
           this.dateLastTrain = (this.repositoryStatus.results[0].created_at).replace(/[A-Za-z]/g, ' ');
         }
       }
-
-      if (this.repositoryStatus.count === 0) return;
-
+      if (this.repositoryStatus.count === 0) {
+        return;
+      }
       if (this.repositoryStatus.count === 1
-          && (this.repositoryStatus.results[0].status !== 2
-          && this.repositoryStatus.results[0].status !== 3)
-      ) return;
-
+                && (this.repositoryStatus.results[0].status !== 2
+                    && this.repositoryStatus.results[0].status !== 3)) {
+        return;
+      }
       if (!this.examplesList || force) {
         this.examplesList = await this.searchExamples({
           repositoryUuid: this.repository.uuid,
@@ -146,7 +140,10 @@ export default {
       this.repositoryStatus = data;
     },
     onItemDeleted() {
-      this.$emit('exampleDeleted');
+      this.updateExamples(true);
+    },
+    updateSelected(params) {
+      this.$emit('onUpdateSelected', params)
     },
   },
 };
@@ -156,4 +153,14 @@ export default {
 .no-examples {
   margin: 8px;
 }
+.untrained {
+      font-family: 'Lato';
+      font-size: 14px;
+      color: #3B414D;
+      margin-top: 2rem;
+    }
+.divider {
+      background: #E2E6ED;
+      height: 1px;
+    }
 </style>

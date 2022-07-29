@@ -6,51 +6,6 @@
       <div class="trainings-repository__new-example">
         <div v-if="authenticated">
           <div v-if="repository.authorization.can_contribute">
-            <div class="trainings-repository__list-wrapper">
-              <div>
-                <h2 class="trainings-repository__list-wrapper__title">
-                  {{ $t('webapp.trainings.grid_text1') }}
-                </h2>
-                <span class="trainings-repository__list-wrapper__subtitle">
-                  {{ $t('webapp.trainings.grid_text2') }}
-                </span>
-              </div>
-            </div>
-            <new-example-form
-              :repository="repository"
-              @created="updatedExampleList()"
-              @eventStep="dispatchClick()"/>
-            <examples-pending-training
-              :update="update"
-              :is-train="trainProgress"
-              class="trainings-repository__new-example__pending-example"
-              @exampleDeleted="onExampleDeleted"
-              @noPhrases="noPhrasesYet = false"
-            />
-            <div class="trainings-repository__new-example__train">
-              <div
-                :id="getRequirements.ready_for_train
-                || !noPhrasesYet ? 'tour-training-step-6' : ''"
-                :is-next-disabled="true"
-                :is-previous-disabled="true"
-                class="trainings-repository__list-wrapper__tutorialStep">
-                <train
-                  :key="update"
-                  :show-button="getRequirements.ready_for_train || !noPhrasesYet"
-                  :repository="repository"
-                  :authenticated="authenticated"
-                  :version="getSelectedVersion"
-                  :update-repository="async () => { updateRepository(false) }"
-                  @trainProgressUpdated="trainProgress = $event"
-                  @statusUpdated="updateTrainingStatus($event)"
-                  @finishedTutorial="dispatchFinish()"
-                  @tutorialReset="dispatchReset()"
-                  @onTrain="sendEvent(); dispatchClick();"
-                  @onTrainComplete="noPhrasesYet = true"
-                  @onTrainReady="dispatchClick()"
-                  @unauthorized="signIn()" />
-              </div>
-            </div>
           </div>
           <authorization-request-notification
             v-else
@@ -67,44 +22,109 @@
           <login-form hide-forgot-password />
         </div>
       </div>
+      <div
+        v-if="authenticated && repository.authorization.can_contribute">
+        <div class="trainings-repository__header">
+          <div>
+            <unnnic-card
+              type="title"
+              :title="$t('webapp.trainings.database')"
+              :hasInformationIcon="false"
+              icon="folder-1"
+              scheme="aux-pink"
+            />
+            <p class="trainings-repository__description">
+              {{ $t('webapp.trainings.database_description') }}
+            </p>
+          </div>
+          <div>
+            <unnnic-button
+              @click="openDeleteModal = true"
+              type="secondary"
+              size="large"
+              :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
+              :disabled="sentencesCounter === 0"
+            />
+          </div>
+        </div>
+        <filter-examples
+          :intents="repository.intents_list"
+          :entities="repository.entities"
+          :language-filter="false"
+          @querystringformatted="onSearch($event)"
+          @textData="changedText($event)"/>
+        <examples-list
+          :query="translationQuery"
+          :update="update"
+          :text-data="textExample"
+          translation-data
+          @exampleDeleted="onExampleDeleted"
+          @onUpdateSelected="updateSelected"
+        />
+      </div>
     </div>
-    <tour
-      v-if="activeTutorial === 'training'"
-      :step-count="8"
-      :next-event="eventClick"
-      :finish-event="eventClickFinish"
-      :reset-tutorial="eventReset"
-      name="training"/>
+    <unnnic-modal
+      :showModal="openDeleteModal"
+      :text="$t('webapp.trainings.delete_title')"
+      scheme="feedback-red"
+      modal-icon="alert-circle-1"
+      @close="openDeleteModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.trainings.delete_phrase_modal')" />
+      <unnnic-button slot="options" type="terciary" @click="openDeleteModal = false">
+        {{ $t("webapp.home.cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        type="primary"
+        scheme="feedback-red"
+        @click="deleteSelectedItems"
+      >
+        {{ $t("webapp.trainings.delete_title") }}
+      </unnnic-button>
+    </unnnic-modal>
+    <unnnic-modal
+      :showModal="openSuccessModal"
+      :text="$t('webapp.intent.delete_success_title')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openSuccessModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.intent.delete_success_subtitle')" />
+    </unnnic-modal>
   </repository-view-base>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import Analytics from '@/utils/plugins/analytics';
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import NewExampleForm from '@/components/example/NewExampleForm';
+import SentenceFilters from '@/components/repository/repository-evaluate/example/SentenceFilters';
+import ExamplesList from '@/components/example/ExamplesList';
 import ExamplesPendingTraining from '@/components/example/ExamplesPendingTraining';
 import LoginForm from '@/components/auth/LoginForm';
 import AuthorizationRequestNotification from '@/components/repository/AuthorizationRequestNotification';
 import { exampleSearchToDicty, exampleSearchToString } from '@/utils/index';
 import RequestAuthorizationModal from '@/components/repository/RequestAuthorizationModal';
 import Loading from '@/components/shared/Loading';
-import Train from '@/components/repository/training/Train';
-import Tour from '@/components/Tour';
 import RepositoryBase from './Base';
 
 export default {
-  name: 'RepositoryTrainings',
+  name: 'RepositoryDatabase',
   components: {
     RepositoryViewBase,
     NewExampleForm,
+    SentenceFilters,
+    ExamplesList,
     LoginForm,
     AuthorizationRequestNotification,
     RequestAuthorizationModal,
     ExamplesPendingTraining,
     Loading,
-    Train,
-    Tour,
   },
   extends: RepositoryBase,
   data() {
@@ -112,15 +132,11 @@ export default {
       querySchema: {},
       query: {},
       update: false,
-      pendingList: false,
-      eventClick: false,
-      eventClickFinish: false,
-      eventReset: false,
-      blockedNextStepTutorial: false,
       textExample: '',
-      noPhrasesYet: true,
-      trainProgress: false,
       error: '',
+      selectedItems: [],
+      openDeleteModal: false,
+      openSuccessModal: false,
     };
   },
   computed: {
@@ -134,14 +150,18 @@ export default {
       const { language, ...query } = this.query;
       return { ...query, ...(language ? { is_available_language: language } : {}) };
     },
+    sentencesCounter() {
+      if (this.selectedItems !== null) {
+        return this.selectedItems.length
+      }
+      return 0
+    }
   },
   methods: {
     ...mapActions([
       'trainRepository',
+      'deleteExample'
     ]),
-    sendEvent() {
-      Analytics.send({ category: 'Intelligence', event: 'on train event' });
-    },
     onSearch(value) {
       Object.assign(this.querySchema, value);
 
@@ -161,21 +181,8 @@ export default {
       const formattedQueryString = exampleSearchToString(this.querySchema);
       this.query = exampleSearchToDicty(formattedQueryString);
     },
-    updateTrainingStatus(trainStatus) {
-      Object.assign(this.repository, trainStatus);
-    },
     changedText(newText) {
       this.textExample = newText;
-    },
-    dispatchClick() {
-      this.blockedNextStepTutorial = !this.blockedNextStepTutorial;
-      this.eventClick = !this.eventClick;
-    },
-    dispatchFinish() {
-      if (this.activeTutorial === 'training') this.eventClickFinish = !this.eventClickFinish;
-    },
-    dispatchReset() {
-      this.eventReset = !this.eventReset;
     },
     signIn() {
       this.$router.push({
@@ -186,9 +193,19 @@ export default {
       this.update = !this.update;
     },
     onExampleDeleted() {
-      this.repository.examples__count -= 1;
-      this.updateTrainingStatus();
       this.updatedExampleList();
+    },
+    updateSelected(params) {
+      this.selectedItems = params
+    },
+    async deleteSelectedItems() {
+      await this.selectedItems.forEach((item) => {
+        this.deleteExample({ id: item.id });
+        this.repository.examples__count -= 1;
+        this.openDeleteModal = false;
+        this.openSuccessModal = true;
+      });
+      await this.onExampleDeleted()
     },
   },
 };
@@ -231,7 +248,7 @@ export default {
   }
 
   &__new-example {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     background-color: $color-white;
 
     &__pending-example{
@@ -304,6 +321,20 @@ export default {
     }
       }
     }
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__description {
+      font-family: 'Lato';
+      font-size: 14px;
+      color: #4E5666;
+      margin-top: 1rem;
+    }
+
 }
 
 </style>

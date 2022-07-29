@@ -15,6 +15,7 @@ import RepositoryContentAPI from '@/views/repository/content/API';
 import RepositoryContentTests from '@/views/repository/content/Tests';
 import RepositoryHome from '@/views/repository/Home';
 import RepositoryTrainings from '@/views/repository/Trainings';
+import RepositoryDatabase from '@/views/repository/Database';
 import RepositoryTranslate from '@/views/repository/Translate';
 import RepositoryTranslateExternal from '@/views/repository/TranslateExternal';
 import RepositoryTranslations from '@/views/repository/Translations';
@@ -186,6 +187,11 @@ const router = new Router({
           path: ':ownerNickname/:slug/suggestions/',
           name: 'repository-suggestion',
           component: PhraseSuggestion,
+        },
+        {
+          path: ':ownerNickname/:slug/database/',
+          name: 'repository-database',
+          component: RepositoryDatabase,
         },
         {
           path: ':ownerNickname/:slug/translate/',

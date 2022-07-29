@@ -220,6 +220,21 @@
                   })
                 "
               />
+              <unnnic-sidebar-item
+                :text="$t('webapp.menu.database')"
+                :class="[
+                  checkSelectedMenu('repository-database')
+                    ? 'sidebar-wrapper__body--active'
+                    : 'sidebar-wrapper__body__element'
+                ]"
+                @click="
+                  setSelectMenu({
+                    name: 'repository-database',
+                    to: 'repository-database',
+                    closeDrop: false
+                  })
+                "
+              />
             </div>
           </section>
 

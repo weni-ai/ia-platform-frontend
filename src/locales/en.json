@@ -193,8 +193,8 @@
       "no_sentences": "No sentences.",
       "detailed_results": "Detailed Results",
       "login": "Sign in to your account to edit this repository.",
-      "all_intents": "All Intents",
-      "all_entities": "All Entities",
+      "all_intents": "All intents",
+      "all_entities": "All entities",
       "all_languages": "All languages",
       "intent": "Intent",
       "no_versions": "No results for this version"
@@ -496,7 +496,10 @@
       "intent_error": "Intent is required",
       "default_error": "Something went wrong, try again later.",
       "more_than_200_words": "You reached the limit of 200 words per phrase. Adjust the text if necessary or break it into smaller phrases.",
-      "entities_info": "How to add new entities from the sentence?"
+      "entities_info": "How to add new entities from the sentence?",
+      "database": "Repository",
+      "database_description": "List of all sentences trained by the intelligence.",
+      "database_untrained": "This intelligence has no trained sentences. Add phrases and train them in the Training menu."
     },
     "train_modal": {
       "training_status": "Training Status",
@@ -704,7 +707,8 @@
         "adjustments": "Adjustments",
         "api": "API",
         "tests": "Tests"
-      }
+      },
+      "database": "Repository"
     },
     "phrase-suggestion": {
       "title": "Sentence suggestions",
