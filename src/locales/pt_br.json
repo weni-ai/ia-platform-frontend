@@ -193,8 +193,8 @@
       "no_sentences": "Não há frases.",
       "detailed_results": "Resultados Detalhados",
       "login": "Faça login na sua conta para editar essa inteligência.",
-      "all_intents": "Todas as Intenções",
-      "all_entities": "Todas as Entidades",
+      "all_intents": "Todas intenções",
+      "all_entities": "Todas entidades",
       "all_labels": "Todas as Categorias",
       "all_languages": "Todos os idiomas",
       "intent": "Intenção",
@@ -494,7 +494,10 @@
       "empty_text_error": "Digite uma frase",
       "intent_error": "Digite uma intenção",
       "default_error": "Algo de errado aconteceu, tente novamente mais tarde.",
-      "entities_info": "Como adicionar novas entidades a partir da frase?"
+      "entities_info": "Como adicionar novas entidades a partir da frase?",
+      "database": "Repositório",
+      "database_description": "Lista de todas as frases treinadas pela inteligência.",
+      "database_untrained": "Essa inteligência não possui nenhuma frase treinada. Adicione frases e treine-as no menu Treinamento."
     },
     "train_modal": {
       "training_status": "Status do Treinamento",
@@ -698,7 +701,8 @@
         "adjustments": "Ajustes",
         "api": "API",
         "tests": "Testes"
-      }
+      },
+      "database": "Repositório"
     },
     "phrase-suggestion": {
       "title": "Sugestão de frases",
@@ -715,7 +719,7 @@
       "exit_inteligence": "Sair da inteligência",
       "all_versions": "Ver todas as versões",
       "created_by": "Criado por",
-      "filter_by": "Filtrar por"
+      "filter_by": "Exibir"
     },
     "versions": {
       "edit_choose_version": "Adicione, edite e escolha versões da sua inteligência.",

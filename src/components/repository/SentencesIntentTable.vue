@@ -37,7 +37,7 @@
               :state="isSentenceActive"
             />
             <span
-              v-if="$route.name.includes('entitylist')"
+              v-if="showIntents"
               class="ml-4 intent-label"
             >
               Intenção: {{ item.intent }}
@@ -174,6 +174,10 @@ export default {
     list: {
       type: Array,
       default: () => [],
+    },
+    showIntents: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

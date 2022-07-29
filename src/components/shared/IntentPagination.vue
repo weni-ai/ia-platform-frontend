@@ -10,7 +10,7 @@
       @updateList="onSaveUpdate"
       @dispatchEvent="onDispatchEvent($event)" />
     <loading v-show="isLoading" class="pagination__message" />
-    <div class="pagination__bottom">
+    <div v-if="!loadAll" class="pagination__bottom">
       <p v-show="!isLoading" class="text-center">
         {{ listStatusErrorCode | statusCodeVerbose }}
       </p>
