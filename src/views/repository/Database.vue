@@ -44,10 +44,12 @@
               size="large"
               :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
               :disabled="sentencesCounter === 0"
+              class="trainings-repository__button"
             />
           </div>
         </div>
-        <filter-examples
+        <hr class="divider">
+        <sentence-filters
           :intents="repository.intents_list"
           :entities="repository.entities"
           :language-filter="false"
@@ -335,6 +337,16 @@ export default {
       margin-top: 1rem;
     }
 
+    &__button {
+      width: 240px;
+    }
+
 }
+.divider {
+  background: #E2E6ED;
+  height: 1px;
+  margin: 2rem 0;
+}
+
 
 </style>

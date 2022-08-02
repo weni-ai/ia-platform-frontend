@@ -220,23 +220,25 @@
                   })
                 "
               />
-              <unnnic-sidebar-item
-                :text="$t('webapp.menu.database')"
-                :class="[
-                  checkSelectedMenu('repository-database')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element'
-                ]"
-                @click="
-                  setSelectMenu({
-                    name: 'repository-database',
-                    to: 'repository-database',
-                    closeDrop: false
-                  })
-                "
-              />
             </div>
           </section>
+
+          <unnnic-sidebar-item
+            :icon="checkSelectedMenu('repository-database') ? 'folder-2' : 'folder-1'"
+            :text="$t('webapp.menu.database')"
+            :class="[
+              checkSelectedMenu('repository-database')
+                ? 'sidebar-wrapper__body--active'
+                : 'sidebar-wrapper__body__element'
+            ]"
+            @click="
+              setSelectMenu({
+                name: 'repository-database',
+                to: 'repository-database',
+                closeDrop: false
+              })
+            "
+          />
 
           <section class="evaluate-menu">
             <unnnic-sidebar-item
