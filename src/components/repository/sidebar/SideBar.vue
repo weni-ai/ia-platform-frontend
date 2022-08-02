@@ -678,7 +678,7 @@ export default {
     }
 
     &__body {
-      transform: translateY(-1.9rem);
+      margin-top: -1.9rem;
 
       &__element {
         color: $unnnic-color-neutral-cloudy;
