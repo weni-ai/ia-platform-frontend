@@ -467,13 +467,13 @@
       "login": "Entre na sua conta para contribuir com essa inteligência.",
       "sentences_list": "Lista de frases",
       "run_training": "Executar treinamento",
-      "submit": "Enviar",
+      "submit": "Enviar frase para treinamento",
       "highlight_word": "Destaque palavras como entidade",
       "add_entity": "Adicionar entidade",
       "add_entity_for": "Adicionar entidade para",
       "select_text": "Selecione parte do texto para adicionar uma entidade",
-      "add_a_sentence": "Adicionar uma frase",
-      "intent": "Intenção",
+      "add_a_sentence": "Escreva a frase que deseja treinar",
+      "intent": "Selecione a intenção",
       "train_response_title": "Repositório treinado com sucesso!",
       "train_response_subtitle": "Suas frases foram adicionadas ao treinamento. Você pode consultar as frases do repositório em Sentence list.",
       "trained": "Treinado",
@@ -499,7 +499,8 @@
       "database_description": "Lista de todas as frases treinadas pela inteligência.",
       "database_untrained": "Essa inteligência não possui nenhuma frase treinada. Adicione frases e treine-as no menu Treinamento.",
       "train_title": "Treinar Inteligência",
-      "train_description": "Adicione frases para aprimorar a inteligência. Veja nossa documentação e conheça as melhores práticas para criar uma inteligência artificial de qualidade."
+      "train_description": "Adicione frases para aprimorar a inteligência. Veja nossa documentação e conheça as melhores práticas para criar uma inteligência artificial de qualidade.",
+      "entities": "Entidades (opcional)"
     },
     "train_modal": {
       "training_status": "Status do Treinamento",
