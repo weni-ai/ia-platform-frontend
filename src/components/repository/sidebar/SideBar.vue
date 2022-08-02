@@ -690,7 +690,7 @@ export default {
 
       &--dropdown-open {
         background-color: $unnnic-color-background-sky;
-        color: $unnnic-color-neutral-darkest;
+        color: $unnnic-color-neutral-cloudy;
         font-weight: $unnnic-font-weight-bold;
       }
 
