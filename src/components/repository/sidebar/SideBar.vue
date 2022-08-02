@@ -731,6 +731,10 @@ export default {
         margin-left: $unnnic-inline-md;
         margin-bottom: $unnnic-spacing-stack-xs;
         border-bottom: 1px solid $unnnic-color-neutral-soft;
+
+        > div > div > .unnnic-side-bar-item__icon {
+          display: none;
+        }
       }
 
       &__divider {
