@@ -55,16 +55,15 @@
           hasCloudyColor
           :placeholder="getNameVersion"
           v-model="selectedVersion"
+          :optionsHeader="optionsHeader"
         >
           <option v-for="(version, index) in allVersions" :key="index" size="sm">
             {{ version.name }}
           </option>
           <div
             slot="header"
-            @click="routerHandle('repository-versions')"
             class="sidebar-wrapper__header__versions"
           >
-            {{ $t("webapp.dashboard.all_versions") }}
           </div>
         </unnnic-select>
       </section>
@@ -461,7 +460,13 @@ export default {
       collapse: true,
       allVersions: [],
       dropSelect: '',
-      selectedVersion: this.getNameVersion
+      selectedVersion: this.getNameVersion,
+      optionsHeader: [
+        {
+          text: this.$t('webapp.dashboard.all_versions'),
+          click: () => this.routerHandle('repository-versions')
+        }
+      ]
     };
   },
   computed: {
@@ -616,6 +621,24 @@ export default {
       &__select {
         z-index: 10;
         padding-bottom: $unnnic-spacing-stack-sm;
+        .icon-right {
+          transform: translateY(110%)
+        }
+        .dropdown > div > input {
+          height: auto;
+        }
+
+        .unnnic-select__header::after{
+          margin: 0;
+        }
+
+        .dropdown-data .unnnic-select__options > div {
+          max-height: 180px;
+
+          .unnnic-select__options__scroll-area {
+            overflow: hidden;
+          }
+        }
       }
       &__versions {
         cursor: pointer;
