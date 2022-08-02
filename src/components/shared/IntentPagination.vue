@@ -2,10 +2,8 @@
   <div v-if="list && !list.empty">
     <component
       v-show="!isLoading"
-      :key="itemKey && item[itemKey] ? item[itemKey] : index"
       :is="itemComponent"
       :list="list"
-      v-bind="addAttrs(item)"
       @deleted="onItemDeleted(item.id)"
       @updateList="onSaveUpdate"
       @dispatchEvent="onDispatchEvent($event)" />
