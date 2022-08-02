@@ -147,10 +147,6 @@ export default {
     BadgesCard,
   },
   props: {
-    id: {
-      type: Number,
-      required: true,
-    },
     text: {
       type: String,
       default: '',
@@ -172,8 +168,8 @@ export default {
       default: null,
     },
     list: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     showIntents: {
       type: Boolean,

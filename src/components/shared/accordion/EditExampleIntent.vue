@@ -3,18 +3,6 @@
     <form>
       <div class="columns edit-sentence__wrapper">
         <div class="column is-6">
-          <!-- <unnnic-input
-              :errors="errors.text || errors.language"
-              :label="$t('webapp.example.sentence')"
-              ref="textInput"
-              v-model="text"
-              :entities="allEntities"
-              :placeholder="$t('webapp.example.enter_sentence')"
-              @textSelected="setTextSelected($event)"
-              @entityEdited="onEditEntity($event)"
-              @entityAdded="onEntityAdded()"
-            >
-          </unnnic-input> -->
             <p
               slot="label"
               class="unnnic-form__label"
@@ -33,7 +21,8 @@
         <div class="column is-6">
           <unnnic-autocomplete
             :message="errors.non_field_errors"
-            :type="{ 'is-danger': errors.non_field_errors && errors.non_field_errors.length > 0 }"
+            :type="errors.non_field_errors
+                    && errors.non_field_errors.length > 0 ? 'error' : 'normal'"
             :label="$t('webapp.example.intent')"
             v-model="intent"
             :data="filterIntents"
@@ -43,13 +32,6 @@
             @click.native="hideDropdown = false"
             :class="hideDropdown ? 'hidden' : ''"
           >
-            <!-- <b-autocomplete
-              v-model="intent"
-              :data="filterIntents"
-              :placeholder="$t('webapp.example.intent')"
-              dropdown-position="bottom"
-              open-on-focus
-              @input="intent = intentFormatters(intent)" /> -->
           </unnnic-autocomplete>
         </div>
       </div>
@@ -58,22 +40,6 @@
             v-for="(entity, index) in entitiesToEdit"
             :key="`entity-${index}`"
             class="column is-6">
-            <!-- <unnnic-input >
-              <span
-                slot="label"
-                v-html="$t('webapp.example.text_is', {text: highlightedText(entity) })" />
-              <b-autocomplete
-                :data="filterEntities(index, false)"
-                v-model="entity.entity"
-                :placeholder="$t('webapp.example.entity')"
-                dropdown-position="bottom"
-                icon-right="close"
-                icon-right-clickable
-                open-on-focus
-                @input="entitiesToEdit[index].entity = intentFormatters(entity.entity)"
-                @icon-right-click="removeEntity(entity, index)"
-              />
-            </unnnic-input> -->
             <p
               slot="label"
               class="unnnic-form__label"
@@ -95,36 +61,6 @@
             v-for="(entity, index) in pendingEntities"
             :key="`pending-entity-${index}`"
             class="column is-6">
-            <!-- <unnnic-input
-                v-model="entity.entity"
-                :placeholder="$t('webapp.example.entity')"
-                dropdown-position="bottom"
-                icon-right="close"
-                icon-right-clickable
-                open-on-focus
-                @input="pendingEntities[index].entity = intentFormatters(entity.entity)"
-                @select="elevateToEntity(entity, index)"
-                @icon-right-click="removePendingEntity(entity, index)"
-            >
-              <span
-                slot="label"
-                class="edit-sentence__input__label"
-                v-html="$t('webapp.example.text_is', {text: highlightedText(entity) })" />
-              <b-autocomplete
-                :data="filterEntities(index, true)"
-                :custom-formatter="intentFormatters"
-                v-model="entity.entity"
-                :placeholder="$t('webapp.example.entity')"
-                dropdown-position="bottom"
-                icon-right="close"
-                class="edit-sentence-input"
-                icon-right-clickable
-                open-on-focus
-                @input="pendingEntities[index].entity = intentFormatters(entity.entity)"
-                @select="elevateToEntity(entity, index)"
-                @icon-right-click="removePendingEntity(entity, index)"
-              />
-            </unnnic-input> -->
             <p
               slot="label"
               class="unnnic-form__label"
@@ -153,14 +89,6 @@
         </div>
       <div
         class="edit-sentence__btn-wrapper">
-        <!-- <unnnic-button
-          :disabled="textSelected === null"
-          rounded
-          type="is-primary"
-          @click.prevent.stop="addPendingEntity"
-        >
-          <span class="edit-sentence__add-entity-button-text">{{ entityButtonText }} </span>
-        </unnnic-button> -->
         <div>
           <unnnic-button
             type="secondary"

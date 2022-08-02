@@ -12,26 +12,34 @@
         <div class="filter-evaluate-example__filters__wrapper__text">
           {{ $t("webapp.dashboard.filter_by") }}:
         </div>
-         <unnnic-autocomplete
-            :message="errors.intent"
-            :openWithFocus="true"
-            @input="inputFormatters"
-            v-model="intent"
-            :data="optionsIntents"
-            :formatters="inputFormatters"
-            :placeholder="$t('webapp.evaluate.all_intents')"
-          >
-          </unnnic-autocomplete>
-         <unnnic-autocomplete
-            :message="errors.entity"
-            :openWithFocus="true"
-            @input="inputFormatters"
-            v-model="entity"
-            :data="optionsEntities"
-            :formatters="inputFormatters"
-            :placeholder="$t('webapp.evaluate.all_entities')"
-          >
-          </unnnic-autocomplete>
+        <div>
+          <unnnic-autocomplete
+             :message="errors.intent"
+             :openWithFocus="true"
+             @input="inputFormatters"
+             @focus="onInputClick('intent')"
+             @blur="onInputClick('intent')"
+             v-model="intent"
+             :data="optionsIntents"
+             :formatters="inputFormatters"
+             :placeholder="$t('webapp.evaluate.all_intents')"
+             :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
+           />
+        </div>
+        <div>
+          <unnnic-autocomplete
+             :message="errors.entity"
+             :openWithFocus="true"
+             @input="inputFormatters"
+             @focus="onInputClick('entity')"
+             @blur="onInputClick('entity')"
+             v-model="entity"
+             :data="optionsEntities"
+             :formatters="inputFormatters"
+             :placeholder="$t('webapp.evaluate.all_entities')"
+             :iconRight="isEntityInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
+           />
+        </div>
         <b-field v-if="languageFilter && languages">
           <b-select v-model="language" :placeholder="$t('webapp.evaluate.all_languages')" expanded>
             <option
@@ -66,12 +74,12 @@
 import { formatters, LANGUAGES } from '@/utils/index';
 import { mapGetters } from 'vuex';
 import _ from 'lodash';
-import EditExampleBase from '@/components/shared/accordion/EditExampleBase';
+// import EditExampleBase from '@/components/shared/accordion/EditExampleBase';
 
 
 export default {
   name: 'SentenceFilters',
-  extends: EditExampleBase,
+  // extends: EditExampleBase,
   props: {
     debounceTime: {
       type: Number,
@@ -107,7 +115,9 @@ export default {
       versionName: '',
       language: null,
       setTimeoutId: null,
-      errors: {}
+      errors: {},
+      isIntentInputActive: false,
+      isEntityInputActive: false
     };
   },
   computed: {
@@ -222,6 +232,10 @@ export default {
       if (!this.hasVersion) {
         this.language = this.repository.language;
       }
+    },
+    onInputClick(target) {
+      if (target === 'intent') this.isIntentInputActive = !this.isIntentInputActive
+      if (target === 'entity') this.isEntityInputActive = !this.isEntityInputActive
     }
   }
 };
@@ -239,6 +253,7 @@ export default {
     display: grid;
     grid-template-columns: 35% 1fr;
     grid-gap: 3rem;
+    height: 36px;
 
     @media (max-width: $mobile-width) {
       grid-template-columns: 1fr;
@@ -253,7 +268,7 @@ export default {
       grid-gap: 1rem;
 
       &__has-2-fields {
-        grid-template-columns: 1fr 2fr 2fr;
+        grid-template-columns: 1fr 1fr 1fr;
 
         @media (max-width: $mobile-width) {
           grid-template-columns: 1fr;
@@ -291,6 +306,9 @@ export default {
   }
 }
 /deep/ .icon-left {
+    transform: translateY(60%);
+  }
+/deep/ .icon-right {
     transform: translateY(60%);
   }
 </style>

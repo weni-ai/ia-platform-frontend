@@ -162,5 +162,6 @@ export default {
 .divider {
       background: #E2E6ED;
       height: 1px;
+      margin: 2rem 0;
     }
 </style>
