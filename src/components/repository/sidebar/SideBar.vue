@@ -429,7 +429,7 @@
       </section>
       <div slot="footer" class="sidebar-wrapper__footer">
         <unnnic-sidebar-item
-          icon="expand-8-1"
+          icon="expand-full-1"
           class="sidebar-wrapper__footer__text"
           :text="collapse ? $t('webapp.menu.hide') : $t('webapp.menu.expand')"
           :enableTooltip="!collapse"
