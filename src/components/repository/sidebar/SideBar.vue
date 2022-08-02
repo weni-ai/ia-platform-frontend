@@ -647,7 +647,7 @@ export default {
           padding-bottom: $unnnic-spacing-stack-sm;
           &__title {
             font-family: $unnnic-font-family-secondary;
-            color: $unnnic-color-neutral-dark;
+            color: $unnnic-color-brand-weni-soft;
             font-weight: $unnnic-font-weight-bold;
             font-size: $unnnic-font-size-body-gt;
             line-height: ($unnnic-line-height-small + $unnnic-font-size-body-gt);
