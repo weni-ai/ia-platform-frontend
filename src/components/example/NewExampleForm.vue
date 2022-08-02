@@ -1,18 +1,18 @@
 <template>
   <div>
     <form
-      class="columns wrapper is-vcentered is-variable is-2"
+      class="columns wrapper is-vcentered is-variable is-2 is-flex-wrap-wrap"
       @submit.prevent="onSubmit()"
       @keyup.enter="onEnter()"
     >
-      <div class="column is-three-fifths">
+      <div class="column is-12">
         <b-field
           :message="errors.text || errors.language"
         >
           <p
               slot="label"
               class="unnnic-form__label"
-              v-html="$t('webapp.example.sentence')" />
+              v-html="$t('webapp.trainings.add_a_sentence')" />
           <example-text-with-highlighted-entities-input
             id="tour-training-step-1"
             ref="textInput"
@@ -20,37 +20,95 @@
             :is-step-blocked="textSelected === null"
             v-model="text"
             :entities="entities"
-            :placeholder="$t('webapp.trainings.add_a_sentence')"
+            :placeholder="$t('webapp.example.sentence')"
             size="normal"
             @textSelected="setTextSelected($event)"
             @submit="onEnter()"
           >
-            <language-append-select-input
+            <!-- <language-append-select-input
               slot="append"
               v-model="language"
               class="language-append"
-            />
+            /> -->
           </example-text-with-highlighted-entities-input>
         </b-field>
       </div>
-      <div class="column">
+      <div class="column is-12">
+        <b-field class="entities-wrapper" :message="errors.entities">
+          <p
+              slot="label"
+              class="unnnic-form__label"
+              v-html="$t('webapp.trainings.entities')" />
+          <entities-input
+            ref="entitiesInput"
+            v-model="entities"
+            :repository="repository"
+            :text="text"
+            :text-selected="textSelected"
+            :available-entities="entitiesList"
+            :available-labels="availableLabels"
+            @entityAdded="onEntityAdded()"
+          />
+        </b-field>
+      </div>
+      <div class="column is-6">
         <b-field
           id="tour-training-step-4"
           :is-previous-disabled="true"
           :is-step-blocked="intent === ''"
           :message="errors.intent">
-          <b-autocomplete
+          <!-- <b-autocomplete
             v-model="intent"
             :placeholder="$t('webapp.trainings.intent')"
             :data="filteredData"
             :open-on-focus="true"
             dropdown-position="bottom"
+          /> -->
+         <unnnic-autocomplete
+            :label="$t('webapp.trainings.intent')"
+            v-model="intent"
+            :data="filteredData"
+            :placeholder="$t('webapp.example.intent')"
+            :openWithFocus="true"
+            @input="intent = intentFormatters(intent)"
+            @click.native="hideDropdown = false"
+            :class="hideDropdown ? 'hidden' : ''"
+            :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
           />
         </b-field>
       </div>
-      <div class="column is-narrow">
+      <div class="column is-6">
+        <b-field
+          id="tour-training-step-4"
+          :is-previous-disabled="true"
+          :is-step-blocked="intent === ''"
+          :message="errors.intent">
+          <!-- <b-autocomplete
+            v-model="intent"
+            :placeholder="$t('webapp.trainings.intent')"
+            :data="filteredData"
+            :open-on-focus="true"
+            dropdown-position="bottom"
+          /> -->
+           <unnnic-autocomplete
+            :label="$t('webapp.create_repository.language_placeholder')"
+            v-model="language"
+            :placeholder="$t('webapp.trainings.intent')"
+            :openWithFocus="true"
+            @input="intent = intentFormatters(intent)"
+            @click.native="hideDropdown = false"
+            :class="hideDropdown ? 'hidden' : ''"
+            :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
+          />
+          <!-- <language-append-select-input
+              v-model="language"
+              class="language-append"
+            /> -->
+        </b-field>
+      </div>
+      <div class="column is-12">
         <b-field>
-          <b-tooltip
+          <!-- <b-tooltip
             :active="!isValid && validationErrors.length > 0"
             :label="validationErrors.join(', ')"
             type="is-dark">
@@ -65,11 +123,18 @@
               native-type="submit">
               <slot v-if="!submitting">{{ $t('webapp.trainings.submit') }}</slot>
             </b-button>
-          </b-tooltip>
+          </b-tooltip> -->
+          <unnnic-button
+            class="button--full"
+            type="secondary"
+            size="large"
+            @click.prevent.stop="cancelEditSentence">
+            {{ $t('webapp.trainings.submit') }}
+          </unnnic-button>
         </b-field>
       </div>
     </form>
-    <div class="columns is-variable is-1">
+    <!-- <div class="columns is-variable is-1">
       <div class="column is-three-fifths">
         <b-field :message="errors.entities">
           <entities-input
@@ -84,7 +149,7 @@
           />
         </b-field>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -273,5 +338,28 @@ export default {
 
 .columns.is-variable .column:last-child {
   padding-right: 0;
+}
+
+/deep/ .textarea {
+  border: .0625rem solid #e2e6ed;
+  border-radius: .25rem;
+  color: #4e5666;
+  font-weight: 400;
+  font-size: .875rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/deep/ .unnnic-form__label {
+  font-family: 'Lato';
+}
+
+.button--full {
+  width: 100%;
+}
+.entities-wrapper {
+  padding: 1.5rem;
+  border: 1px solid #E2E6ED;
+  border-radius: 8px;
 }
 </style>
