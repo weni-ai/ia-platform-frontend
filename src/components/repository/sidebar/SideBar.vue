@@ -157,6 +157,7 @@
             "
             :text="$t('webapp.menu.summary')"
             :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-summary')"
             @click.native="
               setSelectMenu({
                 name: 'repository-summary',
@@ -287,11 +288,11 @@
               />
             </div>
           </section>
-
           <unnnic-sidebar-item
             :icon="checkSelectedMenu('repository-log') ? 'messages-bubble-3' : 'messages-bubble-1'"
             :text="$t('webapp.menu.inbox')"
             :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-log')"
             @click="
               setSelectMenu({
                 name: 'repository-log',
@@ -361,6 +362,7 @@
             :icon="checkSelectedMenu('repository-integration') ? 'phone-charger-1' : 'charger-1'"
             :text="$t('webapp.menu.integration')"
             :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-integration')"
             @click="
               setSelectMenu({
                 name: 'repository-integration',
@@ -694,7 +696,7 @@ export default {
 
       &--active {
         background-color: $unnnic-color-background-sky;
-        color: $unnnic-color-neutral-darkest;
+        color: $unnnic-color-neutral-cloudy;
         font-weight: $unnnic-font-weight-bold;
 
         .unnnic-icon {
