@@ -501,6 +501,12 @@
       "train_title": "Treinar Inteligência",
       "train_description": "Adicione frases para aprimorar a inteligência. Veja nossa documentação e conheça as melhores práticas para criar uma inteligência artificial de qualidade."
     },
+    "resumeSentences": {
+      "sentences": "Frases",
+      "intentions": "Intenções",
+      "entities": "Entidades",
+      "languages": "Idiomas"
+    },
     "train_modal": {
       "training_status": "Status do Treinamento",
       "status_ok": "Seu bot está pronto para ser treinado!",

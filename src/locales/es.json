@@ -503,6 +503,12 @@
       "database_description": "Lista de todas las oraciones entrenadas por la inteligencia",
       "database_untrained": "Esta inteligencia no tiene frases entrenadas. Agregue frases y entrénelas en el menú Entrenamiento."
     },
+    "resumeSentences": {
+      "sentences": "Frases",
+      "intentions": "Intenciones",
+      "entities": "Entidades",
+      "languages": "Idiomas"
+    },
     "train_modal": {
       "training_status": "Estado de Entrenamiento",
       "status_ok": "¡Tu bot está listo para ser entrenado!",

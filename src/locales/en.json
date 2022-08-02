@@ -501,6 +501,12 @@
       "database_description": "List of all sentences trained by the intelligence.",
       "database_untrained": "This intelligence has no trained sentences. Add phrases and train them in the Training menu."
     },
+    "resumeSentences": {
+      "sentences": "Sentences",
+      "intentions": "Intentions",
+      "entities": "Entities",
+      "languages": "Languages"
+    },
     "train_modal": {
       "training_status": "Training Status",
       "status_ok": "Your bot is ready to be trained!",
