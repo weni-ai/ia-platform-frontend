@@ -633,7 +633,6 @@ export default {
 
           &__text {
             cursor: pointer;
-            text-decoration: underline;
             font-family: $unnnic-font-family-secondary;
             color: $unnnic-color-neutral-cloudy;
             font-weight: $unnnic-font-weight-regular;
