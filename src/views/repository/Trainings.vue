@@ -6,14 +6,27 @@
       <div class="trainings-repository__new-example">
         <div v-if="authenticated">
           <div v-if="repository.authorization.can_contribute">
+            <div>
+              <unnnic-card
+                type="title"
+                :title="$t('webapp.trainings.train_title')"
+                :hasInformationIcon="false"
+                icon="graph-status-circle-1"
+                scheme="aux-purple"
+              />
+              <p class="trainings-repository__description">
+                {{ $t('webapp.trainings.train_description') }}
+              </p>
+            </div>
+            <hr class="divider" />
             <div class="trainings-repository__list-wrapper">
               <div>
                 <h2 class="trainings-repository__list-wrapper__title">
                   {{ $t('webapp.trainings.grid_text1') }}
                 </h2>
-                <span class="trainings-repository__list-wrapper__subtitle">
+                <!-- <span class="trainings-repository__list-wrapper__subtitle">
                   {{ $t('webapp.trainings.grid_text2') }}
-                </span>
+                </span> -->
               </div>
             </div>
             <new-example-form

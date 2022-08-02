@@ -9,6 +9,10 @@
         <b-field
           :message="errors.text || errors.language"
         >
+          <p
+              slot="label"
+              class="unnnic-form__label"
+              v-html="$t('webapp.example.sentence')" />
           <example-text-with-highlighted-entities-input
             id="tour-training-step-1"
             ref="textInput"

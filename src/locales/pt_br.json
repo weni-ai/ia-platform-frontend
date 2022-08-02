@@ -461,7 +461,7 @@
       "cancel": "Cancelar"
     },
     "trainings": {
-      "grid_text1": "Treine uma nova frase",
+      "grid_text1": "Treinar uma nova frase",
       "grid_text2": "Adicionar exemplos para melhorar sua inteligência.",
       "not_can_edit_repository": "Você não pode contribuir para essa inteligência",
       "login": "Entre na sua conta para contribuir com essa inteligência.",
@@ -497,7 +497,9 @@
       "entities_info": "Como adicionar novas entidades a partir da frase?",
       "database": "Repositório",
       "database_description": "Lista de todas as frases treinadas pela inteligência.",
-      "database_untrained": "Essa inteligência não possui nenhuma frase treinada. Adicione frases e treine-as no menu Treinamento."
+      "database_untrained": "Essa inteligência não possui nenhuma frase treinada. Adicione frases e treine-as no menu Treinamento.",
+      "train_title": "Treinar Inteligência",
+      "train_description": "Adicione frases para aprimorar a inteligência. Veja nossa documentação e conheça as melhores práticas para criar uma inteligência artificial de qualidade."
     },
     "train_modal": {
       "training_status": "Status do Treinamento",
