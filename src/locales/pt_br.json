@@ -678,6 +678,7 @@
     },
     "menu": {
       "hide": "Encolher",
+      "expand": "Expandir",
       "created_by": "Criado por",
       "back_text": "Voltar",
       "summary": "Resumo",
