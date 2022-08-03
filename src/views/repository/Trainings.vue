@@ -70,8 +70,6 @@
             :available="!repository.available_request_authorization"
             :repository-uuid="repository.uuid"
             @onAuthorizationRequested="updateRepository(false)" />
-
-            <SentencesResume />
         </div>
         <div v-else>
           <b-notification
@@ -107,7 +105,6 @@ import Loading from '@/components/shared/Loading';
 import Train from '@/components/repository/training/Train';
 import Tour from '@/components/Tour';
 import RepositoryBase from './Base';
-import SentencesResume from '@/components/repository/training/SentencesResume';
 
 export default {
   name: 'RepositoryTrainings',
@@ -121,7 +118,6 @@ export default {
     Loading,
     Train,
     Tour,
-    SentencesResume,
   },
   extends: RepositoryBase,
   data() {
