@@ -1,7 +1,7 @@
 const runtimeVariables = (() => ({
   VUE_APP_VERSION: '(packageDict.version)',
-  VUE_APP_API_BASE_URL: 'https://api-ai-staging.weni.ai/',
-  VUE_APP_BOTHUB_NLP_BASE_URL: 'https://nlp-ai-staging.weni.ai/',
+  VUE_APP_API_BASE_URL: 'https://engine-ai.dev.cloud.weni.ai/',
+  VUE_APP_BOTHUB_NLP_BASE_URL: 'https://nlp-ai-development.weni.ai/',
   VUE_APP_BOTHUB_WEBAPP_BASE_URL: 'https://platform-frontend-ai.dev.cloud.weni.ai/',
   VUE_APP_VERSION_ENABLED: 'true',
   VUE_APP_BOTHUB_WEBAPP_USE_SENTRY: 'true',
