@@ -616,6 +616,7 @@ export default {
     transition: width 0.1s;
     font-family: $font-family;
     border-top-left-radius: $unnnic-border-radius-md;
+    overflow-y: auto;
 
     &__header {
       &__select {
