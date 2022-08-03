@@ -30,8 +30,9 @@
         <unnnic-button
           type="primary"
           size="large"
-          disabled
-          @click.native="setVisibleImportModal()"
+          :disabled="buttonDisabled"
+          :loading="buttonLoading"
+          @click="train()"
         >
           {{ $t("webapp.trainings.run_training") }}
         </unnnic-button>
@@ -79,6 +80,20 @@ export default {
   computed: {
     ...mapGetters(['getCurrentRepository']),
   },
+  props: {
+    buttonDisabled: {
+      type: Boolean,
+    },
+    buttonLoading: {
+      type: Boolean,
+    },
+    buttonClass: {
+      type: String,
+    },
+    buttonClick: {
+      type: Function,
+    },
+  },
   data() {
     return {
       intelligenceFile: null,
@@ -87,6 +102,9 @@ export default {
     };
   },
   methods: {
+    async train(){
+      await this.buttonClick();
+    },
     importSelectedFile() {
       this.importModalVisible = false;
     },

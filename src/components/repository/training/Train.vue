@@ -1,19 +1,15 @@
 <template>
   <div class="train">
-    <b-button
-      ref="training"
-      :disabled="
+    <sentences-resume
+      :buttonDisabled="
         loading ||
-          repository.examples__count === 0
-          || !this.isItOkToEnableButton
+            repository.examples__count === 0
+            || !isItOkToEnableButton
       "
-      :loading="loading || !this.isItOkToEnableButton"
-      type="is-secondary"
-      class="train__button"
-      @click="verifyTrain()"
-    >
-      {{ $t("webapp.trainings.run_training") }}
-    </b-button>
+      :buttonLoading="loading || !isItOkToEnableButton"
+      buttonClass="train__button"
+      :buttonClick="verifyTrain"
+    />
     <div v-if="trainProgress" class="train__progress">
       <progress-bar :progress="progress" type="is-secondary" />
       <p v-html="$t('webapp.trainings.train_progress', { progress: progress })" />
@@ -43,13 +39,15 @@ import { mapActions, mapGetters } from 'vuex';
 import TrainModal from '@/components/repository/training/TrainModal';
 import ProgressBar from '@/components/shared/ProgressBar';
 import TrainResponse from '@/components/repository/training/TrainResponse';
+import SentencesResume from './SentencesResume';
 
 export default {
   name: 'TrainingProgress',
   components: {
     TrainModal,
     TrainResponse,
-    ProgressBar
+    ProgressBar,
+    SentencesResume
   },
   props: {
     load: {
