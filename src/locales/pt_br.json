@@ -502,6 +502,8 @@
       "train_description": "Adicione frases para aprimorar a inteligência. Veja nossa documentação e conheça as melhores práticas para criar uma inteligência artificial de qualidade."
     },
     "resumeSentences": {
+      "title": "Resumo das frases enviadas para treinamento",
+      "description": "Execute o treinamento para aprimorar a inteligência com as frases enviadas",
       "sentences": "Frases",
       "intentions": "Intenções",
       "entities": "Entidades",

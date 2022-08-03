@@ -504,6 +504,8 @@
       "database_untrained": "Esta inteligencia no tiene frases entrenadas. Agregue frases y entrénelas en el menú Entrenamiento."
     },
     "resumeSentences": {
+      "title": "Resumen de frases enviadas para entrenamiento",
+      "description": "Ejecute la capacitación para mejorar la inteligencia con frases enviadas",
       "sentences": "Frases",
       "intentions": "Intenciones",
       "entities": "Entidades",

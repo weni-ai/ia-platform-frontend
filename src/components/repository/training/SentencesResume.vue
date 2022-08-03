@@ -1,10 +1,10 @@
 <template>
   <div class="sentences-resume">
     <h1 class="sentences-resume__title">
-      Resumo das frases enviadas para treinamento
+      {{$t('webapp.resumeSentences.title')}}
     </h1>
     <p class="sentences-resume__description">
-      Execute o treinamento para aprimorar a inteligência com as frases enviadas
+      {{$t('webapp.resumeSentences.description')}}
     </p>
     <div class="sentences-resume__wrapper">
       <div class="sentences-resume__wrapper-cards">
