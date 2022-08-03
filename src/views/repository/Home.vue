@@ -54,9 +54,9 @@
                 </div>
         <div>
           <unnnic-button
-            v-if="true"
-            type="primary"
-            :loading="false"
+            v-if="hasIntegration && !hasIntegrationCheckError"
+            type="secondary"
+            :loading="hasIntegration && !hasIntegrationCheckError"
             @click="changeIntegrateModalState(true)"
             :class="{
               'repository-home__description__header__remove-integrate':
@@ -67,7 +67,7 @@
           </unnnic-button>
           <unnnic-button
             v-else-if="!hasIntegrationCheckError"
-            type="primary"
+            type="secondary"
             :loading="!hasIntegrationDefined"
             @click="changeIntegrateModalState(true)"
             :class="{
@@ -458,6 +458,10 @@ export default {
     display: flex;
     align-items: center;
     gap: $unnnic-spacing-stack-xgiant;
+
+    .unnnic-button {
+      min-width: 245px;
+    }
 
     &__header {
       display: flex;
