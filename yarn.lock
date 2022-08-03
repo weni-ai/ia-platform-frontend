@@ -2266,10 +2266,10 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@weni/unnnic-system@1.5.6":
-  version "1.5.6"
-  resolved "https://registry.yarnpkg.com/@weni/unnnic-system/-/unnnic-system-1.5.6.tgz#469406533d711f0086802c7128b515899bfda303"
-  integrity sha512-Fo3bUTlHBIejrTarQJ03TsVCjzJlkKSqE8LGTcHAa3IUsOr9w7GgEQMzuD1wyDY3AlTuo0TEQpAqbqZwsyxahg==
+"@weni/unnnic-system@1.9.9":
+  version "1.9.9"
+  resolved "https://registry.yarnpkg.com/@weni/unnnic-system/-/unnnic-system-1.9.9.tgz#9fefc4a242aa13aabcc01bfc8d5341f087188f82"
+  integrity sha512-L7uI5PYJNas4/VVnO1kToG2Z1NsXdBiGdLKGZK8i6JcJDl7reDUD3GM9ymRUwApkFgqZ4n7FcU20crheGK6ELA==
   dependencies:
     core-js "^3.6.5"
     moment "^2.29.1"
