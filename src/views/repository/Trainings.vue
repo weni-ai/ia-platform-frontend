@@ -34,27 +34,6 @@
               @created="updatedExampleList()"
               @eventStep="dispatchClick()"
             />
-            <div class="is-flex is-align-items-baseline is-justify-content-space-between my-6">
-              <h2 class="trainings-repository__list-wrapper__title mb-0">
-                {{ $t('webapp.trainings.sentences_to_train') }}
-              </h2>
-              <unnnic-button
-                @click="openDeleteModal = true"
-                type="secondary"
-                size="large"
-                :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
-                :disabled="sentencesCounter === 0"
-                class="trainings-repository__button"
-              />
-            </div>
-            <examples-pending-training
-              :update="update"
-              :is-train="trainProgress"
-              class="trainings-repository__new-example__pending-example"
-              @exampleDeleted="onExampleDeleted"
-              @noPhrases="noPhrasesYet = false"
-              @onUpdateSelected="updateSelected"
-            />
             <div class="trainings-repository__new-example__train">
               <div
                 :id="getRequirements.ready_for_train
@@ -79,6 +58,27 @@
                   @unauthorized="signIn()" />
               </div>
             </div>
+            <div class="is-flex is-align-items-baseline is-justify-content-space-between my-6">
+              <h2 class="trainings-repository__list-wrapper__title mb-0">
+                {{ $t('webapp.trainings.sentences_to_train') }}
+              </h2>
+              <unnnic-button
+                @click="openDeleteModal = true"
+                type="secondary"
+                size="large"
+                :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
+                :disabled="sentencesCounter === 0"
+                class="trainings-repository__button"
+              />
+            </div>
+            <examples-pending-training
+              :update="update"
+              :is-train="trainProgress"
+              class="trainings-repository__new-example__pending-example"
+              @exampleDeleted="onExampleDeleted"
+              @noPhrases="noPhrasesYet = false"
+              @onUpdateSelected="updateSelected"
+            />
           </div>
           <authorization-request-notification
             v-else
@@ -324,8 +324,8 @@ export default {
 
     &__train {
       display: flex;
-      margin-top: -2rem;
-      margin-bottom: 4rem;
+      margin-top: 2rem;
+      margin-bottom: 14rem;
 
       &__progress {
         height: 25px;
