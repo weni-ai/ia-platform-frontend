@@ -8,22 +8,53 @@
           v-if="repository.authorization.can_contribute"
           class="phrase-suggestion">
           <div class="phrase-suggestion__header">
-            <div class="phrase-suggestion__header__container">
-            <h2 class="phrase-suggestion__header__title">
-              {{ $t('webapp.phrase-suggestion.title') }}
-            </h2>
-              <b-tooltip :label="$t('webapp.phrase-suggestion.tooltip_alert')"
-            position="is-right" multilined>
-              <b-field>
-                <b-tag size="is-medium" type="is-primary">BETA</b-tag>
-              </b-field>
-            </b-tooltip>
+            <div class="phrase-suggestion__header__title">
+              <unnnic-card
+                type="title"
+                :title="$t('webapp.phrase-suggestion.title')"
+                :hasInformationIcon="false"
+                icon="copy-paste-1"
+                scheme="feedback-blue"
+              />
 
+              <unnnic-circle-progress-bar :progress="pageItem" :totalProgress="5"  />
             </div>
-            <p class="phrase-suggestion__header__subtitle">
-              {{ $t('webapp.phrase-suggestion.subtitle') }}
-            </p>
+
+            <div class="phrase-suggestion__header__container">
+              <p class="phrase-suggestion__header__subtitle">
+                {{ $t('webapp.phrase-suggestion.subtitle') }}
+              </p>
+            </div>
           </div>
+
+          <div class="phrase-suggestion__cards">
+            <p>Selecione o método que será utilizado para gerar as frases.</p>
+            <div class="phrase-suggestion__cards__container">
+              <div class="phrase-suggestion__cards__container-card">
+                <h3>Title</h3>
+                <p>Você adiciona uma nova frase
+                  que ainda não foi enviada para treinamento
+                   e a plataforma a utilizará como base para gerar novas frases</p>
+                <unnnic-button
+                  type="secondary"
+                >
+                  Selecionar método
+                </unnnic-button>
+              </div>
+              <div class="phrase-suggestion__cards__container-card">
+                <h3>Title</h3>
+                <p>Você adiciona uma nova frase que
+                  ainda não foi enviada para treinamento
+                  e a plataforma a utilizará como base para gerar novas frases</p>
+                <unnnic-button
+                  type="secondary"
+                >
+                  Selecionar método
+                </unnnic-button>
+              </div>
+            </div>
+          </div>
+
           <badges-intents-suggestion
             :list="repository.intents"
             :repository="repository"
@@ -80,6 +111,7 @@ export default {
   extends: RepositoryBase,
   data() {
     return {
+      pageItem: 1,
       perPage: 10,
       loading: false,
       intentSelected: '',
@@ -146,6 +178,8 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .phrase-suggestion{
 
@@ -153,18 +187,57 @@ export default {
         &__container{
           display: flex;
           align-items: center;
-          margin-bottom: $between-title-subtitle;
+          padding-bottom: $unnnic-spacing-stack-lg;
+          margin-bottom: $unnnic-spacing-stack-lg;
+          border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+        }
+        &__title {
+          display: flex;
+          gap: $unnnic-spacing-stack-xl;
+          margin-bottom: $unnnic-spacing-stack-sm;
         }
 
-        &__title{
-            font-size: 1.75rem;
-            font-weight: $font-weight-medium;
-            color: $color-fake-black;
-            margin-right: 1rem;
-        }
         &__subtitle{
-            margin-bottom: $between-subtitle-content
+            max-width: 507px;
+            font-size: $unnnic-font-size-body-gt;
+            color: $unnnic-color-neutral-dark;
+            line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
         }
+    }
+
+    &__cards {
+      display: flex;
+      flex-direction: column;
+      gap: $unnnic-spacing-stack-md;
+
+      &__container {
+        display: flex;
+        gap: $unnnic-spacing-stack-sm;
+
+        &-card {
+          border-radius: $unnnic-border-radius-md;
+          border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+          padding: $unnnic-spacing-stack-md;
+
+          h3 {
+            font-size: $unnnic-font-size-body-lg;
+            font-weight: $unnnic-font-weight-bold;
+            margin-bottom: $unnnic-spacing-stack-nano;
+            color: $unnnic-color-neutral-darkest;
+          }
+
+          p {
+            font-size: $unnnic-font-size-body-gt;
+            color: $unnnic-color-neutral-cloudy;
+            line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
+            margin-bottom: $unnnic-spacing-stack-sm;
+          }
+
+          button {
+            width: 100%;
+          }
+        }
+      }
     }
 
 }

@@ -712,8 +712,8 @@
       "database": "Repository"
     },
     "phrase-suggestion": {
-      "title": "Sentence suggestions",
-      "subtitle": "Select an intent and add suggested phrases to your training.",
+      "title": "Phrase generator",
+      "subtitle": "Tool that allows you, from a single sentence, to generate hundreds of other sentences to improve your artificial intelligence.",
       "empty": "There are no suggested phrases for this intention",
       "confirm-edit": "Confirm edit",
       "cancel-edit": "Cancel edit",
