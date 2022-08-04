@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <div class="columns is-variable is-1">
-      <div
-        class="column is-half entity-form">
-        <span
+  <div class="column is-half">
+    <div>
+      <div>
+        <p
           slot="label"
-          class="entity-form__label"><span
-            :class="entityClass"
-            class="is-rounded">{{ selectedText }}</span> is</span>
+          class="unnnic-form__label"><span
+            class="is-rounded entity">{{ selectedText }}</span> {{ $t('webapp.result.is') }}</p>
         <b-field
           id="tour-training-step-3"
           :is-previous-disabled="true">
@@ -18,7 +16,7 @@
             expanded
             open-on-focus
             dropdown-position="down"
-            icon-right="close"
+            icon-right="close-circle-outline"
             icon-right-clickable
             @icon-right-click="removeEntity()"/>
         </b-field>
@@ -111,5 +109,11 @@ export default {
       margin-bottom: 6px;
       display: block;
     }
+  }
+  .entity {
+    text-decoration: 1px solid #67738B underline;
+  }
+  /deep/ .icon.is-right {
+    transform: translateY(-5%);
   }
 </style>
