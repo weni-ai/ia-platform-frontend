@@ -1,7 +1,7 @@
 <template>
   <div>
     <form
-      class="columns wrapper is-vcentered is-variable is-2 is-flex-wrap-wrap"
+      class="columns wrapper is-vcentered is-variable is-2 is-flex-wrap-wrap mt-3"
       @submit.prevent="onSubmit()"
       @keyup.enter="onEnter()"
     >
@@ -39,7 +39,7 @@
               slot="label"
               class="unnnic-form__label"
               v-html="$t('webapp.trainings.entities')" />
-          <entities-input
+          <new-entities-input
             ref="entitiesInput"
             v-model="entities"
             :repository="repository"
@@ -71,8 +71,8 @@
             :placeholder="$t('webapp.example.intent')"
             :openWithFocus="true"
             @input="intent = intentFormatters(intent)"
-            @click.native="hideDropdown = false"
-            :class="hideDropdown ? 'hidden' : ''"
+            @focus="onInputClick('intent')"
+            @blur="onInputClick('intent')"
             :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
           />
         </b-field>
@@ -93,13 +93,20 @@
            <unnnic-autocomplete
             :label="$t('webapp.create_repository.language_placeholder')"
             v-model="language"
-            :placeholder="$t('webapp.trainings.intent')"
+            :data="languageList"
+            :placeholder="$t('webapp.translate.languages_select')"
             :openWithFocus="true"
             @input="intent = intentFormatters(intent)"
             @click.native="hideDropdown = false"
+            @focus="onInputClick('language')"
+            @blur="onInputClick('language')"
             :class="hideDropdown ? 'hidden' : ''"
-            :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
+            :iconRight="isLanguageInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
           />
+          <!-- <language-select v-model="language"/> -->
+          <!-- <language-select-input
+            v-model="language"
+           :placeholder="$t('webapp.translate.languages_select')"/> -->
           <!-- <language-append-select-input
               v-model="language"
               class="language-append"
@@ -125,10 +132,17 @@
             </b-button>
           </b-tooltip> -->
           <unnnic-button
+            id="tour-training-step-5"
+            :is-previous-disabled="true"
+            :is-next-disabled="true"
+            :disabled="!shouldSubmit"
+            :loading="submitting"
+            :is-step-blocked="!blockedNextStepTutorial"
+            native-type="submit"
             class="button--full"
             type="secondary"
             size="large"
-            @click.prevent.stop="cancelEditSentence">
+          >
             {{ $t('webapp.trainings.submit') }}
           </unnnic-button>
         </b-field>
@@ -155,19 +169,23 @@
 
 <script>
 import ExampleTextWithHighlightedEntitiesInput from '@/components/inputs/ExampleTextWithHighlightedEntitiesInput';
-import EntitiesInput from '@/components/inputs/EntitiesInput';
+import NewEntitiesInput from '@/components/inputs/EntitiesInput/NewEntitiesInput';
 import LanguageAppendSelectInput from '@/components/inputs/LanguageAppendSelectInput';
 
 import { mapActions, mapGetters } from 'vuex';
-import { formatters } from '@/utils';
+import { formatters, LANGUAGES, languageListToDict } from '@/utils';
+import LanguageSelect from '../inputs/LanguageSelect';
+import LanguageSelectInput from '../inputs/LanguageSelectInput';
 
 
 export default {
   name: 'NewExampleForm',
   components: {
     ExampleTextWithHighlightedEntitiesInput,
-    EntitiesInput,
+    NewEntitiesInput,
     LanguageAppendSelectInput,
+    LanguageSelect,
+    LanguageSelectInput
   },
   props: {
     repository: {
@@ -186,6 +204,9 @@ export default {
       submitting: false,
       entitiesList: [],
       blockedNextStepTutorial: false,
+      hideDropdown: true,
+      isIntentInputActive: false,
+      isLanguageInputActive: false
     };
   },
   computed: {
@@ -244,6 +265,9 @@ export default {
         entities,
       };
     },
+    languageList() {
+      return Object.keys(LANGUAGES)
+    }
   },
   watch: {
     async intent() {
@@ -317,6 +341,10 @@ export default {
         this.submitting = false;
       }
       return false;
+    },
+    onInputClick(target) {
+      if (target === 'intent') this.isIntentInputActive = !this.isIntentInputActive
+      if (target === 'language') this.isLanguageInputActive = !this.isLanguageInputActive
     }
   },
 };
@@ -340,7 +368,7 @@ export default {
   padding-right: 0;
 }
 
-/deep/ .textarea {
+/deep/ .textarea, /deep/ .input {
   border: .0625rem solid #e2e6ed;
   border-radius: .25rem;
   color: #4e5666;
@@ -361,5 +389,18 @@ export default {
   padding: 1.5rem;
   border: 1px solid #E2E6ED;
   border-radius: 8px;
+}
+/deep/ .example-txt-w-highlighted-entities__entity__before {
+  font-size: .875rem;
+  border: 1px solid transparent;
+}
+ /deep/ .example-txt-w-highlighted-entities__entity__text {
+  font-size: .875rem;
+}
+/deep/ .icon-right {
+    transform: translateY(60%);
+}
+  /deep/ .hidden .unnnic-autocomplete__container-list{
+  display: none;
 }
 </style>
