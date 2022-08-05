@@ -15,7 +15,6 @@
             ref="entityInputField"
             v-model="entity"
             :data="filteredData"
-            icon-right="close-circle-outline"
             @icon-right-click="removeEntity()"
             @click="hideDropdown = false"
             :openWithFocus="true"
