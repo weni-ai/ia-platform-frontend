@@ -290,7 +290,7 @@ export default {
     // margin-bottom: .5rem;
 
     &__title{
-      font-family: $unnnic-font-family-primary;
+      font-family: $unnnic-font-family-secondary;
       font-size: $unnnic-font-size-title-sm;
       color: $unnnic-color-neutral-dark;
       margin-bottom: 1.5rem;
