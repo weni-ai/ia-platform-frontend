@@ -692,6 +692,7 @@
     },
     "menu": {
       "hide": "Hide",
+      "expand":"Expand",
       "created_by": "Created by",
       "back_text": "Back",
       "summary": "Summary",
