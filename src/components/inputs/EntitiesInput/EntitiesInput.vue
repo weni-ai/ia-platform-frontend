@@ -1,6 +1,18 @@
 <template>
   <div>
-    <!-- <b-tooltip
+    <entity-form
+      v-for="entity in preparedEntities"
+      :key="entity.localId"
+      v-model="entity.entity"
+      :available-entities="allEntities"
+      :entity-class="getEntityClass(entity)"
+      :text="text"
+      :selected-text-start="entity.start"
+      :selected-text-end="entity.end"
+      @removeEntity="() => removeEntity(entity)"
+    />
+
+    <b-tooltip
       :is-active="!textSelectedValue"
       :label="$t('webapp.trainings.highlight_word')"
       multilined
@@ -23,36 +35,7 @@
           <span v-else>{{ $t('webapp.trainings.add_entity') }}</span>
         </span>
       </b-button>
-    </b-tooltip> -->
-    <unnnic-button
-      id="tour-training-step-2"
-      ref="addEntityBtn"
-      :is-next-disabled="true"
-      :is-previous-disabled="true"
-      :disabled="!textSelectedValue"
-      :is-step-blocked="!blockedNextStepTutorial"
-      class="button--full"
-      type="secondary"
-      size="large"
-      @click.prevent.stop="addEntity()">
-      <span class="add-entity-button-text">
-        <span v-if="textSelectedValue">
-          {{ $t('webapp.trainings.add_entity_for') }} "{{ textSelectedValue }}"
-        </span>
-        <span v-else>{{ $t('webapp.trainings.add_entity') }}</span>
-      </span>
-    </unnnic-button>
-    <entity-form
-      v-for="entity in preparedEntities"
-      :key="entity.localId"
-      v-model="entity.entity"
-      :available-entities="allEntities"
-      :entity-class="getEntityClass(entity)"
-      :text="text"
-      :selected-text-start="entity.start"
-      :selected-text-end="entity.end"
-      @removeEntity="() => removeEntity(entity)"
-    />
+    </b-tooltip>
   </div>
 </template>
 
@@ -204,7 +187,4 @@ export default {
     display: block;
     max-width: 40vw;
   }
-  .button--full {
-  width: 100%;
-}
 </style>
