@@ -58,10 +58,6 @@
             type="secondary"
             :loading="hasIntegration && !hasIntegrationCheckError"
             @click="changeIntegrateModalState(true)"
-            :class="{
-              'repository-home__description__header__remove-integrate':
-                hasIntegrationDefined,
-            }"
           >
             {{ $t("webapp.summary.remove_integrate") }}
           </unnnic-button>
@@ -70,10 +66,6 @@
             type="secondary"
             :loading="!hasIntegrationDefined"
             @click="changeIntegrateModalState(true)"
-            :class="{
-              'repository-home__description__header__integrate':
-                hasIntegrationDefined,
-            }"
           >
             {{ $t("webapp.summary.integrate") }}
           </unnnic-button>

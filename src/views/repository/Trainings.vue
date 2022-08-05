@@ -6,26 +6,33 @@
       <div class="trainings-repository__new-example">
         <div v-if="authenticated">
           <div v-if="repository.authorization.can_contribute">
+            <div>
+              <unnnic-card
+                type="title"
+                :title="$t('webapp.trainings.train_title')"
+                :hasInformationIcon="false"
+                icon="graph-status-circle-1"
+                scheme="aux-purple"
+              />
+              <p
+                v-html="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
+                class="trainings-repository__description" />
+            </div>
+            <hr class="divider" />
             <div class="trainings-repository__list-wrapper">
               <div>
                 <h2 class="trainings-repository__list-wrapper__title">
                   {{ $t('webapp.trainings.grid_text1') }}
                 </h2>
-                <span class="trainings-repository__list-wrapper__subtitle">
+                <!-- <span class="trainings-repository__list-wrapper__subtitle">
                   {{ $t('webapp.trainings.grid_text2') }}
-                </span>
+                </span> -->
               </div>
             </div>
             <new-example-form
               :repository="repository"
               @created="updatedExampleList()"
-              @eventStep="dispatchClick()"/>
-            <examples-pending-training
-              :update="update"
-              :is-train="trainProgress"
-              class="trainings-repository__new-example__pending-example"
-              @exampleDeleted="onExampleDeleted"
-              @noPhrases="noPhrasesYet = false"
+              @eventStep="dispatchClick()"
             />
             <div class="trainings-repository__new-example__train">
               <div
@@ -51,6 +58,27 @@
                   @unauthorized="signIn()" />
               </div>
             </div>
+            <div class="is-flex is-align-items-baseline is-justify-content-space-between my-6">
+              <h2 class="trainings-repository__list-wrapper__title mb-0">
+                {{ $t('webapp.trainings.sentences_to_train') }}
+              </h2>
+              <unnnic-button
+                @click="openDeleteModal = true"
+                type="secondary"
+                size="large"
+                :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
+                :disabled="sentencesCounter === 0"
+                class="trainings-repository__button"
+              />
+            </div>
+            <examples-pending-training
+              :update="update"
+              :is-train="trainProgress"
+              class="trainings-repository__new-example__pending-example"
+              @exampleDeleted="onExampleDeleted"
+              @noPhrases="noPhrasesYet = false"
+              @onUpdateSelected="updateSelected"
+            />
           </div>
           <authorization-request-notification
             v-else
@@ -75,6 +103,39 @@
       :finish-event="eventClickFinish"
       :reset-tutorial="eventReset"
       name="training"/>
+      <unnnic-modal
+      :showModal="openDeleteModal"
+      :text="$t('webapp.trainings.delete_title')"
+      scheme="feedback-red"
+      modal-icon="alert-circle-1"
+      @close="openDeleteModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.trainings.delete_phrase_modal')" />
+      <unnnic-button slot="options" type="terciary" @click="openDeleteModal = false">
+        {{ $t("webapp.home.cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        type="primary"
+        scheme="feedback-red"
+        @click="deleteSelectedItems"
+      >
+        {{ $t("webapp.trainings.delete_title") }}
+      </unnnic-button>
+    </unnnic-modal>
+    <unnnic-modal
+      :showModal="openSuccessModal"
+      :text="$t('webapp.intent.delete_success_title')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openSuccessModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.intent.delete_success_subtitle')" />
+    </unnnic-modal>
   </repository-view-base>
 </template>
 
@@ -121,6 +182,9 @@ export default {
       noPhrasesYet: true,
       trainProgress: false,
       error: '',
+      selectedItems: [],
+      openDeleteModal: false,
+      openSuccessModal: false,
     };
   },
   computed: {
@@ -134,10 +198,17 @@ export default {
       const { language, ...query } = this.query;
       return { ...query, ...(language ? { is_available_language: language } : {}) };
     },
+    sentencesCounter() {
+      if (this.selectedItems !== null) {
+        return this.selectedItems.length
+      }
+      return 0
+    }
   },
   methods: {
     ...mapActions([
       'trainRepository',
+      'deleteExample'
     ]),
     sendEvent() {
       Analytics.send({ category: 'Intelligence', event: 'on train event' });
@@ -186,9 +257,20 @@ export default {
       this.update = !this.update;
     },
     onExampleDeleted() {
-      this.repository.examples__count -= 1;
       this.updateTrainingStatus();
       this.updatedExampleList();
+    },
+    updateSelected(params) {
+      this.selectedItems = params
+    },
+    async deleteSelectedItems() {
+      await this.selectedItems.forEach((item) => {
+        this.deleteExample({ id: item.id });
+        this.repository.examples__count -= 1;
+        this.openDeleteModal = false;
+        this.openSuccessModal = true;
+      });
+      await this.onExampleDeleted()
     },
   },
 };
@@ -197,19 +279,21 @@ export default {
 <style lang="scss" scoped>
   @import '~@/assets/scss/colors.scss';
   @import '~@/assets/scss/variables.scss';
+  @import "~@weni/unnnic-system/dist/unnnic.css";
+  @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 
 .trainings-repository {
   &__list-wrapper {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: .5rem;
+    // display: flex;
+    // justify-content: space-between;
+    // margin-bottom: .5rem;
 
     &__title{
-      font-size: 1.75rem;
-      font-weight: $font-weight-medium;
-      color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+      font-family: $unnnic-font-family-primary;
+      font-size: $unnnic-font-size-title-sm;
+      color: $unnnic-color-neutral-dark;
+      margin-bottom: 1.5rem;
     }
      &__subtitle{
       font-size: $font-size;
@@ -241,8 +325,8 @@ export default {
 
     &__train {
       display: flex;
-      margin-top: -2rem;
-      margin-bottom: 4rem;
+      margin-top: 2rem;
+      margin-bottom: 14rem;
 
       &__progress {
         height: 25px;
@@ -304,6 +388,23 @@ export default {
     }
       }
     }
-}
 
+    &__description {
+      font-family: 'Lato';
+      font-size: 14px;
+      color: #4E5666;
+      margin-top: 1rem;
+
+      /deep/ a {
+        color: #4E5666;
+        text-decoration: underline;
+        font-weight: 700;
+      }
+    }
+}
+.divider {
+  background: #E2E6ED;
+  height: 1px;
+  margin: 2rem 0;
+}
 </style>
