@@ -499,7 +499,19 @@
       "entities_info": "How to add new entities from the sentence?",
       "database": "Repository",
       "database_description": "List of all sentences trained by the intelligence.",
-      "database_untrained": "This intelligence has no trained sentences. Add phrases and train them in the Training menu."
+      "database_untrained": "This intelligence has no trained sentences. Add phrases and train them in the Training menu.",
+      "train_title": "Train Intelligence",
+      "train_description": "Add sentences to improve the intelligence. <a href={link}>See our documentation</a> and learn <br> the best practices for creating an quality artificial intelligence.",
+      "entities": "Entities (optional)",
+      "sentences_to_train": "List of sentences added for training"
+    },
+    "resumeSentences": {
+      "title": "Summary of sentences sent for training",
+      "description": "Run training to improve intelligence with submitted phrases",
+      "sentences": "Sentences",
+      "intentions": "Intentions",
+      "entities": "Entities",
+      "languages": "Languages"
     },
     "train_modal": {
       "training_status": "Training Status",
@@ -684,6 +696,7 @@
     },
     "menu": {
       "hide": "Hide",
+      "expand":"Expand",
       "created_by": "Created by",
       "back_text": "Back",
       "summary": "Summary",

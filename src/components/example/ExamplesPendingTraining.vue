@@ -1,6 +1,6 @@
 <template>
   <div>
-    <paginated-list
+    <!-- <paginated-list
       v-if="examplesList"
       :item-component="exampleItemElem"
       :list="examplesList"
@@ -17,7 +17,19 @@
     <p
       v-if="examplesList && examplesList.empty && !isTrain"
       class="no-examples"
-      v-html="$t('webapp.trainings.no_sentences_to_train')"/>
+      v-html="$t('webapp.trainings.no_sentences_to_train')"/> -->
+      <intent-pagination
+        v-if="examplesList"
+        :item-component="sentencesTable"
+        :list="examplesList"
+        :repository="repository"
+        :per-page="perPage"
+        @itemDeleted="onItemDeleted()"
+        @itemSave="dispatchSave"
+        :show-intents="true"
+        :load-all="true"
+        @onUpdateSelected="updateSelected"
+      />
 
   </div>
 </template>
@@ -26,9 +38,12 @@
 import { mapActions, mapGetters } from 'vuex';
 import PaginatedList from '@/components/shared/PaginatedList';
 import ExampleItem from '@/components/example/ExampleItem';
+import IntentPagination from '../shared/IntentPagination';
+import SentencesIntentTable from '@/components/repository/SentencesIntentTable';
 
 const components = {
   PaginatedList,
+  IntentPagination
 };
 
 export default {
@@ -61,6 +76,7 @@ export default {
       dateNow: '',
       error: null,
       pageWasChanged: false,
+      sentencesTable: SentencesIntentTable,
     };
   },
   computed: {
@@ -131,6 +147,9 @@ export default {
     },
     onItemDeleted() {
       this.$emit('exampleDeleted');
+    },
+    updateSelected(params) {
+      this.$emit('onUpdateSelected', params)
     },
   },
 };

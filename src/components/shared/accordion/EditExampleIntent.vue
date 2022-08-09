@@ -35,6 +35,18 @@
           </unnnic-autocomplete>
         </div>
       </div>
+      <div class="columns edit-sentence__wrapper px-3 mt-5 mb-3">
+        <unnnic-button
+          :disabled="textSelected === null"
+          iconLeft="add-1"
+          class="button--full column is-12"
+          type="secondary"
+          size="large"
+          @click.prevent.stop="addPendingEntity"
+        >
+          <span class="edit-sentence__add-entity-button-text">{{ entityButtonText }} </span>
+        </unnnic-button>
+      </div>
       <div class="columns edit-sentence__wrapper">
           <div
             v-for="(entity, index) in entitiesToEdit"
@@ -48,14 +60,13 @@
               :data="filterEntities(index, false)"
               v-model="entity.entity"
               :placeholder="$t('webapp.example.entity')"
-              dropdown-position="bottom"
-              open-on-focus
+              :openWithFocus="true"
               @input="entitiesToEdit[index].entity = intentFormatters(entity.entity)"
               @icon-right-click="removeEntity(entity, index)"
               @click.native="hideDropdown = false"
               :class="hideDropdown ? 'hidden' : ''"
-            >
-            </unnnic-autocomplete>
+              :iconRight="entity ? 'delete-1-1' : ''"
+            />
           </div>
           <div
             v-for="(entity, index) in pendingEntities"
@@ -70,13 +81,10 @@
               :custom-formatter="intentFormatters"
               v-model="entity.entity"
               :placeholder="$t('webapp.example.entity')"
-              dropdown-position="bottom"
-              icon-right="close"
+              :iconRight="entity ? 'delete-1-1' : ''"
               class="edit-sentence-input"
-              icon-right-clickable
-              open-on-focus
               @input="pendingEntities[index].entity = intentFormatters(entity.entity)"
-              @select="elevateToEntity(entity, index)"
+              @choose="elevateToEntity(entity, index)"
               @icon-right-click="removePendingEntity(entity, index)"
               @click.native="hideDropdown = false"
               :class="hideDropdown ? 'hidden' : ''"
@@ -205,6 +213,9 @@ export default {
     }
   }
 }
+.button--full {
+  width: 100%;
+}
 /deep/ .column.is-6 {
   flex: auto;
   max-width: 50%;
@@ -232,5 +243,11 @@ export default {
 /deep/ .unnnic-form__label strong {
   color: #67738B;
   font-weight: 900;
+}
+/deep/ .unnnic-autocomplete__container-list {
+  z-index: 2;
+}
+/deep/ .icon-right {
+  transform: translateY(60%);
 }
 </style>

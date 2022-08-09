@@ -2,6 +2,9 @@
   <repository-view-base :repository="repository" :error-code="errorCode">
     <div v-if="repository" class="repository-home">
       <div class="repository-home__description">
+        <div>
+
+
         <div class="repository-home__title">
           <unnnic-card
             type="title"
@@ -46,33 +49,26 @@
                 class="repository-home__header__tag"
               />
             </div>
-            <div>
-              <unnnic-button
-                v-if="hasIntegration && !hasIntegrationCheckError"
-                type="primary"
-                :loading="!hasIntegrationDefined"
-                @click="changeIntegrateModalState(true)"
-                :class="{
-                  'repository-home__description__header__remove-integrate':
-                    hasIntegrationDefined,
-                }"
-              >
-                {{ $t("webapp.summary.remove_integrate") }}
-              </unnnic-button>
-              <unnnic-button
-                v-else-if="!hasIntegrationCheckError"
-                type="primary"
-                :loading="!hasIntegrationDefined"
-                @click="changeIntegrateModalState(true)"
-                :class="{
-                  'repository-home__description__header__integrate':
-                    hasIntegrationDefined,
-                }"
-              >
-                {{ $t("webapp.summary.integrate") }}
-              </unnnic-button>
-            </div>
           </div>
+        </div>
+                </div>
+        <div>
+          <unnnic-button
+            v-if="hasIntegration && !hasIntegrationCheckError"
+            type="secondary"
+            :loading="hasIntegration && !hasIntegrationCheckError"
+            @click="changeIntegrateModalState(true)"
+          >
+            {{ $t("webapp.summary.remove_integrate") }}
+          </unnnic-button>
+          <unnnic-button
+            v-else-if="!hasIntegrationCheckError"
+            type="secondary"
+            :loading="!hasIntegrationDefined"
+            @click="changeIntegrateModalState(true)"
+          >
+            {{ $t("webapp.summary.integrate") }}
+          </unnnic-button>
         </div>
       </div>
 
@@ -451,6 +447,13 @@ export default {
 
   &__description {
     padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: $unnnic-spacing-stack-xgiant;
+
+    .unnnic-button {
+      min-width: 245px;
+    }
 
     &__header {
       display: flex;
