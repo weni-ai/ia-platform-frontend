@@ -501,7 +501,19 @@
       "entities_info": "¿Cómo agregar nuevas entidades desde la oración?",
       "database": "Repositorio",
       "database_description": "Lista de todas las oraciones entrenadas por la inteligencia",
-      "database_untrained": "Esta inteligencia no tiene frases entrenadas. Agregue frases y entrénelas en el menú Entrenamiento."
+      "database_untrained": "Esta inteligencia no tiene frases entrenadas. Agregue frases y entrénelas en el menú Entrenamiento.",
+      "train_title": "Entrenar Inteligencia",
+      "train_description": "Agrega oraciones para mejorar la inteligencia. <a href={link}>Consulta nuestra documentación</a> y aprende <br> las mejores prácticas para crear una inteligencia artificial de calidad.",
+      "entities": "Entidades (opcional)",
+      "sentences_to_train": "Lista de oraciones agregadas para entrenamiento"
+    },
+    "resumeSentences": {
+      "title": "Resumen de frases enviadas para entrenamiento",
+      "description": "Ejecute la capacitación para mejorar la inteligencia con frases enviadas",
+      "sentences": "Frases",
+      "intentions": "Intenciones",
+      "entities": "Entidades",
+      "languages": "Idiomas"
     },
     "train_modal": {
       "training_status": "Estado de Entrenamiento",

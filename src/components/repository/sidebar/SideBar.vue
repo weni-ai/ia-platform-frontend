@@ -226,6 +226,8 @@
           <unnnic-sidebar-item
             :icon="checkSelectedMenu('repository-database') ? 'folder-2' : 'folder-1'"
             :text="$t('webapp.menu.database')"
+            :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-database')"
             :class="[
               checkSelectedMenu('repository-database')
                 ? 'sidebar-wrapper__body--active'
@@ -235,7 +237,7 @@
               setSelectMenu({
                 name: 'repository-database',
                 to: 'repository-database',
-                closeDrop: false
+                closeDrop: true
               })
             "
           />

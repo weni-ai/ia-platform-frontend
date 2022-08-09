@@ -4,6 +4,7 @@
       v-show="!isLoading"
       :is="itemComponent"
       :list="list"
+      :show-intents="showIntents"
       @deleted="onItemDeleted(item.id)"
       @updateList="onSaveUpdate"
       @dispatchEvent="onDispatchEvent($event)" />
@@ -70,6 +71,10 @@ export default {
       default: null,
     },
     isSearching: {
+      type: Boolean,
+      default: false,
+    },
+    showIntents: {
       type: Boolean,
       default: false,
     },
