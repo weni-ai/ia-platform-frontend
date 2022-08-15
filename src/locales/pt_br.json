@@ -950,5 +950,15 @@
     "infinite_scroll": {
       "title": "Carregando"
     }
+  },
+  "upload_area": {
+    "title":{
+      "text": "Arraste seu arquivo aqui, ou",
+      "highlight": "procure-o"
+    },
+    "subtitle": "Formatos suportados: ",
+    "invalid": {
+      "subtitle": "Arquivo Inválido"
+    }
   }
 }

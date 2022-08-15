@@ -69,9 +69,8 @@
       </div>
       <div slot="options" class="train-modal__buttons">
         <unnnic-button
-          v-if="repositoryTrain"
           ref="trainBtn"
-          type="secondary"
+          type="terciary"
           class="train-modal__buttons__style"
           @click="dispatchTrain()"
         >

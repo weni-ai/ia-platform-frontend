@@ -39,14 +39,19 @@
         <unnnic-button
           type="secondary"
           size="large"
-          @click.native="setVisibleMigrateModal()"
+          @click.native="setVisibleImportModal()"
         >
           {{ $t("webapp.translate.import_title") }}
         </unnnic-button>
       </div>
     </div>
 
-    <ImportDataModal
+
+    <ImportPhrasesModal
+      :open="importModalVisible"
+      :closeModal="closeImportModal"
+    />
+    <!-- <ImportDataModal
       :is-modal-visible="importModalVisible"
       :is-import-button-visible="intelligenceFile === null"
       @selectedFileChanged="intelligenceFile = $event"
@@ -58,7 +63,7 @@
       @selectedFileChanged="intelligenceFile = $event"
       @dispatchCloseModal="closeMigrateModal()"
       @dispatchMigrateNotification="dispatchNotification($event)"
-    />
+    /> -->
   </div>
 </template>
 
@@ -68,6 +73,7 @@ import SummaryInformation from '@/components/repository/SummaryInformation';
 import NumbersCard from '@/components/shared/NumbersCard';
 import ImportDataModal from '@/components/shared/ImportDataModal';
 import MigrateIntelligenceModal from '@/components/shared/MigrateIntelligenceModal';
+import ImportPhrasesModal from '@/components/shared/ImportPhrasesModal';
 
 export default {
   name: 'SentencesResume',
@@ -76,6 +82,7 @@ export default {
     NumbersCard,
     ImportDataModal,
     MigrateIntelligenceModal,
+    ImportPhrasesModal,
   },
   computed: {
     ...mapGetters(['getCurrentRepository']),
