@@ -1,60 +1,51 @@
 <template>
   <div class="migrate-intelligence-modal">
-    <b-modal
-      :active.sync="isModalVisible"
-      :destroy-on-hide="false"
-      :can-cancel="false"
-      has-modal-card
-      aria-role="dialog"
-      class="migrate-intelligence-modal__card"
-      aria-modal>
-      <div
-        class="modal-card migrate-intelligence-modal__modal-style">
-        <header class="modal-card-head migrate-intelligence-modal__modal-style__header">
-          <p>{{ $t('webapp.migrate_intelligence.title') }}</p>
-        </header>
-        <section class="modal-card-body">
-          <div
-            class="migrate-intelligence-modal__fields">
-            <b-field class="migrate-intelligence-modal__fields__inputs">
-              <b-input
-                v-model="authToken"
-                :placeholder="$t('webapp.migrate_intelligence.token_input')"
-                expanded/>
-            </b-field>
-            <b-field class="migrate-intelligence-modal__fields__inputs">
-              <b-select
-                v-model="languageSelect"
-                :placeholder="$t('webapp.migrate_intelligence.language')"
-                expanded>
-                <option
-                  v-for="[language, label] in languages"
-                  :value="language"
-                  :key="language">{{ label }}</option>
-              </b-select>
-            </b-field>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <div class="migrate-intelligence-modal__modal-style__style-button">
-            <b-button
-              class="modal-button"
-              type="is-white"
-              @click="dispatchCloseMigrateModal()">
-              {{ $t('webapp.migrate_intelligence.cancel') }}
-            </b-button>
-            <b-button
-              :loading="isButtonLoading"
-              :disabled="checkInputs"
-              class="modal-button"
-              type="is-primary"
-              @click="dispatchMigrate()">
-              {{ $t('webapp.migrate_intelligence.migrate') }}
-            </b-button>
-          </div>
-        </footer>
-      </div>
-    </b-modal>
+    <div
+      class="modal-card migrate-intelligence-modal__modal-style">
+      <header class="modal-card-head migrate-intelligence-modal__modal-style__header">
+        <p>{{ $t('webapp.migrate_intelligence.title') }}</p>
+      </header>
+      <section class="modal-card-body">
+        <div
+          class="migrate-intelligence-modal__fields">
+          <b-field class="migrate-intelligence-modal__fields__inputs">
+            <b-input
+              v-model="authToken"
+              :placeholder="$t('webapp.migrate_intelligence.token_input')"
+              expanded/>
+          </b-field>
+          <b-field class="migrate-intelligence-modal__fields__inputs">
+            <b-select
+              v-model="languageSelect"
+              :placeholder="$t('webapp.migrate_intelligence.language')"
+              expanded>
+              <option
+                v-for="[language, label] in languages"
+                :value="language"
+                :key="language">{{ label }}</option>
+            </b-select>
+          </b-field>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <div class="migrate-intelligence-modal__modal-style__style-button">
+          <b-button
+            class="modal-button"
+            type="is-white"
+            @click="dispatchCloseMigrateModal()">
+            {{ $t('webapp.migrate_intelligence.cancel') }}
+          </b-button>
+          <b-button
+            :loading="isButtonLoading"
+            :disabled="checkInputs"
+            class="modal-button"
+            type="is-primary"
+            @click="dispatchMigrate()">
+            {{ $t('webapp.migrate_intelligence.migrate') }}
+          </b-button>
+        </div>
+      </footer>
+    </div>
   </div>
 </template>
 

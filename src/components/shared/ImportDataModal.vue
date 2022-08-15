@@ -1,70 +1,61 @@
 <template>
   <div class="import-data-modal">
-    <b-modal
-      :active.sync="isModalVisible"
-      :destroy-on-hide="false"
-      :can-cancel="false"
-      has-modal-card
-      aria-role="dialog"
-      class="import-data-modal__card"
-      aria-modal>
-      <div
-        class="modal-card import-data-modal__modal-style">
-        <header class="modal-card-head import-data-modal__modal-style__header">
-          <p>{{ $t('webapp.import_dataset.title') }}</p>
-        </header>
-        <section class="modal-card-body">
-          <b-field
-            class="import-data-modal__custom-file-upload">
-            <div class="import-data-modal__custom-file-upload__input">
-              <b-upload v-model="selectedFile">
-                <a class="button import-data-modal__custom-file-upload__input__button">
-                  <b-icon
-                    icon="upload"
-                    type="is-white"/>
-                </a>
-              </b-upload>
+    <div
+      class="modal-card import-data-modal__modal-style">
+      <header class="modal-card-head import-data-modal__modal-style__header">
+        <p>{{ $t('webapp.import_dataset.title') }}</p>
+      </header>
+      <section class="modal-card-body">
+        <b-field
+          class="import-data-modal__custom-file-upload">
+          <div class="import-data-modal__custom-file-upload__input">
+            <b-upload v-model="selectedFile">
+              <a class="button import-data-modal__custom-file-upload__input__button">
+                <b-icon
+                  icon="upload"
+                  type="is-white"/>
+              </a>
+            </b-upload>
+            <div
+              v-if="selectedFile"
+              class="import-data-modal__custom-file-upload__input__file">
+              {{ selectedFile.name }}
               <div
-                v-if="selectedFile"
-                class="import-data-modal__custom-file-upload__input__file">
-                {{ selectedFile.name }}
-                <div
-                  class="import-data-modal__custom-file-upload__input__icon"
-                  @click="removeSelectedFile">
-                  <b-icon
-                    icon="close-circle"
-                    custom-size="mdi-18px"
-                  />
-                </div>
-              </div>
-              <div
-                v-else
-                class="import-data-modal__custom-file-upload__input__file">
-                <span>{{ $t('webapp.import_dataset.empty_file') }}</span>
+                class="import-data-modal__custom-file-upload__input__icon"
+                @click="removeSelectedFile">
+                <b-icon
+                  icon="close-circle"
+                  custom-size="mdi-18px"
+                />
               </div>
             </div>
-          </b-field>
-        </section>
-        <footer class="modal-card-foot">
-          <div class="import-data-modal__modal-style__style-button">
-            <b-button
-              class="modal-button"
-              type="is-white"
-              @click="dispatchCloseImportModal()">
-              {{ $t('webapp.import_dataset.cancel') }}
-            </b-button>
-            <b-button
-              :loading="isButtonLoading"
-              :disabled="selectedFile === null"
-              class="modal-button"
-              type="is-primary"
-              @click="dispatchUploadFile()">
-              {{ $t('webapp.import_dataset.importar') }}
-            </b-button>
+            <div
+              v-else
+              class="import-data-modal__custom-file-upload__input__file">
+              <span>{{ $t('webapp.import_dataset.empty_file') }}</span>
+            </div>
           </div>
-        </footer>
-      </div>
-    </b-modal>
+        </b-field>
+      </section>
+      <footer class="modal-card-foot">
+        <div class="import-data-modal__modal-style__style-button">
+          <b-button
+            class="modal-button"
+            type="is-white"
+            @click="dispatchCloseImportModal()">
+            {{ $t('webapp.import_dataset.cancel') }}
+          </b-button>
+          <b-button
+            :loading="isButtonLoading"
+            :disabled="selectedFile === null"
+            class="modal-button"
+            type="is-primary"
+            @click="dispatchUploadFile()">
+            {{ $t('webapp.import_dataset.importar') }}
+          </b-button>
+        </div>
+      </footer>
+    </div>
   </div>
 </template>
 

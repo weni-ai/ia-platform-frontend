@@ -10,9 +10,10 @@
       buttonClass="train__button"
       :buttonClick="verifyTrain"
     />
-    <div v-if="trainProgress" class="train__progress">
-      <progress-bar :progress="progress" type="is-secondary" />
-      <p v-html="$t('webapp.trainings.train_progress', { progress: progress })" />
+    <div v-if="true" class="train__progress">
+      <unnnic-progress-bar :value="progress" title="Title name" inline />
+      <!-- <progress-bar :progress="progress" type="is-secondary" /> -->
+      <!-- <p v-html="$t('webapp.trainings.train_progress', { progress: progress })" /> -->
     </div>
     <train-modal
       v-if="repository"

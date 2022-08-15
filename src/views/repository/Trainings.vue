@@ -290,7 +290,7 @@ export default {
     // margin-bottom: .5rem;
 
     &__title{
-      font-family: $unnnic-font-family-primary;
+      font-family: $unnnic-font-family-secondary;
       font-size: $unnnic-font-size-title-sm;
       color: $unnnic-color-neutral-dark;
       margin-bottom: 1.5rem;
@@ -406,5 +406,14 @@ export default {
   background: #E2E6ED;
   height: 1px;
   margin: 2rem 0;
+}
+
+/deep/ input:focus, /deep/ textarea:focus {
+  box-shadow: none;
+  border-color: #9caccc;
+}
+
+/deep/ input, /deep/ textarea {
+  height: auto;
 }
 </style>
