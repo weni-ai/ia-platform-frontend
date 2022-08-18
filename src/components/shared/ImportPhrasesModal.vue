@@ -6,15 +6,19 @@
           {{ $t("webapp.import_and_export_intelligence.import_rasa") }}
         </template>
         <template slot="tab-panel-first">
-          <ImportDataModal
-            @dispatchImportNotification="dispatchNotification($event)"
+          <import-rasa-modal
+            @dispatchImportNotification="dispatchNotification"
+            @dispatchCloseModal="closeModal"
           />
         </template>
         <template slot="tab-head-second">
           {{ $t("webapp.import_and_export_intelligence.migrate_wit") }}
         </template>
         <template slot="tab-panel-second">
-          <MigrateIntelligenceModal />
+          <import-wit-modal
+            @dispatchCloseModal="closeModal"
+            @dispatchMigrateNotification="dispatchNotification"
+          />
         </template>
       </unnnic-tab>
     </div>
@@ -22,14 +26,14 @@
 </template>
 
 <script>
-import ImportDataModal from '@/components/shared/ImportDataModal';
-import MigrateIntelligenceModal from '@/components/shared/MigrateIntelligenceModal';
+import ImportRasaModal from '@/components/shared/ImportRasaModal';
+import ImportWitModal from '@/components/shared/ImportWitModal';
 
 export default {
   name: 'ImportPhrasesModal',
   components: {
-    ImportDataModal,
-    MigrateIntelligenceModal
+    ImportRasaModal,
+    ImportWitModal
   },
   props: {
     open: {
@@ -47,10 +51,7 @@ export default {
   },
   methods: {
     dispatchNotification(value) {
-      this.$buefy.toast.open({
-        message: value.message,
-        type: `${value.type}`,
-      });
+      this.$emit('dispatchImportNotification', value);
     },
   }
 };

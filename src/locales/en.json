@@ -490,7 +490,7 @@
       "delete_button": "Delete",
       "cancel_button": "Cancel",
       "save_button": "Save",
-      "train_progress": "{progress}% of training completed",
+      "train_progress": "Training in progress",
       "empty_text_error": "You need type a text to sentence",
       "error_caracter_type": "The phrase must contain letters or numbers. Include them to proceed.", 
       "intent_error": "Intent is required",

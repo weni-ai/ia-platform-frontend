@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-half">
+  <div class="column is-6">
     <div>
       <div>
         <p

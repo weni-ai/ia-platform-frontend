@@ -13,7 +13,6 @@
         @onUpdateSelected="updateSelected"
       />
       <div v-else>
-        <hr class="divider">
         <p class="untrained">
           {{ $t('webapp.trainings.database_untrained') }}
         </p>

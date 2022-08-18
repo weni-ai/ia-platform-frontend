@@ -348,5 +348,10 @@ export default {
   margin: 2rem 0;
 }
 
+/deep/ input:focus, /deep/ textarea:focus {
+  box-shadow: none;
+  border-color: #9caccc;
+}
+
 
 </style>

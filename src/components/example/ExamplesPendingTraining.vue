@@ -13,11 +13,12 @@
       @itemDeleted="onItemDeleted($event)"
       @pageChanged="pageChanged()"/>
 
-    <br>
+    <br> -->
     <p
       v-if="examplesList && examplesList.empty && !isTrain"
       class="no-examples"
-      v-html="$t('webapp.trainings.no_sentences_to_train')"/> -->
+      v-html="$t('webapp.trainings.no_sentences_to_train')"/>
+
       <intent-pagination
         v-if="examplesList"
         :item-component="sentencesTable"
@@ -52,7 +53,7 @@ export default {
   props: {
     perPage: {
       type: Number,
-      default: 12,
+      default: 100,
     },
     update: {
       type: Boolean,
@@ -158,5 +159,6 @@ export default {
 <style lang="scss" scoped>
 .no-examples {
   margin: 0;
+  font: 14px 'Lato';
 }
 </style>

@@ -480,7 +480,7 @@
       "processing": "Processando",
       "no_changes": "Sem alterações",
       "no_sentences": "Não há frases.",
-      "no_sentences_to_train": "Não há frases para treinar.",
+      "no_sentences_to_train": "Nenhuma frase foi adicionada para treinamento.",
       "no_train_sentence": "Essa frase ainda não foi adicionada ao treinamento.",
       "failed": "Falhou",
       "intention_or_sentence_already_exist": "Intenção ou frase já existe",
@@ -490,7 +490,7 @@
       "delete_button":"Deletar",
       "cancel_button":"Cancelar",
       "save_button":"Salvar",
-      "train_progress": "{progress}% do treinamento concluído",
+      "train_progress": "Treinamento em execução",
       "empty_text_error": "Digite uma frase",
       "intent_error": "Digite uma intenção",
       "default_error": "Algo de errado aconteceu, tente novamente mais tarde.",
@@ -501,7 +501,8 @@
       "train_title": "Treinar Inteligência",
       "train_description": "Adicione frases para aprimorar a inteligência. <a href={link}>Veja nossa documentação</a> e conheça <br> as melhores práticas para criar uma inteligência artificial de qualidade.",
       "entities": "Entidades (opcional)",
-      "sentences_to_train": "Lista de frases adicionadas para treinamento"
+      "sentences_to_train": "Lista de frases adicionadas para treinamento",
+      "add_entity_info": "Selecione palavra(s) da frase que deseja treinar para adicionar entidade(s)"
     },
     "resumeSentences": {
       "title": "Resumo das frases enviadas para treinamento",
@@ -927,8 +928,8 @@
     },
     "migrate_intelligence": {
       "title": "Migrar inteligência Wit.AI",
-      "token_input": "Adicione seu Server Access Token aqui",
-      "language": "Seleciona o idioma",
+      "token_input": "Adicione o Server Access Token",
+      "language": "Selecione o idioma",
       "cancel": "Cancelar",
       "migrate": "Confirmar",
       "migrate_success": "Migração feita com sucesso."
@@ -939,7 +940,11 @@
       "cancel": "Cancelar",
       "importar": "Confirmar",
       "import_success": "Importação feita com sucesso.",
-      "import_error": "Algo de errado aconteceu, tente novamente mais tarde."
+      "import_error": "Algo de errado aconteceu, tente novamente mais tarde.",
+      "import_sentences_success_title": "Frases importadas com sucesso!",
+      "import_sentences_success_message": "As frases importadas foram adicionadas para treinamento. 😉",
+      "import_sentences_error_title": "Erro ao importar as frases",
+      "import_sentences_error_message": "Algo de errado aconteceu, tente novamente mais tarde."
     },
     "weni_notification":{
       "title": "O Bothub agora é Weni Inteligência Artificial",

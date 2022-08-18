@@ -28,7 +28,7 @@
 
       <div class="sentences-resume__wrapper-buttons">
         <unnnic-button
-          type="primary"
+          type="secondary"
           size="large"
           :disabled="buttonDisabled"
           :loading="buttonLoading"
@@ -37,7 +37,7 @@
           {{ $t("webapp.trainings.run_training") }}
         </unnnic-button>
         <unnnic-button
-          type="secondary"
+          type="terciary"
           size="large"
           @click.native="setVisibleImportModal()"
         >
@@ -48,22 +48,24 @@
 
 
     <ImportPhrasesModal
+      class="import-modal"
       :open="importModalVisible"
       :closeModal="closeImportModal"
+      @dispatchImportNotification="dispatchNotification"
+      @dispatchMigrateNotification="dispatchNotification"
     />
-    <!-- <ImportDataModal
-      :is-modal-visible="importModalVisible"
-      :is-import-button-visible="intelligenceFile === null"
-      @selectedFileChanged="intelligenceFile = $event"
-      @dispatchCloseModal="closeImportModal()"
-      @dispatchImportNotification="dispatchNotification($event)"
-    />
-    <MigrateIntelligenceModal
-      :is-modal-visible="migrateModalVisible"
-      @selectedFileChanged="intelligenceFile = $event"
-      @dispatchCloseModal="closeMigrateModal()"
-      @dispatchMigrateNotification="dispatchNotification($event)"
-    /> -->
+
+    <unnnic-modal
+      :showModal="openNotificationModal"
+      :text="notificationModalTitle"
+      :scheme="notificationModalType === 'success' ? 'feedback-green' : 'feedback-red'"
+      :modal-icon="notificationModalType === 'success' ? 'check-circle-1-1' : 'alert-circle-1'"
+      @close="openNotificationModal = false"
+    >
+      <span
+      slot="message"
+      v-html="notificationModalMessage" />
+    </unnnic-modal>
   </div>
 </template>
 
@@ -106,6 +108,10 @@ export default {
       intelligenceFile: null,
       importModalVisible: false,
       migrateModalVisible: false,
+      openNotificationModal: false,
+      notificationModalType: '',
+      notificationModalTitle: '',
+      notificationModalMessage: ''
     };
   },
   methods: {
@@ -134,10 +140,11 @@ export default {
       this.migrateModalVisible = false;
     },
     dispatchNotification(value) {
-      this.$buefy.toast.open({
-        message: value.message,
-        type: `${value.type}`,
-      });
+      this.openNotificationModal = true
+      this.notificationModalType = value.type
+      this.notificationModalTitle = value.title
+      this.notificationModalMessage = value.message
+      if (value.type === 'success') this.$emit('onImportSuccess')
     },
   },
 };
@@ -153,7 +160,7 @@ export default {
   width: 100%;
   border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
   border-radius: $unnnic-border-radius-md;
-  padding: $unnnic-spacing-stack-sm;
+  padding: $unnnic-spacing-stack-md;
 
   &__title,
   &__description {
@@ -167,6 +174,7 @@ export default {
 
   &__description {
     font-size: $unnnic-font-size-body-gt;
+    margin-top: $unnnic-spacing-stack-xs;
   }
 
   &__wrapper {
@@ -207,6 +215,15 @@ export default {
         min-width: 284px;
       }
     }
+  }
+}
+
+.import-modal {
+  /deep/ .unnnic-modal-container-background-body-alert_icon {
+    display: none;
+  }
+  /deep/ .unnnic-modal-container-background-body-description {
+    padding-bottom: 0;
   }
 }
 </style>
