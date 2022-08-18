@@ -3,56 +3,54 @@
     <div v-if="repository" class="repository-home">
       <div class="repository-home__description">
         <div>
-
-
-        <div class="repository-home__title">
-          <unnnic-card
-            type="title"
-            :title="$t('webapp.home.description')"
-            :hasInformationIcon="false"
-            icon="paginate-filter-text-1"
-            scheme="aux-orange"
-          />
-        </div>
-        <div class="repository-home__description__header">
-          <div>
-            <vue-markdown
-              :source="repository.description"
-              :show="show"
-              :html="html"
-              :breaks="breaks"
-              :linkify="linkify"
-              :emoji="emoji"
-              :typographer="typographer"
-              :toc="toc"
-              toc-id="toc"
-              class="repository-home__description__text markdown-body"
+          <div class="repository-home__title">
+            <unnnic-card
+              type="title"
+              :title="$t('webapp.home.description')"
+              :hasInformationIcon="false"
+              icon="paginate-filter-text-1"
+              scheme="aux-orange"
             />
-            <p
-              v-if="repository.description"
-              class="repository-home__description__text"
-            />
-            <p v-else>
-              <i class="text-color-grey-dark">{{
-                $t("webapp.home.no_description")
-              }}</i>
-            </p>
           </div>
-          <div class="repository-home__description__tags-wrapper">
+          <div class="repository-home__description__header">
             <div>
-              <unnnic-tag
-                v-for="(category, index) in getAllCategories"
-                :key="index"
-                :text="category"
-                disabled
-                scheme="background-sky"
-                class="repository-home__header__tag"
+              <vue-markdown
+                :source="repository.description"
+                :show="show"
+                :html="html"
+                :breaks="breaks"
+                :linkify="linkify"
+                :emoji="emoji"
+                :typographer="typographer"
+                :toc="toc"
+                toc-id="toc"
+                class="repository-home__description__text markdown-body"
               />
+              <p
+                v-if="repository.description"
+                class="repository-home__description__text"
+              />
+              <p v-else>
+                <i class="text-color-grey-dark">{{
+                  $t("webapp.home.no_description")
+                }}</i>
+              </p>
+            </div>
+            <div class="repository-home__description__tags-wrapper">
+              <div>
+                <unnnic-tag
+                  v-for="(category, index) in getAllCategories"
+                  :key="index"
+                  :text="category"
+                  disabled
+                  scheme="background-sky"
+                  class="repository-home__header__tag"
+                />
+              </div>
             </div>
           </div>
         </div>
-                </div>
-        <div>
+        <div class="ml-auto">
           <unnnic-button
             v-if="hasIntegration && !hasIntegrationCheckError"
             type="secondary"
