@@ -87,7 +87,6 @@ export default {
       this.updateExamples(true);
     },
     examplesList() {
-      // console.log(this.examplesList)
       this.$emit('updateCount', this.examplesList)
     }
   },
