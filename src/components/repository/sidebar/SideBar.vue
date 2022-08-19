@@ -173,6 +173,7 @@
           />
           <section class="training-menu">
             <unnnic-sidebar-item
+              v-if="getCurrentRepository.authorization.can_contribute"
               :icon="
                 dropSelect === 'isTrainActive' ? 'graph-status-circle-1-1' : 'graph-status-circle-1'
               "
@@ -224,6 +225,7 @@
           </section>
 
           <unnnic-sidebar-item
+            v-if="getCurrentRepository.authorization.can_contribute"
             :icon="checkSelectedMenu('repository-database') ? 'folder-2' : 'folder-1'"
             :text="$t('webapp.menu.database')"
             :enableTooltip="!collapse"
@@ -244,6 +246,7 @@
 
           <section class="evaluate-menu">
             <unnnic-sidebar-item
+              v-if="getCurrentRepository.authorization.can_contribute"
               :icon="dropSelect === 'isTestsActive' ? 'check-square-2' : 'check-square-1'"
               :text="$t('webapp.menu.test')"
               :enableTooltip="!collapse"
@@ -292,6 +295,7 @@
             </div>
           </section>
           <unnnic-sidebar-item
+            v-if="getCurrentRepository.authorization.can_contribute"
             :icon="checkSelectedMenu('repository-log') ? 'messages-bubble-3' : 'messages-bubble-1'"
             :text="$t('webapp.menu.inbox')"
             :enableTooltip="!collapse"
@@ -313,6 +317,7 @@
 
           <section class="translate-menu">
             <unnnic-sidebar-item
+              v-if="getCurrentRepository.authorization.can_contribute"
               :icon="dropSelect === 'isTranslationsActive' ? 'translate-2' : 'translate-1'"
               :text="$t('webapp.menu.translation')"
               :enableTooltip="!collapse"

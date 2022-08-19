@@ -1,6 +1,7 @@
 <template>
   <div>
     <form
+      autocomplete="off"
       class="columns wrapper is-vcentered is-variable is-2 is-flex-wrap-wrap mt-3"
       @submit.prevent="onSubmit()"
       @keyup.enter="onEnter()"
@@ -117,7 +118,7 @@
           </unnnic-select>
         </b-field>
       </div>
-      <div class="column is-12">
+      <div class="column is-12 mt-4">
         <b-field>
           <unnnic-button
             id="tour-training-step-5"
@@ -158,7 +159,7 @@
       text="Frase adicionada para treinamento"
       closeText="Fechar"
       scheme="feedback-green"
-      icon="check-circle-1-1"
+      icon="check-circle-1"
       @click.native="alertSuccess = false"
     />
   </div>
@@ -362,6 +363,7 @@ export default {
 
 .columns.is-variable .column {
   padding-left: 0;
+  padding-right: 0;
 }
 
 /deep/ .textarea, /deep/ .input {

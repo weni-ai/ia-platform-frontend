@@ -5,7 +5,7 @@
       <section class="modal-card-body">
         <div
           class="migrate-intelligence-modal__fields text-left">
-          <b-field class="migrate-intelligence-modal__fields__inputs">
+          <b-field class="migrate-intelligence-modal__fields__inputs mb-1">
             <unnnic-input
               v-model="authToken"
               :label="$t('webapp.migrate_intelligence.token_input')"
@@ -24,7 +24,7 @@
           </b-field>
         </div>
       </section>
-      <footer class="modal-card-foot">
+      <footer class="modal-card-foot mt-1">
         <div class="migrate-intelligence-modal__modal-style__style-button">
           <unnnic-button
             size="large"
@@ -128,7 +128,7 @@ export default {
 .migrate-intelligence-modal {
 
   &__modal-style{
-      width: 26.5rem;
+      width: 100%;
       @media (max-width: $mobile-width) {
         padding-left: 5rem
       }
@@ -165,14 +165,17 @@ export default {
     justify-content: center;
 
     &__inputs{
-      width: 90%;
-      margin-top: 1rem;
+      width: 100%;
     }
   }
 }
 .modal-card-foot, .modal-card-body {
   background: #f9f9f9;
   border-top: none;
+}
+
+.modal-card-body {
+  padding: 0;
 }
 /deep/ .dropdown {
   display: block;

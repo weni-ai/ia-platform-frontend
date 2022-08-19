@@ -60,7 +60,7 @@
       :text="notificationModalTitle"
       :scheme="notificationModalType === 'success' ? 'feedback-green' : 'feedback-red'"
       :modal-icon="notificationModalType === 'success' ? 'check-circle-1-1' : 'alert-circle-1'"
-      @close="openNotificationModal = false"
+      @close="onCloseNotification"
     >
       <span
       slot="message"
@@ -133,18 +133,15 @@ export default {
         this.intelligenceFile = null;
       });
     },
-    setVisibleMigrateModal() {
-      this.migrateModalVisible = true;
-    },
-    closeMigrateModal() {
-      this.migrateModalVisible = false;
-    },
     dispatchNotification(value) {
       this.openNotificationModal = true
       this.notificationModalType = value.type
       this.notificationModalTitle = value.title
       this.notificationModalMessage = value.message
-      if (value.type === 'success') this.$emit('onImportSuccess')
+    },
+    onCloseNotification() {
+      this.openNotificationModal = false
+      if (this.notificationModalType === 'success') this.$emit('onImportSuccess')
     },
   },
 };

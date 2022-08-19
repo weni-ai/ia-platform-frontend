@@ -86,6 +86,10 @@ export default {
     repository() {
       this.updateExamples(true);
     },
+    examplesList() {
+      // console.log(this.examplesList)
+      this.$emit('updateCount', this.examplesList)
+    }
   },
   mounted() {
     this.updateExamples();
@@ -130,6 +134,7 @@ export default {
           endCreatedAt: this.dateLastTrain,
         });
       }
+      this.$emit()
     },
     async getRepositoryStatus() {
       const { data } = await this.getRepositoryStatusTraining({

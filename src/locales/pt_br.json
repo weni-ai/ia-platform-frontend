@@ -521,7 +521,7 @@
       "ready_for_train_subtitle": "Volte e corrija os erros encontrados ou prossiga e treine parcialmente.",
       "language_available": "Não existem frases de idiomas novos para treinar. Adicione-os e tente novamente.",
       "warnings": "Alertas",
-      "train": "Prosseguir",
+      "train": "Corrigir",
       "cancel": "Cancelar",
       "ok": "ok"
     },
@@ -965,5 +965,8 @@
     "invalid": {
       "subtitle": "Arquivo Inválido"
     }
+  },
+  "import_card": {
+    "importing": "Importando.."
   }
 }
