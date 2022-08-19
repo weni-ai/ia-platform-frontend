@@ -39,7 +39,7 @@
         <unnnic-button
           :disabled="textSelected === null"
           iconLeft="add-1"
-          class="button--full column is-12"
+          class="button--full"
           type="secondary"
           size="large"
           @click.prevent.stop="addPendingEntity"
@@ -101,7 +101,7 @@
           <unnnic-button
             type="secondary"
             size="small"
-            class="mr-3 edit-sentence__btn-wrapper__button"
+            class="mr-4 edit-sentence__btn-wrapper__button"
             :disabled="!isValid || submitting"
             :tooltip-hover="!isValid ? validationErrors : null"
             :loading="submitting"
@@ -201,7 +201,7 @@ export default {
     margin: 1rem 1.7rem 0.7rem 1.7rem;
 
     &__button{
-      width: 128px;
+      width: 50%;
     }
 
     a {
