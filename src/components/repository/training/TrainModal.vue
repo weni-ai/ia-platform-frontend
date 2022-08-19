@@ -14,8 +14,8 @@
     v-else
     :showModal="open"
     @close="closeModal"
-    :text="$t('webapp.train_modal.language_warning')"
-    description="Volte e corrija os erros encontrados ou prossiga e treine parcialmente."
+    :text="$t('webapp.train_modal.ready_for_train_title')"
+    :description="$t('webapp.train_modal.ready_for_train_subtitle')"
     modalIcon="alert-circle-1"
     scheme="feedback-red"
   >
@@ -42,7 +42,11 @@
                 <div class="train-modal__wrapper__content__content-requirements__item__field">
                   {{ `[${lang.toUpperCase().replace('_','-')}]` }}
                 </div>
-                <p> {{ firstText(requirement) }} </p>
+                <p>
+                  <strong>{{ firstText(requirement) }}</strong>
+                  <br />
+                  <span>{{ secondText(requirement) }}</span>
+                </p>
               </div>
             </div>
           </div>
@@ -75,13 +79,6 @@
           @click="dispatchTrain()"
         >
           <span>{{ $t("webapp.train_modal.train") }}</span>
-        </unnnic-button>
-        <unnnic-button
-          type="primary"
-          ref="closeBtn"
-          @click="closeModal()"
-        >
-          <span>{{ $t("webapp.train_modal.cancel") }}</span>
         </unnnic-button>
       </div>
     </template>
@@ -236,6 +233,7 @@ export default {
       &__content-requirements {
         display: flex;
         flex-direction: column;
+        margin-bottom: $unnnic-spacing-stack-xs;
         gap: $unnnic-spacing-stack-xs;
         &__item {
           display: flex;
@@ -282,4 +280,7 @@ export default {
     }
   }
 }
+  /deep/ .unnnic-modal-container-background-body-description {
+    padding-bottom: 2rem;
+  }
 </style>

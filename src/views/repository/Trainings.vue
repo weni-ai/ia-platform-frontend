@@ -60,7 +60,7 @@
                 />
               </div>
             </div>
-            <div class="is-flex is-align-items-baseline is-justify-content-space-between mt-6 mb-4">
+            <div class="is-flex is-align-items-baseline is-justify-content-space-between mt-6 mb-5">
               <h2 class="trainings-repository__list-wrapper__title mb-0">
                 {{ $t('webapp.trainings.sentences_to_train') }}
               </h2>
@@ -295,7 +295,7 @@ export default {
       font-family: $unnnic-font-family-secondary;
       font-size: $unnnic-font-size-title-sm;
       color: $unnnic-color-neutral-dark;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1px;
     }
      &__subtitle{
       font-size: $font-size;
@@ -329,7 +329,7 @@ export default {
     &__train {
       display: flex;
       margin-top: 2.5rem;
-      margin-bottom: 14rem;
+      margin-bottom: 15.5rem;
 
       &__progress {
         height: 25px;

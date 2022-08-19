@@ -2,9 +2,12 @@
     <unnnic-modal-upload
       v-model="selectedFile"
       :textCancel="$t('webapp.import_dataset.cancel')"
+      :acceptMultiple="false"
       textTitle=""
       :textAction="$t('webapp.import_dataset.importar')"
-      supportedFormats="txt,JSON"
+      :isUploading="isUploading"
+      supportedFormats=".txt,.json"
+      canImport
       @action="dispatchUploadFile()"
       @cancel="removeFile()"
     />
@@ -24,6 +27,7 @@ export default {
   data() {
     return {
       selectedFile: [],
+      isUploading: false
     };
   },
   computed: {
@@ -37,7 +41,7 @@ export default {
     ]),
     async dispatchUploadFile() {
       try {
-        this.isButtonLoading = true;
+        this.isUploading = true;
         const formData = new FormData();
         formData.append('file', this.selectedFile[0]);
         formData.append('language', this.getCurrentRepository.language);
@@ -60,7 +64,7 @@ export default {
           message: this.$t('webapp.import_dataset.import_sentences_error_message')
         });
       } finally {
-        this.isButtonLoading = false;
+        this.isUploading = false;
       }
     },
     dispatchCloseImportModal() {
@@ -87,6 +91,10 @@ export default {
   box-shadow: none;
   /deep/ .close-button-container {
     display: none;
+  }
+  /deep/ .footer {
+    padding: 1.5rem 0 2.5rem;
+    margin-top: 0;
   }
 }
 </style>
