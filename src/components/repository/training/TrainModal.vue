@@ -76,7 +76,7 @@
           ref="trainBtn"
           type="terciary"
           class="train-modal__buttons__style"
-          @click="dispatchTrain()"
+          @click="closeModal()"
         >
           <span>{{ $t("webapp.train_modal.train") }}</span>
         </unnnic-button>
@@ -283,4 +283,5 @@ export default {
   /deep/ .unnnic-modal-container-background-body-description {
     padding-bottom: 2rem;
   }
+
 </style>
