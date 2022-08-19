@@ -360,6 +360,12 @@ export default {
     /deep/ .unnnic-modal-container-background-body-spacing_header {
       display: none;
     }
+    /deep/ .unnnic-progress-bar.primary {
+    padding: 1rem .5rem;
+    }
+    /deep/ .unnnic-modal {
+      z-index: 1;
+    }
   }
 }
 </style>
