@@ -159,7 +159,7 @@
       text="Frase adicionada para treinamento"
       closeText="Fechar"
       scheme="feedback-green"
-      icon="check-circle-1"
+      icon="check-circle-1-1"
       @click.native="alertSuccess = false"
     />
   </div>
@@ -412,4 +412,5 @@ export default {
 /deep/ .alert {
   word-spacing: 0;
 }
+
 </style>
