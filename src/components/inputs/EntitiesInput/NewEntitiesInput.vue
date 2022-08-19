@@ -19,7 +19,7 @@
         <span v-else>{{ $t('webapp.trainings.add_entity') }}</span>
       </span>
     </unnnic-button>
-    <div class="columns is-flex-wrap-wrap mt-1">
+    <div class="columns is-flex-wrap-wrap mt-0">
       <entity-form
         v-for="entity in preparedEntities"
         :key="entity.localId"

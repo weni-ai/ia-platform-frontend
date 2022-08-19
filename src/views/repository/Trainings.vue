@@ -16,7 +16,7 @@
               />
               <p
                 v-html="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
-                class="trainings-repository__description" />
+                class="trainings-repository__description column is-6 p-0" />
             </div>
             <hr class="divider" />
             <div class="trainings-repository__list-wrapper">
@@ -55,10 +55,12 @@
                   @onTrain="sendEvent(); dispatchClick();"
                   @onTrainComplete="noPhrasesYet = true"
                   @onTrainReady="dispatchClick()"
-                  @unauthorized="signIn()" />
+                  @unauthorized="signIn()"
+                  @updateItems="updatedExampleList()"
+                />
               </div>
             </div>
-            <div class="is-flex is-align-items-baseline is-justify-content-space-between my-6">
+            <div class="is-flex is-align-items-baseline is-justify-content-space-between mt-6 mb-5">
               <h2 class="trainings-repository__list-wrapper__title mb-0">
                 {{ $t('webapp.trainings.sentences_to_train') }}
               </h2>
@@ -290,10 +292,10 @@ export default {
     // margin-bottom: .5rem;
 
     &__title{
-      font-family: $unnnic-font-family-primary;
+      font-family: $unnnic-font-family-secondary;
       font-size: $unnnic-font-size-title-sm;
       color: $unnnic-color-neutral-dark;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1px;
     }
      &__subtitle{
       font-size: $font-size;
@@ -321,12 +323,13 @@ export default {
     &__pending-example{
       margin-top: 1.6rem;
       min-height: 5rem;
+      margin-bottom: 3rem;
     }
 
     &__train {
       display: flex;
-      margin-top: 2rem;
-      margin-bottom: 14rem;
+      margin-top: 2.5rem;
+      margin-bottom: 15.5rem;
 
       &__progress {
         height: 25px;
@@ -406,5 +409,14 @@ export default {
   background: #E2E6ED;
   height: 1px;
   margin: 2rem 0;
+}
+
+/deep/ input:focus, /deep/ textarea:focus {
+  box-shadow: none;
+  border-color: #9caccc;
+}
+
+/deep/ input, /deep/ textarea {
+  height: auto;
 }
 </style>

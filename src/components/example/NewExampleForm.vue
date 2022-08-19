@@ -1,11 +1,12 @@
 <template>
   <div>
     <form
+      autocomplete="off"
       class="columns wrapper is-vcentered is-variable is-2 is-flex-wrap-wrap mt-3"
       @submit.prevent="onSubmit()"
       @keyup.enter="onEnter()"
     >
-      <div class="column is-12">
+      <div class="column is-12 mb-2">
         <b-field
           :message="errors.text || errors.language"
         >
@@ -36,9 +37,23 @@
       <div class="column is-12">
         <b-field class="entities-wrapper" :message="errors.entities">
           <p
-              slot="label"
-              class="unnnic-form__label"
-              v-html="$t('webapp.trainings.entities')" />
+            slot="label"
+            class="unnnic-form__label"
+          >
+            {{ $t('webapp.trainings.entities') }}
+            <unnnic-tool-tip
+              side="right"
+              :text="$t('webapp.trainings.add_entity_info')"
+              enabled
+            >
+              <unnnic-icon
+                class="info"
+                icon="information-circle-4"
+                size="sm"
+                scheme="neutral-soft"
+              />
+            </unnnic-tool-tip>
+          </p>
           <new-entities-input
             ref="entitiesInput"
             v-model="entities"
@@ -51,26 +66,18 @@
           />
         </b-field>
       </div>
-      <div class="column is-6">
+      <div class="column is-6 pr-4">
         <b-field
           id="tour-training-step-4"
           :is-previous-disabled="true"
           :is-step-blocked="intent === ''"
           :message="errors.intent">
-          <!-- <b-autocomplete
-            v-model="intent"
-            :placeholder="$t('webapp.trainings.intent')"
-            :data="filteredData"
-            :open-on-focus="true"
-            dropdown-position="bottom"
-          /> -->
          <unnnic-autocomplete
             :label="$t('webapp.trainings.intent')"
             v-model="intent"
             :data="filteredData"
             :placeholder="$t('webapp.example.intent')"
             :openWithFocus="true"
-            @input="intent = intentFormatters(intent)"
             @focus="onInputClick('intent')"
             @blur="onInputClick('intent')"
             :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
@@ -83,54 +90,36 @@
           :is-previous-disabled="true"
           :is-step-blocked="intent === ''"
           :message="errors.intent">
-          <!-- <b-autocomplete
-            v-model="intent"
-            :placeholder="$t('webapp.trainings.intent')"
-            :data="filteredData"
-            :open-on-focus="true"
-            dropdown-position="bottom"
-          /> -->
-           <unnnic-autocomplete
+           <!-- <unnnic-autocomplete
+              :label="$t('webapp.create_repository.language_placeholder')"
+              v-model="language"
+              :data="languageLabels"
+              :placeholder="$t('webapp.translate.languages_select')"
+              :openWithFocus="true"
+              @click.native="hideDropdown = false"
+              @focus="onInputClick('language')"
+              @blur="onInputClick('language')"
+              :class="hideDropdown ? 'hidden' : ''"
+              :iconRight="isLanguageInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
+            /> -->
+          <unnnic-select
+            :placeholder="$t('webapp.translate.languages_select')"
             :label="$t('webapp.create_repository.language_placeholder')"
             v-model="language"
-            :data="languageList"
-            :placeholder="$t('webapp.translate.languages_select')"
-            :openWithFocus="true"
-            @input="intent = intentFormatters(intent)"
-            @click.native="hideDropdown = false"
-            @focus="onInputClick('language')"
-            @blur="onInputClick('language')"
-            :class="hideDropdown ? 'hidden' : ''"
-            :iconRight="isLanguageInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
-          />
-          <!-- <language-select v-model="language"/> -->
-          <!-- <language-select-input
-            v-model="language"
-           :placeholder="$t('webapp.translate.languages_select')"/> -->
-          <!-- <language-append-select-input
-              v-model="language"
-              class="language-append"
-            /> -->
+          >
+            <option
+              v-for="[option, label] in languageList"
+              :key="option"
+              :value="option"
+              @select="language = option"
+            >
+              {{ label }}
+            </option>
+          </unnnic-select>
         </b-field>
       </div>
-      <div class="column is-12">
+      <div class="column is-12 mt-4">
         <b-field>
-          <!-- <b-tooltip
-            :active="!isValid && validationErrors.length > 0"
-            :label="validationErrors.join(', ')"
-            type="is-dark">
-            <b-button
-              id="tour-training-step-5"
-              :is-previous-disabled="true"
-              :is-next-disabled="true"
-              :disabled="!shouldSubmit"
-              :loading="submitting"
-              :is-step-blocked="!blockedNextStepTutorial"
-              type="is-primary"
-              native-type="submit">
-              <slot v-if="!submitting">{{ $t('webapp.trainings.submit') }}</slot>
-            </b-button>
-          </b-tooltip> -->
           <unnnic-button
             id="tour-training-step-5"
             :is-previous-disabled="true"
@@ -164,6 +153,15 @@
         </b-field>
       </div>
     </div> -->
+    <unnnic-alert
+      v-if="alertSuccess"
+      title=""
+      text="Frase adicionada para treinamento"
+      closeText="Fechar"
+      scheme="feedback-green"
+      icon="check-circle-1"
+      @click.native="alertSuccess = false"
+    />
   </div>
 </template>
 
@@ -206,7 +204,8 @@ export default {
       blockedNextStepTutorial: false,
       hideDropdown: true,
       isIntentInputActive: false,
-      isLanguageInputActive: false
+      isLanguageInputActive: false,
+      alertSuccess: false
     };
   },
   computed: {
@@ -267,7 +266,8 @@ export default {
     },
     languageList() {
       return Object.keys(LANGUAGES)
-    }
+        .map(lang => ([lang, LANGUAGES[lang]]));
+    },
   },
   watch: {
     async intent() {
@@ -314,6 +314,7 @@ export default {
         this.entities = [];
         this.submitting = false;
 
+        this.alertSuccess = true
         this.$emit('created');
         this.$emit('eventStep');
         return true;
@@ -345,7 +346,7 @@ export default {
     onInputClick(target) {
       if (target === 'intent') this.isIntentInputActive = !this.isIntentInputActive
       if (target === 'language') this.isLanguageInputActive = !this.isLanguageInputActive
-    }
+    },
   },
 };
 </script>
@@ -362,9 +363,6 @@ export default {
 
 .columns.is-variable .column {
   padding-left: 0;
-}
-
-.columns.is-variable .column:last-child {
   padding-right: 0;
 }
 
@@ -376,6 +374,8 @@ export default {
   font-size: .875rem;
   box-sizing: border-box;
   width: 100%;
+  padding: .75rem 1rem;
+  height: 48px;
 }
 
 /deep/ .unnnic-form__label {
@@ -394,13 +394,22 @@ export default {
   font-size: .875rem;
   border: 1px solid transparent;
 }
- /deep/ .example-txt-w-highlighted-entities__entity__text {
+/deep/ .example-txt-w-highlighted-entities__entity__text {
   font-size: .875rem;
 }
-/deep/ .icon-right {
-    transform: translateY(60%);
-}
-  /deep/ .hidden .unnnic-autocomplete__container-list{
+/deep/ .hidden .unnnic-autocomplete__container-list{
   display: none;
+}
+/deep/ .column {
+  padding: .5rem;
+}
+/deep/ .dropdown {
+  display: block;
+}
+/deep/ .example-txt-w-highlighted-entities__entity {
+  padding: 0.6rem 0.9rem;
+}
+/deep/ .alert {
+  word-spacing: 0;
 }
 </style>

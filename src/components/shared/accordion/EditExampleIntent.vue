@@ -35,7 +35,7 @@
           </unnnic-autocomplete>
         </div>
       </div>
-      <div class="columns edit-sentence__wrapper px-3 mt-5 mb-3">
+      <div class="columns edit-sentence__wrapper px-2 mt-5 mb-3">
         <unnnic-button
           :disabled="textSelected === null"
           iconLeft="add-1"
@@ -97,7 +97,7 @@
         </div>
       <div
         class="edit-sentence__btn-wrapper">
-        <div>
+        <div class="column is-6 pl-0 py-0 is-flex is-justify-content-space-between">
           <unnnic-button
             type="secondary"
             size="small"
@@ -219,16 +219,22 @@ export default {
 /deep/ .column.is-6 {
   flex: auto;
   max-width: 50%;
+  padding: .5rem;
 }
 /deep/ .textarea {
-  // background: #fff;
-  border: .0625rem solid #e2e6ed;
-  border-radius: .25rem;
-  color: #4e5666;
-  font-weight: 400;
-  font-size: .875rem;
-  box-sizing: border-box;
-  width: 100%;
+    border: .0625rem solid #e2e6ed;
+    border-radius: .25rem;
+    color: #4e5666;
+    font-weight: 400;
+    font-size: .875rem;
+    box-sizing: border-box;
+    width: 100%;
+    padding: .75rem 1rem;
+    height: 48px !important;
+}
+
+/deep/ .input {
+  height: auto;
 }
 /deep/ .example-txt-w-highlighted-entities__entity {
   font-size: .875rem;
@@ -242,12 +248,13 @@ export default {
 }
 /deep/ .unnnic-form__label strong {
   color: #67738B;
-  font-weight: 900;
+  font-weight: 400;
+  text-decoration: solid #67738B underline;
 }
 /deep/ .unnnic-autocomplete__container-list {
   z-index: 2;
 }
-/deep/ .icon-right {
-  transform: translateY(60%);
+/deep/ .example-txt-w-highlighted-entities__entity {
+  padding: 0.6rem 0.9rem;
 }
 </style>

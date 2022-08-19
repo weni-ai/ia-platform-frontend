@@ -9,10 +9,18 @@
       :buttonLoading="loading || !isItOkToEnableButton"
       buttonClass="train__button"
       :buttonClick="verifyTrain"
+      @onImportSuccess="updateItems"
     />
     <div v-if="trainProgress" class="train__progress">
-      <progress-bar :progress="progress" type="is-secondary" />
-      <p v-html="$t('webapp.trainings.train_progress', { progress: progress })" />
+      <unnnic-modal :showModal="true" :closeIcon="false">
+        <div slot="message">
+          <unnnic-progress-bar
+            :value="progress"
+            :title="$t('webapp.trainings.train_progress')"
+            inline
+          />
+        </div>
+      </unnnic-modal>
     </div>
     <train-modal
       v-if="repository"
@@ -310,6 +318,12 @@ export default {
       this.trainResults = false;
       this.trainProgress = false;
       await this.updateRepository(false);
+    },
+    updateItems() {
+      this.updateTrainingStatus();
+      this.getRepositoryStatus();
+      this.repositoryRequirements();
+      this.$emit('updateItems')
     }
   }
 };
@@ -333,6 +347,18 @@ export default {
     p {
       font-size: 13px;
       font-weight: $font-weight-bolder;
+    }
+    /deep/ .unnnic-modal-container-background {
+      height: 56px;
+    }
+    /deep/ .unnnic-modal-container-background-body {
+      padding: 0
+    }
+    /deep/ .unnnic-modal-container-background-body-title {
+      padding: 0
+    }
+    /deep/ .unnnic-modal-container-background-body-spacing_header {
+      display: none;
     }
   }
 }
