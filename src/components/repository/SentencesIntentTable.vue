@@ -279,7 +279,7 @@ export default {
         await this.deleteExample({ id: this.sentenceId });
         this.$emit('dispatchEvent', { event: 'itemDeleted' });
         this.openModal = false;
-        this.openSuccessModal = true;
+        setTimeout(() => { this.openSuccessModal = true }, 2000);
       } catch {
         this.$emit('dispatchEvent', { event: 'error' });
       }

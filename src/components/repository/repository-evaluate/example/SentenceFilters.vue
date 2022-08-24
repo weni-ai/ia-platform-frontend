@@ -74,12 +74,10 @@
 import { formatters, LANGUAGES } from '@/utils/index';
 import { mapGetters } from 'vuex';
 import _ from 'lodash';
-// import EditExampleBase from '@/components/shared/accordion/EditExampleBase';
 
 
 export default {
   name: 'SentenceFilters',
-  // extends: EditExampleBase,
   props: {
     debounceTime: {
       type: Number,
@@ -246,7 +244,7 @@ export default {
 
 .filter-evaluate-example {
   width: 100%;
-  margin: 0 auto 0.5rem;
+  margin: 0 auto 1.8rem;
 
   &__filters {
     margin: 1rem 0;
@@ -257,6 +255,10 @@ export default {
 
     @media (max-width: $mobile-width) {
       grid-template-columns: 1fr;
+    }
+
+    /deep/ input {
+      height: auto;
     }
 
     &__input-text {
@@ -298,6 +300,7 @@ export default {
         font-family: 'Lato';
         font-size: 14px;
       }
+
     }
   }
 
@@ -305,10 +308,4 @@ export default {
     margin-top: 0.5rem;
   }
 }
-/deep/ .icon-left {
-    transform: translateY(60%);
-  }
-/deep/ .icon-right {
-    transform: translateY(60%);
-  }
 </style>

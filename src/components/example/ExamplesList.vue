@@ -13,7 +13,6 @@
         @onUpdateSelected="updateSelected"
       />
       <div v-else>
-        <hr class="divider">
         <p class="untrained">
           {{ $t('webapp.trainings.database_untrained') }}
         </p>
@@ -87,6 +86,9 @@ export default {
     repository() {
       this.updateExamples(true);
     },
+    examplesList() {
+      this.$emit('updateCount', this.examplesList)
+    }
   },
   mounted() {
     this.updateExamples();
@@ -131,6 +133,7 @@ export default {
           endCreatedAt: this.dateLastTrain,
         });
       }
+      this.$emit()
     },
     async getRepositoryStatus() {
       const { data } = await this.getRepositoryStatusTraining({

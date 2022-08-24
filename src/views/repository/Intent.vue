@@ -261,15 +261,9 @@ export default {
       }
     }
   }
-  /deep/ .icon-right {
-    transform: translateY(70%);
-  }
-  /deep/ .icon-left {
-    transform: translateY(60%);
-  }
-  /deep/ .input.size-md.has-icon-right {
-    width: 100px;
-  }
+/deep/ .input {
+  height: auto;
+}
 
 
 </style>

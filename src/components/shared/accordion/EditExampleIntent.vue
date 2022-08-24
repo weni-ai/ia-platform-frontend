@@ -20,6 +20,7 @@
         </div>
         <div class="column is-6">
           <unnnic-autocomplete
+            size="sm"
             :message="errors.non_field_errors"
             :type="errors.non_field_errors
                     && errors.non_field_errors.length > 0 ? 'error' : 'normal'"
@@ -35,28 +36,30 @@
           </unnnic-autocomplete>
         </div>
       </div>
-      <div class="columns edit-sentence__wrapper px-3 mt-5 mb-3">
-        <unnnic-button
-          :disabled="textSelected === null"
-          iconLeft="add-1"
-          class="button--full column is-12"
-          type="secondary"
-          size="large"
-          @click.prevent.stop="addPendingEntity"
-        >
-          <span class="edit-sentence__add-entity-button-text">{{ entityButtonText }} </span>
-        </unnnic-button>
-      </div>
-      <div class="columns edit-sentence__wrapper">
+      <div class="add-entity">
+        <div class="">
+          <unnnic-button
+            :disabled="textSelected === null"
+            iconLeft="add-1"
+            class="button--full"
+            type="secondary"
+            size="large"
+            @click.prevent.stop="addPendingEntity"
+          >
+            <span class="edit-sentence__add-entity-button-text">{{ entityButtonText }} </span>
+          </unnnic-button>
+        </div>
+        <div class="columns edit-sentence__wrapper mx-0">
           <div
             v-for="(entity, index) in entitiesToEdit"
             :key="`entity-${index}`"
-            class="column is-6">
+            class="column is-6 px-0 entity-input">
             <p
               slot="label"
               class="unnnic-form__label"
               v-html="$t('webapp.example.text_is', {text: highlightedText(entity) })" />
             <unnnic-autocomplete
+              size="sm"
               :data="filterEntities(index, false)"
               v-model="entity.entity"
               :placeholder="$t('webapp.example.entity')"
@@ -71,12 +74,13 @@
           <div
             v-for="(entity, index) in pendingEntities"
             :key="`pending-entity-${index}`"
-            class="column is-6">
+            class="column is-6 px-0 entity-input">
             <p
               slot="label"
               class="unnnic-form__label"
               v-html="$t('webapp.example.text_is', {text: highlightedText(entity) })" />
             <unnnic-autocomplete
+              size="sm"
               :data="filterEntities(index, true)"
               :custom-formatter="intentFormatters"
               v-model="entity.entity"
@@ -84,28 +88,27 @@
               :iconRight="entity ? 'delete-1-1' : ''"
               class="edit-sentence-input"
               @input="pendingEntities[index].entity = intentFormatters(entity.entity)"
-              @choose="elevateToEntity(entity, index)"
               @icon-right-click="removePendingEntity(entity, index)"
               @click.native="hideDropdown = false"
               :class="hideDropdown ? 'hidden' : ''"
-            >
-            </unnnic-autocomplete>
+            />
           </div>
           <b-field
             :message="errors.entities"
             type="is-danger" />
         </div>
+      </div>
       <div
         class="edit-sentence__btn-wrapper">
-        <div>
+        <div class="column is-6 p-0 is-flex is-justify-content-space-between">
           <unnnic-button
             type="secondary"
             size="small"
-            class="mr-3 edit-sentence__btn-wrapper__button"
+            class="mr-4 edit-sentence__btn-wrapper__button"
             :disabled="!isValid || submitting"
             :tooltip-hover="!isValid ? validationErrors : null"
             :loading="submitting"
-            @click="onSubmit">
+            @click="saveSentence">
             <slot v-if="!submitting">{{ $t('webapp.trainings.save_button') }}</slot>
           </unnnic-button>
           <unnnic-button
@@ -148,6 +151,10 @@ export default {
     cancelEditSentence() {
       this.$emit('cancel')
     },
+    async saveSentence() {
+      await this.onSubmit();
+      this.cancelEditSentence();
+    }
   }
 };
 </script>
@@ -163,7 +170,7 @@ export default {
 
   &__wrapper {
     max-width: 100%;
-    margin: 0 1rem;
+    margin: 0 .5rem;
     flex-wrap: wrap;
   }
 
@@ -198,10 +205,10 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1rem 1.7rem 0.7rem 1.7rem;
+    margin: 1rem;
 
     &__button{
-      width: 128px;
+      width: 50%;
     }
 
     a {
@@ -216,22 +223,37 @@ export default {
 .button--full {
   width: 100%;
 }
+.add-entity {
+  padding: 1rem;
+  margin: 1rem;
+  border: 1px solid #E2E6ED;
+  border-radius: 8px;
+}
+.entity-input:nth-child(even) {
+  padding-left: 1rem !important;
+}
 /deep/ .column.is-6 {
   flex: auto;
   max-width: 50%;
+  padding: .5rem;
 }
 /deep/ .textarea {
-  // background: #fff;
-  border: .0625rem solid #e2e6ed;
-  border-radius: .25rem;
-  color: #4e5666;
-  font-weight: 400;
-  font-size: .875rem;
-  box-sizing: border-box;
-  width: 100%;
+    border: .0625rem solid #e2e6ed;
+    border-radius: .25rem;
+    color: #4e5666;
+    font-weight: 400;
+    font-size: .75rem;
+    box-sizing: border-box;
+    width: 100%;
+    padding: .5rem 1rem;
+    height: 38px !important;
+}
+
+/deep/ .input {
+  height: auto;
 }
 /deep/ .example-txt-w-highlighted-entities__entity {
-  font-size: .875rem;
+  font-size: .75rem;
   border: 2px solid transparent;
 }
 /deep/ .hidden .unnnic-autocomplete__container-list{
@@ -242,12 +264,13 @@ export default {
 }
 /deep/ .unnnic-form__label strong {
   color: #67738B;
-  font-weight: 900;
+  font-weight: 400;
+  text-decoration: solid #67738B underline;
 }
 /deep/ .unnnic-autocomplete__container-list {
   z-index: 2;
 }
-/deep/ .icon-right {
-  transform: translateY(60%);
+/deep/ .example-txt-w-highlighted-entities__entity {
+  padding: 0.5rem 0.9rem;
 }
 </style>

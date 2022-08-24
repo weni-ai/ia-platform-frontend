@@ -50,7 +50,7 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="ml-auto">
           <unnnic-button
             v-if="hasIntegration && !hasIntegrationCheckError"
             type="secondary"

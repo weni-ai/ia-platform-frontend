@@ -50,6 +50,7 @@
         </div>
         <hr class="divider">
         <sentence-filters
+          v-if="showFilters"
           :intents="repository.intents_list"
           :entities="repository.entities"
           :language-filter="false"
@@ -62,6 +63,7 @@
           translation-data
           @exampleDeleted="onExampleDeleted"
           @onUpdateSelected="updateSelected"
+          @updateCount="onUpdateCount"
         />
       </div>
     </div>
@@ -139,6 +141,7 @@ export default {
       selectedItems: [],
       openDeleteModal: false,
       openSuccessModal: false,
+      showFilters: false
     };
   },
   computed: {
@@ -209,6 +212,10 @@ export default {
       });
       await this.onExampleDeleted()
     },
+    async onUpdateCount(params) {
+      await this.$nextTick();
+      if (params) this.showFilters = true
+    }
   },
 };
 </script>
@@ -346,6 +353,11 @@ export default {
   background: #E2E6ED;
   height: 1px;
   margin: 2rem 0;
+}
+
+/deep/ input:focus, /deep/ textarea:focus {
+  box-shadow: none;
+  border-color: #9caccc;
 }
 
 

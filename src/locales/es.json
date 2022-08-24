@@ -493,7 +493,7 @@
       "cancel_button": "Cancelar",
       "save_button": "Ahorrar",
       "error_caracter_type": "La frase debe contener letras o números. Incluirlos para continuar.",
-      "train_progress": "{progress}% de entrenamiento completado",
+      "train_progress": "Entrenamiento en progreso",
       "empty_text_error": "Introduzca una oración",
       "intent_error": "Entrar en una intención",
       "default_error": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
