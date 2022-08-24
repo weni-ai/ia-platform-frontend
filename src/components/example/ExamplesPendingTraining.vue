@@ -93,6 +93,10 @@ export default {
     repository() {
       this.updateExamples(true);
     },
+    async examplesList() {
+      await this.$nextTick();
+      this.$emit('onUpdateList', this.examplesList.total)
+    }
   },
   mounted() {
     this.updateExamples();

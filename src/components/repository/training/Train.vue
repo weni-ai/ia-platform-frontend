@@ -35,7 +35,7 @@
       @closeTrainModal="closeTrainModal()"
     />
     <train-response
-      :open="trainResults"
+      :open="true"
       @dispatchCloseProgress="closeProgress()"
       @resetProgressValue="progress = 10"
     />
@@ -349,7 +349,7 @@ export default {
       font-weight: $font-weight-bolder;
     }
     /deep/ .unnnic-modal-container-background {
-      height: 56px;
+      height: 88px;
     }
     /deep/ .unnnic-modal-container-background-body {
       padding: 0
@@ -361,7 +361,7 @@ export default {
       display: none;
     }
     /deep/ .unnnic-progress-bar.primary {
-    padding: 1rem .5rem;
+    padding: 2rem 1.5rem;
     }
     /deep/ .unnnic-modal {
       z-index: 1;

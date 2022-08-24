@@ -130,7 +130,7 @@ export default {
         Vue.delete(this.entitiesToEdit, index);
       });
     },
-    removePendingEntity(index) {
+    removePendingEntity(entity, index) {
       this.$nextTick(() => {
         Vue.delete(this.pendingEntities, index);
       });
@@ -163,7 +163,7 @@ export default {
 
       this.entitiesToEdit.push(entityObject);
       this.onEntityAdded();
-      this.removePendingEntity(index);
+      this.removePendingEntity(entity, index);
     },
     onEditEntity(entity) {
       if (this.$refs.textInput.emitTextSelected) {

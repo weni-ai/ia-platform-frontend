@@ -57,5 +57,10 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+
+/deep/ .unnnic-modal-container-background {
+  height: 420px;
+}
+
 </style>

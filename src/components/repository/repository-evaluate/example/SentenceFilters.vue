@@ -74,12 +74,10 @@
 import { formatters, LANGUAGES } from '@/utils/index';
 import { mapGetters } from 'vuex';
 import _ from 'lodash';
-// import EditExampleBase from '@/components/shared/accordion/EditExampleBase';
 
 
 export default {
   name: 'SentenceFilters',
-  // extends: EditExampleBase,
   props: {
     debounceTime: {
       type: Number,

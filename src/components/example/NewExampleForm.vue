@@ -55,6 +55,7 @@
             </unnnic-tool-tip>
           </p>
           <new-entities-input
+            class="mb-3"
             ref="entitiesInput"
             v-model="entities"
             :repository="repository"
