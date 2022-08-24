@@ -35,7 +35,7 @@
       @closeTrainModal="closeTrainModal()"
     />
     <train-response
-      :open="true"
+      :open="trainResults"
       @dispatchCloseProgress="closeProgress()"
       @resetProgressValue="progress = 10"
     />
