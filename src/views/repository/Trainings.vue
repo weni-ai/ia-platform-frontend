@@ -80,6 +80,7 @@
               @exampleDeleted="onExampleDeleted"
               @noPhrases="noPhrasesYet = false"
               @onUpdateSelected="updateSelected"
+              @onUpdateList="updateCount"
             />
           </div>
           <authorization-request-notification
@@ -274,6 +275,9 @@ export default {
       });
       await this.onExampleDeleted()
     },
+    updateCount(value) {
+      console.log(value)
+    }
   },
 };
 </script>

@@ -24,7 +24,7 @@
           </b-field>
         </div>
       </section>
-      <footer class="modal-card-foot mt-1">
+      <footer class="modal-card-foot mt-1 px-0">
         <div class="migrate-intelligence-modal__modal-style__style-button">
           <unnnic-button
             size="large"
@@ -140,22 +140,9 @@ export default {
 
     &__style-button{
       width:100%;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-
-      .modal-button {
-        cursor: pointer;
-        border: 1px solid #dbdbdb;
-        text-align: center;
-        border-radius: 4px;
-        font-family: $font-family;
-        box-shadow: none;
-
-        &:hover{
-          border: 1px solid #c2c2c2;
-        }
-      }
+      display: grid;
+      grid-gap: 2rem;
+      grid-template-columns: repeat(auto-fit,minmax(10rem,1fr));
     }
   }
     &__fields {
