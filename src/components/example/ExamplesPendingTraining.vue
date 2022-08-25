@@ -1,19 +1,5 @@
 <template>
   <div>
-    <!-- <paginated-list
-      v-if="examplesList"
-      :item-component="exampleItemElem"
-      :list="examplesList"
-      :repository="repository"
-      :per-page="perPage"
-      :is-accordion-open="pageWasChanged"
-      :pending-example="pendingExample"
-      :is-suggestion="true"
-      @itemSave="dispatchSave"
-      @itemDeleted="onItemDeleted($event)"
-      @pageChanged="pageChanged()"/>
-
-    <br> -->
     <p
       v-if="examplesList && examplesList.empty && !isTrain"
       class="no-examples"
@@ -95,7 +81,7 @@ export default {
     },
     async examplesList() {
       await this.$nextTick();
-      this.$emit('onUpdateList', this.examplesList.total)
+      this.$emit('onUpdateList', this.examplesList)
     }
   },
   mounted() {

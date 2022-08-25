@@ -4,7 +4,7 @@
       :text="$t('webapp.trainings.train_response_title')"
       scheme="feedback-green"
       modal-icon="check-circle-1-1"
-      @close="open = false"
+      @close="closeModal()"
     >
       <span
       slot="message"

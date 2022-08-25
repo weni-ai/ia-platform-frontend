@@ -499,7 +499,7 @@
       "database_description": "Lista de todas as frases treinadas pela inteligência.",
       "database_untrained": "Essa inteligência não possui nenhuma frase treinada. Adicione frases e treine-as no menu Treinamento.",
       "train_title": "Treinar Inteligência",
-      "train_description": "Adicione frases para aprimorar a inteligência. <a href={link}>Veja nossa documentação</a> e conheça <br> as melhores práticas para criar uma inteligência artificial de qualidade.",
+      "train_description": "Adicione frases para aprimorar a inteligência. <a href={link}>Veja nossa documentação</a> e conheça as melhores práticas para criar uma inteligência artificial de qualidade.",
       "entities": "Entidades (opcional)",
       "sentences_to_train": "Lista de frases adicionadas para treinamento",
       "add_entity_info": "Selecione palavra(s) da frase que deseja treinar para adicionar entidade(s)"

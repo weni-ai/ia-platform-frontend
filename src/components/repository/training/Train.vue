@@ -9,6 +9,7 @@
       :buttonLoading="loading || !isItOkToEnableButton"
       buttonClass="train__button"
       :buttonClick="verifyTrain"
+      :examples-list="examplesList"
       @onImportSuccess="updateItems"
     />
     <div v-if="trainProgress" class="train__progress">
@@ -81,6 +82,10 @@ export default {
     updateOnLoad: {
       type: Boolean,
       default: true
+    },
+    examplesList: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -361,7 +366,8 @@ export default {
       display: none;
     }
     /deep/ .unnnic-progress-bar.primary {
-    padding: 2rem 1.5rem;
+      padding: 2rem 1.5rem;
+      white-space: nowrap;
     }
     /deep/ .unnnic-modal {
       z-index: 1;

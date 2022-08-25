@@ -10,19 +10,19 @@
       <div class="sentences-resume__wrapper-cards">
         <NumbersCard
           :label="$t('webapp.resumeSentences.sentences')"
-          :count="getCurrentRepository.examples__count"
+          :count="stats.count"
         />
         <NumbersCard
           :label="$t('webapp.resumeSentences.intentions')"
-          :count="getCurrentRepository.intents_list.length"
+          :count="stats.intents"
         />
         <NumbersCard
           :label="$t('webapp.resumeSentences.entities')"
-          :count="getCurrentRepository.entities.length"
+          :count="stats.entities"
         />
         <NumbersCard
           :label="$t('webapp.resumeSentences.languages')"
-          :count="getCurrentRepository.available_languages.length"
+          :count="stats.languages"
         />
       </div>
 
@@ -88,6 +88,22 @@ export default {
   },
   computed: {
     ...mapGetters(['getCurrentRepository']),
+    stats() {
+      if (this.examplesList) {
+        return {
+          count: this.examplesList.total,
+          intents: this.filterIntents(),
+          entities: this.filterEntities(),
+          languages: this.filterLanguages(),
+        }
+      }
+      return {
+        count: 0,
+        intents: 0,
+        entities: 0,
+        languages: 0
+      }
+    }
   },
   props: {
     buttonDisabled: {
@@ -102,6 +118,9 @@ export default {
     buttonClick: {
       type: Function,
     },
+    examplesList: {
+      type: Object,
+    }
   },
   data() {
     return {
@@ -143,6 +162,38 @@ export default {
       this.openNotificationModal = false
       if (this.notificationModalType === 'success') this.$emit('onImportSuccess')
     },
+    filterIntents() {
+      const intents = this.examplesList.items.map(el => el.intent)
+      const result = intents.sort().reduce((init, current) => {
+        if (init.length === 0 || init[init.length - 1] !== current) {
+          init.push(current);
+        }
+        return init;
+      }, []);
+      return result.length
+    },
+    filterEntities() {
+      const entities = this.examplesList.items
+        .reduce((prev, curr) => [...prev, ...curr.entities], [])
+        .map(el => el.entity)
+        .sort().reduce((init, current) => {
+          if (init.length === 0 || init[init.length - 1] !== current) {
+            init.push(current);
+          }
+          return init;
+        }, []);
+      return entities.length
+    },
+    filterLanguages() {
+      const languages = this.examplesList.items.map(el => el.language)
+      const result = languages.sort().reduce((init, current) => {
+        if (init.length === 0 || init[init.length - 1] !== current) {
+          init.push(current);
+        }
+        return init;
+      }, []);
+      return result.length
+    }
   },
 };
 </script>
