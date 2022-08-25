@@ -147,7 +147,6 @@ export default {
       return initalText[0];
     },
     secondText(requirement) {
-      console.log(this.languagesWarnings)
       const initalText = requirement.split('\n');
       return initalText[1];
     },

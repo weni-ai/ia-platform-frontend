@@ -1,7 +1,7 @@
 const runtimeVariables = (() => ({
   VUE_APP_VERSION: '(packageDict.version)',
-  VUE_APP_API_BASE_URL: 'https://api-ai-staging.weni.ai/',
-  VUE_APP_BOTHUB_NLP_BASE_URL: 'https://nlp-ai-staging.weni.ai/',
+  VUE_APP_API_BASE_URL: 'https://engine-ai.dev.cloud.weni.ai/',
+  VUE_APP_BOTHUB_NLP_BASE_URL: 'https://nlp-ai-development.weni.ai/',
   VUE_APP_BOTHUB_WEBAPP_BASE_URL: 'https://platform-frontend-ai.dev.cloud.weni.ai/',
   VUE_APP_VERSION_ENABLED: 'true',
   VUE_APP_BOTHUB_WEBAPP_USE_SENTRY: 'true',
@@ -20,7 +20,7 @@ const runtimeVariables = (() => ({
   VUE_APP_RECAPTCHA_TOKEN: '6LdeeLoaAAAAAK0dh1vWgcr4VMj9i1R7AsERnSaT',
   VUE_APP_HELPHERO_ID: 'm7dO0to4OK',
   VUE_APP_HELPHERO_TOUR: 'ZlUBE8O2Ik',
-  VUE_APP_QA_FLOW_CHANNEL: 'e3b72a50-8790-4db9-82a1-0479df734d35',
+  VUE_APP_QA_FLOW_CHANNEL: '4c46585b-8393-415b-856a-280c7d9ca9af',
   VUE_APP_LOGROCKET_ID: 'weni/develop',
   VUE_APP_LOGROCKET_PARENT_DOMAIN: 'https://dash-develop.weni.ai/',
 
