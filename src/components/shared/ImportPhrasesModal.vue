@@ -60,7 +60,7 @@ export default {
 <style lang="scss" scoped>
 
 /deep/ .unnnic-modal-container-background {
-  height: 420px;
+  min-height: 420px;
 }
 
 </style>

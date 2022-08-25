@@ -48,6 +48,7 @@
                   :authenticated="authenticated"
                   :version="getSelectedVersion"
                   :update-repository="async () => { updateRepository(false) }"
+                  :examples-list="examplesList"
                   @trainProgressUpdated="trainProgress = $event"
                   @statusUpdated="updateTrainingStatus($event)"
                   @finishedTutorial="dispatchFinish()"
@@ -188,6 +189,7 @@ export default {
       selectedItems: [],
       openDeleteModal: false,
       openSuccessModal: false,
+      examplesList: null
     };
   },
   computed: {
@@ -206,7 +208,7 @@ export default {
         return this.selectedItems.length
       }
       return 0
-    }
+    },
   },
   methods: {
     ...mapActions([
@@ -276,7 +278,7 @@ export default {
       await this.onExampleDeleted()
     },
     updateCount(value) {
-      console.log(value)
+      this.examplesList = value
     }
   },
 };
