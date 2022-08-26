@@ -63,13 +63,13 @@ export default {
 
     .request-authorization{
        color: $color-fake-black;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
       text-align: center;
     }
 
     a {
       color: $color-grey-dark;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
       text-align: center;
     }
 </style>

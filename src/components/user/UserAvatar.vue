@@ -55,8 +55,8 @@ export default {
 
   .avatar {
     position: relative;
-    width: $size-normal;
-    height: $size-normal;
+    width: $unnnic-avatar-size-sm;
+    height: $unnnic-avatar-size-sm;
     overflow: hidden;
     color: $color-fake-black;
     background-color: $color-fake-white;

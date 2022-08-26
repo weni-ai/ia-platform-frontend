@@ -73,7 +73,7 @@ export default {
   margin: 1rem 0;
   border: 1px solid $color-grey;
   border-radius: 0.5rem;
-  font-family: $font-family;
+  font-family: $unnnic-font-family-secondary;
 
   &__wrapper {
     display: flex;

@@ -282,20 +282,20 @@ export default {
 
 .graphics-results {
   margin: 0 auto;
-  font-family: $font-family;
+  font-family: $unnnic-font-family-secondary;
 
   &__title {
     margin: 2rem 0 0.5rem;
     font-size: 1.75rem;
-    font-weight: $font-weight-medium;
+    font-weight: 600;
     color: $color-fake-black;
-    margin-bottom: $between-title-subtitle;
+    margin-bottom: 0.938rem;
   }
 
   &__subtitle {
     margin: 2rem 0 0.5rem;
-    font-family: $font-family;
-    font-weight: $font-weight-bolder;
+    font-family: $unnnic-font-family-secondary;
+    font-weight: $unnnic-font-weight-bold;
   }
 
   &__info {

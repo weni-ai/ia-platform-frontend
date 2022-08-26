@@ -102,17 +102,17 @@ export default {
 
     &__title{
         margin-top: 2.2rem;
-        margin-bottom: $between-title-subtitle;
+        margin-bottom: 0.938rem;
         font-size: 1.75rem;
-        font-weight: $font-weight-medium;
+        font-weight: 600;
         color: $color-fake-black;
-        margin-bottom: $between-title-subtitle;
+        margin-bottom: 0.938rem;
     }
 
     &__description {
         text-align: justify;
         font-size: 12px;
-        margin-bottom: $between-subtitle-content;
+        margin-bottom: 2.188rem;
         @media (max-width: $mobile-width) {
             max-width: 80%;
         }
@@ -134,7 +134,7 @@ export default {
             width: 11.188rem;
             height: 2.5rem;
             color: $color-white;
-            font-family: $font-family;
+            font-family: $unnnic-font-family-secondary;
             box-shadow: 0px 3px 6px #00000029;
             border-radius: 6px;
             margin-right: 2rem;

@@ -571,7 +571,7 @@ export default {
       margin: 0.5rem 0;
       width: 45%;
         &__label{
-        font-weight: $font-weight-normal;
+        font-weight: $unnnic-font-weight-regular;
         }
     }
   }
@@ -590,7 +590,7 @@ export default {
 
   &__requestAuthorization{
         color: $color-fake-black;
-        font-weight: $font-weight-medium;
+        font-weight: 600;
         text-align: center;
         float: right
   }
@@ -640,9 +640,9 @@ export default {
     width: 179px;
     height: 40px;
     margin: 0.5rem;
-    font-family: $font-family;
-    font-size: $font-size;
-    font-weight: $font-weight-bolder;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-lg;
+    font-weight: $unnnic-font-weight-bold;
     box-shadow: 0px 3px 6px #00000029;
     border-radius: 6px;
     background-color: $color-primary;
@@ -680,19 +680,19 @@ export default {
 }
 
 .translate-description{
-  margin-top: $between-subtitle-content;
+  margin-top: 2.188rem;
   h1{
     font-size: 28px;
-    margin-bottom: $between-title-subtitle;
+    margin-bottom: 0.938rem;
     color: $color-fake-black;
-    font-family: $font-family;
-    font-weight: $font-weight-bolder;
+    font-family: $unnnic-font-family-secondary;
+    font-weight: $unnnic-font-weight-bold;
   }
   p{
-    margin-bottom: $between-subtitle-content;
+    margin-bottom: 2.188rem;
     color: $color-fake-black;
-    font-family: $font-family;
-    font-size: $font-size
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-lg
   }
 }
 
@@ -712,8 +712,8 @@ export default {
    &__file{
      border: 1px solid #D5D5D5;
      color: #BABABA;
-     font-size: $font-size;
-     font-family: $font-family;
+     font-size: $unnnic-font-size-body-lg;
+     font-family: $unnnic-font-family-secondary;
      display: flex;
      width: 100%;
      justify-content:center;

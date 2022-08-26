@@ -341,10 +341,10 @@ export default {
 .repository-adjustments {
   &__title {
     font-size: 1.75rem;
-    font-weight: $font-weight-medium;
+    font-weight: 600;
     display: flex;
     align-items: center;
-    font-family: $font-family;
+    font-family: $unnnic-font-family-secondary;
     color: $color-fake-black;
   }
 

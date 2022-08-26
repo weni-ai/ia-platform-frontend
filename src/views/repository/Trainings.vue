@@ -304,7 +304,7 @@ export default {
       margin-bottom: 1px;
     }
      &__subtitle{
-      font-size: $font-size;
+      font-size: $unnnic-font-size-body-lg;
     }
 
     &__button{
@@ -343,7 +343,7 @@ export default {
 
         p{
           font-size: 13px;
-          font-weight: $font-weight-bolder;
+          font-weight: $unnnic-font-weight-bold;
         }
       }
 

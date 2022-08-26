@@ -80,7 +80,7 @@ export default {
 .org-card {
   $org-card-margin: 1rem;
   cursor: pointer;
-  font-family: $font-family;
+  font-family: $unnnic-font-family-secondary;
 
   margin: $org-card-margin 0 $org-card-margin 2*$org-card-margin;
   padding: 1rem 0;
@@ -92,7 +92,7 @@ export default {
   justify-content: center;
   background-color: white;
   border: 1px solid $color-grey;
-  border-radius: $radius-normal;
+  border-radius: $unnnic-border-radius-md;
   border: 1px solid transparent;
   box-shadow: 0rem 0rem .5rem .2rem rgba(0, 0, 0, 0.1);
   flex-grow: 0;
@@ -102,7 +102,7 @@ export default {
     margin: $org-card-margin 0 $org-card-margin 0.5*$org-card-margin;
   }
 
-  @media screen and (max-width: $small-mobile-width) {
+  @media screen and (max-width: 450px) {
     width: calc(100% - 1rem);
     margin: 1rem auto;
   }
@@ -125,7 +125,7 @@ export default {
 
   &__title {
     font-size: 1.5rem;
-    font-weight: $font-weight-bolder;
+    font-weight: $unnnic-font-weight-bold;
     margin-bottom: .5rem;
   }
 

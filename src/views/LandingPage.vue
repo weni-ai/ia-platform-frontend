@@ -158,7 +158,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    font-family: $font-family;
+    font-family: $unnnic-font-family-secondary;
 
     &__button {
       color: $color-primary;
@@ -176,9 +176,9 @@ export default {
     }
 
     &__logo {
-      min-width: ($size-normal * 0.75);
-      max-width: ($size-normal * 4.3);
-      padding: ($size-normal * 0.125) 0;
+      min-width: ($unnnic-avatar-size-sm * 0.75);
+      max-width: ($unnnic-avatar-size-sm * 4.3);
+      padding: ($unnnic-avatar-size-sm * 0.125) 0;
       align-self: center;
 
       img {
@@ -332,7 +332,7 @@ export default {
 
       h2 {
         font-size: 1.5rem;
-        font-weight: $font-weight-bolder;
+        font-weight: $unnnic-font-weight-bold;
       }
 
       @media screen and (max-width: $mobile-width) {
@@ -357,15 +357,15 @@ export default {
       &__title {
         margin: $moredate-margin;
         color: $color-fake-black;
-        font-weight: $font-weight-medium;
-        font-family: $font-family;
+        font-weight: 600;
+        font-family: $unnnic-font-family-secondary;
         font-size: 1.75rem;
       }
 
       &__button {
         margin: $moredate-margin;
-        font-weight: $font-weight-medium;
-        font-family: $font-family;
+        font-weight: 600;
+        font-family: $unnnic-font-family-secondary;
       }
     }
   }
@@ -384,8 +384,8 @@ export default {
       font-size: 1.75rem;
       text-align: center;
       color: $color-fake-black;
-      font-weight: $font-weight-medium;
-      font-family: $font-family;
+      font-weight: 600;
+      font-family: $unnnic-font-family-secondary;
       height: 350px;
       @media screen and (max-width: $mobile-width) {
         margin-top: -100vh;
@@ -402,8 +402,8 @@ export default {
     &__button {
       margin: $margin;
       color: $color-white;
-      font-family: $font-family;
-      font-weight: $font-weight-bolder;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-bold;
       padding: 0 2rem;
       background-color: $color-secondary;
     }

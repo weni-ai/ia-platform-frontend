@@ -113,7 +113,7 @@ export default {
 
     &__wrapper {
       margin: 0 0 0 0.8rem;
-      font-family: $font-family;
+      font-family: $unnnic-font-family-secondary;
 
       strong {
         margin-right: 0.5rem;

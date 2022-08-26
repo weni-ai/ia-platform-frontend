@@ -81,10 +81,10 @@ export default {
             font-size: 1.75rem;
             margin-bottom: 1.2rem;
           h2 {
-            font-family: $font-family;
+            font-family: $unnnic-font-family-secondary;
             color: $color-fake-black;
             margin-bottom:0.6rem;
-            font-weight: $font-weight-medium;
+            font-weight: 600;
             margin-right: 0.6rem;
           }
         }

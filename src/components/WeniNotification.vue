@@ -97,7 +97,7 @@ export default {
       color: $color-white;
       font-family: Roboto slab;
       transition: 0.5s ease;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
 
       &:hover {
         background-color: $color-primary;

@@ -48,7 +48,7 @@ export default {
             margin: 0 1rem 0 1rem;
         }
 
-        @media screen and (max-width: $small-mobile-width) {
+        @media screen and (max-width: 450px) {
             margin: 0 1rem 0 1rem;
         }
     }

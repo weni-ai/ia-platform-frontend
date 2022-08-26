@@ -106,7 +106,7 @@ export default {
 
   &__requestAuthorization{
     color: $color-fake-black;
-    font-weight: $font-weight-medium;
+    font-weight: 600;
     text-align: center;
     float: right;
     text-decoration: none !important;
@@ -128,13 +128,13 @@ export default {
     &__title {
       margin-top: 2rem;
       font-size: 1.75rem;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
       color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+      margin-bottom: 0.938rem;
     }
 
     &__description {
-      margin-bottom: $between-subtitle-content + 0.5rem;
+      margin-bottom: 2.188rem + 0.5rem;
       line-height: 0.8rem;
       @media screen and (max-width: $mobile-width * 1.2) {
         line-height: 1.2rem;

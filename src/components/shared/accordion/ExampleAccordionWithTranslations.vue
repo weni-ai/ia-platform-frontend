@@ -291,7 +291,7 @@ export default {
 
         &__faded {
             color: $color-grey-dark;
-            font-family: $font-family;
+            font-family: $unnnic-font-family-secondary;
 
             strong {
               margin-right: 0.5rem;

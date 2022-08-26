@@ -225,7 +225,7 @@ export default {
 
       h1{
         font-size: 1.75rem;
-        font-weight: $font-weight-bolder;
+        font-weight: $unnnic-font-weight-bold;
       }
     }
     &__loading{
@@ -236,7 +236,7 @@ export default {
       text-align: center;
 
       &__button{
-        font-display: $font-family;
+        font-display: $unnnic-font-family-secondary;
       }
     }
 
@@ -255,8 +255,8 @@ export default {
         th {
           color: #707070;
           font-size: 17px;
-          font-family: $font-family;
-          font-weight: $font-weight-bolder;
+          font-family: $unnnic-font-family-secondary;
+          font-weight: $unnnic-font-weight-bold;
         }
       }
     }

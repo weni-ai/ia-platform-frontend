@@ -173,7 +173,7 @@ export default {
 
   &__append {
     pointer-events: all !important;
-    width: $form-append-width !important;
+    width: $unnnic-spacing-stack-awesome !important;
   }
 
   &__input-wrapper {

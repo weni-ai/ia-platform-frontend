@@ -278,6 +278,6 @@ $entities-colors: (
 }
 
 body {
-  font-family: $font-family;
+  font-family: $unnnic-font-family-secondary;
 }
 </style>

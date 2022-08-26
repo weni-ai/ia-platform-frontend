@@ -172,19 +172,19 @@ export default {
 }
 
 .translate-description{
-  margin-top: $between-subtitle-content;
+  margin-top: 2.188rem;
   h1{
     font-size: 28px;
-    margin-bottom: $between-title-subtitle;
+    margin-bottom: 0.938rem;
     color: $color-fake-black;
-    font-family: $font-family;
-    font-weight: $font-weight-bolder;
+    font-family: $unnnic-font-family-secondary;
+    font-weight: $unnnic-font-weight-bold;
   }
   p{
-    margin-bottom: $between-subtitle-content;
+    margin-bottom: 2.188rem;
     color: $color-fake-black;
-    font-family: $font-family;
-    font-size: $font-size
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-lg
   }
 }
 

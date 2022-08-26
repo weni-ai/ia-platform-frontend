@@ -142,13 +142,13 @@ export default {
 
     h2 {
         color: $color-fake-black;
-        font-weight: $font-weight-bolder;
-        font-family: $font-family;
+        font-weight: $unnnic-font-weight-bold;
+        font-family: $unnnic-font-family-secondary;
     }
 
     h1 {
-        font-weight: $font-weight-bolder;
-        font-family: $font-family;
+        font-weight: $unnnic-font-weight-bold;
+        font-family: $unnnic-font-family-secondary;
         margin: 0;
     }
 

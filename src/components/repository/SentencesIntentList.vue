@@ -202,7 +202,7 @@ export default {
 
     &__text {
       max-width: 100%;
-      font-family: $font-family;
+      font-family: $unnnic-font-family-secondary;
     }
 
     &__tag {

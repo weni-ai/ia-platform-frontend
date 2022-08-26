@@ -132,8 +132,8 @@ export default {
   align-items: center;
 
   &__content{
-    min-width: $size-large + 50rem;
-    min-height: $size-large + 23rem;
+    min-width: 3.4375rem + 50rem;
+    min-height: 3.4375rem + 23rem;
 
     &__container{
       display: flex;

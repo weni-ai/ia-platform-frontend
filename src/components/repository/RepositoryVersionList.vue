@@ -349,7 +349,7 @@ export default {
 
 
 .version-list {
-   font-family: $font-family;
+   font-family: $unnnic-font-family-secondary;
 }
 
 .icon {
@@ -359,7 +359,7 @@ export default {
 .versions {
   margin: auto;
   max-width: $max-repository-card-width;
-  font-family: $font-family;
+  font-family: $unnnic-font-family-secondary;
 
   &__header {
     margin: 3.875rem 0 2.75rem 0;
@@ -392,7 +392,7 @@ export default {
       color: $primary;
       font-weight: bold;
       cursor: pointer;
-      font-family: $font-family;
+      font-family: $unnnic-font-family-secondary;
     }
 
     &__buttons-wrapper {

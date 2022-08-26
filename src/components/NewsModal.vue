@@ -137,9 +137,9 @@ export default {
         h2{
             font-weight: bold;
             font-size: 1.75rem;
-            font-weight: $font-weight-medium;
+            font-weight: 600;
             color: $color-fake-black;
-            margin-bottom: $between-title-subtitle;
+            margin-bottom: 0.938rem;
           }
 
         p {
@@ -167,8 +167,8 @@ export default {
                 height: 43px;
                 box-shadow: 0px 3px 6px #00000029;
                 border-radius: 6px;
-                font-weight: $font-weight-medium;
-                font-family: $font-family;
+                font-weight: 600;
+                font-family: $unnnic-font-family-secondary;
             }
 
             &__hidden {

@@ -145,7 +145,7 @@ footer {
     }
 
     &-title {
-      font-weight: $font-weight-bolder;
+      font-weight: $unnnic-font-weight-bold;
       font-size: 1.2rem;
       text-transform: uppercase;
       margin-bottom: 0.375rem;

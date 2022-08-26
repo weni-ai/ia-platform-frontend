@@ -294,8 +294,8 @@ export default {
 .entity-edit {
   &__title {
     font-size: 1.75rem;
-    font-weight: $font-weight-medium;
-    font-family: $font-family;
+    font-weight: 600;
+    font-family: $unnnic-font-family-secondary;
     color: $color-fake-black;
   }
 
@@ -324,8 +324,8 @@ export default {
 
   &__entities-list {
     &__labeled-count {
-      margin-top: $between-title-subtitle;
-      margin-bottom: $between-subtitle-content;
+      margin-top: 0.938rem;
+      margin-bottom: 2.188rem;
     }
   }
 }
@@ -334,6 +334,6 @@ export default {
   font-size: 12px;
   line-height: 13px;
   padding: 1rem 0.5rem;
-  font-family: $font-family;
+  font-family: $unnnic-font-family-secondary;
 }
 </style>

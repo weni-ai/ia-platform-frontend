@@ -62,11 +62,11 @@ export default {
 
 .title{
   font-size: 1.75rem;
-  font-weight: $font-weight-medium;
+  font-weight: 600;
   color: $color-fake-black;
-  margin-bottom: $between-title-subtitle;
+  margin-bottom: 0.938rem;
 }
 .description {
-  margin-bottom: $between-subtitle-content;
+  margin-bottom: 2.188rem;
 }
 </style>

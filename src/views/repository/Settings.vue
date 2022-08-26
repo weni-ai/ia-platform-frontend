@@ -124,16 +124,16 @@ export default {
 @import '~@/assets/scss/variables.scss';
 
   .settings {
-    font-family: $font-family;
+    font-family: $unnnic-font-family-secondary;
 
     &__section {
       margin-bottom: 2rem;
 
       h1 {
       font-size: 1.75rem;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
       color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+      margin-bottom: 0.938rem;
       }
     }
   }

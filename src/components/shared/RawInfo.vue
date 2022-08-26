@@ -77,14 +77,14 @@ export default {
           padding: 0 1.3rem;
 
           h1{
-            font-family: $font-family;
+            font-family: $unnnic-font-family-secondary;
             font-size: 1.75rem;
-            font-weight: $font-weight-bolder;
+            font-weight: $unnnic-font-weight-bold;
           }
 
           p{
-            font-family: $font-family;
-            font-size: $font-size;
+            font-family: $unnnic-font-family-secondary;
+            font-size: $unnnic-font-size-body-lg;
           }
         }
 

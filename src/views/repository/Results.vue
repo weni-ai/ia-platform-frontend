@@ -95,7 +95,7 @@ export default {
     border-bottom: 1px solid $color-grey;
   &__requestAuthorization{
     color: $color-fake-black;
-    font-weight: $font-weight-medium;
+    font-weight: 600;
     text-align: center;
     float: right;
     text-decoration: none !important;
@@ -112,9 +112,9 @@ export default {
     &__title {
       margin-top: 2rem;
       font-size: 1.75rem;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
       color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+      margin-bottom: 0.938rem;
     }
     &__wrapper {
       display: flex;

@@ -147,7 +147,7 @@ export default {
     width: calc(100% * 1/2 - 1rem);
   }
 
-  @media screen and (max-width: $small-mobile-width) {
+  @media screen and (max-width: 450px) {
     width: calc(100% - 1rem);
     margin: $repository-card-margin auto;
   }
@@ -208,7 +208,7 @@ export default {
 
   &__title {
     font-size: 1.25rem;
-    font-weight: $font-weight-bolder;
+    font-weight: $unnnic-font-weight-bold;
     margin-bottom: .5rem;
 
     &__bagde {
@@ -227,8 +227,8 @@ export default {
 
     &__repository{
       color: $color-fake-black;
-      font-family: $font-family;
-      font-weight: $font-weight-bolder;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-bold;
     }
   }
 
@@ -237,7 +237,7 @@ export default {
 
     &__created-by{
       color: $color-primary;
-      font-weight: $font-weight-normal;
+      font-weight: $unnnic-font-weight-regular;
     }
   }
 

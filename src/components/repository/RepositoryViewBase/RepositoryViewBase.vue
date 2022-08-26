@@ -280,7 +280,7 @@ export default {
       h1 {
         font-size: 3rem;
         line-height: 4rem;
-        font-weight: $font-weight-bolder;
+        font-weight: $unnnic-font-weight-bold;
         color: black;
         opacity: .5;
       }

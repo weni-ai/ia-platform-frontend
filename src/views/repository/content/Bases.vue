@@ -163,10 +163,10 @@ export default {
 .repository-base {
   &__title {
     font-size: 1.75rem;
-    font-weight: $font-weight-medium;
+    font-weight: 600;
     display: flex;
     align-items: center;
-    font-family: $font-family;
+    font-family: $unnnic-font-family-secondary;
     color: $color-fake-black;
 
     div {
@@ -218,7 +218,7 @@ export default {
   font-size: $unnnic-font-size-body-md;
   line-height: 13px;
   padding: 1rem 0.5rem;
-  font-family: $font-family;
+  font-family: $unnnic-font-family-secondary;
 }
 .markdown-body {
   a {

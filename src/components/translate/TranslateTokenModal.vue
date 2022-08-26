@@ -118,8 +118,8 @@ export default {
 .token-modal {
   overflow: hidden;
   background-color: white;
-  border-radius: $radius-medium;
-  font-family: $font-family;
+  border-radius: .75rem;
+  font-family: $unnnic-font-family-secondary;
 
   &__content {
     padding: 0.5rem 0.5rem;
@@ -135,15 +135,15 @@ export default {
     font-size: 1rem;
     text-align: center;
     margin: auto;
-    margin-bottom: $between-subtitle-content;
+    margin-bottom: 2.188rem;
     width: 60%;
   }
 
   &__header {
     font-size: 1.5rem;
-    font-weight: $font-weight-medium;
+    font-weight: 600;
     color: $color-fake-black;
-    margin-bottom: $between-title-subtitle;
+    margin-bottom: 0.938rem;
   }
 
   &__header,
@@ -159,7 +159,7 @@ export default {
       border-radius: 6px;
       width: 159px;
       height: 40px;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
     }
   }
 
@@ -167,7 +167,7 @@ export default {
     display: flex;
     justify-content: center;
     margin: 0.5rem 0;
-    font-weight: $font-weight-bolder;
+    font-weight: $unnnic-font-weight-bold;
     text-decoration: underline;
     cursor: pointer;
   }

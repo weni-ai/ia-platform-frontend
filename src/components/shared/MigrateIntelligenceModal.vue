@@ -152,7 +152,7 @@ export default {
         border: 1px solid #dbdbdb;
         text-align: center;
         border-radius: 4px;
-        font-family: $font-family;
+        font-family: $unnnic-font-family-secondary;
         box-shadow: none;
 
         &:hover{

@@ -71,7 +71,7 @@ export default {
     }
 
     span, strong{
-      font-family: $font-family;
+      font-family: $unnnic-font-family-secondary;
     }
 
     .entity-tag {

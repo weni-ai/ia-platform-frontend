@@ -171,9 +171,9 @@ export default {
   height: 2.188rem;
   border-radius: 6px;
   box-shadow: 0px 3px 6px #00000029;
-  font-weight: $font-weight-bolder;
-  font-family: $font-family;
-  font-size: $font-size;
+  font-weight: $unnnic-font-weight-bold;
+  font-family: $unnnic-font-family-secondary;
+  font-size: $unnnic-font-size-body-lg;
 }
 
 </style>

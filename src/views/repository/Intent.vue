@@ -234,7 +234,7 @@ export default {
   }
   .requestAuthorization{
       color: $color-fake-black;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
       text-align: center;
       float: right
     }

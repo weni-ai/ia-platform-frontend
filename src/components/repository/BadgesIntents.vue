@@ -94,9 +94,9 @@ export default {
         cursor: pointer;
 
         span{
-          font-size: $font-small;
-          font-family: $font-family;
-          font-weight: $font-weight-normal;
+          font-size: $unnnic-font-size-body-gt;
+          font-family: $unnnic-font-family-secondary;
+          font-weight: $unnnic-font-weight-regular;
         }
       }
   }

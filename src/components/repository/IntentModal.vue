@@ -100,7 +100,7 @@ export default {
   align-items: center;
 
   &__content{
-    width: $size-large + 25rem;
+    width: 3.4375rem + 25rem;
 
       &__footer{
       display: flex;

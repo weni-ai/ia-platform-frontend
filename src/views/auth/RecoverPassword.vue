@@ -62,7 +62,7 @@ export default {
 
         h1{
           color:$color-primary;
-          font-family: $font-family;
+          font-family: $unnnic-font-family-secondary;
           font-size: 2.563rem;
           text-align: center;
         }

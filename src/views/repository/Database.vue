@@ -233,12 +233,12 @@ export default {
 
     &__title{
       font-size: 1.75rem;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
       color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+      margin-bottom: 0.938rem;
     }
      &__subtitle{
-      font-size: $font-size;
+      font-size: $unnnic-font-size-body-lg;
     }
 
     &__button{
@@ -276,7 +276,7 @@ export default {
 
         p{
           font-size: 13px;
-          font-weight: $font-weight-bolder;
+          font-weight: $unnnic-font-weight-bold;
         }
       }
 

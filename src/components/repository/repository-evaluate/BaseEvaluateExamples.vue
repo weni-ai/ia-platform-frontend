@@ -98,9 +98,9 @@ export default {
 
   &__title{
       font-size: 1.75rem;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
       color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+      margin-bottom: 0.938rem;
   }
 
   &__divider {

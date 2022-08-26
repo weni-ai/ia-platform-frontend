@@ -106,8 +106,8 @@ export default {
   width: 157px;
   height: 35px;
   margin: 0 0.6rem;
-  font-family: $font-family;
-  font-weight: $font-weight-bolder;
+  font-family: $unnnic-font-family-secondary;
+  font-weight: $unnnic-font-weight-bold;
   border-radius: 6px;
   box-shadow: 0px 3px 6px #00000029;
 }

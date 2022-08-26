@@ -351,7 +351,7 @@ export default {
     width: 60%;
     p {
       font-size: 13px;
-      font-weight: $font-weight-bolder;
+      font-weight: $unnnic-font-weight-bold;
     }
     /deep/ .unnnic-modal-container-background {
       height: 88px;

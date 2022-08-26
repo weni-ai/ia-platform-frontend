@@ -261,7 +261,7 @@ export default {
     }
 
     h3{
-      font-weight: $font-weight-medium;
+      font-weight: 600;
       font-size: 1.75rem;
       margin-right: 1rem;
     }
@@ -284,14 +284,14 @@ export default {
         height: 85%;
 
         p{
-          margin-bottom: $between-subtitle-content;
+          margin-bottom: 2.188rem;
         }
 
 
         &__content{
             display: flex;
             justify-content: space-between;
-            margin-top: $between-subtitle-content;
+            margin-top: 2.188rem;
 
             &__icon {
                 display: flex;
@@ -317,7 +317,7 @@ export default {
                 width: 75%;
                 overflow: auto;
                 scrollbar-width: none;
-                margin-bottom: $between-subtitle-content;
+                margin-bottom: 2.188rem;
 
                 .select-input{
                     margin-right: 0.3rem;
@@ -339,8 +339,8 @@ export default {
             width: 160px;
             height: 43px;
             margin: 0 0.5rem;
-            font-weight: $font-weight-bolder;
-            font-family: $font-family;
+            font-weight: $unnnic-font-weight-bold;
+            font-family: $unnnic-font-family-secondary;
             box-shadow: 0px 3px 6px #00000029;
             white-space: normal;
             word-wrap: break-word;

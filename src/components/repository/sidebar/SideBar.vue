@@ -614,7 +614,7 @@ export default {
   left: 0;
   z-index: 10;
   opacity: 1;
-  font-family: $font-family;
+  font-family: $unnnic-font-family-secondary;
   display: flex;
 
   .sidebar-wrapper {
@@ -623,7 +623,7 @@ export default {
     height: 100%;
     width: $menu-expanded-size;
     transition: width 0.1s;
-    font-family: $font-family;
+    font-family: $unnnic-font-family-secondary;
     border-top-left-radius: $unnnic-border-radius-md;
     overflow-y: auto;
 

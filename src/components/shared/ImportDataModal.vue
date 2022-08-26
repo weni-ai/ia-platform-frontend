@@ -153,7 +153,7 @@ export default {
         border: 1px solid #dbdbdb;
         text-align: center;
         border-radius: 4px;
-        font-family: $font-family;
+        font-family: $unnnic-font-family-secondary;
         box-shadow: none;
 
         &:hover{
@@ -178,8 +178,8 @@ export default {
     &__file{
       border: 1px solid #D5D5D5;
       color: #BABABA;
-      font-size: $font-size;
-      font-family: $font-family;
+      font-size: $unnnic-font-size-body-lg;
+      font-family: $unnnic-font-family-secondary;
       display: flex;
       width: 100%;
       justify-content:center;

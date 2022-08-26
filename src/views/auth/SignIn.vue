@@ -82,7 +82,7 @@ export default {
         margin-bottom: 1.5rem;
 
         p{
-          font-family: $font-family;
+          font-family: $unnnic-font-family-secondary;
           font-size: 1rem;
           color:$color-fake-black;
           margin-right: 1rem;
@@ -94,9 +94,9 @@ export default {
           margin-top: 0.15rem;
           border-radius: 6px;
           box-shadow: 0px 3px 6px #00000029;
-          font-weight: $font-weight-bolder;
-          font-family: $font-family;
-          font-size: $font-size;
+          font-weight: $unnnic-font-weight-bold;
+          font-family: $unnnic-font-family-secondary;
+          font-size: $unnnic-font-size-body-lg;
     }
       }
 
@@ -108,7 +108,7 @@ export default {
 
         h1{
           color:$color-primary;
-          font-family: $font-family;
+          font-family: $unnnic-font-family-secondary;
           font-size: 2.563rem;
           text-align: center;
             @media screen and (max-width: 40em) {

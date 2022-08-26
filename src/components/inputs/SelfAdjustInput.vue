@@ -124,7 +124,7 @@ export default {
         }
 
         &__appended {
-            padding: 0.3rem $form-append-width 0.3rem 1rem;
+            padding: 0.3rem $unnnic-spacing-stack-awesome 0.3rem 1rem;
 
             &--small {
               padding-right: 1rem;
@@ -145,15 +145,15 @@ export default {
     .event-clickable {
         display: flex;
         justify-content: flex-end;
-        margin-right: $form-append-width/4;
+        margin-right: $unnnic-spacing-stack-awesome/4;
         pointer-events: all !important;
-        min-width: $form-append-width !important;
+        min-width: $unnnic-spacing-stack-awesome !important;
         > * {
           pointer-events: all !important;
         }
 
         &--small {
-          margin-right: $form-append-width/8;
+          margin-right: $unnnic-spacing-stack-awesome/8;
         }
     }
 </style>

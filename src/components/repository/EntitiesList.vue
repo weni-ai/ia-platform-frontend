@@ -256,7 +256,7 @@ export default {
   margin-bottom: 2rem !important;
   &__options {
     p {
-      font-size: $font-size;
+      font-size: $unnnic-font-size-body-lg;
     }
 
   }
@@ -284,7 +284,7 @@ export default {
 
         div {
           font-size: 1.12rem;
-          font-family: $font-family;
+          font-family: $unnnic-font-family-secondary;
           margin-bottom: 0.1rem;
         }
       }

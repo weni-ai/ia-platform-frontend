@@ -201,7 +201,7 @@ export default {
         width: 100%;
         display: flex;
         justify-content: space-between;
-        font-family: $font-family;
+        font-family: $unnnic-font-family-secondary;
 
         &__buttons {
           display: flex;

@@ -238,7 +238,7 @@ export default {
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .repository-analyze-text {
-  font-family: $font-family;
+  font-family: $unnnic-font-family-secondary;
 
   &__news {
     background: rgba(0, 158, 150, 0.08);
@@ -270,13 +270,13 @@ export default {
   }
 
   &__title {
-    margin-bottom: $between-subtitle-content;
+    margin-bottom: 2.188rem;
 
     h2 {
       font-size: 1.75rem;
-      font-weight: $font-weight-medium;
+      font-weight: 600;
       color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+      margin-bottom: 0.938rem;
     }
   }
 

@@ -143,8 +143,8 @@ export default {
 
         &__title{
           color: $color-fake-black;
-          font-weight: $font-weight-medium;
-          font-family: $font-family;
+          font-weight: 600;
+          font-family: $unnnic-font-family-secondary;
           font-size: 1.75rem;
         }
 

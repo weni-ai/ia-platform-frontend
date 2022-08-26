@@ -193,8 +193,8 @@ export default {
         &__button {
           width: 179px;
           height: 36px;
-          font-family: $font-family;
-          font-size: $font-size;
+          font-family: $unnnic-font-family-secondary;
+          font-size: $unnnic-font-size-body-lg;
           color: $color-white;
       }
     }
