@@ -73,7 +73,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
+
 @import '~@/assets/scss/colors.scss';
 
 
@@ -97,7 +97,7 @@ export default {
   box-shadow: 0rem 0rem .5rem .2rem rgba(0, 0, 0, 0.1);
   flex-grow: 0;
 
-  @media screen and (max-width: $mobile-width) {
+  @media screen and (max-width: 800px) {
     width: calc(100% * 1/2 - 1rem);
     margin: $org-card-margin 0 $org-card-margin 0.5*$org-card-margin;
   }

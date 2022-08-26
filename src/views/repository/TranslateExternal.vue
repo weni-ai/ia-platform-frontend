@@ -152,7 +152,7 @@ export default {
 
 <style lang="scss">
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
 .repository-translate {
   background-color: $color-white;

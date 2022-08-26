@@ -195,7 +195,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
     tr, td, table, th, .table {
     border: 0;

@@ -207,8 +207,7 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/scss/colors.scss";
 @import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
 
 .create-repository {
   padding: 2rem 4rem;
@@ -218,7 +217,7 @@ export default {
   justify-content: center;
   align-items: center;
 
-  @media (max-width: $mobile-width * 1.5) {
+  @media (max-width: 800px * 1.5) {
     flex-direction: column;
     align-items: center;
   }

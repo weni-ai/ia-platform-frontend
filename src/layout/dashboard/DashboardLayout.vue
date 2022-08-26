@@ -124,7 +124,7 @@ export default {
 <style lang="scss">
 @import '~@/assets/scss/utilities.scss';
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
 html{
   overflow-y:auto

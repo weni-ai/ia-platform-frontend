@@ -89,7 +89,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
 .import-and-export-intelligence{
     display: flex;
@@ -113,7 +113,7 @@ export default {
         text-align: justify;
         font-size: 12px;
         margin-bottom: 2.188rem;
-        @media (max-width: $mobile-width) {
+        @media (max-width: 800px) {
             max-width: 80%;
         }
     }
@@ -147,7 +147,7 @@ export default {
             border-radius: 4px;
         }
     }
-    @media (max-width: $mobile-width) {
+    @media (max-width: 800px) {
         width: 25rem;
     }
 }

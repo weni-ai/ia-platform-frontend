@@ -11,7 +11,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import NewsModal from '@/components/NewsModal';
 import hotjar from '@/utils/plugins/hotjar';
-import unnic from '@weni/unnnic-system';
+import '@weni/unnnic-system'
 import I18n from '@/utils/plugins/i18n';
 import store from './store';
 
@@ -166,9 +166,7 @@ export default {
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
 @import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
 
 ::-webkit-scrollbar {
   width: 4px;

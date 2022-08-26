@@ -39,12 +39,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
+
     .org-list {
         display: flex;
         flex-wrap: wrap;
 
-        @media screen and (max-width: $mobile-width) {
+        @media screen and (max-width: 800px) {
             margin: 0 1rem 0 1rem;
         }
 

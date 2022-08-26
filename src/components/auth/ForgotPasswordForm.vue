@@ -94,7 +94,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
 .control{
   margin-top: 1.5rem;

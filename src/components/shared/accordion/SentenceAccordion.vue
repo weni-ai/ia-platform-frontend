@@ -111,7 +111,7 @@ export default {
 <style lang="scss" scoped>
   @import '~@/assets/scss/utilities';
   @import '~@/assets/scss/colors.scss';
-  @import '~@/assets/scss/variables.scss';
+  
 
   .align {
     &-center {
@@ -179,7 +179,7 @@ export default {
         padding: .35rem;
       }
 
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         flex-wrap: wrap;
       }
 
@@ -190,7 +190,7 @@ export default {
     &__check {
       margin: 0 1rem;
 
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         margin: 1rem 0;
       }
     }
@@ -204,7 +204,7 @@ export default {
       display: flex;
       justify-content: flex-end;
 
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         margin: 0.3rem 0;
       }
     }

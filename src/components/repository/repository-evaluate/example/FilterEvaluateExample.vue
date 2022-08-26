@@ -233,7 +233,7 @@ export default {
     grid-template-columns: 35% 1fr;
     grid-gap: 3rem;
 
-    @media (max-width: $mobile-width) {
+    @media (max-width: 800px) {
       grid-template-columns: 1fr;
     }
 
@@ -248,7 +248,7 @@ export default {
       &__has-2-fields {
         grid-template-columns: 1fr 2fr 2fr;
 
-        @media (max-width: $mobile-width) {
+        @media (max-width: 800px) {
           grid-template-columns: 1fr;
         }
       }
@@ -256,7 +256,7 @@ export default {
       &__has-3-fields {
         grid-template-columns: 1fr 2fr 2fr 2fr;
 
-        @media (max-width: $mobile-width) {
+        @media (max-width: 800px) {
           grid-template-columns: 1fr;
         }
       }
@@ -264,7 +264,7 @@ export default {
       &__has-4-fields {
         grid-template-columns: 1fr 2fr 2fr 2fr 2fr;
 
-        @media (max-width: $mobile-width) {
+        @media (max-width: 800px) {
           grid-template-columns: 1fr;
         }
       }

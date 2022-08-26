@@ -74,7 +74,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 @import '~@/assets/scss/utilities.scss';
 
 footer {
@@ -105,7 +105,7 @@ footer {
     width: 100%;
     background-color: $color-primary;
     margin: 0;
-    @media screen and (max-width: $mobile-width *1.2) {
+    @media screen and (max-width: (800px * 1.2)) {
         margin-top: -16vh;
         text-align: center;
       }
@@ -165,7 +165,7 @@ footer {
 
     &-sociallist {
       display: flex;
-       @media screen and (max-width: $mobile-width) {
+       @media screen and (max-width: 800px) {
         justify-content: center;
       }
 

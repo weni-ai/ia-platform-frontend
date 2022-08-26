@@ -151,7 +151,7 @@ export default {
 
 <style lang="scss" scoped>
 
-@import '~@/assets/scss/variables.scss';
+
 @import '~@/assets/scss/colors.scss';
 
 .filter-result-example {
@@ -163,7 +163,7 @@ export default {
     display: flex;
     justify-content: space-between;
 
-    @media (max-width: $mobile-width) {
+    @media (max-width: 800px) {
         grid-template-columns: 1fr;
     }
 

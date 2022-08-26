@@ -226,9 +226,8 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/utilities.scss';
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import '~@weni/unnnic-system/dist/unnnic.css';
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+
 
  ::-webkit-scrollbar {
   width: 4px;
@@ -347,7 +346,7 @@ export default {
             line-height: 0.95rem;
         }
       }
-       @media screen and (max-width: $mobile-width) {
+       @media screen and (max-width: 800px) {
         width: 400px;
       }
   }

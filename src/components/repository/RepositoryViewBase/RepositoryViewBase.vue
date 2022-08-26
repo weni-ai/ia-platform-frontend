@@ -157,7 +157,7 @@ export default {
 
 <style lang="scss" scoped>
   @import '~@/assets/scss/colors.scss';
-  @import '~@/assets/scss/variables.scss';
+  
 
 
   .rpstr-vw-bs {
@@ -248,12 +248,12 @@ export default {
         &__mobile-navigation {
           display: none;
 
-          @media screen and (max-width: $mobile-width) {
+          @media screen and (max-width: 800px) {
             display: block;
           }
         }
 
-        @media screen and (max-width: $mobile-width) {
+        @media screen and (max-width: 800px) {
           min-height: auto;
           margin: 1rem;
         }

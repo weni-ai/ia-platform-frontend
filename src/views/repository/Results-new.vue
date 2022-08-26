@@ -88,7 +88,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
 .evaluate {
   &__divider {
@@ -136,7 +136,7 @@ export default {
     &__description {
       margin-bottom: 2.188rem + 0.5rem;
       line-height: 0.8rem;
-      @media screen and (max-width: $mobile-width * 1.2) {
+      @media screen and (max-width: (800px * 1.2)) {
         line-height: 1.2rem;
       }
     }

@@ -123,13 +123,13 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
 .migrate-intelligence-modal {
 
   &__modal-style{
       width: 100%;
-      @media (max-width: $mobile-width) {
+      @media (max-width: 800px) {
         padding-left: 5rem
       }
     &__header{

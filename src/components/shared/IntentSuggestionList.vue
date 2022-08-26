@@ -193,7 +193,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
   .intent-suggestion-list {
 
@@ -221,7 +221,7 @@ export default {
           margin-left: 1.6rem;
         }
 
-        @media screen and (max-width: $mobile-width) {
+        @media screen and (max-width: 800px) {
         padding: 0.6rem;
       }
 

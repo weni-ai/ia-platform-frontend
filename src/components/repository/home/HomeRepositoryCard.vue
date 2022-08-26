@@ -324,8 +324,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
 
 .unnnic-card-intelligence {
   display: flex;

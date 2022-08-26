@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
+
 @import '~@/assets/scss/colors.scss';
 
 $shadow-color: #00000029;
@@ -58,7 +58,7 @@ $shadow-color: #00000029;
     > * {
         margin-right: 1.313rem;
 
-        @media screen and (max-width: $mobile-width) {
+        @media screen and (max-width: 800px) {
           margin-right: 0.4rem;
         }
 
@@ -69,7 +69,7 @@ $shadow-color: #00000029;
 
     &__item {
         padding: 0.8rem 2.5rem;
-        @media screen and (max-width: $mobile-width) {
+        @media screen and (max-width: 800px) {
           padding: 0.8rem 1.2rem;
         }
         background-color: $color-fake-white;

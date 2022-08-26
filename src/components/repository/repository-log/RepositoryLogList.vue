@@ -374,7 +374,7 @@ export default {
     font-weight: bold;
     padding: 0 0.6rem 0 1.6rem;
 
-    @media screen and (max-width: $mobile-width) {
+    @media screen and (max-width: 800px) {
       padding: 0.6rem;
     }
 

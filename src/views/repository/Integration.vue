@@ -234,8 +234,7 @@ export default {
 <style lang="scss">
 @import "~@/assets/scss/colors.scss";
 @import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
 
 .repository-analyze-text {
   font-family: $unnnic-font-family-secondary;
@@ -319,7 +318,7 @@ export default {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    @media screen and (max-width: $mobile-width) {
+    @media screen and (max-width: 800px) {
       flex-direction: column;
       justify-content: center;
     }
@@ -328,7 +327,7 @@ export default {
       &__label {
         display: flex;
       }
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         width: 100%;
       }
     }

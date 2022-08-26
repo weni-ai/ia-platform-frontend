@@ -188,7 +188,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/utilities.scss';
-@import '~@/assets/scss/variables.scss';
+
 @import '~@/assets/scss/colors.scss';
 
 .translation {
@@ -215,7 +215,7 @@ export default {
     margin-bottom: 4px;
 
     &__field {
-      @media (max-width: $mobile-width) {
+      @media (max-width: 800px) {
         display: flex;
         flex-direction: column;
       }
@@ -227,7 +227,7 @@ export default {
     padding: 4px 8px 4px 16px;
   &__container{
     width: 35rem;
-    @media (max-width: $mobile-width) {
+    @media (max-width: 800px) {
       width: 90%;
       display: flex;
       flex-direction: column;
@@ -236,10 +236,10 @@ export default {
     &__text{
       display: flex;
       justify-content: space-between;
-      @media (max-width: $mobile-width) {
+      @media (max-width: 800px) {
         width: 90%;
       }
-      @media (max-width: $mobile-width - 150px) {
+      @media (max-width: (800px - 150px)) {
         text-align: center;
         flex-direction: column;
       }

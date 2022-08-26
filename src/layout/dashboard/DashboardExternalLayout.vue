@@ -118,7 +118,7 @@ export default {
       justify-content: space-between;
       align-items: center;
       padding: 0 7rem 0 5.7rem;
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         top: 10rem;
       }
 

@@ -116,7 +116,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
 .b-checkbox.checkbox:not(.button){
   margin-right: 0;
@@ -171,7 +171,7 @@ export default {
           width: 32rem;
           overflow: hidden;
           text-overflow: ellipsis;
-            @media screen and (max-width: $mobile-width) {
+            @media screen and (max-width: 800px) {
               width: 12rem;
             }
           }

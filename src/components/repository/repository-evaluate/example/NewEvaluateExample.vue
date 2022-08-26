@@ -269,7 +269,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
 .new-sentence {
   width: 100%;
@@ -295,7 +295,7 @@ export default {
       grid-gap: 1rem;
       padding: 1rem 0;
 
-      @media (max-width: $mobile-width) {
+      @media (max-width: 800px) {
         grid-template-columns: 1fr;
       }
 

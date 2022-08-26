@@ -197,7 +197,7 @@ export default {
       align-items: center;
       display: flex;
 
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         padding: 1rem 0;
         padding-bottom: 7rem;
         text-align: center;
@@ -208,14 +208,14 @@ export default {
         width: calc(100% * 1 / 2 - 1rem);
         margin-top: 5vh;
 
-        @media screen and (max-width: $mobile-width) {
+        @media screen and (max-width: 800px) {
           width: 100%;
         }
 
         h1 {
           font-size: 4rem;
 
-          @media screen and (max-width: $mobile-width) {
+          @media screen and (max-width: 800px) {
             font-size: 3rem;
           }
         }
@@ -232,7 +232,7 @@ export default {
         height: 400px;
         display: inline-block;
 
-        @media screen and (max-width: $mobile-width) {
+        @media screen and (max-width: 800px) {
           display: none;
         }
 
@@ -285,7 +285,7 @@ export default {
       position: relative;
       width: 100%;
       z-index: 1;
-      @media screen and (max-height: $mobile-width) {
+      @media screen and (max-height: 800px) {
         height: 130vh;
       }
     }
@@ -301,7 +301,7 @@ export default {
       z-index: 1;
       text-align: center;
 
-      @media screen and (max-width: $mobile-width * 1.2) {
+      @media screen and (max-width: 800px * 1.2) {
         flex-direction: column;
         position: relative;
         transform: translateY(0);
@@ -309,7 +309,7 @@ export default {
         bottom: 10%;
         background-color: #12b3a0;
       }
-      @media screen and (max-height: $mobile-width) {
+      @media screen and (max-height: 800px) {
         top: 50%;
         transform: translateY(-60%);
       }
@@ -335,7 +335,7 @@ export default {
         font-weight: $unnnic-font-weight-bold;
       }
 
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         width: 100%;
         margin: 2rem;
       }
@@ -346,7 +346,7 @@ export default {
     z-index: 99;
     position: relative;
 
-    @media screen and (max-width: $mobile-width) {
+    @media screen and (max-width: 800px) {
       top: -90vh;
     }
 
@@ -374,7 +374,7 @@ export default {
     margin: 2rem auto 0;
     max-width: $max-width - 400px;
     height: 200px;
-    @media screen and (max-width: $mobile-width) {
+    @media screen and (max-width: 800px) {
       height: 400px;
     }
     &__container {
@@ -387,13 +387,13 @@ export default {
       font-weight: 600;
       font-family: $unnnic-font-family-secondary;
       height: 350px;
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         margin-top: -100vh;
         height: 400px;
       }
       &__items {
         width: 60%;
-        @media screen and (max-width: $mobile-width) {
+        @media screen and (max-width: 800px) {
           width: 90%;
         }
       }
@@ -414,7 +414,7 @@ export default {
       align-items: center;
       max-width: calc(100% * 1 / 4 - 1rem);
 
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         display: none;
       }
 
@@ -443,7 +443,7 @@ export default {
           }
         }
 
-        @media screen and (max-width: $mobile-width) {
+        @media screen and (max-width: 800px) {
           display: none;
         }
       }

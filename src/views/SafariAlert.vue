@@ -75,8 +75,7 @@ export default {
 @import "~buefy/src/scss/buefy";
 @import "~@/assets/scss/colors.scss";
 @import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
 
 .safari-alert{
   background-color: $color-white;

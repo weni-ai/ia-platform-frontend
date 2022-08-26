@@ -127,7 +127,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
+
 @import '~@/assets/scss/colors.scss';
 
 
@@ -143,7 +143,7 @@ export default {
   border-radius: 0.5rem;
   box-shadow:0rem 0rem 0.5rem 0.2rem rgba(0, 0, 0, 0.1);
 
-  @media screen and (max-width: $mobile-width) {
+  @media screen and (max-width: 800px) {
     width: calc(100% * 1/2 - 1rem);
   }
 
@@ -220,7 +220,7 @@ export default {
         font-size: 1.5em;
       }
 
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         display: inline-block;
       }
     }

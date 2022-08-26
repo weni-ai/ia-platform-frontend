@@ -190,7 +190,7 @@ export default {
 
 .repository-translate{
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
   &__list{
     margin-left: 0.5rem;

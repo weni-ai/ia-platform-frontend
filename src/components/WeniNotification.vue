@@ -26,8 +26,7 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/scss/colors.scss";
 @import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
 
 .notification {
   width: 100%;
@@ -38,7 +37,7 @@ export default {
   align-items: center;
   margin: auto;
 
-  @media screen and (max-width: $mobile-width) {
+  @media screen and (max-width: 800px) {
     height: 10rem;
   }
 
@@ -49,7 +48,7 @@ export default {
     justify-content: space-around;
     color: $color-fake-black;
 
-    @media screen and (max-width: $mobile-width) {
+    @media screen and (max-width: 800px) {
       flex-direction: column;
       width: 100%;
     }
@@ -58,7 +57,7 @@ export default {
       font-family: $unnnic-font-family-primary;
       text-shadow: 0px 1px 1px #00000029;
       font-weight: bold;
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         width: 100%;
         text-align: center;
       }
@@ -67,7 +66,7 @@ export default {
     &__subtitle {
       font-size: 0.8rem;
       font-family: $unnnic-font-family-secondary;
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         width: 100%;
         text-align: center;
         padding-bottom: 1rem;
@@ -78,10 +77,10 @@ export default {
       border-right: 2px solid $color-fake-grey;
       height: 1rem;
       margin-right: 0.5%;
-      @media screen and (max-width: $mobile-width * 1.6) {
+      @media screen and (max-width: 800px * 1.6) {
         margin-right: 2%;
       }
-      @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: 800px) {
         border-right: none;
         height: 0.2rem;
       }

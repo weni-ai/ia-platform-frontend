@@ -47,7 +47,6 @@ export default {
 <style lang="scss">
 @import '~@/assets/scss/variables.scss';
 
-
 @keyframes IconSpin {
   from {
     transform: rotate(0deg);
@@ -68,7 +67,7 @@ export default {
 }
 
 .set-fill-mobile{
-    @media screen and (max-width: $mobile-width) {
+    @media screen and (max-width: 800px) {
       filter: invert(57%) sepia(12%) saturate(2114%) hue-rotate(123deg)
       brightness(108%) contrast(91%);
     }

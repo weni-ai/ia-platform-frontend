@@ -109,7 +109,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+
 
 .forgot-password{
   margin-bottom: 1.5rem;
