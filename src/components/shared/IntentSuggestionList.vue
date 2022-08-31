@@ -3,7 +3,7 @@
     class="intent-suggestion-list">
     <div
       v-if="phraseList.total !== 0">
-      <div
+      <!-- <div
         class="intent-suggestion-list__section">
         <div class="intent-suggestion-list__section__check">
           <b-checkbox
@@ -48,10 +48,14 @@
             </b-tooltip>
           </div>
         </div>
-      </div>
+      </div> -->
+      <p>
+        Selecione a frase que deseja utilizar como base para gerar outras frases.
+      </p>
       <edit-intent-suggestion
         :per-page="perPage"
         :phrases-variation="phraseList"
+        @dispatchSelected="dispatchSelected"
       />
     </div>
     <div v-else>
@@ -186,6 +190,9 @@ export default {
         message,
         type: 'is-danger',
       });
+    },
+    dispatchSelected(sentence) {
+      this.$emit('dispatchSelected', sentence);
     },
   },
 };
