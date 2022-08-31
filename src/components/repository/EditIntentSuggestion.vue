@@ -1,6 +1,8 @@
 <template>
   <div>
     <paginated-simple
+      @onSentenceSelected="dispatchSelected"
+      :load-all="true"
       :item-component="suggestion"
       :list="phrasesVariation"
       :per-page="perPage"/>
@@ -42,6 +44,9 @@ export default {
   methods: {
     dispatchSave(sentence) {
       this.$emit('dispatchSave', sentence);
+    },
+    dispatchSelected(sentence) {
+      this.$emit('dispatchSelected', sentence);
     },
   },
 };

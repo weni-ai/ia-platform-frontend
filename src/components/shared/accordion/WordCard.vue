@@ -3,20 +3,28 @@
     <div class="intent-suggestion-accordion__content">
       <div
         class="intent-suggestion-accordion__content__check-field">
-        <span class="intent-suggestion-accordion__content__tag">[{{ repository.language }}]</span>
+        <unnnic-checkbox
+          @change="setSuggestion"
+          v-model="checked"
+          :native-value="toExample"/>
       </div>
 
       <div
         class="intent-suggestion-accordion__content__phrase">
-        <p>{{ phraseSuggestion }}</p>
+        <p>{{ text }}</p>
       </div>
     </div>
 
     <div class="intent-suggestion-accordion__icons">
-        <unnnic-icon-svg
+        <!-- <unnnic-icon-svg
           icon="arrow-right-1-1"
           size="sm"
           @click.native="selectSentence"
+        /> -->
+        <entity-tag
+          v-for="entity in entities"
+          :entity-name="entity.entity"
+          :key="entity.localId"
         />
     </div>
   </div>
@@ -24,9 +32,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import EntityTag from '@/components/repository/repository-evaluate/example/EntityTag';
 
 export default {
-  name: 'IntentSuggestion',
+  name: 'WordCard',
   props: {
     id: {
       type: Number,
@@ -36,13 +45,17 @@ export default {
       type: String,
       default: '',
     },
+    entities: {
+      type: Array,
+      default: () => []
+    },
   },
   data() {
     return {
       open: false,
       phraseSuggestion: '',
       editing: false,
-      checked: false,
+      checked: true,
     };
   },
   computed: {
@@ -57,13 +70,6 @@ export default {
     },
   },
   watch: {
-    checked() {
-      if (this.checked) {
-        this.setSelectedSuggestion(this.toExample);
-      } else {
-        this.removeSelectedSuggestion(this.toExample);
-      }
-    },
     isAccordionOpen() {
       this.open = false;
     },
@@ -107,8 +113,12 @@ export default {
           text: this.phraseSuggestion,
         },
       });
+    },
+    setSuggestion() {
+      this.$emit('onChangeGenerate', { text: this.phraseSuggestion, value: this.checked })
     }
   },
+  components: { EntityTag }
 };
 </script>
 <style lang="scss" scoped>

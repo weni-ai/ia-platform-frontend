@@ -724,7 +724,9 @@
       "empty": "Não há sugestão de frases para essa intenção",
       "confirm-edit": "Confirmar edição",
       "cancel-edit": "Cancelar edição",
-      "tooltip_alert": "As palavras sugeridas são geradas através de contextos retirados da internet, portanto, podem acontecer sugestões que fujam do controle da nossa equipe."
+      "tooltip_alert": "As palavras sugeridas são geradas através de contextos retirados da internet, portanto, podem acontecer sugestões que fujam do controle da nossa equipe.",
+      "add_a_sentence":"Escreva a frase que deseja utilizar",
+      "submit": "Enviar frase"
     },
     "dashboard": {
       "sentences": "frases",
