@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-6">
+  <div class="column is-6 pb-0">
     <div>
       <div>
         <p

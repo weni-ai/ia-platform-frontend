@@ -11,7 +11,7 @@
 
       <div
         class="intent-suggestion-accordion__content__phrase">
-        <p>{{ text }}</p>
+        <p :class="checked && 'label-active'">{{ text }}</p>
       </div>
     </div>
 
@@ -181,6 +181,7 @@ export default {
       &__phrase{
         margin-left: 1rem;
           p {
+          font-size: $unnnic-font-size-body-lg;
           white-space: nowrap;
           width: 32rem;
           overflow: hidden;
@@ -208,5 +209,8 @@ export default {
         align-self: center;
     }
 
+    .label-active {
+      font-weight: $unnnic-font-weight-bold;
+    }
 }
 </style>

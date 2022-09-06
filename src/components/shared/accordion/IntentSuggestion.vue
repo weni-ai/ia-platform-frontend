@@ -107,6 +107,10 @@ export default {
           text: this.phraseSuggestion,
         },
       });
+      // this.$emit('onSentenceSelected', {
+      //   id: this.id,
+      //   text: this.phraseSuggestion,
+      // });
     }
   },
 };

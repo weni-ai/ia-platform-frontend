@@ -121,15 +121,6 @@
         </b-field>
       </div>
     </form>
-    <unnnic-alert
-      v-if="alertSuccess"
-      title=""
-      text="Frase adicionada para treinamento"
-      closeText="Fechar"
-      scheme="feedback-green"
-      icon="check-circle-1-1"
-      @click.native="alertSuccess = false"
-    />
   </div>
 </template>
 
@@ -167,7 +158,6 @@ export default {
       hideDropdown: true,
       isIntentInputActive: false,
       isLanguageInputActive: false,
-      alertSuccess: false
     };
   },
   computed: {
@@ -262,7 +252,42 @@ export default {
       this.errors = {};
       this.submitting = true;
 
-      this.$emit('onSubmit', this.data)
+      try {
+        await this.newExample({
+          repository: this.repository.uuid,
+          repositoryVersion: this.repository.repository_version_id,
+          ...this.data,
+        });
+
+
+        this.submitting = false;
+
+        this.$emit('onSubmit', this.data)
+        return true;
+      } catch (error) {
+        /* istanbul ignore next */
+
+        const errorResponse = error.response;
+        const errorText = error.response.data;
+        /* istanbul ignore next */
+        if (errorText.text[0] === 'Enter a valid value that has letters in it') {
+          this.$buefy.toast.open({
+            message: this.$t('webapp.trainings.error_caracter_type'),
+            type: 'is-danger'
+          });
+        }
+        if (errorResponse && errorText.text[0] !== 'Enter a valid value that has letters in it') {
+          /* istanbul ignore next */
+          this.$buefy.toast.open({
+            message: this.$t('webapp.trainings.intention_or_sentence_already_exist'),
+            type: 'is-danger'
+          });
+          this.errors = errorResponse;
+        }
+        /* istanbul ignore next */
+        this.submitting = false;
+      }
+
       return false;
     },
     onInputClick(target) {
