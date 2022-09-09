@@ -252,7 +252,7 @@
             <div class="phrase-suggestion__cards__variation-card">
               <div>
                 <h3>{{ generatedSentences.length }} novas frases geradas</h3>
-                <p>
+                <p class="mb-0">
                   Lista de frases geradas a partir da frase <span>{{ sentenceSelected.text }}</span>
                   para a intenção <span>{{ intentSelected }}</span>
                 </p>
@@ -379,21 +379,6 @@ export default {
       repositoryUUID: 'getCurrentRepository',
       versionSelected: 'getSelectedVersion',
     }),
-    data() {
-      const {
-        text,
-        language,
-        intent,
-        entities,
-      } = this;
-
-      return {
-        text,
-        language,
-        intent,
-        entities,
-      };
-    },
   },
   watch: {
     versionSelected() {
@@ -493,7 +478,8 @@ export default {
       words = words.map((word, index) => ({
         word: word.replace('?', ''),
         generate: true,
-        entity: this.sentenceSelected?.entities?.filter(e => e.entity === word) || ''
+        entity: this.sentenceSelected?.entities
+          ?.filter(e => word === this.sentenceSelected.text.substring(e.start, e.end)) || ''
       }))
 
       this.wordsList = words
@@ -504,17 +490,20 @@ export default {
         const { data } = await this.suggestWords({
           isQuestion: this.isQuestion,
           intent: this.intentSelected,
-          texts: this.wordsList
+          texts: this.wordsList.map(e => ({
+            ...e,
+            entity: e?.entity[0]?.entity || ''
+          }))
         });
         this.wordVariations = data.map(obj => {
           if (obj) {
             return {
               ...obj,
-              inputs: obj.suggestions.map(suggestion => ({
+              inputs: obj.suggestions.map((suggestion, index) => ({
                 text: suggestion,
-                checked: false
+                checked: index === 0
               })),
-              suggestions: [],
+              suggestions: obj.suggestions.splice(0, 1),
             };
           }
 
@@ -546,7 +535,10 @@ export default {
         const { data } = await this.suggestSentences({
           isQuestion: this.isQuestion,
           intent: this.intentSelected,
-          texts: this.wordVariations
+          texts: this.wordVariations.map(e => ({
+            ...e,
+            entity: e.entity || ''
+          }))
         });
         const result = data.rasa_nlu_data.common_examples
         result.forEach(e => {
@@ -564,8 +556,8 @@ export default {
         this.loading = false
       }
     },
-    deleteSentence(props) {
-      this.generatedSentences = this.generatedSentences.filter(sentence => sentence !== props)
+    deleteSentence(item) {
+      this.generatedSentences = this.generatedSentences.filter(sentence => sentence !== item)
     },
     addNewVariation(variation) {
       const newInput = { text: this.newVariation, checked: false }
@@ -601,13 +593,13 @@ export default {
           const errorResponse = error.response;
           const errorText = error.response.data;
           /* istanbul ignore next */
-          if (errorText.text[0] === 'Enter a valid value that has letters in it') {
+          if (errorText.detail[0] === 'Enter a valid value that has letters in it') {
             this.$buefy.toast.open({
               message: this.$t('webapp.trainings.error_caracter_type'),
               type: 'is-danger'
             });
           }
-          if (errorResponse && errorText.text[0] !== 'Enter a valid value that has letters in it') {
+          if (errorResponse && errorText.detail[0] !== 'Enter a valid value that has letters in it') {
             /* istanbul ignore next */
             this.$buefy.toast.open({
               message: this.$t('webapp.trainings.intention_or_sentence_already_exist'),
@@ -778,6 +770,10 @@ export default {
     /deep/ input:focus, /deep/ textarea:focus {
       box-shadow: none;
       border-color: #9caccc;
+    }
+
+    /deep/ .actions {
+      display: initial !important;
     }
 
     h3 {

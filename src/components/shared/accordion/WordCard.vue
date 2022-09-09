@@ -46,7 +46,7 @@ export default {
       default: '',
     },
     entities: {
-      type: Array,
+      type: [Array, String],
       default: () => []
     },
   },

@@ -36,6 +36,23 @@ export default {
       type: String,
       default: '',
     },
+    created_at: {
+      type: String,
+      default: '',
+    },
+    entities: {
+      type: [Array, String],
+      default: () => [],
+    },
+    intent: {
+      type: String,
+      default: '',
+    },
+    language: {
+      type: String,
+      default: '',
+    }
+
   },
   data() {
     return {
@@ -105,12 +122,10 @@ export default {
         value: {
           id: this.id,
           text: this.phraseSuggestion,
+          entities: this.entities,
+          language: this.language
         },
       });
-      // this.$emit('onSentenceSelected', {
-      //   id: this.id,
-      //   text: this.phraseSuggestion,
-      // });
     }
   },
 };
