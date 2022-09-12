@@ -458,10 +458,6 @@ export default {
       align-items: flex-start;
       flex-direction: column;
 
-      &__integrate {
-        background-color: $unnnic-color-brand-weni-soft;
-        margin-left: auto;
-      }
       &__remove-integrate {
         border: 1px solid $unnnic-color-feedback-red;
         color: $unnnic-color-feedback-red;

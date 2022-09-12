@@ -722,8 +722,8 @@
       "database": "Repositorio"
     },
     "phrase-suggestion": {
-      "title": "Sugerencia de frases",
-      "subtitle": "Seleccione una intención y agregue frases sugeridas a su entrenamiento.",
+      "title": "Generador de frases",
+      "subtitle": "Herramienta que te permite, a partir de una sola frase, generar cientos de otras frases para mejorar tu inteligencia artificial.",
       "empty": "No hay ninguna sugerencia de oraciones para esta intención",
       "confirm-edit": "Confirmar la edición",
       "cancel-edit": "Cancelar edición",

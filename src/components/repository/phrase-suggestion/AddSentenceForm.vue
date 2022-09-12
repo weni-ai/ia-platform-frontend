@@ -13,7 +13,7 @@
           <p
               slot="label"
               class="unnnic-form__label"
-              v-html="$t('webapp.trainings.add_a_sentence')" />
+              v-html="$t('webapp.phrase-suggestion.add_a_sentence')" />
           <example-text-with-highlighted-entities-input
             id="tour-training-step-1"
             ref="textInput"
@@ -26,11 +26,6 @@
             @textSelected="setTextSelected($event)"
             @submit="onEnter()"
           >
-            <!-- <language-append-select-input
-              slot="append"
-              v-model="language"
-              class="language-append"
-            /> -->
           </example-text-with-highlighted-entities-input>
         </b-field>
       </div>
@@ -91,18 +86,6 @@
           :is-previous-disabled="true"
           :is-step-blocked="intent === ''"
           :message="errors.intent">
-           <!-- <unnnic-autocomplete
-              :label="$t('webapp.create_repository.language_placeholder')"
-              v-model="language"
-              :data="languageLabels"
-              :placeholder="$t('webapp.translate.languages_select')"
-              :openWithFocus="true"
-              @click.native="hideDropdown = false"
-              @focus="onInputClick('language')"
-              @blur="onInputClick('language')"
-              :class="hideDropdown ? 'hidden' : ''"
-              :iconRight="isLanguageInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
-            /> -->
           <unnnic-select
             :placeholder="$t('webapp.translate.languages_select')"
             :label="$t('webapp.create_repository.language_placeholder')"
@@ -133,58 +116,27 @@
             type="secondary"
             size="large"
           >
-            {{ $t('webapp.trainings.submit') }}
+            {{ $t('webapp.phrase-suggestion.submit') }}
           </unnnic-button>
         </b-field>
       </div>
     </form>
-    <!-- <div class="columns is-variable is-1">
-      <div class="column is-three-fifths">
-        <b-field :message="errors.entities">
-          <entities-input
-            ref="entitiesInput"
-            v-model="entities"
-            :repository="repository"
-            :text="text"
-            :text-selected="textSelected"
-            :available-entities="entitiesList"
-            :available-labels="availableLabels"
-            @entityAdded="onEntityAdded()"
-          />
-        </b-field>
-      </div>
-    </div> -->
-    <unnnic-alert
-      v-if="alertSuccess"
-      title=""
-      text="Frase adicionada para treinamento"
-      closeText="Fechar"
-      scheme="feedback-green"
-      icon="check-circle-1-1"
-      @click.native="alertSuccess = false"
-    />
   </div>
 </template>
 
 <script>
 import ExampleTextWithHighlightedEntitiesInput from '@/components/inputs/ExampleTextWithHighlightedEntitiesInput';
 import NewEntitiesInput from '@/components/inputs/EntitiesInput/NewEntitiesInput';
-import LanguageAppendSelectInput from '@/components/inputs/LanguageAppendSelectInput';
 
 import { mapActions, mapGetters } from 'vuex';
-import { formatters, LANGUAGES, languageListToDict } from '@/utils';
-import LanguageSelect from '../inputs/LanguageSelect';
-import LanguageSelectInput from '../inputs/LanguageSelectInput';
+import { formatters, LANGUAGES } from '@/utils';
 
 
 export default {
-  name: 'NewExampleForm',
+  name: 'AddSentenceForm',
   components: {
     ExampleTextWithHighlightedEntitiesInput,
     NewEntitiesInput,
-    LanguageAppendSelectInput,
-    LanguageSelect,
-    LanguageSelectInput
   },
   props: {
     repository: {
@@ -206,7 +158,6 @@ export default {
       hideDropdown: true,
       isIntentInputActive: false,
       isLanguageInputActive: false,
-      alertSuccess: false
     };
   },
   computed: {
@@ -308,16 +259,10 @@ export default {
           ...this.data,
         });
 
-        this.blockedNextStepTutorial = !this.blockedNextStepTutorial;
 
-        this.text = '';
-        this.intent = '';
-        this.entities = [];
         this.submitting = false;
 
-        this.alertSuccess = true
-        this.$emit('created');
-        this.$emit('eventStep');
+        this.$emit('onSubmit', this.data)
         return true;
       } catch (error) {
         /* istanbul ignore next */
@@ -342,6 +287,7 @@ export default {
         /* istanbul ignore next */
         this.submitting = false;
       }
+
       return false;
     },
     onInputClick(target) {
