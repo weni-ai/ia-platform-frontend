@@ -1,5 +1,5 @@
 <template>
-  <unnnic-taginput
+  <b-taginput
     v-model="value"
     :data="filteredData"
     expanded

@@ -1,5 +1,5 @@
 <template>
-  <unnnic-taginput
+  <b-taginput
     ref="taginput"
     v-model="newValue"
     :data="data"
@@ -21,7 +21,7 @@
         </div>
       </div>
     </template>
-  </unnnic-taginput>
+  </b-taginput>
 </template>
 
 <script>
