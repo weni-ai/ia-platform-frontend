@@ -1,6 +1,6 @@
 <template>
-  <b-modal
-    :active="active && shouldShow"
+  <unnnic-modal
+    :showModal="active && shouldShow"
     :width="740"
     @close="onClose">
     <div
@@ -16,12 +16,12 @@
           class="news-modal__image">
       </div>
       <div class="news-modal__controls">
-        <b-button
+        <unnnic-button
           class="news-modal__controls__button"
-          type="is-primary"
+          type="primary"
           @click="hasPrevious ? previous() : onClose()">
           {{ hasPrevious ? $t('back') : $t('cancel') }}
-        </b-button>
+        </unnnic-button>
         <div class="news-modal__indicator__wrapper">
           <div
             v-for="index in info.count"
@@ -30,15 +30,15 @@
                      'news-modal__indicator--active': current === index}"
             @click="current=index" />
         </div>
-        <b-button
+        <unnnic-button
           class="news-modal__controls__button"
-          type="is-primary"
+          type="primary"
           @click="hasNext ? next() : onClose()">
           {{ hasNext ? $t('next') : $t('finish') }}
-        </b-button>
+        </unnnic-button>
       </div>
     </div>
-  </b-modal>
+  </unnnic-modal>
 </template>
 
 <script>

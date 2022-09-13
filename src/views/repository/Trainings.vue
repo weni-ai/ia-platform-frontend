@@ -90,7 +90,7 @@
             :repository-uuid="repository.uuid"
             @onAuthorizationRequested="updateRepository(false)" />
         </div>
-        <div v-else>
+        <div>
           <b-notification
             :closable="false"
             type="is-info">
@@ -286,7 +286,6 @@ export default {
 
 <style lang="scss" scoped>
   @import '~@/assets/scss/colors.scss';
-  
 
 
 .trainings-repository {

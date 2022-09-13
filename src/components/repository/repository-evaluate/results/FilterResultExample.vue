@@ -3,7 +3,7 @@
     <div class="filter-result-example__filters">
       <b-field
         class="filter-result-example__filters__input-text">
-        <b-input
+        <unnnic-input
           v-model="text"
           :debounce="debounceTime"
           placeholder="Search sentence"
@@ -16,20 +16,20 @@
             {{ $t('webapp.dashboard.filter_by') }}:
           </div>
           <b-field>
-            <b-select
+            <unnnic-select
               class="filter-result-example__filters__wrapper__filter__select"
               expanded
               placeholder="All test type">
               <option value="flint">Flint</option>
               <option value="silver">Silver</option>
-            </b-select>
+            </unnnic-select>
           </b-field>
         </div>
         <div>
-          <b-button
+          <unnnic-button
             :disabled="true"
             class="filter-result-example__filters__wrapper__button"
-            type="is-secondary">Compare results</b-button>
+            type="secondary">Compare results</unnnic-button>
         </div>
       </div>
     </div>

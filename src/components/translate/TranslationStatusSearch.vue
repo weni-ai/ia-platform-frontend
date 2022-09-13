@@ -1,13 +1,13 @@
 <template>
   <div>
     <b-field>
-      <b-input
+      <unnnic-input
         v-model="search"
         :placeholder="$t('webapp.translate.search')"
         icon-right="magnify" />
     </b-field>
     <b-field>
-      <b-select
+      <unnnic-select
         v-model="percentage"
         :placeholder="$t('webapp.translate.all')"
         expanded>
@@ -15,7 +15,7 @@
           v-for="option in options"
           :key="option.label"
           :value="option.value"> {{ option.label }} </option>
-      </b-select>
+      </unnnic-select>
     </b-field>
   </div>
 </template>

@@ -5,7 +5,7 @@
         <div
           :style="image"
           :class="{'image-input__image__container': true, 'image-input__image__default': !src}">
-          <b-icon
+          <unnnic-icon-svg
             v-if="!src"
             icon="account" />
         </div>
@@ -18,7 +18,7 @@
         <span
           class="image-input__icon"
           @click="onFileUpload">
-          <b-icon
+          <unnnic-icon-svg
             icon="camera" />
         </span>
       </div>

@@ -163,7 +163,7 @@ export default {
   justify-content: center;
   align-items: center;
 
-  @media (max-width: 800px * 1.5) {
+  @media (max-width: (800px * 1.5)) {
     flex-direction: column;
     align-items: center;
   }

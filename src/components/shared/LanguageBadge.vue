@@ -1,7 +1,7 @@
 <template>
-  <b-tag
+  <unnnic-tag
     :class="{ badge: true, transparent: !main }"
-    rounded>{{ language }}</b-tag>
+    rounded>{{ language }}</unnnic-tag>
 </template>
 
 <script>

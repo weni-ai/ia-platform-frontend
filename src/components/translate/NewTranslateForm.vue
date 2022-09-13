@@ -22,13 +22,13 @@
       </div>
       <div class="column is-narrow">
         <b-field>
-          <b-button
+          <unnnic-button
             id="tour-translate-step-5"
             :is-next-disabled="true"
             :is-previous-disabled="true"
             :disabled="!isValid || submitting"
-            type="is-secondary"
-            native-type="submit">{{ $t('webapp.translate.submit_translation') }}</b-button>
+            type="secondary"
+            native-type="submit">{{ $t('webapp.translate.submit_translation') }}</unnnic-button>
         </b-field>
       </div>
     </form>

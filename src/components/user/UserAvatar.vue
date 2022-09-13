@@ -17,7 +17,7 @@
       <div
         v-else
         class="avatar__icon">
-        <b-icon
+        <unnnic-icon-svg
           :icon="isOrganization ? 'account-multiple' : 'account'"
           size="small" />
       </div>

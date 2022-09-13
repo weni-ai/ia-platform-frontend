@@ -32,22 +32,22 @@
       </div>
       <div class="translation__icons column is-2">
         <span>
-          <b-button
+          <unnnic-button
             class="translation__icon"
             icon-right="close-thick"
             @click.native.stop="cancelEditSentence" />
-          <b-button
+          <unnnic-button
             :disabled="submitting"
             class="translation__icon">
-            <b-icon
+            <unnnic-icon-svg
               :icon="submitting ? 'refresh' : 'check-bold'"
               :class="{
                 'translation__icon': true,
                 'icon-spin': submitting
               }"
-              size="is-small"
+              size="sm"
               @click.native.stop="onSubmit" />
-          </b-button>
+          </unnnic-button>
         </span>
       </div>
     </div>

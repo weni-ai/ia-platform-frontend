@@ -29,9 +29,9 @@
             :href="`#delete-example-${id}`"
             class="has-text-danger"
             @click.prevent.stop="editSentence()">
-            <b-icon
+            <unnnic-icon-svg
               icon="pencil"
-              size="is-small"
+              size="sm"
               class="example-accordion__icon example__icon" />
           </a>
         </div>
@@ -44,9 +44,9 @@
             :href="`#delete-example-${id}`"
             class="has-text-danger"
             @click.prevent.stop="deleteThisExample()">
-            <b-icon
+            <unnnic-icon-svg
               icon="delete"
-              size="is-small"
+              size="sm"
               class="example-accordion__icon example__icon" />
           </a>
         </div>

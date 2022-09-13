@@ -5,11 +5,11 @@
         <div class="signup__content__field">
           <div class="signup__content__field__header">
             <p>{{ $t('webapp.register_form.already_have_account') }}</p>
-            <b-button
-              type="is-primary"
+            <unnnic-button
+              type="primary"
               class="signup__content__field__header__createButton"
               @click="goToLoginPage">
-              {{ $t('webapp.register_form.signin') }}</b-button>
+              {{ $t('webapp.register_form.signin') }}</unnnic-button>
           </div>
           <div class="signup__content__field__forms">
             <h1>{{ $t('webapp.register_form.create_account_title') }}</h1>
@@ -29,12 +29,12 @@
               </p>
               <div class="field">
                 <div class="control has-text-centered">
-                  <b-button
+                  <unnnic-button
                     :disabled="submitting"
                     expanded
-                    class="signup__content__field__forms__button is-primary"
+                    class="signup__content__field__forms__button primary"
                     native-type="submit"
-                  >{{ $t('webapp.register_form.get_free') }}</b-button>
+                  >{{ $t('webapp.register_form.get_free') }}</unnnic-button>
                 </div>
                 <div class="signup__content__field__forms__agree-message">
                   <small>

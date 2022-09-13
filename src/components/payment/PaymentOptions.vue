@@ -28,10 +28,10 @@
           </div>
         </div>
         <div class="payment-options__card__button__container">
-          <b-button
-            type="is-primary"
+          <unnnic-button
+            type="primary"
             class="payment-options__card__button"
-            @click="option.action"> {{ option.button_text }} </b-button>
+            @click="option.action"> {{ option.button_text }} </unnnic-button>
         </div>
       </div>
     </div>

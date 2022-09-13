@@ -9,9 +9,9 @@
         {{ $t("webapp.weni_notification.subtitle") }}
       </span>
       <a href="https://weni.ai/blog/modularizacao-plataformas/">
-        <b-button rounded class="notification__field__button">{{
+        <unnnic-button rounded class="notification__field__button">{{
           $t("webapp.weni_notification.button")
-        }}</b-button>
+        }}</unnnic-button>
       </a>
     </div>
   </div>

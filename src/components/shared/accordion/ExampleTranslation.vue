@@ -25,16 +25,16 @@
           class="translation__text" />
         <div
           class="translation__entities">
-          <b-tooltip
+          <unnnic-tool-tip
             v-if="!has_valid_entities"
-            :label="$t('webapp.translate.invalid_entities')"
+            :text="$t('webapp.translate.invalid_entities')"
             multilined
-            type="is-warning">
-            <b-icon
-              size="is-small"
+          >
+            <unnnic-icon-svg
+              size="sm"
               class="is-warining"
               icon="alert" />
-          </b-tooltip>
+          </unnnic-tool-tip>
           <entity-tag
             v-for="(entity, i) in entitiesList"
             :key="i"
@@ -46,14 +46,14 @@
         </div>
       </div>
       <div class="translation__icons">
-          <b-icon
+          <unnnic-icon-svg
             :class="{clickable: true, 'icon-disabled': disableEdit}"
-            size="is-small"
+            size="sm"
             icon="pencil"
             @click.native.stop="editing = true" />
-          <b-icon
+          <unnnic-icon-svg
             class="clickable"
-            size="is-small"
+            size="sm"
             icon="delete"
             @click.native="deleteThisTranslation()" />
       </div>

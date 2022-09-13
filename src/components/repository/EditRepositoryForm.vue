@@ -9,11 +9,11 @@
       :errors="errors"
       :initial-data="initialData" />
     <div class="text-center">
-      <b-button
+      <unnnic-button
         v-if="formSchema"
         :disabled="submitting"
-        type="is-primary"
-        native-type="submit">{{ $t('webapp.settings.save') }}</b-button>
+        type="primary"
+        native-type="submit">{{ $t('webapp.settings.save') }}</unnnic-button>
     </div>
   </form>
 </template>

@@ -7,7 +7,7 @@
       v-model="data"
       type="text"
       placeholder="the world of robots is here" >
-    <button type="submit"><b-icon icon="magnify" /></button>
+    <button type="submit"><unnnic-icon-svg icon="magnify" /></button>
   </form>
 </template>
 

@@ -17,17 +17,17 @@
       <div
         slot="append"
         class="translate-form__icon">
-        <b-tooltip
+        <unnnic-tool-tip
           v-if="invalid"
-          :label="$t('webapp.translate.invalid_entities')"
+          :text="$t('webapp.translate.invalid_entities')"
           class="translate-form__icon"
           multilined
           type="is-warning">
-          <b-icon
-            size="is-small"
+          <unnnic-icon-svg
+            size="sm"
             class="is-warning"
             icon="alert" />
-        </b-tooltip>
+        </unnnic-tool-tip>
       </div>
     </example-text-with-highlighted-entities-input>
     <div

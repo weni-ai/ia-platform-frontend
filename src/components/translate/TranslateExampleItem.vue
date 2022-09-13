@@ -45,7 +45,7 @@
             class="button is-primary"
             @click="toggleFormOpen()">
             <span>{{ $t('webapp.translate.translate_sentence') }}</span>
-            <b-icon icon="chevron-down" />
+            <unnnic-icon-svg icon="chevron-down" />
           </button>
         </div>
       </div>

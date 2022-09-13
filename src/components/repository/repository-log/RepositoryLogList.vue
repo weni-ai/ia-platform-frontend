@@ -2,7 +2,7 @@
   <div class="repository-log-list">
     <div class="repository-log-list__section">
       <b-notification v-if="loadingLogs" :closable="false">
-        <b-loading :active.sync="loadingLogs" />
+        <loading />
       </b-notification>
       <div>
         <b-checkbox v-model="select" :native-value="selectAll">
@@ -10,25 +10,25 @@
         </b-checkbox>
       </div>
       <div class="repository-log-list__section__buttonsIcon">
-        <b-tooltip :label="$t('webapp.inbox.add_to_train_button')">
-          <b-button
+        <unnnic-tool-tip :text="$t('webapp.inbox.add_to_train_button')">
+          <unnnic-button
             id="tour-inbox-step-2"
             :is-previous-disabled="true"
-            type="is-primary"
+            type="primary"
             icon-right="refresh"
             @click="showModalTraining($t('webapp.inbox.training'))"
           />
-        </b-tooltip>
-        <b-tooltip :label="$t('webapp.inbox.add_to_sentence_button')">
-          <b-button
+        </unnnic-tool-tip>
+        <unnnic-tool-tip :text="$t('webapp.inbox.add_to_sentence_button')">
+          <unnnic-button
             id="tour-inbox-step-3"
             :is-previous-disabled="true"
             :is-next-disabled="true"
             icon-right="chat-processing"
-            type="is-primary"
+            type="primary"
             @click="showModalSentence($t('webapp.inbox.test_sentences'))"
           />
-        </b-tooltip>
+        </unnnic-tool-tip>
       </div>
     </div>
     <paginated-list
@@ -57,6 +57,8 @@ import PaginatedList from '@/components/shared/PaginatedList';
 import LogAccordion from '@/components/shared/accordion/LogAccordion';
 import IntentModal from '@/components/repository/IntentModal';
 import IntentModalEdition from '@/components/repository/IntentModalWithEdition';
+import Loading from '@/components/shared/Loading';
+
 
 export default {
   name: 'RepositoryLogList',
@@ -64,7 +66,8 @@ export default {
     PaginatedList,
     LogAccordion,
     IntentModal,
-    IntentModalEdition
+    IntentModalEdition,
+    Loading
   },
   props: {
     query: {

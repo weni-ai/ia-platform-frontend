@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-icon
+    <unnnic-icon-svg
       icon="alpha-s-box"
       custom-size="mdi-24px"
       class="suggestion-icon"

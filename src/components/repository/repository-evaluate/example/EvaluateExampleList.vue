@@ -1,6 +1,6 @@
 <template>
   <div class="evaluate-example-list">
-    <paginated-list
+    <intent-pagination
       v-if="examplesList"
       :item-component="exampleItemElem"
       :list="examplesList"
@@ -18,12 +18,16 @@
 import { mapActions, mapGetters } from 'vuex';
 import PaginatedList from '@/components/shared/PaginatedList';
 import ExampleAccordion from '@/components/shared/accordion/ExampleAccordion';
+import SentencesIntentTable from '@/components/repository/SentencesIntentTable';
+import IntentPagination from '@/components/shared/IntentPagination';
 
 
 export default {
   name: 'EvaluateExampleList',
   components: {
     PaginatedList,
+    SentencesIntentTable,
+    IntentPagination
   },
   props: {
     query: {
@@ -42,7 +46,7 @@ export default {
   data() {
     return {
       examplesList: null,
-      exampleItemElem: ExampleAccordion,
+      exampleItemElem: SentencesIntentTable,
       allEntities: [],
       searchingExample: false,
     };

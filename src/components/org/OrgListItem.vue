@@ -13,11 +13,11 @@
             <strong class="medium text-color-primary">{{ owner.nickname }}</strong>
           </div> -->
           <div class="org-card__attrs">
-            <p class="org-card__attrs__line"> <b-icon
+            <p class="org-card__attrs__line"> <unnnic-icon-svg
               size="is-medium"
               class="org-card__icon"
               icon="head-snowflake"/> {{ $tc('webapp.orgs.repositories', count_repositories) }} </p>
-            <p class="org-card__attrs__line"> <b-icon
+            <p class="org-card__attrs__line"> <unnnic-icon-svg
               size="is-medium"
               class="org-card__icon"
               icon="account-multiple"/> {{ $tc('webapp.orgs.members', count_members) }} </p>

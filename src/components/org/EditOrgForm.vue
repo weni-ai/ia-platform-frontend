@@ -1,8 +1,7 @@
 <template>
   <div>
     <form @submit.prevent="onSubmit">
-      <loading v-if="!filteredSchema" />
-      <b-loading :active="submitting" />
+      <loading v-if="!filteredSchema || submitting" />
       <form-generator
         v-if="filteredSchema && !submitting"
         :schema="filteredSchema"
@@ -12,11 +11,11 @@
         hide-help
         class="field"/>
       <div>
-        <b-button
+        <unnnic-button
           :disabled="submitting"
           native-type="submit"
-          type="is-primary"
-          class="submit-button">{{ $t('webapp.orgs.edit') }}</b-button>
+          type="primary"
+          class="submit-button">{{ $t('webapp.orgs.edit') }}</unnnic-button>
       </div>
     </form>
   </div>

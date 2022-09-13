@@ -35,13 +35,13 @@
                 <strong>{{ $t("webapp.analyze_text.method_send") }}</strong>
               </p>
 
-              <b-tooltip
-                :label="$t('webapp.analyze_text.tooltip_send')"
+              <unnnic-tool-tip
+                :text="$t('webapp.analyze_text.tooltip_send')"
                 type="is-dark"
-                position="is-right"
+                side="right"
               >
-                <b-icon custom-size="mdi-18px" type="is-dark" icon="help-circle" />
-              </b-tooltip>
+                <unnnic-icon-svg custom-size="mdi-18px" type="is-dark" icon="help-circle" />
+              </unnnic-tool-tip>
             </div>
             <highlighted-code code-class="json"
               >{ "language":"[{{ $t("webapp.analyze_text.language_code") }}]" "text": "[{{
@@ -55,22 +55,22 @@
           <div class="repository-analyze-text__item__authotization-container">
             <div class="repository-analyze-text__item__authotization-container__title">
               <p>Access token:</p>
-              <b-tooltip label="Authorization" type="is-dark" position="is-right">
-                <b-icon custom-size="mdi-18px" type="is-dark" icon="help-circle" />
-              </b-tooltip>
+              <unnnic-tool-tip text="Authorization" side="right">
+                <unnnic-icon-svg custom-size="mdi-18px" type="is-dark" icon="help-circle" />
+              </unnnic-tool-tip>
             </div>
 
             <b-field>
-              <b-select v-model="profileAuth" placeholder="Select a character" expanded>
+              <unnnic-select v-model="profileAuth" placeholder="Select a character" expanded>
                 <option v-for="option in getAuthorizations" :value="option" :key="option.index">
                   {{ option }}
                 </option>
-              </b-select>
+              </unnnic-select>
             </b-field>
             <div class="repository-analyze-text__item__authotization-container__copy">
               <strong>{{ getProfileDetail[0] }} - </strong>
               <p>{{ getProfileDetail[1] }}</p>
-              <b-icon
+              <unnnic-icon-svg
                 icon="content-copy"
                 class="repository-analyze-text__item__authotization-container__copy__icon"
                 @click.native="copyText()"

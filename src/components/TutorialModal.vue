@@ -1,6 +1,6 @@
 <template>
-  <b-modal
-    :active="open"
+  <unnnic-modal
+    :showModal="open"
     :width="width"
     :can-cancel="false"
     @close="$emit('update:open', false)">
@@ -10,7 +10,7 @@
         <p v-html="$t('webapp.tutorial.description')" />
       </div>
       <b-notification
-        :active.sync="openNotification"
+        :showModal.sync="openNotification"
         :duration="4000"
         :closable="false"
         :auto-close="autoCloseNotification"
@@ -20,7 +20,7 @@
         role="alert">
         <div class="tutorial__notificationAlert__container">
           <p>{{ notificationMessage }}</p>
-          <b-icon
+          <unnnic-icon-svg
             v-if="typeNotification === 'is-warning'"
             class="loading"
             icon="sync" />
@@ -35,9 +35,9 @@
           <span
             :class="{'tutorial__item__marker': true,
                      'tutorial__item__marker--active': item.active}">
-            <b-icon
+            <unnnic-icon-svg
               v-show="item.active"
-              size="is-small"
+              size="sm"
               icon="check" />
           </span>
           <span
@@ -65,7 +65,7 @@
     <confetti-effect
       v-if="finisheButton && getFinalMessage !== 'true'"
       :config="confettiConfig"/>
-  </b-modal>
+  </unnnic-modal>
 </template>
 
 <script>

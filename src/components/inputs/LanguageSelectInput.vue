@@ -1,5 +1,5 @@
 <template>
-  <b-autocomplete
+  <unnnic-autocomplete
     v-model="value"
     v-bind="$attrs"
     :custom-formatter="formatter"

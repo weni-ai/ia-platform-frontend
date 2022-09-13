@@ -7,15 +7,15 @@
       <div class="token-item__version">{{ repository_version__name }}</div>
     </div>
     <b-field class="token-item__field">
-      <b-input
+      <unnnic-input
         :value="url"
         expanded
         readonly />
-      <b-button
+      <unnnic-button
         class="token-item__button"
         icon-right="content-copy"
         @click="copy()" />
-      <b-button
+      <unnnic-button
         class="token-item__button"
         icon-right="close-thick"
         @click="deleteToken()" />

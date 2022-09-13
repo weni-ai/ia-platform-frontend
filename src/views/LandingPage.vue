@@ -20,9 +20,9 @@
         <div class="landing-page__header__content__text">
           <h1>{{ $t("webapp.landing_page.header_content1") }}</h1>
           <p>{{ $t("webapp.landing_page.header_content2") }}</p>
-          <b-button type="is-primary" rounded @click="signUp()">
+          <unnnic-button type="primary" rounded @click="signUp()">
             {{ $t("webapp.landing_page.join_for_free") }}
-          </b-button>
+          </unnnic-button>
         </div>
         <div class="landing-page__header__content__animation hide-mobile" />
       </div>
@@ -53,13 +53,13 @@
           {{ $t("webapp.landing_page.best_bots") }}
         </h1>
         <repository-card-list :show-more-button="false" limit="6" />
-        <b-button
+        <unnnic-button
           class="landing-page__bots__content__button"
-          type="is-primary"
+          type="primary"
           @click="showAllBots()"
         >
           {{ $t("webapp.landing_page.all_bots") }}
-        </b-button>
+        </unnnic-button>
       </div>
     </section>
     <section class="landing-page__signup">
@@ -68,13 +68,13 @@
           <h1>
             {{ $t("webapp.landing_page.signup_grid") }}
           </h1>
-          <b-button
+          <unnnic-button
             class="landing-page__signup__button"
             rounded
             @click="signUp()"
           >
             {{ $t("webapp.landing_page.signup_forfree") }}
-          </b-button>
+          </unnnic-button>
         </div>
         <div class="landing-page__signup__animation">
           <div class="landing-page__signup__animation__girl" />

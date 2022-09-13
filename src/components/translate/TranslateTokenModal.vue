@@ -1,5 +1,5 @@
 <template>
-  <b-modal :active="open" :can-cancel="false" width="650px" @close="onClose()">
+  <unnnic-modal :showModal="open" :can-cancel="false" width="650px" @close="onClose()">
     <div class="token-modal">
       <h2 class="token-modal__header has-text-centered">
         {{ $t("webapp.translate.share_title") }}
@@ -21,15 +21,14 @@
         </div>
       </div>
       <div class="token-modal__footer">
-        <b-button
-          :label="$t('webapp.translate.ok')"
+        <unnnic-button
+          :text="$t('webapp.translate.ok')"
           class="token-modal__footer__button"
-          type="is-primary"
           @click="onClose()"
         />
       </div>
     </div>
-  </b-modal>
+  </unnnic-modal>
 </template>
 
 <script>

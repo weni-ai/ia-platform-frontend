@@ -28,9 +28,9 @@
             v-if="!editing || !open"
             :href="`#delete-example-${id}`"
             @click.prevent.stop="editSentence()">
-            <b-icon
+            <unnnic-icon-svg
               icon="pencil"
-              size="is-small"
+              size="sm"
               class="example-accordion__icon example__icon" />
           </a>
         </div>
@@ -42,9 +42,9 @@
           <a
             :href="`#delete-example-${id}`"
             @click.prevent.stop="deleteThisExample()">
-            <b-icon
+            <unnnic-icon-svg
               icon="delete"
-              size="is-small"
+              size="sm"
               class="example-accordion__icon example__icon" />
           </a>
         </div>
@@ -196,7 +196,7 @@ export default {
 
 <style lang="scss" scoped>
  @import '~@/assets/scss/colors.scss';
- 
+
 
   .example-accordion {
 

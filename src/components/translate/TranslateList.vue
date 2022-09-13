@@ -8,27 +8,27 @@
           <span>{{ $t('webapp.translate.select_all') }}</span>
       </div>
       <div class="repository-translate__list__options__buttons">
-        <b-button
+        <unnnic-button
           v-show="!editing"
-          type="is-primary"
+          type="primary"
           icon-right="pencil"
           @click="editing = true"/>
-        <b-button
+        <unnnic-button
           v-show="!editing"
-          type="is-primary"
+          type="primary"
           icon-right="delete"
           @click="deleteAll" />
-        <b-tooltip
-          :label="$t('webapp.translate.save_all')">
-          <b-button
+        <unnnic-tool-tip
+          :text="$t('webapp.translate.save_all')">
+          <unnnic-button
             v-show="editing"
-            type="is-primary"
+            type="primary"
             icon-right="check-bold"
             @click="saveAll" />
-        </b-tooltip>
-        <b-button
+        </unnnic-tool-tip>
+        <unnnic-button
           v-show="editing"
-          type="is-primary"
+          type="primary"
           icon-right="close-thick"
           @click="editing = false" />
       </div>

@@ -13,7 +13,7 @@
     </div>
 
     <div slot="options">
-      <b-icon
+      <unnnic-icon-svg
         :icon="`chevron-${isOpen ? 'up' : 'down'}`"
         class="example-accordion__icon"
         @click.native="isOpen = !isOpen"/>

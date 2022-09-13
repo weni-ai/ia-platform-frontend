@@ -1,10 +1,10 @@
 <template>
-  <b-tag
+  <unnnic-tag
     :type="evaluateType === 'Manual' ? 'is-warning' : 'is-info'"
     class="evaluate-type"
     rounded>
     <p>{{ evaluateType }}</p>
-  </b-tag>
+  </unnnic-tag>
 </template>
 
 <script>

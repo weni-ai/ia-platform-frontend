@@ -1,11 +1,10 @@
 <template>
   <div class="field">
     <div :class="{control: true, 'has-icons-right': hasAppend}">
-      <textarea
+      <unnnic-input
+        size="sm"
         ref="input"
-        :class="{textarea: true,
-                 'self-adjust': true,
-                 'self-adjust__appended': hasAppend,
+        :class="{'self-adjust__appended': hasAppend,
                  'self-adjust__appended--small': hasAppend && smallIcon,
                  'self-adjust--transparent': transparent,
                  'self-adjust__contained': contained,

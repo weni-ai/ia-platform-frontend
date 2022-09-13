@@ -1,7 +1,7 @@
 <template>
-  <!-- <b-tooltip
+  <!-- <unnnic-tool-tip
     :active="!disabled && helpText && helpText.length > 0"
-    :label="helpText"
+    :text="helpText"
     multilined
     type="is-dark"
     position="is-bottom"> -->
@@ -38,7 +38,7 @@
       <!-- <p :class="['has-text-centered', `number-card__subtitle--size-${size}`]">{{ label }} </p>
       <h1 :class="['has-text-centered', `number-card__title--size-${size}`]">{{ count }}</h1> -->
     <!-- </div> -->
-  <!-- </b-tooltip> -->
+  <!-- </unnnic-tool-tip> -->
 </template>
 
 <script>
@@ -84,7 +84,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-
 
 
     .number-card {

@@ -12,7 +12,7 @@
         :is-next-disabled="true"
         :is-step-blocked="!blockedNextStepTutorial"
         class="quick-test__collapse-button__content">
-        <b-icon
+        <unnnic-icon-svg
           :icon="expanded ? 'chevron-right' : 'chevron-left'"/>
         <p class="quick-test__collapse-button__text">
           {{ $t('webapp.quick_test.quick_test') }}
@@ -30,17 +30,17 @@
           <b-field
 
             class="quick-test__login__buttons">
-            <b-button
-              type="is-primary"
+            <unnnic-button
+              type="primary"
               @click="signIn()">
               {{ $t('webapp.register_form.signin') }}
-            </b-button>
-            <b-button
-              type="is-primary"
+            </unnnic-button>
+            <unnnic-button
+              type="primary"
               outlined
               @click="signUp()">
               {{ $t('webapp.landing_page.signup') }}
-            </b-button>
+            </unnnic-button>
           </b-field>
         </div>
         <div

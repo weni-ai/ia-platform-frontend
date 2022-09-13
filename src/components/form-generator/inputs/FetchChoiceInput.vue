@@ -1,6 +1,6 @@
 <template>
   <b-field>
-    <b-select
+    <unnnic-select
       :loading="loading"
       :disabled="isDisabled"
       :placeholder="labelPlaceholder"
@@ -11,7 +11,7 @@
         v-for="(option, index) in options"
         :key="index"
         :value="option"> {{ option.label }} </option>
-    </b-select>
+    </unnnic-select>
   </b-field>
 </template>
 

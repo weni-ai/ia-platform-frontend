@@ -1,7 +1,7 @@
 <template>
   <div class="entity-edit__entities-list">
     <div class="entity-edit__title entity-edit__entities-list__header">
-      <b-loading :is-full-page="false" :active="loading" />
+      <loading v-if="loading" />
     </div>
     <badges-card-drag-drop
       :key="`${newGroup}-${needsUpdate}`"
@@ -74,12 +74,15 @@
 import BadgesCardDragDrop from '@/components/repository/BadgesCardDragDrop';
 import CreateBadgesCard from '@/components/repository/CreateBadgesCard';
 import { mapActions, mapGetters } from 'vuex';
+import Loading from '@/components/shared/Loading';
+
 
 export default {
   name: 'EntityEdit',
   components: {
     BadgesCardDragDrop,
     CreateBadgesCard,
+    Loading
   },
   props: {
     groups: {

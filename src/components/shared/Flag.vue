@@ -1,7 +1,7 @@
 <template>
   <span
     :class="{
-      'is-small': size === 'small',
+      'sm': size === 'small',
       'is-medium': size === 'medium',
       'is-large': size === 'large',
   }">
@@ -65,7 +65,7 @@ span {
     width: 100%;
   }
 
-  &.is-small { width: 8px; }
+  &.sm { width: 8px; }
   &.is-medium { width: 32px; }
   &.is-large { width: 64px; }
 }

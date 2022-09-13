@@ -20,12 +20,12 @@
             <li class="footer-sociallist-item">
               <a
                 href="https://www.facebook.com/bothub.it"
-                target="_blank"><b-icon icon="facebook" /></a>
+                target="_blank"><unnnic-icon-svg icon="facebook" /></a>
             </li>
             <li class="footer-sociallist-item">
               <a
                 href="https://github.com/Ilhasoft/bothub/"
-                target="_blank"><b-icon icon="github" /></a>
+                target="_blank"><unnnic-icon-svg icon="github" /></a>
             </li>
           </ul>
         </div>

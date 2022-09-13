@@ -15,37 +15,37 @@
         <div
           v-if="!editStatus"
           class="intent-suggestion-list__section__buttonsIcon">
-          <b-tooltip :label="$t('webapp.inbox.add_to_train_button')">
-            <b-button
-              type="is-primary"
+          <unnnic-tool-tip :text="$t('webapp.inbox.add_to_train_button')">
+            <unnnic-button
+              type="primary"
               icon-right="refresh"
               @click="addToTraining()" />
-          </b-tooltip>
-          <b-tooltip :label="$t('webapp.inbox.add_to_sentence_button')">
-            <b-button
+          </unnnic-tool-tip>
+          <unnnic-tool-tip :text="$t('webapp.inbox.add_to_sentence_button')">
+            <unnnic-button
               icon-right="chat-processing"
-              type="is-primary"
+              type="primary"
               @click="addToSentences()" />
-          </b-tooltip>
+          </unnnic-tool-tip>
         </div>
         <div v-else>
           <div class="intent-suggestion-list__section__icon">
-            <b-tooltip :label="$t('webapp.phrase-suggestion.confirm-edit')">
-              <b-icon
+            <unnnic-tool-tip :text="$t('webapp.phrase-suggestion.confirm-edit')">
+              <unnnic-icon-svg
                 icon="check-bold"
                 type="is-white"
-                size="is-small"
+                size="sm"
                 class="intent-suggestion-list__section__icon__icon-style"
                 @click.native="confirmEdit()" />
-            </b-tooltip>
-            <b-tooltip :label="$t('webapp.phrase-suggestion.cancel-edit')">
-              <b-icon
+            </unnnic-tool-tip>
+            <unnnic-tool-tip :text="$t('webapp.phrase-suggestion.cancel-edit')">
+              <unnnic-icon-svg
                 class="intent-suggestion-list__section__icon__icon-style"
                 type="is-white"
-                size="is-small"
+                size="sm"
                 icon="close-thick"
                 @click.native="cancelEdit()" />
-            </b-tooltip>
+            </unnnic-tool-tip>
           </div>
         </div>
       </div> -->

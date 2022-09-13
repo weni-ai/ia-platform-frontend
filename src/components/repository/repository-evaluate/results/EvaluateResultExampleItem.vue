@@ -17,7 +17,7 @@
         class="example-text"> {{ text }}</p>
     </div>
 
-    <b-icon
+    <unnnic-icon-svg
       slot="options"
       :class="['level-right', success ? 'success' : 'failed']"
       :icon="success ? 'check-bold' : 'close-thick'" />
@@ -57,9 +57,9 @@
             :key="i"
             class="entity__text">
             <span> {{ entity.value }} {{ $t('webapp.result.is') }}
-              <b-tag
+              <unnnic-tag
                 :class="['entity', getEntityClass(entity)]"
-                rounded>{{ entity.entity }}</b-tag>
+                rounded>{{ entity.entity }}</unnnic-tag>
               <span v-if="entity.confidence">
                 ({{ entity.confidence.toFixed(2) }}
                 {{ $t('webapp.result.confidence') }})
@@ -85,9 +85,9 @@
             :key="i"
             class="entity__text">
             <span> {{ entity.value }} {{ $t('webapp.result.is') }}
-              <b-tag
+              <unnnic-tag
                 :class="['entity', getEntityClass(entity)]"
-                rounded>{{ entity.entity }}</b-tag>
+                rounded>{{ entity.entity }}</unnnic-tag>
               <span v-if="entity.confidence">
                 ({{ entity.confidence.toFixed(2) }}
                 {{ $t('webapp.result.confidence') }})
@@ -105,18 +105,18 @@
         <p>
           <strong> {{ $t('webapp.result.expected_entity') }}: </strong>
           <span> {{ entity.value }} {{ $t('webapp.result.is') }}
-            <b-tag
+            <unnnic-tag
               :class="['entity', getEntityClass(entity)]"
               rounded>
               {{ entity.entity }}
-          </b-tag>/ </span>
+          </unnnic-tag>/ </span>
           <strong> {{ $t('webapp.result.predicted_entity') }}:</strong>
           <span> {{ entity.value }} {{ $t('webapp.result.is') }}
-            <b-tag
+            <unnnic-tag
               :class="['entity', getEntityClass(toEntity(entity))]"
               rounded>
               {{ entity.predicted_entity }}
-            </b-tag>
+            </unnnic-tag>
             <span v-if="entity.confidence">
               ({{ entity.confidence.toFixed(2) }}
               {{ $t('webapp.result.confidence') }})

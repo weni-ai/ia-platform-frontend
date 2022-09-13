@@ -13,12 +13,12 @@
       </div>
       <div class="column is-one-fifth">
         <p>&nbsp;</p>
-        <b-button
+        <unnnic-button
           :disabled="usersProfile.length === 0 || !role"
           class="submit-button"
-          type="is-primary"
+          type="primary"
           native-type="submit"
-          primary>{{ $t('webapp.settings.invite') }}</b-button>
+          primary>{{ $t('webapp.settings.invite') }}</unnnic-button>
       </div>
     </div>
   </form>

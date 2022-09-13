@@ -35,7 +35,7 @@
               :is-previous-disabled="true"
               :message="errors.non_field_errors"
               :is-step-blocked="(intent || '').length === 0">
-              <b-autocomplete
+              <unnnic-autocomplete
                 v-model="intent"
                 :data="filterIntents"
                 :placeholder="$t('webapp.evaluate.intent')"
@@ -44,12 +44,12 @@
             </b-field>
           </div>
           <div class="new-sentence__form__wrapper__submit-btn">
-            <b-tooltip
-              :label="validationErrors.join(', ')"
-              :active="!isValid && validationErrors.length > 0"
+            <unnnic-tool-tip
+              :text="validationErrors.join(', ')"
+              :enabled="!isValid && validationErrors.length > 0"
               multilined
               type="is-dark">
-              <b-button
+              <unnnic-button
                 id="tour-evaluate-step-4"
                 ref="saveSentenceButton"
                 :is-next-disabled="true"
@@ -57,12 +57,12 @@
                 :disabled="!shouldSubmit"
                 :loading="submitting"
                 :is-step-blocked="!blockedNextStepTutorial"
-                type="is-primary"
+                type="primary"
                 class="new-sentence__form__wrapper__submit-btn__button"
                 @click="submitSentence()">
                 <slot v-if="!submitting">{{ $t('webapp.evaluate-manual.submit') }}</slot>
-              </b-button>
-            </b-tooltip>
+              </unnnic-button>
+            </unnnic-tool-tip>
           </div>
         </div>
         <b-field

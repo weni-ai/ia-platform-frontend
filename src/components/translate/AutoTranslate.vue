@@ -1,10 +1,10 @@
 <template>
   <div>
-    <b-button
+    <unnnic-button
       :disabled="!translateTo || loading"
       :loading="loading"
-      :label="$t('webapp.translate.auto_translate')"
-      type="is-primary"
+      :text="$t('webapp.translate.auto_translate')"
+      type="primary"
       @click="onClick()" />
   </div>
 </template>

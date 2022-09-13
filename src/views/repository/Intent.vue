@@ -227,7 +227,6 @@ export default {
 @import '~@/assets/scss/colors.scss';
 
 
-
   label {
     vertical-align: middle;
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="raw-info">
     <div class="raw-info__close">
-      <b-icon
+      <unnnic-icon-svg
         icon="close"
         @click.native="closeModal()"/>
     </div>
@@ -14,7 +14,7 @@
         :code="text"
         class="raw-info__input"
         code-class="json" />
-      <b-icon
+      <unnnic-icon-svg
         icon="content-copy"
         class="raw-info__copy clickable"
         @click.native="copyText()"/>

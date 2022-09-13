@@ -24,7 +24,7 @@
                 <div
                   id="tour-evaluate-step-1"
                   :is-previous-disabled="true">
-                  <b-select
+                  <unnnic-select
                     v-model="currentLanguage"
                     expanded>
                     <option
@@ -34,21 +34,21 @@
                       :value="language.value">
                       {{ language.title }}
                     </option>
-                  </b-select>
+                  </unnnic-select>
                 </div>
               </div>
-              <b-button
+              <unnnic-button
                 ref="runNewTestAutomaticButton"
                 :is-finish-disabled="true"
                 :is-previous-disabled="true"
                 :is-next-disabled="true"
                 :loading="evaluating"
                 :disabled="evaluating"
-                type="is-secondary"
+                type="secondary"
                 class="evaluate__content-header__wrapper__button"
                 @click="newEvaluate()">
                 {{ $t('webapp.evaluate-automatic.run_test') }}
-              </b-button>
+              </unnnic-button>
             </div>
             <progress-stages/>
           </div>
@@ -201,7 +201,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-
 
 
 .evaluate {

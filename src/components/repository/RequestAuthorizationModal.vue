@@ -1,6 +1,6 @@
 <template>
-  <b-modal
-    :active.sync="openValue"
+  <unnnic-modal
+    :showModal.sync="openValue"
     :width="700">
     <div class="request-authorization">
       <h1 class="request-authorization__item">{{ $t('webapp.layout.request_authorization') }}</h1>
@@ -10,7 +10,7 @@
         :repository-uuid="repositoryUuid"
         @requested="onAuthorizationRequested()" />
     </div>
-  </b-modal>
+  </unnnic-modal>
 </template>
 
 <script>

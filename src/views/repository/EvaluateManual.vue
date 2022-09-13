@@ -24,7 +24,7 @@
                 <div
                   id="tour-evaluate-step-1"
                   :is-previous-disabled="true">
-                  <b-select
+                  <unnnic-select
                     v-model="currentLanguage"
                     expanded>
                     <option
@@ -34,10 +34,10 @@
                       :value="language.value">
                       {{ language.title }}
                     </option>
-                  </b-select>
+                  </unnnic-select>
                 </div>
               </div>
-              <b-button
+              <unnnic-button
                 id="tour-evaluate-step-5"
                 ref="runNewTestButton"
                 :is-finish-disabled="true"
@@ -45,10 +45,10 @@
                 :is-next-disabled="true"
                 :loading="evaluating"
                 :disabled="evaluating"
-                type="is-secondary"
+                type="secondary"
                 @click="newEvaluate()">
                 {{ $t('webapp.evaluate-manual.run_test') }}
-              </b-button>
+              </unnnic-button>
             </div>
           </div>
           <div class="evaluate__divider" />

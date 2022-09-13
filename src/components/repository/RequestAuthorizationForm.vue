@@ -7,11 +7,11 @@
       v-model="data"
       :errors="errors" />
     <div>
-      <b-button
+      <unnnic-button
         :disabled="submitting"
         :expanded="true"
         native-type="submit"
-        type="is-primary"> {{ $t('webapp.settings.request') }} </b-button>
+        type="primary"> {{ $t('webapp.settings.request') }} </unnnic-button>
     </div>
   </form>
 </template>

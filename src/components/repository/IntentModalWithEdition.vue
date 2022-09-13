@@ -37,7 +37,7 @@
           @click="closeModal">{{ $t('webapp.inbox.add_log.close') }}</button>
         <button
           :disabled="checkInputs"
-          class="button is-primary"
+          class="button primary"
           @click="addIntent"> {{ $t('webapp.inbox.add_log.add') }}</button>
       </footer>
     </div>

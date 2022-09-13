@@ -3,9 +3,9 @@
     <b-field
       v-if="editing"
       class="word-suggestion-accordion__field">
-      <b-input
+      <unnnic-input
         v-model="suggestionWord"
-        size="is-small"/>
+        size="sm"/>
     </b-field>
 
     <div
@@ -15,21 +15,21 @@
     </div>
 
     <div class="word-suggestion-accordion__icons">
-      <b-icon
+      <unnnic-icon-svg
         v-if="editing"
         icon="check-bold"
-        size="is-small"
+        size="sm"
         class="text-color-grey-dark word-suggestion-accordion__icons__icon"
         @click.native="saveEdition()" />
-      <b-icon
+      <unnnic-icon-svg
         v-else
         icon="pencil"
-        size="is-small"
+        size="sm"
         class="text-color-grey-dark word-suggestion-accordion__icons__icon"
         @click.native="editPhrase()" />
-      <b-icon
+      <unnnic-icon-svg
         icon="delete"
-        size="is-small"
+        size="sm"
         class="text-color-grey-dark word-suggestion-accordion__icons__icon"
         @click.native="deletePhrase()" />
     </div>

@@ -4,18 +4,18 @@
     <div
       class="modal-style__container">
       <div class="modal-style__container__close">
-        <b-icon
+        <unnnic-icon-svg
           icon="close"
           @click.native="closeModal()"/>
       </div>
       <div class="modal-style__container__header">
       <h3>{{ $t('webapp.word_suggestion.title') }}</h3>
-        <b-tooltip :label="$t('webapp.word_suggestion.tooltip_alert')"
-          position="is-bottom" multilined>
+        <unnnic-tool-tip :text="$t('webapp.word_suggestion.tooltip_alert')"
+          side="bottom" multilined>
           <b-field>
-              <b-tag size="is-medium" type="is-primary">BETA</b-tag>
+              <unnnic-tag size="is-medium" type="primary">BETA</unnnic-tag>
           </b-field>
-        </b-tooltip>
+        </unnnic-tool-tip>
       </div>
       <p>{{ $t('webapp.word_suggestion.subtitle') }}</p>
       <loading
@@ -30,7 +30,7 @@
               <div
                 v-for="(text, index) in allWords"
                 :key="index">
-                <b-select
+                <unnnic-select
                   v-model="selectWord[index]"
                   :placeholder="wordsTogether[index]"
                   class="select-input">
@@ -40,17 +40,17 @@
                     :key="index">
                     {{ word }}
                   </option>
-                </b-select>
+                </unnnic-select>
               </div>
             </b-field>
           </div>
           <div class="modal-style__container__body__content__icon">
-            <b-icon
+            <unnnic-icon-svg
               icon="check-bold"
               size="is-medium"
               class="icon-style"
               @click.native="addSentence(selectWord)" />
-            <b-icon
+            <unnnic-icon-svg
               class="icon-style"
               size="is-medium"
               icon="close-thick"
@@ -74,7 +74,7 @@
 
         <footer class="modal-style__container__footer">
           <button
-            class="button is-primary"
+            class="button primary"
             type="button"
             @click="closeModal">{{ $t('webapp.word_suggestion.cancel') }}</button>
           <button
@@ -226,7 +226,6 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/utilities.scss';
 @import '~@/assets/scss/colors.scss';
-
 
 
  ::-webkit-scrollbar {

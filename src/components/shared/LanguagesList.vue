@@ -1,7 +1,7 @@
 <template>
   <div class="languages-list">
     <b-field class="languages-list__field">
-      <b-autocomplete
+      <unnnic-autocomplete
         v-model="selectedLanguage"
         :keep-first="keepFirst"
         :open-on-focus="openOnFocus"

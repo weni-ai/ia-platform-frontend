@@ -8,20 +8,20 @@
       </div>
     </div>
     <div class="authorization__icons">
-      <b-icon
+      <unnnic-icon-svg
         ref="approveBtn"
         class="clickable"
-        type="is-primary"
+        type="primary"
         icon="check"
-        size="is-small"
+        size="sm"
         @click.native="approve()"
       />
-      <b-icon
+      <unnnic-icon-svg
         ref="rejectBtn"
         class="clickable"
         type="is-danger"
         icon="close"
-        size="is-small"
+        size="sm"
         @click.native="reject()"
       />
     </div>

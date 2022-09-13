@@ -94,15 +94,14 @@
       <!-- buttons and select -->
     </section>
     <section>
-      <textarea
+      <unnnic-textarea
         v-model="knowledgeBase.text.value"
         name=""
         id="textId"
         cols="30"
         rows="10"
         class="repository-base-edit__textarea"
-      >
-      </textarea>
+      />
     </section>
 
     <modal

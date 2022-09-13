@@ -2,14 +2,14 @@
   <div class="filter-evaluate-example">
     <div class="filter-evaluate-example__filters">
       <b-field :errors="errors.intent" class="filter-evaluate-example__filters__input-text">
-        <b-input v-model="text" :debounce="debounceTime" icon-right="magnify" />
+        <unnnic-input v-model="text" :debounce="debounceTime" icon-right="magnify" />
       </b-field>
       <div :class="wrapperClasses">
         <div class="filter-evaluate-example__filters__wrapper__text">
           {{ $t("webapp.dashboard.filter_by") }}:
         </div>
         <b-field :message="errors.intent">
-          <b-autocomplete
+          <unnnic-autocomplete
             v-model="intent"
             :data="optionsIntents"
             :formatters="inputFormatters"
@@ -19,7 +19,7 @@
           />
         </b-field>
         <b-field v-if="entities" :message="errors.entity">
-          <b-autocomplete
+          <unnnic-autocomplete
             v-model="entity"
             :data="optionsEntities"
             :formatters="inputFormatters"
@@ -29,7 +29,11 @@
           />
         </b-field>
         <b-field v-if="languageFilter && languages">
-          <b-select v-model="language" :placeholder="$t('webapp.evaluate.all_languages')" expanded>
+          <unnnic-select
+            v-model="language"
+            :placeholder="$t('webapp.evaluate.all_languages')"
+            expanded
+          >
             <option
               v-for="language in languages"
               :key="language.id"
@@ -41,10 +45,10 @@
             <option :value="null">
               {{ $t("webapp.home.all_languages") }}
             </option>
-          </b-select>
+          </unnnic-select>
         </b-field>
         <b-field :message="errors.repository_version_name" v-show="hasVersion">
-          <b-autocomplete
+          <unnnic-autocomplete
             v-if="versions"
             v-model="versionName"
             :loading="false && versionsList.loading"

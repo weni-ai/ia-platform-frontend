@@ -175,7 +175,7 @@
         {{ $t("webapp.home.save_changes") }}
       </unnnic-button>
     </unnnic-modal>
-    <b-loading :is-full-page="false" :active="loading" />
+    <loading v-if="loading" />
   </repository-view-base>
 </template>
 
@@ -188,6 +188,8 @@ import EntityEdit from '@/components/repository/EntityEdit';
 import SummaryInformation from '@/components/repository/SummaryInformation';
 import IntegrationModal from '@/components/shared/IntegrationModal';
 import RepositoryBase from './Base';
+import Loading from '@/components/shared/Loading';
+
 
 export default {
   name: 'RepositoryHome',
@@ -198,6 +200,7 @@ export default {
     EntityEdit,
     SummaryInformation,
     IntegrationModal,
+    Loading
   },
   extends: RepositoryBase,
   data() {

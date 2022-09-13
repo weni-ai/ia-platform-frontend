@@ -13,19 +13,19 @@
             slot="label"
             class="entity-input__input__label"
             v-html="$t('webapp.example.text_is', {text: highlightedText(entity) })" />
-          <b-select
+          <unnnic-select
             v-if="constrictEntities"
             v-model="entity.entity"
             expanded
-            size="is-small"
+            size="sm"
             @input="entitiesToEdit[index].entity = intentFormatters(entity.entity)">
             <option
               v-for="(entity, index) in (availableEntities || [])"
               :key="index">
               {{ entity }}
             </option>
-          </b-select>
-          <b-autocomplete
+          </unnnic-select>
+          <unnnic-autocomplete
             v-else
             :data="filteredData(index)"
             v-model="entity.entity"
@@ -34,26 +34,26 @@
             icon-right="close"
             icon-right-clickable
             open-on-focus
-            size="is-small"
+            size="sm"
             class="edit-sentence-input"
             @input="entitiesToEdit[index].entity = intentFormatters(entity.entity)"
             @icon-right-click="removeEntity(entity, index)"
           />
         </b-field>
         <div class="entity-input__icon-container">
-          <b-icon
+          <unnnic-icon-svg
             v-if="constrictEntities"
             class="clickable"
-            size="is-small"
+            size="sm"
             icon="close"
             @click.native.stop="removeEntity(entity, index)"/>
         </div>
       </div>
       <div class="entity-input__icon-container">
-        <b-tooltip
-          :label="addEntityHelpText"
+        <unnnic-tool-tip
+          :text="addEntityHelpText"
           multilined>
-          <b-icon
+          <unnnic-icon-svg
             :disabled="textSelected === null"
             :class="{clickable: true,
                      'icon-disabled': !addEntityEnabled
@@ -61,7 +61,7 @@
             icon="card-plus"
             @click.native.stop="addEntity"
           />
-        </b-tooltip>
+        </unnnic-tool-tip>
       </div>
     </b-field>
   </div>

@@ -16,18 +16,18 @@
         </div>
       </div>
       <div class="level-right">
-        <b-button
+        <unnnic-button
           class="repository-log-info__button"
           rounded
-          size="is-small"
+          size="sm"
           icon-left="chart-pie"
-          @click="debug()"> {{ $t('webapp.inbox.debug') }} </b-button>
-        <b-button
+          @click="debug()"> {{ $t('webapp.inbox.debug') }} </unnnic-button>
+        <unnnic-button
           class="repository-log-info__button"
           rounded
-          size="is-small"
+          size="sm"
           icon-left="file-document-outline"
-          @click="showRawInfo()"> {{ $t('webapp.inbox.raw') }} </b-button>
+          @click="showRawInfo()"> {{ $t('webapp.inbox.raw') }} </unnnic-button>
       </div>
     </div>
     <div class="log-infos level is-mobile">

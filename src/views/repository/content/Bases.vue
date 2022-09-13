@@ -33,14 +33,14 @@
         </div>
         <div class="repository-base__description__header">
           <div>
-            <b-tag
+            <unnnic-tag
               v-for="(category, index) in getAllCategories"
               :key="index"
               class="repository-base__header__tag"
               rounded
             >
               {{ category }}
-            </b-tag>
+            </unnnic-tag>
           </div>
         </div>
       </div>

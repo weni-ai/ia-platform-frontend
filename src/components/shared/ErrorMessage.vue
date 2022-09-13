@@ -1,7 +1,7 @@
 <template>
   <div class="error-message">
     <div class="error-message-icons">
-      <b-icon
+      <unnnic-icon-svg
         class="error-message-icons-sad"
         custom-size="error-message-icons-sad-size"
         icon="emoticon-sad" />

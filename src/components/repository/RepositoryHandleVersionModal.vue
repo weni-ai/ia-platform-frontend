@@ -3,7 +3,7 @@
     <div class="repository-new-version-modal__container">
       <form @submit.prevent="onSubmit">
         <b-field :label="$t('webapp.versions.title')">
-          <b-input
+          <unnnic-input
             v-model="name"
             :maxlength="maxLength"
             :has-counter="false"
@@ -11,20 +11,20 @@
           />
         </b-field>
         <b-field :label="$t('webapp.versions.version')">
-          <b-input
+          <unnnic-input
             :placeholder="version.name"
             disabled />
         </b-field>
         <div class="field repository-new-version-modal__button-container">
-          <b-button
+          <unnnic-button
             type="is-light"
-            @click="onClose()">{{ $t('webapp.versions.cancel') }}</b-button>
-          <b-button
+            @click="onClose()">{{ $t('webapp.versions.cancel') }}</unnnic-button>
+          <unnnic-button
             :loading="loading"
             :disabled="!canSubmit"
-            type="is-primary"
+            type="primary"
             native-type="submit"
-          >{{ $t('webapp.versions.add_new') }}</b-button>
+          >{{ $t('webapp.versions.add_new') }}</unnnic-button>
         </div>
       </form>
     </div>

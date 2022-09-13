@@ -1,7 +1,7 @@
 <template>
   <div class="categories-list">
     <b-field class="categories-list__field">
-      <b-autocomplete
+      <unnnic-autocomplete
         v-model="category"
         :keep-first="keepFirst"
         :open-on-focus="openOnFocus"

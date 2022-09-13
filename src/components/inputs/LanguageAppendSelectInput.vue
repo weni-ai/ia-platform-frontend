@@ -10,14 +10,14 @@
       <language-badge
         v-if="val"
         :language="val" />
-      <b-icon
+      <unnnic-icon-svg
         v-else
         class="language-icon language-icon__menu__no-val"
-        size="is-small"
+        size="sm"
         icon="earth" />
-      <b-icon
+      <unnnic-icon-svg
         class="clickable align language-icon language-icon__menu"
-        size="is-small"
+        size="sm"
         icon="menu-down" />
     </span>
     <b-dropdown-item

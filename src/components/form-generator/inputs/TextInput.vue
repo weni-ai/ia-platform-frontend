@@ -1,5 +1,5 @@
 <template>
-  <b-input
+  <unnnic-input
     :maxlength="max_length"
     :placeholder="labelPlaceholder"
     v-model="value"

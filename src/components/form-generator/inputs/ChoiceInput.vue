@@ -5,7 +5,7 @@
     :label-placeholder="labelPlaceholder"
     v-model="value"
     @input="update()"/>
-  <b-autocomplete
+  <unnnic-autocomplete
     v-else-if="compact"
     v-model="value"
     :placeholder="labelPlaceholder"
@@ -16,7 +16,7 @@
     open-on-focus
     @input="updateInput"
     @select="selectOption"/>
-  <b-select
+  <unnnic-select
     v-else
     v-model="value"
     expanded
@@ -25,7 +25,7 @@
       v-for="choice in choices"
       :key="choice.value"
       :value="choice.value">{{ choice.display_name }}</option>
-  </b-select>
+  </unnnic-select>
 </template>
 
 <script>

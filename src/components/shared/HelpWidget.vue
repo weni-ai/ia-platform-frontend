@@ -1,5 +1,5 @@
 <template>
-  <b-icon
+  <unnnic-icon-svg
     class="help-widget-icon"
     icon="help-circle"
     @click.native="open()" />

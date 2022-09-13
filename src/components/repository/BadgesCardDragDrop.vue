@@ -109,13 +109,13 @@
               <span slot="label" v-html="$t('webapp.home.edit_group_field_title')" />
             </unnnic-input>
             <!-- <b-field class="badges-card__header__edit__field">
-              <b-input v-model="groupName" size="is-small" />
+              <unnnic-input v-model="groupName" size="sm" />
             </b-field> -->
             <!-- <div class="badges-card__header__edit__icon">
-              <b-icon
+              <unnnic-icon-svg
                 v-if="edit"
                 icon="check-bold"
-                size="is-small"
+                size="sm"
                 @click.native="saveChange()"
               />
             </div> -->

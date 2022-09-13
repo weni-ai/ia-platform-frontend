@@ -1,5 +1,5 @@
 <template>
-  <b-select
+  <unnnic-select
     :value="value"
     :placeholder="$t('webapp.translate.languages_select')"
     expanded
@@ -9,7 +9,7 @@
       v-for="[language, label] in languages"
       :value="language"
       :key="language">{{ label }}</option>
-  </b-select>
+  </unnnic-select>
 </template>
 
 <script>

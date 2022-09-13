@@ -8,22 +8,22 @@
       {{ $t('webapp.import_and_export_intelligence.subtitle') }}
     </p>
     <div class="import-and-export-intelligence__buttons">
-      <b-button
+      <unnnic-button
         v-if="intelligenceFile === null"
         ref="setVisibleImport"
-        type="is-primary"
+        type="primary"
         class="import-and-export-intelligence__buttons__import-button"
         @click.native="setVisibleImportModal()">
         {{ $t('webapp.import_and_export_intelligence.import_rasa') }}
-      </b-button>
-      <b-button
+      </unnnic-button>
+      <unnnic-button
         v-if="intelligenceFile === null"
         ref="setVisibleMigrate"
-        type="is-primary"
+        type="primary"
         class="import-and-export-intelligence__buttons__import-button"
         @click.native="setVisibleMigrateModal()">
         {{ $t('webapp.import_and_export_intelligence.migrate_wit') }}
-      </b-button>
+      </unnnic-button>
     </div>
 
     <import-data-modal

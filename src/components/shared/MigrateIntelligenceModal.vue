@@ -1,7 +1,7 @@
 <template>
   <div class="migrate-intelligence-modal">
-    <b-modal
-      :active.sync="isModalVisible"
+    <unnnic-modal
+      :showModal.sync="isModalVisible"
       :destroy-on-hide="false"
       :can-cancel="false"
       has-modal-card
@@ -17,13 +17,13 @@
           <div
             class="migrate-intelligence-modal__fields">
             <b-field class="migrate-intelligence-modal__fields__inputs">
-              <b-input
+              <unnnic-input
                 v-model="authToken"
                 :placeholder="$t('webapp.migrate_intelligence.token_input')"
                 expanded/>
             </b-field>
             <b-field class="migrate-intelligence-modal__fields__inputs">
-              <b-select
+              <unnnic-select
                 v-model="languageSelect"
                 :placeholder="$t('webapp.migrate_intelligence.language')"
                 expanded>
@@ -31,30 +31,30 @@
                   v-for="[language, label] in languages"
                   :value="language"
                   :key="language">{{ label }}</option>
-              </b-select>
+              </unnnic-select>
             </b-field>
           </div>
         </section>
         <footer class="modal-card-foot">
           <div class="migrate-intelligence-modal__modal-style__style-button">
-            <b-button
+            <unnnic-button
               class="modal-button"
               type="is-white"
               @click="dispatchCloseMigrateModal()">
               {{ $t('webapp.migrate_intelligence.cancel') }}
-            </b-button>
-            <b-button
+            </unnnic-button>
+            <unnnic-button
               :loading="isButtonLoading"
               :disabled="checkInputs"
               class="modal-button"
               type="is-primary"
               @click="dispatchMigrate()">
               {{ $t('webapp.migrate_intelligence.migrate') }}
-            </b-button>
+            </unnnic-button>
           </div>
         </footer>
       </div>
-    </b-modal>
+    </unnnic-modal>
   </div>
 </template>
 

@@ -15,7 +15,7 @@
             :disabled="loadingOriginal"
             :class="{
               button: true,
-              'is-small': true,
+              'sm': true,
               'is-primary': !showingOriginal,
               'is-info': showingOriginal,
               'is-loading': loadingOriginal,
@@ -64,7 +64,7 @@
             :href="`#delete-translation-${id}`"
             class="delete-icon"
             @click.prevent="deleteThisTranslation()">
-            <b-icon icon="delete"
+            <unnnic-icon-svg icon="delete"
               class="level-left translation-infos__container__icon"/>
           </a>
         </div>

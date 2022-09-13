@@ -24,9 +24,9 @@
             <div
               slot="header"
               class="v-step__header">
-              <b-icon
+              <unnnic-icon-svg
                 icon="close"
-                size="is-small"
+                size="sm"
                 @click.native="skipTutorial()"/>
             </div>
             <template>

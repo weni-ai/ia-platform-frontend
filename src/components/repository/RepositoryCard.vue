@@ -62,11 +62,11 @@
               path: '/home',
               query: { category: category.id },
           }">
-            <b-tag
-              color="grey-light"
+            <unnnic-tag
+              scheme="feedback-grey"
               rounded
-              size="is-small"
-              class="repository-card__categories__category">{{ category.name }}</b-tag>
+              size="sm"
+              class="repository-card__categories__category">{{ category.name }}</unnnic-tag>
           </component>
         </div>
       </div>

@@ -3,7 +3,7 @@
     <div
       v-show="list"
       class="user-reports__filter">
-      <b-select
+      <unnnic-select
         :disabled="list && list.loading"
         v-model="filter"
         class="user-reports__select">
@@ -11,7 +11,7 @@
           v-for="(option, index) in options"
           :key="index"
           :value="option"> {{ option.label }} </option>
-      </b-select>
+      </unnnic-select>
       {{ $t('webapp.my_profile.reports.filter_by') }}
     </div>
     <user-report-item

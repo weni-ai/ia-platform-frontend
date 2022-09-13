@@ -45,9 +45,9 @@
           <a
             v-show="!editing"
             @click.prevent.stop="editSentence()">
-            <b-icon
+            <unnnic-icon-svg
               icon="pencil"
-              size="is-small"
+              size="sm"
               class="example__icon" />
           </a>
         </div>
@@ -57,9 +57,9 @@
         <div class="level-item">
           <a
             @click.prevent.stop="deleteThisExample()">
-            <b-icon
+            <unnnic-icon-svg
               icon="delete"
-              size="is-small"
+              size="sm"
               class="example__icon" />
           </a>
         </div>

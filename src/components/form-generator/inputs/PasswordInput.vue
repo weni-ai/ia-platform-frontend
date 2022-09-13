@@ -1,5 +1,5 @@
 <template>
-  <b-input
+  <unnnic-input
     :message="drfErro"
     :maxlength="max_length"
     v-model="value"

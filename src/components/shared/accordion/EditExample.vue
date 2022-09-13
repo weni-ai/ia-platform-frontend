@@ -23,7 +23,7 @@
             :message="errors.non_field_errors"
             :type="{ 'is-danger': errors.non_field_errors && errors.non_field_errors.length > 0 }"
             :label="$t('webapp.example.intent')">
-            <b-autocomplete
+            <unnnic-autocomplete
               v-model="intent"
               :data="filterIntents"
               :placeholder="$t('webapp.example.intent')"
@@ -45,7 +45,7 @@
                 slot="label"
                 class="edit-sentence__input__label"
                 v-html="$t('webapp.example.text_is', {text: highlightedText(entity) })" />
-              <b-autocomplete
+              <unnnic-autocomplete
                 :data="filterEntities(index, false)"
                 v-model="entity.entity"
                 :placeholder="$t('webapp.example.entity')"
@@ -68,7 +68,7 @@
                 slot="label"
                 class="edit-sentence__input__label"
                 v-html="$t('webapp.example.text_is', {text: highlightedText(entity) })" />
-              <b-autocomplete
+              <unnnic-autocomplete
                 :data="filterEntities(index, true)"
                 :custom-formatter="intentFormatters"
                 v-model="entity.entity"
@@ -91,28 +91,28 @@
       </div>
       <div
         class="edit-sentence__btn-wrapper">
-        <b-button
+        <unnnic-button
           :disabled="textSelected === null"
           rounded
-          type="is-primary"
+          type="primary"
           @click.prevent.stop="addPendingEntity"
         >
           <span class="edit-sentence__add-entity-button-text">{{ entityButtonText }} </span>
-        </b-button>
+        </unnnic-button>
         <div>
-          <b-button
+          <unnnic-button
             class="edit-sentence__btn-wrapper__cancelButton"
             @click="cancelEditSentence">
             {{ $t('webapp.trainings.cancel_button') }}
-          </b-button>
-          <b-button
+          </unnnic-button>
+          <unnnic-button
             :disabled="!isValid || submitting"
             :tooltip-hover="!isValid ? validationErrors : null"
             :loading="submitting"
             class="edit-sentence__btn-wrapper__saveButton"
             @click="onSubmit">
             <slot v-if="!submitting">{{ $t('webapp.trainings.save_button') }}</slot>
-          </b-button>
+          </unnnic-button>
         </div>
       </div>
     </form>

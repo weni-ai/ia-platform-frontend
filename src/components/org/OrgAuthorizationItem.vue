@@ -11,26 +11,26 @@
       <role-select
         :editable="editable"
         v-model="newRole"
-        size="is-small" />
+        size="sm" />
     </div>
     <div class="column is-2 authorization-item__icon__container">
-      <b-icon
+      <unnnic-icon-svg
         v-show="!submitting"
         icon="delete"
-        size="is-small"
+        size="sm"
         class="authorization-item__icon authorization-item__icon--button"
         @click.native="remove()"/>
-      <b-icon
+      <unnnic-icon-svg
         v-show="!submitting"
         icon="pencil"
-        size="is-small"
+        size="sm"
         class="authorization-item__icon authorization-item__icon--button"
         @click.native="editable = !editable"/>
-      <b-icon
+      <unnnic-icon-svg
         v-show="submitting"
         class="authorization-item__icon icon-spin"
         icon="refresh" />
-      <b-icon
+      <unnnic-icon-svg
         v-show="submitted"
         class="text-color-primary"
         icon="check" />

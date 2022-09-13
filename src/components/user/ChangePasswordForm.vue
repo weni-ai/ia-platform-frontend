@@ -9,11 +9,11 @@
       class="field" />
     <div class="field">
       <div class="control has-text-centered">
-        <b-button
+        <unnnic-button
           :disabled="submitting"
           native-type="submit"
-          type="is-primary"
-          class="submit">{{ $t('webapp.my_profile.edit') }}</b-button>
+          type="primary"
+          class="submit">{{ $t('webapp.my_profile.edit') }}</unnnic-button>
       </div>
     </div>
   </form>

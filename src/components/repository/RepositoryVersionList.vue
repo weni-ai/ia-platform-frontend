@@ -1,8 +1,8 @@
 <template>
   <div class="version-list">
-    <b-modal
+    <unnnic-modal
       :width="500"
-      :active.sync="isNewVersionModalActive"
+      :showModal.sync="isNewVersionModalActive"
       class="repository-new-version-modal"
       trap-focus
       aria-role="dialog"
@@ -13,7 +13,7 @@
         @close="isNewVersionModalActive = false"
         @error="showError"
         @addedVersion="onAddedVersion()"/>
-    </b-modal>
+    </unnnic-modal>
     <loading v-if="loadingList" />
     <section v-else>
       <b-table
@@ -38,7 +38,7 @@
             numeric>
             <b-field v-if="isEdit.edit === true && isEdit.id === props.row.id">
               <div class="versions__edit-input">
-                <b-input
+                <unnnic-input
                   :expanded="true"
                   v-model="isEdit.name"
                   :value="isEdit.name"
@@ -90,30 +90,30 @@
             label=""
             sortable>
             <div class="versions__table__buttons-wrapper">
-              <b-button
-                :type="props.row.is_default ? 'is-primary': 'is-light'"
+              <unnnic-button
+                :type="props.row.is_default ? 'primary': 'is-light'"
                 :disabled="!canEdit"
-                class="is-small"
+                class="sm"
                 rounded
                 @click="handleDefaultVersion(props.row.id, props.row.name)">
                 {{ $t('webapp.versions.main') }}
-              </b-button>
-              <b-icon
+              </unnnic-button>
+              <unnnic-icon-svg
                 v-if="canEdit"
                 icon="pencil"
-                size="is-small"
+                size="sm"
                 class="versions__table__buttons-wrapper__icon"
                 @click.native="onEditVersion({id: props.row.id, name: props.row.name})"/>
-              <b-icon
+              <unnnic-icon-svg
                 v-if="canEdit"
                 icon="delete"
-                size="is-small"
+                size="sm"
                 class="versions__table__buttons-wrapper__icon"
                 @click.native="onDeleteVersion(props.row.id, props.row.is_default)"/>
-              <b-icon
+              <unnnic-icon-svg
                 v-if="canEdit"
                 icon="content-copy"
-                size="is-small"
+                size="sm"
                 class="versions__table__buttons-wrapper__icon"
                 @click.native="copyVersion(props.row)"/>
             </div>

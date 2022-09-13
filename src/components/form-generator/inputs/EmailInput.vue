@@ -1,5 +1,5 @@
 <template>
-  <b-input
+  <unnnic-input
     :maxlength="max_length"
     :has-counter="showMaxLength"
     v-model="value"

@@ -3,15 +3,15 @@
     v-if="compact"
     :label="label"
     horizontal>
-    <b-switch
+    <unnnic-switch
       v-model="value"
       @input="update()" />
     <b-field :message="helpText" />
   </b-field>
-  <b-switch
+  <unnnic-switch
     v-else
     v-model="value"
-    @input="update()">{{ verboseValue }}</b-switch>
+    @input="update()">{{ verboseValue }}</unnnic-switch>
 </template>
 
 <script>

@@ -77,22 +77,22 @@
             class="create-repository__wrapper__form"
           />
           <div class="create-repository__wrapper__buttons">
-            <b-button
-              type="is-primary"
+            <unnnic-button
+              type="primary"
               class="create-repository__wrapper__form__buttons"
               @click="current = 0"
             >
               {{ $t("webapp.create_repository.previous") }}
-            </b-button>
+            </unnnic-button>
             <span class="create-repository__wrapper__form__finishButton">
-              <b-button
+              <unnnic-button
                 :disabled="categories.length === 0"
                 native-type="submit"
-                type="is-primary"
+                type="primary"
                 class="create-repository__wrapper__form__buttons"
               >
                 {{ $t("webapp.create_repository.submit") }}
-              </b-button>
+              </unnnic-button>
             </span>
           </div>
         </div>
@@ -104,13 +104,13 @@
           </h1>
           <p v-html="$t('webapp.create_repository.repository_created_text')" />
           <router-link :to="repositoryDetailsRouterParams()">
-            <b-button
+            <unnnic-button
               class="create-repository__wrapper__form__final--message__button"
-              type="is-primary"
+              type="primary"
               @click="sendEvent()"
             >
               {{ $t("webapp.create_repository.start") }}
-            </b-button>
+            </unnnic-button>
           </router-link>
         </div>
       </section>

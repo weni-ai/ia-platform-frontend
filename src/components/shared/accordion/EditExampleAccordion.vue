@@ -50,7 +50,7 @@
         <div class="edit-sentence__icon-container--intent">
           {{ $t('webapp.example.intent') }}: <tr />
         </div>
-        <b-autocomplete
+        <unnnic-autocomplete
           v-model="intent"
           :data="optionsIntents"
           :placeholder="$t('webapp.example.intent')"
@@ -63,26 +63,26 @@
           v-show="!custom"
           class="edit-sentence__icon-container edit-sentence__icon-container--intent">
 
-          <b-button
+          <unnnic-button
             class="edit-sentence__icon"
             icon-right="close-thick"
             @click.native.stop="cancelEditSentence" />
-          <b-tooltip
+          <unnnic-tool-tip
             :active="!isValid"
-            :label="validationErrorsString">
-            <b-button
+            :text="validationErrorsString">
+            <unnnic-button
               :disabled="submitting"
               class="edit-sentence__icon">
-              <b-icon
+              <unnnic-icon-svg
                 :icon="submitting ? 'refresh' : 'check-bold'"
                 :class="{
                   'edit-sentence__icon': true,
                   'icon-spin': submitting
                 }"
-                size="is-small"
+                size="sm"
                 @click.native.stop="onSubmit" />
-            </b-button>
-          </b-tooltip>
+            </unnnic-button>
+          </unnnic-tool-tip>
         </div>
 
       </b-field>

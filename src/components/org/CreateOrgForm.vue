@@ -1,8 +1,7 @@
 <template>
   <div>
     <form @submit.prevent="onSubmit">
-      <loading v-if="!formSchema" />
-      <b-loading :active="submitting" />
+      <loading v-if="!formSchema || submitting" />
       <form-generator
         v-if="formSchema"
         :schema="filteredSchema"
@@ -13,21 +12,21 @@
         class="field"/>
       <!-- <div class="control has-text-centered">
         <b-field>
-          <b-input
+          <unnnic-input
             expanded
             placeholder="Invite to Organization" />
-          <b-button
+          <unnnic-button
             class="submit-button--secondary"
-            type="is-secondary"> {{ $t('webapp.orgs.send_email') }} </b-button>
+            type="secondary"> {{ $t('webapp.orgs.send_email') }} </unnnic-button>
         </b-field>
       </div> -->
       <div class="control submit-button__wrapper has-text-centered">
-        <b-button
+        <unnnic-button
           ref="submit"
           :disabled="submitting"
           native-type="submit"
-          type="is-primary"
-          class="submit-button">{{ $t('webapp.orgs.create') }}</b-button>
+          type="primary"
+          class="submit-button">{{ $t('webapp.orgs.create') }}</unnnic-button>
       </div>
     </form>
   </div>

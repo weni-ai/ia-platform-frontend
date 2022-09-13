@@ -11,7 +11,7 @@
       </header>
       <section class="modal-card-body">
         <b-field>
-          <b-select
+          <unnnic-select
             v-model="selectedOptions"
             :placeholder="$t('webapp.inbox.intent')"
             size="is-medium"
@@ -34,7 +34,7 @@
               {{ info.name }} {{ info.confidence | percent }}
             </option>
 
-          </b-select>
+          </unnnic-select>
 
         </b-field>
       </section>
@@ -45,7 +45,7 @@
           @click="closeModal">{{ $t('webapp.inbox.add_log.close') }}</button>
         <button
           :disabled="!selectedOptions"
-          class="button is-primary"
+          class="button primary"
           @click="addIntent"> {{ $t('webapp.inbox.add_log.add') }}</button>
       </footer>
     </div>

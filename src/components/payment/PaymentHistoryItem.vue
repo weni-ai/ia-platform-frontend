@@ -6,9 +6,9 @@
       <p class="history__period__title">
         {{ $t('webapp.my_profile.payment.payment', { period }) }}
       </p>
-      <b-button type="is-primary">
+      <unnnic-button type="primary">
         {{ $tc('webapp.my_profile.reports.predictions', predictions) }}
-      </b-button>
+      </unnnic-button>
     </div>
     <div class="history__total">
       <p class="history__total__title">
@@ -42,7 +42,7 @@
         {{ $t('webapp.my_profile.payment.payment', { period }) }}
       </p>
       <p class="history__total__title"> {{ $n(total, 'currency') }}
-        <b-icon
+        <unnnic-icon-svg
           :class="paid? 'success' : 'danger' "
           :icon="paid ? 'check-bold' : 'close-thick'" />
       </p>

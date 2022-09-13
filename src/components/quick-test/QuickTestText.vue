@@ -49,16 +49,16 @@
         </div>
       </div>
       <div class="field is-grouped is-grouped-centered">
-        <b-button
+        <unnnic-button
           class="quick-test-text__button"
           icon-left="chart-pie"
-          @click="debug()"> {{ $t('webapp.quick_test.debug') }} </b-button>
+          @click="debug()"> {{ $t('webapp.quick_test.debug') }} </unnnic-button>
 
-        <b-button
+        <unnnic-button
           class="quick-test-text__button"
           icon-left="file-document-outline"
           @click="showRawInfo()"> {{ $t('webapp.quick_test.raw') }}
-        </b-button>
+        </unnnic-button>
       </div>
     </div>
   </div>

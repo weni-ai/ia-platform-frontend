@@ -1,9 +1,6 @@
 <template>
   <div>
-    <b-loading
-      :is-full-page="false"
-      :active="loading"
-      :can-cancel="false" />
+    <loading v-if="loading" />
     <transition-group
       v-if="!translationList"
       name="list"
@@ -34,11 +31,13 @@
 import { mapActions } from 'vuex';
 import Pie from '@/components/shared/Pie';
 import Flag from '@/components/shared/Flag';
+import Loading from '@/components/shared/Loading';
 
 
 const components = {
   Pie,
   Flag,
+  Loading
 };
 
 export default {

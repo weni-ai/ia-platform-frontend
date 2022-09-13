@@ -5,12 +5,12 @@
         <div class="login__content__field">
           <div class="login__content__field__header">
             <p>{{ $t('webapp.login_form.dont_have_account') }}</p>
-            <b-button
-              type="is-primary"
+            <unnnic-button
+              type="primary"
               class="login__content__field__header__createButton"
               @click="goToCreate">
               {{ $t('webapp.login_form.get_free') }}
-            </b-button>
+            </unnnic-button>
           </div>
 
           <div class="login__content__field__forms">

@@ -35,12 +35,12 @@
             <p>Opera</p>
         </a>
       </div>
-      <b-button
+      <unnnic-button
         class="safari-alert__content__button"
         size="normal"
         @click="goToLandingPage()">
         {{ $t('webapp.safari_alert.button') }}
-      </b-button>
+      </unnnic-button>
     </div>
   </div>
 </template>

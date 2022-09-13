@@ -4,7 +4,7 @@
       <language-select v-model="language" />
     </b-field>
     <b-field :label="$t('webapp.analyze_text.message')">
-      <b-input
+      <unnnic-input
         v-model="text"
         type="textarea" />
     </b-field>

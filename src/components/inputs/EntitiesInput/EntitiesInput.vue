@@ -12,12 +12,12 @@
       @removeEntity="() => removeEntity(entity)"
     />
 
-    <b-tooltip
-      :is-active="!textSelectedValue"
-      :label="$t('webapp.trainings.highlight_word')"
+    <unnnic-tool-tip
+      :enabled="!textSelectedValue"
+      :text="$t('webapp.trainings.highlight_word')"
       multilined
       type="is-dark">
-      <b-button
+      <unnnic-button
         id="tour-training-step-2"
         ref="addEntityBtn"
         :is-next-disabled="true"
@@ -25,7 +25,7 @@
         :disabled="!textSelectedValue"
         :is-step-blocked="!blockedNextStepTutorial"
         rounded
-        type="is-primary"
+        type="primary"
         @click.prevent.stop="addEntity()"
       >
         <span class="add-entity-button-text">
@@ -34,8 +34,8 @@
           </span>
           <span v-else>{{ $t('webapp.trainings.add_entity') }}</span>
         </span>
-      </b-button>
-    </b-tooltip>
+      </unnnic-button>
+    </unnnic-tool-tip>
   </div>
 </template>
 

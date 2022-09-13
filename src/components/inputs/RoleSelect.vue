@@ -1,13 +1,13 @@
 <template>
-  <b-tooltip
-    :active="!!helpText"
-    :label="helpText"
+  <unnnic-tool-tip
+    :enabled="!!helpText"
+    :text="helpText"
     multilined
     class="blocked">
     <p
       v-show="!editable"
       class="has-text-centered"><small> {{ roleLabel }} </small></p>
-    <b-select
+    <unnnic-select
       v-show="editable"
       v-model="role"
       v-bind="$attrs"
@@ -18,8 +18,8 @@
         :key="value">
         {{ $t(`webapp.roles.${label.toLowerCase()}`) }}
       </option>
-    </b-select>
-  </b-tooltip>
+    </unnnic-select>
+  </unnnic-tool-tip>
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
   <div class="import-data-modal">
-    <b-modal
-      :active.sync="isModalVisible"
+    <unnnic-modal
+      :showModal.sync="isModalVisible"
       :destroy-on-hide="false"
       :can-cancel="false"
       has-modal-card
@@ -19,7 +19,7 @@
             <div class="import-data-modal__custom-file-upload__input">
               <b-upload v-model="selectedFile">
                 <a class="button import-data-modal__custom-file-upload__input__button">
-                  <b-icon
+                  <unnnic-icon-svg
                     icon="upload"
                     type="is-white"/>
                 </a>
@@ -31,7 +31,7 @@
                 <div
                   class="import-data-modal__custom-file-upload__input__icon"
                   @click="removeSelectedFile">
-                  <b-icon
+                  <unnnic-icon-svg
                     icon="close-circle"
                     custom-size="mdi-18px"
                   />
@@ -47,24 +47,24 @@
         </section>
         <footer class="modal-card-foot">
           <div class="import-data-modal__modal-style__style-button">
-            <b-button
+            <unnnic-button
               class="modal-button"
               type="is-white"
               @click="dispatchCloseImportModal()">
               {{ $t('webapp.import_dataset.cancel') }}
-            </b-button>
-            <b-button
+            </unnnic-button>
+            <unnnic-button
               :loading="isButtonLoading"
               :disabled="selectedFile === null"
               class="modal-button"
-              type="is-primary"
+              type="primary"
               @click="dispatchUploadFile()">
               {{ $t('webapp.import_dataset.importar') }}
-            </b-button>
+            </unnnic-button>
           </div>
         </footer>
       </div>
-    </b-modal>
+    </unnnic-modal>
   </div>
 </template>
 

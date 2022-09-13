@@ -51,17 +51,17 @@
       <word-suggestion-button
         v-show="!editing && isSuggestion"
         :get-sentence="sentenceDetail"/>
-      <b-icon
+      <unnnic-icon-svg
         v-show="!editing"
         :icon="editing ? 'check' : 'pencil'"
         :class="{ clickable: true,
                   'icon-disabled': editingTranslation,
                   'example-item__options__icon': !editing}"
-        size="is-small"
+        size="sm"
         @click.native.stop="handleEdit" />
-      <b-icon
+      <unnnic-icon-svg
         class="clickable example-item__options__icon"
-        size="is-small"
+        size="sm"
         icon="delete"
         @click.native.stop="deleteThisExample" />
     </div>

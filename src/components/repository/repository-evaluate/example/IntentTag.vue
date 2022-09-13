@@ -1,5 +1,5 @@
 <template>
-  <!-- <b-tag :closable="closable" class="intent-tag" size="is-medium" rounded
+  <!-- <unnnic-tag :closable="closable" class="intent-tag" size="is-medium" rounded
     @close="$emit('close')">
     <div class="intent-tag__container">
       <div v-if="intentCount" class="intent-tag__container__count-style">
@@ -7,7 +7,7 @@
       </div>
       {{ entityName }}
     </div>
-  </b-tag> -->
+  </unnnic-tag> -->
   <div class="intent-tag">
     <unnnic-tag
       @close="$emit('close')"

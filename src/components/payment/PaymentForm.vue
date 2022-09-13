@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-loading :active="loading" />
-    <b-input
+    <loading v-if="loading" />
+    <unnnic-input
       v-model="name"
       :placeholder="$t('webapp.payment.info.card_name')"
       class="card-number__field" />
@@ -21,12 +21,12 @@
     />
     <div
       class="payment-buttons">
-      <b-button
+      <unnnic-button
         v-if="showBackButton"
-        type="is-primary"
-        @click="$emit('back')"> {{ $t('webapp.payment.info.back') }} </b-button>
-      <b-button
-        type="is-primary"> {{ $t('webapp.payment.info.save') }} </b-button>
+        type="primary"
+        @click="$emit('back')"> {{ $t('webapp.payment.info.back') }} </unnnic-button>
+      <unnnic-button
+        type="primary"> {{ $t('webapp.payment.info.save') }} </unnnic-button>
     </div>
   </div>
 </template>
@@ -34,11 +34,13 @@
 <script>
 import { Card } from 'vue-stripe-elements-plus';
 import stripe from '@/utils/plugins/stripe';
+import Loading from '@/components/shared/Loading';
 
 export default {
   name: 'PaymentForm',
   components: {
     Card,
+    Loading
   },
   props: {
     showBackButton: {

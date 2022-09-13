@@ -4,22 +4,22 @@
       v-if="error"
       class="debug__error">
       <div class="debug__close">
-        <b-icon
+        <unnnic-icon-svg
           icon="close"
           @click.native="closeModal()"/>
       </div>
       <p> {{ $t('webapp.debug.debug_description') }} </p>
-      <b-button
+      <unnnic-button
         class="debug__error__button"
-        type="is-primary"
-        @click="reload()"> {{ $t('webapp.debug.reload') }} </b-button>
+        type="primary"
+        @click="reload()"> {{ $t('webapp.debug.reload') }} </unnnic-button>
     </div>
     <loading
       v-else-if="loading"
       class="debug__loading"/>
     <div v-else>
       <div class="debug__close">
-        <b-icon
+        <unnnic-icon-svg
           icon="close"
           @click.native="closeModal()"/>
       </div>

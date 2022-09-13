@@ -1,7 +1,6 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <loading v-if="!formSchema" />
-    <b-loading :active="submitting" />
+    <loading v-if="!formSchema || submitting" />
     <form-generator
       v-if="formSchema && myProfile"
       :schema="filteredSchema"
@@ -24,21 +23,21 @@
       <a @click="openChangePasswordModal()">
         {{ $t('webapp.my_profile.change_password') }} </a>
       <div class="control has-text-centered">
-        <b-button
+        <unnnic-button
           :disabled="submitting"
           native-type="submit"
-          type="is-primary"
-          class="submit-button">{{ $t('webapp.my_profile.edit') }}</b-button>
+          type="primary"
+          class="submit-button">{{ $t('webapp.my_profile.edit') }}</unnnic-button>
       </div>
     </div>
-    <b-modal
+    <unnnic-modal
       :width="489"
-      :active.sync="changePasswordModalOpen">
+      :showModal.sync="changePasswordModalOpen">
       <div class="change-password">
         <h1>{{ $t('webapp.my_profile.modal_change_password') }}</h1>
         <change-password-form @changed="onPasswordChanged()" />
       </div>
-    </b-modal>
+    </unnnic-modal>
   </form>
 </template>
 

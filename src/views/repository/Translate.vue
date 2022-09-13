@@ -15,7 +15,7 @@
                   <b-field
                     id="tour-translate-step-1"
                     :is-previous-disabled="true">
-                    <b-input
+                    <unnnic-input
                       :placeholder="baseLanguage"
                       disabled/>
                   </b-field>
@@ -24,7 +24,7 @@
               <div class="repository-translate__translate-arrow-icon">
                 <div class="field">
                   <label class="label">&nbsp;</label>
-                  <b-icon
+                  <unnnic-icon-svg
                     icon="chevron-right"
                     size="is-medium" />
                 </div>
@@ -58,17 +58,17 @@
                 :repository-uuid="repository.uuid"
                 @onTranslate="translating = true"
                 @onTranslateComplete="translating = false" />
-              <b-button
+              <unnnic-button
                 :disabled="!(repository && translate.to)"
-                :label="$t('webapp.translate.send_to_translators')"
+                :text="$t('webapp.translate.send_to_translators')"
                 class="repository-translate__header__button"
-                type="is-primary"
+                type="primary"
                 @click="tokenModalOpen = true" />
             </div>
           </div>
           <div v-if="!!translate.to">
-            <b-modal
-              :active.sync="isImportFileVisible"
+            <unnnic-modal
+              :showModal.sync="isImportFileVisible"
               :destroy-on-hide="false"
               :can-cancel="false"
               has-modal-card
@@ -88,7 +88,7 @@
                         v-model="translationFile"
                       >
                         <a class="button custom-file-upload__input__button">
-                          <b-icon
+                          <unnnic-icon-svg
                             icon="upload"
                             type="is-white"/>
                         </a>
@@ -102,7 +102,7 @@
                         <div
                           class="custom-file-upload__input__icon"
                           @click="removeSelectedFile">
-                          <b-icon
+                          <unnnic-icon-svg
                             icon="close-circle"
                             custom-size="mdi-18px"
                           />
@@ -121,28 +121,28 @@
                 </section>
                 <footer class="modal-card-foot">
                   <div class="repository-translate__modalStyle__styleButton">
-                    <b-button
+                    <unnnic-button
                       class="modalButton"
                       type="is-white"
                       @click="closeImportModal()">
                       {{ $t('webapp.translate.import_button_cancel') }}
-                    </b-button>
+                    </unnnic-button>
 
-                    <b-button
+                    <unnnic-button
                       :loading="waitDownloadFile"
                       :disabled="translationFile === null"
                       class="modalButton"
-                      type="is-primary"
+                      type="primary"
                       @click="importTranslation()">
                       {{ $t('webapp.translate.import_button') }}
-                    </b-button>
+                    </unnnic-button>
                   </div>
                 </footer>
               </div>
-            </b-modal>
+            </unnnic-modal>
 
-            <b-modal
-              :active.sync="isExportFileVisible"
+            <unnnic-modal
+              :showModal.sync="isExportFileVisible"
               :destroy-on-hide="false"
               :can-cancel="false"
               has-modal-card
@@ -157,7 +157,7 @@
                 <section class="modal-card-body">
                   <div class="repository-translate__selection__section">
                     <b-field>
-                      <b-select
+                      <unnnic-select
                         v-model="allTranslations"
                         expanded
                         size="is-medium"
@@ -169,30 +169,30 @@
                           :key="option.id">
                           {{ option.label }}
                         </option>
-                      </b-select>
+                      </unnnic-select>
                     </b-field>
                   </div>
                 </section>
 
                 <footer class="modal-card-foot">
                   <div class="repository-translate__modalStyle__styleButton">
-                    <b-button
+                    <unnnic-button
                       class="modalButton"
                       type="is-white"
                       @click="closeExportModal()">
                       {{ $t('webapp.translate.import_button_cancel') }}
-                    </b-button>
-                    <b-button
+                    </unnnic-button>
+                    <unnnic-button
                       :loading="waitDownloadFile"
-                      type="is-primary"
+                      type="primary"
                       class="modalButton"
                       @click="exportTranslation()">
                       {{ $t('webapp.translate.export_button') }}
-                    </b-button>
+                    </unnnic-button>
                   </div>
                 </footer>
               </div>
-            </b-modal>
+            </unnnic-modal>
             <div class="repository-translate__list">
               <div class="repository-translate__list__search">
                 <translation-sentence-status
@@ -251,19 +251,19 @@
               :is-previous-disabled="true"
               class="repository-translate__translateButtons">
 
-              <b-button
-                :class="{'is-primary': !!translate.to}"
+              <unnnic-button
+                :class="{'primary': !!translate.to}"
                 class="repository-translate__buttons repository-translate__unableButton"
                 @click="checkLanguageToImport()">
                 {{ $t('webapp.translate.import_title') }}
-              </b-button>
+              </unnnic-button>
 
-              <b-button
-                :class="{'is-primary': !!translate.to}"
+              <unnnic-button
+                :class="{'primary': !!translate.to}"
                 class="repository-translate__buttons repository-translate__unableButton"
                 @click="checkLanguageToExport()">
                 {{ $t('webapp.translate.export_title') }}
-              </b-button>
+              </unnnic-button>
 
             </div>
           </div>

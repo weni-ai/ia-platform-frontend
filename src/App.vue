@@ -278,4 +278,8 @@ $entities-colors: (
 body {
   font-family: $unnnic-font-family-secondary;
 }
+
+.input, .textarea {
+  height: auto;
+}
 </style>
