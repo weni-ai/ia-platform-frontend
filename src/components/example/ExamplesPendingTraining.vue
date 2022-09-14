@@ -95,6 +95,7 @@ export default {
     ]),
     dispatchSave() {
       this.updateExamples(true);
+      this.$emit('onEditSentence')
     },
     pageChanged() {
       this.pageWasChanged = !this.pageWasChanged;
