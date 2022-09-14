@@ -81,6 +81,7 @@
               @noPhrases="noPhrasesYet = false"
               @onUpdateSelected="updateSelected"
               @onUpdateList="updateCount"
+              @onEditSentence="updateRepository(false)"
             />
           </div>
           <authorization-request-notification
