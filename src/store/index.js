@@ -16,6 +16,8 @@ import News from './news';
 import Tutorial from './tutorial';
 import External from './external';
 import Integration from './integration';
+import Suggestions from './suggestions';
+
 
 Vue.use(Vuex);
 
@@ -35,7 +37,8 @@ const store = new Vuex.Store({
     Tutorial,
     External,
     Intent,
-    Integration
+    Integration,
+    Suggestions
   },
 });
 

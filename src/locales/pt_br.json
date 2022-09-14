@@ -719,12 +719,14 @@
       "database": "Repositório"
     },
     "phrase-suggestion": {
-      "title": "Sugestão de frases",
-      "subtitle": "Selecione uma intenção e adicione frases sugeridas ao seu treinamento.",
+      "title": "Gerador de frases",
+      "subtitle": "Ferramenta que possibilita você, a partir de uma única frase, gerar centenas de outras frases para aprimorar sua inteligência artificial.",
       "empty": "Não há sugestão de frases para essa intenção",
       "confirm-edit": "Confirmar edição",
       "cancel-edit": "Cancelar edição",
-      "tooltip_alert": "As palavras sugeridas são geradas através de contextos retirados da internet, portanto, podem acontecer sugestões que fujam do controle da nossa equipe."
+      "tooltip_alert": "As palavras sugeridas são geradas através de contextos retirados da internet, portanto, podem acontecer sugestões que fujam do controle da nossa equipe.",
+      "add_a_sentence":"Escreva a frase que deseja utilizar",
+      "submit": "Enviar frase"
     },
     "dashboard": {
       "sentences": "frases",

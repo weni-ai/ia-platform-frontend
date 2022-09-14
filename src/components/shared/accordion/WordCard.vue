@@ -3,20 +3,28 @@
     <div class="intent-suggestion-accordion__content">
       <div
         class="intent-suggestion-accordion__content__check-field">
-        <span class="intent-suggestion-accordion__content__tag">[{{ repository.language }}]</span>
+        <unnnic-checkbox
+          @change="setSuggestion"
+          v-model="checked"
+          :native-value="toExample"/>
       </div>
 
       <div
         class="intent-suggestion-accordion__content__phrase">
-        <p>{{ phraseSuggestion }}</p>
+        <p :class="checked && 'label-active'">{{ text }}</p>
       </div>
     </div>
 
     <div class="intent-suggestion-accordion__icons">
-        <unnnic-icon-svg
+        <!-- <unnnic-icon-svg
           icon="arrow-right-1-1"
           size="sm"
           @click.native="selectSentence"
+        /> -->
+        <entity-tag
+          v-for="entity in entities"
+          :entity-name="entity.entity"
+          :key="entity.localId"
         />
     </div>
   </div>
@@ -24,9 +32,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import EntityTag from '@/components/repository/repository-evaluate/example/EntityTag';
 
 export default {
-  name: 'IntentSuggestion',
+  name: 'WordCard',
   props: {
     id: {
       type: Number,
@@ -36,30 +45,17 @@ export default {
       type: String,
       default: '',
     },
-    created_at: {
-      type: String,
-      default: '',
-    },
     entities: {
       type: [Array, String],
-      default: () => [],
+      default: () => []
     },
-    intent: {
-      type: String,
-      default: '',
-    },
-    language: {
-      type: String,
-      default: '',
-    }
-
   },
   data() {
     return {
       open: false,
       phraseSuggestion: '',
       editing: false,
-      checked: false,
+      checked: true,
     };
   },
   computed: {
@@ -74,13 +70,6 @@ export default {
     },
   },
   watch: {
-    checked() {
-      if (this.checked) {
-        this.setSelectedSuggestion(this.toExample);
-      } else {
-        this.removeSelectedSuggestion(this.toExample);
-      }
-    },
     isAccordionOpen() {
       this.open = false;
     },
@@ -122,12 +111,14 @@ export default {
         value: {
           id: this.id,
           text: this.phraseSuggestion,
-          entities: this.entities,
-          language: this.language
         },
       });
+    },
+    setSuggestion() {
+      this.$emit('onChangeGenerate', { text: this.phraseSuggestion, value: this.checked })
     }
   },
+  components: { EntityTag }
 };
 </script>
 <style lang="scss" scoped>
@@ -190,6 +181,7 @@ export default {
       &__phrase{
         margin-left: 1rem;
           p {
+          font-size: $unnnic-font-size-body-lg;
           white-space: nowrap;
           width: 32rem;
           overflow: hidden;
@@ -217,5 +209,8 @@ export default {
         align-self: center;
     }
 
+    .label-active {
+      font-weight: $unnnic-font-weight-bold;
+    }
 }
 </style>
