@@ -176,6 +176,9 @@
       </unnnic-button>
     </unnnic-modal>
     <b-loading :is-full-page="false" :active="loading" />
+    <template v-slot:loader>
+      <home-loader />
+    </template>
   </repository-view-base>
 </template>
 
@@ -188,6 +191,7 @@ import EntityEdit from '@/components/repository/EntityEdit';
 import SummaryInformation from '@/components/repository/SummaryInformation';
 import IntegrationModal from '@/components/shared/IntegrationModal';
 import RepositoryBase from './Base';
+import HomeLoader from '@/views/repository/loadings/Home';
 
 export default {
   name: 'RepositoryHome',
@@ -198,6 +202,7 @@ export default {
     EntityEdit,
     SummaryInformation,
     IntegrationModal,
+    HomeLoader
   },
   extends: RepositoryBase,
   data() {
@@ -547,4 +552,5 @@ export default {
 /deep/ .tab-head > .unnnic-tooltip-label {
   max-width: 360px;
 }
+
 </style>
