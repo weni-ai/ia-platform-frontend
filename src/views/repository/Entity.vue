@@ -78,6 +78,9 @@
       </b-notification>
       <login-form hide-forgot-password />
     </div>
+    <template v-slot:loader>
+      <intent-loader />
+    </template>
   </repository-view-base>
 
 </template>
@@ -93,7 +96,7 @@ import RequestAuthorizationModal from '@/components/repository/RequestAuthorizat
 import Loading from '@/components/shared/Loading';
 import RepositoryBase from './Base';
 import IntentPagination from '@/components/shared/IntentPagination';
-
+import IntentLoader from '@/views/repository/loadings/Intent';
 
 export default {
   name: 'Entity',
@@ -106,7 +109,8 @@ export default {
     EntitiesList,
     Loading,
     SentencesIntentTable,
-    IntentPagination
+    IntentPagination,
+    IntentLoader
   },
   extends: RepositoryBase,
   props: {

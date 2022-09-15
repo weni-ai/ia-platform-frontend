@@ -100,6 +100,9 @@
       slot="message"
       v-html="$t('webapp.intent.delete_success_subtitle')" />
     </unnnic-modal>
+    <template v-slot:loader>
+      <database-loader />
+    </template>
   </repository-view-base>
 </template>
 
@@ -116,6 +119,8 @@ import { exampleSearchToDicty, exampleSearchToString } from '@/utils/index';
 import RequestAuthorizationModal from '@/components/repository/RequestAuthorizationModal';
 import Loading from '@/components/shared/Loading';
 import RepositoryBase from './Base';
+import DatabaseLoader from '@/views/repository/loadings/Database';
+
 
 export default {
   name: 'RepositoryDatabase',
@@ -129,6 +134,7 @@ export default {
     RequestAuthorizationModal,
     ExamplesPendingTraining,
     Loading,
+    DatabaseLoader
   },
   extends: RepositoryBase,
   data() {

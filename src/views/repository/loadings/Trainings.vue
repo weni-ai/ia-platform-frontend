@@ -64,7 +64,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -99,9 +98,9 @@ export default {};
   }
 
   &__fields {
-    margin-top: 1.5rem;
+    margin-top: $unnnic-spacing-stack-md;
     display: flex;
-    gap: 1rem;
+    gap: $unnnic-spacing-inline-sm;
 
     &__field {
       width: 50%;
@@ -109,7 +108,7 @@ export default {};
   }
 
   &__train-button {
-    margin: 2rem 0;
+    margin: $unnnic-spacing-stack-lg 0;
   }
 
   &__info {
