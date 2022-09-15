@@ -82,6 +82,7 @@ export default {};
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+  padding-bottom: $unnnic-spacing-stack-sm;
 
   &__title {
     margin: $unnnic-spacing-inline-xs 0;

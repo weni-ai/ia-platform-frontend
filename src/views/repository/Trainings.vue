@@ -140,6 +140,9 @@
       slot="message"
       v-html="$t('webapp.intent.delete_success_subtitle')" />
     </unnnic-modal>
+    <template v-slot:loader>
+      <trainings-loader />
+    </template>
   </repository-view-base>
 </template>
 
@@ -157,6 +160,7 @@ import Loading from '@/components/shared/Loading';
 import Train from '@/components/repository/training/Train';
 import Tour from '@/components/Tour';
 import RepositoryBase from './Base';
+import TrainingsLoader from '@/views/repository/loadings/Trainings';
 
 export default {
   name: 'RepositoryTrainings',
@@ -170,6 +174,7 @@ export default {
     Loading,
     Train,
     Tour,
+    TrainingsLoader
   },
   extends: RepositoryBase,
   data() {
