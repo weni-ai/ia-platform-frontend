@@ -91,6 +91,13 @@
               <unnnic-icon-svg size="md" icon="loading-circle-1" class="rotation" />
             </div>
           </unnnic-dropdown-item>
+
+          <unnnic-dropdown-item @click="openCopyConfirm(repositoryDetail.name)">
+            <div class="unnnic-card-intelligence__header__buttons__dropdown">
+              <unnnic-icon-svg size="sm" icon="copy-paste-1" />
+              <div>{{ $t("webapp.home.copy-intelligence") }}</div>
+            </div>
+          </unnnic-dropdown-item>
         </unnnic-dropdown>
       </div>
     </section>
@@ -185,6 +192,40 @@
       @closeIntegratationModal="changeIntegrateModalState(false)"
       @dispatchUpdateIntegration="changeIntegrationValue($event)"
     />
+    <unnnic-modal
+      :showModal="openConfirmModal"
+      :text="$t('webapp.intelligences_lib.clone.confirm_modal_title',
+        {intelligence: this.selectedIntelligence })"
+      scheme="feedback-yellow"
+      modal-icon="alert-circle-1"
+      @close="openConfirmModal = false"
+    >
+      <span
+        slot="message"
+        v-html="$t('webapp.intelligences_lib.clone.confirm_modal_message')"
+      />
+      <unnnic-button slot="options" type="terciary" @click="openConfirmModal = false">
+        {{ $t("webapp.home.cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        type="terciary"
+        @click="copyIntelligence()"
+      >
+        {{ $t("webapp.intelligences_lib.clone.copy") }}
+      </unnnic-button>
+    </unnnic-modal>
+    <unnnic-modal
+      :showModal="openNotificationModal"
+      :text="notificationModalTitle"
+      :scheme="notificationModalType === 'success' ? 'feedback-green' : 'feedback-red'"
+      :modal-icon="notificationModalType === 'success' ? 'check-circle-1-1' : 'alert-circle-1'"
+      @close="openNotificationModal = false"
+    >
+      <span
+      slot="message"
+      v-html="notificationModalMessage" />
+    </unnnic-modal>
   </div>
 </template>
 
@@ -200,7 +241,14 @@ export default {
       dropdownOpen: false,
       integrateModal: false,
       hasIntegration: null,
-      integrationError: null
+      integrationError: null,
+      openSuccessModal: false,
+      openConfirmModal: false,
+      openNotificationModal: false,
+      notificationModalTitle: '',
+      notificationModalType: '',
+      notificationModalMessage: '',
+      selectedIntelligence: ''
     };
   },
   props: {
@@ -259,7 +307,8 @@ export default {
     ...mapActions([
       'setIntegrationRepository',
       'getIntegrationRepository',
-      'updateIntegratedProjects'
+      'updateIntegratedProjects',
+      'cloneRepository'
     ]),
     async checkIfHasIntegration() {
       try {
@@ -318,6 +367,29 @@ export default {
           }
         });
       }
+    },
+    async copyIntelligence() {
+      try {
+        await this.cloneRepository({
+          repositoryUUID: this.repositoryDetail.uuid,
+          ownerId: +this.getOrgSelected
+        })
+        this.notificationModalType = 'success'
+        this.notificationModalTitle = this.$t('webapp.intelligences_lib.clone.success_modal_title')
+        this.notificationModalMessage = this.$t('webapp.intelligences_lib.clone.success_modal_message')
+      } catch (error) {
+        this.notificationModalType = 'error'
+        this.notificationModalTitle = this.$t('webapp.intelligences_lib.clone.error_modal_title')
+        this.notificationModalMessage = error.response.data
+      } finally {
+        this.openConfirmModal = false
+        this.openNotificationModal = true
+        this.$emit('onCopySuccess')
+      }
+    },
+    openCopyConfirm(intelligence) {
+      this.selectedIntelligence = intelligence
+      this.openConfirmModal = true
     }
   }
 };

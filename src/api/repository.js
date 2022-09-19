@@ -309,4 +309,13 @@ export default {
       },
     );
   },
+  clone(repositoryUUID, ownerId) {
+    return request.$http.post(
+      '/v2/repository/clone-repository/',
+      {
+        repository: repositoryUUID,
+        owner: ownerId
+      },
+    );
+  },
 };
