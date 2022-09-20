@@ -55,16 +55,15 @@
           hasCloudyColor
           :placeholder="getNameVersion"
           v-model="selectedVersion"
+          :optionsHeader="optionsHeader"
         >
           <option v-for="(version, index) in allVersions" :key="index" size="sm">
             {{ version.name }}
           </option>
           <div
             slot="header"
-            @click="routerHandle('repository-versions')"
             class="sidebar-wrapper__header__versions"
           >
-            {{ $t("webapp.dashboard.all_versions") }}
           </div>
         </unnnic-select>
       </section>
@@ -157,6 +156,7 @@
             "
             :text="$t('webapp.menu.summary')"
             :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-summary')"
             @click.native="
               setSelectMenu({
                 name: 'repository-summary',
@@ -173,8 +173,9 @@
           />
           <section class="training-menu">
             <unnnic-sidebar-item
+              v-if="getCurrentRepository.authorization.can_contribute"
               :icon="
-                dropSelect === 'isTrainActive' ? 'graph-status-circle-1' : 'graph-status-circle-1'
+                dropSelect === 'isTrainActive' ? 'graph-status-circle-1-1' : 'graph-status-circle-1'
               "
               :text="$t('webapp.menu.training')"
               :enableTooltip="!collapse"
@@ -225,6 +226,7 @@
 
           <section class="evaluate-menu">
             <unnnic-sidebar-item
+              v-if="getCurrentRepository.authorization.can_contribute"
               :icon="dropSelect === 'isTestsActive' ? 'check-square-2' : 'check-square-1'"
               :text="$t('webapp.menu.test')"
               :enableTooltip="!collapse"
@@ -272,11 +274,12 @@
               />
             </div>
           </section>
-
           <unnnic-sidebar-item
+            v-if="getCurrentRepository.authorization.can_contribute"
             :icon="checkSelectedMenu('repository-log') ? 'messages-bubble-3' : 'messages-bubble-1'"
             :text="$t('webapp.menu.inbox')"
             :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-log')"
             @click="
               setSelectMenu({
                 name: 'repository-log',
@@ -294,6 +297,7 @@
 
           <section class="translate-menu">
             <unnnic-sidebar-item
+              v-if="getCurrentRepository.authorization.can_contribute"
               :icon="dropSelect === 'isTranslationsActive' ? 'translate-2' : 'translate-1'"
               :text="$t('webapp.menu.translation')"
               :enableTooltip="!collapse"
@@ -346,6 +350,7 @@
             :icon="checkSelectedMenu('repository-integration') ? 'phone-charger-1' : 'charger-1'"
             :text="$t('webapp.menu.integration')"
             :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-integration')"
             @click="
               setSelectMenu({
                 name: 'repository-integration',
@@ -363,6 +368,7 @@
 
           <section class="settings-menu">
             <unnnic-sidebar-item
+              v-if="getCurrentRepository.authorization.can_contribute"
               :icon="dropSelect === 'isSettingsActive' ? 'cog-2' : 'cog-1'"
               :text="$t('webapp.menu.settings')"
               :enableTooltip="!collapse"
@@ -414,9 +420,10 @@
       </section>
       <div slot="footer" class="sidebar-wrapper__footer">
         <unnnic-sidebar-item
-          icon="expand-8-1"
+          icon="expand-full-1"
           class="sidebar-wrapper__footer__text"
-          :text="$t('webapp.menu.hide')"
+          :text="collapse ? $t('webapp.menu.hide') : $t('webapp.menu.expand')"
+          :enableTooltip="!collapse"
           @click="collapseHandle()"
         />
       </div>
@@ -443,7 +450,13 @@ export default {
       collapse: true,
       allVersions: [],
       dropSelect: '',
-      selectedVersion: this.getNameVersion
+      selectedVersion: this.getNameVersion,
+      optionsHeader: [
+        {
+          text: this.$t('webapp.dashboard.all_versions'),
+          click: () => this.routerHandle('repository-versions')
+        }
+      ]
     };
   },
   computed: {
@@ -593,11 +606,30 @@ export default {
     transition: width 0.1s;
     font-family: $font-family;
     border-top-left-radius: $unnnic-border-radius-md;
+    overflow-y: auto;
 
     &__header {
       &__select {
         z-index: 10;
         padding-bottom: $unnnic-spacing-stack-sm;
+        .icon-right {
+          transform: translateY(110%)
+        }
+        .dropdown > div > input {
+          height: auto;
+        }
+
+        .unnnic-select__header::after{
+          margin: 0;
+        }
+
+        .dropdown-data .unnnic-select__options > div {
+          max-height: 180px;
+
+          .unnnic-select__options__scroll-area {
+            overflow: hidden;
+          }
+        }
       }
       &__versions {
         cursor: pointer;
@@ -617,7 +649,6 @@ export default {
 
           &__text {
             cursor: pointer;
-            text-decoration: underline;
             font-family: $unnnic-font-family-secondary;
             color: $unnnic-color-neutral-cloudy;
             font-weight: $unnnic-font-weight-regular;
@@ -631,7 +662,7 @@ export default {
           padding-bottom: $unnnic-spacing-stack-sm;
           &__title {
             font-family: $unnnic-font-family-secondary;
-            color: $unnnic-color-neutral-dark;
+            color: $unnnic-color-brand-weni-soft;
             font-weight: $unnnic-font-weight-bold;
             font-size: $unnnic-font-size-body-gt;
             line-height: ($unnnic-line-height-small + $unnnic-font-size-body-gt);
@@ -662,7 +693,7 @@ export default {
     }
 
     &__body {
-      transform: translateY(-1.9rem);
+      margin-top: -1.9rem;
 
       &__element {
         color: $unnnic-color-neutral-cloudy;
@@ -673,13 +704,13 @@ export default {
 
       &--dropdown-open {
         background-color: $unnnic-color-background-sky;
-        color: $unnnic-color-neutral-darkest;
+        color: $unnnic-color-neutral-cloudy;
         font-weight: $unnnic-font-weight-bold;
       }
 
       &--active {
         background-color: $unnnic-color-background-sky;
-        color: $unnnic-color-neutral-darkest;
+        color: $unnnic-color-neutral-cloudy;
         font-weight: $unnnic-font-weight-bold;
 
         .unnnic-icon {
@@ -691,6 +722,10 @@ export default {
         margin-left: $unnnic-inline-md;
         margin-bottom: $unnnic-spacing-stack-xs;
         border-bottom: 1px solid $unnnic-color-neutral-soft;
+
+        > div > div > .unnnic-side-bar-item__icon {
+          display: none;
+        }
       }
 
       &__divider {
