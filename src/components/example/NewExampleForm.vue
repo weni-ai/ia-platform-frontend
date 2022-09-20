@@ -157,8 +157,8 @@
     <unnnic-alert
       v-if="alertSuccess"
       title=""
-      text="Frase adicionada para treinamento"
-      closeText="Fechar"
+      :text="$t('webapp.trainings.sentence_added')"
+      :closeText="$t('webapp.inbox.add_log.close')"
       scheme="feedback-green"
       icon="check-circle-1-1"
       @click.native="alertSuccess = false"
