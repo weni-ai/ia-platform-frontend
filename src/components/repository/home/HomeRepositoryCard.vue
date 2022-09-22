@@ -92,7 +92,10 @@
             </div>
           </unnnic-dropdown-item>
 
-          <unnnic-dropdown-item @click="openCopyConfirm(repositoryDetail.name)">
+          <unnnic-dropdown-item
+            v-if="!repositoryDetail.is_private"
+            @click="openCopyConfirm(repositoryDetail.name)"
+          >
             <div class="unnnic-card-intelligence__header__buttons__dropdown">
               <unnnic-icon-svg size="sm" icon="copy-paste-1" />
               <div>{{ $t("webapp.home.copy-intelligence") }}</div>
@@ -209,7 +212,7 @@
       </unnnic-button>
       <unnnic-button
         slot="options"
-        type="terciary"
+        type="secondary"
         @click="copyIntelligence()"
       >
         {{ $t("webapp.intelligences_lib.clone.copy") }}
