@@ -10,7 +10,7 @@
           <span> "{{ intentSelected }}" </span>
         </h1>
       </div>
-      <div class="intent-list__buttons-wrapper">
+      <div v-if="repository.authorization.can_contribute" class="intent-list__buttons-wrapper">
         <unnnic-button
           ref="editIntentEvent"
           @click="editOptionsIntent()"

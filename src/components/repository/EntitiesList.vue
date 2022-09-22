@@ -10,7 +10,7 @@
           <span> "{{ entitySelected }}" </span>
         </h1>
       </div>
-      <div class="entity-list__buttons-wrapper">
+      <div v-if="repository.authorization.can_contribute" class="entity-list__buttons-wrapper">
         <unnnic-button
           ref="editEntityEvent"
           @click="editOptionsEntity()"
