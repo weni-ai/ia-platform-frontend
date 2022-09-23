@@ -5,7 +5,7 @@
     <div
       v-if="authenticated"
       class="entity-list">
-      <div v-if="repository && repository.authorization.can_contribute">
+      <div v-if="repository">
         <intents-list
           :intents-list="examplesList"
           :repository="repository"

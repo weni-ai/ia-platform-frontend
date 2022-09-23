@@ -15,6 +15,7 @@
           :key="list.uuid"
           :repository-detail="list"
           @dispatchShowModal="showModal($event)"
+          @onCopySuccess="getOrgsRepositories()"
         />
       </div>
       <infinite-scroll

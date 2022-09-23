@@ -15,7 +15,7 @@
 
     <template v-slot:item="{ item }">
       <unnnic-table-row :headers="table.headers">
-        <template v-slot:checkarea>
+        <template v-if="repository.authorization.can_contribute" v-slot:checkarea>
           <unnnic-checkbox v-model="item.selected" :style="{ margin: '4px' }" />
         </template>
 
@@ -45,7 +45,7 @@
           </div>
         </template>
 
-        <template v-slot:edit>
+        <template v-if="repository.authorization.can_contribute" v-slot:edit>
           <div :style="{ textAlign: 'center' }">
             <unnnic-button
               size="small"
@@ -56,7 +56,7 @@
           </div>
         </template>
 
-        <template v-slot:delete>
+        <template v-if="repository.authorization.can_contribute" v-slot:delete>
           <div :style="{ textAlign: 'center' }">
             <unnnic-button
               size="small"
@@ -186,25 +186,9 @@ export default {
       table: {
         headers: [
           {
-            id: 'checkarea',
-            text: '',
-            width: '32px',
-            condensed: true,
-          },
-          {
             id: 'sentence',
             text: this.$t('webapp.intent.table_sentence'),
             flex: 1,
-          },
-          {
-            id: 'edit',
-            text: this.$t('webapp.intent.table_edit'),
-            width: '40px',
-          },
-          {
-            id: 'delete',
-            text: this.$t('webapp.intent.table_delete'),
-            width: '40px',
           },
         ],
       },
@@ -259,6 +243,28 @@ export default {
         // eslint-disable-next-line no-underscore-dangle
         this.$refs[id]._data.active = this.isSentenceActive
       }
+    }
+  },
+  mounted() {
+    if (this.repository.authorization.can_contribute) {
+      this.table.headers
+        .unshift({
+          id: 'checkarea',
+          text: '',
+          width: '32px',
+          condensed: true,
+        })
+      this.table.headers
+        .push({
+          id: 'edit',
+          text: this.$t('webapp.intent.table_edit'),
+          width: '40px',
+        },
+        {
+          id: 'delete',
+          text: this.$t('webapp.intent.table_delete'),
+          width: '40px',
+        })
     }
   },
   methods: {

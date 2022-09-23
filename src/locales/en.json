@@ -68,7 +68,15 @@
       "tab_org_subtitle": "Visualize and access intelligences created by the organization.",
       "tab_community_title": "Community Intelligences",
       "tab_community_subtitle": "Visualize and use intelligences that are public.",
-      "intent_count": "Number of intention phrases"
+      "intent_count": "Number of intention phrases",
+      "clone": {
+        "success_modal_title": "Copied intelligence!",
+        "success_modal_message": "The intelligence was successfully copied! You can find it in the Organization's Intelligences tab 😉",
+        "error_modal_title": "Error copying intelligence",
+        "confirm_modal_title": "Make a copy of the intelligence “{intelligence}”?",
+        "confirm_modal_message": "By making a copy of the intelligence, you can use it in your organization and also make the changes you want.",
+        "copy": "Copy"
+      }
     },
     "create_repository": {
       "intelligence": "New intelligence",
@@ -360,7 +368,9 @@
         "edit-base_modal_delete_button_cancel": "Cancel",
         "see-all_bases": "See all bases",
         "add_base":"+ Add base"
-      }
+      },
+      "copy-intelligence": "Copy intelligence"
+
     },
     "summary": {
       "training_information": "Traning information",
