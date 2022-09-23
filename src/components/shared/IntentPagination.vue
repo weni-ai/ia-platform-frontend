@@ -2,15 +2,14 @@
   <div v-if="list && !list.empty">
     <component
       v-show="!isLoading"
-      :key="itemKey && item[itemKey] ? item[itemKey] : index"
       :is="itemComponent"
       :list="list"
-      v-bind="addAttrs(item)"
+      :show-intents="showIntents"
       @deleted="onItemDeleted(item.id)"
       @updateList="onSaveUpdate"
       @dispatchEvent="onDispatchEvent($event)" />
     <loading v-show="isLoading" class="pagination__message" />
-    <div class="pagination__bottom">
+    <div v-if="!loadAll" class="pagination__bottom">
       <p v-show="!isLoading" class="text-center">
         {{ listStatusErrorCode | statusCodeVerbose }}
       </p>
@@ -72,6 +71,10 @@ export default {
       default: null,
     },
     isSearching: {
+      type: Boolean,
+      default: false,
+    },
+    showIntents: {
       type: Boolean,
       default: false,
     },

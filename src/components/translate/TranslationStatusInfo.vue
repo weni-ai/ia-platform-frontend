@@ -1,20 +1,20 @@
 <template>
   <div class="translation-status-info">
-    <numbers-card
+    <translation-stats-card
       :disabled="!languages"
       :help-text="(languages || []).join(', ')"
       :count="(languages || []).length"
       :label="$tc('webapp.summary.information_language',
                   (languages || []).length)"
       size="medium" />
-    <numbers-card
+    <translation-stats-card
       :disabled="!completedLanguages"
       :help-text="(completedLanguages || []).join(', ')"
       :count="(completedLanguages || []).length"
       :label="$tc('webapp.translate.completed',
                   (completedLanguages || []).length)"
       size="medium" />
-    <numbers-card
+    <translation-stats-card
       :disabled="!translatorsList"
       :help-text="(translatorsList || []).join(', ')"
       :count="(translatorsList || []).length"
@@ -25,13 +25,13 @@
 </template>
 
 <script>
-import NumbersCard from '@/components/shared/NumbersCard';
+import TranslationStatsCard from '@/components/shared/TranslationStatsCard';
 import { mapActions } from 'vuex';
 
 export default {
   name: 'TranslationStatusInfo',
   components: {
-    NumbersCard,
+    TranslationStatsCard,
   },
   props: {
     repositoryUuid: {

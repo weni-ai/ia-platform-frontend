@@ -68,7 +68,15 @@
       "tab_org_subtitle": "Visualiza y accede a las inteligencias creadas por la organización.",
       "tab_community_title": "Inteligencia Comunitaria",
       "tab_community_subtitle": "Ver y usar inteligencias que son públicas.",
-      "intent_count": "Número de oraciones de intención"
+      "intent_count": "Número de oraciones de intención",
+      "clone": {
+        "success_modal_title": "¡Inteligencia copiada!",
+        "success_modal_message": "¡La inteligencia se copió con éxito! Puedes encontrarla en la pestaña Inteligencias de la Organización 😉",
+        "error_modal_title": "Error al copiar inteligencia",
+        "confirm_modal_title": "¿Hacer una copia de la inteligencia “{intelligence}”?",
+        "confirm_modal_message": "Al hacer una copia de la inteligencia, puedes usarla en tu organización y también hacer los cambios que quieras.",
+        "copy": "Copiar"
+      }
     },
     "create_repository": {
       "intelligence": "Nueva inteligencia",
@@ -362,7 +370,9 @@
         "edit-base_modal_delete_button_validation": "Escriba ${this.knowledgeBase.title} para confirmar la eliminación",
         "see-all_bases": "Ver todas las bases",
         "add_base": "+ Añadir base"
-      }
+      },
+      "copy-intelligence": "Copiar inteligencia"
+
     },
     "summary": {
       "training_information": "Información de Entrenamiento",
@@ -703,7 +713,8 @@
         "adjustments": "Ajustes",
         "api": "API",
         "tests": "Pruebas"
-      }
+      },
+      "database": "Repositorio"
     },
     "phrase-suggestion": {
       "title": "Sugerencia de frases",

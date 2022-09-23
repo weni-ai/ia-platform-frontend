@@ -18,7 +18,7 @@
         class="text-center">
         {{ listStatusErrorCode | statusCodeVerbose }}
       </p>
-      <div class="pagination__bottom__controls">
+      <div v-if="!loadAll" class="pagination__bottom__controls">
         <div
           v-if="list && list.total > 0"
           class="pagination__bottom__controls__message">

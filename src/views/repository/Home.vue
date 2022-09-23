@@ -2,77 +2,71 @@
   <repository-view-base :repository="repository" :error-code="errorCode">
     <div v-if="repository" class="repository-home">
       <div class="repository-home__description">
-        <div class="repository-home__title">
-          <unnnic-card
-            type="title"
-            :title="$t('webapp.home.description')"
-            :hasInformationIcon="false"
-            icon="paginate-filter-text-1"
-            scheme="aux-orange"
-          />
-        </div>
-        <div class="repository-home__description__header">
-          <div>
-            <vue-markdown
-              :source="repository.description"
-              :show="show"
-              :html="html"
-              :breaks="breaks"
-              :linkify="linkify"
-              :emoji="emoji"
-              :typographer="typographer"
-              :toc="toc"
-              toc-id="toc"
-              class="repository-home__description__text markdown-body"
+        <div>
+          <div class="repository-home__title">
+            <unnnic-card
+              type="title"
+              :title="$t('webapp.home.description')"
+              :hasInformationIcon="false"
+              icon="paginate-filter-text-1"
+              scheme="aux-orange"
             />
-            <p
-              v-if="repository.description"
-              class="repository-home__description__text"
-            />
-            <p v-else>
-              <i class="text-color-grey-dark">{{
-                $t("webapp.home.no_description")
-              }}</i>
-            </p>
           </div>
-          <div class="repository-home__description__tags-wrapper">
+          <div class="repository-home__description__header">
             <div>
-              <unnnic-tag
-                v-for="(category, index) in getAllCategories"
-                :key="index"
-                :text="category"
-                disabled
-                scheme="background-sky"
-                class="repository-home__header__tag"
+              <vue-markdown
+                :source="repository.description"
+                :show="show"
+                :html="html"
+                :breaks="breaks"
+                :linkify="linkify"
+                :emoji="emoji"
+                :typographer="typographer"
+                :toc="toc"
+                toc-id="toc"
+                class="repository-home__description__text markdown-body"
               />
+              <p
+                v-if="repository.description"
+                class="repository-home__description__text"
+              />
+              <p v-else>
+                <i class="text-color-grey-dark">{{
+                  $t("webapp.home.no_description")
+                }}</i>
+              </p>
             </div>
-            <div>
-              <unnnic-button
-                v-if="hasIntegration && !hasIntegrationCheckError"
-                type="primary"
-                :loading="!hasIntegrationDefined"
-                @click="changeIntegrateModalState(true)"
-                :class="{
-                  'repository-home__description__header__remove-integrate':
-                    hasIntegrationDefined,
-                }"
-              >
-                {{ $t("webapp.summary.remove_integrate") }}
-              </unnnic-button>
-              <unnnic-button
-                v-else-if="!hasIntegrationCheckError"
-                type="primary"
-                :loading="!hasIntegrationDefined"
-                @click="changeIntegrateModalState(true)"
-                :class="{
-                  'repository-home__description__header__integrate':
-                    hasIntegrationDefined,
-                }"
-              >
-                {{ $t("webapp.summary.integrate") }}
-              </unnnic-button>
+            <div class="repository-home__description__tags-wrapper">
+              <div>
+                <unnnic-tag
+                  v-for="(category, index) in getAllCategories"
+                  :key="index"
+                  :text="category"
+                  disabled
+                  scheme="background-sky"
+                  class="repository-home__header__tag"
+                />
+              </div>
             </div>
           </div>
+        </div>
+        <div class="ml-auto">
+          <unnnic-button
+            v-if="hasIntegration && !hasIntegrationCheckError"
+            type="secondary"
+            :loading="hasIntegration && !hasIntegrationCheckError"
+            @click="changeIntegrateModalState(true)"
+          >
+            {{ $t("webapp.summary.remove_integrate") }}
+          </unnnic-button>
+          <unnnic-button
+            v-else-if="!hasIntegrationCheckError"
+            type="secondary"
+            :loading="!hasIntegrationDefined"
+            @click="changeIntegrateModalState(true)"
+          >
+            {{ $t("webapp.summary.integrate") }}
+          </unnnic-button>
         </div>
       </div>
 
@@ -182,6 +176,9 @@
       </unnnic-button>
     </unnnic-modal>
     <b-loading :is-full-page="false" :active="loading" />
+    <template v-slot:loader>
+      <summary-loader />
+    </template>
   </repository-view-base>
 </template>
 
@@ -194,6 +191,7 @@ import EntityEdit from '@/components/repository/EntityEdit';
 import SummaryInformation from '@/components/repository/SummaryInformation';
 import IntegrationModal from '@/components/shared/IntegrationModal';
 import RepositoryBase from './Base';
+import SummaryLoader from '@/views/repository/loadings/Summary';
 
 export default {
   name: 'RepositoryHome',
@@ -204,6 +202,7 @@ export default {
     EntityEdit,
     SummaryInformation,
     IntegrationModal,
+    SummaryLoader
   },
   extends: RepositoryBase,
   data() {
@@ -451,6 +450,13 @@ export default {
 
   &__description {
     padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: $unnnic-spacing-stack-xgiant;
+
+    .unnnic-button {
+      min-width: 245px;
+    }
 
     &__header {
       display: flex;
@@ -458,10 +464,6 @@ export default {
       align-items: flex-start;
       flex-direction: column;
 
-      &__integrate {
-        background-color: $unnnic-color-brand-weni-soft;
-        margin-left: auto;
-      }
       &__remove-integrate {
         border: 1px solid $unnnic-color-feedback-red;
         color: $unnnic-color-feedback-red;
@@ -550,4 +552,5 @@ export default {
 /deep/ .tab-head > .unnnic-tooltip-label {
   max-width: 360px;
 }
+
 </style>

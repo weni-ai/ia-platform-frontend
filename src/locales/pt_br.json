@@ -68,7 +68,15 @@
       "tab_org_subtitle": "Visualize e acesse as inteligências criadas pela organização.",
       "tab_community_title": "Inteligências da Comunidade",
       "tab_community_subtitle": "Visualize e use inteligências que são públicas.",
-      "intent_count": "Número de frases da intenção"
+      "intent_count": "Número de frases da intenção",
+      "clone": {
+        "success_modal_title": "Inteligência copiada!",
+        "success_modal_message": "A inteligência foi copiada com sucesso! É possível encontrá-la na aba Inteligências da organização 😉",
+        "error_modal_title": "Erro ao copiar inteligência",
+        "confirm_modal_title": "Fazer uma cópia da inteligência “{intelligence}”?",
+        "confirm_modal_message": "Ao fazer uma cópia da inteligência, é possível utilizá-la na sua organização e também fazer as alterações que desejar.",
+        "copy": "Copiar"
+      }
     },
     "create_repository": {
       "intelligence": "Nova inteligência",
@@ -360,8 +368,8 @@
         "edit-base_modal_delete_button_confirm": "Excluir base",
         "edit-base_modal_delete_button_cancel": "Cancelar",
         "edit-base_modal_delete_button_validation": "Digite ${this.knowledgeBase.title} para confirmar a exclusão"
-
-      }
+      },
+      "copy-intelligence": "Copiar inteligência"
     },
     "summary": {
       "training_information": "Informações do Treinamento",
@@ -699,7 +707,8 @@
         "adjustments": "Ajustes",
         "api": "API",
         "tests": "Testes"
-      }
+      },
+      "database": "Repositório"
     },
     "phrase-suggestion": {
       "title": "Sugestão de frases",
@@ -779,7 +788,7 @@
       "description": "Esta entidade está presente em <strong>{n}</strong> frase no total. | Esta entidade está presente em <strong>{n}</strong> frases no total.",
       "edit_button": "Alterar nome da entidade",
       "save_button": "Salvar",
-      "no_sentences": "Nenhuma senteça.",
+      "no_sentences": "Nenhuma frase treinada.",
       "error_entity": "Algo de errado aconteceu, tente novamente mais tarde.",
       "error_entity_exists": "Entidade já existe",
       "edit_entity_modal_title": "Alterar nome da entidade",
@@ -911,8 +920,8 @@
     },
     "migrate_intelligence": {
       "title": "Migrar inteligência Wit.AI",
-      "token_input": "Adicione seu Server Access Token aqui",
-      "language": "Seleciona o idioma",
+      "token_input": "Adicione o Server Access Token",
+      "language": "Selecione o idioma",
       "cancel": "Cancelar",
       "migrate": "Confirmar",
       "migrate_success": "Migração feita com sucesso."
@@ -934,5 +943,18 @@
     "infinite_scroll": {
       "title": "Carregando"
     }
+  },
+  "upload_area": {
+    "title":{
+      "text": "Arraste seu arquivo aqui, ou",
+      "highlight": "procure-o"
+    },
+    "subtitle": "Formatos suportados: ",
+    "invalid": {
+      "subtitle": "Arquivo Inválido"
+    }
+  },
+  "import_card": {
+    "importing": "Importando.."
   }
 }

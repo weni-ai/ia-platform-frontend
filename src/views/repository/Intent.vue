@@ -5,7 +5,7 @@
     <div
       v-if="authenticated"
       class="entity-list">
-      <div v-if="repository && repository.authorization.can_contribute">
+      <div v-if="repository">
         <intents-list
           :intents-list="examplesList"
           :repository="repository"
@@ -75,6 +75,9 @@
       </b-notification>
       <login-form hide-forgot-password />
     </div>
+    <template v-slot:loader>
+      <intent-loader />
+    </template>
   </repository-view-base>
 
 </template>
@@ -90,6 +93,7 @@ import RequestAuthorizationModal from '@/components/repository/RequestAuthorizat
 import Loading from '@/components/shared/Loading';
 import RepositoryBase from './Base';
 import IntentPagination from '@/components/shared/IntentPagination';
+import IntentLoader from '@/views/repository/loadings/Intent';
 
 export default {
   name: 'Intent',
@@ -102,7 +106,8 @@ export default {
     SentencesIntentTable,
     IntentsList,
     Loading,
-    IntentPagination
+    IntentPagination,
+    IntentLoader
   },
   extends: RepositoryBase,
   props: {
@@ -261,15 +266,9 @@ export default {
       }
     }
   }
-  /deep/ .icon-right {
-    transform: translateY(70%);
-  }
-  /deep/ .icon-left {
-    transform: translateY(60%);
-  }
-  /deep/ .input.size-md.has-icon-right {
-    width: 100px;
-  }
+/deep/ .input {
+  height: auto;
+}
 
 
 </style>

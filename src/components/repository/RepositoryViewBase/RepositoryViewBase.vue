@@ -26,8 +26,10 @@
     </div>
     <div
       v-else-if="!repository || (repository && !repository.name && repository.loading)"
-      class="rpstr-vw-bs__loading">
-      <loading/>
+      class="rpstr-vw-bs__wrapper__content">
+      <slot name="loader">
+        <loading/>
+      </slot>
     </div>
     <request-authorization-modal
       v-if="repository"

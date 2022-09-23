@@ -230,4 +230,7 @@ export default {
   }) {
     return repository.repositoryUploadRasa(formData, repositoryVersion, repositoryUUID);
   },
+  cloneRepository(store, { repositoryUUID, ownerId }){
+    return repository.clone(repositoryUUID, ownerId);
+  },
 };
