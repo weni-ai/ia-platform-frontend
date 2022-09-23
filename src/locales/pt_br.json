@@ -788,7 +788,7 @@
       "description": "Esta entidade está presente em <strong>{n}</strong> frase no total. | Esta entidade está presente em <strong>{n}</strong> frases no total.",
       "edit_button": "Alterar nome da entidade",
       "save_button": "Salvar",
-      "no_sentences": "Nenhuma senteça.",
+      "no_sentences": "Nenhuma frase treinada.",
       "error_entity": "Algo de errado aconteceu, tente novamente mais tarde.",
       "error_entity_exists": "Entidade já existe",
       "edit_entity_modal_title": "Alterar nome da entidade",
