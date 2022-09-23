@@ -1,27 +1,22 @@
 <template>
   <div class="train">
-    <sentences-resume
-      :buttonDisabled="
+    <b-button
+      ref="training"
+      :disabled="
         loading ||
-            repository.examples__count === 0
-            || !isItOkToEnableButton
+          repository.examples__count === 0
+          || !this.isItOkToEnableButton
       "
-      :buttonLoading="loading || !isItOkToEnableButton"
-      buttonClass="train__button"
-      :buttonClick="verifyTrain"
-      :examples-list="examplesList"
-      @onImportSuccess="updateItems"
-    />
+      :loading="loading || !this.isItOkToEnableButton"
+      type="is-secondary"
+      class="train__button"
+      @click="verifyTrain()"
+    >
+      {{ $t("webapp.trainings.run_training") }}
+    </b-button>
     <div v-if="trainProgress" class="train__progress">
-      <unnnic-modal :showModal="true" :closeIcon="false">
-        <div slot="message">
-          <unnnic-progress-bar
-            :value="progress"
-            :title="$t('webapp.trainings.train_progress')"
-            inline
-          />
-        </div>
-      </unnnic-modal>
+      <progress-bar :progress="progress" type="is-secondary" />
+      <p v-html="$t('webapp.trainings.train_progress', { progress: progress })" />
     </div>
     <train-modal
       v-if="repository"
@@ -48,15 +43,13 @@ import { mapActions, mapGetters } from 'vuex';
 import TrainModal from '@/components/repository/training/TrainModal';
 import ProgressBar from '@/components/shared/ProgressBar';
 import TrainResponse from '@/components/repository/training/TrainResponse';
-import SentencesResume from './SentencesResume';
 
 export default {
   name: 'TrainingProgress',
   components: {
     TrainModal,
     TrainResponse,
-    ProgressBar,
-    SentencesResume
+    ProgressBar
   },
   props: {
     load: {
@@ -82,10 +75,6 @@ export default {
     updateOnLoad: {
       type: Boolean,
       default: true
-    },
-    examplesList: {
-      type: Object,
-      default: () => {}
     }
   },
   data() {
@@ -323,12 +312,6 @@ export default {
       this.trainResults = false;
       this.trainProgress = false;
       await this.updateRepository(false);
-    },
-    updateItems() {
-      this.updateTrainingStatus();
-      this.getRepositoryStatus();
-      this.repositoryRequirements();
-      this.$emit('updateItems')
     }
   }
 };
@@ -352,25 +335,6 @@ export default {
     p {
       font-size: 13px;
       font-weight: $font-weight-bolder;
-    }
-    /deep/ .unnnic-modal-container-background {
-      height: 88px;
-    }
-    /deep/ .unnnic-modal-container-background-body {
-      padding: 0
-    }
-    /deep/ .unnnic-modal-container-background-body-title {
-      padding: 0
-    }
-    /deep/ .unnnic-modal-container-background-body-spacing_header {
-      display: none;
-    }
-    /deep/ .unnnic-progress-bar.primary {
-      padding: 2rem 1.5rem;
-      white-space: nowrap;
-    }
-    /deep/ .unnnic-modal {
-      z-index: 1;
     }
   }
 }

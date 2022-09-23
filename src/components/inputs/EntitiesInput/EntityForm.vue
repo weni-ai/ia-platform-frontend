@@ -1,26 +1,27 @@
 <template>
-  <div class="column is-6 pb-0">
-    <div>
-      <div>
-        <p
+  <div>
+    <div class="columns is-variable is-1">
+      <div
+        class="column is-half entity-form">
+        <span
           slot="label"
-          class="unnnic-form__label">
-          <span class="is-rounded entity">
-            {{ selectedText }}
-          </span>
-          {{ $t('webapp.result.is') }}
-        </p>
-        <unnnic-autocomplete
-            id="tour-training-step-3"
+          class="entity-form__label"><span
+            :class="entityClass"
+            class="is-rounded">{{ selectedText }}</span> is</span>
+        <b-field
+          id="tour-training-step-3"
+          :is-previous-disabled="true">
+          <b-autocomplete
             ref="entityInputField"
             v-model="entity"
             :data="filteredData"
-            @icon-right-click="removeEntity()"
-            @click="hideDropdown = false"
-            :openWithFocus="true"
-            :iconRight="entity ? 'delete-1-1' : ''"
-            :class="hideDropdown ? 'hidden' : ''"
-          />
+            expanded
+            open-on-focus
+            dropdown-position="down"
+            icon-right="close"
+            icon-right-clickable
+            @icon-right-click="removeEntity()"/>
+        </b-field>
       </div>
     </div>
   </div>
@@ -60,7 +61,6 @@ export default {
   data() {
     return {
       entity: '',
-      hideDropdown: true
     };
   },
   computed: {
@@ -88,8 +88,7 @@ export default {
       this.$emit('input', this.entity);
     },
   },
-  async mounted() {
-    await this.$nextTick();
+  mounted() {
     this.entity = this.selectedText;
   },
   methods: {
@@ -113,13 +112,4 @@ export default {
       display: block;
     }
   }
-  .entity {
-    text-decoration: 1px solid #67738B underline;
-  }
-  /deep/ .icon.is-right {
-    transform: translateY(-5%);
-  }
-  /deep/ .hidden .unnnic-autocomplete__container-list {
-  display: none;
-}
 </style>

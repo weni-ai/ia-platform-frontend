@@ -3,27 +3,38 @@
     <div class="intent-suggestion-accordion__content">
       <div
         class="intent-suggestion-accordion__content__check-field">
-        <span class="intent-suggestion-accordion__content__tag">[{{ repository.language }}]</span>
+        <b-checkbox
+          v-model="checked"
+          :native-value="toExample"/>
       </div>
+      <b-field
+        v-if="editing"
+        class="intent-suggestion-accordion__content__field">
+        <b-input
+          v-model="phraseSuggestion"
+          class="intent-suggestion-accordion__content__field__input"
+          size="is-small"/>
+      </b-field>
 
       <div
+        v-else
         class="intent-suggestion-accordion__content__phrase">
         <p>{{ phraseSuggestion }}</p>
       </div>
     </div>
 
     <div class="intent-suggestion-accordion__icons">
-        <unnnic-icon-svg
-          icon="arrow-right-1-1"
-          size="sm"
-          @click.native="selectSentence"
-        />
+      <b-icon
+        icon="pencil"
+        size="is-small"
+        class="intent-suggestion-accordion__icons__style"
+        @click.native="!editing ? editPhrase() : ''" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'IntentSuggestion',
@@ -36,23 +47,10 @@ export default {
       type: String,
       default: '',
     },
-    created_at: {
-      type: String,
-      default: '',
+    repository: {
+      type: Object,
+      default: /* istanbul ignore next */ () => ({}),
     },
-    entities: {
-      type: [Array, String],
-      default: () => [],
-    },
-    intent: {
-      type: String,
-      default: '',
-    },
-    language: {
-      type: String,
-      default: '',
-    }
-
   },
   data() {
     return {
@@ -63,9 +61,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      repository: 'getCurrentRepository',
-    }),
     toExample() {
       return {
         text: this.phraseSuggestion,
@@ -116,42 +111,23 @@ export default {
       this.editing = false;
       this.setEditingStatus(false);
     },
-    selectSentence() {
-      this.$emit('dispatchEvent', {
-        event: 'onSentenceSelected',
-        value: {
-          id: this.id,
-          text: this.phraseSuggestion,
-          entities: this.entities,
-          language: this.language
-        },
-      });
-    }
   },
 };
 </script>
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .b-checkbox.checkbox:not(.button){
   margin-right: 0;
 }
 
 .intent-suggestion-accordion{
-    &:last-child{
-      margin-bottom: $unnnic-spacing-stack-xl;
-    }
-
     width: 100%;
-    // height: 40px;
-    margin: 1rem 0;
-    background: #FFFFFF;
-    border: 1px solid #E2E6ED;
-    border-radius: 8px;
-    padding: $unnnic-spacing-stack-sm;
+    height: 40px;
+    margin: 0.4rem 0;
+    background: $color-fake-white;
+    border: 1px solid $color-border;
 
     display:flex;
     justify-content: space-between;
@@ -161,14 +137,15 @@ export default {
     &__content{
      width: 80%;
      display:flex;
+     padding-left: 10px;
      justify-content: flex-start;
      align-items: center;
-     font-size: $unnnic-font-size-body-gt;
 
       &__check-field{
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        margin-left: 1rem;
       }
 
       &__field{
@@ -200,21 +177,20 @@ export default {
           }
       }
 
-      &__tag {
-        // margin-right: 0.5rem;
-        font-weight: 900;
-        // font-size: 14px;
-        color: #d0d3d9;
-      }
-
     }
 
 
     &__icons{
         margin-right: 1rem;
-        cursor: pointer;
-        display: flex;
-        align-self: center;
+
+        &__style{
+            color: $color-grey-dark;
+            cursor: pointer;
+        }
+        &__style:hover{
+            color: $color-fake-grey;
+        }
+
     }
 
 }

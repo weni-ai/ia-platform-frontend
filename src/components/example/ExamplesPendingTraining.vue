@@ -1,22 +1,23 @@
 <template>
   <div>
+    <paginated-list
+      v-if="examplesList"
+      :item-component="exampleItemElem"
+      :list="examplesList"
+      :repository="repository"
+      :per-page="perPage"
+      :is-accordion-open="pageWasChanged"
+      :pending-example="pendingExample"
+      :is-suggestion="true"
+      @itemSave="dispatchSave"
+      @itemDeleted="onItemDeleted($event)"
+      @pageChanged="pageChanged()"/>
+
+    <br>
     <p
       v-if="examplesList && examplesList.empty && !isTrain"
       class="no-examples"
       v-html="$t('webapp.trainings.no_sentences_to_train')"/>
-
-      <intent-pagination
-        v-if="examplesList"
-        :item-component="sentencesTable"
-        :list="examplesList"
-        :repository="repository"
-        :per-page="perPage"
-        @itemDeleted="onItemDeleted()"
-        @itemSave="dispatchSave"
-        :show-intents="true"
-        :load-all="true"
-        @onUpdateSelected="updateSelected"
-      />
 
   </div>
 </template>
@@ -25,12 +26,9 @@
 import { mapActions, mapGetters } from 'vuex';
 import PaginatedList from '@/components/shared/PaginatedList';
 import ExampleItem from '@/components/example/ExampleItem';
-import IntentPagination from '../shared/IntentPagination';
-import SentencesIntentTable from '@/components/repository/SentencesIntentTable';
 
 const components = {
   PaginatedList,
-  IntentPagination
 };
 
 export default {
@@ -39,7 +37,7 @@ export default {
   props: {
     perPage: {
       type: Number,
-      default: 100,
+      default: 12,
     },
     update: {
       type: Boolean,
@@ -63,7 +61,6 @@ export default {
       dateNow: '',
       error: null,
       pageWasChanged: false,
-      sentencesTable: SentencesIntentTable,
     };
   },
   computed: {
@@ -79,10 +76,6 @@ export default {
     repository() {
       this.updateExamples(true);
     },
-    async examplesList() {
-      await this.$nextTick();
-      this.$emit('onUpdateList', this.examplesList)
-    }
   },
   mounted() {
     this.updateExamples();
@@ -95,7 +88,6 @@ export default {
     ]),
     dispatchSave() {
       this.updateExamples(true);
-      this.$emit('onEditSentence')
     },
     pageChanged() {
       this.pageWasChanged = !this.pageWasChanged;
@@ -140,9 +132,6 @@ export default {
     onItemDeleted() {
       this.$emit('exampleDeleted');
     },
-    updateSelected(params) {
-      this.$emit('onUpdateSelected', params)
-    },
   },
 };
 </script>
@@ -150,6 +139,5 @@ export default {
 <style lang="scss" scoped>
 .no-examples {
   margin: 0;
-  font: 14px 'Lato';
 }
 </style>
