@@ -477,26 +477,26 @@
       "login": "Sign in to your account to contribute to this intelligence.",
       "sentences_list": "Sentences list",
       "run_training": "Run training",
-      "submit": "Submit",
+      "submit": "Send sentence to training",
       "highlight_word": "Highlight words to mark as entity",
       "add_entity": "Add entity",
       "add_entity_for": "Add entity for",
       "select_text": "Select part of your text to add an entity",
       "add_a_sentence": "Add a sentence",
-      "intent": "Intent",
+      "intent": "Select the intent",
       "train_response_title": "Repository trained successfully!",
-      "train_response_subtitle": "Your sentences have been added to the training. You can consult the repository sentences in the sentence list.",
+      "train_response_subtitle": "The sentences you added were successfully trained. You can query all trained sentences in the Database menu. 😉",
       "trained": "Trained",
       "processing": "Processing",
       "no_changes": "No Changes",
       "no_sentences": "No sentences.",
-      "no_sentences_to_train": "There are no phrases to train",
+      "no_sentences_to_train": "No sentences have been added to training.",
       "no_train_sentence": "This sentence has not yet been added to the training.",
       "failed": "Failed",
       "intention_or_sentence_already_exist": "Intention and Sentence already exists",
-      "delete_title": "Delete sentence entity",
-      "delete_phrase_modal_title": "Delete sentence",
-      "delete_phrase_modal": "Are you sure? The example will be deleted",
+      "delete_title": "Delete sentences",
+      "delete_phrase_modal_title":"Delete sentence",
+      "delete_phrase_modal":"Do you really want to delete the selected sentences? Once the action is performed, it will not be possible to reverse it.",
       "delete_button": "Delete",
       "cancel_button": "Cancel",
       "save_button": "Save",
@@ -513,11 +513,13 @@
       "train_title": "Train Intelligence",
       "train_description": "Add sentences to improve the intelligence. <a href={link}>See our documentation</a> and learn <br> the best practices for creating an quality artificial intelligence.",
       "entities": "Entities (optional)",
-      "sentences_to_train": "List of sentences added for training"
+      "sentences_to_train": "List of sentences added for training",
+      "add_entity_info": "Select words from the sentence you want to train to add entities",
+      "sentence_added": "Sentence added for training"
     },
     "resumeSentences": {
       "title": "Summary of sentences sent for training",
-      "description": "Run training to improve intelligence with submitted phrases",
+      "description": "Run training to improve intelligence with submitted sentences",
       "sentences": "Sentences",
       "intentions": "Intentions",
       "entities": "Entities",
@@ -956,7 +958,11 @@
       "cancel": "Cancel",
       "importar": "Confirm",
       "import_success": "Successful importation.",
-      "import_error": "Something went wrong, try again later."
+      "import_error": "Something went wrong, try again later.",
+      "import_sentences_success_title": "Sentences imported successfully!",
+      "import_sentences_success_message": "Imported sentences have been added for training. 😉",
+      "import_sentences_error_title": "Error importing sentences",
+      "import_sentences_error_message": "Something went wrong, please try again later."
     },
     "weni_notification": {
       "title": "Bothub is now Weni Artificial Intelligence",
@@ -967,5 +973,18 @@
     "infinite_scroll": {
       "title": "Loading"
     }
+  },
+  "upload_area": {
+    "title":{
+      "text": "Drag your file here, or",
+      "highlight": "search for it"
+    },
+    "subtitle": "Supported formats: ",
+    "invalid": {
+      "subtitle": "Invalid File"
+    }
+  },
+  "import_card": {
+    "importing": "Importing.."
   }
 }

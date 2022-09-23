@@ -510,7 +510,8 @@
       "train_description": "Adicione frases para aprimorar a inteligência. <a href={link}>Veja nossa documentação</a> e conheça as melhores práticas para criar uma inteligência artificial de qualidade.",
       "entities": "Entidades (opcional)",
       "sentences_to_train": "Lista de frases adicionadas para treinamento",
-      "add_entity_info": "Selecione palavra(s) da frase que deseja treinar para adicionar entidade(s)"
+      "add_entity_info": "Selecione palavra(s) da frase que deseja treinar para adicionar entidade(s)",
+      "sentence_added": "Frase adicionada para treinamento"
     },
     "resumeSentences": {
       "title": "Resumo das frases enviadas para treinamento",
