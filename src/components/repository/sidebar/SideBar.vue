@@ -224,6 +224,26 @@
             </div>
           </section>
 
+          <!-- <unnnic-sidebar-item
+            v-if="getCurrentRepository.authorization.can_contribute"
+            :icon="checkSelectedMenu('repository-database') ? 'folder-2' : 'folder-1'"
+            :text="$t('webapp.menu.database')"
+            :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-database')"
+            :class="[
+              checkSelectedMenu('repository-database')
+                ? 'sidebar-wrapper__body--active'
+                : 'sidebar-wrapper__body__element'
+            ]"
+            @click="
+              setSelectMenu({
+                name: 'repository-database',
+                to: 'repository-database',
+                closeDrop: true
+              })
+            "
+          /> -->
+
           <section class="evaluate-menu">
             <unnnic-sidebar-item
               v-if="getCurrentRepository.authorization.can_contribute"

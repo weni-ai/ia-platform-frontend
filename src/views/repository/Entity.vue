@@ -5,7 +5,7 @@
     <div
       v-if="authenticated"
       class="entity-list">
-      <div v-if="repository && repository.authorization.can_contribute">
+      <div v-if="repository">
         <entities-list
           :entities-list="examplesList"
           :repository="repository"
@@ -43,6 +43,7 @@
           :add-attributes="{ entitySelected }"
           @itemDeleted="onItemDeleted()"
           @itemSave="onItemSave()"
+          :show-intents="true"
           @onUpdateSelected="updateSelected"
         />
         <p
@@ -77,6 +78,9 @@
       </b-notification>
       <login-form hide-forgot-password />
     </div>
+    <template v-slot:loader>
+      <intent-loader />
+    </template>
   </repository-view-base>
 
 </template>
@@ -92,7 +96,7 @@ import RequestAuthorizationModal from '@/components/repository/RequestAuthorizat
 import Loading from '@/components/shared/Loading';
 import RepositoryBase from './Base';
 import IntentPagination from '@/components/shared/IntentPagination';
-
+import IntentLoader from '@/views/repository/loadings/Intent';
 
 export default {
   name: 'Entity',
@@ -105,7 +109,8 @@ export default {
     EntitiesList,
     Loading,
     SentencesIntentTable,
-    IntentPagination
+    IntentPagination,
+    IntentLoader
   },
   extends: RepositoryBase,
   props: {
@@ -264,11 +269,8 @@ export default {
       }
     }
   }
-  /deep/ .icon-right {
-    transform: translateY(70%);
-  }
-  /deep/ .icon-left {
-    transform: translateY(60%);
-  }
+/deep/ .input {
+  height: auto;
+}
 
 </style>

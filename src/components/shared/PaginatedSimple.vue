@@ -13,7 +13,7 @@
       v-if="isLoading"
       class="pagination__message" />
     <div
-      v-else
+      v-else-if="!loadAll"
       class="pagination__bottom">
       <div class="pagination__bottom__controls">
         <div
@@ -66,6 +66,10 @@ export default {
       type: String,
       default: null,
     },
+    loadAll: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
