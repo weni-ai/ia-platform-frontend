@@ -408,7 +408,7 @@
     "intent": {
       "title": "Intención",
       "description": "Esta intención contiene {n} frase | Esta intención contiene {n} frases.",
-      "edit_button": "Editar intención",
+      "edit_button": "Editar Intención",
       "save_button": "Ahorrar",
       "no_sentences": "Ni frase.",
       "error_intent": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
@@ -508,7 +508,10 @@
       "intent_error": "Entrar en una intención",
       "default_error": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
       "more_than_200_words": "Límite de 200 palabras por frase alcanzado. Ajuste el texto si es necesario o divídalo en frases más pequeñas.",
-      "entities_info": "¿Cómo agregar nuevas entidades desde la oración?"
+      "entities_info": "¿Cómo agregar nuevas entidades desde la oración?",
+      "database": "Repositorio",
+      "database_description": "Lista de todas las oraciones entrenadas por la inteligencia",
+      "database_untrained": "Esta inteligencia no tiene frases entrenadas. Agregue frases y entrénelas en el menú Entrenamiento."
     },
     "train_modal": {
       "training_status": "Estado de Entrenamiento",

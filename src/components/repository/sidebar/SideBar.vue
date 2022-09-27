@@ -224,7 +224,7 @@
             </div>
           </section>
 
-          <!-- <unnnic-sidebar-item
+          <unnnic-sidebar-item
             v-if="getCurrentRepository.authorization.can_contribute"
             :icon="checkSelectedMenu('repository-database') ? 'folder-2' : 'folder-1'"
             :text="$t('webapp.menu.database')"
@@ -242,7 +242,7 @@
                 closeDrop: true
               })
             "
-          /> -->
+          />
 
           <section class="evaluate-menu">
             <unnnic-sidebar-item
