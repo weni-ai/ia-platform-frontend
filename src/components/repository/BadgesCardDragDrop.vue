@@ -221,6 +221,9 @@ export default {
   },
   mounted() {
     this.updateLocalList();
+    this.$nextTick(() => {
+      this.list.sort((a, b) => a.value.localeCompare(b.value));
+    });
   },
   methods: {
     ...mapActions(['editGroup']),
