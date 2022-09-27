@@ -405,7 +405,7 @@
     "intent":{
       "title": "Frases da intenção",
       "description": "Essa intenção possui <strong>{n}</strong> frase | Essa intenção possui <strong>{n}</strong> frases no total.",
-      "edit_button": "Alterar nome da intenção",
+      "edit_button": "Alterar nome",
       "save_button": "Salvar",
       "no_sentences": "Nenhuma frase.",
       "error_intent": "Algo de errado aconteceu, tente novamente mais tarde.",
@@ -418,7 +418,7 @@
       "success_modal_subtitle": "O nome da intenção foi alterado com sucesso 😉",
       "delete_success_title": "Frase(s) excluída(s)!",
       "delete_success_subtitle": "As frases selecionadas foram excluídas com sucesso 😉",
-      "delete_selected": "Excluir selecionados ({n})",
+      "delete_selected": "Excluir selecionadas ({n})",
       "sentences_perpage": "Frases exibidas por página:",
       "search_sentence": "Busque por frase...",
       "table_sentence": "Frase",
@@ -502,7 +502,10 @@
       "empty_text_error": "Digite uma frase",
       "intent_error": "Digite uma intenção",
       "default_error": "Algo de errado aconteceu, tente novamente mais tarde.",
-      "entities_info": "Como adicionar novas entidades a partir da frase?"
+      "entities_info": "Como adicionar novas entidades a partir da frase?",
+      "database": "Repositório",
+      "database_description": "Lista de todas as frases treinadas pela inteligência.",
+      "database_untrained": "Essa inteligência não possui nenhuma frase treinada. Adicione frases e treine-as no menu Treinamento."
     },
     "train_modal": {
       "training_status": "Status do Treinamento",
@@ -786,7 +789,7 @@
     "entity":{
       "title": "Frases da entidade",
       "description": "Esta entidade está presente em <strong>{n}</strong> frase no total. | Esta entidade está presente em <strong>{n}</strong> frases no total.",
-      "edit_button": "Alterar nome da entidade",
+      "edit_button": "Alterar nome",
       "save_button": "Salvar",
       "no_sentences": "Nenhuma frase treinada.",
       "error_entity": "Algo de errado aconteceu, tente novamente mais tarde.",
