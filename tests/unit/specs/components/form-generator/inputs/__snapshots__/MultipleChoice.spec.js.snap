@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MultipleChoice.vue renders correctly 1`] = `<b-taginput-stub data="pt,pt-br,en" expanded="" autocomplete="" open-on-focus="" clear-on-select="" field="display_name" icon="label" value=""></b-taginput-stub>`;
+exports[`MultipleChoice.vue renders correctly 1`] = `<b-taginput-stub expanded="true" icon="label" autocomplete="true" usehtml5validation="true" statusicon="true" value="" data="pt,pt-br,en" hascounter="true" field="display_name" openonfocus="true" closable="true" confirmkeys=",,Tab,Enter" removeonkeys="Backspace" onpasteseparators="," beforeadding="[Function]" createtag="[Function]" clear-on-select=""></b-taginput-stub>`;

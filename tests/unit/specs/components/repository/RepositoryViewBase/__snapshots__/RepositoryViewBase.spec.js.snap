@@ -6,7 +6,7 @@ exports[`RepositoryViewBase.vue error -1 renders correctly 1`] = `
     <!---->
     <!---->
   </div>
-  <div class="rpstr-vw-bs__loading">
+  <div class="rpstr-vw-bs__wrapper__content">
     <loading-stub></loading-stub>
   </div>
   <!---->
@@ -19,7 +19,7 @@ exports[`RepositoryViewBase.vue error 404 renders correctly 1`] = `
     <!---->
     <!---->
   </div>
-  <div class="rpstr-vw-bs__loading">
+  <div class="rpstr-vw-bs__wrapper__content">
     <loading-stub></loading-stub>
   </div>
   <!---->
@@ -32,7 +32,7 @@ exports[`RepositoryViewBase.vue loading renders correctly 1`] = `
     <!---->
     <!---->
   </div>
-  <div class="rpstr-vw-bs__loading">
+  <div class="rpstr-vw-bs__wrapper__content">
     <loading-stub></loading-stub>
   </div>
   <!---->

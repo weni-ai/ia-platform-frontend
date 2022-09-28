@@ -10,7 +10,7 @@ exports[`Translate.vue renders correctly 1`] = `
       <login-form-stub hideforgotpassword="true"></login-form-stub>
     </div>
   </div>
-  <translate-token-modal-stub repositoryuuid="" urlgenerator="function () { [native code] }"></translate-token-modal-stub>
+  <translate-token-modal-stub repositoryuuid="" urlgenerator="[Function]"></translate-token-modal-stub>
   <!---->
 </repository-view-base-stub>
 `;
