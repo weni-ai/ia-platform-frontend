@@ -2,7 +2,8 @@
 import Vue from 'vue';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { getEntityColor } from '@/utils/entitiesColors';
-import { formatters } from '@/utils';
+import { formatters, LANGUAGES } from '@/utils';
+
 
 export default {
   name: 'EditExampleBase',
@@ -42,6 +43,7 @@ export default {
       textSelected: null,
       text: JSON.parse(JSON.stringify(this.textToEdit)),
       intent: JSON.parse(JSON.stringify(this.intentToEdit)),
+      language: JSON.parse(JSON.stringify(this.languageEdit)),
       entitiesToEdit: JSON.parse(JSON.stringify(this.entities)),
       pendingEntities: [],
       submitting: false,
@@ -49,8 +51,7 @@ export default {
   },
   computed: {
     ...mapState({
-      repository: state => state.Repository.selectedRepository,
-      language: state => state.Repository.evaluateLanguage,
+      repository: state => state.Repository.selectedRepository
     }),
     ...mapGetters({
       version: 'getSelectedVersion',
@@ -96,6 +97,10 @@ export default {
     },
     highlightedText() {
       return entity => this.text.slice(entity.start, entity.end);
+    },
+    languageList() {
+      return Object.keys(LANGUAGES)
+        .map(lang => ([lang, LANGUAGES[lang]]));
     },
   },
   watch: {
@@ -241,7 +246,7 @@ export default {
             text: this.text,
             intent: this.intent,
             entities: entitiesResponse,
-            language: this.languageEdit,
+            language: this.language,
           });
         } else {
           await this.updateEvaluateExample({

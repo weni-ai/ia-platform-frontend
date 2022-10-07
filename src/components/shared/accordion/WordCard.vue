@@ -5,13 +5,14 @@
         class="intent-suggestion-accordion__content__check-field">
         <unnnic-checkbox
           @change="setSuggestion"
-          v-model="checked"
+          v-model="active"
+          :disabled="!checkable"
           :native-value="toExample"/>
       </div>
 
       <div
         class="intent-suggestion-accordion__content__phrase">
-        <p :class="checked && 'label-active'">{{ text }}</p>
+        <p :class="active && 'label-active'">{{ text }}</p>
       </div>
     </div>
 
@@ -49,13 +50,21 @@ export default {
       type: [Array, String],
       default: () => []
     },
+    checked: {
+      type: Boolean,
+      default: true
+    },
+    checkable: {
+      type: Boolean,
+      default: true
+    },
   },
   data() {
     return {
       open: false,
       phraseSuggestion: '',
       editing: false,
-      checked: true,
+      active: this.checked
     };
   },
   computed: {
@@ -115,7 +124,7 @@ export default {
       });
     },
     setSuggestion() {
-      this.$emit('onChangeGenerate', { text: this.phraseSuggestion, value: this.checked })
+      this.$emit('onChange', { text: this.phraseSuggestion, value: this.active })
     }
   },
   components: { EntityTag }
