@@ -1,27 +1,26 @@
 <template>
-  <div>
-    <div class="columns is-variable is-1">
-      <div
-        class="column is-half entity-form">
-        <span
+  <div class="column is-6 pb-0">
+    <div>
+      <div>
+        <p
           slot="label"
-          class="entity-form__label"><span
-            :class="entityClass"
-            class="is-rounded">{{ selectedText }}</span> is</span>
-        <b-field
-          id="tour-training-step-3"
-          :is-previous-disabled="true">
-          <b-autocomplete
+          class="unnnic-form__label">
+          <span class="is-rounded entity">
+            {{ selectedText }}
+          </span>
+          {{ $t('webapp.result.is') }}
+        </p>
+        <unnnic-autocomplete
+            id="tour-training-step-3"
             ref="entityInputField"
             v-model="entity"
             :data="filteredData"
-            expanded
-            open-on-focus
-            dropdown-position="down"
-            icon-right="close"
-            icon-right-clickable
-            @icon-right-click="removeEntity()"/>
-        </b-field>
+            @icon-right-click="removeEntity()"
+            @click="hideDropdown = false"
+            :openWithFocus="true"
+            :iconRight="entity ? 'delete-1-1' : ''"
+            :class="hideDropdown ? 'hidden' : ''"
+          />
       </div>
     </div>
   </div>
@@ -57,10 +56,15 @@ export default {
       type: Number,
       required: true,
     },
+    newEntity: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
       entity: '',
+      hideDropdown: true
     };
   },
   computed: {
@@ -88,8 +92,9 @@ export default {
       this.$emit('input', this.entity);
     },
   },
-  mounted() {
-    this.entity = this.selectedText;
+  async mounted() {
+    await this.$nextTick();
+    this.entity = this.newEntity ?? this.selectedText;
   },
   methods: {
     async removeEntity() {
@@ -112,4 +117,13 @@ export default {
       display: block;
     }
   }
+  .entity {
+    text-decoration: 1px solid #67738B underline;
+  }
+  /deep/ .icon.is-right {
+    transform: translateY(-5%);
+  }
+  /deep/ .hidden .unnnic-autocomplete__container-list {
+  display: none;
+}
 </style>

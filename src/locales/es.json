@@ -408,7 +408,7 @@
     "intent": {
       "title": "Intención",
       "description": "Esta intención contiene {n} frase | Esta intención contiene {n} frases.",
-      "edit_button": "Editar Intención",
+      "edit_button": "Editar intención",
       "save_button": "Ahorrar",
       "no_sentences": "Ni frase.",
       "error_intent": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
@@ -503,7 +503,7 @@
       "cancel_button": "Cancelar",
       "save_button": "Ahorrar",
       "error_caracter_type": "La frase debe contener letras o números. Incluirlos para continuar.",
-      "train_progress": "{progress}% de entrenamiento completado",
+      "train_progress": "Entrenamiento en progreso",
       "empty_text_error": "Introduzca una oración",
       "intent_error": "Entrar en una intención",
       "default_error": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
@@ -511,7 +511,19 @@
       "entities_info": "¿Cómo agregar nuevas entidades desde la oración?",
       "database": "Repositorio",
       "database_description": "Lista de todas las oraciones entrenadas por la inteligencia",
-      "database_untrained": "Esta inteligencia no tiene frases entrenadas. Agregue frases y entrénelas en el menú Entrenamiento."
+      "database_untrained": "Esta inteligencia no tiene frases entrenadas. Agregue frases y entrénelas en el menú Entrenamiento.",
+      "train_title": "Entrenar Inteligencia",
+      "train_description": "Agrega oraciones para mejorar la inteligencia. <a href={link}>Consulta nuestra documentación</a> y aprende <br> las mejores prácticas para crear una inteligencia artificial de calidad.",
+      "entities": "Entidades (opcional)",
+      "sentences_to_train": "Lista de oraciones agregadas para entrenamiento"
+    },
+    "resumeSentences": {
+      "title": "Resumen de frases enviadas para entrenamiento",
+      "description": "Ejecute la capacitación para mejorar la inteligencia con frases enviadas",
+      "sentences": "Frases",
+      "intentions": "Intenciones",
+      "entities": "Entidades",
+      "languages": "Idiomas"
     },
     "train_modal": {
       "training_status": "Estado de Entrenamiento",
@@ -692,7 +704,7 @@
     },
     "menu": {
       "hide": "Encogerse",
-      "expand": "Expandir",
+      "expand":"Expandir",
       "created_by": "Criado por",
       "back_text": "Volver",
       "summary": "Resumen",
@@ -720,8 +732,8 @@
       "database": "Repositorio"
     },
     "phrase-suggestion": {
-      "title": "Sugerencia de frases",
-      "subtitle": "Seleccione una intención y agregue frases sugeridas a su entrenamiento.",
+      "title": "Generador de frases",
+      "subtitle": "Herramienta que te permite, a partir de una sola frase, generar cientos de otras frases para mejorar tu inteligencia artificial.",
       "empty": "No hay ninguna sugerencia de oraciones para esta intención",
       "confirm-edit": "Confirmar la edición",
       "cancel-edit": "Cancelar edición",
