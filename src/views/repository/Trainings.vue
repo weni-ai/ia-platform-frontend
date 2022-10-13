@@ -72,7 +72,7 @@
                 :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
                 :disabled="sentencesCounter === 0"
                 class="trainings-repository__button"
-                iconLeft="bin-1-1"
+                iconLeft="delete-1-1"
               />
             </div>
             <examples-pending-training

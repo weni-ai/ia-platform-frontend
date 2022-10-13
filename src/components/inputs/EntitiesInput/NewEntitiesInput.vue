@@ -25,6 +25,7 @@
       <div slot="icon" class="level example-accordion__btns-wrapper">
         <unnnic-icon-svg
           :icon="`${isOpen ? 'arrow-button-down-1' : 'arrow-right-1-1'}`"
+          scheme="neutral-cleanest"
           size="xs"
         />
       </div>
@@ -51,7 +52,7 @@
           :is-step-blocked="!blockedNextStepTutorial"
           :disabled="!text"
           iconLeft="add-1"
-          class="button--full mt-5"
+          class="button--full mt-1 mb-3"
           type="terciary"
           size="large"
           @click.prevent.stop="addEntity()"
@@ -346,5 +347,12 @@ export default {
 
 /deep/ .unnnic-modal-container-background-body {
   padding-top: 1rem;
+}
+
+/deep/ .expander__trigger__icon {
+  margin-top: 2px;
+}
+/deep/ .expander__trigger {
+  padding: .2rem 0;
 }
 </style>

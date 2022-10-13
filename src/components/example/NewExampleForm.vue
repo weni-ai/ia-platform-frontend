@@ -88,7 +88,6 @@
       <div class="column is-12 mt-2">
         <b-field class="entities-wrapper" :message="errors.entities">
           <new-entities-input
-            class="mb-3"
             ref="entitiesInput"
             v-model="entities"
             :repository="repository"
