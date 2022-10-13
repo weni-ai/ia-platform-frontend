@@ -67,6 +67,7 @@
           <div slot="icon" class="level example-accordion__btns-wrapper">
             <unnnic-icon-svg
               :icon="`${isOpen ? 'arrow-button-down-1' : 'arrow-right-1-1'}`"
+              scheme="neutral-cleanest"
               size="xs"
             />
           </div>
@@ -120,17 +121,59 @@
                 type="is-danger" />
             </div>
             <unnnic-button
-              :disabled="textSelected === null"
               iconLeft="add-1"
               class="button--full mb-3"
               type="terciary"
               size="large"
-              @click.prevent.stop="addPendingEntity"
+              @click.prevent.stop="addEntity"
             >
               <span class="edit-sentence__add-entity-button-text">{{ entityButtonText }} </span>
             </unnnic-button>
           </div>
         </entity-accordion>
+        <unnnic-modal
+          :showModal="entityModal"
+          :text="$t('webapp.trainings.add_entity_modal_title')"
+          :closeIcon="false"
+        >
+          <div slot="message" class="modal-header text-left">
+            <unnnic-autocomplete
+                :label="$t('webapp.trainings.add_entity_field_label')"
+                ref="entityInputField"
+                :data="getAllEntities"
+                v-model="entity"
+                :openWithFocus="true"
+                :iconRight="isEntityInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
+                @focus="onInputClick()"
+                @blur="onInputClick()"
+            />
+            <div>
+              <unnnic-label class="mt-5" :label="$t('webapp.trainings.add_entity_checkbox_title')"/>
+              <div class="words-wrapper">
+                <word-card
+                  v-for="(word, index) in words"
+                  :key="index"
+                  class="word"
+                  :checked="false"
+                  :checkable="!word.hasEntity && entity.length > 0"
+                  :text="word.text"
+                  @onChange="onWordSelected"
+                />
+              </div>
+            </div>
+          </div>
+          <unnnic-button slot="options" type="terciary" @click.prevent.stop="cancelEditEntity()">
+            {{ $t("webapp.home.cancel") }}
+          </unnnic-button>
+          <unnnic-button
+            slot="options"
+            class="create-repository__container__button"
+            type="secondary"
+            @click.prevent.stop="setEntity()"
+          >
+            {{ $t("webapp.trainings.add_entity_finish_edit") }}
+          </unnnic-button>
+        </unnnic-modal>
       </div>
       <div
         class="edit-sentence__btn-wrapper">
@@ -170,20 +213,39 @@
 import EditExampleBase from './EditExampleBase';
 import ExampleTextWithHighlightedEntitiesInput from '@/components/inputs/ExampleTextWithHighlightedEntitiesInput';
 import EntityAccordion from '@/components/shared/accordion/EntityAccordion';
+import WordCard from '@/components/shared/accordion/WordCard';
+
 
 export default {
   name: 'EditExampleIntent',
   components: {
     ExampleTextWithHighlightedEntitiesInput,
-    EntityAccordion
+    EntityAccordion,
+    WordCard
   },
   data() {
     return {
       hideDropdown: true,
-      isOpen: false
+      isOpen: false,
+      entityModal: false,
+      isEntityInputActive: false,
+      selectedEntities: [],
+      entity: ''
     }
   },
   extends: EditExampleBase,
+  computed: {
+    words() {
+      return this.text
+        .split(' ')
+        .map((word, index) => ({
+          text: word,
+          hasEntity: (this.pendingEntities.filter(e => this.text.substring(e.start, e.end) === word) || '').length > 0,
+          start: this.text.indexOf(word),
+          end: this.text.indexOf(word) + word.length
+        }))
+    },
+  },
   methods: {
     cancelEditSentence() {
       this.$emit('cancel')
@@ -191,6 +253,44 @@ export default {
     async saveSentence() {
       await this.onSubmit();
       this.cancelEditSentence();
+    },
+    addEntity() {
+      if (this.textSelected) {
+        this.addPendingEntity();
+      } else {
+        this.entityModal = true
+      }
+    },
+    onWordSelected(event) {
+      const start = this.text.indexOf(event.text);
+      const end = start + event.text.length
+
+      if (event.value) {
+        this.selectedEntities.push({
+          end,
+          entity: this.entity,
+          start,
+        });
+      } else {
+        this.selectedEntities = this.selectedEntities.filter(e => e.start !== start)
+      }
+    },
+    cancelEditEntity() {
+      this.selectedEntities = []
+      this.entityModal = false
+      this.entity = ''
+    },
+    setEntity() {
+      this.pendingEntities.push(...this.selectedEntities)
+      this.pendingEntities = this.pendingEntities.map(entity => ({
+        ...entity,
+        class: ''
+      }))
+
+      this.cancelEditEntity();
+    },
+    onInputClick() {
+      this.isEntityInputActive = !this.isEntityInputActive
     }
   }
 };
@@ -261,8 +361,8 @@ export default {
   width: 100%;
 }
 .add-entity {
-  padding: .5rem 1rem;
-  margin: 1rem .5rem;
+  padding: .2rem 1rem;
+  margin: .5rem .5rem 1rem;
   border: 1px solid #E2E6ED;
   border-radius: 8px;
 }
@@ -321,5 +421,15 @@ export default {
 }
 /deep/ .dropdown {
   display: block;
+}
+/deep/ .unnnic-modal-container-background-body-alert_icon {
+  display: none;
+}
+
+/deep/ .unnnic-modal-container-background-body {
+  padding-top: 1rem;
+}
+/deep/ .expander__trigger__icon {
+  margin-top: 2px;
 }
 </style>
