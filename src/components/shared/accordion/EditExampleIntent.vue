@@ -124,7 +124,7 @@
               iconLeft="add-1"
               class="button--full mb-3"
               type="terciary"
-              size="large"
+              size="small"
               @click.prevent.stop="addEntity"
             >
               <span class="edit-sentence__add-entity-button-text">{{ entityButtonText }} </span>
@@ -361,7 +361,7 @@ export default {
   width: 100%;
 }
 .add-entity {
-  padding: .2rem 1rem;
+  padding: .4rem 1rem;
   margin: .5rem .5rem 1rem;
   border: 1px solid #E2E6ED;
   border-radius: 8px;
@@ -369,6 +369,18 @@ export default {
 .entity-input:nth-child(even) {
   padding-left: .5rem !important;
   padding-right: 0 !important;
+}
+
+.words-wrapper {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.word {
+  width: 48%;
+  margin: 0 !important;
 }
 
 /deep/ .column.is-6 {
@@ -427,9 +439,12 @@ export default {
 }
 
 /deep/ .unnnic-modal-container-background-body {
-  padding-top: 1rem;
+  padding-top: 2rem;
 }
 /deep/ .expander__trigger__icon {
   margin-top: 2px;
+}
+/deep/ .unnnic-modal-container-background-body-description {
+  padding-bottom: 0;
 }
 </style>

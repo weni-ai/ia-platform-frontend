@@ -30,7 +30,7 @@
         />
       </div>
       <div slot="body">
-        <div class="columns is-flex-wrap-wrap mt-0">
+        <div class="columns is-flex-wrap-wrap mt-0 px-0">
           <entity-form
             v-for="entity in preparedEntities"
             :key="entity.localId"
@@ -346,13 +346,29 @@ export default {
 }
 
 /deep/ .unnnic-modal-container-background-body {
-  padding-top: 1rem;
+  padding-top: 2rem;
 }
 
 /deep/ .expander__trigger__icon {
-  margin-top: 2px;
+  margin-top: 3px;
 }
 /deep/ .expander__trigger {
-  padding: .2rem 0;
+  padding: .4rem 0;
+}
+
+/deep/ .expander__body {
+  padding-inline: 0;
+}
+
+/deep/ .column:nth-child(odd) {
+  padding-left: 0
+}
+
+/deep/ .column:nth-child(even) {
+  padding-right: 0
+}
+
+/deep/ .unnnic-modal-container-background-body-description {
+  padding-bottom: 0;
 }
 </style>
