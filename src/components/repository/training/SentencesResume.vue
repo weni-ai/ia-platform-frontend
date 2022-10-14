@@ -65,7 +65,7 @@
             >
               <unnnic-icon icon="alert-circle-1-1" scheme="feedback-red" size="sm" />
               <div class="train-modal__wrapper__content__content-requirements__item__texts">
-                <p>
+                <p class="is-flex">
                   <strong class="train-modal__wrapper__content__content-requirements__item__field">
                     {{ `[${lang.toUpperCase().replace('_','-')}]` }}
                   </strong>
@@ -83,7 +83,7 @@
           >
             <unnnic-icon icon="alert-circle-1-1" scheme="feedback-red" size="sm" />
             <div class="train-modal__wrapper__content__content-requirements__item__texts">
-              <p v-for="(warning, index) in warnings" :key="index">
+              <p class="is-flex" v-for="(warning, index) in warnings" :key="index">
                 <strong class="train-modal__wrapper__content__content-requirements__item__field">
                   {{ `[${lang.toUpperCase().replace('_','-')}]` }}
                 </strong>
@@ -385,7 +385,7 @@ export default {
       &__content-requirements {
         display: flex;
         flex-direction: column;
-        margin-bottom: $unnnic-spacing-stack-xs;
+        margin-bottom: $unnnic-spacing-inline-ant;
         gap: $unnnic-spacing-inline-ant;
         &__item {
           display: flex;
@@ -401,6 +401,7 @@ export default {
             flex-direction: column;
             align-items: flex-start;
             text-align: start;
+            font-family: $unnnic-font-family-secondary;
 
             > div {
               color: $unnnic-color-neutral-darkest;
@@ -417,6 +418,11 @@ export default {
 
           }
 
+          &__field {
+            font-size: $unnnic-font-size-body-sm;
+            font-weight: $unnnic-font-weight-bold;
+            margin-right: $unnnic-spacing-inline-ant;
+          }
         }
       }
     }
