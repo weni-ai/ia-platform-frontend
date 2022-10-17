@@ -361,11 +361,11 @@ export default {
 }
 
 /deep/ .column:nth-child(odd) {
-  padding-left: 0
+  padding-left: .8rem;
 }
 
 /deep/ .column:nth-child(even) {
-  padding-right: 0
+  padding-right: .8rem;
 }
 
 /deep/ .unnnic-modal-container-background-body-description {
