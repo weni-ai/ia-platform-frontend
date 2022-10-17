@@ -3,52 +3,6 @@
     class="intent-suggestion-list">
     <div
       v-if="phraseList.total !== 0">
-      <!-- <div
-        class="intent-suggestion-list__section">
-        <div class="intent-suggestion-list__section__check">
-          <b-checkbox
-            v-model="select"
-            :native-value="selectAll">
-            {{ $t('webapp.inbox.select_all') }}
-          </b-checkbox>
-        </div>
-        <div
-          v-if="!editStatus"
-          class="intent-suggestion-list__section__buttonsIcon">
-          <b-tooltip :label="$t('webapp.inbox.add_to_train_button')">
-            <b-button
-              type="is-primary"
-              icon-right="refresh"
-              @click="addToTraining()" />
-          </b-tooltip>
-          <b-tooltip :label="$t('webapp.inbox.add_to_sentence_button')">
-            <b-button
-              icon-right="chat-processing"
-              type="is-primary"
-              @click="addToSentences()" />
-          </b-tooltip>
-        </div>
-        <div v-else>
-          <div class="intent-suggestion-list__section__icon">
-            <b-tooltip :label="$t('webapp.phrase-suggestion.confirm-edit')">
-              <b-icon
-                icon="check-bold"
-                type="is-white"
-                size="is-small"
-                class="intent-suggestion-list__section__icon__icon-style"
-                @click.native="confirmEdit()" />
-            </b-tooltip>
-            <b-tooltip :label="$t('webapp.phrase-suggestion.cancel-edit')">
-              <b-icon
-                class="intent-suggestion-list__section__icon__icon-style"
-                type="is-white"
-                size="is-small"
-                icon="close-thick"
-                @click.native="cancelEdit()" />
-            </b-tooltip>
-          </div>
-        </div>
-      </div> -->
       <p>
         Selecione a frase que deseja utilizar como base para gerar outras frases.
       </p>

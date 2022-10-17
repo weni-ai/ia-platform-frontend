@@ -9,12 +9,13 @@
           scheme="aux-blue"/>
     </section>
 
-    <home-tab-navigation @changeTabValue="howTabIsShown = $event"/>
+    <home-tab-navigation @changeTabValue="onTabSelected"/>
 
     <home-intelligence-from-project
       v-show="howTabIsShown === 0"/>
 
     <home-intelligence-from-org
+      :key="update"
       v-show="howTabIsShown === 1"/>
 
     <home-intelligence-from-community
@@ -39,8 +40,15 @@ export default {
   data() {
     return {
       howTabIsShown: 0,
+      update: false
     };
   },
+  methods: {
+    onTabSelected(event) {
+      this.howTabIsShown = event
+      this.update = !this.update
+    }
+  }
 };
 </script>
 

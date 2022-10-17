@@ -56,6 +56,10 @@ export default {
       type: Number,
       required: true,
     },
+    newEntity: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
@@ -90,7 +94,7 @@ export default {
   },
   async mounted() {
     await this.$nextTick();
-    this.entity = this.selectedText;
+    this.entity = this.newEntity ?? this.selectedText;
   },
   methods: {
     async removeEntity() {

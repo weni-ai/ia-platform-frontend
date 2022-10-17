@@ -72,6 +72,7 @@
                 :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
                 :disabled="sentencesCounter === 0"
                 class="trainings-repository__button"
+                iconLeft="delete-1-1"
               />
             </div>
             <examples-pending-training
@@ -324,7 +325,7 @@ export default {
 
     &__tutorialStep{
       width: 100%;
-      height: 2.2rem;
+      height: 100%;
     }
   }
 
@@ -341,7 +342,7 @@ export default {
     &__train {
       display: flex;
       margin-top: 2.5rem;
-      margin-bottom: 15.5rem;
+      // margin-bottom: 15.5rem;
 
       &__progress {
         height: 25px;

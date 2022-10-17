@@ -1,6 +1,6 @@
 <template>
   <div class="translation-sentence-status">
-    <numbers-card
+    <translation-stats-card
       v-for="status in statusInfo"
       :key="status.key"
       :count="status.count || 0"
@@ -15,12 +15,12 @@
 </template>
 
 <script>
-import NumbersCard from '@/components/shared/NumbersCard';
+import TranslationStatsCard from '@/components/shared/TranslationStatsCard';
 import { mapActions } from 'vuex';
 
 export default {
   name: 'TranslationSentenceStatus',
-  components: { NumbersCard },
+  components: { TranslationStatsCard },
   props: {
     externalToken: {
       type: String,

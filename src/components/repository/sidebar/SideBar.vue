@@ -388,6 +388,7 @@
 
           <section class="settings-menu">
             <unnnic-sidebar-item
+              v-if="getCurrentRepository.authorization.can_contribute"
               :icon="dropSelect === 'isSettingsActive' ? 'cog-2' : 'cog-1'"
               :text="$t('webapp.menu.settings')"
               :enableTooltip="!collapse"

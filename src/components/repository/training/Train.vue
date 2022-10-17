@@ -10,6 +10,9 @@
       buttonClass="train__button"
       :buttonClick="verifyTrain"
       :examples-list="examplesList"
+      :requirements-to-train="trainRequirements"
+      :languages-warnings="languagesWarnings"
+      :language-available-to-train="languageAvailableToTrain"
       @onImportSuccess="updateItems"
     />
     <div v-if="trainProgress" class="train__progress">

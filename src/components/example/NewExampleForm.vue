@@ -6,7 +6,7 @@
       @submit.prevent="onSubmit()"
       @keyup.enter="onEnter()"
     >
-      <div class="column is-12 mb-2">
+      <div class="column is-6 pr-4">
         <b-field
           :message="errors.text || errors.language"
         >
@@ -25,84 +25,50 @@
             size="normal"
             @textSelected="setTextSelected($event)"
             @submit="onEnter()"
-          >
-            <!-- <language-append-select-input
-              slot="append"
-              v-model="language"
-              class="language-append"
-            /> -->
-          </example-text-with-highlighted-entities-input>
-        </b-field>
-      </div>
-      <div class="column is-12">
-        <b-field class="entities-wrapper" :message="errors.entities">
-          <p
-            slot="label"
-            class="unnnic-form__label"
-          >
-            {{ $t('webapp.trainings.entities') }}
-            <unnnic-tool-tip
-              side="right"
-              :text="$t('webapp.trainings.add_entity_info')"
-              enabled
-            >
-              <unnnic-icon
-                class="info"
-                icon="information-circle-4"
-                size="sm"
-                scheme="neutral-soft"
-              />
-            </unnnic-tool-tip>
-          </p>
-          <new-entities-input
-            class="mb-3"
-            ref="entitiesInput"
-            v-model="entities"
-            :repository="repository"
-            :text="text"
-            :text-selected="textSelected"
-            :available-entities="entitiesList"
-            :available-labels="availableLabels"
-            @entityAdded="onEntityAdded()"
           />
         </b-field>
       </div>
-      <div class="column is-6 pr-4">
+      <div class="column is-3 pr-4">
         <b-field
           id="tour-training-step-4"
           :is-previous-disabled="true"
           :is-step-blocked="intent === ''"
           :message="errors.intent">
+         <p
+           slot="label"
+           class="unnnic-form__label"
+         >
+           {{ $t('webapp.trainings.intent') }}
+           <unnnic-tool-tip
+             side="top"
+             :text="$t('webapp.trainings.intent_info')"
+             enabled
+           >
+             <unnnic-icon
+               class="info"
+               icon="information-circle-4"
+               size="sm"
+               scheme="neutral-soft"
+             />
+           </unnnic-tool-tip>
+         </p>
          <unnnic-autocomplete
-            :label="$t('webapp.trainings.intent')"
             v-model="intent"
             :data="filteredData"
             :placeholder="$t('webapp.example.intent')"
             :openWithFocus="true"
-            @focus="onInputClick('intent')"
-            @blur="onInputClick('intent')"
+            @focus="onIntentInputClick"
+            @blur="onIntentInputClick"
             :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
           />
         </b-field>
       </div>
-      <div class="column is-6">
+      <div class="column is-3">
         <b-field
           id="tour-training-step-4"
           :is-previous-disabled="true"
           :is-step-blocked="intent === ''"
           :message="errors.intent">
-           <!-- <unnnic-autocomplete
-              :label="$t('webapp.create_repository.language_placeholder')"
-              v-model="language"
-              :data="languageLabels"
-              :placeholder="$t('webapp.translate.languages_select')"
-              :openWithFocus="true"
-              @click.native="hideDropdown = false"
-              @focus="onInputClick('language')"
-              @blur="onInputClick('language')"
-              :class="hideDropdown ? 'hidden' : ''"
-              :iconRight="isLanguageInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
-            /> -->
           <unnnic-select
             :placeholder="$t('webapp.translate.languages_select')"
             :label="$t('webapp.create_repository.language_placeholder')"
@@ -117,6 +83,20 @@
               {{ label }}
             </option>
           </unnnic-select>
+        </b-field>
+      </div>
+      <div class="column is-12 mt-2">
+        <b-field class="entities-wrapper" :message="errors.entities">
+          <new-entities-input
+            ref="entitiesInput"
+            v-model="entities"
+            :repository="repository"
+            :text="text"
+            :text-selected="textSelected"
+            :available-entities="entitiesList"
+            :available-labels="availableLabels"
+            @entityAdded="onEntityAdded()"
+          />
         </b-field>
       </div>
       <div class="column is-12 mt-4">
@@ -138,22 +118,6 @@
         </b-field>
       </div>
     </form>
-    <!-- <div class="columns is-variable is-1">
-      <div class="column is-three-fifths">
-        <b-field :message="errors.entities">
-          <entities-input
-            ref="entitiesInput"
-            v-model="entities"
-            :repository="repository"
-            :text="text"
-            :text-selected="textSelected"
-            :available-entities="entitiesList"
-            :available-labels="availableLabels"
-            @entityAdded="onEntityAdded()"
-          />
-        </b-field>
-      </div>
-    </div> -->
     <unnnic-alert
       v-if="alertSuccess"
       title=""
@@ -169,12 +133,9 @@
 <script>
 import ExampleTextWithHighlightedEntitiesInput from '@/components/inputs/ExampleTextWithHighlightedEntitiesInput';
 import NewEntitiesInput from '@/components/inputs/EntitiesInput/NewEntitiesInput';
-import LanguageAppendSelectInput from '@/components/inputs/LanguageAppendSelectInput';
 
 import { mapActions, mapGetters } from 'vuex';
-import { formatters, LANGUAGES, languageListToDict } from '@/utils';
-import LanguageSelect from '../inputs/LanguageSelect';
-import LanguageSelectInput from '../inputs/LanguageSelectInput';
+import { formatters, LANGUAGES } from '@/utils';
 
 
 export default {
@@ -182,9 +143,6 @@ export default {
   components: {
     ExampleTextWithHighlightedEntitiesInput,
     NewEntitiesInput,
-    LanguageAppendSelectInput,
-    LanguageSelect,
-    LanguageSelectInput
   },
   props: {
     repository: {
@@ -206,7 +164,8 @@ export default {
       hideDropdown: true,
       isIntentInputActive: false,
       isLanguageInputActive: false,
-      alertSuccess: false
+      alertSuccess: false,
+      addEntity: false
     };
   },
   computed: {
@@ -344,9 +303,8 @@ export default {
       }
       return false;
     },
-    onInputClick(target) {
-      if (target === 'intent') this.isIntentInputActive = !this.isIntentInputActive
-      if (target === 'language') this.isLanguageInputActive = !this.isLanguageInputActive
+    onIntentInputClick() {
+      this.isIntentInputActive = !this.isIntentInputActive
     },
   },
 };
@@ -387,7 +345,7 @@ export default {
   width: 100%;
 }
 .entities-wrapper {
-  padding: 1.5rem;
+  padding: 0 1rem;
   border: 1px solid #E2E6ED;
   border-radius: 8px;
 }
@@ -412,6 +370,10 @@ export default {
 }
 /deep/ .alert {
   word-spacing: 0;
+}
+
+/deep/ .unnnic-tooltip-label {
+  max-width: 350px;
 }
 
 </style>

@@ -293,12 +293,16 @@ export default {
     cancelEditSentence() {
       this.open = !this.open;
       this.editing = false;
+      // eslint-disable-next-line no-underscore-dangle
+      this.$refs[this.selectedItem]._data.active = false
       this.selectedItem = null;
     },
     editSentence(id) {
       this.selectedItem = id
       this.open = true;
       this.editing = true;
+      // eslint-disable-next-line no-underscore-dangle
+      this.$refs[id]._data.active = true
     },
     updateList() {
       this.$emit('updateList');
@@ -311,13 +315,17 @@ export default {
     },
     activeSentence(item) {
       const { id } = item
-      // eslint-disable-next-line no-underscore-dangle
-      this.$refs[id]._data.active = true
+      if (!this.editing) {
+        // eslint-disable-next-line no-underscore-dangle
+        this.$refs[id]._data.active = true
+      }
     },
     inactiveSentence(item) {
       const { id } = item
-      // eslint-disable-next-line no-underscore-dangle
-      this.$refs[id]._data.active = false
+      if (!this.editing) {
+        // eslint-disable-next-line no-underscore-dangle
+        this.$refs[id]._data.active = false
+      }
     }
   },
 };

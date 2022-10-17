@@ -18,6 +18,7 @@
           type="secondary"
           size="large"
           :text="$t('webapp.intent.edit_button')"
+          iconLeft="pencil-write-1"
         />
         <unnnic-button
           @click="openDeleteModal = true"
@@ -25,6 +26,7 @@
           size="large"
           :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
           :disabled="sentencesCounter === 0"
+          iconLeft="bin-1-1"
         />
       </div>
     </div>
