@@ -14,79 +14,79 @@
     </template>
 
     <template v-slot:item="{ item }">
-      <unnnic-table-row :headers="table.headers">
-        <template v-if="repository.authorization.can_contribute" v-slot:checkarea>
-          <unnnic-checkbox v-model="item.selected" :style="{ margin: '4px' }" />
-        </template>
+        <unnnic-table-row :headers="table.headers">
+          <template v-if="repository.authorization.can_contribute" v-slot:checkarea>
+            <unnnic-checkbox v-model="item.selected" :style="{ margin: '4px' }" />
+          </template>
 
-        <template v-slot:sentence>
-          <div
-            @mouseenter="activeSentence(item)"
-            @mouseleave="inactiveSentence(item)"
-            :title="item.sentence"
-            class="break-text example-accordion__sentence"
-          >
-            <span class="example-accordion__tag">[{{ item.language }}]</span>
-            <highlighted-entity
-              :ref="item.id"
-              :id="item.id"
-              :text="item.text"
-              :highlighted="item.highlighted"
-              :entities="item.entities"
-              :color-only="item.entitySelected"
-              :state="isSentenceActive"
-            />
-            <span
-              v-if="showIntents"
-              class="ml-4 intent-label"
+          <template v-slot:sentence>
+            <div
+              @mouseenter="activeSentence(item)"
+              @mouseleave="inactiveSentence(item)"
+              :title="item.sentence"
+              class="break-text example-accordion__sentence"
             >
-            {{ $t("webapp.translate.intent") + ' ' + item.intent }}
-            </span>
-          </div>
-        </template>
+              <span class="example-accordion__tag">[{{ item.language }}]</span>
+              <highlighted-entity
+                :ref="item.id"
+                :id="item.id"
+                :text="item.text"
+                :highlighted="item.highlighted"
+                :entities="item.entities"
+                :color-only="item.entitySelected"
+                :state="isSentenceActive"
+              />
+              <span
+                v-if="showIntents"
+                class="ml-4 intent-label"
+              >
+              {{ $t("webapp.translate.intent") + ' ' + item.intent }}
+              </span>
+            </div>
+          </template>
 
-        <template v-if="repository.authorization.can_contribute" v-slot:edit>
-          <div :style="{ textAlign: 'center' }">
-            <unnnic-button
-              size="small"
-              type="secondary"
-              iconCenter="pencil-write-1"
-              @click.prevent.stop="editSentence(item.id)"
-            />
-          </div>
-        </template>
+          <template v-if="repository.authorization.can_contribute" v-slot:edit>
+            <div :style="{ textAlign: 'center' }">
+              <unnnic-button
+                size="small"
+                type="secondary"
+                iconCenter="pencil-write-1"
+                @click.prevent.stop="editSentence(item.id)"
+              />
+            </div>
+          </template>
 
-        <template v-if="repository.authorization.can_contribute" v-slot:delete>
-          <div :style="{ textAlign: 'center' }">
-            <unnnic-button
-              size="small"
-              type="secondary"
-              iconCenter="delete-1-1"
-              @click.prevent.stop="deleteThisExample(item.id)"
-            />
-          </div>
-        </template>
-      </unnnic-table-row>
-      <!-- <example-info
-        v-if="!editing"
-        :entities-list="entitiesList"
-        :highlighted.sync="highlighted"
-        :intent="intent"
-      /> -->
+          <template v-if="repository.authorization.can_contribute" v-slot:delete>
+            <div :style="{ textAlign: 'center' }">
+              <unnnic-button
+                size="small"
+                type="secondary"
+                iconCenter="delete-1-1"
+                @click.prevent.stop="deleteThisExample(item.id)"
+              />
+            </div>
+          </template>
+        </unnnic-table-row>
+        <!-- <example-info
+          v-if="!editing"
+          :entities-list="entitiesList"
+          :highlighted.sync="highlighted"
+          :intent="intent"
+        /> -->
 
-      <edit-example-intent
-        v-if="item.id === selectedItem"
-        :entities="item.entities"
-        :intent-to-edit="item.intent"
-        :edit-example="true"
-        :text-to-edit="item.text"
-        :sentence-id="item.id"
-        :language-edit="item.language"
-        :get-all-entities="getEntitiesName"
-        @saveList="updateList"
-        @cancel="cancelEditSentence"
-      />
-    </template>
+        <edit-example-intent
+          v-if="item.id === selectedItem"
+          :entities="item.entities"
+          :intent-to-edit="item.intent"
+          :edit-example="true"
+          :text-to-edit="item.text"
+          :sentence-id="item.id"
+          :language-edit="item.language"
+          :get-all-entities="getEntitiesName"
+          @saveList="updateList"
+          @cancel="cancelEditSentence"
+        />
+      </template>
   </unnnic-table>
   <unnnic-modal
     :showModal="openModal"
@@ -240,8 +240,7 @@ export default {
     sentence(value) {
       if (value) {
         const { id } = value
-        // eslint-disable-next-line no-underscore-dangle
-        this.$refs[id]._data.active = this.isSentenceActive
+        this.$refs[id].active = this.isSentenceActive
       }
     }
   },
@@ -293,16 +292,15 @@ export default {
     cancelEditSentence() {
       this.open = !this.open;
       this.editing = false;
-      // eslint-disable-next-line no-underscore-dangle
-      this.$refs[this.selectedItem]._data.active = false
+      this.$refs[this.selectedItem].active = false
       this.selectedItem = null;
     },
     editSentence(id) {
       this.selectedItem = id
       this.open = true;
       this.editing = true;
-      // eslint-disable-next-line no-underscore-dangle
-      this.$refs[id]._data.active = true
+      this.$refs[id].active = true
+      console.log(this.$refs[id])
     },
     updateList() {
       this.$emit('updateList');
@@ -316,15 +314,13 @@ export default {
     activeSentence(item) {
       const { id } = item
       if (!this.editing) {
-        // eslint-disable-next-line no-underscore-dangle
-        this.$refs[id]._data.active = true
+        this.$refs[id].active = true
       }
     },
     inactiveSentence(item) {
       const { id } = item
       if (!this.editing) {
-        // eslint-disable-next-line no-underscore-dangle
-        this.$refs[id]._data.active = false
+        this.$refs[id].active = false
       }
     }
   },
@@ -372,6 +368,10 @@ export default {
   padding-top: 1px;
 }
 
+/deep/ .test > .item {
+  background-color: blue;
+}
+
 /deep/ .scroll {
   padding-right: 0;
 }
@@ -392,6 +392,9 @@ export default {
 }
 /deep/ .unnnic-table .item:hover {
   border: 1px solid $unnnic-color-neutral-soft;
+}
+/deep/ .test .unnnic-table .item {
+  background: black;
 }
 
 </style>

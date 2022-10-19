@@ -14,7 +14,6 @@
         @itemDeleted="onItemDeleted()"
         @itemSave="dispatchSave"
         :show-intents="true"
-        :load-all="true"
         @onUpdateSelected="updateSelected"
       />
 
@@ -39,7 +38,7 @@ export default {
   props: {
     perPage: {
       type: Number,
-      default: 100,
+      default: 50,
     },
     update: {
       type: Boolean,

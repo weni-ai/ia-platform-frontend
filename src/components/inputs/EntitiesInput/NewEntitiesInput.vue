@@ -30,7 +30,7 @@
         />
       </div>
       <div slot="body">
-        <div class="columns is-flex-wrap-wrap mt-0 px-0">
+        <div class="columns is-flex-wrap-wrap mt-0 px-0 mb-0">
           <entity-form
             v-for="entity in preparedEntities"
             :key="entity.localId"
@@ -52,7 +52,7 @@
           :is-step-blocked="!blockedNextStepTutorial"
           :disabled="!text"
           iconLeft="add-1"
-          class="button--full mt-1 mb-3"
+          class="button--full mb-3"
           type="terciary"
           size="large"
           @click.prevent.stop="addEntity()"
@@ -366,6 +366,10 @@ export default {
 
 /deep/ .column:nth-child(even) {
   padding-right: .8rem;
+}
+
+/deep/ .column:last-child {
+  margin-bottom: 1rem;
 }
 
 /deep/ .unnnic-modal-container-background-body-description {

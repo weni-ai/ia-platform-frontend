@@ -14,7 +14,6 @@
         @itemDeleted="onItemDeleted()"
         @itemSave="dispatchSave"
         :show-intents="true"
-        :load-all="true"
         @onUpdateSelected="updateSelected"
       />
 
@@ -34,12 +33,12 @@ const components = {
 };
 
 export default {
-  name: 'ExamplesPendingTraining',
+  name: 'ExamplesList',
   components,
   props: {
     perPage: {
       type: Number,
-      default: 100,
+      default: 50,
     },
     update: {
       type: Boolean,
