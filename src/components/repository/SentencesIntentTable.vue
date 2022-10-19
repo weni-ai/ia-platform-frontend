@@ -300,7 +300,6 @@ export default {
       this.open = true;
       this.editing = true;
       this.$refs[id].active = true
-      console.log(this.$refs[id])
     },
     updateList() {
       this.$emit('updateList');

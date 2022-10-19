@@ -515,7 +515,12 @@
       "entities": "Entities (optional)",
       "sentences_to_train": "List of sentences added for training",
       "add_entity_info": "Select words from the sentence you want to train to add entities",
-      "sentence_added": "Sentence added for training"
+      "sentence_added": "Sentence added for training",
+      "add_entity_modal_title": "Add entity",
+      "add_entity_field_label": "Add or select an entity",
+      "add_entity_checkbox_title": "Select the word(s) of the sentence related to this entity",
+      "add_entity_finish_edit": "Finish",
+      "add_entity_cancel": "Cancel"
     },
     "resumeSentences": {
       "title": "Summary of sentences sent for training",
