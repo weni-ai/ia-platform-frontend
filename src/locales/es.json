@@ -515,7 +515,15 @@
       "train_title": "Entrenar Inteligencia",
       "train_description": "Agrega oraciones para mejorar la inteligencia. <a href={link}>Consulta nuestra documentación</a> y aprende <br> las mejores prácticas para crear una inteligencia artificial de calidad.",
       "entities": "Entidades (opcional)",
-      "sentences_to_train": "Lista de oraciones agregadas para entrenamiento"
+      "sentences_to_train": "Lista de oraciones agregadas para entrenamiento",
+      "add_entity_info": "Estos son elementos que se utilizan para extraer información adicional al enviar una oración al bot, además de su intención clasificada.",
+      "sentence_added": "Oración agregada para entrenamiento",
+      "intent_info": "Las intenciones son lo que define el contexto de tu inteligencia. Cuando se le da una oración para clasificar, tu inteligencia responderá a cuál de las intenciones entrenadas es más probable que pertenezca esa oración.",
+      "add_entity_modal_title": "Agregar entidad",
+      "add_entity_field_label": "Agregar o seleccionar una entidad",
+      "add_entity_checkbox_title": "Seleccione la(s) palabra(s) de la oración relacionada con esta entidad",
+      "add_entity_finish_edit": "Finalizar",
+      "add_entity_cancel": "Cancelar"
     },
     "resumeSentences": {
       "title": "Resumen de frases enviadas para entrenamiento",

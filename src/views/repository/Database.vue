@@ -45,7 +45,7 @@
               :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
               :disabled="sentencesCounter === 0"
               class="trainings-repository__button"
-              iconLeft="bin-1-1"
+              iconLeft="delete-1-1"
             />
           </div>
         </div>
@@ -113,7 +113,6 @@ import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import NewExampleForm from '@/components/example/NewExampleForm';
 import SentenceFilters from '@/components/repository/repository-evaluate/example/SentenceFilters';
 import ExamplesList from '@/components/example/ExamplesList';
-import ExamplesPendingTraining from '@/components/example/ExamplesPendingTraining';
 import LoginForm from '@/components/auth/LoginForm';
 import AuthorizationRequestNotification from '@/components/repository/AuthorizationRequestNotification';
 import { exampleSearchToDicty, exampleSearchToString } from '@/utils/index';
@@ -133,7 +132,6 @@ export default {
     LoginForm,
     AuthorizationRequestNotification,
     RequestAuthorizationModal,
-    ExamplesPendingTraining,
     Loading,
     DatabaseLoader
   },
@@ -154,9 +152,6 @@ export default {
   computed: {
     ...mapGetters([
       'authenticated',
-      'activeTutorial',
-      'getSelectedVersion',
-      'getRequirements',
     ]),
     translationQuery() {
       const { language, ...query } = this.query;
@@ -171,7 +166,6 @@ export default {
   },
   methods: {
     ...mapActions([
-      'trainRepository',
       'deleteExample'
     ]),
     onSearch(value) {
@@ -195,11 +189,6 @@ export default {
     },
     changedText(newText) {
       this.textExample = newText;
-    },
-    signIn() {
-      this.$router.push({
-        name: 'signIn',
-      });
     },
     updatedExampleList() {
       this.update = !this.update;

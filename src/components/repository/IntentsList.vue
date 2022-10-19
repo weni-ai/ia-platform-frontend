@@ -26,7 +26,7 @@
           size="large"
           :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
           :disabled="sentencesCounter === 0"
-          iconLeft="bin-1-1"
+          iconLeft="delete-1-1"
         />
       </div>
     </div>
