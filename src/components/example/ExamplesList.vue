@@ -86,9 +86,8 @@ export default {
     repository() {
       this.updateExamples(true);
     },
-    async examplesList() {
-      await this.$nextTick();
-      this.$emit('onUpdateList', this.examplesList)
+    examplesList() {
+      this.$emit('updateCount', this.examplesList)
     }
   },
   mounted() {
