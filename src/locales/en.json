@@ -516,6 +516,7 @@
       "sentences_to_train": "List of sentences added for training",
       "add_entity_info": "Select words from the sentence you want to train to add entities",
       "sentence_added": "Sentence added for training",
+      "intent_info": "Intents are what define the context of your intelligence. When given a sentence to rank, your intelligence will respond to which of the trained intents that sentence is most likely to belong to.",
       "add_entity_modal_title": "Add entity",
       "add_entity_field_label": "Add or select an entity",
       "add_entity_checkbox_title": "Select the word(s) of the sentence related to this entity",

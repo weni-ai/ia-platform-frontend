@@ -1,10 +1,10 @@
 <template>
-  <div class="column is-6 pb-0">
+  <div class="column is-6 pt-0">
     <div>
       <div>
         <p
           slot="label"
-          class="unnnic-form__label">
+          class="unnnic-form__label mt-0">
           <span class="is-rounded entity">
             {{ selectedText }}
           </span>

@@ -13,7 +13,7 @@
               enabled
             >
               <unnnic-icon
-                class="info"
+                class="info ml-1"
                 icon="information-circle-4"
                 size="sm"
                 scheme="neutral-soft"
@@ -341,6 +341,9 @@ export default {
   margin: 0 !important;
 }
 
+.info {
+  margin-bottom: 1px;
+}
 /deep/ .unnnic-modal-container-background-body-alert_icon {
   display: none;
 }
@@ -366,6 +369,10 @@ export default {
 
 /deep/ .column:nth-child(even) {
   padding-right: .8rem;
+}
+
+/deep/ .column:not(:first-child) {
+  margin-bottom: 1rem;
 }
 
 /deep/ .column:last-child {
