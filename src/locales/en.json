@@ -527,7 +527,7 @@
       "title": "Summary of sentences sent for training",
       "description": "Run training to improve intelligence with submitted sentences",
       "sentences": "Sentences",
-      "intentions": "Intentions",
+      "intentions": "Intents",
       "entities": "Entities",
       "languages": "Languages"
     },

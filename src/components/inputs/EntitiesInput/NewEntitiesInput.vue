@@ -76,7 +76,7 @@
             :label="$t('webapp.trainings.add_entity_field_label')"
             ref="entityInputField"
             v-model="entity"
-            :data="allEntities"
+            :data="filteredEntities"
             :openWithFocus="true"
             :iconRight="isEntityInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
             @focus="onInputClick()"
@@ -194,6 +194,9 @@ export default {
           start: this.text.indexOf(word),
           end: this.text.indexOf(word) + word.length
         }))
+    },
+    filteredEntities() {
+      return [...this.entities.map(entity => entity.entity), ...this.allEntities];
     },
   },
   watch: {

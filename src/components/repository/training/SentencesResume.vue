@@ -46,11 +46,9 @@
       </div>
     </div>
 
-    <div v-if="
-        requirementsToTrainStatus ||
-        languagesWarningsStatus ||
-        languageAvailableToTrain.length === 0"
-        class="train-modal__wrapper__content"
+    <div
+      v-if="requirementsToTrainStatus || languagesWarningsStatus"
+      class="train-modal__wrapper__content"
       >
         <div v-if="requirementsToTrainStatus">
           <div
@@ -138,7 +136,7 @@ export default {
     stats() {
       if (this.examplesList) {
         return {
-          count: this.examplesList.total,
+          count: this.examplesList.count,
           intents: this.filterIntents(),
           entities: this.filterEntities(),
           languages: this.filterLanguages(),
@@ -228,7 +226,7 @@ export default {
       if (this.notificationModalType === 'success') this.$emit('onImportSuccess')
     },
     filterIntents() {
-      const intents = this.examplesList.items.map(el => el.intent)
+      const intents = this.examplesList.results.map(el => el.intent)
       const result = intents.sort().reduce((init, current) => {
         if (init.length === 0 || init[init.length - 1] !== current) {
           init.push(current);
@@ -238,7 +236,7 @@ export default {
       return result.length
     },
     filterEntities() {
-      const entities = this.examplesList.items
+      const entities = this.examplesList.results
         .reduce((prev, curr) => [...prev, ...curr.entities], [])
         .map(el => el.entity)
         .sort().reduce((init, current) => {
@@ -250,7 +248,7 @@ export default {
       return entities.length
     },
     filterLanguages() {
-      const languages = this.examplesList.items.map(el => el.language)
+      const languages = this.examplesList.results.map(el => el.language)
       const result = languages.sort().reduce((init, current) => {
         if (init.length === 0 || init[init.length - 1] !== current) {
           init.push(current);
