@@ -210,7 +210,7 @@ export default {
     },
     async onUpdateCount(params) {
       await this.$nextTick();
-      if (params) this.showFilters = true
+      if (params.total !== 0) this.showFilters = true
     }
   },
 };

@@ -63,6 +63,7 @@ export default {
       error: null,
       pageWasChanged: false,
       sentencesTable: SentencesIntentTable,
+      allItems: null
     };
   },
   computed: {
@@ -78,9 +79,13 @@ export default {
     repository() {
       this.updateExamples(true);
     },
-    async examplesList() {
+    // async examplesList() {
+    //   await this.$nextTick();
+    //   this.$emit('onUpdateList', this.allItems)
+    // }
+    async allItems() {
       await this.$nextTick();
-      this.$emit('onUpdateList', this.examplesList)
+      this.$emit('onUpdateList', this.allItems)
     }
   },
   mounted() {
@@ -89,6 +94,7 @@ export default {
   methods: {
     ...mapActions([
       'searchExamples',
+      'getAllExamples',
       'setRequirements',
       'getRepositoryStatusTraining',
     ]),
@@ -122,6 +128,7 @@ export default {
           startCreatedAt: this.createdAtLastTrain,
           endCreatedAt: this.dateNow,
         });
+        await this.getAllItems();
 
         const hasPhrases = await this.examplesList.updateItems();
         if (hasPhrases.length !== 0) {
@@ -142,6 +149,17 @@ export default {
     updateSelected(params) {
       this.$emit('onUpdateSelected', params)
     },
+    async getAllItems() {
+      const { data } = await this.getAllExamples({
+        repositoryUuid: this.repository.uuid,
+        version: this.repository.repository_version_id,
+        limit: 1000,
+        startCreatedAt: this.createdAtLastTrain,
+        endCreatedAt: this.dateNow,
+      });
+      this.allItems = data
+      // this.$emit('onUpdateExamples', this.allItems)
+    }
   },
 };
 </script>

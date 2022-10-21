@@ -55,4 +55,15 @@ export default {
   suggestions(id) {
     return request.$http.get(`/v2/repository/example/${id}/word_suggestions/`);
   },
+  getAll(repositoryUuid, version, query = {}, limit, startCreatedAt, endCreatedAt) {
+    const queryString = qs.stringify({
+      repository_uuid: repositoryUuid,
+      repository_version: version,
+      start_created_at: startCreatedAt,
+      end_created_at: endCreatedAt,
+      limit,
+      ...query
+    });
+    return request.$http.get(`/v2/repository/examples/?${queryString}`);
+  },
 };

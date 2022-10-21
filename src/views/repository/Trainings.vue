@@ -267,6 +267,7 @@ export default {
     },
     updatedExampleList() {
       this.update = !this.update;
+      this.updateRepository(false)
     },
     onExampleDeleted() {
       this.updateTrainingStatus();

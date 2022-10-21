@@ -12,7 +12,7 @@
       @onUpdateSelected="updateSelected"
     />
     <p
-      v-else
+      v-if="examplesList.total === 0"
       class="no-examples"
       v-html="$t('webapp.trainings.database_untrained')"
     />
