@@ -31,26 +31,7 @@
       </div>
       <div class="column is-12">
         <b-field class="entities-wrapper" :message="errors.entities">
-          <p
-            slot="label"
-            class="unnnic-form__label"
-          >
-            {{ $t('webapp.trainings.entities') }}
-            <unnnic-tool-tip
-              side="right"
-              :text="$t('webapp.trainings.add_entity_info')"
-              enabled
-            >
-              <unnnic-icon
-                class="info"
-                icon="information-circle-4"
-                size="sm"
-                scheme="neutral-soft"
-              />
-            </unnnic-tool-tip>
-          </p>
           <new-entities-input
-            class="mb-3"
             ref="entitiesInput"
             v-model="entities"
             :repository="repository"
@@ -333,7 +314,7 @@ export default {
   width: 100%;
 }
 .entities-wrapper {
-  padding: 1.5rem;
+  padding: 0 1rem;
   border: 1px solid #E2E6ED;
   border-radius: 8px;
 }

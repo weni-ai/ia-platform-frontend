@@ -1,114 +1,88 @@
 <template>
-  <b-modal :active="open" :can-cancel="false">
-    <div id="tour-training-step-7" :is-previous-disabled="true" :is-finish-disabled="true">
-      <div class="train-modal">
-        <div class="train-modal__close">
-          <b-icon icon="close" class="train-modal__close__icon" @click.native="closeModal()" />
-        </div>
-        <div class="train-modal__container">
-          <strong v-if="repositoryTrain" class="train-modal__text-warning">
-            {{ $t("webapp.train_modal.ready_for_train_title") }}</strong
-          >
-          <strong v-else class="train-modal__text-warning">
-            {{ $t("webapp.train_modal.language_warning") }}</strong
-          >
+  <unnnic-modal
+    :showModal="open"
+    @close="closeModal"
+    text="teste"
+    description="teste"
+    v-if="repositoryTrain"
+  >
+    <template #message>
+
+    </template>
+  </unnnic-modal>
+  <unnnic-modal
+    v-else
+    :showModal="open"
+    @close="closeModal"
+    :text="$t('webapp.train_modal.ready_for_train_title')"
+    :description="$t('webapp.train_modal.ready_for_train_subtitle')"
+    modalIcon="alert-circle-1"
+    scheme="feedback-red"
+  >
+    <template #message>
+      <div v-if="
+        requirementsToTrainStatus ||
+        languagesWarningsStatus ||
+        languageAvailableToTrain.length === 0"
+        class="train-modal__wrapper__content"
+      >
+        <div v-if="requirementsToTrainStatus">
           <div
-            v-if="
-              requirementsToTrainStatus ||
-                languagesWarningsStatus ||
-                languageAvailableToTrain.length === 0
-            "
-            class="train-modal__wrapper"
+            v-for="(requirements, lang) in requirementsToTrain"
+            :key="lang"
+            class="train-modal__wrapper__content__content-requirements"
           >
-            <p v-if="repositoryTrain" class="train-modal__wrapper__subtitle">
-              {{ $t("webapp.train_modal.ready_for_train_subtitle") }}
-            </p>
-            <p v-else-if="languageAvailableToTrain.length === 0">
-              {{ $t("webapp.train_modal.language_available") }}
-            </p>
-            <p v-else class="train-modal__wrapper__subtitle">
-              {{ $t("webapp.train_modal.missing_requirements") }}
-            </p>
-            <div class="train-modal__wrapper__content">
-              <div v-if="requirementsToTrainStatus">
-                <div
-                  v-for="(requirements, lang) in requirementsToTrain"
-                  :key="lang"
-                  class="train-modal__wrapper__content__content-requirements"
-                >
-                  <div
-                    v-for="(requirement, i) in requirements"
-                    :key="i"
-                    class="train-modal__wrapper__content__content-requirements__item"
-                  >
-                    <div class="train-modal__wrapper__content__content-requirements__item__field">
-                      <b-tag type="is-primary" rounded>{{ lang }}</b-tag>
-                    </div>
-                    <p>
-                      <strong
-                        class="train-modal__wrapper__content__content-requirements__item__text"
-                      >
-                        {{ firstText(requirement) }}
-                      </strong>
-                      <br />
-                      <span>{{ secondText(requirement) }}</span>
-                    </p>
-                    <b-icon
-                      icon="close"
-                      class="train-modal__wrapper__content__content-requirements__item__icon"
-                      @click.native="closeModal()"
-                    />
-                  </div>
+            <div
+              v-for="(requirement, i) in requirements"
+              :key="i"
+              class="train-modal__wrapper__content__content-requirements__item"
+            >
+              <unnnic-icon icon="alert-circle-1-1" scheme="feedback-red" size="sm" />
+              <div class="train-modal__wrapper__content__content-requirements__item__texts">
+                <div class="train-modal__wrapper__content__content-requirements__item__field">
+                  {{ `[${lang.toUpperCase().replace('_','-')}]` }}
                 </div>
-              </div>
-              <div v-if="languagesWarningsStatus">
-                <div class="train-modal__wrapper__content__content-requirements">
-                  <div
-                    v-for="(warnings, lang) in languagesWarnings"
-                    :key="lang"
-                    class="train-modal__wrapper__content__content-requirements__item"
-                  >
-                    <div class="train-modal__wrapper__content__content-requirements__item__field">
-                      <b-tag type="is-primary" rounded>{{ lang }}</b-tag>
-                    </div>
-                    <p v-for="(warning, index) in warnings" :key="index">
-                      <strong>{{ firstText(warning) }}</strong>
-                      <br />
-                      <span>{{ secondText(warning) }}</span>
-                    </p>
-                    <b-icon
-                      icon="close"
-                      class="train-modal__wrapper__content__content-requirements__item__icon"
-                      @click.native="closeModal()"
-                    />
-                  </div>
-                </div>
+                <p>
+                  <strong>{{ firstText(requirement) }}</strong>
+                  <br />
+                  <span>{{ secondText(requirement) }}</span>
+                </p>
               </div>
             </div>
-            <div class="train-modal__buttons">
-              <b-button
-                ref="closeBtn"
-                type="is-primary"
-                class="train-modal__buttons__style"
-                @click="closeModal()"
-              >
-                <span>{{ $t("webapp.train_modal.cancel") }}</span>
-              </b-button>
-              <b-button
-                v-if="repositoryTrain"
-                ref="trainBtn"
-                type="is-primary"
-                class="train-modal__buttons__style"
-                @click="dispatchTrain()"
-              >
-                <span>{{ $t("webapp.train_modal.train") }}</span>
-              </b-button>
+          </div>
+        </div>
+        <div class="train-modal__wrapper__content__content-requirements">
+          <div
+            v-for="(warnings, lang) in languagesWarnings"
+            :key="lang"
+            class="train-modal__wrapper__content__content-requirements__item"
+          >
+            <unnnic-icon icon="alert-circle-1-1" scheme="feedback-red" size="sm" />
+            <div class="train-modal__wrapper__content__content-requirements__item__texts">
+              <div class="train-modal__wrapper__content__content-requirements__item__field">
+                {{ `[${lang.toUpperCase().replace('_','-')}]` }}
+              </div>
+              <p v-for="(warning, index) in warnings" :key="index">
+                <strong>{{ firstText(warning) }}</strong>
+                <br />
+                <span>{{ secondText(warning) }}</span>
+              </p>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </b-modal>
+      <div slot="options" class="train-modal__buttons">
+        <unnnic-button
+          ref="trainBtn"
+          type="terciary"
+          class="train-modal__buttons__style"
+          @click="closeModal()"
+        >
+          <span>{{ $t("webapp.train_modal.train") }}</span>
+        </unnnic-button>
+      </div>
+    </template>
+  </unnnic-modal>
 </template>
 
 <script>
@@ -193,19 +167,21 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/scss/colors.scss";
 @import "~@/assets/scss/variables.scss";
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 ::-webkit-scrollbar {
-  width: 0.6rem;
+  width: 0.25rem;
 }
 ::-webkit-scrollbar-track {
-  background: #e9e9ec;
+  background: $unnnic-color-neutral-soft;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: $color-primary;
+  background: $unnnic-color-neutral-clean;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: $color-primary;
+  background: $unnnic-color-neutral-dark;
 }
 :not(.quick-test) {
   pointer-events: visible;
@@ -251,53 +227,60 @@ export default {
     &__content {
       overflow: auto;
       max-height: 13.75rem;
+      padding-right: $unnnic-spacing-stack-xs;
+      margin-top: $unnnic-spacing-stack-md;
       &__content-requirements {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: $unnnic-spacing-stack-xs;
+        gap: $unnnic-spacing-stack-xs;
         &__item {
           display: flex;
-          justify-content: space-between;
-          padding: 2.1rem 1rem;
+          gap: $unnnic-spacing-stack-xs;
           align-items: center;
-          margin: 0 1rem 0.6rem 0;
-          height: 4.063rem;
-          border: 1.5px solid $color-danger;
-          background-color: $color-fake-white;
-          border-radius: 0.375rem;
-          &__icon {
-            color: $color-danger;
-            padding-left: 1rem;
-          }
-          &__field {
-            width: 2.9rem;
+          background: $unnnic-color-background-snow;
+          box-shadow: $unnnic-shadow-level-near;
+          padding: 12px;
+          border-radius: $unnnic-border-radius-sm;
+
+          &__texts {
             display: flex;
-            padding-right: 1rem;
-            font-weight: $font-weight-bolder;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: start;
+
+            > div {
+              color: $unnnic-color-neutral-darkest;
+              font-size: $unnnic-font-size-body-sm;
+              font-weight: $unnnic-font-weight-bold;
+              line-height: $unnnic-font-size-body-sm + $unnnic-line-height-md;
+            }
+
+            p {
+              color: $unnnic-color-neutral-dark;
+              font-size: $unnnic-font-size-body-md;
+              line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+            }
+
           }
-          &__text {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: block;
-            max-width: 28rem;
-          }
+
         }
       }
     }
   }
   &__buttons {
-    margin: 1rem 0;
+    margin-top: $unnnic-spacing-stack-lg;
     display: flex;
     justify-content: center;
     align-items: center;
-    &__style {
-      box-shadow: 0px 3px 6px #00000029;
-      width: 6rem;
-      height: 2.688rem;
-      font-weight: $font-weight-bolder;
-      font-family: $font-family;
-      margin: 0 1rem;
+    gap: $unnnic-spacing-stack-lg;
+    button {
+      width: 100%;
     }
   }
 }
+  /deep/ .unnnic-modal-container-background-body-description {
+    padding-bottom: 2rem;
+  }
+
 </style>

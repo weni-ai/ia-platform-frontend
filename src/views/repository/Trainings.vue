@@ -6,26 +6,33 @@
       <div class="trainings-repository__new-example">
         <div v-if="authenticated">
           <div v-if="repository.authorization.can_contribute">
+            <div>
+              <unnnic-card
+                type="title"
+                :title="$t('webapp.trainings.train_title')"
+                :hasInformationIcon="false"
+                icon="graph-status-circle-1"
+                scheme="aux-purple"
+              />
+              <p
+                v-html="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
+                class="trainings-repository__description column is-6 p-0" />
+            </div>
+            <hr class="divider" />
             <div class="trainings-repository__list-wrapper">
               <div>
                 <h2 class="trainings-repository__list-wrapper__title">
                   {{ $t('webapp.trainings.grid_text1') }}
                 </h2>
-                <span class="trainings-repository__list-wrapper__subtitle">
+                <!-- <span class="trainings-repository__list-wrapper__subtitle">
                   {{ $t('webapp.trainings.grid_text2') }}
-                </span>
+                </span> -->
               </div>
             </div>
             <new-example-form
               :repository="repository"
               @created="updatedExampleList()"
-              @eventStep="dispatchClick()"/>
-            <examples-pending-training
-              :update="update"
-              :is-train="trainProgress"
-              class="trainings-repository__new-example__pending-example"
-              @exampleDeleted="onExampleDeleted"
-              @noPhrases="noPhrasesYet = false"
+              @eventStep="dispatchClick()"
             />
             <div class="trainings-repository__new-example__train">
               <div
@@ -41,6 +48,7 @@
                   :authenticated="authenticated"
                   :version="getSelectedVersion"
                   :update-repository="async () => { updateRepository(false) }"
+                  :examples-list="examplesList"
                   @trainProgressUpdated="trainProgress = $event"
                   @statusUpdated="updateTrainingStatus($event)"
                   @finishedTutorial="dispatchFinish()"
@@ -48,9 +56,35 @@
                   @onTrain="sendEvent(); dispatchClick();"
                   @onTrainComplete="noPhrasesYet = true"
                   @onTrainReady="dispatchClick()"
-                  @unauthorized="signIn()" />
+                  @unauthorized="signIn()"
+                  @updateItems="updatedExampleList()"
+                />
               </div>
             </div>
+            <div class="is-flex is-align-items-baseline is-justify-content-space-between mt-6 mb-5">
+              <h2 class="trainings-repository__list-wrapper__title mb-0">
+                {{ $t('webapp.trainings.sentences_to_train') }}
+              </h2>
+              <unnnic-button
+                @click="openDeleteModal = true"
+                type="secondary"
+                size="large"
+                :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
+                :disabled="sentencesCounter === 0"
+                class="trainings-repository__button"
+                iconLeft="delete-1-1"
+              />
+            </div>
+            <examples-pending-training
+              :update="update"
+              :is-train="trainProgress"
+              class="trainings-repository__new-example__pending-example"
+              @exampleDeleted="onExampleDeleted"
+              @noPhrases="noPhrasesYet = false"
+              @onUpdateSelected="updateSelected"
+              @onUpdateList="updateCount"
+              @onEditSentence="updateRepository(false)"
+            />
           </div>
           <authorization-request-notification
             v-else
@@ -67,29 +101,6 @@
           <login-form hide-forgot-password />
         </div>
       </div>
-      <div
-        v-if="authenticated && repository.authorization.can_contribute">
-        <hr>
-        <div
-          class="trainings-repository__list-wrapper">
-          <h2 class="trainings-repository__list-wrapper__title">
-            {{ $t('webapp.trainings.sentences_list') }}
-          </h2>
-        </div>
-        <filter-examples
-          :intents="repository.intents_list"
-          :entities="repository.entities"
-          :language-filter="true"
-          @querystringformatted="onSearch($event)"
-          @textData="changedText($event)"/>
-        <examples-list
-          :query="translationQuery"
-          :update="update"
-          :text-data="textExample"
-          translation-data
-          @exampleDeleted="onExampleDeleted"
-        />
-      </div>
     </div>
     <tour
       v-if="activeTutorial === 'training'"
@@ -98,6 +109,42 @@
       :finish-event="eventClickFinish"
       :reset-tutorial="eventReset"
       name="training"/>
+      <unnnic-modal
+      :showModal="openDeleteModal"
+      :text="$t('webapp.trainings.delete_title')"
+      scheme="feedback-red"
+      modal-icon="alert-circle-1"
+      @close="openDeleteModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.trainings.delete_phrase_modal')" />
+      <unnnic-button slot="options" type="terciary" @click="openDeleteModal = false">
+        {{ $t("webapp.home.cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        type="primary"
+        scheme="feedback-red"
+        @click="deleteSelectedItems"
+      >
+        {{ $t("webapp.trainings.delete_title") }}
+      </unnnic-button>
+    </unnnic-modal>
+    <unnnic-modal
+      :showModal="openSuccessModal"
+      :text="$t('webapp.intent.delete_success_title')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openSuccessModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.intent.delete_success_subtitle')" />
+    </unnnic-modal>
+    <template v-slot:loader>
+      <trainings-loader />
+    </template>
   </repository-view-base>
 </template>
 
@@ -106,8 +153,6 @@ import { mapGetters, mapActions } from 'vuex';
 import Analytics from '@/utils/plugins/analytics';
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import NewExampleForm from '@/components/example/NewExampleForm';
-import FilterExamples from '@/components/repository/repository-evaluate/example/FilterEvaluateExample';
-import ExamplesList from '@/components/example/ExamplesList';
 import ExamplesPendingTraining from '@/components/example/ExamplesPendingTraining';
 import LoginForm from '@/components/auth/LoginForm';
 import AuthorizationRequestNotification from '@/components/repository/AuthorizationRequestNotification';
@@ -117,14 +162,13 @@ import Loading from '@/components/shared/Loading';
 import Train from '@/components/repository/training/Train';
 import Tour from '@/components/Tour';
 import RepositoryBase from './Base';
+import TrainingsLoader from '@/views/repository/loadings/Trainings';
 
 export default {
   name: 'RepositoryTrainings',
   components: {
     RepositoryViewBase,
     NewExampleForm,
-    FilterExamples,
-    ExamplesList,
     LoginForm,
     AuthorizationRequestNotification,
     RequestAuthorizationModal,
@@ -132,6 +176,7 @@ export default {
     Loading,
     Train,
     Tour,
+    TrainingsLoader
   },
   extends: RepositoryBase,
   data() {
@@ -148,6 +193,10 @@ export default {
       noPhrasesYet: true,
       trainProgress: false,
       error: '',
+      selectedItems: [],
+      openDeleteModal: false,
+      openSuccessModal: false,
+      examplesList: null
     };
   },
   computed: {
@@ -161,10 +210,17 @@ export default {
       const { language, ...query } = this.query;
       return { ...query, ...(language ? { is_available_language: language } : {}) };
     },
+    sentencesCounter() {
+      if (this.selectedItems !== null) {
+        return this.selectedItems.length
+      }
+      return 0
+    },
   },
   methods: {
     ...mapActions([
       'trainRepository',
+      'deleteExample'
     ]),
     sendEvent() {
       Analytics.send({ category: 'Intelligence', event: 'on train event' });
@@ -211,12 +267,27 @@ export default {
     },
     updatedExampleList() {
       this.update = !this.update;
+      this.updateRepository(false)
     },
     onExampleDeleted() {
-      this.repository.examples__count -= 1;
       this.updateTrainingStatus();
       this.updatedExampleList();
     },
+    updateSelected(params) {
+      this.selectedItems = params
+    },
+    async deleteSelectedItems() {
+      await this.selectedItems.forEach((item) => {
+        this.deleteExample({ id: item.id });
+        this.repository.examples__count -= 1;
+        this.openDeleteModal = false;
+        this.openSuccessModal = true;
+      });
+      await this.onExampleDeleted()
+    },
+    updateCount(value) {
+      this.examplesList = value
+    }
   },
 };
 </script>
@@ -224,19 +295,21 @@ export default {
 <style lang="scss" scoped>
   @import '~@/assets/scss/colors.scss';
   @import '~@/assets/scss/variables.scss';
+  @import "~@weni/unnnic-system/dist/unnnic.css";
+  @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 
 .trainings-repository {
   &__list-wrapper {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: .5rem;
+    // display: flex;
+    // justify-content: space-between;
+    // margin-bottom: .5rem;
 
     &__title{
-      font-size: 1.75rem;
-      font-weight: $font-weight-medium;
-      color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+      font-family: $unnnic-font-family-secondary;
+      font-size: $unnnic-font-size-title-sm;
+      color: $unnnic-color-neutral-dark;
+      margin-bottom: 1px;
     }
      &__subtitle{
       font-size: $font-size;
@@ -253,7 +326,7 @@ export default {
 
     &__tutorialStep{
       width: 100%;
-      height: 2.2rem;
+      height: 100%;
     }
   }
 
@@ -264,12 +337,13 @@ export default {
     &__pending-example{
       margin-top: 1.6rem;
       min-height: 5rem;
+      margin-bottom: 3rem;
     }
 
     &__train {
       display: flex;
-      margin-top: -2rem;
-      margin-bottom: 4rem;
+      margin-top: 2.5rem;
+      // margin-bottom: 15.5rem;
 
       &__progress {
         height: 25px;
@@ -331,6 +405,32 @@ export default {
     }
       }
     }
+
+    &__description {
+      font-family: 'Lato';
+      font-size: 14px;
+      color: #4E5666;
+      margin-top: 1rem;
+
+      /deep/ a {
+        color: #4E5666;
+        text-decoration: underline;
+        font-weight: 700;
+      }
+    }
+}
+.divider {
+  background: #E2E6ED;
+  height: 1px;
+  margin: 2rem 0;
 }
 
+/deep/ input:focus, /deep/ textarea:focus {
+  box-shadow: none;
+  border-color: #9caccc;
+}
+
+/deep/ input, /deep/ textarea {
+  height: auto;
+}
 </style>

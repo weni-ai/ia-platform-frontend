@@ -1,38 +1,33 @@
 <template>
   <div>
-    <paginated-list
+    <intent-pagination
       v-if="examplesList"
-      :item-component="exampleItemElem"
+      :item-component="sentencesTable"
       :list="examplesList"
       :repository="repository"
       :per-page="perPage"
-      :is-suggestion="true"
-      :is-accordion-open="pageWasChanged"
-      :is-searching="searchingExample"
+      @itemDeleted="onItemDeleted()"
       @itemSave="dispatchSave"
-      @itemDeleted="onItemDeleted($event)"
-      @pageChanged="pageChanged()"/>
-    <br>
-    <div v-if="examplesList && examplesList.empty">
-      <p
-        v-if="textData === ''"
-        class="no-examples"
-        v-html="$t('webapp.trainings.no_sentences')"/>
-      <p
-        v-else
-        v-html="$t('webapp.trainings.no_train_sentence')"/>
-    </div>
+      :show-intents="true"
+      @onUpdateSelected="updateSelected"
+    />
+    <p
+      v-if="examplesList.total === 0"
+      class="no-examples"
+      v-html="$t('webapp.trainings.database_untrained')"
+    />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import PaginatedList from '@/components/shared/PaginatedList';
-import ExampleItem from '@/components/example/ExampleItem';
-import ExampleAccordionWithTranslations from '@/components/shared/accordion/ExampleAccordionWithTranslations';
+import IntentPagination from '../shared/IntentPagination';
+import SentencesIntentTable from '@/components/repository/SentencesIntentTable';
 
 const components = {
   PaginatedList,
+  IntentPagination
 };
 
 export default {
@@ -45,7 +40,7 @@ export default {
     },
     perPage: {
       type: Number,
-      default: 12,
+      default: 50,
     },
     update: {
       type: Boolean,
@@ -66,6 +61,7 @@ export default {
       dateLastTrain: '',
       pageWasChanged: false,
       searchingExample: false,
+      sentencesTable: SentencesIntentTable,
     };
   },
   computed: {
@@ -73,9 +69,6 @@ export default {
       repositoryVersion: 'getSelectedVersion',
       repository: 'getCurrentRepository',
     }),
-    exampleItemElem() {
-      return this.translationData ? ExampleAccordionWithTranslations : ExampleItem;
-    },
   },
   watch: {
     query() {
@@ -93,6 +86,9 @@ export default {
     repository() {
       this.updateExamples(true);
     },
+    examplesList() {
+      this.$emit('updateCount', this.examplesList)
+    }
   },
   mounted() {
     this.updateExamples();
@@ -100,13 +96,15 @@ export default {
   methods: {
     ...mapActions([
       'searchExamples',
+      'setRequirements',
       'getRepositoryStatusTraining',
     ]),
-    pageChanged() {
-      this.pageWasChanged = !this.pageWasChanged;
-    },
     dispatchSave() {
       this.updateExamples(true);
+      this.$emit('onEditSentence')
+    },
+    pageChanged() {
+      this.pageWasChanged = !this.pageWasChanged;
     },
     async updateExamples(force = false) {
       await this.getRepositoryStatus();
@@ -120,14 +118,11 @@ export default {
           this.dateLastTrain = (this.repositoryStatus.results[0].created_at).replace(/[A-Za-z]/g, ' ');
         }
       }
-
       if (this.repositoryStatus.count === 0) return;
-
       if (this.repositoryStatus.count === 1
           && (this.repositoryStatus.results[0].status !== 2
           && this.repositoryStatus.results[0].status !== 3)
       ) return;
-
       if (!this.examplesList || force) {
         this.examplesList = await this.searchExamples({
           repositoryUuid: this.repository.uuid,
@@ -148,12 +143,16 @@ export default {
     onItemDeleted() {
       this.$emit('exampleDeleted');
     },
+    updateSelected(params) {
+      this.$emit('onUpdateSelected', params)
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .no-examples {
-  margin: 8px;
+  margin: 0;
+  font: 14px 'Lato';
 }
 </style>

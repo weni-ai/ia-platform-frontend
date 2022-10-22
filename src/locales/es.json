@@ -503,12 +503,35 @@
       "cancel_button": "Cancelar",
       "save_button": "Ahorrar",
       "error_caracter_type": "La frase debe contener letras o números. Incluirlos para continuar.",
-      "train_progress": "{progress}% de entrenamiento completado",
+      "train_progress": "Entrenamiento en progreso",
       "empty_text_error": "Introduzca una oración",
       "intent_error": "Entrar en una intención",
       "default_error": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
       "more_than_200_words": "Límite de 200 palabras por frase alcanzado. Ajuste el texto si es necesario o divídalo en frases más pequeñas.",
-      "entities_info": "¿Cómo agregar nuevas entidades desde la oración?"
+      "entities_info": "¿Cómo agregar nuevas entidades desde la oración?",
+      "database": "Repositorio",
+      "database_description": "Lista de todas las oraciones entrenadas por la inteligencia",
+      "database_untrained": "Esta inteligencia no tiene frases entrenadas. Agregue frases y entrénelas en el menú Entrenamiento.",
+      "train_title": "Entrenar Inteligencia",
+      "train_description": "Agrega oraciones para mejorar la inteligencia. <a href={link}>Consulta nuestra documentación</a> y aprende <br> las mejores prácticas para crear una inteligencia artificial de calidad.",
+      "entities": "Entidades (opcional)",
+      "sentences_to_train": "Lista de oraciones agregadas para entrenamiento",
+      "add_entity_info": "Estos son elementos que se utilizan para extraer información adicional al enviar una oración al bot, además de su intención clasificada.",
+      "sentence_added": "Oración agregada para entrenamiento",
+      "intent_info": "Las intenciones son lo que define el contexto de tu inteligencia. Cuando se le da una oración para clasificar, tu inteligencia responderá a cuál de las intenciones entrenadas es más probable que pertenezca esa oración.",
+      "add_entity_modal_title": "Agregar entidad",
+      "add_entity_field_label": "Agregar o seleccionar una entidad",
+      "add_entity_checkbox_title": "Seleccione la(s) palabra(s) de la oración relacionada con esta entidad",
+      "add_entity_finish_edit": "Finalizar",
+      "add_entity_cancel": "Cancelar"
+    },
+    "resumeSentences": {
+      "title": "Resumen de frases enviadas para entrenamiento",
+      "description": "Ejecute la capacitación para mejorar la inteligencia con frases enviadas",
+      "sentences": "Frases",
+      "intentions": "Intenciones",
+      "entities": "Entidades",
+      "languages": "Idiomas"
     },
     "train_modal": {
       "training_status": "Estado de Entrenamiento",
@@ -689,7 +712,7 @@
     },
     "menu": {
       "hide": "Encogerse",
-      "expand": "Expandir",
+      "expand":"Expandir",
       "created_by": "Criado por",
       "back_text": "Volver",
       "summary": "Resumen",
@@ -717,8 +740,8 @@
       "database": "Repositorio"
     },
     "phrase-suggestion": {
-      "title": "Sugerencia de frases",
-      "subtitle": "Seleccione una intención y agregue frases sugeridas a su entrenamiento.",
+      "title": "Generador de frases",
+      "subtitle": "Herramienta que te permite, a partir de una sola frase, generar cientos de otras frases para mejorar tu inteligencia artificial.",
       "empty": "No hay ninguna sugerencia de oraciones para esta intención",
       "confirm-edit": "Confirmar la edición",
       "cancel-edit": "Cancelar edición",

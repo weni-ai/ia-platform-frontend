@@ -105,14 +105,14 @@ export default {
       if ((this.list.total / (this.list.total / this.perPage)) * this.page > this.list.total) {
         return this.list.total
       }
-      return (this.list.total / (this.list.total / this.perPage)) * this.page
+      return (this.list.total / (this.list.total / this.perPage)).toFixed(0) * this.page
     },
     maxPages() {
       if (Number.isInteger(this.list.total / this.perPage)) {
         return this.list.total / this.perPage
       }
       return (this.list.total / this.perPage) + 1
-    }
+    },
   },
   watch: {
     list() {

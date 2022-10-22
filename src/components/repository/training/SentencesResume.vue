@@ -46,6 +46,51 @@
       </div>
     </div>
 
+    <div
+      v-if="requirementsToTrainStatus || languagesWarningsStatus"
+      class="train-modal__wrapper__content"
+      >
+        <div v-if="requirementsToTrainStatus">
+          <div
+            v-for="(requirements, lang) in requirementsToTrain"
+            :key="lang"
+            class="train-modal__wrapper__content__content-requirements"
+          >
+            <div
+              v-for="(requirement, i) in requirements"
+              :key="i"
+              class="train-modal__wrapper__content__content-requirements__item"
+            >
+              <unnnic-icon icon="alert-circle-1-1" scheme="feedback-red" size="sm" />
+              <div class="train-modal__wrapper__content__content-requirements__item__texts">
+                <p class="is-flex">
+                  <strong class="train-modal__wrapper__content__content-requirements__item__field">
+                    {{ `[${lang.toUpperCase().replace('_','-')}]` }}
+                  </strong>
+                  <span>{{ firstText(requirement) }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="train-modal__wrapper__content__content-requirements">
+          <div
+            v-for="(warnings, lang) in languagesWarnings"
+            :key="lang"
+            class="train-modal__wrapper__content__content-requirements__item"
+          >
+            <unnnic-icon icon="alert-circle-1-1" scheme="feedback-red" size="sm" />
+            <div class="train-modal__wrapper__content__content-requirements__item__texts">
+              <p class="is-flex" v-for="(warning, index) in warnings" :key="index">
+                <strong class="train-modal__wrapper__content__content-requirements__item__field">
+                  {{ `[${lang.toUpperCase().replace('_','-')}]` }}
+                </strong>
+                <span>{{ firstText(warning) }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <ImportPhrasesModal
       class="import-modal"
@@ -91,7 +136,7 @@ export default {
     stats() {
       if (this.examplesList) {
         return {
-          count: this.examplesList.total,
+          count: this.examplesList.count,
           intents: this.filterIntents(),
           entities: this.filterEntities(),
           languages: this.filterLanguages(),
@@ -103,6 +148,12 @@ export default {
         entities: 0,
         languages: 0
       }
+    },
+    requirementsToTrainStatus() {
+      return Object.keys(this.requirementsToTrain).length !== 0;
+    },
+    languagesWarningsStatus() {
+      return Object.keys(this.languagesWarnings).length !== 0;
     }
   },
   props: {
@@ -120,7 +171,19 @@ export default {
     },
     examplesList: {
       type: Object,
-    }
+    },
+    requirementsToTrain: {
+      type: Object,
+      required: true
+    },
+    languagesWarnings: {
+      type: Object,
+      required: true
+    },
+    languageAvailableToTrain: {
+      type: Array,
+      required: true
+    },
   },
   data() {
     return {
@@ -130,7 +193,7 @@ export default {
       openNotificationModal: false,
       notificationModalType: '',
       notificationModalTitle: '',
-      notificationModalMessage: ''
+      notificationModalMessage: '',
     };
   },
   methods: {
@@ -163,7 +226,7 @@ export default {
       if (this.notificationModalType === 'success') this.$emit('onImportSuccess')
     },
     filterIntents() {
-      const intents = this.examplesList.items.map(el => el.intent)
+      const intents = this.examplesList.results.map(el => el.intent)
       const result = intents.sort().reduce((init, current) => {
         if (init.length === 0 || init[init.length - 1] !== current) {
           init.push(current);
@@ -173,7 +236,7 @@ export default {
       return result.length
     },
     filterEntities() {
-      const entities = this.examplesList.items
+      const entities = this.examplesList.results
         .reduce((prev, curr) => [...prev, ...curr.entities], [])
         .map(el => el.entity)
         .sort().reduce((init, current) => {
@@ -185,7 +248,7 @@ export default {
       return entities.length
     },
     filterLanguages() {
-      const languages = this.examplesList.items.map(el => el.language)
+      const languages = this.examplesList.results.map(el => el.language)
       const result = languages.sort().reduce((init, current) => {
         if (init.length === 0 || init[init.length - 1] !== current) {
           init.push(current);
@@ -193,7 +256,15 @@ export default {
         return init;
       }, []);
       return result.length
-    }
+    },
+    firstText(requirement) {
+      const initalText = requirement.split('\n');
+      return initalText[0];
+    },
+    secondText(requirement) {
+      const initalText = requirement.split('\n');
+      return initalText[1];
+    },
   },
 };
 </script>
@@ -262,6 +333,106 @@ export default {
         width: 100%;
         min-width: 284px;
       }
+    }
+  }
+}
+
+.train-modal {
+  max-height: 33.438rem;
+  width: 41.563rem;
+  background-color: $color-white;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 0.5rem;
+  margin: auto;
+  font-family: $font-family;
+  &__close {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem 1rem 0 0;
+    cursor: pointer;
+    &__icon {
+      color: $color-grey;
+    }
+  }
+  &__container {
+    padding: 1rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  &__text-ready-train {
+    font-size: 20px;
+    color: $color-primary;
+  }
+  &__text-warning {
+    font-size: 28px;
+  }
+  &__wrapper {
+    padding: 1rem;
+    &__subtitle {
+      margin-bottom: 1.5rem;
+    }
+    &__content {
+      // overflow: auto;
+      // max-height: 13.75rem;
+      // padding-right: $unnnic-spacing-stack-xs;
+      margin-top: $unnnic-spacing-stack-md;
+      &__content-requirements {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: $unnnic-spacing-inline-ant;
+        gap: $unnnic-spacing-inline-ant;
+        &__item {
+          display: flex;
+          gap: $unnnic-spacing-stack-xs;
+          align-items: center;
+          // background: $unnnic-color-background-snow;
+          // box-shadow: $unnnic-shadow-level-near;
+          // padding: 12px;
+          // border-radius: $unnnic-border-radius-sm;
+
+          &__texts {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: start;
+            font-family: $unnnic-font-family-secondary;
+
+            > div {
+              color: $unnnic-color-neutral-darkest;
+              font-size: $unnnic-font-size-body-sm;
+              font-weight: $unnnic-font-weight-bold;
+              line-height: $unnnic-font-size-body-sm + $unnnic-line-height-md;
+            }
+
+            p {
+              color: $unnnic-color-neutral-dark;
+              font-size: $unnnic-font-size-body-md;
+              line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+            }
+
+          }
+
+          &__field {
+            font-size: $unnnic-font-size-body-sm;
+            font-weight: $unnnic-font-weight-bold;
+            margin-right: $unnnic-spacing-inline-ant;
+          }
+        }
+      }
+    }
+  }
+  &__buttons {
+    margin-top: $unnnic-spacing-stack-lg;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $unnnic-spacing-stack-lg;
+    button {
+      width: 100%;
     }
   }
 }
