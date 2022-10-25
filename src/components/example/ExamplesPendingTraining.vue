@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p
+    <!-- <p
       v-if="examplesList && examplesList.empty && !isTrain"
       class="no-examples"
-      v-html="$t('webapp.trainings.no_sentences_to_train')"/>
+      v-html="$t('webapp.trainings.no_sentences_to_train')"/> -->
 
       <intent-pagination
-        v-if="examplesList"
+        v-if="examplesList.total > 0"
         :item-component="sentencesTable"
         :list="examplesList"
         :repository="repository"
@@ -79,10 +79,6 @@ export default {
     repository() {
       this.updateExamples(true);
     },
-    // async examplesList() {
-    //   await this.$nextTick();
-    //   this.$emit('onUpdateList', this.allItems)
-    // }
     async allItems() {
       await this.$nextTick();
       this.$emit('onUpdateList', this.allItems)

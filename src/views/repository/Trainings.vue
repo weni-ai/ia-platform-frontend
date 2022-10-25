@@ -34,7 +34,10 @@
               @created="updatedExampleList()"
               @eventStep="dispatchClick()"
             />
-            <div class="trainings-repository__new-example__train">
+            <div
+              v-if="examplesList && examplesList.count > 0"
+              class="trainings-repository__new-example__train"
+            >
               <div
                 :id="getRequirements.ready_for_train
                 || !noPhrasesYet ? 'tour-training-step-6' : ''"
@@ -61,7 +64,10 @@
                 />
               </div>
             </div>
-            <div class="is-flex is-align-items-baseline is-justify-content-space-between mt-6 mb-5">
+            <div
+              v-if="examplesList && examplesList.count > 0"
+              class="is-flex is-align-items-baseline is-justify-content-space-between mt-6 mb-5"
+            >
               <h2 class="trainings-repository__list-wrapper__title mb-0">
                 {{ $t('webapp.trainings.sentences_to_train') }}
               </h2>
