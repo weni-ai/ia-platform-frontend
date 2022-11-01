@@ -23,7 +23,7 @@
             :title="item.sentence"
             class="break-text example-accordion__sentence"
           >
-            <span class="example-accordion__tag">[{{ repository.language }}]</span>
+            <span class="example-accordion__tag">[{{ item.language }}]</span>
             <highlighted-entity
               :ref="item.id"
               :id="item.id"
@@ -34,6 +34,17 @@
               :state="isSentenceActive"
             />
           </div>
+        </template>
+
+        <template v-if="repository.authorization.can_contribute" v-slot:edit>
+            <div :style="{ textAlign: 'center' }">
+              <unnnic-button
+                size="small"
+                type="secondary"
+                iconCenter="pencil-write-1"
+                @click.prevent.stop="editSentence(item.id)"
+              />
+            </div>
         </template>
 
         <template v-slot:delete>
@@ -47,6 +58,20 @@
           </div>
         </template>
       </unnnic-table-row>
+      <edit-example-intent
+        v-if="item.id === selectedItem"
+        from="suggestions"
+        :entities="item.entities"
+        :intent-to-edit="item.intent"
+        :edit-example="true"
+        :text-to-edit="item.text"
+        :sentence-id="item.id"
+        :language-edit="item.language"
+        :get-all-entities="getEntitiesName"
+        @saveList="updateList"
+        @cancel="cancelEditSentence"
+        @dispatchSave="saveSentence"
+      />
     </template>
   </unnnic-table>
   <unnnic-modal
@@ -136,6 +161,11 @@ export default {
             flex: 1,
           },
           {
+            id: 'edit',
+            text: this.$t('webapp.intent.table_edit'),
+            width: '40px',
+          },
+          {
             id: 'delete',
             text: this.$t('webapp.intent.table_delete'),
             width: '40px',
@@ -146,6 +176,7 @@ export default {
       sentence: null,
       openSuccessModal: false,
       isSentenceActive: false,
+      selectedItem: null,
     };
   },
 
@@ -202,6 +233,24 @@ export default {
       const { id } = item
       // eslint-disable-next-line no-underscore-dangle
       this.$refs[id]._data.active = false
+    },
+    cancelEditSentence() {
+      this.open = !this.open;
+      this.editing = false;
+      this.$refs[this.selectedItem].active = false
+      this.selectedItem = null;
+    },
+    editSentence(id) {
+      this.selectedItem = id
+      this.open = true;
+      this.editing = true;
+      this.$refs[id].active = true
+    },
+    updateList() {
+      this.$emit('updateList');
+    },
+    saveSentence(event) {
+      this.$emit('onSaveSentence', event)
     }
   },
 };

@@ -191,7 +191,6 @@ export default {
         margin-left: 1rem;
           p {
           white-space: nowrap;
-          width: 32rem;
           overflow: hidden;
           text-overflow: ellipsis;
             @media screen and (max-width: $mobile-width) {

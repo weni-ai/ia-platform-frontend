@@ -4,7 +4,7 @@
       <div v-if="authenticated">
         <loading v-if="loading" />
         <div v-else-if="repository.authorization.can_contribute" class="phrase-suggestion">
-          <div v-if="pageItem === 1">
+          <div v-if="pageItem === 0">
             <div class="phrase-suggestion__header">
               <div class="phrase-suggestion__header__title">
                 <unnnic-card
@@ -15,7 +15,6 @@
                   scheme="feedback-blue"
                 />
 
-                <unnnic-circle-progress-bar :progress="pageItem" :totalProgress="5" />
               </div>
 
               <div class="phrase-suggestion__header__container">
@@ -26,39 +25,46 @@
             </div>
 
             <div class="phrase-suggestion__cards">
-              <p>Selecione o método que será utilizado para gerar as frases.</p>
+              <p>
+                {{ $t('webapp.phrase-suggestion.select_method') }}
+              </p>
               <div class="phrase-suggestion__cards__container">
                 <div class="phrase-suggestion__cards__container-card">
-                  <h3>Adicionar uma nova frase</h3>
-                  <p>Você adiciona uma nova frase
-                    que ainda não foi enviada para treinamento
-                    e a plataforma a utilizará como base para gerar novas frases</p>
+                  <h3>
+                    {{ $t('webapp.phrase-suggestion.new_sentence') }}
+                  </h3>
+                  <p>
+                    {{ $t('webapp.phrase-suggestion.new_sentence_info') }}
+                  </p>
                   <unnnic-button @click="goToAddNewSentence" type="secondary">
-                    Selecionar método
+                    {{ $t('webapp.phrase-suggestion.select_method_button') }}
                   </unnnic-button>
                 </div>
                 <div class="phrase-suggestion__cards__container-card">
-                  <h3>Utilizar uma frase existente</h3>
-                  <p>Você seleciona uma frase que já foi enviada anteriormente para treinamento
-                    e a plataforma a utilizará como base para gerar novas frases</p>
+                  <h3>
+                    {{ $t('webapp.phrase-suggestion.existing_sentence') }}
+                  </h3>
+                  <p>
+                    {{ $t('webapp.phrase-suggestion.select_existing') }}
+                  </p>
                   <unnnic-button @click="goToAddExistingSentence" type="secondary">
-                    Selecionar método
+                    {{ $t('webapp.phrase-suggestion.select_method_button') }}
                   </unnnic-button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div v-if="pageItem === 2 && isSentenceNew">
+          <div v-if="pageItem === 1 && isSentenceNew">
             <div class="phrase-suggestion__header">
               <div class="phrase-suggestion__header__step">
                 <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
                   <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
                 </div>
                 <h1 class="ml-4 mr-5">
-                  Adicionar nova frase
+                  {{ $t('webapp.phrase-suggestion.add_new') }}
                 </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="2" :totalProgress="5" />
+                <unnnic-circle-progress-bar class="ml-2" :progress="1" :totalProgress="5" />
               </div>
             </div>
 
@@ -72,23 +78,23 @@
 
           </div>
 
-          <div v-if="pageItem === 2 && !isSentenceNew">
+          <div v-if="pageItem === 1 && !isSentenceNew">
             <div class="phrase-suggestion__header">
               <div class="phrase-suggestion__header__step">
                 <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
                   <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
                 </div>
                 <h1 class="ml-4 mr-5">
-                  Utilizar frase existente
+                  {{ $t('webapp.phrase-suggestion.add_existing') }}
                 </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="2" :totalProgress="5" />
+                <unnnic-circle-progress-bar class="ml-2" :progress="1" :totalProgress="4" />
               </div>
             </div>
 
             <hr class="divider" />
             <div class="column is-6 p-0">
               <unnnic-select
-                label="Selecione a intenção para visualizar as frases"
+                :label="$t('webapp.phrase-suggestion.select_intent')"
                 v-model="intentSelected"
                 @onChange="addIntents"
               >
@@ -118,6 +124,41 @@
 
           </div>
 
+          <div v-if="pageItem === 2">
+            <div class="phrase-suggestion__header">
+              <div class="phrase-suggestion__header__step">
+                <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
+                  <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
+                </div>
+                <h1 class="ml-4 mr-5">
+                  {{ $t('webapp.phrase-suggestion.select_words_title') }}
+                </h1>
+                <unnnic-circle-progress-bar class="ml-2" :progress="2" :totalProgress="4" />
+              </div>
+            </div>
+
+            <hr class="divider" />
+
+            <h4 class="mb-5">
+              {{ $t('webapp.phrase-suggestion.select_words') }}
+            </h4>
+
+            <div class="phrase-suggestion__word-cards__wrapper">
+              <word-card
+                v-for="(word, index) in wordsList"
+                :key="index"
+                :text="word.word"
+                :entities="word.entity"
+                @onChange="updateWordsList"
+              />
+            </div>
+
+            <unnnic-button class="button--full mt-2" @click="addVariations" type="secondary">
+              {{ $t('webapp.phrase-suggestion.finish_selection') }}
+            </unnnic-button>
+
+          </div>
+
           <div v-if="pageItem === 3">
             <div class="phrase-suggestion__header">
               <div class="phrase-suggestion__header__step">
@@ -125,50 +166,16 @@
                   <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
                 </div>
                 <h1 class="ml-4 mr-5">
-                  Frase "{{ sentenceSelected.text }}"
+                  {{ $t('webapp.phrase-suggestion.select_variations') }}
                 </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="3" :totalProgress="5" />
+                <unnnic-circle-progress-bar class="ml-2" :progress="3" :totalProgress="4" />
               </div>
             </div>
 
             <hr class="divider" />
 
             <h4 class="mb-5">
-              Selecione quais palavras que deseja gerar as variações.
-            </h4>
-
-            <word-card
-              v-for="(word, index) in wordsList"
-              :key="index"
-              :text="word.word"
-              :entities="word.entity"
-              @onChangeGenerate="updateWordsList"
-            />
-
-            <unnnic-button class="button--full mt-2" @click="addVariations" type="secondary">
-              Concluir seleção
-            </unnnic-button>
-
-          </div>
-
-          <div v-if="pageItem === 4">
-            <div class="phrase-suggestion__header">
-              <div class="phrase-suggestion__header__step">
-                <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
-                  <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
-                </div>
-                <h1 class="ml-4 mr-5">
-                  Seleção das variações de palavras geradas
-                </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="4" :totalProgress="5" />
-              </div>
-            </div>
-
-            <hr class="divider" />
-
-            <h4 class="mb-5">
-              Foram geradas diversas variações para cada uma das palavras selecionadas.<br>
-              Agora, selecione as variações que deseja utilizar para gerar as frases.
+              {{ $t('webapp.phrase-suggestion.select_variations_info') }}
             </h4>
 
             <unnnic-accordion
@@ -181,8 +188,10 @@
               <span
                 slot="actions"
               >
-                {{ variation.inputs.length }} variações geradas /
-                {{ variation.suggestions.length }} variações selecionadas
+                {{ $tc('webapp.phrase-suggestion.variations_generated',
+                variation.inputs.length) }} /
+                {{ $tc('webapp.phrase-suggestion.variations_selected',
+                variation.suggestions.length) }}
               </span>
               <div>
                 <div class="is-flex is-flex-direction-row is-flex-wrap-wrap">
@@ -204,7 +213,7 @@
                   <div class="column is-4 p-0">
                     <unnnic-input
                       placeholder="Variação"
-                      label="Adicionar variação diferente"
+                      :label="$t('webapp.phrase-suggestion.new_variation')"
                       v-model="newVariation"
                       size="sm"
                     />
@@ -218,7 +227,7 @@
                       iconLeft="add-1"
                       type="secondary"
                     >
-                      Adicionar
+                      {{ $t('webapp.phrase-suggestion.add') }}
                     </unnnic-button>
                 </div>
               </div>
@@ -229,21 +238,21 @@
               @click="goToGeneratedSentences"
               type="secondary"
               >
-              Gerar frases
+              {{ $t('webapp.phrase-suggestion.generate_sentences') }}
             </unnnic-button>
 
           </div>
 
-          <div v-if="pageItem === 5">
+          <div v-if="pageItem === 4">
             <div class="phrase-suggestion__header">
               <div class="phrase-suggestion__header__step">
                 <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
                   <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
                 </div>
                 <h1 class="ml-4 mr-5">
-                  Frases geradas
+                  {{ $t('webapp.phrase-suggestion.generated_sentences') }}
                 </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="5" :totalProgress="5" />
+                <unnnic-circle-progress-bar class="ml-2" :progress="4" :totalProgress="4" />
               </div>
             </div>
 
@@ -251,10 +260,15 @@
 
             <div class="phrase-suggestion__cards__variation-card">
               <div>
-                <h3>{{ generatedSentences.length }} novas frases geradas</h3>
+                <h3>
+                  {{ $tc('webapp.phrase-suggestion.new_sentences_generated',
+                  generatedSentences.length) }}
+                </h3>
                 <p class="mb-0">
-                  Lista de frases geradas a partir da frase <span>{{ sentenceSelected.text }}</span>
-                  para a intenção <span>{{ intentSelected }}</span>
+                  {{ $t('webapp.phrase-suggestion.generated_from_sentence') }}
+                  <span>{{ sentenceSelected.text }}</span>
+                  {{ $t('webapp.phrase-suggestion.to_intent') }}
+                  <span>{{ intentSelected }}</span>
                 </p>
               </div>
               <unnnic-button
@@ -262,7 +276,7 @@
                 :loading="submittingToTraining"
                 type="secondary"
               >
-                Enviar para treinamento
+                {{ $t('webapp.phrase-suggestion.send_to_training') }}
               </unnnic-button>
             </div>
 
@@ -271,7 +285,8 @@
               :repository="repository"
               :per-page="perPage"
               @onDeleteSentence="deleteSentence"
-              :load-all="true"
+              @onSaveSentence="updateGeneratedList"
+              load-all
             />
 
           </div>
@@ -288,27 +303,22 @@
     </div>
     <unnnic-modal
       :showModal="openFinishModal"
-      text="Frases enviadas para treinamento!"
+      :text="$t('webapp.phrase-suggestion.sent_to_training')"
       scheme="feedback-green"
-      modal-icon="alert-circle-1"
+      modal-icon="check-circle-1-1"
       :closeIcon="false"
     >
       <span
       slot="message"
       >
-        As frases geradas foram enviadas para treinamento.
-        Para aprimorar a inteligência com essas frases,
-        execute o treinamento no menu Treinar Inteligência. 😉
+        {{ $t('webapp.phrase-suggestion.sent_to_training_info') }}
       </span>
-      <unnnic-button class="is-flex-grow-2" slot="options" type="terciary" @click="goToInitialStep">
-        Voltar para o Gerador de frases
-      </unnnic-button>
       <unnnic-button
         slot="options"
         type="secondary"
         @click="goToTraining"
       >
-        Ir para Treinamento
+        {{ $t('webapp.phrase-suggestion.go_to_training') }}
       </unnnic-button>
     </unnnic-modal>
   </repository-view-base>
@@ -349,7 +359,7 @@ export default {
   extends: RepositoryBase,
   data() {
     return {
-      pageItem: 1,
+      pageItem: 0,
       isSentenceNew: false,
       perPage: 300,
       loading: false,
@@ -370,6 +380,7 @@ export default {
       submittingToTraining: false,
       openFinishModal: false,
       sentencesIntents: IntentSuggestion,
+      token: null
     };
   },
   computed: {
@@ -384,6 +395,9 @@ export default {
     versionSelected() {
       this.intentSelected = '';
     },
+    token() {
+      this.checkGenerationStatus()
+    }
   },
   methods: {
     ...mapActions([
@@ -394,7 +408,8 @@ export default {
       'suggestWords',
       'suggestSentences',
       'newExample',
-      'searchExamples'
+      'searchExamples',
+      'recoverSentences'
     ]),
     updateLoading(intent) {
       this.loading = true;
@@ -432,30 +447,30 @@ export default {
     },
     goToAddNewSentence() {
       this.isSentenceNew = true
-      this.pageItem = 2
+      this.pageItem = 1
     },
     goToAddExistingSentence() {
       this.isSentenceNew = false
-      this.pageItem = 2
+      this.pageItem = 1
     },
     onSentenceSelected(sentence) {
       this.sentenceSelected = sentence
       this.splitSentence()
-      this.pageItem = 3
+      this.pageItem = 2
     },
     addSentence(sentence) {
       this.sentenceSelected = sentence
       this.intentSelected = sentence.intent
       this.splitSentence()
-      this.pageItem = 3
+      this.pageItem = 2
     },
     addVariations() {
       this.addWordVariation()
-      this.pageItem = 4
+      this.pageItem = 3
     },
     goToGeneratedSentences() {
       this.generateSentences()
-      this.pageItem = 5
+      this.pageItem = 4
     },
     async addIntents(intent) {
       // this.loading = true
@@ -504,6 +519,7 @@ export default {
                 checked: index === 0
               })),
               suggestions: obj.suggestions.splice(0, 1),
+              isOpen: obj.generate
             };
           }
 
@@ -540,11 +556,7 @@ export default {
             entity: e.entity || ''
           }))
         });
-        const result = data.rasa_nlu_data.common_examples
-        result.forEach(e => {
-          e.language = this.repository.language
-        })
-        this.generatedSentences = result
+        this.token = data
       } catch (e) {
         const message = this.$t('webapp.home.default_error');
 
@@ -614,11 +626,39 @@ export default {
       })
     },
     goToInitialStep() {
-      this.pageItem = 1
+      this.pageItem = 0
       this.openFinishModal = false
     },
     goToTraining() {
       this.$router.push(`/dashboard/${this.$route.params.ownerNickname}/${this.$route.params.slug}/training`)
+    },
+    async checkGenerationStatus() {
+      this.loading = true
+      try {
+        const { data } = await this.recoverSentences({ token: this.token })
+        if (data) {
+          const result = data.rasa_nlu_data.common_examples
+          result.forEach(e => {
+            e.language = this.repository.language
+          })
+          this.generatedSentences = result.map((sentence, index) => ({
+            ...sentence,
+            id: index
+          }))
+        }
+      } catch (e) {
+        const message = this.$t('webapp.home.default_error');
+
+        this.$buefy.toast.open({
+          message,
+          type: 'is-danger',
+        });
+      } finally {
+        this.loading = false
+      }
+    },
+    updateGeneratedList(event) {
+      Object.assign(this.generatedSentences.find(item => item.id === event.id), event)
     }
   },
 };
@@ -664,7 +704,7 @@ export default {
         align-items: center;
 
         h1 {
-          font-family: $unnnic-font-family-primary;
+          font-family: $unnnic-font-family-secondary;
           font-size: $unnnic-font-size-title-sm;
         }
       }
@@ -687,6 +727,7 @@ export default {
           border-radius: $unnnic-border-radius-md;
           border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
           padding: $unnnic-spacing-stack-md;
+          width: 50%;
 
           h3 {
             font-family: $unnnic-font-family-secondary;
@@ -739,6 +780,16 @@ export default {
             font-weight: $unnnic-font-weight-bold;
           }
         }
+      }
+    }
+
+    &__word-cards {
+
+      &__wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: $unnnic-spacing-stack-sm;
       }
     }
 
@@ -797,5 +848,6 @@ export default {
   .add-variation {
     width: 160px;
   }
+
 }
 </style>

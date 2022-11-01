@@ -7,4 +7,7 @@ export default {
   async suggestSentences(store, { isQuestion, intent, texts }) {
     return suggestions.suggestSentences(isQuestion, intent, texts);
   },
+  async recoverSentences(store, { token }) {
+    return suggestions.recoverSentences(token);
+  },
 };
