@@ -192,7 +192,7 @@
             :disabled="!isValid || submitting"
             :tooltip-hover="!isValid ? validationErrors : null"
             :loading="submitting"
-            @click="saveSentence">
+            @click.prevent.stop="saveSentence">
             <slot v-if="!submitting">{{ $t('webapp.trainings.save_button') }}</slot>
           </unnnic-button>
         </div>
@@ -223,6 +223,12 @@ export default {
     EntityAccordion,
     WordCard
   },
+  props: {
+    from: {
+      type: String,
+      default: null
+    }
+  },
   data() {
     return {
       hideDropdown: true,
@@ -245,14 +251,36 @@ export default {
           end: this.text.indexOf(word) + word.length
         }))
     },
+    sentence() {
+      const {
+        sentenceId,
+        text,
+        language,
+        intent,
+        allEntities,
+      } = this;
+
+      return {
+        id: sentenceId,
+        text,
+        language,
+        intent,
+        entities: allEntities,
+      };
+    }
   },
   methods: {
     cancelEditSentence() {
       this.$emit('cancel')
     },
     async saveSentence() {
-      await this.onSubmit();
-      this.cancelEditSentence();
+      if (this.from !== 'suggestions') {
+        await this.onSubmit();
+        this.cancelEditSentence();
+      } else {
+        this.$emit('dispatchSave', this.sentence)
+        this.cancelEditSentence();
+      }
     },
     addEntity() {
       if (this.textSelected) {

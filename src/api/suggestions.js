@@ -21,4 +21,12 @@ export default {
       },
     );
   },
+  recoverSentences(token) {
+    return request.$http().post(
+      'recover_sentences/',
+      {
+        token
+      },
+    );
+  },
 };
