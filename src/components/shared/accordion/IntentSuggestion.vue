@@ -1,5 +1,10 @@
 <template>
-  <div class="intent-suggestion-accordion">
+  <div
+    @click="selectSentence"
+    @mouseenter="activeSentence(id)"
+    @mouseleave="inactiveSentence(id)"
+    class="intent-suggestion-accordion"
+  >
     <div class="intent-suggestion-accordion__content">
       <div
         class="intent-suggestion-accordion__content__check-field">
@@ -8,7 +13,13 @@
 
       <div
         class="intent-suggestion-accordion__content__phrase">
-        <p>{{ phraseSuggestion }}</p>
+        <highlighted-entity
+          :ref="id"
+          :id="id"
+          :text="phraseSuggestion"
+          :entities="entities"
+          :state="isSentenceActive"
+        />
       </div>
     </div>
 
@@ -24,8 +35,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import HighlightedEntity from '@/components/shared/HighlightedEntity';
 
 export default {
+  components: { HighlightedEntity },
   name: 'IntentSuggestion',
   props: {
     id: {
@@ -60,6 +73,7 @@ export default {
       phraseSuggestion: '',
       editing: false,
       checked: false,
+      isSentenceActive: false
     };
   },
   computed: {
@@ -80,9 +94,6 @@ export default {
       } else {
         this.removeSelectedSuggestion(this.toExample);
       }
-    },
-    isAccordionOpen() {
-      this.open = false;
     },
   },
   created() {
@@ -126,7 +137,13 @@ export default {
           language: this.language
         },
       });
-    }
+    },
+    activeSentence(id) {
+      this.$refs[id].active = true
+    },
+    inactiveSentence(id) {
+      this.$refs[id].active = false
+    },
   },
 };
 </script>
@@ -136,42 +153,41 @@ export default {
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
-.b-checkbox.checkbox:not(.button){
+.b-checkbox.checkbox:not(.button) {
   margin-right: 0;
 }
 
-.intent-suggestion-accordion{
-    &:last-child{
+.intent-suggestion-accordion {
+  width: 100%;
+  // height: 40px;
+  margin: 1rem 0;
+  background: #FFFFFF;
+  border: 1px solid #E2E6ED;
+  border-radius: 8px;
+  padding: $unnnic-spacing-stack-sm;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+    &:last-child {
       margin-bottom: $unnnic-spacing-stack-xl;
     }
 
-    width: 100%;
-    // height: 40px;
-    margin: 1rem 0;
-    background: #FFFFFF;
-    border: 1px solid #E2E6ED;
-    border-radius: 8px;
-    padding: $unnnic-spacing-stack-sm;
-
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-
-
-    &__content{
+    &__content {
      width: 80%;
      display:flex;
      justify-content: flex-start;
      align-items: center;
      font-size: $unnnic-font-size-body-gt;
 
-      &__check-field{
+      &__check-field {
         display: flex;
         justify-content: flex-end;
         align-items: center;
       }
 
-      &__field{
+      &__field {
           margin-left: 1rem;
           width: 50%;
           height: 100px;
@@ -187,17 +203,9 @@ export default {
           }
       }
 
-      &__phrase{
+      &__phrase {
         margin-left: 1rem;
-          p {
-          white-space: nowrap;
-          width: 32rem;
-          overflow: hidden;
-          text-overflow: ellipsis;
-            @media screen and (max-width: $mobile-width) {
-              width: 12rem;
-            }
-          }
+        font-size: $unnnic-font-size-body-gt;
       }
 
       &__tag {
@@ -210,11 +218,14 @@ export default {
     }
 
 
-    &__icons{
+    &__icons {
         margin-right: 1rem;
         cursor: pointer;
         display: flex;
         align-self: center;
+    }
+    /deep/ .highlighted-text--size-normal {
+      font-size: $unnnic-font-size-body-gt;
     }
 
 }
