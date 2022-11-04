@@ -6,7 +6,7 @@
       @submit.prevent="onSubmit()"
       @keyup.enter="onEnter()"
     >
-      <div class="column is-12 mb-2">
+      <div class="column is-6 pr-4">
         <b-field
           :message="errors.text || errors.language"
         >
@@ -25,25 +25,10 @@
             size="normal"
             @textSelected="setTextSelected($event)"
             @submit="onEnter()"
-          >
-          </example-text-with-highlighted-entities-input>
-        </b-field>
-      </div>
-      <div class="column is-12">
-        <b-field class="entities-wrapper" :message="errors.entities">
-          <new-entities-input
-            ref="entitiesInput"
-            v-model="entities"
-            :repository="repository"
-            :text="text"
-            :text-selected="textSelected"
-            :available-entities="entitiesList"
-            :available-labels="availableLabels"
-            @entityAdded="onEntityAdded()"
           />
         </b-field>
       </div>
-      <div class="column is-6 pr-4">
+      <div class="column is-3 pr-4">
         <b-field
           id="tour-training-step-4"
           :is-previous-disabled="true"
@@ -61,7 +46,7 @@
           />
         </b-field>
       </div>
-      <div class="column is-6">
+      <div class="column is-3">
         <b-field
           id="tour-training-step-4"
           :is-previous-disabled="true"
@@ -81,6 +66,20 @@
               {{ label }}
             </option>
           </unnnic-select>
+        </b-field>
+      </div>
+      <div class="column is-12 mt-2">
+        <b-field class="entities-wrapper" :message="errors.entities">
+          <new-entities-input
+            ref="entitiesInput"
+            v-model="entities"
+            :repository="repository"
+            :text="text"
+            :text-selected="textSelected"
+            :available-entities="entitiesList"
+            :available-labels="availableLabels"
+            @entityAdded="onEntityAdded()"
+          />
         </b-field>
       </div>
       <div class="column is-12 mt-4">
