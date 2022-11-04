@@ -64,7 +64,7 @@
                 <h1 class="ml-4 mr-5">
                   {{ $t('webapp.phrase-suggestion.add_new') }}
                 </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="1" :totalProgress="5" />
+                <unnnic-circle-progress-bar class="ml-2" :progress="1" :totalProgress="4" />
               </div>
             </div>
 
@@ -214,13 +214,13 @@
                     <unnnic-input
                       placeholder="Variação"
                       :label="$t('webapp.phrase-suggestion.new_variation')"
-                      v-model="newVariation"
+                      v-model="variation.newVariation"
                       size="sm"
                     />
                   </div>
                     <unnnic-button
                       @click="addNewVariation(variation)"
-                      :disabled="!newVariation"
+                      :disabled="!variation.newVariation"
                       class="mt-auto ml-4 add-variation"
                       style="height: 38px"
                       size="small"
@@ -234,7 +234,7 @@
             </unnnic-accordion>
 
             <unnnic-button
-              class="button--full my-5"
+              class="button--full mb-5"
               @click="goToGeneratedSentences"
               type="secondary"
               >
@@ -572,11 +572,11 @@ export default {
       this.generatedSentences = this.generatedSentences.filter(sentence => sentence !== item)
     },
     addNewVariation(variation) {
-      const newInput = { text: this.newVariation, checked: false }
+      const newInput = { text: variation.newVariation, checked: false }
       this.wordVariations.find(e => e === variation)
         .inputs.push(newInput)
       this.setSuggestion(newInput, variation)
-      this.newVariation = ''
+      variation.newVariation = ''
     },
     setSuggestion(input, variation) {
       input.checked = !input.checked
@@ -759,6 +759,7 @@ export default {
           border-radius: $unnnic-border-radius-md;
           border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
           padding: $unnnic-spacing-stack-md;
+          margin-bottom: $unnnic-spacing-stack-lg;
 
           h3 {
             font-family: $unnnic-font-family-secondary;
@@ -825,6 +826,12 @@ export default {
 
     /deep/ .actions {
       display: initial !important;
+    }
+
+    /deep/ .intent-suggestion-accordion__icons {
+      margin-right: 0.5rem;
+      margin-left: 1rem;
+      overflow-wrap: anywhere;
     }
 
     h3 {
