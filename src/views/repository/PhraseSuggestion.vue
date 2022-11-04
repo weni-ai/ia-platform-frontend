@@ -14,6 +14,11 @@
                   icon="copy-paste-1"
                   scheme="feedback-blue"
                 />
+                <b-field>
+                  <b-tag class="phrase-suggestion__beta-badge" size="is-medium" type="is-primary">
+                    BETA
+                  </b-tag>
+                </b-field>
 
               </div>
 
@@ -684,8 +689,9 @@ export default {
 
       &__title {
         display: flex;
-        gap: $unnnic-spacing-stack-xl;
+        gap: $unnnic-spacing-stack-lg;
         margin-bottom: $unnnic-spacing-stack-sm;
+        align-items: center;
       }
 
       &__subtitle {
@@ -854,6 +860,13 @@ export default {
   }
   .add-variation {
     width: 160px;
+  }
+
+  &__beta-badge {
+    background-color: rgba(0, 158, 150, 0.16) !important;
+    color: $unnnic-color-brand-weni-soft !important;
+    font-weight: $unnnic-font-weight-bold;
+    padding: 4px 8px;
   }
 
 }
