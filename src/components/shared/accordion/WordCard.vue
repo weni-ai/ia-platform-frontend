@@ -141,13 +141,7 @@ export default {
 }
 
 .intent-suggestion-accordion{
-    // &:last-child{
-    //   margin-bottom: $unnnic-spacing-stack-xl;
-    // }
-
     width: 49%;
-    // height: 40px;
-    margin: .5rem 0;
     background: #FFFFFF;
     border: 1px solid #E2E6ED;
     border-radius: 8px;
