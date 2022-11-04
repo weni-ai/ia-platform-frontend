@@ -159,7 +159,7 @@ export default {
 
 
     &__content{
-     width: 80%;
+     width: 60%;
      display:flex;
      justify-content: flex-start;
      align-items: center;
@@ -189,16 +189,15 @@ export default {
 
       &__phrase{
         margin-left: 1rem;
+        width: 100%;
           p {
           font-size: $unnnic-font-size-body-lg;
           white-space: nowrap;
-          width: 32rem;
+          // width: 32rem;
           overflow: hidden;
           text-overflow: ellipsis;
-            @media screen and (max-width: $mobile-width) {
-              width: 12rem;
-            }
-          }
+          margin-right: 2rem;
+        }
       }
 
       &__tag {

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <unnnic-table :items="list" class="mt-6">
+  <unnnic-table :items="list">
     <template v-slot:header>
       <unnnic-table-row :headers="table.headers">
         <template v-slot:checkarea>
