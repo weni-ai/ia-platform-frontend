@@ -79,7 +79,7 @@
         <div>
           <unnnic-select
             class="unnic--clickable"
-            size="sm"
+            size="md"
             :placeholder="$t('webapp.create_repository.language_placeholder')"
             v-model="knowledgeBase.text.language"
             search
@@ -456,8 +456,8 @@ export default {
       }
     }
     &__button {
-      width: 44px;
-      height: 44px;
+      width: 36px;
+      height: 36px;
     }
     &--content {
       display: flex;
@@ -531,6 +531,9 @@ export default {
       justify-content: left;
       align-items: center;
     }
+  }
+  .icon-right {
+    transform: translateY(70%);
   }
 }
 </style>
