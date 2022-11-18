@@ -190,7 +190,7 @@
     },
     "raw": {
       "raw": "Raw",
-      "raw_subtitle": "Analise a confiança em cada intenção identificada para entender o resultado do teste rápido"
+      "raw_subtitle": "Analise a confiança em cada intenção identificada para entender o resultado do teste rápido."
     },
     "evaluate": {
       "results": "Resultados",
@@ -316,7 +316,7 @@
       "confirm_remove_integrate": "Remover integração",
       "bases": {
         "knowledge_bases": "Bases de conhecimento",
-        "description": "As Bases de Conhecimento são as fontes de texto de uma Inteligência de Conteúdo. Distribua o texto da inteligência em bases, reunindo informações semelhantes sobre cada uma. Saiba mais em nossa <a href='https://docs.ilhasoft.mobi/l/pt/inteligencia-conteudo/introdu-o-intelig-ncia-de-conte-do' target='_blank' class='repository-base__description__text--link'>documentação</a>.",
+        "description": "As Bases de Conhecimento são as fontes de texto de uma Inteligência de Conteúdo. Distribua o texto da inteligência em bases, reunindo informações semelhantes sobre cada uma. Saiba mais em nossa <a href='https://docs.weni.ai/l/pt/bothub/introdu-o-intelig-ncia-de-conte-do' target='_blank' class='repository-base__description__text--link'>documentação</a>.",
         "new_knowledge_base": "Adicionar nova base",
         "adjustments": "Ajustes",
         "adjustments_subtitle": "Inteligência de conteúdo",
@@ -802,7 +802,7 @@
       "signin": "Entre na sua conta para editar essa inteligência."
     },
     "inbox": {
-      "description": "Essas são as frases das interações de usuário com a sua inteligência.\nPodem ser úteis para seu treinamento ou teste. ",
+      "description": "Veja as mensagens recebidas e como a inteligência as interpretou. Essas interações podem ser úteis para monitorar e aprimorar sua IA.",
       "intent": "Intenção",
       "language": "Idioma",
       "version": "Versão",
@@ -818,8 +818,8 @@
       "entry_error": "Intenção e Frase já existem.",
       "add_to_train_error": "Aconteceu um erro",
       "add_to_sentences_error": "Um erro ocorreu.",
-      "add_to_train_button": "Adicionar ao treinamento",
-      "add_to_sentence_button": "Adicionar às frases de teste",
+      "add_to_train_button": "Enviar para treinamento",
+      "add_to_sentence_button": "Enviar para teste",
       "remove_log_button": "Deletar senteça",
       "select_phrase":"Selecione uma frase",
       "select_all":"Selecionar todos",
@@ -833,7 +833,8 @@
       "debug": "Debug",
       "raw": "Raw",
       "confidence": "Confiança",
-      "entities": "Entidade | Entidades"
+      "entities": "Entidade | Entidades",
+      "search_label": "Buscar interações..."
     },
     "entity":{
       "title": "Frases da entidade",
