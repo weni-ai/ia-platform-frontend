@@ -31,7 +31,6 @@
             maxWidth="15rem"
           >
             <unnnicButton
-              size="large"
               type="secondary"
               iconLeft="floppy-disk-1"
               :iconRight="null"
@@ -48,7 +47,6 @@
             maxWidth="15rem"
           >
             <unnnicButton
-              size="large"
               type="secondary"
               iconLeft="bin-1-1"
               :iconRight="null"
@@ -65,7 +63,6 @@
             maxWidth="15rem"
           >
             <unnnicButton
-              size="large"
               type="secondary"
               iconLeft="messages-bubble-4"
               :iconRight="null"
@@ -447,6 +444,7 @@ export default {
       justify-content: space-between;
 
       .unnnic-tooltip {
+        height: 36px;
         &:nth-child(2) {
           margin: 0 $unnnic-inset-nano;
         }
@@ -535,5 +533,9 @@ export default {
   .icon-right {
     transform: translateY(70%);
   }
+
+}
+.input.size-md {
+  height: 36px;
 }
 </style>
