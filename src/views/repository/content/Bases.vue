@@ -223,6 +223,8 @@ export default {
   font-family: $font-family;
 }
 .markdown-body {
+  margin: 1rem 0;
+
   a {
     color: $color-primary;
     text-decoration: none;
