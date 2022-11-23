@@ -200,6 +200,10 @@ export default {
       justify-content: space-between;
     }
   }
+
+  /deep/ .input.size-md {
+    height: 36px;
+  }
 }
 
 #webchat {
@@ -420,6 +424,7 @@ export default {
 /deep/ .icon-right {
   transform: translateY(70%);
 }
+
 .error-text {
   font-family: $unnnic-font-family-secondary;
 }
