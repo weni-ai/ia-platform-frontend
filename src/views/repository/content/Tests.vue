@@ -18,7 +18,7 @@
         </div>
         <div class="repository-tests__select__inputs">
           <div class="repository-tests__select__input">
-            <unnnicSelect v-if="bases.length" size="sm" placeholder="" v-model="baseIdLang">
+            <unnnicSelect v-if="bases.length" size="md" placeholder="" v-model="baseIdLang">
               <option
                 v-for="base in bases"
                 :value="[base.knowledge_base, base.language].join('⇝')"
@@ -35,7 +35,10 @@
     </section>
     <hr />
     <section>
-      <div id="webchat" />
+      <div v-if="initText" id="webchat" />
+      <div class="error-text" v-else>
+        Não foi possível consultar a base de conhecimento. tente de novo mais tarde.
+      </div>
     </section>
   </repository-view-base>
 </template>
@@ -69,8 +72,11 @@ export default {
         : '';
     },
     initText() {
-      const infos = [this.myProfile.language, this.authorization, this.baseIdLang];
-      return infos.every(info => info) ? infos.join('⇝') : '';
+      if (this.myProfile.language && this.authorization && this.baseIdLang) {
+        const infos = [this.myProfile.language, this.authorization, this.baseIdLang];
+        return infos.every(info => info) ? infos.join('⇝') : '';
+      }
+      return null
     }
   },
   methods: {
@@ -173,6 +179,7 @@ export default {
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .repository-tests {
+
   &__description {
     display: flex;
     justify-content: space-between;
@@ -192,6 +199,10 @@ export default {
       align-items: center;
       justify-content: space-between;
     }
+  }
+
+  /deep/ .input.size-md {
+    height: 46px;
   }
 }
 
@@ -408,5 +419,13 @@ export default {
       font-size: 18px;
     }
   }
+}
+
+/deep/ .icon-right {
+  transform: translateY(100%);
+}
+
+.error-text {
+  font-family: $unnnic-font-family-secondary;
 }
 </style>

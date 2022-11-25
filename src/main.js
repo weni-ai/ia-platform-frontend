@@ -38,6 +38,13 @@ if ((runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_USE_SENTRY'))
     integrations: [new VueIntegration({ Vue, attachProps: true })],
     environment: process.env.NODE_ENV,
     logErrors: true,
+
+    beforeSend: (event) => {
+      if (window.location.hostname === 'localhost') {
+        return null;
+      }
+      return event;
+    },
   });
 }
 
