@@ -1,15 +1,25 @@
 <template>
-  <unnnic-modal :showModal="true" :text="$t('webapp.raw.raw')" @close="closeModal()">
-    <div slot="message" class="raw-info">
-      <div class="raw-info__title">
-        <p>{{ $t('webapp.raw.raw_subtitle') }}</p>
-      </div>
-      <div class="raw-info__json">
-        <highlighted-code :code="text" class="raw-info__input" code-class="json" />
-        <b-icon icon="content-copy" class="raw-info__copy clickable" @click.native="copyText()" />
-      </div>
+  <div class="raw-info">
+    <div class="raw-info__close">
+      <b-icon
+        icon="close"
+        @click.native="closeModal()"/>
     </div>
-  </unnnic-modal>
+    <div class="raw-info__title">
+      <h1>{{ $t('webapp.raw.raw') }}</h1>
+      <p>{{ $t('webapp.raw.raw_subtitle') }}</p>
+    </div>
+    <div class="raw-info__json">
+      <highlighted-code
+        :code="text"
+        class="raw-info__input"
+        code-class="json" />
+      <b-icon
+        icon="content-copy"
+        class="raw-info__copy clickable"
+        @click.native="copyText()"/>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -38,7 +48,7 @@ export default {
       });
     },
     closeModal() {
-      this.$emit('closeModal')
+      this.$parent.close();
     },
   },
 };
@@ -48,59 +58,56 @@ export default {
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
 
-.raw-info {
-  display: flex;
-  flex-direction: column;
+    .raw-info {
+        display: flex;
+        flex-direction: column;
+        border-radius: 8px;
+        background-color: white;
+        height: 30.2rem;
+        padding: 1rem;
+        padding-left: 2rem;
 
-  &__json {
-    position: relative;
-    margin-top: 1.5rem;
+        &__json{
+           position: relative;
+           padding: 1.1rem;
+           height: 31.25rem;
+        }
 
-    pre {
-      background: white;
-      text-align: left;
-      font-size: .875rem;
+        &__title{
+          padding: 0 1.3rem;
+
+          h1{
+            font-family: $font-family;
+            font-size: 1.75rem;
+            font-weight: $font-weight-bolder;
+          }
+
+          p{
+            font-family: $font-family;
+            font-size: $font-size;
+          }
+        }
+
+        &__input{
+           height: 18.75rem;
+           font-size: 1.1rem;
+           overflow-y: scroll;
+        }
+
+        &__copy {
+          color: $color-grey-dark;
+          position: absolute;
+          top: 2.5rem;
+          right: 3rem;
+        }
+
+        &__close{
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          color: $color-grey-dark;
+          cursor: pointer;
+        }
     }
-  }
-
-  &__title {
-    padding: 0 1.3rem;
-
-    h1 {
-      font-family: $font-family;
-      font-size: 1.75rem;
-      font-weight: $font-weight-bolder;
-    }
-
-    p {
-      font-family: 'Lato';
-    }
-  }
-
-  &__input {
-    height: 18.75rem;
-    font-size: 1.1rem;
-    overflow-y: scroll;
-  }
-
-  &__copy {
-    color: $color-grey-dark;
-    position: absolute;
-    top: 2.5rem;
-    right: 3rem;
-  }
-
-  &__close {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    color: $color-grey-dark;
-    cursor: pointer;
-  }
-}
-
-/deep/ .unnnic-modal-container-background-body-alert_icon {
-  display: none;
-}
 </style>

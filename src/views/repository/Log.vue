@@ -3,59 +3,17 @@
     <div v-if="authenticated" class="repository-log">
       <div v-if="repository && repository.authorization.can_contribute">
         <div class="repository-log__header">
-          <div class="column is-5 p-0">
-            <unnnic-card
-              type="title"
-              :title="$t('webapp.menu.inbox')"
-              :hasInformationIcon="false"
-              icon="messages-bubble-1"
-              scheme="aux-blue"
-            />
-            <p class="repository-log__subtitle">
-              {{ $t("webapp.inbox.description") }}
-            </p>
-          </div>
-          <div class="repository-log__header__buttons">
-            <unnnic-button
-              :text="$t('webapp.inbox.add_to_train_button')"
-              id="tour-inbox-step-2"
-              :is-previous-disabled="true"
-              type="secondary"
-              iconLeft="graph-status-circle-1"
-              disabled
-              @click="showModalTraining($t('webapp.inbox.training'))"
-            />
-            <unnnic-button
-              :text="$t('webapp.inbox.add_to_sentence_button')"
-              id="tour-inbox-step-3"
-              :is-previous-disabled="true"
-              :is-next-disabled="true"
-              iconLeft="check-square-1"
-              type="secondary"
-              disabled
-              @click="showModalSentence($t('webapp.inbox.test_sentences'))"
-            />
-          </div>
+          <h1>{{ $t("webapp.menu.inbox") }}</h1>
+          <p>{{ $t("webapp.inbox.description") }}</p>
         </div>
-        <!-- <filter-evaluate-example
+        <filter-evaluate-example
           v-if="repository"
           :intents="repository.intents_list"
           :versions="versions"
           language-filter
           :hasVersion="false"
           @querystringformatted="onSearch($event)"
-        /> -->
-
-        <hr class="divider" />
-
-        <sentence-filters
-          :intents="repository.intents_list"
-          :versions="versions"
-          language-filter
-          :hasVersion="false"
-          :searchFilterLabel="$t('webapp.inbox.search_label')"
-          @querystringformatted="onSearch($event)"
-          @textData="changedText($event)"/>
+        />
         <repository-log-list
           :per-page="perPage"
           :query="query"
@@ -100,8 +58,6 @@ import LoginForm from '@/components/auth/LoginForm';
 import FilterEvaluateExample from '@/components/repository/repository-evaluate/example/FilterEvaluateExample';
 import { LANGUAGES } from '@/utils';
 import Tour from '@/components/Tour';
-import SentenceFilters from '@/components/repository/repository-evaluate/example/SentenceFilters';
-
 
 import IntentModal from '@/components/repository/IntentModal';
 import RepositoryBase from './Base';
@@ -115,8 +71,7 @@ export default {
     AuthorizationRequestNotification,
     FilterEvaluateExample,
     Tour,
-    IntentModal,
-    SentenceFilters
+    IntentModal
   },
   extends: RepositoryBase,
   data() {
@@ -187,27 +142,20 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/scss/colors.scss";
 @import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
-
 label {
   vertical-align: middle;
 }
 .repository-log {
-  font-family: $unnnic-font-family-secondary;
+  font-family: $font-family;
 
   &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    margin-bottom: 3.5rem;
 
-    &__buttons {
-      display: flex;
-      gap: $unnnic-spacing-inset-sm;
-
-      button {
-        width: 245px;
-      }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: $font-weight-medium;
+      color: $color-fake-black;
+      margin-bottom: $between-title-subtitle;
     }
   }
 
@@ -215,17 +163,5 @@ label {
     pointer-events: initial !important;
     cursor: pointer;
   }
-
-  &__subtitle {
-    font-size: $unnnic-font-size-body-gt;
-    color: $unnnic-color-neutral-dark;
-    line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
-    margin-top: $unnnic-spacing-stack-sm;
-  }
-}
-.divider {
-  background: $unnnic-color-neutral-soft;
-  margin: $unnnic-spacing-stack-lg 0;
-  height: 1px;
 }
 </style>
