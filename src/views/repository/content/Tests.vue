@@ -202,7 +202,7 @@ export default {
   }
 
   /deep/ .input.size-md {
-    height: 36px;
+    height: 46px;
   }
 }
 
@@ -422,7 +422,7 @@ export default {
 }
 
 /deep/ .icon-right {
-  transform: translateY(70%);
+  transform: translateY(100%);
 }
 
 .error-text {
