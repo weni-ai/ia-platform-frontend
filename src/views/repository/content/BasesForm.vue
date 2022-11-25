@@ -444,7 +444,7 @@ export default {
       justify-content: space-between;
 
       .unnnic-tooltip {
-        height: 36px;
+        height: 46px;
         &:nth-child(2) {
           margin: 0 $unnnic-inset-nano;
         }
@@ -454,8 +454,8 @@ export default {
       }
     }
     &__button {
-      width: 36px;
-      height: 36px;
+      width: 46px;
+      height: 46px;
     }
     &--content {
       display: flex;
@@ -511,6 +511,12 @@ export default {
       margin-right: $unnnic-inset-sm;
     }
   }
+  .input.size-md {
+    height: 46px;
+  }
+  /deep/.input.size-md {
+    height: 46px;
+  }
 }
 
 ::v-deep {
@@ -531,11 +537,14 @@ export default {
     }
   }
   .icon-right {
-    transform: translateY(70%);
+    transform: translateY(100%);
+  }
+  .input.size-md {
+    height: 46px;
   }
 
 }
 .input.size-md {
-  height: 36px;
+  height: 46px;
 }
 </style>
