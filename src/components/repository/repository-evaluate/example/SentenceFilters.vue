@@ -3,7 +3,7 @@
     <div class="filter-evaluate-example__filters">
       <unnnic-input
         :message="errors.intent"
-        :placeholder="$t(searchFilterLabel)"
+        :placeholder="$t('webapp.intent.search_sentence')"
         iconLeft="search-1"
         v-model="text"
         :debounce="debounceTime"
@@ -26,7 +26,7 @@
              :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
            />
         </div>
-        <div v-if="entities">
+        <div>
           <unnnic-autocomplete
              :message="errors.entity"
              :openWithFocus="true"
@@ -40,11 +40,8 @@
              :iconRight="isEntityInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
            />
         </div>
-        <div v-if="languageFilter && languages">
-          <unnnic-select
-            :placeholder="$t('webapp.evaluate.all_languages')"
-            v-model="language"
-          >
+        <b-field v-if="languageFilter && languages">
+          <b-select v-model="language" :placeholder="$t('webapp.evaluate.all_languages')" expanded>
             <option
               v-for="language in languages"
               :key="language.id"
@@ -56,8 +53,8 @@
             <option :value="null">
               {{ $t("webapp.home.all_languages") }}
             </option>
-          </unnnic-select>
-        </div>
+          </b-select>
+        </b-field>
         <b-field :message="errors.repository_version_name" v-show="hasVersion">
           <b-autocomplete
             v-if="versions"
@@ -105,11 +102,7 @@ export default {
     hasVersion: {
       type: Boolean,
       default: true
-    },
-    searchFilterLabel: {
-      type: String,
-      default: 'webapp.intent.search_sentence'
-    },
+    }
   },
   data() {
     return {
@@ -313,10 +306,6 @@ export default {
 
   &__text {
     margin-top: 0.5rem;
-  }
-
-  /deep/ .dropdown {
-    display: block;
   }
 }
 </style>

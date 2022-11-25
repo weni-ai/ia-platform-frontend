@@ -4,12 +4,12 @@
       <b-notification v-if="loadingLogs" :closable="false">
         <b-loading :active.sync="loadingLogs" />
       </b-notification>
-      <!-- <div>
+      <div>
         <b-checkbox v-model="select" :native-value="selectAll">
           {{ $t("webapp.inbox.select_all") }}
         </b-checkbox>
-      </div> -->
-      <!-- <div class="repository-log-list__section__buttonsIcon">
+      </div>
+      <div class="repository-log-list__section__buttonsIcon">
         <b-tooltip :label="$t('webapp.inbox.add_to_train_button')">
           <b-button
             id="tour-inbox-step-2"
@@ -29,11 +29,11 @@
             @click="showModalSentence($t('webapp.inbox.test_sentences'))"
           />
         </b-tooltip>
-      </div> -->
+      </div>
     </div>
-    <intent-pagination
+    <paginated-list
       :per-page="perPage"
-      :item-component="logTable"
+      :item-component="logAccordion"
       :list="list"
       :loading.sync="loading"
       :is-accordion-open="pageWasChanged"
@@ -53,16 +53,15 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import IntentPagination from '@/components/shared/IntentPagination';
+import PaginatedList from '@/components/shared/PaginatedList';
 import LogAccordion from '@/components/shared/accordion/LogAccordion';
 import IntentModal from '@/components/repository/IntentModal';
 import IntentModalEdition from '@/components/repository/IntentModalWithEdition';
-import LogTable from '@/components/repository/LogTable';
 
 export default {
   name: 'RepositoryLogList',
   components: {
-    IntentPagination,
+    PaginatedList,
     LogAccordion,
     IntentModal,
     IntentModalEdition
@@ -94,8 +93,7 @@ export default {
       nlp: {},
       loadingLogs: false,
       pageWasChanged: false,
-      searchingLog: false,
-      logTable: LogTable
+      searchingLog: false
     };
   },
   computed: {
