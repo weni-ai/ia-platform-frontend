@@ -7,26 +7,26 @@
       :created-at="created_at"
       :version-name="version_name"
       :highlighted.sync="highlighted"
-      :repositoryUUID="this.repository.uuid"
-      :version="this.nlp_log.repository_version"
-      :language="this.nlp_log.language"
-      :text="this.text"
-      :id="this.id"
-      :nlp_log="this.nlp_log"
-      :entities="this.entities"
-      :is_corrected="this.isCorrected"
+      :repositoryUUID="repository.uuid"
+      :version="nlp_log.repository_version"
+      :language="nlp_log.language"
+      :text="text"
+      :id="id"
+      :nlp_log="nlp_log"
+      :entities="entities"
+      :is_corrected="isCorrected"
       @onShowRawInfo="showRawInfo()"
       @debug="debug()"
     />
     <repository-debug
       v-if="showDebug"
-      :repositoryUUID="this.repository.uuid"
-      :version="this.nlp_log.repository_version"
-      :language="this.nlp_log.language"
-      :text="this.text"
+      :repositoryUUID="repository.uuid"
+      :version="nlp_log.repository_version"
+      :language="nlp_log.language"
+      :text="text"
       @closeModal="showDebug = false"
     />
-    <raw-info v-if="showRaw" :info="this.nlp_log" @closeModal="showRaw = false" />
+    <raw-info v-if="showRaw" :info="nlp_log" @closeModal="showRaw = false" />
   </div>
 </template>
 
@@ -52,7 +52,6 @@ export default {
     HighlightedText,
     RawInfo,
     IntentModal,
-    RepositoryDebug
   },
   props: {
     id: {
@@ -81,27 +80,26 @@ export default {
     },
     isAccordionOpen: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   data() {
     return {
       deleteDialog: null,
-      open: true,
+      open: false,
       loading: false,
       isRawInfoActive: false,
       intent: '',
       isCorrected: Boolean,
       checked: false,
       highlighted: null,
-      showRaw: false,
-      showDebug: false
     };
   },
   computed: {
     ...mapState({
       repository: state => state.Repository.selectedRepository,
     }),
+    ...mapGetters(['getLogSentence']),
     entities() {
       return Object.keys(this.nlp_log.entities).map(key => this.nlp_log.entities[key].map(
         (entity) => {
@@ -149,7 +147,7 @@ export default {
       }
     },
     isAccordionOpen() {
-      this.open = true;
+      this.open = false;
     },
   },
   created() {
@@ -163,29 +161,27 @@ export default {
       return `entity-${getEntityColor(entity)}`;
     },
     showRawInfo() {
-      // this.$buefy.modal.open({
-      //   props: { info: this.nlp_log },
-      //   parent: this,
-      //   component: RawInfo,
-      //   hasModalCard: false,
-      //   trapFocus: true,
-      // });
-      this.showRaw = true
+      this.$buefy.modal.open({
+        props: { info: this.nlp_log },
+        parent: this,
+        component: RawInfo,
+        hasModalCard: false,
+        trapFocus: true,
+      });
     },
     debug() {
-      // this.$buefy.modal.open({
-      //   parent: this,
-      //   component: RepositoryDebug,
-      //   props: {
-      //     repositoryUUID: this.repository.uuid,
-      //     version: this.nlp_log.repository_version,
-      //     language: this.nlp_log.language,
-      //     text: this.text,
-      //   },
-      //   hasModalCard: false,
-      //   trapFocus: true,
-      // });
-      this.showDebug = true
+      this.$buefy.modal.open({
+        parent: this,
+        component: RepositoryDebug,
+        props: {
+          repositoryUUID: this.repository.uuid,
+          version: this.nlp_log.repository_version,
+          language: this.nlp_log.language,
+          text: this.text,
+        },
+        hasModalCard: false,
+        trapFocus: true,
+      });
     },
   },
 };
@@ -193,20 +189,13 @@ export default {
 
 <style lang="scss" scoped>
   @import '~@/assets/scss/colors.scss';
-  @import "~@weni/unnnic-system/dist/unnnic.css";
-  @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 .log-accordion {
   &__menu-title {
     margin: 1rem;
   }
   &__version-name {
-    font-size: $unnnic-font-size-body-md;
-    font-weight: $unnnic-font-weight-bold;
-
-    &--regular {
-      font-size: $unnnic-font-size-body-md;
-      font-weight: $unnnic-font-weight-regular;
-    }
+    color: $color-primary;
+    font-weight: bold;
   }
 }
 </style>
