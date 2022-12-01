@@ -52,6 +52,7 @@ export default {
     HighlightedText,
     RawInfo,
     IntentModal,
+    RepositoryDebug
   },
   props: {
     id: {
@@ -80,26 +81,27 @@ export default {
     },
     isAccordionOpen: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   data() {
     return {
       deleteDialog: null,
-      open: false,
+      open: true,
       loading: false,
       isRawInfoActive: false,
       intent: '',
       isCorrected: Boolean,
       checked: false,
       highlighted: null,
+      showRaw: false,
+      showDebug: false
     };
   },
   computed: {
     ...mapState({
       repository: state => state.Repository.selectedRepository,
     }),
-    ...mapGetters(['getLogSentence']),
     entities() {
       return Object.keys(this.nlp_log.entities).map(key => this.nlp_log.entities[key].map(
         (entity) => {
@@ -147,7 +149,7 @@ export default {
       }
     },
     isAccordionOpen() {
-      this.open = false;
+      this.open = true;
     },
   },
   created() {
@@ -161,27 +163,29 @@ export default {
       return `entity-${getEntityColor(entity)}`;
     },
     showRawInfo() {
-      this.$buefy.modal.open({
-        props: { info: this.nlp_log },
-        parent: this,
-        component: RawInfo,
-        hasModalCard: false,
-        trapFocus: true,
-      });
+      // this.$buefy.modal.open({
+      //   props: { info: this.nlp_log },
+      //   parent: this,
+      //   component: RawInfo,
+      //   hasModalCard: false,
+      //   trapFocus: true,
+      // });
+      this.showRaw = true
     },
     debug() {
-      this.$buefy.modal.open({
-        parent: this,
-        component: RepositoryDebug,
-        props: {
-          repositoryUUID: this.repository.uuid,
-          version: this.nlp_log.repository_version,
-          language: this.nlp_log.language,
-          text: this.text,
-        },
-        hasModalCard: false,
-        trapFocus: true,
-      });
+      // this.$buefy.modal.open({
+      //   parent: this,
+      //   component: RepositoryDebug,
+      //   props: {
+      //     repositoryUUID: this.repository.uuid,
+      //     version: this.nlp_log.repository_version,
+      //     language: this.nlp_log.language,
+      //     text: this.text,
+      //   },
+      //   hasModalCard: false,
+      //   trapFocus: true,
+      // });
+      this.showDebug = true
     },
   },
 };
@@ -189,13 +193,20 @@ export default {
 
 <style lang="scss" scoped>
   @import '~@/assets/scss/colors.scss';
+  @import "~@weni/unnnic-system/dist/unnnic.css";
+  @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 .log-accordion {
   &__menu-title {
     margin: 1rem;
   }
   &__version-name {
-    color: $color-primary;
-    font-weight: bold;
+    font-size: $unnnic-font-size-body-md;
+    font-weight: $unnnic-font-weight-bold;
+
+    &--regular {
+      font-size: $unnnic-font-size-body-md;
+      font-weight: $unnnic-font-weight-regular;
+    }
   }
 }
 </style>
