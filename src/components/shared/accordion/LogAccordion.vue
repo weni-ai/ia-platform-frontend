@@ -7,26 +7,26 @@
       :created-at="created_at"
       :version-name="version_name"
       :highlighted.sync="highlighted"
-      :repositoryUUID="this.repository.uuid"
-      :version="this.nlp_log.repository_version"
-      :language="this.nlp_log.language"
-      :text="this.text"
-      :id="this.id"
-      :nlp_log="this.nlp_log"
-      :entities="this.entities"
-      :is_corrected="this.isCorrected"
+      :repositoryUUID="repository.uuid"
+      :version="nlp_log.repository_version"
+      :language="nlp_log.language"
+      :text="text"
+      :id="id"
+      :nlp_log="nlp_log"
+      :entities="entities"
+      :is_corrected="isCorrected"
       @onShowRawInfo="showRawInfo()"
       @debug="debug()"
     />
     <repository-debug
       v-if="showDebug"
-      :repositoryUUID="this.repository.uuid"
-      :version="this.nlp_log.repository_version"
-      :language="this.nlp_log.language"
-      :text="this.text"
+      :repositoryUUID="repository.uuid"
+      :version="nlp_log.repository_version"
+      :language="nlp_log.language"
+      :text="text"
       @closeModal="showDebug = false"
     />
-    <raw-info v-if="showRaw" :info="this.nlp_log" @closeModal="showRaw = false" />
+    <raw-info v-if="showRaw" :info="nlp_log" @closeModal="showRaw = false" />
   </div>
 </template>
 
