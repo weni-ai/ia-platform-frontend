@@ -66,6 +66,7 @@ export default {
       this.modalInfo = { ...value };
     },
     async getOrgsRepositories() {
+      this.$emit('loading', true)
       try {
         const { data } = await this.getRepositories({
           limit: 20,
@@ -77,6 +78,8 @@ export default {
         this.isComplete = data.next == null;
       } catch (err) {
         this.error = err;
+      } finally {
+        this.$emit('loading', false)
       }
     },
     createNewIntelligence() {

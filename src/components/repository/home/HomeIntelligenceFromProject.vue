@@ -1,9 +1,6 @@
 <template>
   <home-intelligence-container>
-    <div class="loading" v-if="loading">
-      <loading/>
-    </div>
-    <div class="home-intelligences-from-project" v-else>
+    <div class="home-intelligences-from-project">
       <section class="home-intelligences-from-project__content" v-if="checkProjectLength">
         <div class="home-intelligences-from-project__content__text">
           <p>
@@ -79,6 +76,7 @@ export default {
       this.modalInfo = { ...value };
     },
     async getProjectList() {
+      this.$emit('loading', true)
       try {
         const { data } = await this.searchProjectWithFlow({
           projectUUID: this.getProjectSelected
@@ -94,7 +92,8 @@ export default {
       } catch (err) {
         this.error = err;
       } finally {
-        this.loading = false;
+        // this.loading = false;
+        this.$emit('loading', false)
       }
     },
     createNewIntelligence() {
