@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :class="['home', loading ? 'hidden' : 'visible']">
+    <div class="home">
       <section class="home__header">
           <unnnic-card
             :title="$t('webapp.intelligences_lib.title')"
@@ -11,23 +11,23 @@
       </section>
 
       <home-tab-navigation @changeTabValue="onTabSelected"/>
+      <div :class="[loading ? 'hidden' : 'visible']">
+        <home-intelligence-from-project
+          @loading="loading = $event"
+          v-show="howTabIsShown === 0"/>
 
-      <home-intelligence-from-project
-        @loading="loading = $event"
-        v-show="howTabIsShown === 0"/>
+        <home-intelligence-from-org
+          @loading="loading = $event"
+          :key="update"
+          v-show="howTabIsShown === 1"/>
 
-      <home-intelligence-from-org
-        @loading="loading = $event"
-        :key="update"
-        v-show="howTabIsShown === 1"/>
+        <home-intelligence-from-community
+          @loading="loading = $event"
+          v-show="howTabIsShown === 2"/>
+      </div>
 
-      <home-intelligence-from-community
-        @loading="loading = $event"
-        v-show="howTabIsShown === 2"/>
-    </div>
-
-    <div :class="['home-loading', !loading ? 'hidden' : 'visible']">
-      <div class="home-loading__header">
+      <div :class="['home-loading', !loading ? 'hidden' : 'visible']">
+      <!-- <div class="home-loading__header">
         <unnnic-skeleton-loading
           class="home-loading__title"
           tag="div"
@@ -42,7 +42,7 @@
         <unnnic-skeleton-loading tag="div" width="30vw" height="96px" />
       </div>
 
-      <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+      <unnnic-skeleton-loading tag="hr" width="100px" height="1px" /> -->
 
       <div v-if="howTabIsShown === 0" class="home-loading__project">
         <unnnic-skeleton-loading tag="div" width="529px" height="60px" />
@@ -56,6 +56,7 @@
         <unnnic-skeleton-loading tag="div" width="23vw" height="260px" />
       </div>
 
+      </div>
     </div>
 
   </div>
@@ -135,6 +136,7 @@ export default {
   &__project {
     margin: auto;
     text-align: center;
+    height: 70vh;
   }
 
   &__cards {
