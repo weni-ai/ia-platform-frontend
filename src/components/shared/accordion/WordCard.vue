@@ -5,13 +5,14 @@
         class="intent-suggestion-accordion__content__check-field">
         <unnnic-checkbox
           @change="setSuggestion"
-          v-model="checked"
+          v-model="active"
+          :disabled="!checkable"
           :native-value="toExample"/>
       </div>
 
       <div
         class="intent-suggestion-accordion__content__phrase">
-        <p :class="checked && 'label-active'">{{ text }}</p>
+        <p :class="active && 'label-active'">{{ text }}</p>
       </div>
     </div>
 
@@ -49,13 +50,21 @@ export default {
       type: [Array, String],
       default: () => []
     },
+    checked: {
+      type: Boolean,
+      default: true
+    },
+    checkable: {
+      type: Boolean,
+      default: true
+    },
   },
   data() {
     return {
       open: false,
       phraseSuggestion: '',
       editing: false,
-      checked: true,
+      active: this.checked
     };
   },
   computed: {
@@ -115,7 +124,7 @@ export default {
       });
     },
     setSuggestion() {
-      this.$emit('onChangeGenerate', { text: this.phraseSuggestion, value: this.checked })
+      this.$emit('onChange', { text: this.phraseSuggestion, value: this.active })
     }
   },
   components: { EntityTag }
@@ -132,13 +141,7 @@ export default {
 }
 
 .intent-suggestion-accordion{
-    &:last-child{
-      margin-bottom: $unnnic-spacing-stack-xl;
-    }
-
-    width: 100%;
-    // height: 40px;
-    margin: 1rem 0;
+    width: 49%;
     background: #FFFFFF;
     border: 1px solid #E2E6ED;
     border-radius: 8px;
@@ -150,7 +153,7 @@ export default {
 
 
     &__content{
-     width: 80%;
+     width: 60%;
      display:flex;
      justify-content: flex-start;
      align-items: center;
@@ -180,16 +183,15 @@ export default {
 
       &__phrase{
         margin-left: 1rem;
+        width: 100%;
           p {
           font-size: $unnnic-font-size-body-lg;
           white-space: nowrap;
-          width: 32rem;
+          // width: 32rem;
           overflow: hidden;
           text-overflow: ellipsis;
-            @media screen and (max-width: $mobile-width) {
-              width: 12rem;
-            }
-          }
+          margin-right: 2rem;
+        }
       }
 
       &__tag {

@@ -229,4 +229,7 @@ export default {
       }
     }
   }
+  /deep/ .unnnic-tooltip-label {
+    max-width: 350px;
+  }
 </style>

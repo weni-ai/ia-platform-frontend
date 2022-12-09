@@ -33,14 +33,14 @@
         </div>
         <div class="repository-base__description__header">
           <div>
-            <b-tag
+            <unnnic-tag
               v-for="(category, index) in getAllCategories"
               :key="index"
               class="repository-base__header__tag"
-              rounded
-            >
-              {{ category }}
-            </b-tag>
+              :text="category"
+              disabled
+              scheme="background-sky"
+            />
           </div>
         </div>
       </div>
@@ -191,9 +191,11 @@ export default {
       align-items: flex-start;
     }
 
-    &__text {
+    &__text, i {
       margin-top: $unnnic-inset-nano;
+      font-family: $unnnic-font-family-secondary;
       font-size: $unnnic-font-size-body-gt;
+      color: $unnnic-color-neutral-dark;
       ul li {
         list-style-type: disc;
       }
@@ -221,14 +223,11 @@ export default {
   font-family: $font-family;
 }
 .markdown-body {
+  margin: 1.5rem 0;
+
   a {
     color: $color-primary;
     text-decoration: none;
-  }
-
-  hr {
-    background: $color-primary;
-    height: 2px;
   }
 
   h1,
@@ -250,5 +249,10 @@ export default {
     color: $unnnic-color-neutral-dark;
     text-decoration: underline;
   }
+}
+
+hr {
+  background: $unnnic-color-neutral-soft;
+  height: 1px;
 }
 </style>

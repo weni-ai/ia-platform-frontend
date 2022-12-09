@@ -54,7 +54,7 @@
           <unnnic-button
             v-if="hasIntegration && !hasIntegrationCheckError"
             type="secondary"
-            :loading="hasIntegration && !hasIntegrationCheckError"
+            :loading="!hasIntegrationDefined"
             @click="changeIntegrateModalState(true)"
           >
             {{ $t("webapp.summary.remove_integrate") }}

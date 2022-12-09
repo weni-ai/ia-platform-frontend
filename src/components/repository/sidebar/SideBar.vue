@@ -76,6 +76,7 @@
                 : 'layout-dashboard-1'
             "
             :text="$t('webapp.menu.content.bases')"
+            :active="checkSelectedMenu('repository-content-bases')"
             :enableTooltip="!collapse"
             @click.native="
               setSelectMenu({
@@ -96,6 +97,7 @@
               checkSelectedMenu('repository-content-tests') ? 'check-square-2' : 'check-square-1'
             "
             :text="$t('webapp.menu.content.tests')"
+            :active="checkSelectedMenu('repository-content-tests')"
             :enableTooltip="!collapse"
             @click.native="
               setSelectMenu({
@@ -114,6 +116,7 @@
           <unnnic-sidebar-item
             :icon="checkSelectedMenu('repository-content-api') ? 'phone-charger-1' : 'charger-1'"
             :text="$t('webapp.menu.content.api')"
+            :active="checkSelectedMenu('repository-content-api')"
             :enableTooltip="!collapse"
             @click.native="
               setSelectMenu({
@@ -132,6 +135,7 @@
           <unnnic-sidebar-item
             :icon="checkSelectedMenu('repository-content-adjustments') ? 'cog-2' : 'cog-1'"
             :text="$t('webapp.menu.content.adjustments')"
+            :active="checkSelectedMenu('repository-content-adjustments')"
             :enableTooltip="!collapse"
             @click.native="
               setSelectMenu({

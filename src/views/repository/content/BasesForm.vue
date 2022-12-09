@@ -31,7 +31,6 @@
             maxWidth="15rem"
           >
             <unnnicButton
-              size="large"
               type="secondary"
               iconLeft="floppy-disk-1"
               :iconRight="null"
@@ -48,7 +47,6 @@
             maxWidth="15rem"
           >
             <unnnicButton
-              size="large"
               type="secondary"
               iconLeft="bin-1-1"
               :iconRight="null"
@@ -65,7 +63,6 @@
             maxWidth="15rem"
           >
             <unnnicButton
-              size="large"
               type="secondary"
               iconLeft="messages-bubble-4"
               :iconRight="null"
@@ -79,7 +76,7 @@
         <div>
           <unnnic-select
             class="unnic--clickable"
-            size="sm"
+            size="md"
             :placeholder="$t('webapp.create_repository.language_placeholder')"
             v-model="knowledgeBase.text.language"
             search
@@ -447,6 +444,7 @@ export default {
       justify-content: space-between;
 
       .unnnic-tooltip {
+        height: 46px;
         &:nth-child(2) {
           margin: 0 $unnnic-inset-nano;
         }
@@ -456,8 +454,8 @@ export default {
       }
     }
     &__button {
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
     }
     &--content {
       display: flex;
@@ -513,6 +511,12 @@ export default {
       margin-right: $unnnic-inset-sm;
     }
   }
+  .input.size-md {
+    height: 46px;
+  }
+  /deep/.input.size-md {
+    height: 46px;
+  }
 }
 
 ::v-deep {
@@ -532,5 +536,15 @@ export default {
       align-items: center;
     }
   }
+  .icon-right {
+    transform: translateY(100%);
+  }
+  .input.size-md {
+    height: 46px;
+  }
+
+}
+.input.size-md {
+  height: 46px;
 }
 </style>

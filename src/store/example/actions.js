@@ -81,4 +81,11 @@ export default {
     );
     return response;
   },
+  async getAllExamples(store, {
+    repositoryUuid, version, query, limit = 20, startCreatedAt, endCreatedAt,
+  }) {
+    const response = await example.getAll(repositoryUuid, version,
+      query, limit, startCreatedAt, endCreatedAt);
+    return response;
+  },
 };

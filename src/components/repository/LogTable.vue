@@ -1,6 +1,6 @@
 <template>
 <div>
-  <unnnic-table :items="list.items" class="mt-4">
+  <unnnic-table :items="orderedList" class="mt-4">
     <template v-slot:header>
       <unnnic-table-row :headers="table.headers">
         <template v-slot:checkarea>
@@ -10,12 +10,44 @@
             :style="{ margin: '4px' }"
           />
         </template>
+        <template v-slot:edit>
+          <span>
+            {{ $t('webapp.inbox.intent') }}
+          </span>
+          <unnnic-icon-svg
+            size="xs"
+            :icon="`sort-${sorts.intent}`"
+            :scheme="
+              sorts.intent === 'default'
+                ? 'neutral-clean'
+                : 'brand-weni-soft'
+            "
+            clickable
+            @click="sort('intent')"
+          />
+        </template>
+        <template v-slot:delete>
+          <span>
+            {{ $t('webapp.inbox.confidence') }}
+          </span>
+          <unnnic-icon-svg
+            size="xs"
+            :icon="`sort-${sorts.confidence}`"
+            :scheme="
+              sorts.confidence === 'default'
+                ? 'neutral-clean'
+                : 'brand-weni-soft'
+            "
+            clickable
+            @click="sort('confidence')"
+          />
+        </template>
       </unnnic-table-row>
     </template>
 
     <template v-slot:item="{ item }">
         <unnnic-table-row :headers="table.headers">
-          <template v-if="repository.authorization.can_contribute" v-slot:checkarea>
+          <template v-slot:checkarea>
             <unnnic-checkbox v-model="item.selected" :style="{ margin: '4px' }" />
           </template>
 
@@ -23,16 +55,26 @@
             <div
               @mouseenter="activeSentence(item)"
               @mouseleave="inactiveSentence(item)"
+              @click.prevent.stop="editSentence(item.id)"
               :title="item.sentence"
               class="break-text example-accordion__sentence"
             >
-              <span class="example-accordion__tag">[{{ item.language }}]</span>
+              <unnnic-icon-svg
+                :icon="
+                  `${open && selectedItem === item.id ? 'arrow-button-down-1' : 'arrow-right-1-1'}`
+                "
+                scheme="neutral-cleanest"
+                size="xs"
+                clickable
+                class="mr-2"
+              />
+              <span class="example-accordion__tag">[{{ item.nlp_log.language }}]</span>
               <highlighted-entity
                 :ref="item.id"
                 :id="item.id"
                 :text="item.text"
                 :highlighted="item.highlighted"
-                :entities="item.entities"
+                :entities="item.nlp_log.entities.other || []"
                 :color-only="item.entitySelected"
                 :state="isSentenceActive"
               />
@@ -45,37 +87,33 @@
             </div>
           </template>
 
-          <template v-if="repository.authorization.can_contribute" v-slot:edit>
-            <div :style="{ textAlign: 'center' }">
-              <unnnic-button
+          <template v-slot:edit>
+            <div :style="{ textAlign: 'left' }">
+              <!-- <unnnic-button
                 size="small"
                 type="secondary"
                 iconCenter="pencil-write-1"
                 @click.prevent.stop="editSentence(item.id)"
-              />
+              /> -->
+              <span>{{ item.nlp_log.intent.name }}</span>
             </div>
           </template>
 
-          <template v-if="repository.authorization.can_contribute" v-slot:delete>
-            <div :style="{ textAlign: 'center' }">
-              <unnnic-button
+          <template v-slot:delete>
+            <div :style="{ textAlign: 'left' }">
+              <!-- <unnnic-button
                 size="small"
                 type="secondary"
                 iconCenter="delete-1-1"
                 @click.prevent.stop="deleteThisExample(item.id)"
-              />
+              /> -->
+              <span>{{ item.confidence }}</span>
             </div>
           </template>
         </unnnic-table-row>
-        <!-- <example-info
-          v-if="!editing"
-          :entities-list="entitiesList"
-          :highlighted.sync="highlighted"
-          :intent="intent"
-        /> -->
 
-        <edit-example-intent
-          v-if="item.id === selectedItem"
+        <!-- <edit-example-intent
+          v-if="open && item.id === selectedItem"
           :entities="item.entities"
           :intent-to-edit="item.intent"
           :edit-example="true"
@@ -85,10 +123,21 @@
           :get-all-entities="getEntitiesName"
           @saveList="updateList"
           @cancel="cancelEditSentence"
+        /> -->
+        <log-accordion
+          v-if="open && item.id === selectedItem"
+          :nlp_log="item.nlp_log"
+          :id="item.id"
+          :text="item.text"
+          :created_at="item.created_at"
+          :version_name="item.version_name"
+          @event_nlp="nlp = $event"
+          @event_addLog="addLogStructure($event)"
+          @event_removeLog="removeLogStructure($event)"
         />
       </template>
   </unnnic-table>
-  <unnnic-modal
+  <!-- <unnnic-modal
     :showModal="openModal"
     :text="$t('webapp.trainings.delete_title')"
     scheme="feedback-red"
@@ -120,40 +169,29 @@
     <span
     slot="message"
     v-html="$t('webapp.intent.delete_success_subtitle')" />
-  </unnnic-modal>
+  </unnnic-modal> -->
 </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import { getEntityColor } from '@/utils/entitiesColors';
-import ExampleInfo from '@/components/shared/accordion/ExampleInfo';
+import { getWordIndex } from '@/utils';
 import EditExampleIntent from '@/components/shared/accordion/EditExampleIntent';
-import EditExample from '@/components/shared/accordion/EditExample';
-import SentenceAccordion from '@/components/shared/accordion/SentenceAccordion';
 import HighlightedEntity from '@/components/shared/HighlightedEntity';
-import LanguageBadge from '@/components/shared/LanguageBadge';
-import BadgesCard from '@/components/repository/BadgesCard';
+import LogAccordion from '@/components/shared/accordion/LogAccordion';
 
 export default {
-  name: 'SentencesIntentTable',
+  name: 'LogTable',
   components: {
-    SentenceAccordion,
-    ExampleInfo,
     EditExampleIntent,
-    EditExample,
     HighlightedEntity,
-    LanguageBadge,
-    BadgesCard,
+    LogAccordion,
   },
   props: {
     text: {
       type: String,
       default: '',
-    },
-    entities: {
-      type: Array,
-      default: /* istanbul ignore next */ () => [],
     },
     intent: {
       type: String,
@@ -186,32 +224,82 @@ export default {
       table: {
         headers: [
           {
+            id: 'checkarea',
+            text: '',
+            width: '32px',
+            condensed: true,
+          },
+          {
             id: 'sentence',
             text: this.$t('webapp.intent.table_sentence'),
-            flex: 1,
+            flex: 8,
           },
+          {
+            id: 'edit',
+            text: this.$t('webapp.inbox.intent'),
+            flex: 3
+          },
+          {
+            id: 'delete',
+            text: this.$t('webapp.inbox.confidence'),
+            flex: 2,
+          }
         ],
       },
+      sorts: {
+        intent: 'default',
+        confidence: 'default',
+      },
+      ordering: '',
       selectedItem: null,
       openModal: false,
       sentenceId: null,
       openSuccessModal: false,
       isSentenceActive: false,
+      orderedList: null
     };
   },
 
   computed: {
     ...mapState({
-      repository: (state) => state.Repository.selectedRepository,
+      repository: state => state.Repository.selectedRepository,
     }),
-    entitiesList() {
-      return this.entities.map((entity) => ({
-        value: entity.value,
-        class: this.getEntityClass(entity.entity),
-        group: entity.group,
-        ...entity,
-      }));
-    },
+    // entities() {
+    //   return Object.keys(this.list.nlp_log.entities).map(key => this.nlp_log.entities[key].map(
+    //     (entity) => {
+    //       if (entity.start && entity.end) return entity;
+    //       const { start, end } = getWordIndex(entity.value, this.text);
+    //       return {
+    //         start,
+    //         end,
+    //         ...entity,
+    //       };
+    //     },
+    //   )).flat();
+    // },
+    // entitiesList() {
+    //   return this.entities
+    //     .map((entity, index) => ({
+    //       value: this.entities[index],
+    //       class: this.getEntityClass(this.entities[index]),
+    //       ...entity,
+    //     }));
+    // },
+    // toExample() {
+    //   return {
+    //     repository: this.repository.uuid,
+    //     repository_version: this.nlp_log.repository_version,
+    //     text: this.text,
+    //     language: this.nlp_log.language,
+    //     entities: this.entities.map(entity => ({
+    //       entity: entity.entity,
+    //       start: entity.start,
+    //       end: entity.end,
+    //     })),
+    //     intent: this.intent,
+    //     is_corrected: this.isCorrected,
+    //   };
+    // },
     getEntitiesName() {
       const allEntitiesName = this.repository.entities.map(
         (entityValue) => entityValue.value
@@ -232,7 +320,18 @@ export default {
     selectedItems() {
       return this.list.items.filter((item) => item.selected === true)
     },
+    formattedConfidence() {
+      return this.list.items.map((item) => ({
+        ...item,
+        confidence: `${parseFloat(item.nlp_log.intent.confidence * 100).toFixed(0)}%`
+      }));
+    }
   },
+  // mounted() {
+  //   setTimeout(() => {
+  //     this.orderedList = this.formattedConfidence
+  //   }, 2000);
+  // },
   watch: {
     selectedItems() {
       this.$emit('dispatchEvent', { event: 'onUpdateSelected', value: this.selectedItems });
@@ -242,28 +341,42 @@ export default {
         const { id } = value
         this.$refs[id].active = this.isSentenceActive
       }
-    }
-  },
-  mounted() {
-    if (this.repository.authorization.can_contribute) {
-      this.table.headers
-        .unshift({
-          id: 'checkarea',
-          text: '',
-          width: '32px',
-          condensed: true,
-        })
-      this.table.headers
-        .push({
-          id: 'edit',
-          text: this.$t('webapp.intent.table_edit'),
-          width: '40px',
-        },
-        {
-          id: 'delete',
-          text: this.$t('webapp.intent.table_delete'),
-          width: '40px',
-        })
+    },
+    sorts: {
+      handler(value){
+        if (value.intent === 'desc') {
+          this.orderedList = this.formattedConfidence.sort((x, y) => {
+            const a = x.nlp_log.intent.name.toUpperCase();
+            const b = y.nlp_log.intent.name.toUpperCase();
+            // eslint-disable-next-line no-nested-ternary
+            return a === b ? 0 : a > b ? 1 : -1;
+          });
+        }
+        if (value.intent === 'asc') {
+          this.orderedList = this.formattedConfidence.sort((x, y) => {
+            const a = x.nlp_log.intent.name.toUpperCase();
+            const b = y.nlp_log.intent.name.toUpperCase();
+            // eslint-disable-next-line no-nested-ternary
+            return a === b ? 0 : a > b ? -1 : 1;
+          });
+        }
+        if (value.confidence === 'desc') {
+          this.orderedList = this.formattedConfidence
+            .sort((a, b) => a.nlp_log.intent.confidence - b.nlp_log.intent.confidence)
+        }
+        if (value.confidence === 'asc') {
+          this.orderedList = this.formattedConfidence
+            .sort((a, b) => b.nlp_log.intent.confidence - a.nlp_log.intent.confidence)
+        }
+        if (value.intent === 'default' || value.confidence === 'default') {
+          this.orderedList = this.formattedConfidence
+        }
+      },
+      deep: true
+    },
+    async formattedConfidence() {
+      await this.$nextTick();
+      this.orderedList = this.formattedConfidence
     }
   },
   methods: {
@@ -297,7 +410,7 @@ export default {
     },
     editSentence(id) {
       this.selectedItem = id
-      this.open = true;
+      this.open = !this.open;
       this.editing = true;
       this.$refs[id].active = true
     },
@@ -321,9 +434,31 @@ export default {
       if (!this.editing) {
         this.$refs[id].active = false
       }
-    }
+    },
+    sort(name) {
+      ['intent', 'confidence'].forEach((key) => {
+        if (key === name) {
+          // eslint-disable-next-line no-nested-ternary
+          this.sorts[key] = this.sorts[key] === 'default'
+            ? 'asc'
+            : this.sorts[key] === 'asc'
+              ? 'desc'
+              : 'default';
+
+          this.ordering = {
+            default: '',
+            asc: key,
+            desc: `-${key}`,
+          }[this.sorts[key]];
+        } else {
+          this.sorts[key] = 'default';
+        }
+      });
+
+      // this.reload();
+    },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -357,6 +492,7 @@ export default {
   &__sentence {
     color: $unnnic-color-neutral-darkest;
     display: flex;
+    align-items: center;
   }
 }
 

@@ -1,42 +1,44 @@
 <template>
-  <div class="intent-suggestion-accordion">
+  <div
+    @click="selectSentence"
+    @mouseenter="activeSentence(id)"
+    @mouseleave="inactiveSentence(id)"
+    class="intent-suggestion-accordion"
+  >
     <div class="intent-suggestion-accordion__content">
       <div
         class="intent-suggestion-accordion__content__check-field">
-        <b-checkbox
-          v-model="checked"
-          :native-value="toExample"/>
+        <span class="intent-suggestion-accordion__content__tag">[{{ repository.language }}]</span>
       </div>
-      <b-field
-        v-if="editing"
-        class="intent-suggestion-accordion__content__field">
-        <b-input
-          v-model="phraseSuggestion"
-          class="intent-suggestion-accordion__content__field__input"
-          size="is-small"/>
-      </b-field>
 
       <div
-        v-else
         class="intent-suggestion-accordion__content__phrase">
-        <p>{{ phraseSuggestion }}</p>
+        <highlighted-entity
+          :ref="id"
+          :id="id"
+          :text="phraseSuggestion"
+          :entities="entities"
+          :state="isSentenceActive"
+        />
       </div>
     </div>
 
     <div class="intent-suggestion-accordion__icons">
-      <b-icon
-        icon="pencil"
-        size="is-small"
-        class="intent-suggestion-accordion__icons__style"
-        @click.native="!editing ? editPhrase() : ''" />
+        <unnnic-icon-svg
+          icon="arrow-right-1-1"
+          size="sm"
+          @click.native="selectSentence"
+        />
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import HighlightedEntity from '@/components/shared/HighlightedEntity';
 
 export default {
+  components: { HighlightedEntity },
   name: 'IntentSuggestion',
   props: {
     id: {
@@ -47,10 +49,23 @@ export default {
       type: String,
       default: '',
     },
-    repository: {
-      type: Object,
-      default: /* istanbul ignore next */ () => ({}),
+    created_at: {
+      type: String,
+      default: '',
     },
+    entities: {
+      type: [Array, String],
+      default: () => [],
+    },
+    intent: {
+      type: String,
+      default: '',
+    },
+    language: {
+      type: String,
+      default: '',
+    }
+
   },
   data() {
     return {
@@ -58,9 +73,13 @@ export default {
       phraseSuggestion: '',
       editing: false,
       checked: false,
+      isSentenceActive: false
     };
   },
   computed: {
+    ...mapGetters({
+      repository: 'getCurrentRepository',
+    }),
     toExample() {
       return {
         text: this.phraseSuggestion,
@@ -75,9 +94,6 @@ export default {
       } else {
         this.removeSelectedSuggestion(this.toExample);
       }
-    },
-    isAccordionOpen() {
-      this.open = false;
     },
   },
   created() {
@@ -111,44 +127,67 @@ export default {
       this.editing = false;
       this.setEditingStatus(false);
     },
+    selectSentence() {
+      this.$emit('dispatchEvent', {
+        event: 'onSentenceSelected',
+        value: {
+          id: this.id,
+          text: this.phraseSuggestion,
+          entities: this.entities,
+          language: this.language
+        },
+      });
+    },
+    activeSentence(id) {
+      this.$refs[id].active = true
+    },
+    inactiveSentence(id) {
+      this.$refs[id].active = false
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
-.b-checkbox.checkbox:not(.button){
+.b-checkbox.checkbox:not(.button) {
   margin-right: 0;
 }
 
-.intent-suggestion-accordion{
-    width: 100%;
-    height: 40px;
-    margin: 0.4rem 0;
-    background: $color-fake-white;
-    border: 1px solid $color-border;
+.intent-suggestion-accordion {
+  width: 100%;
+  // height: 40px;
+  margin: 1rem 0;
+  background: #FFFFFF;
+  border: 1px solid #E2E6ED;
+  border-radius: 8px;
+  padding: $unnnic-spacing-stack-sm;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
 
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
+    &:last-child {
+      margin-bottom: $unnnic-spacing-stack-xl;
+    }
 
-
-    &__content{
+    &__content {
      width: 80%;
      display:flex;
-     padding-left: 10px;
      justify-content: flex-start;
      align-items: center;
+     font-size: $unnnic-font-size-body-gt;
 
-      &__check-field{
+      &__check-field {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        margin-left: 1rem;
       }
 
-      &__field{
+      &__field {
           margin-left: 1rem;
           width: 50%;
           height: 100px;
@@ -164,33 +203,29 @@ export default {
           }
       }
 
-      &__phrase{
+      &__phrase {
         margin-left: 1rem;
-          p {
-          white-space: nowrap;
-          width: 32rem;
-          overflow: hidden;
-          text-overflow: ellipsis;
-            @media screen and (max-width: $mobile-width) {
-              width: 12rem;
-            }
-          }
+        font-size: $unnnic-font-size-body-gt;
+      }
+
+      &__tag {
+        // margin-right: 0.5rem;
+        font-weight: 900;
+        // font-size: 14px;
+        color: #d0d3d9;
       }
 
     }
 
 
-    &__icons{
+    &__icons {
         margin-right: 1rem;
-
-        &__style{
-            color: $color-grey-dark;
-            cursor: pointer;
-        }
-        &__style:hover{
-            color: $color-fake-grey;
-        }
-
+        cursor: pointer;
+        display: flex;
+        align-self: center;
+    }
+    /deep/ .highlighted-text--size-normal {
+      font-size: $unnnic-font-size-body-gt;
     }
 
 }

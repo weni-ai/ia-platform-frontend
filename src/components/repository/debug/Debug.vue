@@ -1,66 +1,52 @@
 <template>
-  <div class="debug">
-    <div
-      v-if="error"
-      class="debug__error">
-      <div class="debug__close">
-        <b-icon
-          icon="close"
-          @click.native="closeModal()"/>
+  <unnnic-modal
+    :showModal="true"
+    :text="$t('webapp.debug.debug')"
+    @close="closeModal()"
+  >
+    <div slot="message" class="debug">
+      <div v-if="error" class="debug__error">
+        <p> {{ $t('webapp.debug.debug_description') }} </p>
+        <b-button
+         class="debug__error__button"
+         type="is-primary"
+         @click="reload()"
+        >
+          {{ $t('webapp.debug.reload') }}
+        </b-button>
       </div>
-      <p> {{ $t('webapp.debug.debug_description') }} </p>
-      <b-button
-        class="debug__error__button"
-        type="is-primary"
-        @click="reload()"> {{ $t('webapp.debug.reload') }} </b-button>
-    </div>
-    <loading
-      v-else-if="loading"
-      class="debug__loading"/>
-    <div v-else>
-      <div class="debug__close">
-        <b-icon
-          icon="close"
-          @click.native="closeModal()"/>
-      </div>
-      <div class="debug__title">
-        <h1>{{ $t('webapp.debug.debug') }}</h1>
-        <p>{{ $t('webapp.debug.debug_subtitle') }}</p>
-      </div>
-      <div class="debug__container">
-        <div
-          v-for="(word, index) in wordsFromText"
-          :key="index">
-          <span
-            :style="style(word)"
-            class="debug__container__text"> {{ word }} </span>
+      <loading v-else-if="loading" class="debug__loading" />
+      <div v-else>
+        <div class="debug__title">
+          <p>{{ $t('webapp.debug.debug_subtitle') }}</p>
+        </div>
+        <div class="debug__container">
+          <div v-for="(word, index) in wordsFromText" :key="index">
+            <span :style="style(word)" class="debug__container__text"> {{ word }} </span>
+          </div>
+        </div>
+        <div class="debug__table">
+
+          <table v-if="tableData.length > 0" class="debug__table__data">
+            <thead>
+              <tr>
+                <th> {{ $t('webapp.debug.word') }}</th>
+                <th> {{ $t('webapp.debug.intent') }}</th>
+                <th> {{ $t('webapp.debug.relevance') }}</th>
+              </tr>
+            </thead>
+            <tr v-for="(table, index) in mapTableData" :key="index">
+              <td>{{ table.text }}</td>
+              <td>{{ table.relevance.intent }}</td>
+              <td>{{ table.relevance.relevance.toFixed(2) }}</td>
+            </tr>
+          </table>
+
+          <div class="debug__range" />
         </div>
       </div>
-      <div class="debug__table">
-
-        <table
-          v-if="tableData.length > 0"
-          class="debug__table__data">
-          <thead>
-            <tr>
-              <th> {{ $t('webapp.debug.word') }}:</th>
-              <th> {{ $t('webapp.debug.intent') }}:</th>
-              <th> {{ $t('webapp.debug.relevance') }}:</th>
-            </tr>
-          </thead>
-          <tr
-            v-for="(table, index) in mapTableData"
-            :key="index">
-            <td>{{ table.text }}</td>
-            <td>{{ table.relevance.intent }}</td>
-            <td>{{ table.relevance.relevance.toFixed(2) }}</td>
-          </tr>
-        </table>
-
-        <div class="debug__range" />
-      </div>
     </div>
-  </div>
+  </unnnic-modal>
 </template>
 
 <script>
@@ -92,6 +78,7 @@ export default {
       data: null,
       loading: false,
       error: null,
+      showModal: true
     };
   },
   computed: {
@@ -152,7 +139,7 @@ export default {
       return word.replace(/[.,\/#!$%\^&\*;:?/(/){}=\-_`~()]/g, '');
     },
     closeModal() {
-      this.$parent.close();
+      this.$emit('closeModal')
     },
     reload() {
       this.load();
@@ -186,7 +173,7 @@ export default {
       );
 
       return {
-        'background-color': `hsl(172, ${100 - (value * 50)}%, ${65 - (value * 25)}%)`,
+        color: `hsl(177, 100%, ${45 - (value * 25)}%)`,
       };
     },
   },
@@ -197,96 +184,120 @@ export default {
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
 
-    tr, td, table, th, .table {
-    border: 0;
-    padding: 0.35rem;
+tr,
+td,
+table,
+th,
+.table {
+  border: 0;
+  padding: 0.35rem;
+}
+
+.debug {
+  margin: 0 auto;
+  // width: 30vw;
+  // min-width: 600px;
+  border-radius: 10px;
+  padding: 1rem;
+  // background-color: white;
+
+  &__close {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: $color-grey-dark;
+    cursor: pointer;
   }
 
-  .debug {
-    margin: 0 auto;
-    width: 30vw;
-    min-width: 600px;
-    border-radius: 10px;
-    padding: 1rem;
-    background-color: white;
+  &__title {
+    margin: 0 1rem;
+    padding: 0 1.5rem;
 
-    &__close{
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      color: $color-grey-dark;
-      cursor: pointer;
+    h1 {
+      font-size: 1.75rem;
+      font-weight: $font-weight-bolder;
     }
+  }
 
-    &__title{
-      margin: 0 1rem;
-      padding: 0 1.5rem;
+  &__loading {
+    padding: 1rem 0;
+  }
 
-      h1{
-        font-size: 1.75rem;
+  &__error {
+    text-align: center;
+
+    &__button {
+      font-display: 'Lato';
+    }
+  }
+
+  &__table {
+    text-align: left;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #E2E6ED;
+    border-radius: 4px;
+    background: #FFFFFF;
+    color: #67738B;
+
+    &__data {
+      width: 100%;
+      // min-width: 400px;
+      // margin-left: 3rem;
+
+      th {
+        color: #67738B;
+        font-size: 17px;
+        font-family: 'Lato';
         font-weight: $font-weight-bolder;
       }
     }
-    &__loading{
-      padding: 1rem 0;
+  }
+
+  &__range {
+    // margin: 2rem 0.6rem 0 0;
+    width: 1rem;
+    // background: linear-gradient(180deg, #1B7E71 0%, #19DEC4 50%, #00FFDD 100%);
+    background: linear-gradient(180deg, #005E5A 0%, #00DED2 100%);
+    border-radius: 4px;
+  }
+
+
+  &__container {
+    margin: 1.5rem 0;
+    // display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    // border: 1px solid $color-border;
+    background: #FFFFFF;
+    border: 1px solid #E2E6ED;
+    border-radius: 4px;
+    display: flex;
+    align-items: flex-start;
+    padding: 12px;
+    // gap: 10px;
+
+
+    >* {
+      margin: 6px 0;
     }
-
-    &__error{
-      text-align: center;
-
-      &__button{
-        font-display: $font-family;
-      }
-    }
-
-    &__table {
-      text-align:center;
-      margin: 1rem;
-      display: flex;
-      justify-content: center;
-      color: #707070;
-
-      &__data{
-        width: 20vw;
-        min-width: 400px;
-        margin-left: 3rem;
-
-        th {
-          color: #707070;
-          font-size: 17px;
-          font-family: $font-family;
-          font-weight: $font-weight-bolder;
-        }
-      }
-    }
-
-    &__range {
-      margin: 2rem 0.6rem 0 0;
-      width: 1.25rem;
-      background: linear-gradient(180deg, #1B7E71 0%, #19DEC4 50%, #00FFDD 100%);
-      border-radius: 3px;
-    }
-
-
-    &__container {
-      margin: 1rem 2.4rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      border: 1px solid $color-border;
-
-      > * {
-        margin: 1rem 0;
-      }
 
     &__text {
       padding: 0.25rem;
       font-weight: bold;
       font-size: 1.5rem;
-      margin: 0.25rem;
-      border-radius: 5px;
-      }
+      // margin: 0.25rem;
+      // border-radius: 5px;
     }
   }
+
+}
+/deep/ .unnnic-modal-container-background-body-alert_icon {
+  display: none;
+}
+/deep/ .unnnic-modal-container-background-body-title {
+  padding-bottom: .5rem;
+}
 </style>

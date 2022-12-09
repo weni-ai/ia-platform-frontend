@@ -1,32 +1,32 @@
 <template>
   <div>
-      <intent-pagination
-        v-if="examplesList"
-        :item-component="sentencesTable"
-        :list="examplesList"
-        :repository="repository"
-        :per-page="perPage"
-        @itemDeleted="onItemDeleted()"
-        @itemSave="dispatchSave"
-        :show-intents="true"
-        :load-all="true"
-        @onUpdateSelected="updateSelected"
-      />
-      <div v-else>
-        <p class="untrained">
-          {{ $t('webapp.trainings.database_untrained') }}
-        </p>
-      </div>
-    <br>
+    <intent-pagination
+      v-if="examplesList"
+      :item-component="sentencesTable"
+      :list="examplesList"
+      :repository="repository"
+      :per-page="perPage"
+      @itemDeleted="onItemDeleted()"
+      @itemSave="dispatchSave"
+      :show-intents="true"
+      @onUpdateSelected="updateSelected"
+    />
+    <p
+      v-if="examplesList.total === 0"
+      class="no-examples"
+      v-html="$t('webapp.trainings.database_untrained')"
+    />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import PaginatedList from '@/components/shared/PaginatedList';
 import IntentPagination from '../shared/IntentPagination';
 import SentencesIntentTable from '@/components/repository/SentencesIntentTable';
 
 const components = {
+  PaginatedList,
   IntentPagination
 };
 
@@ -40,7 +40,7 @@ export default {
     },
     perPage: {
       type: Number,
-      default: 10,
+      default: 50,
     },
     update: {
       type: Boolean,
@@ -96,19 +96,21 @@ export default {
   methods: {
     ...mapActions([
       'searchExamples',
+      'setRequirements',
       'getRepositoryStatusTraining',
     ]),
-    pageChanged() {
-      this.pageWasChanged = !this.pageWasChanged;
-    },
     dispatchSave() {
       this.updateExamples(true);
+      this.$emit('onEditSentence')
+    },
+    pageChanged() {
+      this.pageWasChanged = !this.pageWasChanged;
     },
     async updateExamples(force = false) {
       await this.getRepositoryStatus();
       if (this.repositoryStatus.count !== 0) {
         if (this.repositoryStatus.results[0].status !== 2
-                    && this.repositoryStatus.results[0].status !== 3) {
+          && this.repositoryStatus.results[0].status !== 3) {
           if (this.repositoryStatus.results[1] !== undefined) {
             this.dateLastTrain = (this.repositoryStatus.results[1].created_at).replace(/[A-Za-z]/g, ' ');
           }
@@ -116,14 +118,11 @@ export default {
           this.dateLastTrain = (this.repositoryStatus.results[0].created_at).replace(/[A-Za-z]/g, ' ');
         }
       }
-      if (this.repositoryStatus.count === 0) {
-        return;
-      }
+      if (this.repositoryStatus.count === 0) return;
       if (this.repositoryStatus.count === 1
-                && (this.repositoryStatus.results[0].status !== 2
-                    && this.repositoryStatus.results[0].status !== 3)) {
-        return;
-      }
+          && (this.repositoryStatus.results[0].status !== 2
+          && this.repositoryStatus.results[0].status !== 3)
+      ) return;
       if (!this.examplesList || force) {
         this.examplesList = await this.searchExamples({
           repositoryUuid: this.repository.uuid,
@@ -133,7 +132,6 @@ export default {
           endCreatedAt: this.dateLastTrain,
         });
       }
-      this.$emit()
     },
     async getRepositoryStatus() {
       const { data } = await this.getRepositoryStatusTraining({
@@ -143,7 +141,7 @@ export default {
       this.repositoryStatus = data;
     },
     onItemDeleted() {
-      this.updateExamples(true);
+      this.$emit('exampleDeleted');
     },
     updateSelected(params) {
       this.$emit('onUpdateSelected', params)
@@ -154,17 +152,7 @@ export default {
 
 <style lang="scss" scoped>
 .no-examples {
-  margin: 8px;
+  margin: 0;
+  font: 14px 'Lato';
 }
-.untrained {
-      font-family: 'Lato';
-      font-size: 14px;
-      color: #3B414D;
-      margin-top: 2rem;
-    }
-.divider {
-      background: #E2E6ED;
-      height: 1px;
-      margin: 2rem 0;
-    }
 </style>

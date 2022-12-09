@@ -1,23 +1,21 @@
 <template>
   <div>
-    <paginated-list
-      v-if="examplesList"
-      :item-component="exampleItemElem"
-      :list="examplesList"
-      :repository="repository"
-      :per-page="perPage"
-      :is-accordion-open="pageWasChanged"
-      :pending-example="pendingExample"
-      :is-suggestion="true"
-      @itemSave="dispatchSave"
-      @itemDeleted="onItemDeleted($event)"
-      @pageChanged="pageChanged()"/>
-
-    <br>
-    <p
+    <!-- <p
       v-if="examplesList && examplesList.empty && !isTrain"
       class="no-examples"
-      v-html="$t('webapp.trainings.no_sentences_to_train')"/>
+      v-html="$t('webapp.trainings.no_sentences_to_train')"/> -->
+
+      <intent-pagination
+        v-if="examplesList.total > 0"
+        :item-component="sentencesTable"
+        :list="examplesList"
+        :repository="repository"
+        :per-page="perPage"
+        @itemDeleted="onItemDeleted()"
+        @itemSave="dispatchSave"
+        :show-intents="true"
+        @onUpdateSelected="updateSelected"
+      />
 
   </div>
 </template>
@@ -26,9 +24,12 @@
 import { mapActions, mapGetters } from 'vuex';
 import PaginatedList from '@/components/shared/PaginatedList';
 import ExampleItem from '@/components/example/ExampleItem';
+import IntentPagination from '../shared/IntentPagination';
+import SentencesIntentTable from '@/components/repository/SentencesIntentTable';
 
 const components = {
   PaginatedList,
+  IntentPagination
 };
 
 export default {
@@ -37,7 +38,7 @@ export default {
   props: {
     perPage: {
       type: Number,
-      default: 12,
+      default: 50,
     },
     update: {
       type: Boolean,
@@ -61,6 +62,8 @@ export default {
       dateNow: '',
       error: null,
       pageWasChanged: false,
+      sentencesTable: SentencesIntentTable,
+      allItems: null
     };
   },
   computed: {
@@ -76,6 +79,10 @@ export default {
     repository() {
       this.updateExamples(true);
     },
+    async allItems() {
+      await this.$nextTick();
+      this.$emit('onUpdateList', this.allItems)
+    }
   },
   mounted() {
     this.updateExamples();
@@ -83,11 +90,13 @@ export default {
   methods: {
     ...mapActions([
       'searchExamples',
+      'getAllExamples',
       'setRequirements',
       'getRepositoryStatusTraining',
     ]),
     dispatchSave() {
       this.updateExamples(true);
+      this.$emit('onEditSentence')
     },
     pageChanged() {
       this.pageWasChanged = !this.pageWasChanged;
@@ -115,6 +124,7 @@ export default {
           startCreatedAt: this.createdAtLastTrain,
           endCreatedAt: this.dateNow,
         });
+        await this.getAllItems();
 
         const hasPhrases = await this.examplesList.updateItems();
         if (hasPhrases.length !== 0) {
@@ -132,6 +142,20 @@ export default {
     onItemDeleted() {
       this.$emit('exampleDeleted');
     },
+    updateSelected(params) {
+      this.$emit('onUpdateSelected', params)
+    },
+    async getAllItems() {
+      const { data } = await this.getAllExamples({
+        repositoryUuid: this.repository.uuid,
+        version: this.repository.repository_version_id,
+        limit: 1000,
+        startCreatedAt: this.createdAtLastTrain,
+        endCreatedAt: this.dateNow,
+      });
+      this.allItems = data
+      // this.$emit('onUpdateExamples', this.allItems)
+    }
   },
 };
 </script>
@@ -139,5 +163,6 @@ export default {
 <style lang="scss" scoped>
 .no-examples {
   margin: 0;
+  font: 14px 'Lato';
 }
 </style>
