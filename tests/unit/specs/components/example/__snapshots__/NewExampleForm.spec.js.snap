@@ -2,33 +2,49 @@
 
 exports[`NewExampleForm.vue renders correctly 1`] = `
 <div>
-  <form class="columns wrapper is-vcentered is-variable is-2">
-    <div class="column is-three-fifths">
+  <form autocomplete="off" class="columns wrapper is-vcentered is-variable is-2 is-flex-wrap-wrap mt-3">
+    <div class="column is-6 pr-4">
       <b-field-stub addons="true">
-        <example-text-with-highlighted-entities-input-stub value="" entities="" id="tour-training-step-1" is-previous-disabled="true" is-step-blocked="true" placeholder="some specific text" size="normal">
-          <language-append-select-input-stub dropdowndirection="is-bottom-left" class="language-append"></language-append-select-input-stub>
-        </example-text-with-highlighted-entities-input-stub>
+        <p class="unnnic-form__label">some specific text</p>
+        <example-text-with-highlighted-entities-input-stub value="" entities="" id="tour-training-step-1" is-previous-disabled="true" is-step-blocked="true" placeholder="some specific text" size="normal"></example-text-with-highlighted-entities-input-stub>
       </b-field-stub>
     </div>
-    <div class="column">
+    <div class="column is-3 pr-4">
       <b-field-stub addons="true" id="tour-training-step-4" is-previous-disabled="true" is-step-blocked="true">
-        <b-autocomplete-stub usehtml5validation="true" statusicon="true" value="" data="" field="value" openonfocus="true" dropdownposition="bottom" type="text" confirmkeys="Tab,Enter" placeholder="some specific text"></b-autocomplete-stub>
+        <p class="unnnic-form__label">
+          some specific text
+          <unnnic-tool-tip side="top" text="some specific text" enabled="">
+            <unnnic-icon icon="information-circle-4" size="sm" scheme="neutral-soft" class="info"></unnnic-icon>
+          </unnnic-tool-tip>
+        </p>
+        <unnnic-autocomplete data="" placeholder="some specific text" openwithfocus="true" iconright="arrow-button-down-1"></unnnic-autocomplete>
       </b-field-stub>
     </div>
-    <div class="column is-narrow">
+    <div class="column is-3">
+      <b-field-stub addons="true" id="tour-training-step-4" is-previous-disabled="true" is-step-blocked="true">
+        <unnnic-select placeholder="some specific text" label="some specific text">
+          <option value="en">
+            English
+          </option>
+          <option value="pt">
+            Portuguese
+          </option>
+        </unnnic-select>
+      </b-field-stub>
+    </div>
+    <div class="column is-12 mt-2">
+      <b-field-stub addons="true" class="entities-wrapper">
+        <new-entities-input-stub value="" repository="[object Object]" text="" availableentities="" entitiesforedit="" available-labels=""></new-entities-input-stub>
+      </b-field-stub>
+    </div>
+    <div class="column is-12 mt-4">
       <b-field-stub addons="true">
-        <b-tooltip-stub active="true" type="is-dark" label="some specific text, some specific text" position="is-top" triggers="hover" size="is-medium" animated="true" animation="fade" autoclose="true">
-          <b-button-stub type="is-primary" nativetype="submit" tag="button" id="tour-training-step-5" is-previous-disabled="true" is-next-disabled="true" disabled="true" is-step-blocked="true">some specific text</b-button-stub>
-        </b-tooltip-stub>
+        <unnnic-button id="tour-training-step-5" is-previous-disabled="true" is-next-disabled="true" disabled="true" is-step-blocked="true" native-type="submit" type="secondary" size="large" class="button--full">
+          some specific text
+        </unnnic-button>
       </b-field-stub>
     </div>
   </form>
-  <div class="columns is-variable is-1">
-    <div class="column is-three-fifths">
-      <b-field-stub addons="true">
-        <entities-input-stub value="" repository="[object Object]" text="" availableentities="" entitiesforedit="" available-labels=""></entities-input-stub>
-      </b-field-stub>
-    </div>
-  </div>
+  <!---->
 </div>
 `;
