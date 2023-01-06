@@ -4,12 +4,12 @@
       <b-notification v-if="loadingLogs" :closable="false">
         <b-loading :active.sync="loadingLogs" />
       </b-notification>
-      <div>
+      <!-- <div>
         <b-checkbox v-model="select" :native-value="selectAll">
           {{ $t("webapp.inbox.select_all") }}
         </b-checkbox>
-      </div>
-      <div class="repository-log-list__section__buttonsIcon">
+      </div> -->
+      <!-- <div class="repository-log-list__section__buttonsIcon">
         <b-tooltip :label="$t('webapp.inbox.add_to_train_button')">
           <b-button
             id="tour-inbox-step-2"
@@ -29,11 +29,11 @@
             @click="showModalSentence($t('webapp.inbox.test_sentences'))"
           />
         </b-tooltip>
-      </div>
+      </div> -->
     </div>
-    <paginated-list
+    <intent-pagination
       :per-page="perPage"
-      :item-component="logAccordion"
+      :item-component="logTable"
       :list="list"
       :loading.sync="loading"
       :is-accordion-open="pageWasChanged"
@@ -43,6 +43,7 @@
       @event_addLog="addLogStructure($event)"
       @event_removeLog="removeLogStructure($event)"
       @pageChanged="pageChanged()"
+      @onUpdateSelected="updateSelected"
     />
 
     <h4 v-if="list && list.empty && !loading" class="repository-log-list__empty-message">
@@ -53,15 +54,16 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import PaginatedList from '@/components/shared/PaginatedList';
+import IntentPagination from '@/components/shared/IntentPagination';
 import LogAccordion from '@/components/shared/accordion/LogAccordion';
 import IntentModal from '@/components/repository/IntentModal';
 import IntentModalEdition from '@/components/repository/IntentModalWithEdition';
+import LogTable from '@/components/repository/LogTable';
 
 export default {
   name: 'RepositoryLogList',
   components: {
-    PaginatedList,
+    IntentPagination,
     LogAccordion,
     IntentModal,
     IntentModalEdition
@@ -93,7 +95,8 @@ export default {
       nlp: {},
       loadingLogs: false,
       pageWasChanged: false,
-      searchingLog: false
+      searchingLog: false,
+      logTable: LogTable
     };
   },
   computed: {
@@ -169,7 +172,8 @@ export default {
           repository: this.repository,
           titleHeader: typeModal,
           confidenceVerify: this.confidenceVerify,
-          logData: this.logData[0]
+          logData: this.logData[0],
+          buttonLabel: this.$t('webapp.inbox.add_to_train')
         },
         parent: this,
         component: this.logData.length === 1 ? IntentModalEdition : IntentModal,
@@ -203,7 +207,8 @@ export default {
           info: this.nlp,
           repository: this.repository,
           titleHeader: typeModal,
-          logData: this.logData[0]
+          logData: this.logData[0],
+          buttonLabel: this.$t('webapp.inbox.add_to_sentence')
         },
         parent: this,
         component: this.logData.length === 1 ? IntentModalEdition : IntentModal,
@@ -347,7 +352,10 @@ export default {
         query: queryParams,
         limit: this.perPage
       });
-    }
+    },
+    updateSelected(params) {
+      this.$emit('onUpdateSelected', params)
+    },
   }
 };
 </script>

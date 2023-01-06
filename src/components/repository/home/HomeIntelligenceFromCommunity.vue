@@ -49,12 +49,13 @@ export default {
       this.modalInfo = { ...value }
     },
     async getCommunityRepositories() {
+      this.$emit('loading', true)
       try {
         const { data } = await this.searchRepositories({
-          limit: 21,
+          limit: 20,
           offset: this.page,
         });
-        this.page += 21;
+        this.page += 20;
         this.repositoryCommunityList = [
           ...this.repositoryCommunityList,
           ...data.results,
@@ -62,6 +63,8 @@ export default {
         this.isComplete = data.next == null;
       } catch (err) {
         this.error = err;
+      } finally {
+        this.$emit('loading', false)
       }
     },
   },
@@ -80,6 +83,7 @@ export default {
     @media screen and (max-width: 1400px) {
       grid-template-columns: repeat(3, 32%);
     }
+    padding-bottom: 15rem;
   }
 }
 </style>
