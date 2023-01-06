@@ -48,7 +48,11 @@
     <template v-slot:item="{ item }">
         <unnnic-table-row :headers="table.headers">
           <template v-slot:checkarea>
-            <unnnic-checkbox v-model="item.selected" :style="{ margin: '4px' }" />
+            <unnnic-checkbox
+              v-model="item.selected"
+              @change="dispatchSelectedItems"
+              :style="{ margin: '4px' }"
+            />
           </template>
 
           <template v-slot:sentence>
@@ -61,7 +65,8 @@
             >
               <unnnic-icon-svg
                 :icon="
-                  `${open && selectedItem === item.id ? 'arrow-button-down-1' : 'arrow-right-1-1'}`
+                  `${open && selectedItem === item.id
+                    ? 'arrow-button-down-1' : 'arrow-button-right-1'}`
                 "
                 scheme="neutral-cleanest"
                 size="xs"
@@ -318,7 +323,7 @@ export default {
       return 'less';
     },
     selectedItems() {
-      return this.list.items.filter((item) => item.selected === true)
+      return this.orderedList.filter((item) => item.selected === true)
     },
     formattedConfidence() {
       return this.list.items.map((item) => ({
@@ -327,15 +332,7 @@ export default {
       }));
     }
   },
-  // mounted() {
-  //   setTimeout(() => {
-  //     this.orderedList = this.formattedConfidence
-  //   }, 2000);
-  // },
   watch: {
-    selectedItems() {
-      this.$emit('dispatchEvent', { event: 'onUpdateSelected', value: this.selectedItems });
-    },
     sentence(value) {
       if (value) {
         const { id } = value
@@ -377,6 +374,9 @@ export default {
     async formattedConfidence() {
       await this.$nextTick();
       this.orderedList = this.formattedConfidence
+    },
+    orderedList() {
+      this.dispatchSelectedItems();
     }
   },
   methods: {
@@ -457,6 +457,9 @@ export default {
 
       // this.reload();
     },
+    dispatchSelectedItems() {
+      this.$emit('dispatchEvent', { event: 'onUpdateSelected', value: this.selectedItems });
+    }
   },
 }
 </script>
@@ -530,6 +533,9 @@ export default {
 }
 /deep/ .test .unnnic-table .item {
   background: black;
+}
+/deep/ .highlighted-text--size-normal {
+  font-size: $unnnic-font-size-body-gt;
 }
 
 </style>

@@ -1,98 +1,20 @@
 <template>
-  <sentence-accordion
-    :open.sync="isOpen"
-    :custom-accordion="!custom"
-    :class="custom ? 'custom-accordion' : ''"
-    align="top">
-    <language-badge
-      slot="check"
-      :language="languageEdit"
-      main />
-    <div
-      slot="header"
-      class="edit-sentence">
-      <form>
-        <b-field
-          :errors="errors.text || errors.language">
-          <example-text-with-highlighted-entities-input
-            ref="textInput"
-            v-model="text"
-            :entities="allEntities"
-            :placeholder="$t('webapp.example.enter_sentence')"
-            size="normal"
-            @textSelected="setTextSelected($event)"
-            @entityEdited="onEditEntity($event)"
-            @entityAdded="onEntityAdded()"
-          />
-        </b-field>
-        <example-entity-small-input
-          v-model="allEntitiesInput"
-          :text="text"
-          :available-entities="getAllEntities"
-          :entities="entities"
-          :text-selected="textSelected"
-          :class="allEntitiesInput.length !== 0 && custom ? 'input-custom-style' : ''"
-          @addedEntity="onEntityAdded"/>
-        <b-field
-          :message="errors.entities"
-          type="is-danger" />
-      </form>
+  <div class="example">
+    <div>
+      <div>
+        {{ text }}
+      </div>
+      <div class="example__intent" v-html="`${ $t('webapp.example.intent') + ': ' + intent}`" />
     </div>
-
-    <div
-      slot="options"
-      class="edit-sentence__options">
-      <b-field
-        :message="errors.non_field_errors"
-        :type="{ 'is-danger': errors.non_field_errors && errors.non_field_errors.length > 0 }"
-        horizontal
-        addons>
-        <div class="edit-sentence__icon-container--intent">
-          {{ $t('webapp.example.intent') }}: <tr />
-        </div>
-        <b-autocomplete
-          v-model="intent"
-          :data="optionsIntents"
-          :placeholder="$t('webapp.example.intent')"
-          max-height="120px"
-          dropdown-position="bottom"
-          open-on-focus
-          @input="intent = intentFormatters(intent)" />
-
-        <div
-          v-show="!custom"
-          class="edit-sentence__icon-container edit-sentence__icon-container--intent">
-
-          <b-button
-            class="edit-sentence__icon"
-            icon-right="close-thick"
-            @click.native.stop="cancelEditSentence" />
-          <b-tooltip
-            :active="!isValid"
-            :label="validationErrorsString">
-            <b-button
-              :disabled="submitting"
-              class="edit-sentence__icon">
-              <b-icon
-                :icon="submitting ? 'refresh' : 'check-bold'"
-                :class="{
-                  'edit-sentence__icon': true,
-                  'icon-spin': submitting
-                }"
-                size="is-small"
-                @click.native.stop="onSubmit" />
-            </b-button>
-          </b-tooltip>
-        </div>
-
-      </b-field>
+    <div>
+      <unnnic-button
+        size="small"
+        type="secondary"
+        iconCenter="pencil-write-1"
+        @click.prevent.stop="editSentence(item.id)"
+      />
     </div>
-
-    <div slot="body">
-      <slot name="body" />
-    </div>
-
-  </sentence-accordion>
+  </div>
 </template>
 
 <script>
@@ -168,7 +90,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~@/assets/scss/colors.scss';
 
 .icon {
@@ -220,4 +142,26 @@ export default {
 .custom-accordion{
   max-width: 100%;
 }
+.example {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #E2E6ED;
+  font-size: 14px;
+  color: #3B414D;
+  text-align: left;
+  margin-bottom: .5rem;
+
+  &__intent {
+    font-family: 'Lato';
+    font-size: 12px;
+    color: #67738B;
+  }
+}
+.modal-background {
+    background-color: transparent;
+  }
 </style>
