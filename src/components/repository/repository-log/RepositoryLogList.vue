@@ -43,6 +43,7 @@
       @event_addLog="addLogStructure($event)"
       @event_removeLog="removeLogStructure($event)"
       @pageChanged="pageChanged()"
+      @onUpdateSelected="updateSelected"
     />
 
     <h4 v-if="list && list.empty && !loading" class="repository-log-list__empty-message">
@@ -171,7 +172,8 @@ export default {
           repository: this.repository,
           titleHeader: typeModal,
           confidenceVerify: this.confidenceVerify,
-          logData: this.logData[0]
+          logData: this.logData[0],
+          buttonLabel: this.$t('webapp.inbox.add_to_train')
         },
         parent: this,
         component: this.logData.length === 1 ? IntentModalEdition : IntentModal,
@@ -205,7 +207,8 @@ export default {
           info: this.nlp,
           repository: this.repository,
           titleHeader: typeModal,
-          logData: this.logData[0]
+          logData: this.logData[0],
+          buttonLabel: this.$t('webapp.inbox.add_to_sentence')
         },
         parent: this,
         component: this.logData.length === 1 ? IntentModalEdition : IntentModal,
@@ -349,7 +352,10 @@ export default {
         query: queryParams,
         limit: this.perPage
       });
-    }
+    },
+    updateSelected(params) {
+      this.$emit('onUpdateSelected', params)
+    },
   }
 };
 </script>

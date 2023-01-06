@@ -27,22 +27,6 @@
       </div>
 
       <div :class="['home-loading', !loading ? 'hidden' : 'visible']">
-      <!-- <div class="home-loading__header">
-        <unnnic-skeleton-loading
-          class="home-loading__title"
-          tag="div"
-          width="40px"
-          height="40px"
-        />
-        <unnnic-skeleton-loading tag="div" width="189px" height="40px" />
-      </div>
-      <div class="home-loading__description">
-        <unnnic-skeleton-loading tag="div" width="30vw" height="96px" />
-        <unnnic-skeleton-loading tag="div" width="30vw" height="96px" />
-        <unnnic-skeleton-loading tag="div" width="30vw" height="96px" />
-      </div>
-
-      <unnnic-skeleton-loading tag="hr" width="100px" height="1px" /> -->
 
       <div v-if="howTabIsShown === 0" class="home-loading__project">
         <unnnic-skeleton-loading tag="div" width="529px" height="60px" />
@@ -115,7 +99,7 @@ export default {
   height: 100vh;
   padding-bottom: $unnnic-spacing-stack-sm;
   background: white;
-  padding: 1.5rem;
+  padding: 1.5rem 1.75rem;
 
   &__title {
     margin: $unnnic-spacing-inline-xs 0;
