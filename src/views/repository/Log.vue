@@ -277,7 +277,7 @@ export default {
       }
       this.$buefy.modal.open({
         props: {
-          info: this.nlp_log,
+          info: this.selectedItems[0].nlp_log,
           repository: this.repository,
           titleHeader: typeModal,
           logData: this.logData[0],
