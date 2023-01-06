@@ -343,7 +343,8 @@ export default {
               repositoryVersion: this.version
             });
             this.$buefy.toast.open({
-              type: 'is-success'
+              type: 'is-success',
+              message: `${values.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
             });
           }
         } catch (error) {
