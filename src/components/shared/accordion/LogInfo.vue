@@ -90,6 +90,32 @@
         </div>
       </div>
     </div>
+    <unnnic-modal
+      :showModal="openModalTraining"
+      :text="$t('webapp.example.sent_to_training')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openModalTraining = false"
+    >
+      <span
+      slot="message"
+      >
+        {{ $t('webapp.example.sent_to_training_info') }}
+      </span>
+    </unnnic-modal>
+    <unnnic-modal
+      :showModal="openModalTest"
+      :text="$t('webapp.example.sent_to_test')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openModalTest = false"
+    >
+      <span
+      slot="message"
+      >
+        {{ $t('webapp.example.sent_to_test_info') }}
+      </span>
+    </unnnic-modal>
   </div>
 </template>
 
@@ -162,6 +188,8 @@ export default {
       pageWasChanged: false,
       searchingLog: false,
       isCorrected: Boolean,
+      openModalTraining: false,
+      openModalTest: false
     };
   },
   computed: {
@@ -329,10 +357,11 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
-              type: 'is-success'
-            });
+            // this.$buefy.toast.open({
+            //   message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
+            //   type: 'is-success'
+            // });
+            this.openModalTraining = true
           } else {
             await this.newExample({
               ...data,
@@ -342,10 +371,11 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              type: 'is-success',
-              message: `${values.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
-            });
+            // this.$buefy.toast.open({
+            //   type: 'is-success',
+            //  message: `${values.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
+            // });
+            this.openModalTraining = true
           }
         } catch (error) {
           this.showError(error, data, 'training');
@@ -369,10 +399,11 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_sentence')}`,
-              type: 'is-success'
-            });
+            // this.$buefy.toast.open({
+            // message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_sentence')}`,
+            //   type: 'is-success'
+            // });
+            this.openModalTest = true
           } else {
             await this.newEvaluateExample({
               ...data,
@@ -382,12 +413,13 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              message: `${values.text.bold()}, ${this.$t(
-                'webapp.inbox.entry_has_add_to_sentence'
-              )}`,
-              type: 'is-success'
-            });
+            // this.$buefy.toast.open({
+            //   message: `${values.text.bold()}, ${this.$t(
+            //     'webapp.inbox.entry_has_add_to_sentence'
+            //   )}`,
+            //   type: 'is-success'
+            // });
+            this.openModalTest = true
           }
         } catch (error) {
           this.showError(error, data, 'evaluate');

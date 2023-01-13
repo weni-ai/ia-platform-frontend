@@ -1,7 +1,6 @@
 <template>
   <repository-view-base :repository="repository" :error-code="errorCode">
-    <div v-if="authenticated" class="repository-log">
-      <div v-if="repository && repository.authorization.can_contribute">
+      <div v-if="repository && repository.authorization.can_contribute" class="repository-log">
         <div class="repository-log__header">
           <div class="column is-5 p-0">
             <unnnic-card
@@ -66,20 +65,33 @@
           @onUpdateSelected="updateSelected"
         />
       </div>
-      <authorization-request-notification
-        v-else-if="repository"
-        :available="!repository.available_request_authorization"
-        :repository-uuid="repositoryUUID"
-        @onAuthorizationRequested="updateRepository(false)"
-      />
-    </div>
+      <unnnic-modal
+        :showModal="openModalTraining"
+        :text="$t('webapp.example.sent_to_training')"
+        scheme="feedback-green"
+        modal-icon="check-circle-1-1"
+        @close="openModalTraining = false"
+      >
+        <span
+        slot="message"
+        >
+          {{ $t('webapp.example.sent_to_training_info') }}
+        </span>
+      </unnnic-modal>
+      <unnnic-modal
+        :showModal="openModalTest"
+        :text="$t('webapp.example.sent_to_test')"
+        scheme="feedback-green"
+        modal-icon="check-circle-1-1"
+        @close="openModalTest = false"
+      >
+        <span
+        slot="message"
+        >
+          {{ $t('webapp.example.sent_to_test_info') }}
+        </span>
+      </unnnic-modal>
 
-    <div v-else>
-      <b-notification :closable="false" class="is-info">
-        {{ $t("webapp.inbox.signin_you_account") }}
-      </b-notification>
-      <login-form hide-forgot-password />
-    </div>
 
     <tour
       v-if="activeTutorial === 'inbox'"
@@ -89,6 +101,9 @@
       :finish-event="eventClickFinish"
       name="inbox"
     />
+    <template v-slot:loader>
+      <log-loader />
+    </template>
   </repository-view-base>
 </template>
 
@@ -105,6 +120,8 @@ import SentenceFilters from '@/components/repository/repository-evaluate/example
 import IntentModalEdition from '@/components/repository/IntentModalWithEdition';
 import IntentModal from '@/components/repository/IntentModal';
 import RepositoryBase from './Base';
+import LogLoader from '@/views/repository/loadings/Log';
+
 
 export default {
   name: 'RepositoryLog',
@@ -117,7 +134,8 @@ export default {
     Tour,
     IntentModal,
     SentenceFilters,
-    IntentModalEdition
+    IntentModalEdition,
+    LogLoader
   },
   extends: RepositoryBase,
   data() {
@@ -132,7 +150,9 @@ export default {
       eventClickFinish: false,
       selectedItems: [],
       logData: [],
-      intent: ''
+      intent: '',
+      openModalTraining: false,
+      openModalTest: false
     };
   },
   computed: {
@@ -332,10 +352,11 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
-              type: 'is-success'
-            });
+            // this.$buefy.toast.open({
+            //   message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
+            //   type: 'is-success'
+            // });
+            this.openModalTraining = true
           } else {
             await this.newExample({
               ...data,
@@ -345,13 +366,15 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              type: 'is-success',
-              message: `${values.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
-            });
+            // this.$buefy.toast.open({
+            //   type: 'is-success',
+            //  message: `${values.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
+            // });
+            this.openModalTraining = true
           }
         } catch (error) {
           this.showError(error, data, 'training');
+          // this.openSuccessTraining();
         } finally {
           this.loadingLogs = false;
           this.select = false;
@@ -372,10 +395,11 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_sentence')}`,
-              type: 'is-success'
-            });
+            // this.$buefy.toast.open({
+            // message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_sentence')}`,
+            //   type: 'is-success'
+            // });
+            this.openModalTest = true
           } else {
             await this.newEvaluateExample({
               ...data,
@@ -385,12 +409,13 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              message: `${values.text.bold()}, ${this.$t(
-                'webapp.inbox.entry_has_add_to_sentence'
-              )}`,
-              type: 'is-success'
-            });
+            // this.$buefy.toast.open({
+            //   message: `${values.text.bold()}, ${this.$t(
+            //     'webapp.inbox.entry_has_add_to_sentence'
+            //   )}`,
+            //   type: 'is-success'
+            // });
+            this.openModalTest = true
           }
         } catch (error) {
           this.showError(error, data, 'evaluate');
