@@ -211,7 +211,7 @@ p {
     padding-top: 0
   }
   .unnnic-modal-container-background-body-description {
-    padding-bottom: 0;
+    padding-bottom: 1.5rem;
   }
   .unnnic-modal-container-background-body {
     min-height: 13.5rem;

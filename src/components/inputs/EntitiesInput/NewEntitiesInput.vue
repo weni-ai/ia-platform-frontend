@@ -8,6 +8,7 @@
           >
             {{ $t('webapp.trainings.entities') }}
             <unnnic-tool-tip
+              v-if="showHint"
               side="top"
               :text="$t('webapp.trainings.add_entity_info')"
               enabled
@@ -152,6 +153,10 @@ export default {
     entitiesForEdit: {
       type: Array,
       default: () => ([]),
+    },
+    showHint: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

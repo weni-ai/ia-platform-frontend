@@ -466,7 +466,11 @@
       "help_text": "Quando seu bot recebe uma mensaem, ele pode usar um reconhecedor para examiná-la e identificar a intenção.",
       "delete_text": "Tem certeza? Este exemplo será deletado.",
       "delete": "Deletar",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "sent_to_training": "Frases enviadas para treinamento!",
+      "sent_to_training_info": "As frases que você selecionou foram enviadas para treinamento com sucesso. Para treinar a inteligência com essas frases, vá ao menu Treinar Inteligência. 😉",
+      "sent_to_test": "Frases enviadas para teste!",
+      "sent_to_test_info": "As frases que você selecionou foram enviadas para teste com sucesso. Para testá-las, vá ao menu Testar. 😉"
     },
     "trainings": {
       "grid_text1": "Treinar uma nova frase",
