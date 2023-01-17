@@ -248,7 +248,7 @@
             "
           />
 
-          <section class="evaluate-menu">
+          <!-- <section class="evaluate-menu">
             <unnnic-sidebar-item
               v-if="getCurrentRepository.authorization.can_contribute"
               :icon="dropSelect === 'isTestsActive' ? 'check-square-2' : 'check-square-1'"
@@ -297,7 +297,7 @@
                 "
               />
             </div>
-          </section>
+          </section> -->
           <unnnic-sidebar-item
             v-if="getCurrentRepository.authorization.can_contribute"
             :icon="checkSelectedMenu('repository-log') ? 'messages-bubble-3' : 'messages-bubble-1'"
