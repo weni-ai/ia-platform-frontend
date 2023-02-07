@@ -49,60 +49,6 @@
               <h2>{{ $t("webapp.evaluate-manual.historic_title") }}</h2>
             </div>
           </div>
-
-          <div class="evaluate__content-header">
-            <h2 class="evaluate__content-header__title">
-              {{ $t('webapp.evaluate-manual.header_title') }}
-            </h2>
-            <p>{{ $t('webapp.evaluate-manual.header_title_p') }}</p>
-            <p>{{ $t('webapp.evaluate-manual.header_title_p2') }}</p>
-            <div class="evaluate__content-header__wrapper">
-              <div
-                class="evaluate__content-header__wrapper__language-select">
-                <p class="evaluate__content-header__wrapper__language-select__text">
-                  <strong>
-                    {{ $t('webapp.evaluate-manual.header_title_lang') }}
-                  </strong>
-                </p>
-                <div
-                  id="tour-evaluate-step-1"
-                  :is-previous-disabled="true">
-                  <b-select
-                    v-model="currentLanguage"
-                    expanded>
-                    <option
-                      v-for="language in languages"
-                      :key="language.id"
-                      :selected="language.value === currentLanguage"
-                      :value="language.value">
-                      {{ language.title }}
-                    </option>
-                  </b-select>
-                </div>
-              </div>
-              <b-button
-                id="tour-evaluate-step-5"
-                ref="runNewTestButton"
-                :is-finish-disabled="true"
-                :is-previous-disabled="true"
-                :is-next-disabled="true"
-                :loading="evaluating"
-                :disabled="evaluating"
-                type="is-secondary"
-                @click="newEvaluate()">
-                {{ $t('webapp.evaluate-manual.run_test') }}
-              </b-button>
-            </div>
-          </div>
-          <div class="evaluate__divider" />
-          <div class="evaluate__content-wrapper">
-            <base-evaluate-examples
-              :filter-by-language="currentLanguage"
-              @created="updateTrainingStatus()"
-              @deleted="updateTrainingStatus()"
-              @eventStep="dispatchClick()"
-              @eventError="dispatchSkip()"/>
-          </div>
         </div>
         <div class="evaluate__container">
           <div class="evaluate__item">
@@ -383,43 +329,6 @@ export default {
         }
       }
     }
-  }
-
-  &__content-header {
-    text-align: left;
-
-    &__buttons {
-      margin: 2rem 1rem;
-    }
-
-    &__title {
-      margin-top: 2rem;
-      font-size: 1.75rem;
-      font-weight: $font-weight-medium;
-      color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
-    }
-
-    &__wrapper {
-      display: flex;
-      align-items: flex-end;
-      margin-top: 1rem;
-
-      &__language-select {
-        flex: 1;
-        margin-right: .5rem;
-        text-align: left;
-
-        &__text{
-          margin-bottom: 1rem;
-        }
-      }
-    }
-  }
-
-  &__content-wrapper {
-    max-width: 100%;
-    margin: 0 auto;
   }
 }
 </style>

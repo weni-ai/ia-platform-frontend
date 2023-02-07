@@ -238,7 +238,6 @@ export default {
 @import '~@weni/unnnic-system/dist/unnnic.css';
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-
 .evaluate {
 
   &__quality {
@@ -330,7 +329,7 @@ export default {
     }
   }
 
-  /* &__navigation {
+  &__navigation {
     display: flex;
     justify-content: center;
     margin-top: 2.5rem;
@@ -379,44 +378,7 @@ export default {
           }
         }
       }
-    } */
-  }
-
-  /* &__content-header {
-    text-align: left;
-
-    &__buttons {
-      margin: 2rem 1rem;
-    }
-
-    &__title {
-      margin-top: 2rem;
-      font-size: 1.75rem;
-      font-weight: $font-weight-medium;
-      color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
-    }
-
-    &__wrapper {
-      display: flex;
-      align-items: flex-end;
-      margin-top: 1rem;
-
-      &__language-select {
-        flex: 1;
-        margin-right: .5rem;
-        text-align: left;
-
-        &__text{
-          margin-bottom: 1rem;
-        }
-      }
     }
   }
-
-  &__content-wrapper {
-    max-width: 100%;
-    margin: 0 auto;
-  } */
-/* } */
+}
 </style>
