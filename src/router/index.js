@@ -234,11 +234,11 @@ const router = new Router({
           name: 'repository-log',
           component: RepositoryLog,
         },
-        {
+/*         {
           path: ':ownerNickname/:slug/results/',
           name: 'repository-results',
           component: RepositoryResults,
-        },
+        }, */
         {
           path: ':ownerNickname/:slug/entitylist/:entity_id',
           name: 'repository-entitylist',
