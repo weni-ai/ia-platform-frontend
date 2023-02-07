@@ -209,8 +209,14 @@
       "no_versions": "Sem resultados para esta versão"
     },
     "evaluate-manual": {
-      "header_title": "Teste sua inteligência",
-      "header_title_p": "Como seu modelo está performando? Você tem dados suficientes? Suas intenções e entidades foram bem desenhadas?",
+      "header_title": "Testes manuais",
+      "header_title_p": "Adicione manualmente frases de teste, simulando entradas do usuário final, para avaliar a qualidade das frases treinadas pela IA.",
+      "tips_title": "Dicas para fazer um teste eficaz",
+      "tips_description": "Procure adicionar frases de teste reais, mas que nunca foram vistas pelo modelo (frases diferentes das treinadas). Isso permitirá testar se sua IA realmente consegue abstrair e compreender o sentido das intenções que foram treinadas para conseguir classificar corretamente uma frase de teste nunca vista antes.",
+      "test_title": "Fazer novo teste manual de frases",
+      "test_p": "Executar um novo teste manual, adicionando frases que simulam entradas reais do usuário final.",
+      "test_button": "Ir para teste manual",
+      "historic_title": "Histórico de testes manuais",
       "header_title_p2": "Usando nossa função de teste, você pode avaliar a performance da sua inteligência facilmente.",
       "header_title_lang": "Selecione o idioma para executar o teste.",
       "run_test": "Executar teste",
@@ -230,6 +236,20 @@
       "header_title_p2": "Usando nossa função de teste, você pode avaliar a performance da sua inteligência facilmente.",
       "header_title_lang": "Selecione o idioma para executar o teste.",
       "run_test": "Executar teste"
+    },
+    "evaluate-automatic-new": {
+      "header_title": "Testes automáticos",
+      "header_title_p": "A cada nova interação é feita, de forma automática, uma nova análise das frases para avaliar se a IA está funcionando adequadamente.",
+      "quality_title": "Com base na análise das interações mais recentes, a qualidade atual da sua IA é de:",
+      "summary_title1": "Frases testadas",
+      "summary_title2": "Data do teste",
+      "summary_chart_title": "Histórico de análises",
+      "tips_title": "Dicas de como aprimorar a qualidade da IA",
+      "tips_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "tips_p": "Treine mais frases para a intenção",
+      "results_title": "Resultados detalhados",
+      "results_tab_title": "Frases",
+      "results_tab_title2": "Gráficos"
     },
     "result": {
       "load_result": "Carregar Resultados",
