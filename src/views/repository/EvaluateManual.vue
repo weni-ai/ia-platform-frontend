@@ -13,7 +13,8 @@
               icon="check-square-1"
               type="title"
               :has-information-icon="false"
-              scheme="aux-orange" />
+              scheme="aux-orange"
+            />
               <p
                 v-html="$t('webapp.evaluate-manual.header_title_p')"
                 class="column is-7"></p>
