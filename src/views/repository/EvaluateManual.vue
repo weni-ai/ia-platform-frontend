@@ -49,6 +49,14 @@
             <div class="evaluate__historic__title">
               <h2>{{ $t("webapp.evaluate-manual.historic_title") }}</h2>
             </div>
+
+            <paginated-list
+              v-if="versionsList"
+              :item-component="evaluateItem"
+              :list="versionsList" />
+            <p
+              v-if="versionsList && versionsList.empty"
+              class="no-examples">{{ $t('webapp.evaluate.no_versions') }}</p>
           </div>
         </div>
         <div class="evaluate__container">
@@ -91,6 +99,8 @@ import { LANGUAGES } from '@/utils';
 import Tour from '@/components/Tour';
 import LoginForm from '@/components/auth/LoginForm';
 import RepositoryBase from './Base';
+import EvaluateVersionItem from '@/components/repository/repository-evaluate/versions/EvaluateVersionItem';
+import PaginatedList from '@/components/shared/PaginatedList';
 
 export default {
   name: 'RepositoryEvaluateManual',
@@ -100,6 +110,8 @@ export default {
     BaseEvaluateExamples,
     AuthorizationRequestNotification,
     Tour,
+    EvaluateVersionItem,
+    PaginatedList,
   },
   extends: RepositoryBase,
   data() {
@@ -111,6 +123,8 @@ export default {
       eventClickFinish: false,
       eventReset: false,
       eventSkip: false,
+      evaluateItem: EvaluateVersionItem,
+      versionsList: null,
     };
   },
   computed: {
@@ -120,6 +134,8 @@ export default {
     ...mapGetters({
       repositoryVersion: 'getSelectedVersion',
       activeTutorial: 'activeTutorial',
+      repository: 'getCurrentRepository',
+      version: 'getSelectedVersion',
     }),
     languages() {
       if (!this.selectedRepository || !this.selectedRepository.evaluate_languages_count) return [];
@@ -130,6 +146,9 @@ export default {
           title: `${LANGUAGES[lang]} (${this.$tc('webapp.evaluate-manual.get_examples_test_sentences', this.selectedRepository.evaluate_languages_count[lang])})`,
         }));
     },
+  },
+  mounted() {
+    this.updateVersionList();
   },
   watch: {
     selectedRepository() {
@@ -142,6 +161,7 @@ export default {
     ...mapActions([
       'runNewEvaluate',
       'getTrainingStatus',
+      'getAllResults',
     ]),
     dispatchClick() {
       this.eventClick = !this.eventClick;
@@ -202,6 +222,14 @@ export default {
         });
       }
       return false;
+    },
+    async updateVersionList(force = false) {
+      if (!this.resultExampleList || force) {
+        this.versionsList = await this.getAllResults({
+          repositoryUuid: this.repository.uuid,
+          version: this.version,
+        });
+      }
     },
   },
 };

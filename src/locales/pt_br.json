@@ -258,7 +258,7 @@
     "result": {
       "load_result": "Carregar Resultados",
       "download": "Download",
-      "test": "Teste",
+      "test": "Teste manual",
       "evaluate_output": "Resultados do teste",
       "evaluate_output_text": "Para mais informações, veja nossa",
       "documentation": "documentação",
