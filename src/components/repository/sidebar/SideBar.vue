@@ -175,7 +175,7 @@
                 : 'sidebar-wrapper__body__element'
             ]"
           />
-          <section class="training-menu">
+          <!-- <section class="training-menu">
             <unnnic-sidebar-item
               v-if="getCurrentRepository.authorization.can_contribute"
               :icon="
@@ -226,7 +226,27 @@
                 "
               />
             </div>
-          </section>
+          </section> -->
+
+          <unnnic-sidebar-item
+            :text="$t('webapp.menu.training')"
+            :icon="checkSelectedMenu('repository-training')
+              ? 'graph-status-circle-1-1' : 'graph-status-circle-1'"
+            :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-training')"
+            :class="[
+              checkSelectedMenu('repository-training')
+                ? 'sidebar-wrapper__body--active'
+                : 'sidebar-wrapper__body__element'
+            ]"
+            @click="
+              setSelectMenu({
+                name: 'repository-training',
+                to: 'repository-training',
+                closeDrop: true
+              })
+            "
+          />
 
           <unnnic-sidebar-item
             v-if="getCurrentRepository.authorization.can_contribute"
@@ -267,6 +287,21 @@
               class="sidebar-wrapper__body__item"
             >
               <unnnic-sidebar-item
+                :text="$t('webapp.menu.test-automatic')"
+                :class="[
+                  checkSelectedMenu('repository-test-automatic')
+                    ? 'sidebar-wrapper__body--active'
+                    : 'sidebar-wrapper__body__element'
+                ]"
+                @click="
+                  setSelectMenu({
+                    name: 'repository-test-automatic',
+                    to: 'repository-test-automatic',
+                    closeDrop: false
+                  })
+                "
+              />
+              <unnnic-sidebar-item
                 :text="$t('webapp.menu.test-manual')"
                 :class="[
                   checkSelectedMenu('repository-test-manual')
@@ -277,21 +312,6 @@
                   setSelectMenu({
                     name: 'repository-test-manual',
                     to: 'repository-test-manual',
-                    closeDrop: false
-                  })
-                "
-              />
-              <unnnic-sidebar-item
-                :text="$t('webapp.menu.results')"
-                :class="[
-                  checkSelectedMenu('repository-results')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element'
-                ]"
-                @click="
-                  setSelectMenu({
-                    name: 'repository-results',
-                    to: 'repository-results',
                     closeDrop: false
                   })
                 "

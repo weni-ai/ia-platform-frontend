@@ -9,63 +9,90 @@
           class="evaluate">
           <div class="evaluate__content-header">
             <unnnic-card
-              :title="$t('webapp.evaluate-manual.header_title')"
+              :title="$t('webapp.evaluate-automatic-new.header_title')"
               icon="check-square-1"
               type="title"
               :has-information-icon="false"
-              scheme="aux-orange"
-            />
+              scheme="aux-orange" />
               <p
-                v-html="$t('webapp.evaluate-manual.header_title_p')"
+                v-html="$t('webapp.evaluate-automatic-new.header_title_p')"
                 class="column is-7"></p>
           </div>
 
           <div class="evaluate__divider"></div>
 
-          <div class="evaluate__test">
-            <div class="text column is-7">
-              <h2
-                v-html="$t('webapp.evaluate-manual.test_title')"></h2>
-              <p
-                v-html="$t('webapp.evaluate-manual.test_p')"></p>
-            </div>
-            <unnnic-button
-              type="secondary"
-              :text="$t('webapp.evaluate-manual.test_button')"
-              size="large"
-            />
+          <div class="evaluate__quality">
+            <h2>{{ $t("webapp.evaluate-automatic-new.quality_title") }}</h2>
+            <p>90%</p>
           </div>
 
+          <div class="evaluate__summary">
+            <div class="evaluate__summary__infos">
+              <unnnic-card-number
+                :description="$t('webapp.evaluate-automatic-new.summary_title1')"
+                :number="'3.125'"
+              />
+
+              <unnnic-card-number
+                :description="$t('webapp.evaluate-automatic-new.summary_title2')"
+                :number="'06/01/2023  17:50'"
+              />
+            </div>
+
+            <div class="evaluate__summary__chart">
+              <unnnic-chart-line
+                :title="$t('webapp.evaluate-automatic-new.summary_chart_title')"
+                condensed="true"
+                :data="chart"
+              />
+            </div>
+          </div>
           <unnnic-card
             type="account"
-            :title="$t('webapp.evaluate-manual.tips_title')"
-            :description="$t('webapp.evaluate-manual.tips_description')"
+            :title="$t('webapp.evaluate-automatic-new.tips_title')"
+            :description="$t('webapp.evaluate-automatic-new.tips_description')"
             icon="study-light-idea-1"
             scheme="brand-weni-soft"
             class="evaluate__tips"
           />
-
-          <div class="evaluate__historic">
-            <div class="evaluate__historic__title">
-              <h2>{{ $t("webapp.evaluate-manual.historic_title") }}</h2>
+          <div class="evaluate__results">
+            <div class="evaluate__results__title">
+              <h2>{{ $t("webapp.evaluate-automatic-new.results_title") }}</h2>
             </div>
 
-            <paginated-list
-              v-if="versionsList"
-              :item-component="evaluateItem"
-              :list="versionsList" />
-            <p
-              v-if="versionsList && versionsList.empty"
-              class="no-examples">{{ $t('webapp.evaluate.no_versions') }}</p>
-          </div>
-        </div>
-        <div class="evaluate__container">
-          <div class="evaluate__item">
-            <authorization-request-notification
-              v-if="repository && !repository.authorization.can_write"
-              :available="!repository.available_request_authorization"
-              :repository-uuid="repository.uuid"
-              @onAuthorizationRequested="updateRepository(false)" />
+            <unnnic-tab class="pb-6" initialTab="first" :tabs="tabs">
+              <template slot="tab-head-first">
+                {{ $t("webapp.evaluate-automatic-new.results_tab_title") }}
+              </template>
+              <template slot="tab-panel-first">
+
+              </template>
+              <template slot="tab-head-second">
+                {{ $t("webapp.evaluate-automatic-new.results_tab_title2") }}
+              </template>
+              <template slot="tab-panel-second">
+                <h2 class="evaluate__chart__title">Relatório de Precisão das Intenções</h2>
+                <p class="evaluate__chart__subtitle">
+                  Uma pontuação de precisão perfeita de 1.0 significa
+                  que todos os resultados dos testes foram positivos.
+                </p>
+                <unnnic-chart-bar
+                  condensed
+                  :groups="intentChart"
+                  :fixedMaxValue="1"
+                />
+                <h2 class="evaluate__chart__title">Relatório de Precisão das Entidades</h2>
+                <p class="evaluate__chart__subtitle">
+                  Uma pontuação de precisão perfeita de 1.0 significa
+                  que todos os resultados dos testes foram positivos.
+                </p>
+                <unnnic-chart-bar
+                  condensed
+                  :groups="entityChart"
+                  :fixedMaxValue="1"
+                />
+              </template>
+            </unnnic-tab>
           </div>
         </div>
       </div>
@@ -74,44 +101,30 @@
         <b-notification
           :closable="false"
           type="is-info">
-          {{ $t('webapp.evaluate-manual.login') }}
+          {{ $t('webapp.evaluate-automatic.login') }}
         </b-notification>
         <login-form hide-forgot-password />
       </div>
     </div>
-    <tour
-      v-if="activeTutorial === 'evaluate'"
-      :step-count="7"
-      :next-event="eventClick"
-      :finish-event="eventClickFinish"
-      :reset-tutorial="eventReset"
-      :skip-event="eventSkip"
-      name="evaluate"/>
   </repository-view-base>
 </template>
 
 <script>
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
-import BaseEvaluateExamples from '@/components/repository/repository-evaluate/BaseEvaluateExamples';
 import AuthorizationRequestNotification from '@/components/repository/AuthorizationRequestNotification';
 import { mapActions, mapState, mapGetters } from 'vuex';
 import { LANGUAGES } from '@/utils';
-import Tour from '@/components/Tour';
 import LoginForm from '@/components/auth/LoginForm';
 import RepositoryBase from './Base';
-import EvaluateVersionItem from '@/components/repository/repository-evaluate/versions/EvaluateVersionItem';
-import PaginatedList from '@/components/shared/PaginatedList';
+import ProgressStages from '@/components/shared/ProgressStages';
 
 export default {
-  name: 'RepositoryEvaluateManual',
+  name: 'RepositoryEvaluateAutomaticNew',
   components: {
     RepositoryViewBase,
     LoginForm,
-    BaseEvaluateExamples,
     AuthorizationRequestNotification,
-    Tour,
-    EvaluateVersionItem,
-    PaginatedList,
+    ProgressStages,
   },
   extends: RepositoryBase,
   data() {
@@ -123,8 +136,44 @@ export default {
       eventClickFinish: false,
       eventReset: false,
       eventSkip: false,
-      evaluateItem: EvaluateVersionItem,
-      versionsList: null,
+      tabs: ['first', 'second'],
+      chart: [
+        {
+          title: 'Jan',
+          value: 0
+        },
+        {
+          title: 'Fev',
+          value: 1
+        },
+        {
+          title: 'Mar',
+          value: 0.5
+        },
+        {
+          title: 'Abr',
+          value: 1
+        }
+      ],
+      intentChart: [
+        { values: { Mississipi: 1 }, title: 'Mississipi' },
+        { values: { digital: 0.7 }, title: 'digital' },
+        { values: { Developer: 0.3 }, title: 'Developer' },
+        { values: { people: 0.6 }, title: 'people' },
+        { values: { fields: 0.4 }, title: 'fields' },
+        { values: { Analyst: 0.5 }, title: 'Analyst' },
+        { values: { Iowa: 0.6 }, title: 'Iowa' }
+      ],
+      entityChart: [
+        { values: { Mississipi: 1 }, title: 'Mississipi' },
+        { values: { digital: 0.7 }, title: 'digital' },
+        { values: { Developer: 0.3 }, title: 'Developer' },
+        { values: { people: 0.6 }, title: 'people' },
+        { values: { fields: 0.4 }, title: 'fields' },
+        { values: { Analyst: 0.5 }, title: 'Analyst' },
+        { values: { Iowa: 0.8 }, title: 'Iowa' },
+        { values: { symptoms: 0.6 }, title: 'symptoms' }
+      ],
     };
   },
   computed: {
@@ -134,8 +183,6 @@ export default {
     ...mapGetters({
       repositoryVersion: 'getSelectedVersion',
       activeTutorial: 'activeTutorial',
-      repository: 'getCurrentRepository',
-      version: 'getSelectedVersion',
     }),
     languages() {
       if (!this.selectedRepository || !this.selectedRepository.evaluate_languages_count) return [];
@@ -143,12 +190,9 @@ export default {
         .map((lang, index) => ({
           id: index + 1,
           value: lang,
-          title: `${LANGUAGES[lang]} (${this.$tc('webapp.evaluate-manual.get_examples_test_sentences', this.selectedRepository.evaluate_languages_count[lang])})`,
+          title: `${LANGUAGES[lang]}`,
         }));
     },
-  },
-  mounted() {
-    this.updateVersionList();
   },
   watch: {
     selectedRepository() {
@@ -161,7 +205,6 @@ export default {
     ...mapActions([
       'runNewEvaluate',
       'getTrainingStatus',
-      'getAllResults',
     ]),
     dispatchClick() {
       this.eventClick = !this.eventClick;
@@ -216,20 +259,12 @@ export default {
         this.error = error.response.data;
         this.evaluating = false;
         this.$buefy.toast.open({
-          message: `${this.error.detail || this.$t('webapp.evaluate-manual.default_error')} `,
+          message: `${this.error.detail || this.$t('webapp.evaluate-automatic.default_error')} `,
           type: 'is-danger',
           duration: 5000,
         });
       }
       return false;
-    },
-    async updateVersionList(force = false) {
-      if (!this.resultExampleList || force) {
-        this.versionsList = await this.getAllResults({
-          repositoryUuid: this.repository.uuid,
-          version: this.version,
-        });
-      }
     },
   },
 };
@@ -243,10 +278,64 @@ export default {
 
 .evaluate {
 
+  &__quality {
+    background-color: rgba(0, 158, 150, 0.08);
+    border-radius: 8px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    margin-top: $unnnic-spacing-stack-md;
+    padding-left: $unnnic-spacing-stack-sm;
+
+    p {
+      font-weight: 900;
+      padding-left: $unnnic-spacing-stack-xs;
+      color: #009E96;
+    }
+  }
+
   &__divider {
     height: 1px;
     background-color: $unnnic-color-neutral-soft;
     margin-top: $unnnic-spacing-stack-md;
+  }
+
+  &__summary {
+    display: flex;
+
+    &__infos {
+      width: 35%;
+      display: flex;
+      flex-direction: column;
+    }
+    .unnnic-card-number {
+      background-color: #fff;
+      max-width: 333px;
+      border: 1px solid #E2E6ED;
+      margin-top: $unnnic-spacing-stack-sm;
+
+      /deep/ h4 {
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-dark;
+        font-size: $font-size;
+      }
+
+      /deep/ span {
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-dark;
+        font-size: $unnnic-font-size-title-sm;
+      }
+    }
+
+    &__chart {
+      margin-left: $unnnic-spacing-stack-sm;
+      margin-top: $unnnic-spacing-stack-sm;
+      width: 60%;
+
+      .unnnic-chart-line {
+        height: 100%;
+      }
+    }
   }
 
   &__tips {
@@ -264,47 +353,17 @@ export default {
     }
   }
 
-  &__test {
+  &__results {
     margin-top: $unnnic-spacing-stack-lg;
-    border: 1px solid $unnnic-color-neutral-soft;
-    border-radius: 8px;
-    height: 132px;
-    padding: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .text {
-      margin-left: 10px;
-
-      h2 {
-        font-family: $unnnic-font-family-secondary;
-        color: $unnnic-color-neutral-dark;
-        font-size: $unnnic-font-size-title-sm;
-      }
-
-      p {
-        margin-top: $unnnic-spacing-stack-sm;
-        font-family: $unnnic-font-family-secondary;
-        color: $unnnic-color-neutral-dark;
-        font-size: 14px;
-      }
-    }
-
-    .unnnic-button {
-      height: 48px;
-      width: 300px;
-    }
-  }
-
-  &__historic {
-    margin-top: $unnnic-spacing-stack-lg;
-
     &__title {
       h2 {
         font-family: $unnnic-font-family-secondary;
         color: $unnnic-color-neutral-dark;
       }
+    }
+
+    .tab {
+      margin-top: $unnnic-spacing-stack-md;
     }
   }
 
@@ -357,6 +416,20 @@ export default {
           }
         }
       }
+    }
+  }
+  &__chart {
+    &__title {
+      font-size: 20px;
+      font-family: 'Lato';
+      color: #4E5666;
+      margin: 2rem 0 1rem;
+    }
+    &__subtitle {
+      font-size: 14px;
+      font-family: 'Lato';
+      color: #67738B;
+      margin-bottom: 1rem;
     }
   }
 }

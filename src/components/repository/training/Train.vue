@@ -13,6 +13,7 @@
       :requirements-to-train="trainRequirements"
       :languages-warnings="languagesWarnings"
       :language-available-to-train="languageAvailableToTrain"
+      :evaluating="evaluating"
       @onImportSuccess="updateItems"
     />
     <div v-if="trainProgress" class="train__progress">
@@ -103,7 +104,8 @@ export default {
       repositoryStatus: {},
       loadingStatus: false,
       languageAvailableToTrain: [],
-      isItOkToEnableButton: false
+      isItOkToEnableButton: false,
+      evaluating: false
     };
   },
   computed: {
@@ -153,7 +155,8 @@ export default {
       'getRepositoryStatusTraining',
       'setRepositoryTraining',
       'getRepositoryRequirements',
-      'setRequirements'
+      'setRequirements',
+      'runNewEvaluate'
     ]),
     sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
@@ -332,7 +335,37 @@ export default {
       this.getRepositoryStatus();
       this.repositoryRequirements();
       this.$emit('updateItems')
-    }
+    },
+    async newEvaluate() {
+      this.evaluating = true;
+      try {
+        await Promise.all(this.repository.available_languages.map(async (language) => {
+          const result = await this.runNewEvaluate({
+            repositoryUUID: this.repository.uuid,
+            language,
+            version: this.version,
+          });
+          this.evaluating = false;
+        }));
+        // if (this.repository.available_languages.length > 1) {
+        //   const result = await this.runNewEvaluate({
+        //     repositoryUUID: this.repository.uuid,
+        //     language: this.currentLanguage,
+        //     version: this.version,
+        //   });
+        //   this.evaluating = false;
+        // }
+      } catch (error) {
+        // this.dispatchReset();
+        // this.error = error.response.data;
+        this.evaluating = false;
+        this.$buefy.toast.open({
+          message: `${this.error.detail || this.$t('webapp.evaluate-manual.default_error')} `,
+          type: 'is-danger',
+          duration: 5000,
+        });
+      }
+    },
   }
 };
 </script>
