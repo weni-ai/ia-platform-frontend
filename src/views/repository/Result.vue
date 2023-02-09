@@ -62,18 +62,36 @@
               <h2>{{ $t("webapp.evaluate-automatic-new.results_title") }}</h2>
             </div>
 
-            <unnnic-tab initialTab="first" :tabs="tabs">
+            <unnnic-tab class="pb-6" initialTab="first" :tabs="tabs">
               <template slot="tab-head-first">
                 {{ $t("webapp.evaluate-automatic-new.results_tab_title") }}
               </template>
               <template slot="tab-panel-first">
-                <p>testando</p>
               </template>
               <template slot="tab-head-second">
                 {{ $t("webapp.evaluate-automatic-new.results_tab_title2") }}
               </template>
               <template slot="tab-panel-second">
-                <p>testando2</p>
+                <h2 class="evaluate__chart__title">Relatório de Precisão das Intenções</h2>
+                <p class="evaluate__chart__subtitle">
+                  Uma pontuação de precisão perfeita de 1.0 significa
+                  que todos os resultados dos testes foram positivos.
+                </p>
+                <unnnic-chart-bar
+                  condensed
+                  :groups="intentChart"
+                  :fixedMaxValue="1"
+                />
+                <h2 class="evaluate__chart__title">Relatório de Precisão das Entidades</h2>
+                <p class="evaluate__chart__subtitle">
+                  Uma pontuação de precisão perfeita de 1.0 significa
+                  que todos os resultados dos testes foram positivos.
+                </p>
+                <unnnic-chart-bar
+                  condensed
+                  :groups="entityChart"
+                  :fixedMaxValue="1"
+                />
               </template>
             </unnnic-tab>
           </div>
@@ -121,6 +139,25 @@ export default {
       evaluating: false,
       error: {},
       tabs: ['first', 'second'],
+      intentChart: [
+        { values: { Mississipi: 1 }, title: 'Mississipi' },
+        { values: { digital: 0.7 }, title: 'digital' },
+        { values: { Developer: 0.3 }, title: 'Developer' },
+        { values: { people: 0.6 }, title: 'people' },
+        { values: { fields: 0.4 }, title: 'fields' },
+        { values: { Analyst: 0.5 }, title: 'Analyst' },
+        { values: { Iowa: 0.6 }, title: 'Iowa' }
+      ],
+      entityChart: [
+        { values: { Mississipi: 1 }, title: 'Mississipi' },
+        { values: { digital: 0.7 }, title: 'digital' },
+        { values: { Developer: 0.3 }, title: 'Developer' },
+        { values: { people: 0.6 }, title: 'people' },
+        { values: { fields: 0.4 }, title: 'fields' },
+        { values: { Analyst: 0.5 }, title: 'Analyst' },
+        { values: { Iowa: 0.8 }, title: 'Iowa' },
+        { values: { symptoms: 0.6 }, title: 'symptoms' }
+      ],
     };
   },
   computed: {
@@ -290,6 +327,20 @@ export default {
   &__content-wrapper {
     max-width: 100%;
     margin: 0 auto;
+  }
+  &__chart {
+    &__title {
+      font-size: 20px;
+      font-family: 'Lato';
+      color: #4E5666;
+      margin: 2rem 0 1rem;
+    }
+    &__subtitle {
+      font-size: 14px;
+      font-family: 'Lato';
+      color: #67738B;
+      margin-bottom: 1rem;
+    }
   }
 }
 </style>

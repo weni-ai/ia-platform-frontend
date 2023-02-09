@@ -87,7 +87,7 @@ export default {
 }
 .modal-upload {
   padding: 0;
-  background: transparent;
+  background: white;
   box-shadow: none;
   /deep/ .close-button-container {
     display: none;
@@ -95,9 +95,19 @@ export default {
   /deep/ .footer {
     padding: 1.5rem 0 2.5rem;
     margin-top: 0;
+    background: white;
   }
   /deep/ .unnnic-import-card__data {
     text-align: left;
+  }
+  /deep/ .unnnic-button {
+    background-color: rgba(208,211,217,.16);
+    color: #4e5666;
+    border: .0625rem solid #d0d3d9;
+
+    &--terciary {
+      display: none;
+    }
   }
 }
 </style>

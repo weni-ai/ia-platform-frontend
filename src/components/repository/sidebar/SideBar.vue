@@ -175,7 +175,7 @@
                 : 'sidebar-wrapper__body__element'
             ]"
           />
-          <section class="training-menu">
+          <!-- <section class="training-menu">
             <unnnic-sidebar-item
               v-if="getCurrentRepository.authorization.can_contribute"
               :icon="
@@ -226,7 +226,27 @@
                 "
               />
             </div>
-          </section>
+          </section> -->
+
+          <unnnic-sidebar-item
+            :text="$t('webapp.menu.training')"
+            :icon="checkSelectedMenu('repository-training')
+              ? 'graph-status-circle-1-1' : 'graph-status-circle-1'"
+            :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-training')"
+            :class="[
+              checkSelectedMenu('repository-training')
+                ? 'sidebar-wrapper__body--active'
+                : 'sidebar-wrapper__body__element'
+            ]"
+            @click="
+              setSelectMenu({
+                name: 'repository-training',
+                to: 'repository-training',
+                closeDrop: true
+              })
+            "
+          />
 
           <unnnic-sidebar-item
             v-if="getCurrentRepository.authorization.can_contribute"
@@ -572,6 +592,7 @@ export default {
       if (
         this.$router.currentRoute.name === 'repository-test-automatic'
         || this.$router.currentRoute.name === 'repository-test-manual'
+        || this.$router.currentRoute.name === 'repository-results'
       ) {
         this.dropSelect = 'isTestsActive';
       }
