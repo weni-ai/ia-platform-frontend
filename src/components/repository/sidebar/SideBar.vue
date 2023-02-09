@@ -248,7 +248,7 @@
             "
           />
 
-          <!-- <section class="evaluate-menu">
+          <section class="evaluate-menu">
             <unnnic-sidebar-item
               v-if="getCurrentRepository.authorization.can_contribute"
               :icon="dropSelect === 'isTestsActive' ? 'check-square-2' : 'check-square-1'"
@@ -267,6 +267,21 @@
               class="sidebar-wrapper__body__item"
             >
               <unnnic-sidebar-item
+                :text="$t('webapp.menu.test-automatic')"
+                :class="[
+                  checkSelectedMenu('repository-test-automatic')
+                    ? 'sidebar-wrapper__body--active'
+                    : 'sidebar-wrapper__body__element'
+                ]"
+                @click="
+                  setSelectMenu({
+                    name: 'repository-test-automatic',
+                    to: 'repository-test-automatic',
+                    closeDrop: false
+                  })
+                "
+              />
+              <unnnic-sidebar-item
                 :text="$t('webapp.menu.test-manual')"
                 :class="[
                   checkSelectedMenu('repository-test-manual')
@@ -281,23 +296,8 @@
                   })
                 "
               />
-              <unnnic-sidebar-item
-                :text="$t('webapp.menu.results')"
-                :class="[
-                  checkSelectedMenu('repository-results')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element'
-                ]"
-                @click="
-                  setSelectMenu({
-                    name: 'repository-results',
-                    to: 'repository-results',
-                    closeDrop: false
-                  })
-                "
-              />
             </div>
-          </section> -->
+          </section>
           <unnnic-sidebar-item
             v-if="getCurrentRepository.authorization.can_contribute"
             :icon="checkSelectedMenu('repository-log') ? 'messages-bubble-3' : 'messages-bubble-1'"
@@ -572,7 +572,6 @@ export default {
       if (
         this.$router.currentRoute.name === 'repository-test-automatic'
         || this.$router.currentRoute.name === 'repository-test-manual'
-        || this.$router.currentRoute.name === 'repository-results'
       ) {
         this.dropSelect = 'isTestsActive';
       }
