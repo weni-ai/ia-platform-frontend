@@ -369,8 +369,11 @@
         "see-all_bases": "See all bases",
         "add_base":"+ Add base"
       },
-      "copy-intelligence": "Copy intelligence"
-
+      "copy-intelligence": "Copy intelligence",
+      "intelligence_filter_title": "Filter community intelligences",
+      "intelligence_filter_category": "Categories",
+      "intelligence_filter_languages": "Languages",
+      "intelligence_filter_languages_select": "Select a language"
     },
     "summary": {
       "training_information": "Traning information",

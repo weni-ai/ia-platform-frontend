@@ -369,7 +369,11 @@
         "edit-base_modal_delete_button_cancel": "Cancelar",
         "edit-base_modal_delete_button_validation": "Digite ${this.knowledgeBase.title} para confirmar a exclusão"
       },
-      "copy-intelligence": "Copiar inteligência"
+      "copy-intelligence": "Copiar inteligência",
+      "intelligence_filter_title": "Filtrar Inteligências da comunidade",
+      "intelligence_filter_category": "Categorias",
+      "intelligence_filter_languages": "Idiomas",
+      "intelligence_filter_languages_select": "Selecione um idioma"
     },
     "summary": {
       "training_information": "Informações do Treinamento",
