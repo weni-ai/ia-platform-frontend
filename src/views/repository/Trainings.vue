@@ -20,7 +20,7 @@
           {{ $t("webapp.trainings.grid_text1") }}
         </template>
         <template slot="tab-panel-first">
-          <div class="trainings-repository__new-example">
+          <div class="trainings-repository__new-example pt-4">
         <div v-if="authenticated">
           <div v-if="repository.authorization.can_contribute">
             <div class="trainings-repository__list-wrapper">
@@ -117,7 +117,7 @@
         </template>
         <template slot="tab-panel-second">
           <div>
-            <h2 class="trainings-repository__list-wrapper__title">
+            <h2 class="trainings-repository__list-wrapper__title pt-4">
               {{ $t('webapp.translate.import_title') }}
             </h2>
           </div>
@@ -496,6 +496,7 @@ export default {
       font-size: 14px;
       color: #4E5666;
       margin-top: 1rem;
+      margin-bottom: 2rem;
 
       /deep/ a {
         color: #4E5666;

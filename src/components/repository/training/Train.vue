@@ -8,12 +8,13 @@
       "
       :buttonLoading="loading || !isItOkToEnableButton"
       buttonClass="train__button"
-      :buttonClick="verifyTrain"
+      :buttonClick="showAlertForce"
       :examples-list="examplesList"
       :requirements-to-train="trainRequirements"
       :languages-warnings="languagesWarnings"
       :language-available-to-train="languageAvailableToTrain"
       :evaluating="evaluating"
+      :runEvaluate="newEvaluate"
       @onImportSuccess="updateItems"
     />
     <div v-if="trainProgress" class="train__progress">
@@ -44,6 +45,81 @@
       @dispatchCloseProgress="closeProgress()"
       @resetProgressValue="progress = 10"
     />
+    <unnnic-modal
+      :showModal="showEvaluateSuccess"
+      text="Frases testadas com sucesso! O índice de acerto foi de 82%"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openSuccessModal = false"
+      :closeIcon="false"
+    >
+      <span
+        slot="message"
+      >
+        Das 125 frases enviadas para treinamento, a IA compreendeu corretamente 102.
+        Veja os resultados detalhados do teste ou envie as frases direto para treinamento.
+      </span>
+      <unnnic-button slot="options" type="terciary" @click.prevent.stop="verifyTrain()">
+        Enviar para treinamento
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        class="create-repository__container__button"
+        type="secondary"
+        @click.prevent.stop="goToEvaluateResult()"
+      >
+        Ver resultado
+      </unnnic-button>
+    </unnnic-modal>
+    <unnnic-modal
+        :showModal="alertForce"
+        text="Com as novas frases, a força da IA vai cair.
+          Deseja executar o treinamento mesmo assim?"
+        scheme="feedback-yellow"
+        modal-icon="alert-circle-1"
+        :closeIcon="false"
+        class="train__intelligence-force__modal"
+      >
+        <div slot="message">
+          <div class="train__intelligence-force">
+              <unnnic-chart-rainbow :value="75" description="Forte" />
+              <div class="train__intelligence-force__arrow">
+                <unnnic-icon-svg icon="keyboard-arrow-right-1" size="lg" />
+              </div>
+              <unnnic-chart-rainbow :value="60" description="Regular" />
+          </div>
+        </div>
+        <div slot="message">
+          <div class="mt-5 mb-2">
+            Veja algumas recomendações para a força da IA não cair:
+          </div>
+          <unnnic-alert
+            version="1.0"
+            title=""
+            text="Adicione mais frases na intenção symptoms"
+            scheme="aux-blue"
+            icon="study-light-idea-1"
+          />
+          <unnnic-alert
+            version="1.0"
+            title=""
+            text="Adicione mais frases na intenção symptoms"
+            scheme="aux-blue"
+            icon="study-light-idea-1"
+          />
+        </div>
+        <unnnic-button slot="options" type="terciary" @click.prevent.stop="alertForce = false">
+          {{ $t("webapp.home.cancel") }}
+        </unnnic-button>
+        <unnnic-button
+          slot="options"
+          class="create-repository__container__button"
+          type="secondary"
+          @click.prevent.stop="verifyTrain()"
+        >
+          Executar treinamento
+        </unnnic-button>
+      </unnnic-modal>
   </div>
 </template>
 
@@ -105,7 +181,10 @@ export default {
       loadingStatus: false,
       languageAvailableToTrain: [],
       isItOkToEnableButton: false,
-      evaluating: false
+      evaluating: false,
+      showEvaluateSuccess: false,
+      evaluateResult: {},
+      alertForce: false
     };
   },
   computed: {
@@ -247,6 +326,8 @@ export default {
       this.$emit('onTrain');
     },
     async verifyTrain() {
+      this.showEvaluateSuccess = false
+      this.alertForce = false
       if (
         Object.keys(this.getRequirements.languages_warnings).length
         || Object.keys(this.getRequirements.requirements_to_train).length
@@ -338,34 +419,55 @@ export default {
     },
     async newEvaluate() {
       this.evaluating = true;
-      try {
-        await Promise.all(this.repository.available_languages.map(async (language) => {
-          const result = await this.runNewEvaluate({
-            repositoryUUID: this.repository.uuid,
-            language,
-            version: this.version,
+      this.repository.available_languages.map(async (language) => {
+        try {
+          if (this.repository.available_languages.length > 1) {
+            const result = await this.runNewEvaluate({
+              repositoryUUID: this.repository.uuid,
+              language,
+              version: this.version,
+            });
+            this.evaluateResult = result
+            this.showEvaluateSuccess = true;
+          } else {
+            const result = await this.runNewEvaluate({
+              repositoryUUID: this.repository.uuid,
+              language,
+              version: this.version,
+            });
+            this.$buefy.toast.open({
+              message: `${this.$t('webapp.inbox.entry_has_add_to_sentence')}`,
+              type: 'is-success'
+            });
+            this.evaluateResult = result
+            this.showEvaluateSuccess = true;
+          }
+        } catch (error) {
+          console.log(error)
+          console.log(error.response)
+          this.$buefy.toast.open({
+            message: `${error.response.data.detail || this.$t('webapp.evaluate-manual.default_error')} `,
+            type: 'is-danger'
           });
+        } finally {
           this.evaluating = false;
-        }));
-        // if (this.repository.available_languages.length > 1) {
-        //   const result = await this.runNewEvaluate({
-        //     repositoryUUID: this.repository.uuid,
-        //     language: this.currentLanguage,
-        //     version: this.version,
-        //   });
-        //   this.evaluating = false;
-        // }
-      } catch (error) {
-        // this.dispatchReset();
-        // this.error = error.response.data;
-        this.evaluating = false;
-        this.$buefy.toast.open({
-          message: `${this.error.detail || this.$t('webapp.evaluate-manual.default_error')} `,
-          type: 'is-danger',
-          duration: 5000,
-        });
-      }
+        }
+      });
     },
+    goToEvaluateResult() {
+      this.$router.push({
+        name: 'repository-result',
+        params: {
+          ownerNickname: this.repository.owner.nickname,
+          slug: this.repository.slug,
+          resultId: this.evaluateResult.data.evaluate_id,
+          version: this.evaluateResult.data.evaluate_version,
+        },
+      });
+    },
+    showAlertForce() {
+      this.alertForce = true
+    }
   }
 };
 </script>
@@ -409,5 +511,45 @@ export default {
       z-index: 1;
     }
   }
+  &__intelligence-force {
+    display: flex;
+    align-items: center;
+
+    &__arrow {
+      margin: 0 1rem;
+    }
+
+    &__modal {
+      /deep/ .unnnic-modal-container-background {
+        width: 780px;
+      }
+      /deep/ .unnnic-modal-container-background-body-description {
+        padding-bottom: .5rem;
+      }
+      /deep/ .unnnic-alert {
+        width: 100%;
+        text-align: left;
+        position: unset;
+        margin-top: .5rem;
+
+        .unnnic--clickable {
+          display: none;
+        }
+      }
+    }
+  }
 }
+/deep/ .number {
+    align-items: unset;
+    background-color: unset;
+    border-radius: 0;
+    display: unset;
+    height: 0;
+    justify-content: unset;
+    margin-right: 0;
+    min-width: unset;
+    padding: 0;
+    text-align: unset;
+   vertical-align: bottom;
+ }
 </style>

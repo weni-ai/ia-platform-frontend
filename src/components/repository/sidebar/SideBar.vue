@@ -249,6 +249,26 @@
           />
 
           <unnnic-sidebar-item
+            :text="$t('webapp.menu.suggestion')"
+            :icon="checkSelectedMenu('repository-suggestion')
+              ? 'copy-paste-1' : 'copy-paste-1'"
+            :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-suggestion')"
+            :class="[
+                  checkSelectedMenu('repository-suggestion')
+                    ? 'sidebar-wrapper__body--active'
+                    : 'sidebar-wrapper__body__element'
+                ]"
+            @click="
+                  setSelectMenu({
+                    name: 'repository-suggestion',
+                    to: 'repository-suggestion',
+                    closeDrop: false
+                  })
+                "
+          />
+
+          <unnnic-sidebar-item
             v-if="getCurrentRepository.authorization.can_contribute"
             :icon="checkSelectedMenu('repository-database') ? 'folder-2' : 'folder-1'"
             :text="$t('webapp.menu.database')"
