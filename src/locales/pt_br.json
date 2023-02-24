@@ -536,7 +536,7 @@
       "database_untrained": "Essa inteligência não possui nenhuma frase treinada. Adicione frases e treine-as no menu Treinamento.",
       "database_modal_title": "Frase(s) editada(s)!",
       "database_modal_description": "As frases foram editadas com sucesso. Execute o treinamento novamente para que a Inteligência reconheça essas frases 😉",
-      "database_save_button": "Salvar alterações e enviar pra treinamento",
+      "database_save_button": "Enviar alterações pra treinamento",
       "train_title": "Treinar Inteligência",
       "train_description": "Adicione frases para aprimorar a Inteligência Artificial. <a href={link}>Veja nossa documentação</a> e conheça as melhores práticas para criar uma IA de qualidade.",
       "entities": "Entidades (opcional)",
