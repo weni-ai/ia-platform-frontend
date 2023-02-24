@@ -23,7 +23,6 @@ import RepositorySettings from '@/views/repository/Settings';
 import RepositoryIntegration from '@/views/repository/Integration';
 import RepositoryEvaluateManual from '@/views/repository/EvaluateManual';
 import RepositoryEvaluateAutomatic from '@/views/repository/EvaluateAutomatic';
-import RepositoryEvaluateAutomaticNew from '@/views/repository/EvaluateAutomaticNew';
 import RepositoryResults from '@/views/repository/Results';
 import RepositoryResult from '@/views/repository/Result';
 import RepositoryVersions from '@/views/repository/Versions';
@@ -224,11 +223,6 @@ const router = new Router({
         //   name: 'repository-test-automatic',
         //   component: RepositoryEvaluateAutomatic,
         // },
-        {
-          path: ':ownerNickname/:slug/evaluate/automatic',
-          name: 'repository-test-automatic',
-          component: RepositoryEvaluateAutomaticNew,
-        },
         {
           path: ':ownerNickname/:slug/log/',
           name: 'repository-log',

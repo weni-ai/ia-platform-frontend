@@ -372,12 +372,11 @@ export default {
 }
 
 /deep/ .column:nth-child(odd) {
-  padding-left: .8rem !important;
-  padding-right: .8rem !important;
+  padding-left: .8rem;
 }
 
 /deep/ .column:nth-child(even) {
-  padding-right: .8rem !important;
+  padding-right: .8rem;
 }
 
 /deep/ .column:not(:first-child) {

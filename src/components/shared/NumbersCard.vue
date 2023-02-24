@@ -1,6 +1,5 @@
 <template>
-  <unnnic-tool-tip
-    :text="helpText || ''"
+  <unnnic-tool-tip :text="helpText"
     :enabled="!disabled && helpText && helpText.length > 0"
     side="bottom"
     maxWidth="15rem"

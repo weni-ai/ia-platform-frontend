@@ -3,9 +3,9 @@
     <h1 class="sentences-resume__title">
       {{$t('webapp.resumeSentences.title')}}
     </h1>
-    <!-- <p class="sentences-resume__description">
+    <p class="sentences-resume__description">
       {{$t('webapp.resumeSentences.description')}}
-    </p> -->
+    </p>
     <div class="sentences-resume__wrapper">
       <div class="sentences-resume__wrapper-cards">
         <NumbersCard
@@ -33,27 +33,16 @@
           :disabled="buttonDisabled"
           :loading="buttonLoading"
           @click="train()"
-          iconLeft="graph-status-circle-1"
         >
           {{ $t("webapp.trainings.run_training") }}
         </unnnic-button>
         <unnnic-button
-          type="secondary"
-          size="large"
-          :disabled="buttonDisabled"
-          :loading="evaluating"
-          iconLeft="check-square-1"
-          @click="newEvaluate()"
-        >
-          {{ $t("webapp.trainings.run_tests") }}
-        </unnnic-button>
-        <!-- <unnnic-button
           type="terciary"
           size="large"
           @click.native="setVisibleImportModal()"
         >
           {{ $t("webapp.translate.import_title") }}
-        </unnnic-button> -->
+        </unnnic-button>
       </div>
     </div>
 
@@ -126,7 +115,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 import SummaryInformation from '@/components/repository/SummaryInformation';
 import NumbersCard from '@/components/shared/NumbersCard';
 import ImportDataModal from '@/components/shared/ImportDataModal';
@@ -194,13 +183,6 @@ export default {
     languageAvailableToTrain: {
       type: Array,
       required: true
-    },
-    runEvaluate: {
-      type: Function,
-    },
-    evaluating: {
-      type: Boolean,
-      default: false
     },
   },
   data() {
@@ -282,9 +264,6 @@ export default {
     secondText(requirement) {
       const initalText = requirement.split('\n');
       return initalText[1];
-    },
-    async newEvaluate(){
-      await this.runEvaluate();
     },
   },
 };
