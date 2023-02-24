@@ -146,7 +146,7 @@ export default {
       selectedItems: [],
       openDeleteModal: false,
       openSuccessModal: false,
-      showFilters: false
+      showFilters: false,
     };
   },
   computed: {
@@ -210,7 +210,7 @@ export default {
     },
     async onUpdateCount(params) {
       await this.$nextTick();
-      if (params.total !== 0) this.showFilters = true
+      if (params) this.showFilters = true
     }
   },
 };
