@@ -64,16 +64,44 @@
                 size="xs"
                 value
               />
-              <p>Comercial</p>
+              <p>Commercial</p>
             </div>
           </div>
-          <div>
+          <div class="ml-6">
             <div class="intelligence-filter__container__item">
               <unnnic-checkbox
                 size="xs"
                 value
               />
-              <p>Comercial</p>
+              <p>Education</p>
+            </div>
+            <div class="intelligence-filter__container__item">
+              <unnnic-checkbox
+                size="xs"
+                value
+              />
+              <p>Food</p>
+            </div>
+            <div class="intelligence-filter__container__item">
+              <unnnic-checkbox
+                size="xs"
+                value
+              />
+              <p>Health</p>
+            </div>
+            <div class="intelligence-filter__container__item">
+              <unnnic-checkbox
+                size="xs"
+                value
+              />
+              <p>Technology</p>
+            </div>
+            <div class="intelligence-filter__container__item">
+              <unnnic-checkbox
+                size="xs"
+                value
+              />
+              <p>Others</p>
             </div>
           </div>
         </div>
@@ -105,7 +133,7 @@ export default {
 
 .intelligence-filter {
   width: 100%;
-  height: 100%;
+  height: max-content;
   border: 1px solid #E2E6ED;
   border-radius: 8px;
 

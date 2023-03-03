@@ -43,7 +43,7 @@
       "save_password": "Save password"
     },
     "intelligences_lib": {
-      "title": "Intelligences Library",
+      "title": "Artificial Intelligence",
       "new_intelligence": "New Intelligence",
       "unused_projects": "Your project is not using intelligence linked by a classifier. Create a new one or explore among the intelligence of your organization or community in the options above.",
       "created_by": "Created by",
