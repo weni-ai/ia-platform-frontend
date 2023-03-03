@@ -1,5 +1,5 @@
 <template>
-  <div class="unnnic-card-intelligence">
+  <div @click.prevent.stop="repositoryDetailsRouterParams()" class="unnnic-card-intelligence">
     <section class="unnnic-card-intelligence__header">
       <div class="unnnic-card-intelligence__header__detail">
         <div class="unnnic-card-intelligence__header__detail__title">
@@ -13,7 +13,7 @@
       </div>
 
       <div class="unnnic-card-intelligence__header__buttons">
-        <div>
+        <!-- <div>
           <unnnic-tag
             @click.native="repositoryDetailsRouterParams()"
             :text="$t('webapp.intelligences_lib.open')"
@@ -21,6 +21,29 @@
             class="unnnic-card-intelligence__header__buttons__tag"
             clickable
           />
+        </div> -->
+        <div v-if="hasIntegrationDefined && !hasIntegrationCheckError">
+          <unnnic-tool-tip
+             side="top"
+             :text="hasIntegration ?
+              $t('webapp.home.remove_integrate') : $t('webapp.home.integrate')"
+             enabled
+           >
+            <unnnic-button-icon
+              v-if="!hasIntegration"
+              @click.prevent.stop="changeIntegrateModalState(true)"
+              size="small"
+              icon="add-1"
+              class="mr-2"
+            />
+            <unnnic-button-icon
+              v-else
+              @click.prevent.stop="changeIntegrateModalState(true)"
+              size="small"
+              icon="subtract-circle-1"
+              class="mr-2 unnnic-card-intelligence__header__buttons__dropdown--reddish"
+            />
+          </unnnic-tool-tip>
         </div>
 
         <unnnic-dropdown
@@ -64,7 +87,7 @@
             </div>
           </unnnic-dropdown-item>
 
-          <unnnic-dropdown-item
+          <!-- <unnnic-dropdown-item
             @click="changeIntegrateModalState(true)"
             v-if="hasIntegrationDefined && !hasIntegrationCheckError"
           >
@@ -90,7 +113,7 @@
             <div class="unnnic-card-intelligence__header__buttons__dropdown__loading">
               <unnnic-icon-svg size="md" icon="loading-circle-1" class="rotation" />
             </div>
-          </unnnic-dropdown-item>
+          </unnnic-dropdown-item> -->
 
           <unnnic-dropdown-item
             v-if="!repositoryDetail.is_private"
@@ -123,6 +146,7 @@
         <unnnic-icon-svg
           icon="information-circle-4"
           class="unnnic-card-intelligence__type__icon"
+          scheme="neutral-soft"
           size="sm"
         />
       </unnnic-tool-tip>
@@ -136,6 +160,7 @@
         <unnnic-icon-svg
           icon="information-circle-4"
           class="unnnic-card-intelligence__type__icon"
+          scheme="neutral-soft"
           size="sm"
         />
       </unnnic-tool-tip>
@@ -187,6 +212,42 @@
           </div>
         </div>
       </div>
+
+      <div v-if="type === 'repository'" class="unnnic-card-intelligence__detail__content"
+        v-show="repositoryDetail.repository_type === 'classifier'">
+        <div class="unnnic-card-intelligence__detail__content__data">
+          {{ $tc("webapp.intelligences_lib.intelligence_force",
+          this.repositoryDetail.intents.length) }}
+          <unnnic-tool-tip
+            v-if="repositoryDetail.repository_type === 'classifier'"
+            :text="$t('webapp.intelligences_lib.intelligence_force_tooltip')"
+            enabled
+            side="top"
+            max-width="17rem"
+          >
+            <unnnic-icon-svg
+              icon="information-circle-4"
+              class="unnnic-card-intelligence__type__icon"
+              scheme="neutral-soft"
+              size="sm"
+            />
+          </unnnic-tool-tip>
+        </div>
+        <div class="unnnic-card-intelligence__detail__content__data__info">
+          <unnnic-icon-svg
+            icon="fitness-biceps-1"
+            class="unnnic-card-intelligence__detail__content__data__info__icon"
+            size="sm"
+            scheme="feedback-blue"
+            hasBackground
+          />
+
+          <div class="unnnic-card-intelligence__detail__content__data__info__number">
+            {{ `${repositoryDetail.intents.length}%` }}
+          </div>
+        </div>
+      </div>
+
     </section>
     <integration-modal
       :openModal="integrateModal"
@@ -274,7 +335,7 @@ export default {
       return {
         name: this.repositoryDetail.name,
         repository_version_id: this.repositoryDetail.version_default?.id,
-        uuid: this.repositoryDetail.uuid
+        uuid: this.repositoryDetail.uuid,
       };
     },
     hasIntegrationDefined() {
@@ -409,7 +470,12 @@ export default {
   border-radius: $unnnic-border-radius-md;
   padding: $unnnic-inset-md;
   border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-  margin-bottom: $unnnic-inline-sm;
+  // margin-bottom: $unnnic-inline-sm;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 0.25rem 8px lightgrey;
+  }
 
   &__clickable {
     cursor: pointer;

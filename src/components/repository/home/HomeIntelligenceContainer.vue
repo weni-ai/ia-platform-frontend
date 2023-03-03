@@ -17,8 +17,9 @@ export default {
   height: 70vh;
   overflow-y: auto;
   overflow-x: hidden;
-  margin: $unnnic-inline-md;
+  // margin: $unnnic-inline-md;
+  // padding: 0 $unnnic-inline-nano;
   background-color: $unnnic-color-background-snow;
-  padding: 0 $unnnic-inline-nano;
+  padding-right: $unnnic-inline-md;
 }
 </style>

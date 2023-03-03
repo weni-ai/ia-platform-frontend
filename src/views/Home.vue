@@ -12,32 +12,37 @@
 
       <home-tab-navigation @changeTabValue="onTabSelected"/>
       <div :class="[loading ? 'hidden' : 'visible']">
-        <home-intelligence-from-project
+        <home-intelligence-from-community
           @loading="loading = $event"
           v-show="howTabIsShown === 0"/>
+
+        <home-intelligence-from-project
+          @loading="loading = $event"
+          v-show="howTabIsShown === 1"/>
 
         <home-intelligence-from-org
           @loading="loading = $event"
           :key="update"
-          v-show="howTabIsShown === 1"/>
-
-        <home-intelligence-from-community
-          @loading="loading = $event"
           v-show="howTabIsShown === 2"/>
+
       </div>
 
       <div :class="['home-loading', !loading ? 'hidden' : 'visible']">
 
       <div v-if="howTabIsShown === 0" class="home-loading__project">
-        <unnnic-skeleton-loading tag="div" width="529px" height="60px" />
-        <unnnic-skeleton-loading tag="div" width="346px" height="60px" />
+        <unnnic-skeleton-loading tag="div" class="mb-5" width="510px" height="46px" />
+
+        <div class="home-loading__cards">
+          <unnnic-skeleton-loading tag="div" width="31vw" height="480px" />
+          <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+          <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+        </div>
       </div>
 
-      <div v-else class="home-loading__cards">
-        <unnnic-skeleton-loading tag="div" width="23vw" height="260px" />
-        <unnnic-skeleton-loading tag="div" width="23vw" height="260px" />
-        <unnnic-skeleton-loading tag="div" width="23vw" height="260px" />
-        <unnnic-skeleton-loading tag="div" width="23vw" height="260px" />
+      <div v-if="howTabIsShown !== 0" class="home-loading__cards">
+        <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+        <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+        <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
       </div>
 
       </div>
@@ -64,7 +69,7 @@ export default {
     return {
       howTabIsShown: 0,
       update: false,
-      loading: false
+      loading: true
     };
   },
   methods: {
@@ -118,9 +123,9 @@ export default {
   }
 
   &__project {
-    margin: auto;
-    text-align: center;
-    height: 70vh;
+    // margin: auto;
+    // text-align: center;
+    // height: 70vh;
   }
 
   &__cards {
