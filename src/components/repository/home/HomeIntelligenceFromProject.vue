@@ -139,6 +139,11 @@ export default {
 
     &__text {
       margin-bottom: 2.25rem;
+
+      p {
+        font-size: $unnnic-font-size-body-lg;
+        color: $unnnic-color-neutral-dark;
+      }
     }
 
     &__button * {

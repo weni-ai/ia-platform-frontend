@@ -53,11 +53,8 @@ export default {
       isComplete: false,
       error: null,
       openModal: false,
-      query: { categories: 'Health' },
       modalInfo: {
       },
-      recommended: true,
-      mostUsed: false
     };
   },
   methods: {
@@ -72,7 +69,6 @@ export default {
         const { data } = await this.searchRepositories({
           limit: 20,
           offset: this.page,
-          query: this.query
         });
         this.page += 20;
         this.repositoryCommunityList = [
@@ -91,16 +87,10 @@ export default {
       try {
         const { data } = await this.getCommunityRepository({
           limit: 20,
-          offset: this.page,
-          language: filter && filter.language,
-          categories: filter && filter.categories,
-          recommended: filter && filter.recommended,
-          most_used: filter && filter.mostUsed
+          offset: 0,
+          ...filter
         });
-        // this.page += 20;
-        this.repositoryCommunityList = [
-          data.results
-        ];
+        this.repositoryCommunityList = data.results
         this.isComplete = data.next == null;
       } catch (err) {
         this.error = err;

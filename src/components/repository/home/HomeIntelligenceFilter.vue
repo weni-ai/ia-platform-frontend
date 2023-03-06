@@ -65,7 +65,7 @@ export default {
   name: 'HomeIntelligenceFilter',
   data(){
     return {
-      recommended: true,
+      recommended: false,
       mostUsed: false,
       categories: [
         { label: 'Social', value: false },
@@ -85,20 +85,22 @@ export default {
   },
   watch: {
     filter() {
-      console.log(this.filter)
       this.$emit('change', this.filter)
     }
   },
   computed: {
     filter() {
-      return {
+      const params = {
         categories: this.categories
           .filter(category => category.value === true)
-          .map(item => item.label),
+          .map(item => item.label)
+          .join(),
         most_used: this.mostUsed ? 'True' : '',
         recommended: this.recommended ? 'True' : '',
         language: this.language
       }
+      // eslint-disable-next-line no-return-assign
+      return Object.entries(params).reduce((a, [k, v]) => (v ? (a[k] = v, a) : a), {})
     },
     languageList() {
       return Object.keys(LANGUAGES)
@@ -155,7 +157,7 @@ export default {
     &__item {
       display: flex;
       align-items: center;
-      margin-top: $unnnic-spacing-stack-xs;
+      margin-top: $unnnic-spacing-stack-sm;
 
       p {
         margin-left: 4px;
