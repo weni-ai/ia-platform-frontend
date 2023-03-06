@@ -373,8 +373,7 @@ export default {
       this.hasIntegration = value;
       this.updateIntegratedProjects();
     },
-    showIntegrationNotification(value, from) {
-      console.log(from)
+    showIntegrationNotification(value) {
       if (value === 'success') {
         this.notificationModalTitle = 'Inteligência integrada'
         this.notificationModalMessage = 'A Inteligência foi integrada com sucesso 😉'
