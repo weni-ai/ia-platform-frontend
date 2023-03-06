@@ -37,17 +37,18 @@
       </div>
     </div>
 
-    <unnnic-button slot="options" type="terciary" @click="dispatchCloseModal()">
+    <unnnic-button slot="options" type="terciary" @click.prevent.stop="dispatchCloseModal()">
       {{ $t("webapp.home.cancel") }}
     </unnnic-button>
     <unnnic-button
       slot="options"
       class="integration-modal__button"
       :class="{ 'integration-modal__button__opacity': checkInputConfirm && hasIntegration }"
-      type="terciary"
+      type="secondary"
       :loading="loading"
       :disabled="hasIntegration && checkInputConfirm"
-      @click="hasIntegration ? dispatchRemoveIntegrateRepository() : dispatchIntegrateRepository()"
+      @click.prevent.stop="hasIntegration ?
+       dispatchRemoveIntegrateRepository() : dispatchIntegrateRepository()"
     >
       <span v-if="hasIntegration" class="integration-modal__button__txt">{{
         $t("webapp.home.confirm_remove_integrate")
@@ -134,10 +135,12 @@ export default {
           organization: this.getOrgSelected
         });
         this.$emit('dispatchUpdateIntegration', true);
+        this.$emit('dispatchIntegrationNotification', 'success');
 
         this.setUpdateRepository(true);
       } catch (err) {
         this.integrationError = err.response && err.response.data;
+        this.$emit('dispatchIntegrationNotification', 'error');
       } finally {
         this.loading = false;
         this.dispatchCloseModal();
