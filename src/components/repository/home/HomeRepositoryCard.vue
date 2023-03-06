@@ -1,5 +1,5 @@
 <template>
-  <div @click="repositoryDetailsRouterParams()" class="unnnic-card-intelligence">
+  <div @click.prevent.self="repositoryDetailsRouterParams()" class="unnnic-card-intelligence">
     <section class="unnnic-card-intelligence__header">
       <div class="unnnic-card-intelligence__header__detail">
         <div class="unnnic-card-intelligence__header__detail__title">
@@ -13,15 +13,6 @@
       </div>
 
       <div class="unnnic-card-intelligence__header__buttons">
-        <!-- <div>
-          <unnnic-tag
-            @click.native="repositoryDetailsRouterParams()"
-            :text="$t('webapp.intelligences_lib.open')"
-            scheme="aux-blue"
-            class="unnnic-card-intelligence__header__buttons__tag"
-            clickable
-          />
-        </div> -->
         <div v-if="hasIntegrationDefined && !hasIntegrationCheckError">
           <unnnic-tool-tip
              side="top"
@@ -87,34 +78,6 @@
             </div>
           </unnnic-dropdown-item>
 
-          <!-- <unnnic-dropdown-item
-            @click="changeIntegrateModalState(true)"
-            v-if="hasIntegrationDefined && !hasIntegrationCheckError"
-          >
-            <div
-              v-if="hasIntegration"
-              :class="[
-                'unnnic-card-intelligence__header__buttons__dropdown',
-                'unnnic-card-intelligence__header__buttons__dropdown--reddish'
-              ]"
-            >
-              <unnnic-icon-svg size="sm" icon="subtract-circle-1" />
-              <div>
-                {{ $t("webapp.home.remove_integrate") }}
-              </div>
-            </div>
-            <div v-else class="unnnic-card-intelligence__header__buttons__dropdown">
-              <unnnic-icon-svg size="sm" icon="add-1" />
-              <div>{{ $t("webapp.home.integrate") }}</div>
-            </div>
-          </unnnic-dropdown-item>
-
-          <unnnic-dropdown-item v-else-if="!hasIntegrationCheckError">
-            <div class="unnnic-card-intelligence__header__buttons__dropdown__loading">
-              <unnnic-icon-svg size="md" icon="loading-circle-1" class="rotation" />
-            </div>
-          </unnnic-dropdown-item> -->
-
           <unnnic-dropdown-item
             v-if="!repositoryDetail.is_private"
             @click="openCopyConfirm(repositoryDetail.name)"
@@ -145,7 +108,6 @@
       >
         <unnnic-icon-svg
           icon="information-circle-4"
-          class="unnnic-card-intelligence__type__icon"
           scheme="neutral-soft"
           size="sm"
         />
@@ -159,7 +121,6 @@
       >
         <unnnic-icon-svg
           icon="information-circle-4"
-          class="unnnic-card-intelligence__type__icon"
           scheme="neutral-soft"
           size="sm"
         />
@@ -224,10 +185,10 @@
             enabled
             side="top"
             max-width="17rem"
+            class="unnnic-card-intelligence__type__icon"
           >
             <unnnic-icon-svg
               icon="information-circle-4"
-              class="unnnic-card-intelligence__type__icon"
               scheme="neutral-soft"
               size="sm"
             />
@@ -243,7 +204,7 @@
           />
 
           <div class="unnnic-card-intelligence__detail__content__data__info__number">
-            {{ `${repositoryDetail.intents.length}%` }}
+            {{ `${intelligenceForce}%` }}
           </div>
         </div>
       </div>
@@ -365,7 +326,13 @@ export default {
         type: 1,
         languages: this.repositoryDetail.available_languages
       };
-    }
+    },
+    intelligenceForce() {
+      const scoreObject = this.repositoryDetail.repository_score;
+      const scoreResult = (scoreObject.evaluate_size_score
+      + scoreObject.intents_balance_score + scoreObject.intents_size_score) / 3;
+      return scoreResult.toFixed(0);
+    },
   },
   methods: {
     ...mapActions([
@@ -590,11 +557,11 @@ export default {
     line-height: $unnnic-font-size-body-md + $unnnic-line-height-medium;
 
     &__text {
-      margin-right: $unnnic-inline-xs;
+      margin-right: 10px;
     }
 
     &__icon {
-      color: $unnnic-color-neutral-soft;
+      margin-left: 10px;
     }
   }
 
