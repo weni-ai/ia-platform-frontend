@@ -7,15 +7,16 @@
       <div class="intelligence-filter__container__recommended">
         <div class="intelligence-filter__container__item">
           <unnnic-checkbox
-            size="xs"
-            value
+            size="md"
+            v-model="recommended"
           />
           <p>Recomendadas</p>
         </div>
 
         <div class="intelligence-filter__container__item">
           <unnnic-checkbox
-            size="xs"
+            size="md"
+            v-model="mostUsed"
           />
           <p>Mais usadas</p>
         </div>
@@ -23,107 +24,93 @@
       <div class="intelligence-filter__container__categories">
         <h3>{{ $t("webapp.home.intelligence_filter_category") }}</h3>
         <div class="intelligence-filter__container__categories__items">
-          <div>
-            <div class="intelligence-filter__container__item">
+            <div
+              v-for="(category, index) in categories"
+              :key="index"
+              class="intelligence-filter__container__item"
+              >
               <unnnic-checkbox
-                size="xs"
-                value
+                v-model="category.value"
+                size="md"
               />
-              <p>Social</p>
+              <p v-html="category.label" />
             </div>
-            <div class="intelligence-filter__container__item">
-              <unnnic-checkbox
-                size="xs"
-                value
-              />
-              <p>Service</p>
-            </div>
-            <div class="intelligence-filter__container__item">
-              <unnnic-checkbox
-                size="xs"
-                value
-              />
-              <p>Configuration</p>
-            </div>
-            <div class="intelligence-filter__container__item">
-              <unnnic-checkbox
-                size="xs"
-                value
-              />
-              <p>Finances</p>
-            </div>
-            <div class="intelligence-filter__container__item">
-              <unnnic-checkbox
-                size="xs"
-                value
-              />
-              <p>Business</p>
-            </div>
-            <div class="intelligence-filter__container__item">
-              <unnnic-checkbox
-                size="xs"
-                value
-              />
-              <p>Commercial</p>
-            </div>
-          </div>
-          <div class="ml-6">
-            <div class="intelligence-filter__container__item">
-              <unnnic-checkbox
-                size="xs"
-                value
-              />
-              <p>Education</p>
-            </div>
-            <div class="intelligence-filter__container__item">
-              <unnnic-checkbox
-                size="xs"
-                value
-              />
-              <p>Food</p>
-            </div>
-            <div class="intelligence-filter__container__item">
-              <unnnic-checkbox
-                size="xs"
-                value
-              />
-              <p>Health</p>
-            </div>
-            <div class="intelligence-filter__container__item">
-              <unnnic-checkbox
-                size="xs"
-                value
-              />
-              <p>Technology</p>
-            </div>
-            <div class="intelligence-filter__container__item">
-              <unnnic-checkbox
-                size="xs"
-                value
-              />
-              <p>Others</p>
-            </div>
-          </div>
         </div>
       </div>
       <div class="intelligence-filter__container__languages">
-        <h3>{{ $t("webapp.home.intelligence_filter_languages") }}</h3>
+        <h3>Idioma</h3>
         <unnnic-select
-          :placeholder="$t('webapp.home.intelligence_filter_languages_select')"
-          size="sm"
-        />
+            :placeholder="$t('webapp.translate.languages_select')"
+            v-model="language"
+            size="sm"
+          >
+            <option
+              v-for="[option, label] in languageList"
+              :key="option"
+              :value="option"
+              @select="language = option"
+            >
+              {{ label }}
+            </option>
+          </unnnic-select>
       </div>
     </section>
   </div>
 </template>
 
 <script>
+import { formatters, LANGUAGES } from '@/utils';
+
 export default {
   name: 'HomeIntelligenceFilter',
   data(){
     return {
+      recommended: true,
+      mostUsed: false,
+      categories: [
+        { label: 'Social', value: false },
+        { label: 'Service', value: false },
+        { label: 'Configuration', value: false },
+        { label: 'Finances', value: false },
+        { label: 'Business', value: false },
+        { label: 'Commercial', value: false },
+        { label: 'Education', value: false },
+        { label: 'Food', value: false },
+        { label: 'Health', value: false },
+        { label: 'Technology', value: false },
+        { label: 'Other', value: false },
+      ],
+      language: null
     }
   },
+  watch: {
+    filter() {
+      console.log(this.filter)
+      this.$emit('change', this.filter)
+    }
+  },
+  computed: {
+    filter() {
+      return {
+        categories: this.categories
+          .filter(category => category.value === true)
+          .map(item => item.label),
+        most_used: this.mostUsed ? 'True' : '',
+        recommended: this.recommended ? 'True' : '',
+        language: this.language
+      }
+    },
+    languageList() {
+      return Object.keys(LANGUAGES)
+        .map(lang => ([lang, LANGUAGES[lang]]));
+    },
+  },
+  methods: {
+    // onChangeCategory() {
+    //   const checked = this.categories.filter(category => category.value === true)
+    //   this.$emit('change', this.query)
+    // }
+  }
 }
 </script>
 
@@ -177,8 +164,10 @@ export default {
 
     &__categories {
       height: 100%;
+
       &__items {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
       }
     }
     &__languages {
@@ -187,6 +176,9 @@ export default {
 
         /deep/ .input {
           height: 36px;
+        }
+        /deep/ .dropdown {
+          display: block;
         }
       }
     }

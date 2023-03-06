@@ -4,7 +4,7 @@
       Integre Inteligências prontas e de qualidade ao seu projeto
     </h1>
     <div class="home-intelligences-from-community__wrapper">
-      <home-intelligence-filter />
+      <home-intelligence-filter @change="filterIntelligences" />
       <home-intelligence-container>
           <div class="home-intelligences-from-community">
             <div class="home-intelligences-from-community__cards">
@@ -53,12 +53,15 @@ export default {
       isComplete: false,
       error: null,
       openModal: false,
+      query: { categories: 'Health' },
       modalInfo: {
-      }
+      },
+      recommended: true,
+      mostUsed: false
     };
   },
   methods: {
-    ...mapActions(['searchRepositories']),
+    ...mapActions(['searchRepositories', 'getCommunityRepository']),
     showModal(value){
       this.openModal = true
       this.modalInfo = { ...value }
@@ -69,6 +72,7 @@ export default {
         const { data } = await this.searchRepositories({
           limit: 20,
           offset: this.page,
+          query: this.query
         });
         this.page += 20;
         this.repositoryCommunityList = [
@@ -82,6 +86,28 @@ export default {
         this.$emit('loading', false)
       }
     },
+    async filterIntelligences(filter) {
+      this.$emit('loading', true)
+      try {
+        const { data } = await this.getCommunityRepository({
+          limit: 20,
+          offset: this.page,
+          language: filter && filter.language,
+          categories: filter && filter.categories,
+          recommended: filter && filter.recommended,
+          most_used: filter && filter.mostUsed
+        });
+        // this.page += 20;
+        this.repositoryCommunityList = [
+          data.results
+        ];
+        this.isComplete = data.next == null;
+      } catch (err) {
+        this.error = err;
+      } finally {
+        this.$emit('loading', false)
+      }
+    }
   },
 };
 </script>

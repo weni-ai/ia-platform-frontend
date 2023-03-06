@@ -69,7 +69,7 @@ export default {
     return {
       howTabIsShown: 0,
       update: false,
-      loading: true
+      loading: false
     };
   },
   methods: {
