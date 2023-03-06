@@ -64,9 +64,11 @@ export default {
     /* istanbul ignore next */
     return repository.getProjectsWithFlows(projectUUID);
   },
-  getCommunityRepository(store, querys) {
+  getCommunityRepository(store, limit, offset, language, categories, recommended, most_used) {
     /* istanbul ignore next */
-    return repository.communityRepository({ ...querys, limit: 21 });
+    return repository.communityRepository(
+      limit, offset, language, categories, recommended, most_used
+    );
   },
   getRepository(store, { ownerNickname, slug }) {
     /* istanbul ignore next */

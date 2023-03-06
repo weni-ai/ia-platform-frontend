@@ -1,5 +1,5 @@
 <template>
-  <div @click.prevent.stop="repositoryDetailsRouterParams()" class="unnnic-card-intelligence">
+  <div @click="repositoryDetailsRouterParams()" class="unnnic-card-intelligence">
     <section class="unnnic-card-intelligence__header">
       <div class="unnnic-card-intelligence__header__detail">
         <div class="unnnic-card-intelligence__header__detail__title">
