@@ -78,7 +78,11 @@
         "copy": "Copiar"
       },
       "intelligence_force":"Força",
-      "intelligence_force_tooltip":"A força da inteligência é uma forma simples de medir quão bem a inteligência está projetada. É recomendado que a força esteja acima de 80%"
+      "intelligence_force_tooltip":"A força da inteligência é uma forma simples de medir quão bem a inteligência está projetada. É recomendado que a força esteja acima de 80%",
+      "integration_success_title": "Inteligência integrada",
+      "integration_success_description": "A Inteligência foi integrada com sucesso 😉",
+      "integration_error_title": "Não foi possível integrar a Inteligência",
+      "integration_error_description": "A Inteligência não foi integrada com sucesso"
     },
     "create_repository": {
       "intelligence": "Nova inteligência",
@@ -396,10 +400,14 @@
         "edit-base_modal_delete_button_validation": "Digite ${this.knowledgeBase.title} para confirmar a exclusão"
       },
       "copy-intelligence": "Copiar inteligência",
-      "intelligence_filter_title": "Filtrar Inteligências da comunidade",
-      "intelligence_filter_category": "Categorias",
-      "intelligence_filter_languages": "Idiomas",
-      "intelligence_filter_languages_select": "Selecione um idioma"
+      "intelligence_filter": {
+        "title": "Filtrar Inteligências da comunidade",
+        "category": "Categorias",
+        "languages": "Idioma",
+        "languages_select": "Selecione um idioma",
+        "recommended": "Recomendadas",
+        "most_used": "Mais usadas"
+      }
     },
     "summary": {
       "training_information": "Informações do Treinamento",

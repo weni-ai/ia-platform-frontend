@@ -122,12 +122,6 @@ export default {
     justify-content: space-between;
   }
 
-  &__project {
-    // margin: auto;
-    // text-align: center;
-    // height: 70vh;
-  }
-
   &__cards {
     display: flex;
     justify-content: space-between;

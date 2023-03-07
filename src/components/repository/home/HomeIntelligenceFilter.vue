@@ -2,7 +2,7 @@
   <div class="intelligence-filter">
     <section class="intelligence-filter__container">
       <div class="intelligence-filter__container__title">
-        <h2>{{ $t("webapp.home.intelligence_filter_title") }}</h2>
+        <h2>{{ $t("webapp.home.intelligence_filter.title") }}</h2>
       </div>
       <div class="intelligence-filter__container__recommended">
         <div class="intelligence-filter__container__item">
@@ -10,7 +10,7 @@
             size="md"
             v-model="recommended"
           />
-          <p>Recomendadas</p>
+          <p>{{ $t("webapp.home.intelligence_filter.recommended") }}</p>
         </div>
 
         <div class="intelligence-filter__container__item">
@@ -18,11 +18,11 @@
             size="md"
             v-model="mostUsed"
           />
-          <p>Mais usadas</p>
+          <p>{{ $t("webapp.home.intelligence_filter.most_used") }}</p>
         </div>
       </div>
       <div class="intelligence-filter__container__categories">
-        <h3>{{ $t("webapp.home.intelligence_filter_category") }}</h3>
+        <h3>{{ $t("webapp.home.intelligence_filter.category") }}</h3>
         <div class="intelligence-filter__container__categories__items">
             <div
               v-for="(category, index) in categories"
@@ -33,12 +33,12 @@
                 v-model="category.value"
                 size="md"
               />
-              <p v-html="category.label" />
+              <p v-html="category.name" />
             </div>
         </div>
       </div>
       <div class="intelligence-filter__container__languages">
-        <h3>Idioma</h3>
+        <h3>{{ $t("webapp.home.intelligence_filter.languages") }}</h3>
         <unnnic-select
             :placeholder="$t('webapp.translate.languages_select')"
             v-model="language"
@@ -59,7 +59,8 @@
 </template>
 
 <script>
-import { formatters, LANGUAGES } from '@/utils';
+import { mapActions } from 'vuex';
+import { LANGUAGES } from '@/utils';
 
 export default {
   name: 'HomeIntelligenceFilter',
@@ -67,19 +68,7 @@ export default {
     return {
       recommended: false,
       mostUsed: false,
-      categories: [
-        { label: 'Social', value: false },
-        { label: 'Service', value: false },
-        { label: 'Configuration', value: false },
-        { label: 'Finances', value: false },
-        { label: 'Business', value: false },
-        { label: 'Commercial', value: false },
-        { label: 'Education', value: false },
-        { label: 'Food', value: false },
-        { label: 'Health', value: false },
-        { label: 'Technology', value: false },
-        { label: 'Other', value: false },
-      ],
+      categories: [],
       language: null
     }
   },
@@ -93,7 +82,7 @@ export default {
       const params = {
         categories: this.categories
           .filter(category => category.value === true)
-          .map(item => item.label)
+          .map(item => item.name)
           .join(),
         most_used: this.mostUsed ? 'True' : '',
         recommended: this.recommended ? 'True' : '',
@@ -107,11 +96,26 @@ export default {
         .map(lang => ([lang, LANGUAGES[lang]]));
     },
   },
+  mounted() {
+    this.getCategories();
+  },
   methods: {
-    // onChangeCategory() {
-    //   const checked = this.categories.filter(category => category.value === true)
-    //   this.$emit('change', this.query)
-    // }
+    ...mapActions(['getAllCategories']),
+    async getCategories() {
+      try {
+        const { data } = await this.getAllCategories();
+        const sortedData = data.sort((previous, next) => previous.id - next.id);
+        this.categories = sortedData.map(category => ({
+          value: false,
+          ...category
+        }));
+      } catch (error) {
+        this.$buefy.toast.open({
+          message: error,
+          type: 'is-danger'
+        });
+      }
+    },
   }
 }
 </script>

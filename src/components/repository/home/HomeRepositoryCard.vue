@@ -374,12 +374,13 @@ export default {
       this.updateIntegratedProjects();
     },
     showIntegrationNotification(value) {
+      this.notificationModalType = value
       if (value === 'success') {
-        this.notificationModalTitle = 'Inteligência integrada'
-        this.notificationModalMessage = 'A Inteligência foi integrada com sucesso 😉'
+        this.notificationModalTitle = this.$t('webapp.intelligences_lib.integration_success_title')
+        this.notificationModalMessage = this.$t('webapp.intelligences_lib.integration_success_description')
       } else {
-        this.notificationModalTitle = 'Não foi possível integrar a Inteligência'
-        this.notificationModalMessage = 'A Inteligência não foi integrada com sucesso'
+        this.notificationModalTitle = this.$t('webapp.intelligences_lib.integration_error_title')
+        this.notificationModalMessage = this.$t('webapp.intelligences_lib.integration_error_description')
       }
       this.openNotificationModal = true
     },

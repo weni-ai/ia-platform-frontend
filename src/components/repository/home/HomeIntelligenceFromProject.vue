@@ -141,6 +141,7 @@ export default {
       margin-bottom: 2.25rem;
 
       p {
+        font-family: $unnnic-font-family-secondary;
         font-size: $unnnic-font-size-body-lg;
         color: $unnnic-color-neutral-dark;
       }
