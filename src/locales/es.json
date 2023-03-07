@@ -43,9 +43,9 @@
       "save_password": "Guardar contraseña"
     },
     "intelligences_lib": {
-      "title": "Biblioteca de inteligencia",
+      "title": "Inteligencia Artificial",
       "new_intelligence": "Nueva Inteligencia",
-      "unused_projects": "Su proyecto no está utilizando la inteligencia vinculada por un clasificador. Cree un nuevo o explore la inteligencia de su organización o comunidad en las opciones anteriores.",
+      "unused_projects": "Tu proyecto no está utilizando ninguna inteligencia. Crea una nueva o integra una inteligencia de tu organización o de la galería de inteligencia de la comunidad.",
       "created_by": "Creado por",
       "open": "Abierto",
       "show_intents": "Ver intenciones | Ver intención | Ver intenciones",
@@ -62,12 +62,12 @@
       "intent_modal_subtitle": "Ver las intenciones que forman parte de la inteligencia seleccionada.",
       "language_modal_title": "Idiomas de {nick} | Idioma de {nick} | Idiomas de {nick}",
       "language_modal_subtitle": "Ver los idiomas compatibles con la inteligencia seleccionada.",
-      "tab_project_title": "Inteligencias en el Proyecto",
-      "tab_project_subtitle": "Son inteligencias en uso en el proyecto integrado por el clasificador.",
-      "tab_org_title": "Inteligencias de la Organización",
-      "tab_org_subtitle": "Visualiza y accede a las inteligencias creadas por la organización.",
-      "tab_community_title": "Inteligencia Comunitaria",
-      "tab_community_subtitle": "Ver y usar inteligencias que son públicas.",
+      "tab_project_title": "Inteligencia en el proyecto",
+      "tab_project_subtitle": "Estas son las inteligencias en uso en el proyecto",
+      "tab_org_title": "Inteligencias de la organización",
+      "tab_org_subtitle": "Visualizar e integrar la inteligencia de la organización",
+      "tab_community_title": "Galería de inteligencia comunitaria",
+      "tab_community_subtitle": "Inteligencias públicas disponibles para integración",
       "intent_count": "Número de oraciones de intención",
       "clone": {
         "success_modal_title": "¡Inteligencia copiada!",
@@ -76,7 +76,13 @@
         "confirm_modal_title": "¿Hacer una copia de la inteligencia “{intelligence}”?",
         "confirm_modal_message": "Al hacer una copia de la inteligencia, puedes usarla en tu organización y también hacer los cambios que quieras.",
         "copy": "Copiar"
-      }
+      },
+      "intelligence_force":"Fuerza",
+      "intelligence_force_tooltip":"La fuerza de la inteligencia es una forma sencilla de medir qué tan bien está diseñada la inteligencia. Se recomienda que la fuerza esté por encima del 80%",
+      "integration_success_title": "Inteligencia integrada",
+      "integration_success_description": "La inteligencia se integró conéxito 😉",
+      "integration_error_title": "No se puede integrar la inteligencia",
+      "integration_error_description": "La inteligencia no se integró correctamente"
     },
     "create_repository": {
       "intelligence": "Nueva inteligencia",
@@ -395,8 +401,15 @@
         "see-all_bases": "Ver todas las bases",
         "add_base": "+ Añadir base"
       },
-      "copy-intelligence": "Copiar inteligencia"
-
+      "copy-intelligence": "Copiar inteligencia",
+      "intelligence_filter": {
+        "title": "Filtrar las inteligencias de la comunidad",
+        "category": "Categorías",
+        "languages": "Idioma",
+        "languages_select": "Seleccione un idioma",
+        "recommended": "Recomendado",
+        "most_used": "Más usado"
+      }
     },
     "summary": {
       "training_information": "Información de Entrenamiento",

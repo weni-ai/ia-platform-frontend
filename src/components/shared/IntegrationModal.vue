@@ -13,10 +13,10 @@
     "
     :scheme="hasIntegration ? 'feedback-red' : 'feedback-yellow'"
     modal-icon="alert-circle-1"
-    @close="dispatchCloseModal()"
+    :closeIcon="false"
   >
 
-    <div slot="message" class="integration-modal__container">
+    <div slot="message">
       <span
         v-html="
           hasIntegration
@@ -37,17 +37,18 @@
       </div>
     </div>
 
-    <unnnic-button slot="options" type="terciary" @click="dispatchCloseModal()">
+    <unnnic-button slot="options" type="terciary" @click.prevent.stop="dispatchCloseModal()">
       {{ $t("webapp.home.cancel") }}
     </unnnic-button>
     <unnnic-button
       slot="options"
       class="integration-modal__button"
       :class="{ 'integration-modal__button__opacity': checkInputConfirm && hasIntegration }"
-      type="terciary"
+      type="secondary"
       :loading="loading"
       :disabled="hasIntegration && checkInputConfirm"
-      @click="hasIntegration ? dispatchRemoveIntegrateRepository() : dispatchIntegrateRepository()"
+      @click.prevent.stop="hasIntegration ?
+       dispatchRemoveIntegrateRepository() : dispatchIntegrateRepository()"
     >
       <span v-if="hasIntegration" class="integration-modal__button__txt">{{
         $t("webapp.home.confirm_remove_integrate")
@@ -134,10 +135,12 @@ export default {
           organization: this.getOrgSelected
         });
         this.$emit('dispatchUpdateIntegration', true);
+        this.$emit('dispatchIntegrationNotification', 'success');
 
         this.setUpdateRepository(true);
       } catch (err) {
         this.integrationError = err.response && err.response.data;
+        this.$emit('dispatchIntegrationNotification', 'error');
       } finally {
         this.loading = false;
         this.dispatchCloseModal();
@@ -185,5 +188,8 @@ export default {
       color: $unnnic-color-feedback-red;
     }
   }
+}
+/deep/ .unnnic-modal-container-background-body-description {
+  padding-bottom: $unnnic-spacing-stack-xs;
 }
 </style>

@@ -1,25 +1,33 @@
 <template>
-  <home-intelligence-container>
-    <div class="home-intelligences-from-community">
-      <div class="home-intelligences-from-community__cards">
-        <home-repository-card
-          v-for="list in repositoryCommunityList"
-          :key="list.uuid"
-          :repository-detail="list"
-          @dispatchShowModal="showModal($event)"
-        />
-      </div>
-      <infinite-scroll
-        v-show="!isComplete"
-        @intersect="getCommunityRepositories()"
-      />
+  <div>
+    <h1 class="home-intelligences-from-community__title">
+      Integre Inteligências prontas e de qualidade ao seu projeto
+    </h1>
+    <div class="home-intelligences-from-community__wrapper">
+      <home-intelligence-filter @change="filterIntelligences" />
+      <home-intelligence-container>
+          <div class="home-intelligences-from-community">
+            <div class="home-intelligences-from-community__cards">
+              <home-repository-card
+                v-for="list in repositoryCommunityList"
+                :key="list.uuid"
+                :repository-detail="list"
+                @dispatchShowModal="showModal($event)"
+              />
+            </div>
+            <infinite-scroll
+              v-show="!isComplete"
+              @intersect="getCommunityRepositories()"
+            />
+          </div>
+          <modal-container
+            :info-modal="modalInfo"
+            :show-modal="openModal"
+            @closeModal="openModal = false">
+          </modal-container>
+        </home-intelligence-container>
     </div>
-    <modal-container
-      :info-modal="modalInfo"
-      :show-modal="openModal"
-      @closeModal="openModal = false">
-    </modal-container>
-  </home-intelligence-container>
+  </div>
 </template>
 <script>
 import { mapActions } from 'vuex';
@@ -27,10 +35,17 @@ import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard'
 import HomeIntelligenceContainer from '@/components/repository/home/HomeIntelligenceContainer';
 import infiniteScroll from '@/components/shared/infiniteScroll';
 import ModalContainer from '@/components/repository/home/ModalContainer';
+import HomeIntelligenceFilter from './HomeIntelligenceFilter';
 
 export default {
   name: 'HomeIntelligenceFromCommunity',
-  components: { HomeRepositoryCard, HomeIntelligenceContainer, infiniteScroll, ModalContainer },
+  components: {
+    HomeRepositoryCard,
+    HomeIntelligenceContainer,
+    infiniteScroll,
+    ModalContainer,
+    HomeIntelligenceFilter
+  },
   data() {
     return {
       repositoryCommunityList: [],
@@ -39,11 +54,11 @@ export default {
       error: null,
       openModal: false,
       modalInfo: {
-      }
+      },
     };
   },
   methods: {
-    ...mapActions(['searchRepositories']),
+    ...mapActions(['searchRepositories', 'getCommunityRepository']),
     showModal(value){
       this.openModal = true
       this.modalInfo = { ...value }
@@ -67,6 +82,22 @@ export default {
         this.$emit('loading', false)
       }
     },
+    async filterIntelligences(filter) {
+      this.$emit('loading', true)
+      try {
+        const { data } = await this.getCommunityRepository({
+          limit: 20,
+          offset: 0,
+          ...filter
+        });
+        this.repositoryCommunityList = data.results
+        this.isComplete = data.next == null;
+      } catch (err) {
+        this.error = err;
+      } finally {
+        this.$emit('loading', false)
+      }
+    }
   },
 };
 </script>
@@ -79,11 +110,25 @@ export default {
   &__cards {
     display: grid;
     justify-content: space-between;
-    grid-template-columns: repeat(4, 24%);
+    grid-template-columns: repeat(2, 50%);
+    gap: 1rem;
     @media screen and (max-width: 1400px) {
-      grid-template-columns: repeat(3, 32%);
+      grid-template-columns: repeat(2, 50%);
     }
     padding-bottom: 15rem;
+  }
+
+  &__title {
+    font-family: 'Lato';
+    font-size: 20px;
+    margin: 1.5rem 1.75rem;
+  }
+
+  &__wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin: 1.5rem;
+    gap: 1rem;
   }
 }
 </style>

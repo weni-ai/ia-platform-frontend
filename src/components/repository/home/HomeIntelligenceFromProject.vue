@@ -1,34 +1,44 @@
 <template>
-  <home-intelligence-container>
-    <div class="home-intelligences-from-project">
-      <section class="home-intelligences-from-project__content" v-if="checkProjectLength">
-        <div class="home-intelligences-from-project__content__text">
-          <p>
-            {{ $t("webapp.intelligences_lib.unused_projects") }}
-          </p>
+  <div class="home-intelligences-from-project__wrapper">
+    <home-intelligence-container>
+      <div class="home-intelligences-from-project">
+        <section class="home-intelligences-from-project__content" v-if="checkProjectLength">
+          <div class="home-intelligences-from-project__content__text">
+            <p>
+              {{ $t("webapp.intelligences_lib.unused_projects") }}
+            </p>
+          </div>
+          <div class="home-intelligences-from-project__content__button">
+            <unnnic-button type="secondary" iconLeft="add-1" @click="createNewIntelligence()">
+              {{ $t("webapp.intelligences_lib.new_intelligence") }}
+            </unnnic-button>
+          </div>
+        </section>
+        <div class="home-intelligences-from-project__cards" v-else>
+          <unnnic-card
+            clickable
+            :text="$t('webapp.intelligences_lib.new_intelligence')"
+            type="blank"
+            icon="add-1"
+            class="home-intelligences-from-project__cards__new"
+            @click.native="createNewIntelligence()"
+          />
+          <home-repository-card
+            v-for="list in projectList"
+            :key="list.uuid"
+            :repository-detail="list"
+            @dispatchShowModal="showModal($event)"
+          />
         </div>
-        <div class="home-intelligences-from-project__content__button">
-          <unnnic-button type="secondary" iconLeft="add-1" @click="createNewIntelligence()">
-            {{ $t("webapp.intelligences_lib.new_intelligence") }}
-          </unnnic-button>
-        </div>
-      </section>
-      <div class="home-intelligences-from-project__cards" v-else>
-        <home-repository-card
-          v-for="list in projectList"
-          :key="list.uuid"
-          :repository-detail="list"
-          @dispatchShowModal="showModal($event)"
-        />
       </div>
-    </div>
-    <modal-container
-      :info-modal="modalInfo"
-      :show-modal="openModal"
-      @closeModal="openModal = false"
-    >
-    </modal-container>
-  </home-intelligence-container>
+      <modal-container
+        :info-modal="modalInfo"
+        :show-modal="openModal"
+        @closeModal="openModal = false"
+      >
+      </modal-container>
+    </home-intelligence-container>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
@@ -129,6 +139,12 @@ export default {
 
     &__text {
       margin-bottom: 2.25rem;
+
+      p {
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-body-lg;
+        color: $unnnic-color-neutral-dark;
+      }
     }
 
     &__button * {
@@ -139,10 +155,22 @@ export default {
   &__cards {
     display: grid;
     justify-content: space-between;
-    grid-template-columns: repeat(4, 24%);
+    grid-template-columns: repeat(3, 33%);
+    gap: 1rem;
     @media screen and (max-width: 1400px) {
-      grid-template-columns: repeat(3, 32%);
+      grid-template-columns: repeat(3, 33%);
     }
+
+    // &__new {
+    //   height: 260px;
+    // }
+  }
+
+  &__wrapper {
+    display: grid;
+    // grid-template-columns: 1fr 2fr;
+    margin: 1.5rem;
+    gap: 1rem;
   }
 }
 </style>
