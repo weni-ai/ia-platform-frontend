@@ -57,6 +57,7 @@
       "intelligence_tooltip": "Utiliza intenciones y entidades para interpretar y segmentar mensajes de usuario.",
       "intelligence_tooltip_content": "Registrar textos e inteligencia informativos podrán responder a las preguntas formuladas por los usuarios según el texto.",
       "intent": "Intenciones | Intención | Intenciones",
+      "knowledge_bases": "Bases de conocimiento | Base de conocimiento | Bases de conocimiento",
       "language": "Idiomas | Idioma | Idiomas",
       "intent_modal_title": "Intenciones de {nick} | Intención de {nick} | Intenciones de {nick}",
       "intent_modal_subtitle": "Ver las intenciones que forman parte de la inteligencia seleccionada.",
