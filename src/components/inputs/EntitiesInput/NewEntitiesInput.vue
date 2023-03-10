@@ -36,7 +36,7 @@
             v-for="entity in preparedEntities"
             :key="entity.localId"
             v-model="entity.entity"
-            :available-entities="allEntities"
+            :available-entities="filteredEntities"
             :entity-class="getEntityClass(entity)"
             :text="text"
             :selected-text-start="entity.start"
