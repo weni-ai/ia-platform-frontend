@@ -3,6 +3,7 @@
     :showModal="true"
     :text="$t('webapp.debug.debug')"
     @close="closeModal()"
+    @click.native="tryToClose"
   >
     <div slot="message" class="debug">
       <div v-if="error" class="debug__error">
@@ -134,6 +135,11 @@ export default {
     ...mapActions([
       'debugParse',
     ]),
+    tryToClose(event) {
+      if (event.target === this.$el.querySelector('.unnnic-modal-container')) {
+        this.closeModal();
+      }
+    },
     treat(word) {
       // eslint-disable-next-line no-useless-escape
       return word.replace(/[.,\/#!$%\^&\*;:?/(/){}=\-_`~()]/g, '');

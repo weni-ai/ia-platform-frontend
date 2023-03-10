@@ -1,5 +1,10 @@
 <template>
-  <unnnic-modal :showModal="true" :text="$t('webapp.raw.raw')" @close="closeModal()">
+  <unnnic-modal
+    :showModal="true"
+    :text="$t('webapp.raw.raw')"
+    @close="closeModal()"
+    @click.native="tryToClose"
+  >
     <div slot="message" class="raw-info">
       <div class="raw-info__title">
         <p>{{ $t('webapp.raw.raw_subtitle') }}</p>
@@ -30,6 +35,11 @@ export default {
     },
   },
   methods: {
+    tryToClose(event) {
+      if (event.target === this.$el.querySelector('.unnnic-modal-container')) {
+        this.closeModal();
+      }
+    },
     copyText() {
       navigator.clipboard.writeText(this.text);
       this.$buefy.toast.open({
