@@ -138,16 +138,41 @@
             {{ $tc("webapp.intelligences_lib.intent", this.repositoryDetail.intents.length) }}
           </div>
           <div class="unnnic-card-intelligence__detail__content__data__info">
-            <unnnic-icon-svg
-              icon="typing-1"
+            <unnnic-avatar-icon
               class="unnnic-card-intelligence__detail__content__data__info__icon"
-              size="sm"
+              size="xs"
+              icon="typing-1"
               scheme="aux-pink"
-              hasBackground
             />
 
             <div class="unnnic-card-intelligence__detail__content__data__info__number">
               {{ repositoryDetail.intents.length }}
+            </div>
+          </div>
+        </div>
+
+        <div
+          v-if="type === 'repository' && repositoryDetail.repository_type === 'content'"
+          class="unnnic-card-intelligence__detail__content"
+        >
+          <div class="unnnic-card-intelligence__detail__content__data">
+            {{
+              $tc(
+                'webapp.intelligences_lib.knowledge_bases',
+                repositoryDetail.count_knowledge_bases
+              )
+            }}
+          </div>
+          <div class="unnnic-card-intelligence__detail__content__data__info">
+            <unnnic-avatar-icon
+              class="unnnic-card-intelligence__detail__content__data__info__icon"
+              size="xs"
+              icon="book-address-1-2"
+              scheme="aux-orange"
+            />
+
+            <div class="unnnic-card-intelligence__detail__content__data__info__number">
+              {{ repositoryDetail.count_knowledge_bases }}
             </div>
           </div>
         </div>
@@ -162,12 +187,11 @@
             }}
           </div>
           <div class="unnnic-card-intelligence__detail__content__data__info">
-            <unnnic-icon-svg
-              icon="translate-1"
+            <unnnic-avatar-icon
               class="unnnic-card-intelligence__detail__content__data__info__icon"
-              size="sm"
+              size="xs"
+              icon="translate-1"
               scheme="aux-purple"
-              hasBackground
             />
 
             <div class="unnnic-card-intelligence__detail__content__data__info__number">
@@ -197,12 +221,11 @@
             </unnnic-tool-tip>
           </div>
           <div class="unnnic-card-intelligence__detail__content__data__info">
-            <unnnic-icon-svg
-              icon="fitness-biceps-1"
+            <unnnic-avatar-icon
               class="unnnic-card-intelligence__detail__content__data__info__icon"
-              size="sm"
+              size="xs"
+              icon="fitness-biceps-1"
               scheme="feedback-blue"
-              hasBackground
             />
 
             <div class="unnnic-card-intelligence__detail__content__data__info__number">
