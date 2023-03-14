@@ -14,7 +14,7 @@ export default {
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .home-intelligences-container {
-  height: 70vh;
+  height: 80vh;
   overflow-y: auto;
   overflow-x: hidden;
   // margin: $unnnic-inline-md;

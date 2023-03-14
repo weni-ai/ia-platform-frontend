@@ -57,6 +57,7 @@
       "intelligence_tooltip": "Uses intentions and entities to interpret and segment user messages.",
       "intelligence_tooltip_content": "Upload informational texts and the intelligence will be able to answer questions made by users based on the texts.",
       "intent": "Intents | Intent | Intents",
+      "knowledge_bases": "Knowledge bases | Knowledge base | Knowledge bases",
       "language": "Languages | Language | Languages",
       "intent_modal_title": "Intents of {nick} | Intent of {nick} | Intents of {nick}",
       "intent_modal_subtitle": "Visualize the intentions that are part of the selected intelligence.",
