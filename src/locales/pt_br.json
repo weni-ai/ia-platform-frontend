@@ -44,6 +44,7 @@
     },
     "intelligences_lib": {
       "title": "Inteligência Artificial",
+      "description": "Saiba como integrar uma inteligência ao seu projeto acessando a documentação<br /><a href=\"https://docs.weni.ai/l/pt/bothub/integrar-uma-intelig-ncia-ao-projeto-na-plataforma-weni\" target=\"_blank\">como integrar uma I.A.</a>",
       "new_intelligence": "Nova Inteligência",
       "unused_projects": "Seu projeto não está fazendo uso de inteligências. Crie uma nova ou integre uma inteligência da sua organização ou da galeria de Inteligências da comunidade.",
       "created_by": "Criada por",

@@ -44,6 +44,7 @@
     },
     "intelligences_lib": {
       "title": "Artificial Intelligence",
+      "description": "Learn how to integrate an intelligence into your project by accessing the<br /><a href=\"https://docs.weni.ai/l/pt/bothub/integrar-uma-intelig-ncia-ao-projeto-na-plataforma-weni\" target=\"_blank\">how to integrate an A.I. documentation</a>",
       "new_intelligence": "New Intelligence",
       "unused_projects": "Your project is not using any intelligences. Create a new one or integrate an intelligence from your organization or from the Community intelligence gallery.",
       "created_by": "Created by",
