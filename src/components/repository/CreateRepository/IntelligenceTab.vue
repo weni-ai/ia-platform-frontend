@@ -4,16 +4,27 @@
       {{ $t("webapp.create_repository.intelligence") }}
     </h1>
     <div class="create-repository__intelligence__wrapper">
-      <unnnic-input
+      <unnnic-input-next
         :label="$t('webapp.create_repository.intelligence_name_label')"
         :placeholder="$t('webapp.create_repository.intelligence_name_placeholder')"
         v-model="intelligence.name"
+        maxlength="64"
       />
-      <unnnic-input
+      <unnnic-input-next
         :label="$t('webapp.create_repository.description_label')"
         :placeholder="$t('webapp.create_repository.description_placeholder')"
         v-model="intelligence.description"
       />
+
+      <div
+        :class="[
+          'create-repository__intelligence__type__label',
+          'unnnic-font secondary body-gt color-neutral-cloudy'
+        ]"
+      >
+        {{ $t('webapp.create_repository.intelligence_type') }}
+      </div>
+
       <div class="create-repository__intelligence__type">
         <unnnic-card
           clickable
@@ -105,13 +116,19 @@ export default {
       margin-bottom: 2rem;
     }
 
-    &__wrapper * {
-      margin-bottom: 2rem;
+    &__wrapper {
+      .unnnic-input {
+        margin-bottom: $unnnic-spacing-stack-md;
+      }
     }
 
     &__type {
       display: flex;
       justify-content: space-between;
+
+      &__label {
+        margin-bottom: $unnnic-spacing-stack-nano;
+      }
 
       &__content {
         width: 47%;
@@ -121,6 +138,7 @@ export default {
     &__buttons {
       display: flex;
       justify-content: space-between;
+      margin-top: $unnnic-spacing-stack-lg;
 
       &__btn {
         width: 47%;
