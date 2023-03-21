@@ -2,12 +2,18 @@
   <div>
     <div class="home">
       <section class="home__header">
-          <unnnic-card
-            :title="$t('webapp.intelligences_lib.title')"
-            icon="science-fiction-robot-1"
-            type="title"
-            :has-information-icon="false"
-            scheme="aux-blue"/>
+        <unnnic-card
+          :title="$t('webapp.intelligences_lib.title')"
+          icon="science-fiction-robot-1"
+          type="title"
+          :has-information-icon="false"
+          scheme="aux-blue"
+        />
+
+        <div
+          class="description unnnic-font secondary body-gt color-neutral-dark"
+          v-html="$t('webapp.intelligences_lib.description')"
+        />
       </section>
 
       <home-tab-navigation @changeTabValue="onTabSelected"/>
@@ -95,6 +101,19 @@ export default {
 
     &__header{
       padding: $unnnic-inline-md;
+      padding-bottom: $unnnic-spacing-stack-sm;
+
+      .description {
+        margin-top: $unnnic-spacing-stack-nano;
+        margin-left: $unnnic-spacing-inline-xl + $unnnic-spacing-inline-sm;
+
+        ::v-deep a {
+          text-decoration: underline;
+          text-underline-offset: 3px;
+          font-weight: $unnnic-font-weight-bold;
+          color: inherit;
+        }
+      }
     }
 }
 .home-loading {

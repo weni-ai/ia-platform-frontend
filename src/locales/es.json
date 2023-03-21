@@ -44,6 +44,7 @@
     },
     "intelligences_lib": {
       "title": "Inteligencia Artificial",
+      "description": "Aprenda a integrar una inteligencia en su proyecto accediendo a la documentación<br /><a href=\"https://docs.weni.ai/l/pt/bothub/integrar-uma-intelig-ncia-ao-projeto-na-plataforma-weni\" target=\"_blank\">sobre cómo integrar una I.A.</a>",
       "new_intelligence": "Nueva Inteligencia",
       "unused_projects": "Tu proyecto no está utilizando ninguna inteligencia. Crea una nueva o integra una inteligencia de tu organización o de la galería de inteligencia de la comunidad.",
       "created_by": "Creado por",
@@ -1043,6 +1044,17 @@
     },
     "infinite_scroll": {
       "title": "Cargando"
+    }
+  },
+  "modals": {
+    "cant_access": {
+      "title": "Ops, aún no puede usar este módulo",
+      "description": "Para integrar una inteligencia artificial en su proyecto, debe crear un flujo de conversación creado.<br />Regrese después de crear un flujo.",
+      "button_primary_label": "Ir al módulo de flujo"
+    },
+    "how_to_integrate": {
+      "title": "Cómo integrar una inteligencia",
+      "description": "Elija una inteligencia que desee.<br /><br />2. Haga clic en “+”, Botón de integración del proyecto.<br /><br />3. Vaya a flujos y haga clic en “Crear mensaje”.<br /><br />4. Seleccione la opción “Dividir por intención”.<br /><br />5. Seleccione la intención que desee verificar, luego haga clic en “Aceptar”.<br /><br />6. Luego asigne mensajes de respuesta a cada intención."
     }
   }
 }
