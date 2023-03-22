@@ -41,7 +41,7 @@
                 size="small"
                 type="secondary"
                 iconCenter="copy-paste-1"
-                @click.prevent.stop="editVersion(item.id)"
+                @click.prevent.stop="duplicateThisVersion(item.id)"
               />
             </div>
           </template>
@@ -51,7 +51,7 @@
                 size="small"
                 type="secondary"
                 iconCenter="delete-1-1"
-                @click.prevent.stop="deleteThisExample(item.id)"
+                @click.prevent.stop="deleteThisVersion(item.id)"
               />
             </div>
           </template>
@@ -72,14 +72,14 @@
     </unnnic-table>
     <unnnic-modal
       :showModal="openModal"
-      :text="$t('webapp.trainings.delete_title')"
+      :text="$t('webapp.versions.delete_title_modal')"
       scheme="feedback-red"
       modal-icon="alert-circle-1"
       @close="openModal = false"
     >
       <span
       slot="message"
-      v-html="$t('webapp.trainings.delete_phrase_modal')" />
+      v-html="$t('webapp.versions.delete_phrase_modal')"></span>
       <unnnic-button slot="options" type="terciary" @click="openModal = false">
         {{ $t("webapp.home.cancel") }}
       </unnnic-button>
@@ -89,19 +89,53 @@
         scheme="feedback-red"
         @click="confirmDelete()"
       >
-        {{ $t("webapp.trainings.delete_title") }}
+        {{ $t("webapp.versions.delete_title_modal") }}
       </unnnic-button>
     </unnnic-modal>
     <unnnic-modal
       :showModal="openSuccessModal"
-      :text="$t('webapp.intent.delete_success_title')"
+      :text="$t('webapp.versions.delete_success_title_modal')"
       scheme="feedback-green"
       modal-icon="check-circle-1-1"
       @close="openSuccessModal = false"
     >
       <span
       slot="message"
-      v-html="$t('webapp.intent.delete_success_subtitle')" />
+      v-html="$t('webapp.versions.delete_success_phrase_modal')"></span>
+    </unnnic-modal>
+
+    <unnnic-modal
+      :showModal="openDuplicateModal"
+      :text="$t('webapp.versions.duplicate_title_modal')"
+      scheme="feedback-red"
+      modal-icon="alert-circle-1"
+      @close="openDuplicateModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.versions.duplicate_phrase_modal')"></span>
+      <unnnic-button slot="options" type="terciary" @click="openDuplicateModal = false">
+        {{ $t("webapp.home.cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        type="primary"
+        scheme="feedback-red"
+        @click="confirmDuplicate()"
+      >
+        {{ $t("webapp.versions.duplicate_success_button_modal") }}
+      </unnnic-button>
+    </unnnic-modal>
+    <unnnic-modal
+      :showModal="openSuccessModal"
+      :text="$t('webapp.versions.duplicate_success_title_modal')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openSuccessModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.versions.duplicate_success_phrase_modal')"></span>
     </unnnic-modal>
   </div>
   </template>
@@ -192,6 +226,7 @@ export default {
       },
       selectedItem: null,
       openModal: false,
+      openDuplicateModal: false,
       versionId: null,
       openSuccessModal: false,
       isVersionActive: false,
@@ -271,8 +306,12 @@ export default {
       const color = getEntityColor(entity, allEntitiesName);
       return `entity-${color}`;
     },
-    deleteThisExample(id) {
+    deleteThisVersion(id) {
       this.openModal = true;
+      this.versionId = id;
+    },
+    duplicateThisVersion(id) {
+      this.openDuplicateModal = true;
       this.versionId = id;
     },
     async confirmDelete() {
@@ -280,6 +319,16 @@ export default {
         await this.deleteExample({ id: this.versionId });
         this.$emit('dispatchEvent', { event: 'itemDeleted' });
         this.openModal = false;
+        setTimeout(() => { this.openSuccessModal = true }, 2000);
+      } catch {
+        this.$emit('dispatchEvent', { event: 'error' });
+      }
+    },
+    async confirmDuplicate() {
+      try {
+        await this.duplicateExample({ id: this.versionId });
+        this.$emit('dispatchEvent', { event: 'itemDuplicate' });
+        this.openDuplicateModal = false;
         setTimeout(() => { this.openSuccessModal = true }, 2000);
       } catch {
         this.$emit('dispatchEvent', { event: 'error' });
