@@ -1,413 +1,158 @@
 <template>
-  <div class="version-list">
-    <b-modal
-      :width="500"
-      :active.sync="isNewVersionModalActive"
-      class="repository-new-version-modal"
-      trap-focus
-      aria-role="dialog"
-      aria-modal>
-      <repository-handle-version-modal
-        :repository="repository"
-        :version="selectedVersion"
-        @close="isNewVersionModalActive = false"
-        @error="showError"
-        @addedVersion="onAddedVersion()"/>
-    </b-modal>
-    <loading v-if="loadingList" />
-    <section v-else>
-      <b-table
-        v-if="versionsList"
-        :data="versionsList.items"
-        :paginated="true"
-        :backend-pagination="true"
-        :total="versionsList.total"
-        :per-page="perPage"
-        :current-page.sync="currentPage"
-        :pagination-simple="false"
-        backend-sorting
-        @sort="'is_default'"
-      >
-        <template>
-          <b-table-column
-            :width="isEdit.edit ? 200 : 60"
-            label="version"
-            sortable
-            centered
-            v-slot="props"
-            numeric>
-            <b-field v-if="isEdit.edit === true && isEdit.id === props.row.id">
-              <div class="versions__edit-input">
-                <b-input
-                  :expanded="true"
-                  v-model="isEdit.name"
-                  :value="isEdit.name"
-                  :maxlength="maxEditLength"
-                  :has-counter="false"
-                  :icon-right-clickable="true"
-                  icon-right="close"
-                  @icon-right-click="onCancelEdit"
-                  @input="onEditNameChange"
-                  @keyup.enter.native="handleEditVersion(isEdit.name, props.row.id)"/>
-              </div>
-            </b-field>
-            <span
-              v-else
-              class="versions__table__version-number"
-              @click="handleVersion(props.row.id, props.row.name)">
-              {{ props.row.name }}
-            </span>
-          </b-table-column>
-          <b-table-column
-            :label="$t('webapp.versions.date_created')"
-            centered
-            field="created_at"
-            v-slot="props"
-            sortable >
-            {{ props.row.created_at | moment('from') }}
-          </b-table-column>
-          <b-table-column
-            :label="$t('webapp.versions.last_modified')"
-            centered
-            field="last_update"
-            v-slot="props"
-            sortable>
-            {{ props.row.last_update | moment('from') }}
-          </b-table-column>
-          <b-table-column
-            :label="$t('webapp.versions.created_by')"
-            centered
-            field="created_by"
-            v-slot="props"
-            sortable>
-            {{ props.row.created_by }}
-          </b-table-column>
-          <b-table-column
-            centered
-            width="180"
-            field="is_default"
-            v-slot="props"
-            label=""
-            sortable>
-            <div class="versions__table__buttons-wrapper">
-              <b-button
-                :type="props.row.is_default ? 'is-primary': 'is-light'"
-                :disabled="!canEdit"
-                class="is-small"
-                rounded
-                @click="handleDefaultVersion(props.row.id, props.row.name)">
-                {{ $t('webapp.versions.main') }}
-              </b-button>
-              <b-icon
-                v-if="canEdit"
-                icon="pencil"
-                size="is-small"
-                class="versions__table__buttons-wrapper__icon"
-                @click.native="onEditVersion({id: props.row.id, name: props.row.name})"/>
-              <b-icon
-                v-if="canEdit"
-                icon="delete"
-                size="is-small"
-                class="versions__table__buttons-wrapper__icon"
-                @click.native="onDeleteVersion(props.row.id, props.row.is_default)"/>
-              <b-icon
-                v-if="canEdit"
-                icon="content-copy"
-                size="is-small"
-                class="versions__table__buttons-wrapper__icon"
-                @click.native="copyVersion(props.row)"/>
-            </div>
-          </b-table-column>
-        </template>
-      </b-table>
-    </section>
+  <div>
+    <intent-pagination
+      v-if="examplesList"
+      :item-component="versionTable"
+      :list="examplesList"
+      :repository="repository"
+      :per-page="perPage"
+      @itemDeleted="onItemDeleted()"
+      @itemSave="dispatchSave"
+      :show-intents="true"
+      @onUpdateSelected="updateSelected"
+    />
+    <p
+      v-if="examplesList.total === 0"
+      class="no-examples"
+      v-html="$t('webapp.trainings.database_untrained')"
+    ></p>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import { formatters } from '@/utils/index';
-import RepositoryHandleVersionModal from '@/components/repository/RepositoryHandleVersionModal';
-import Loading from '@/components/shared/Loading';
+import { mapActions, mapGetters } from 'vuex';
+import PaginatedList from '@/components/shared/PaginatedList';
+import IntentPagination from '../shared/IntentPagination';
+import RepositoryVersionTable from '@/components/repository/RepositoryVersionTable';
+
+const components = {
+  PaginatedList,
+  IntentPagination
+};
 
 export default {
   name: 'RepositoryVersionList',
-  components: {
-    RepositoryHandleVersionModal,
-    Loading,
-  },
+  components,
   props: {
-    repository: {
+    query: {
       type: Object,
-      required: true,
+      default: () => ({}),
     },
     perPage: {
       type: Number,
-      default: 5,
+      default: 50,
     },
-    canEdit: {
+    update: {
       type: Boolean,
       default: false,
+    },
+    textData: {
+      type: String,
+      default: '',
+    },
+    translationData: {
+      type: Boolean,
+      default: null,
     },
   },
   data() {
     return {
-      maxEditLength: 40,
-      versionsList: null,
-      asc: false,
-      isEdit: {},
-      currentPage: 1,
-      isNewVersionModalActive: false,
-      selectedVersion: null,
-      loadingEdit: false,
-      loadingList: false,
-      currentEditVersion: null,
+      examplesList: null,
+      dateLastTrain: '',
+      pageWasChanged: false,
+      searchingExample: false,
+      versionTable: RepositoryVersionTable
     };
   },
   computed: {
-    repositoryUUID() {
-      if (!this.repository || this.repository.uuid === 'null') { return null; }
-      return this.repository.uuid;
-    },
-    query() {
-      return {
-        repository: this.repositoryUUID,
-        ordering: `${this.asc ? '+' : '-'}${this.orderField}`,
-      };
-    },
+    ...mapGetters({
+      repositoryVersion: 'getSelectedVersion',
+      repository: 'getCurrentRepository',
+    }),
   },
   watch: {
     query() {
-      this.updateParams();
+      this.updateExamples(true);
+      const filterValue = Object.values(this.query);
+      if (filterValue[0] !== '' || filterValue.length > 1) {
+        this.searchingExample = true;
+        return;
+      }
+      this.searchingExample = false;
     },
-    currentPage() {
-      this.updateVersions();
+    update() {
+      this.updateExamples(true);
     },
-    repositoryUUID() {
-      this.updateParams();
+    repository() {
+      this.updateExamples(true);
     },
+    examplesList() {
+      this.$emit('updateCount', this.examplesList)
+    }
   },
   mounted() {
-    this.updateParams();
+    this.updateExamples();
   },
   methods: {
     ...mapActions([
-      'getVersions',
-      'setDefaultVersion',
-      'deleteVersion',
-      'editVersion',
-      'setRepositoryVersion',
-      'setUpdateVersionsState',
+      'searchExamples',
+      'setRequirements',
+      'getRepositoryStatusTraining',
     ]),
-    onCancelEdit() {
-      this.$nextTick(() => { this.isEdit.edit = false; });
+    dispatchSave() {
+      this.updateExamples(true);
+      this.$emit('onEditSentence')
     },
-    sort(orderField, asc) {
-      this.orderField = orderField;
-      this.asc = asc === 'asc';
-      this.updateVersions();
+    pageChanged() {
+      this.pageWasChanged = !this.pageWasChanged;
     },
-    onEditNameChange(value) {
-      this.$nextTick(() => {
-        this.isEdit.name = formatters.versionItemKey()(value);
-      });
-    },
-    async updateParams() {
-      if (!this.repositoryUUID) { return; }
-      const response = await this.getVersions({
-        limit: this.perPage,
-        query: this.query,
-      });
-      this.versionsList = response;
-      this.updateVersions();
-    },
-    async updateVersions() {
-      this.loadingList = true;
-      try {
-        await this.versionsList.updateItems(this.currentPage);
-        this.loadingList = false;
-      } catch (e) {
-        this.loadingList = false;
-        this.showError(e);
+    async updateExamples(force = false) {
+      await this.getRepositoryStatus();
+      if (this.repositoryStatus.count !== 0) {
+        if (this.repositoryStatus.results[0].status !== 2
+          && this.repositoryStatus.results[0].status !== 3) {
+          if (this.repositoryStatus.results[1] !== undefined) {
+            this.dateLastTrain = (this.repositoryStatus.results[1].created_at).replace(/[A-Za-z]/g, ' ');
+          }
+        } else if (this.repositoryStatus.results[0] !== undefined) {
+          this.dateLastTrain = (this.repositoryStatus.results[0].created_at).replace(/[A-Za-z]/g, ' ');
+        }
       }
-    },
-    handleDefaultVersion(id, name) {
-      this.$buefy.dialog.confirm({
-        title: this.$t('webapp.versions.change_default_version'),
-        message: this.$t('webapp.versions.message_change_default_version', { name }),
-        confirmText: this.$t('webapp.versions.confirm_change_default_version'),
-        type: 'is-warning',
-        hasIcon: true,
-        onConfirm: () => this.setDefaultVersion({
-          repositoryUuid: this.repositoryUUID,
-          id,
-          name,
-        }).then(() => this.updateVersions()),
-      });
-    },
-    onEditVersion(version) {
-      const { id, name } = version;
-      this.isEdit = {
-        edit: true,
-        id,
-        name,
-      };
-    },
-    handleEditVersion(name, id) {
-      if (!name || !(name.length > 0)) {
-        this.isEdit = false;
-        return;
-      }
-      this.editVersion({
-        repositoryUuid: this.repositoryUUID,
-        id,
-        name,
-      }).then(() => {
-        this.setUpdateVersionsState(true);
-        this.$buefy.toast.open({
-          message: this.$t('webapp.versions.version_has_edited'),
-          type: 'is-success',
-        });
-        this.isEdit = false;
-        this.updateVersions();
-      }).catch(() => {
-        this.$buefy.toast.open({
-          message: this.$t('webapp.versions.something_wrong'),
-          type: 'is-danger',
-        });
-      });
-    },
-    handleVersion(id, name) {
-      const version = {
-        id,
-        name,
-      };
-      this.setRepositoryVersion({
-        version,
-        repositoryUUID: this.repositoryUUID,
-      });
-    },
-    copyVersion(version) {
-      this.selectedVersion = version;
-      this.isNewVersionModalActive = true;
-    },
-    onAddedVersion() {
-      this.isNewVersionModalActive = false;
-      this.$buefy.toast.open({
-        message: this.$t('webapp.versions.version_was_created'),
-        type: 'is-success',
-      });
-      this.setUpdateVersionsState(true);
-      this.updateVersions();
-    },
-    onDeleteVersion(id, isDefault) {
-      if (isDefault) {
-        this.$buefy.toast.open({
-          duration: 5000,
-          message: this.$t('webapp.versions.you_cannot_delete_main_branch'),
-          position: 'is-top',
-          type: 'is-danger',
-        });
-      } else {
-        this.$buefy.dialog.confirm({
-          title: this.$t('webapp.versions.deleting_version'),
-          message: this.$t('webapp.versions.message_deleting_version'),
-          confirmText: this.$t('webapp.versions.confirm_deleting_version'),
-          type: 'is-danger',
-          hasIcon: true,
-          onConfirm: () => this.onDeleteVersionConfirm(id),
+      if (this.repositoryStatus.count === 0) return;
+      if (this.repositoryStatus.count === 1
+          && (this.repositoryStatus.results[0].status !== 2
+          && this.repositoryStatus.results[0].status !== 3)
+      ) return;
+      if (!this.examplesList || force) {
+        this.examplesList = await this.searchExamples({
+          repositoryUuid: this.repository.uuid,
+          version: this.repository.repository_version_id,
+          query: this.query,
+          limit: this.perPage,
+          endCreatedAt: this.dateLastTrain,
         });
       }
     },
-    async onDeleteVersionConfirm(id) {
-      try {
-        this.loadingList = true;
-        await this.deleteVersion(id);
-        this.setUpdateVersionsState(true);
-        this.updateVersions();
-      } catch (e) {
-        this.showError(e);
-      } finally {
-        this.loadingList = false;
-      }
-    },
-    showError(error) {
-      // TODO: Treat errors
-      this.$buefy.toast.open({
-        message: error.response.data,
-        type: 'is-danger',
+    async getRepositoryStatus() {
+      const { data } = await this.getRepositoryStatusTraining({
+        repositoryUUID: this.repository.uuid,
+        repositoryVersion: this.repository.repository_version_id,
       });
+      this.repositoryStatus = data;
+    },
+    onItemDeleted() {
+      this.$emit('exampleDeleted');
+    },
+    updateSelected(params) {
+      this.$emit('onUpdateSelected', params)
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/utilities.scss';
-@import '~@/assets/scss/variables.scss';
-
-
-.version-list {
-   font-family: $font-family;
-}
-
-.icon {
-  pointer-events: initial !important;
-}
-
-.versions {
-  margin: auto;
-  max-width: $max-repository-card-width;
-  font-family: $font-family;
-
-  &__header {
-    margin: 3.875rem 0 2.75rem 0;
-
-    &__title {
-      &__wrapper {
-        display: flex;
-        align-items: flex-start;
-      }
-    }
-
-    &__button {
-      font-weight: bold;
-      margin: 0 1rem;
-    }
-  }
-
-  &__edit-input {
-    display: flex;
-    align-items: center;
-
-    span {
-      cursor: pointer;
-      margin-left: .5rem;
-    }
-  }
-
-  &__table {
-    &__version-number {
-      color: $primary;
-      font-weight: bold;
-      cursor: pointer;
-      font-family: $font-family;
-    }
-
-    &__buttons-wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: $color-grey-dark;
-
-      &__icon{
-        margin-left: .6rem;
-      }
-      span {
-        cursor: pointer;
-      }
-    }
-  }
+.no-examples {
+  margin: 0;
+  font: 14px 'Lato';
 }
 </style>
