@@ -76,7 +76,7 @@ export default {
 
         try {
           data = JSON.parse(
-            localStorage.getItem('tutorials:howToIntegrateAI') || '[]',
+            sessionStorage.getItem('tutorials:howToIntegrateAI') || '[]',
           );
 
           const projectUuid = this.$store.state.Auth.project;
@@ -86,7 +86,7 @@ export default {
 
             data.push(projectUuid);
 
-            localStorage.setItem(
+            sessionStorage.setItem(
               'tutorials:howToIntegrateAI',
               JSON.stringify(data),
             );

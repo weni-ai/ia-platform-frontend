@@ -1054,7 +1054,7 @@
     },
     "how_to_integrate": {
       "title": "Cómo integrar una inteligencia",
-      "description": "Elija una inteligencia que desee.<br /><br />2. Haga clic en “+”, Botón de integración del proyecto.<br /><br />3. Vaya a flujos y haga clic en “Crear mensaje”.<br /><br />4. Seleccione la opción “Dividir por intención”.<br /><br />5. Seleccione la intención que desee verificar, luego haga clic en “Aceptar”.<br /><br />6. Luego asigne mensajes de respuesta a cada intención."
+      "description": "1. Elija la inteligencia que mejor se adapte a su proyecto.<br /><br />2. Haz clic en el “+” para integrar la inteligencia en el proyecto.<br /><br />3. Vaya al módulo de flujos y haga clic en “crear mensaje”.<br /><br />5. Selecciona la opción “dividir por intención”.<br /><br />6. Selecciona las intenciones que quieres que tu chatbot entienda y haz clic en “ok”.<br /><br />7. A continuación, asigna mensajes de respuesta a cada una de las intenciones."
     }
   }
 }
