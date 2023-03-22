@@ -16,12 +16,6 @@
     <div
       v-else-if="repository"
       class="versions">
-      <div class="version__header">
-        <div class="version__header__title__wrapper">
-          <h2 class="title">{{ $t('webapp.menu.versions') }}</h2>
-        </div>
-        <p class="description"> {{ $t('webapp.versions.edit_choose_version') }} </p>
-      </div>
       <repository-version-list
         :repository="repository"
         :can-edit="repository.authorization.can_contribute"/>
