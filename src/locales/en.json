@@ -44,6 +44,7 @@
     },
     "intelligences_lib": {
       "title": "Artificial Intelligence",
+      "description": "Learn how to integrate an intelligence into your project by accessing the<br /><a href=\"https://docs.weni.ai/l/pt/bothub/integrar-uma-intelig-ncia-ao-projeto-na-plataforma-weni\" target=\"_blank\">how to integrate an A.I. documentation</a>",
       "new_intelligence": "New Intelligence",
       "unused_projects": "Your project is not using any intelligences. Create a new one or integrate an intelligence from your organization or from the Community intelligence gallery.",
       "created_by": "Created by",
@@ -1065,5 +1066,16 @@
   },
   "import_card": {
     "importing": "Importing.."
+  },
+  "modals": {
+    "cant_access": {
+      "title": "Ops, you can not use this module yet",
+      "description": "To integrate an artificial intelligence into your project, you need to have a conversation flow created.<br />Come back after creating a flow.",
+      "button_primary_label": "Go to the flow module"
+    },
+    "how_to_integrate": {
+      "title": "How to integrate an intelligence",
+      "description": "Choose an intelligence you want. <br /> <br /> 2. Click on “+”, project integrate button.<br /><br />3. Go to flows and click “Create Message”.<br /><br />4. Select the option “Divide by intention”.<br /><br />5. Select the intention you want to check, then click “OK”.<br /><br />6. Then assign response messages to each intention."
+    }
   }
 }
