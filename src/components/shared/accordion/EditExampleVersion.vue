@@ -51,7 +51,7 @@
             class="mr-4 edit-sentence__btn-wrapper__button"
             type="terciary"
             size="small"
-            @click.prevent.stop="cancelEditSentence">
+            @click.prevent.stop="cancelEditVersion">
             {{ $t('webapp.trainings.cancel_button') }}
           </unnnic-button>
           <unnnic-button
@@ -61,7 +61,7 @@
             :disabled="!isValid || submitting"
             :tooltip-hover="!isValid ? validationErrors : null"
             :loading="submitting"
-            @click.prevent.stop="saveSentence">
+            @click.prevent.stop="saveVersion">
             <slot v-if="!submitting">{{ $t('webapp.trainings.save_button') }}</slot>
           </unnnic-button>
         </div>
@@ -131,16 +131,16 @@ export default {
     }
   },
   methods: {
-    cancelEditSentence() {
+    cancelEditVersion() {
       this.$emit('cancel')
     },
-    async saveSentence() {
+    async saveVersion() {
       if (this.from !== 'suggestions') {
         await this.onSubmit();
-        this.cancelEditSentence();
+        this.cancelEditVersion();
       } else {
-        this.$emit('dispatchSave', this.sentence)
-        this.cancelEditSentence();
+        this.$emit('dispatchSave', this.version)
+        this.cancelEditVersion();
       }
     },
     addEntity() {

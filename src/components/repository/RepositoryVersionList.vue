@@ -101,7 +101,7 @@ export default {
     ]),
     dispatchSave() {
       this.updateExamples(true);
-      this.$emit('onEditSentence')
+      this.$emit('onEditVersion')
     },
     pageChanged() {
       this.pageWasChanged = !this.pageWasChanged;

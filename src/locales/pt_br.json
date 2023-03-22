@@ -835,7 +835,17 @@
       "signin": "Entre na sua conta para editar essa inteligência.",
       "table_edit": "Editar",
       "table_duplicate": "Duplicar",
-      "table_delete": "Excluir"
+      "table_delete": "Excluir",
+      "delete_title_modal": "Excluir versão",
+      "delete_phrase_modal": "Deseja mesmo excluir essa versão? Uma vez realizada a ação não será possível revertê-la.",
+      "delete_success_title_modal": "Versão excluída!",
+      "delete_success_phrase_modal": "A versão foi excluída com sucesso 😉",
+
+      "duplicate_title_modal": "Duplicar versão",
+      "duplicate_phrase_modal": "Qual o nome que você quer dar para a cópia dessa versão?",
+      "duplicate_success_title_modal": "Cópia criada!",
+      "duplicate_success_phrase_modal": "A cópia da versão foi criada com sucesso 😉",
+      "duplicate_success_button_modal": "Definir nome"
     },
     "inbox": {
       "description": "Veja as mensagens recebidas e como a inteligência as interpretou. Essas interações podem ser úteis para monitorar e aprimorar sua IA.",
