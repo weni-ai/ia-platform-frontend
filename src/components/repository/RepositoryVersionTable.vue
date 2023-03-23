@@ -8,22 +8,16 @@
       <template v-slot:item="{ item }">
         <unnnic-table-row :headers="table.headers">
           <template v-slot:version>
-            <div
-              @mouseenter="activeVersion(item)"
-              @mouseleave="inactiveVersion(item)"
-              :title="item.version"
-              class="break-text example-accordion__sentence"
-            >
-              <highlighted-entity
-                :ref="item.id"
-                :id="item.id"
-                :text="item.text"
-                :highlighted="item.highlighted"
-                :entities="item.entities"
-                :color-only="item.entitySelected"
-                :state="isVersionActive"
-              />
-            </div>
+            {{ item.name }}
+          </template>
+          <template v-slot:date>
+            {{ item.created_at | moment('from') }}
+          </template>
+          <template v-slot:modification>
+            {{ item.last_update | moment('from') }}
+          </template>
+          <template v-slot:created>
+            {{ item.created_by }}
           </template>
           <template v-if="repository.authorization.can_contribute" v-slot:edit>
             <div :style="{ textAlign: 'center' }">

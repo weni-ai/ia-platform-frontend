@@ -1,27 +1,26 @@
 <template>
   <div>
     <intent-pagination
-      v-if="examplesList"
+      v-if="versionsList"
       :item-component="versionTable"
-      :list="examplesList"
+      :list="versionsList"
       :repository="repository"
       :per-page="perPage"
       @itemDeleted="onItemDeleted()"
       @itemSave="dispatchSave"
-      :show-intents="true"
-      @onUpdateSelected="updateSelected"
     />
-    <p
-      v-if="examplesList.total === 0"
+    <!-- <p
+      v-if="versionsList.total === 0"
       class="no-examples"
       v-html="$t('webapp.trainings.database_untrained')"
-    ></p>
+    ></p> -->
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import PaginatedList from '@/components/shared/PaginatedList';
+import { formatters } from '@/utils/index';
 import IntentPagination from '../shared/IntentPagination';
 import RepositoryVersionTable from '@/components/repository/RepositoryVersionTable';
 
@@ -34,33 +33,32 @@ export default {
   name: 'RepositoryVersionList',
   components,
   props: {
-    query: {
+    repository: {
       type: Object,
-      default: () => ({}),
+      required: true,
     },
     perPage: {
       type: Number,
-      default: 50,
+      default: 5,
     },
-    update: {
+    canEdit: {
       type: Boolean,
       default: false,
-    },
-    textData: {
-      type: String,
-      default: '',
-    },
-    translationData: {
-      type: Boolean,
-      default: null,
     },
   },
   data() {
     return {
-      examplesList: null,
-      dateLastTrain: '',
+      maxEditLength: 40,
+      versionsList: null,
+      asc: false,
+      isEdit: {},
+      currentPage: 1,
+      isNewVersionModalActive: false,
+      selectedVersion: null,
+      loadingEdit: false,
+      loadingList: false,
+      currentEditVersion: null,
       pageWasChanged: false,
-      searchingExample: false,
       versionTable: RepositoryVersionTable
     };
   },
@@ -69,82 +67,189 @@ export default {
       repositoryVersion: 'getSelectedVersion',
       repository: 'getCurrentRepository',
     }),
+    repositoryUUID() {
+      if (!this.repository || this.repository.uuid === 'null') { return null; }
+      return this.repository.uuid;
+    },
+    query() {
+      return {
+        repository: this.repositoryUUID,
+        ordering: `${this.asc ? '+' : '-'}${this.orderField}`,
+      };
+    },
   },
   watch: {
     query() {
-      this.updateExamples(true);
-      const filterValue = Object.values(this.query);
-      if (filterValue[0] !== '' || filterValue.length > 1) {
-        this.searchingExample = true;
-        return;
-      }
-      this.searchingExample = false;
+      this.updateParams();
     },
-    update() {
-      this.updateExamples(true);
+    currentPage() {
+      this.updateVersions();
     },
-    repository() {
-      this.updateExamples(true);
+    repositoryUUID() {
+      this.updateParams();
     },
-    examplesList() {
-      this.$emit('updateCount', this.examplesList)
-    }
   },
   mounted() {
-    this.updateExamples();
+    this.updateParams();
   },
   methods: {
     ...mapActions([
-      'searchExamples',
+      'getVersions',
+      'setDefaultVersion',
+      'deleteVersion',
+      'editVersion',
+      'setRepositoryVersion',
+      'setUpdateVersionsState',
       'setRequirements',
-      'getRepositoryStatusTraining',
     ]),
+    onCancelEdit() {
+      this.$nextTick(() => { this.isEdit.edit = false; });
+    },
+    sort(orderField, asc) {
+      this.orderField = orderField;
+      this.asc = asc === 'asc';
+      this.updateVersions();
+    },
+    onEditNameChange(value) {
+      this.$nextTick(() => {
+        this.isEdit.name = formatters.versionItemKey()(value);
+      });
+    },
+    async updateParams() {
+      if (!this.repositoryUUID) { return; }
+      const response = await this.getVersions({
+        limit: this.perPage,
+        query: this.query,
+      });
+      this.versionsList = response;
+      this.updateVersions();
+    },
+    async updateVersions() {
+      this.loadingList = true;
+      try {
+        await this.versionsList.updateItems(this.currentPage);
+        this.loadingList = false;
+      } catch (e) {
+        this.loadingList = false;
+        this.showError(e);
+      }
+    },
+    handleDefaultVersion(id, name) {
+      this.$buefy.dialog.confirm({
+        title: this.$t('webapp.versions.change_default_version'),
+        message: this.$t('webapp.versions.message_change_default_version', { name }),
+        confirmText: this.$t('webapp.versions.confirm_change_default_version'),
+        type: 'is-warning',
+        hasIcon: true,
+        onConfirm: () => this.setDefaultVersion({
+          repositoryUuid: this.repositoryUUID,
+          id,
+          name,
+        }).then(() => this.updateVersions()),
+      });
+    },
+    onEditVersion(version) {
+      const { id, name } = version;
+      this.isEdit = {
+        edit: true,
+        id,
+        name,
+      };
+    },
+    handleEditVersion(name, id) {
+      if (!name || !(name.length > 0)) {
+        this.isEdit = false;
+        return;
+      }
+      this.editVersion({
+        repositoryUuid: this.repositoryUUID,
+        id,
+        name,
+      }).then(() => {
+        this.setUpdateVersionsState(true);
+        this.$buefy.toast.open({
+          message: this.$t('webapp.versions.version_has_edited'),
+          type: 'is-success',
+        });
+        this.isEdit = false;
+        this.updateVersions();
+      }).catch(() => {
+        this.$buefy.toast.open({
+          message: this.$t('webapp.versions.something_wrong'),
+          type: 'is-danger',
+        });
+      });
+    },
+    handleVersion(id, name) {
+      const version = {
+        id,
+        name,
+      };
+      this.setRepositoryVersion({
+        version,
+        repositoryUUID: this.repositoryUUID,
+      });
+    },
+    copyVersion(version) {
+      this.selectedVersion = version;
+      this.isNewVersionModalActive = true;
+    },
+    onAddedVersion() {
+      this.isNewVersionModalActive = false;
+      this.$buefy.toast.open({
+        message: this.$t('webapp.versions.version_was_created'),
+        type: 'is-success',
+      });
+      this.setUpdateVersionsState(true);
+      this.updateVersions();
+    },
+    onDeleteVersion(id, isDefault) {
+      if (isDefault) {
+        this.$buefy.toast.open({
+          duration: 5000,
+          message: this.$t('webapp.versions.you_cannot_delete_main_branch'),
+          position: 'is-top',
+          type: 'is-danger',
+        });
+      } else {
+        this.$buefy.dialog.confirm({
+          title: this.$t('webapp.versions.deleting_version'),
+          message: this.$t('webapp.versions.message_deleting_version'),
+          confirmText: this.$t('webapp.versions.confirm_deleting_version'),
+          type: 'is-danger',
+          hasIcon: true,
+          onConfirm: () => this.onDeleteVersionConfirm(id),
+        });
+      }
+    },
+    async onDeleteVersionConfirm(id) {
+      try {
+        this.loadingList = true;
+        await this.deleteVersion(id);
+        this.setUpdateVersionsState(true);
+        this.updateVersions();
+      } catch (e) {
+        this.showError(e);
+      } finally {
+        this.loadingList = false;
+      }
+    },
+    showError(error) {
+      // TODO: Treat errors
+      this.$buefy.toast.open({
+        message: error.response.data,
+        type: 'is-danger',
+      });
+    },
     dispatchSave() {
-      this.updateExamples(true);
+      // this.updateExamples(true);
       this.$emit('onEditVersion')
     },
     pageChanged() {
       this.pageWasChanged = !this.pageWasChanged;
     },
-    async updateExamples(force = false) {
-      await this.getRepositoryStatus();
-      if (this.repositoryStatus.count !== 0) {
-        if (this.repositoryStatus.results[0].status !== 2
-          && this.repositoryStatus.results[0].status !== 3) {
-          if (this.repositoryStatus.results[1] !== undefined) {
-            this.dateLastTrain = (this.repositoryStatus.results[1].created_at).replace(/[A-Za-z]/g, ' ');
-          }
-        } else if (this.repositoryStatus.results[0] !== undefined) {
-          this.dateLastTrain = (this.repositoryStatus.results[0].created_at).replace(/[A-Za-z]/g, ' ');
-        }
-      }
-      if (this.repositoryStatus.count === 0) return;
-      if (this.repositoryStatus.count === 1
-          && (this.repositoryStatus.results[0].status !== 2
-          && this.repositoryStatus.results[0].status !== 3)
-      ) return;
-      if (!this.examplesList || force) {
-        this.examplesList = await this.searchExamples({
-          repositoryUuid: this.repository.uuid,
-          version: this.repository.repository_version_id,
-          query: this.query,
-          limit: this.perPage,
-          endCreatedAt: this.dateLastTrain,
-        });
-      }
-    },
-    async getRepositoryStatus() {
-      const { data } = await this.getRepositoryStatusTraining({
-        repositoryUUID: this.repository.uuid,
-        repositoryVersion: this.repository.repository_version_id,
-      });
-      this.repositoryStatus = data;
-    },
     onItemDeleted() {
       this.$emit('exampleDeleted');
-    },
-    updateSelected(params) {
-      this.$emit('onUpdateSelected', params)
     },
   },
 };
