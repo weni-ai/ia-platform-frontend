@@ -8,6 +8,7 @@
       :per-page="perPage"
       @itemDeleted="onItemDeleted()"
       @itemSave="dispatchSave"
+      @onEditVersion="editVersion"
     />
     <!-- <p
       v-if="versionsList.total === 0"
@@ -24,14 +25,12 @@ import { formatters } from '@/utils/index';
 import IntentPagination from '../shared/IntentPagination';
 import RepositoryVersionTable from '@/components/repository/RepositoryVersionTable';
 
-const components = {
-  PaginatedList,
-  IntentPagination
-};
-
 export default {
   name: 'RepositoryVersionList',
-  components,
+  components: {
+    PaginatedList,
+    IntentPagination
+  },
   props: {
     repository: {
       type: Object,
@@ -40,10 +39,6 @@ export default {
     perPage: {
       type: Number,
       default: 5,
-    },
-    canEdit: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {
@@ -65,7 +60,7 @@ export default {
   computed: {
     ...mapGetters({
       repositoryVersion: 'getSelectedVersion',
-      repository: 'getCurrentRepository',
+      /* repository: 'getCurrentRepository', */
     }),
     repositoryUUID() {
       if (!this.repository || this.repository.uuid === 'null') { return null; }
@@ -102,9 +97,9 @@ export default {
       'setUpdateVersionsState',
       'setRequirements',
     ]),
-    onCancelEdit() {
+    /* onCancelEdit() {
       this.$nextTick(() => { this.isEdit.edit = false; });
-    },
+    }, */
     sort(orderField, asc) {
       this.orderField = orderField;
       this.asc = asc === 'asc';
@@ -242,7 +237,7 @@ export default {
       });
     },
     dispatchSave() {
-      // this.updateExamples(true);
+      this.updateParams(true);
       this.$emit('onEditVersion')
     },
     pageChanged() {

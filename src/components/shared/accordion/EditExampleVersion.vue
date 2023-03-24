@@ -3,20 +3,11 @@
     <form>
       <div class="columns edit-sentence__wrapper">
         <div class="column is-6">
-          <p
-            slot="label"
-            class="unnnic-form__label"
-            v-html="$t('webapp.example.version_name')">
-          </p>
-          <example-text-with-highlighted-entities-input
+          <unnnic-input-next
             ref="textInput"
-            v-model="text"
-            :entities="allEntities"
+            :label="$t('webapp.example.version_name')"
+            v-model="versionName"
             :placeholder="$t('webapp.example.enter_sentence')"
-            size="normal"
-            @textSelected="setTextSelected($event)"
-            @entityEdited="onEditEntity($event)"
-            @entityAdded="onEntityAdded()"
           />
         </div>
         <div class="column is-6">
@@ -41,7 +32,8 @@
           </div>
           <unnnic-switch
             :textRight="$t('webapp.example.principal_version_text')"
-            v-model="enable2FA" />
+            v-model="isDefaultVersion"
+            :disabled="isDefault" />
         </div>
       </div>
       <div
@@ -51,18 +43,15 @@
             class="mr-4 edit-sentence__btn-wrapper__button"
             type="terciary"
             size="small"
-            @click.prevent.stop="cancelEditVersion">
+            @click.prevent.stop="$emit('cancel')">
             {{ $t('webapp.trainings.cancel_button') }}
           </unnnic-button>
           <unnnic-button
             type="secondary"
             size="small"
             class="edit-sentence__btn-wrapper__button"
-            :disabled="!isValid || submitting"
-            :tooltip-hover="!isValid ? validationErrors : null"
-            :loading="submitting"
             @click.prevent.stop="saveVersion">
-            <slot v-if="!submitting">{{ $t('webapp.trainings.save_button') }}</slot>
+            {{ $t('webapp.trainings.save_button') }}
           </unnnic-button>
         </div>
       </div>
@@ -71,115 +60,38 @@
 </template>
 
 <script>
-import EditExampleBase from './EditExampleBase';
-import ExampleTextWithHighlightedEntitiesInput from '@/components/inputs/ExampleTextWithHighlightedEntitiesInput';
-import EntityAccordion from '@/components/shared/accordion/EntityAccordion';
-import WordCard from '@/components/shared/accordion/WordCard';
-
-
 export default {
   name: 'EditExampleVersion',
-  components: {
-    ExampleTextWithHighlightedEntitiesInput,
-    EntityAccordion,
-    WordCard
-  },
   props: {
-    from: {
-      type: String,
-      default: null
+    textToEdit: {
+      type: String
+    },
+    versionId: {
+      type: Number
+    },
+    isDefault: {
+      type: Boolean
     }
   },
   data() {
     return {
-      hideDropdown: true,
-      isOpen: false,
-      entityModal: false,
-      isEntityInputActive: false,
-      selectedEntities: [],
-      entity: ''
+      versionName: '',
+      isDefaultVersion: false
     }
   },
-  extends: EditExampleBase,
-  computed: {
-    words() {
-      return this.text
-        .split(' ')
-        .map((word, index) => ({
-          text: word,
-          hasEntity: (this.pendingEntities.filter(e => this.text.substring(e.start, e.end) === word) || '').length > 0,
-          start: this.text.indexOf(word),
-          end: this.text.indexOf(word) + word.length
-        }))
-    },
-    sentence() {
-      const {
-        sentenceId,
-        text,
-        language,
-        intent,
-        allEntities,
-      } = this;
-
-      return {
-        id: sentenceId,
-        text,
-        language,
-        intent,
-        entities: allEntities,
-      };
-    }
+  created(){
+    this.versionName = this.textToEdit;
+    this.isDefaultVersion = this.isDefault;
   },
   methods: {
     cancelEditVersion() {
       this.$emit('cancel')
     },
     async saveVersion() {
-      if (this.from !== 'suggestions') {
-        await this.onSubmit();
-        this.cancelEditVersion();
-      } else {
-        this.$emit('dispatchSave', this.version)
-        this.cancelEditVersion();
-      }
-    },
-    addEntity() {
-      if (this.textSelected) {
-        this.addPendingEntity();
-      } else {
-        this.entityModal = true
-      }
-    },
-    onWordSelected(event) {
-      const start = this.text.indexOf(event.text);
-      const end = start + event.text.length
-
-      if (event.value) {
-        this.selectedEntities.push({
-          end,
-          entity: this.entity,
-          start,
-        });
-      } else {
-        this.selectedEntities = this.selectedEntities.filter(e => e.start !== start)
-      }
-    },
-    cancelEditEntity() {
-      this.selectedEntities = []
-      this.entityModal = false
-      this.entity = ''
-    },
-    setEntity() {
-      this.pendingEntities.push(...this.selectedEntities)
-      this.pendingEntities = this.pendingEntities.map(entity => ({
-        ...entity,
-        class: ''
-      }))
-
-      this.cancelEditEntity();
-    },
-    onInputClick() {
-      this.isEntityInputActive = !this.isEntityInputActive
+      this.$emit('save', {
+        versionName: this.versionName,
+        isDefaultVersion: this.isDefaultVersion
+      })
     }
   }
 };
