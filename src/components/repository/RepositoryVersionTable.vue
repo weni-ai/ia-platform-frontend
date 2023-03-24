@@ -215,7 +215,7 @@ export default {
       versionId: null,
       isVersionActive: false,
       versionName: '',
-      newVersion: ''
+      newVersion: '',
     };
   },
   created(){
