@@ -8,12 +8,34 @@
           <div
             v-if="repository.authorization.can_write">
             <div class="settings__section">
-              <h1>{{ $t('webapp.settings.title_edit_repository') }}</h1>
-              <edit-repository-form
-                :owner-nickname="repository.owner.nickname"
-                :slug="repository.slug"
-                :initial-data="getEditInitialData()"
-                @edited="onEdited($event)" />
+              <unnnic-card
+              type="title"
+              :title="$t('webapp.settings.title_edit_repository')"
+              :hasInformationIcon="false"
+              icon="cog-1"
+              scheme="brand-weni-soft"
+              />
+              <unnnic-tab class="mt-6" initialTab="first" :tabs="tabs">
+                <template slot="tab-head-first">
+                  {{ $t("webapp.settings.settings_tab") }}
+                </template>
+                <template slot="tab-panel-first">
+                  <edit-repository-form
+                    :owner-nickname="repository.owner.nickname"
+                    :slug="repository.slug"
+                    :initial-data="getEditInitialData()"
+                    @edited="onEdited($event)"
+                  />
+                  <hr>
+                  <import-intelligence/>
+                </template>
+                <template slot="tab-head-second">
+                  {{ $t("webapp.settings.versions_tab") }}
+                </template>
+                <template slot="tab-panel-second">
+                  <versions />
+                </template>
+            </unnnic-tab>
             </div>
           </div>
           <authorization-request-notification
@@ -24,9 +46,6 @@
         </div>
       </div>
 
-            <hr>
-            <import-intelligence/>
-            <hr>
 
       <div
         v-if="!authenticated">
@@ -50,6 +69,7 @@ import EditRepositoryForm from '@/components/repository/EditRepositoryForm';
 import ImportIntelligence from '@/components/repository/ImportIntelligence';
 import LoginForm from '@/components/auth/LoginForm';
 import RepositoryBase from './Base';
+import Versions from './Versions';
 
 
 export default {
@@ -60,6 +80,12 @@ export default {
     LoginForm,
     AuthorizationRequestNotification,
     ImportIntelligence,
+    Versions,
+  },
+  data() {
+    return {
+      tabs: ['first', 'second'],
+    };
   },
   extends: RepositoryBase,
   methods: {
@@ -135,6 +161,10 @@ export default {
       color: $color-fake-black;
       margin-bottom: $between-title-subtitle;
       }
+    }
+
+    hr {
+      margin: 3rem 0;
     }
   }
 </style>

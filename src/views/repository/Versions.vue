@@ -63,4 +63,7 @@ export default {
 .description {
   margin-bottom: $between-subtitle-content;
 }
+/deep/ .rpstr-vw-bs__wrapper__content {
+  margin: 0
+}
 </style>

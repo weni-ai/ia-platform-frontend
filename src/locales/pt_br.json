@@ -464,7 +464,7 @@
       "table_delete": "Excluir"
     },
     "settings": {
-      "title_edit_repository": "Editar Inteligência",
+      "title_edit_repository": "Ajustes",
       "manage_your_team": "Gerencie seu time",
       "authorization_requests": "Solicitações de Autorização",
       "request_available": "Você já tem uma solicitação pendente. Espere a resposta de um administrador",
@@ -483,7 +483,10 @@
       "remove_user_confirm": "Você tem certeza que deseja excluir <strong>{user}</> como <strong>{role}</strong>?", 
       "remove": "Remover",
       "cancel": "Cancelar",
-      "default_error": "Algo de errado aconteceu, tente novamente mais tarde."
+      "default_error": "Algo de errado aconteceu, tente novamente mais tarde.",
+      "settings_tab": "Configurações",
+      "versions_tab": "Versões",
+      "settings_accordion": "Configurações avançadas"
     },
     "roles": {
       "user": "Usuário",

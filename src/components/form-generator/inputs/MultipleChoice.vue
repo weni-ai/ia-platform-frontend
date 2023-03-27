@@ -1,14 +1,9 @@
 <template>
-  <b-taginput
+  <unnnic-carousel
+    :tagItems="filteredData"
     v-model="value"
-    :data="filteredData"
-    expanded
-    autocomplete
-    open-on-focus
-    clear-on-select
-    field="display_name"
-    icon="label"
-    @input="update()" />
+    @change-selected="update()"
+  />
 </template>
 
 <script>
@@ -26,13 +21,14 @@ export default {
   },
   data() {
     return {
-      value: this.initialData,
+      value: this.initialData.map(choice => choice.value),
     };
   },
   computed: {
     filteredData() {
       const values = this.value.map(({ value }) => (value));
-      return this.choices.filter(({ value }) => (!values.includes(value)));
+      return this.choices
+        .map((value) => ({ ...value, name: value.display_name, id: value.value }));
     },
   },
   mounted() {
@@ -40,7 +36,7 @@ export default {
   },
   methods: {
     update() {
-      this.$emit('input', this.value.map(choice => choice.value));
+      this.$emit('input', this.value);
     },
   },
 };
