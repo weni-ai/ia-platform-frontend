@@ -466,7 +466,7 @@
       "table_delete": "Excluir"
     },
     "settings": {
-      "title_edit_repository": "Editar Inteligência",
+      "title_edit_repository": "Ajustes",
       "manage_your_team": "Gerencie seu time",
       "authorization_requests": "Solicitações de Autorização",
       "request_available": "Você já tem uma solicitação pendente. Espere a resposta de um administrador",
@@ -485,7 +485,10 @@
       "remove_user_confirm": "Você tem certeza que deseja excluir <strong>{user}</> como <strong>{role}</strong>?", 
       "remove": "Remover",
       "cancel": "Cancelar",
-      "default_error": "Algo de errado aconteceu, tente novamente mais tarde."
+      "default_error": "Algo de errado aconteceu, tente novamente mais tarde.",
+      "settings_tab": "Configurações",
+      "versions_tab": "Versões",
+      "settings_accordion": "Configurações avançadas"
     },
     "roles": {
       "user": "Usuário",
@@ -510,7 +513,11 @@
       "sent_to_training": "Frases enviadas para treinamento!",
       "sent_to_training_info": "As frases que você selecionou foram enviadas para treinamento com sucesso. Para treinar a inteligência com essas frases, vá ao menu Treinar Inteligência. 😉",
       "sent_to_test": "Frases enviadas para teste!",
-      "sent_to_test_info": "As frases que você selecionou foram enviadas para teste com sucesso. Para testá-las, vá ao menu Testar. 😉"
+      "sent_to_test_info": "As frases que você selecionou foram enviadas para teste com sucesso. Para testá-las, vá ao menu Testar. 😉",
+      "version_name": "Nome da versão",
+      "principal_version_label": "Tornar essa a versão principal da inteligência?",
+      "principal_version_text": "Versão principal",
+      "principal_version_info": "Ativar essa opção tornará essa a versão padrão da Inteligência"
     },
     "trainings": {
       "grid_text1": "Adicionar frases",
@@ -829,8 +836,8 @@
     },
     "versions": {
       "edit_choose_version": "Adicione, edite e escolha versões da sua inteligência.",
-      "date_created": "Data de Criação",
-      "last_modified": "Última Modificação",
+      "date_created": "Data de criação",
+      "last_modified": "Última modificação",
       "created_by": "Criado por",
       "main": "Principal",
       "change_default_version": "Mudar a Versão Padrão",
@@ -847,7 +854,28 @@
       "version": "Versão",
       "cancel": "Cancelar",
       "add_new": "Adicionar nova",
-      "signin": "Entre na sua conta para editar essa inteligência."
+      "signin": "Entre na sua conta para editar essa inteligência.",
+      "table_edit": "Editar",
+      "table_duplicate": "Duplicar",
+      "table_delete": "Excluir",
+      "edit_title_modal": "Alterar versão",
+      "edit_phrase_modal": "Deseja mesmo fazer alterações na versão {name}?",
+      "edit_success_title_modal": "Alterações salvas!",
+      "edit_success_phrase_modal": "Alterações feitas com sucesso 😉",
+      "edit_confirm_button": "Fazer alterações",
+      "delete_title_modal": "Excluir versão",
+      "delete_phrase_modal": "Deseja mesmo excluir a versão {name}? Uma vez realizada a ação não será possível revertê-la.",
+      "delete_success_title_modal": "Versão excluída!",
+      "delete_success_phrase_modal": "A versão foi excluída com sucesso 😉",
+      "delete_alert_text": "Não é possível excluir a versão principal",
+      "duplicate_title_modal": "Duplicar a versão {name}",
+      "duplicate_phrase_modal": "Qual o nome que você quer dar para a cópia dessa versão?",
+      "duplicate_input_label": "Nome da versão",
+      "duplicate_input_placeholder": "Nome",
+      "duplicate_confirm_button": "Definir nome",
+      "duplicate_success_title_modal": "Cópia criada!",
+      "duplicate_success_phrase_modal": "A cópia da versão foi criada com sucesso 😉",
+      "duplicate_success_button_modal": "Definir nome"
     },
     "inbox": {
       "description": "Veja as mensagens recebidas e como a inteligência as interpretou. Essas interações podem ser úteis para monitorar e aprimorar sua IA.",
