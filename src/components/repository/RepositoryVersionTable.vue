@@ -79,17 +79,6 @@
         {{ $t('webapp.versions.edit_phrase_modal') }}
       </template>
     </unnnic-modal-next>
-    <unnnic-modal
-      :showModal="openEditSuccessModal"
-      :text="$t('webapp.versions.edit_success_title_modal')"
-      scheme="feedback-green"
-      modal-icon="check-circle-1-1"
-      @close="openDuplicateSuccessModal = false"
-    >
-      <span
-      slot="message"
-      v-html="$t('webapp.versions.edit_success_phrase_modal')"></span>
-    </unnnic-modal>
     <unnnic-modal-next
       v-if="openDeleteModal"
       type="alert"
@@ -108,17 +97,6 @@
       slot="description"
       v-html="$t('webapp.versions.delete_phrase_modal', { name: versionName })"></span>
     </unnnic-modal-next>
-    <unnnic-modal
-      :showModal="openDeleteSuccessModal"
-      :text="$t('webapp.versions.delete_success_title_modal')"
-      scheme="feedback-green"
-      modal-icon="check-circle-1-1"
-      @close="openDeleteSuccessModal = false"
-    >
-      <span
-      slot="message"
-      v-html="$t('webapp.versions.delete_success_phrase_modal')"></span>
-    </unnnic-modal>
 
     <unnnic-modal-next
       type="alert"
@@ -139,20 +117,19 @@
           class="input-duplicate-version"
           v-model="newVersion"
         >
-        {{ newVersion }}
         </unnnic-input-next>
       </template>
     </unnnic-modal-next>
     <unnnic-modal
-      :showModal="openDuplicateSuccessModal"
-      :text="$t('webapp.versions.duplicate_success_title_modal')"
+      :showModal="openSuccessModal"
+      :text="$t(successModalTitle)"
       scheme="feedback-green"
       modal-icon="check-circle-1-1"
-      @close="openDuplicateSuccessModal = false"
+      @close="openSuccessModal = false"
     >
       <span
       slot="message"
-      v-html="$t('webapp.versions.duplicate_success_phrase_modal')"></span>
+      v-html="$t(successModalMessage)"></span>
     </unnnic-modal>
   </div>
   </template>
@@ -161,7 +138,6 @@
 import { mapState, mapActions } from 'vuex';
 import EditExampleVersion from '@/components/shared/accordion/EditExampleVersion';
 import { unnnicCallAlert } from '@weni/unnnic-system';
-import { formatters } from '@/utils/index';
 
 export default {
   name: 'RepositoryVersionTable',
@@ -209,13 +185,13 @@ export default {
       openDeleteModal: false,
       openDuplicateModal: false,
       openEditModal: false,
-      openDuplicateSuccessModal: false,
-      openDeleteSuccessModal: false,
-      openEditSuccessModal: false,
+      openSuccessModal: false,
       versionId: null,
       isVersionActive: false,
       versionName: '',
       newVersion: '',
+      successModalTitle: '',
+      successModalMessage: '',
     };
   },
   created(){
@@ -295,6 +271,8 @@ export default {
         this.$emit('dispatchEvent', { event: 'itemDeleted' });
         this.openDeleteModal = false;
         setTimeout(() => { this.openDeleteSuccessModal = true }, 2000);
+        this.successModalTitle = 'webapp.versions.delete_success_title_modal';
+        this.successModalMessage = 'webapp.versions.delete_success_phrase_modal';
       } catch {
         this.$emit('dispatchEvent', { event: 'error' });
       }
@@ -304,41 +282,37 @@ export default {
       this.versionId = id;
       this.versionName = versionName;
     },
-    onNameChange(value) {
-      this.$nextTick(() => {
-        this.name = formatters.versionItemKey()(value);
-      });
-    },
     async confirmDuplicate() {
       await this.addNewVersion({
-        repositoryUUID: this.repository.uuid,
-        versionUUID: this.version.id,
-        name: this.name,
+        repositoryUUID: this.repositoryUUID,
+        versionUUID: this.versionId,
+        name: this.newVersion,
       })
         .then(() => {
-          this.$emit('addedVersion');
+          this.isNewVersionModalActive = false;
+          this.$emit('dispatchEvent', { event: 'addedVersion', value: this.selectedItems });
+          this.openSuccessModal = true;
+          this.successModalTitle = 'webapp.versions.duplicate_success_title_modal';
+          this.successModalMessage = 'webapp.versions.duplicate_success_phrase_modal';
         })
         .catch((error) => {
           this.$emit('error', error);
         });
     },
-    /* async confirmDuplicate() {
-      try {
-        await this.duplicateVersion(this.versionId);
-        this.$emit('dispatchEvent', { event: 'itemDuplicate' });
-        this.openDuplicateModal = false;
-        setTimeout(() => { this.openDuplicateSuccessModal = true }, 2000);
-      } catch {
-        this.$emit('dispatchEvent', { event: 'error' });
-      }
-    }, */
     async saveVersion({ versionName, isDefaultVersion }) {
-      console.log(this.repositoryUUID)
       await this.editVersion({
         repositoryUuid: this.repositoryUUID,
         id: this.selectedItem,
         name: versionName,
-      });
+      })
+        .then(() => {
+          this.openSuccessModal = true;
+          this.successModalTitle = 'webapp.versions.edit_success_title_modal';
+          this.successModalMessage = 'webapp.versions.edit_success_phrase_modal';
+        })
+        .catch((error) => {
+          this.$emit('error', error);
+        });
       if (isDefaultVersion) {
         await this.setDefaultVersion({
           repositoryUuid: this.repositoryUUID,

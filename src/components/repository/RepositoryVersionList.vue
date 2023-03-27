@@ -9,12 +9,8 @@
       @itemDeleted="onItemDeleted()"
       @itemSave="dispatchSave"
       @onEditVersion="editVersion"
+      @addedVersion="onAddedVersion"
     />
-    <!-- <p
-      v-if="versionsList.total === 0"
-      class="no-examples"
-      v-html="$t('webapp.trainings.database_untrained')"
-    ></p> -->
   </div>
 </template>
 
@@ -190,11 +186,6 @@ export default {
       this.isNewVersionModalActive = true;
     },
     onAddedVersion() {
-      this.isNewVersionModalActive = false;
-      this.$buefy.toast.open({
-        message: this.$t('webapp.versions.version_was_created'),
-        type: 'is-success',
-      });
       this.setUpdateVersionsState(true);
       this.updateVersions();
     },
@@ -249,10 +240,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.no-examples {
-  margin: 0;
-  font: 14px 'Lato';
-}
-</style>
