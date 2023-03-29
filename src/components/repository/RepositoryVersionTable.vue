@@ -301,27 +301,38 @@ export default {
         });
     },
     async saveVersion({ versionName, isDefaultVersion }) {
-      await this.editVersion({
-        repositoryUuid: this.repositoryUUID,
-        id: this.selectedItem,
-        name: versionName,
-      })
-        .then(() => {
-          this.openSuccessModal = true;
-          this.successModalTitle = 'webapp.versions.edit_success_title_modal';
-          this.successModalMessage = 'webapp.versions.edit_success_phrase_modal';
-          if (isDefaultVersion) {
-            this.setDefaultVersion({
-              repositoryUuid: this.repositoryUUID,
-              id: this.selectedItem,
-              name: versionName,
-            })
-          }
-          this.$emit('dispatchEvent', { event: 'itemSave' });
+      if (isDefaultVersion) {
+        await this.setDefaultVersion({
+          repositoryUuid: this.repositoryUUID,
+          id: this.selectedItem,
+          name: versionName,
         })
-        .catch((error) => {
-          this.$emit('error', error);
-        });
+          .then(() => {
+            this.openSuccessModal = true;
+            this.successModalTitle = 'webapp.versions.edit_success_title_modal';
+            this.successModalMessage = 'webapp.versions.edit_success_phrase_modal';
+            this.$emit('dispatchEvent', { event: 'itemSave' });
+          })
+          .catch((error) => {
+            this.$emit('error', error);
+          });
+      }
+      if (versionName !== this.item.name) {
+        await this.editVersion({
+          repositoryUuid: this.repositoryUUID,
+          id: this.selectedItem,
+          name: versionName,
+        })
+          .then(() => {
+            this.openSuccessModal = true;
+            this.successModalTitle = 'webapp.versions.edit_success_title_modal';
+            this.successModalMessage = 'webapp.versions.edit_success_phrase_modal';
+            this.$emit('dispatchEvent', { event: 'itemSave' });
+          })
+          .catch((error) => {
+            this.$emit('error', error);
+          });
+      }
       this.selectedItem = null
     },
     cancelEditVersion() {
