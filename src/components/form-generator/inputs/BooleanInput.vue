@@ -10,7 +10,7 @@
           :description="$t('webapp.create_repository.privacy_type_public_description')"
           type="content"
           icon="lock-unlock-1-1"
-          class="intelligence-privacy__cards__content"
+          class="intelligence-privacy__cards__content mr-4"
           :enabled="!value"
           @click.native="value = false"
         />
@@ -103,7 +103,7 @@ export default {
       display: flex;
       justify-content: space-between;
       &__content {
-        width: 47%;
+        width: 50%;
       }
     }
   }

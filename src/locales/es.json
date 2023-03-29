@@ -82,7 +82,8 @@
       "integration_success_title": "Inteligencia integrada",
       "integration_success_description": "La inteligencia se integró conéxito 😉",
       "integration_error_title": "No se puede integrar la inteligencia",
-      "integration_error_description": "La inteligencia no se integró correctamente"
+      "integration_error_description": "La inteligencia no se integró correctamente",
+      "community_description": "Integre inteligencia de calidad lista para usar en su proyecto"
     },
     "create_repository": {
       "intelligence": "Nueva inteligencia",
@@ -467,7 +468,7 @@
       "table_delete": "Eliminar"
     },
     "settings": {
-      "title_edit_repository": "Editar Inteligencia",
+      "title_edit_repository": "Ajustes",
       "manage_your_team": "Administra tu equipo",
       "authorization_requests": "Solicitudes de Autorización",
       "request_available": "Ya tienes una solicitud pendiente. Esperar la respuesta de un administrador",
@@ -476,7 +477,7 @@
       "users": "Usuarios:",
       "role": "Documentos:",
       "no_requests": "No hay solicitudes.",
-      "save": "Ahorrar",
+      "save": "Guardar ediciones",
       "request": "Hacer pedido",
       "invite": "Enviar invitacion",
       "no_users": "Sin usuarios en el equipo.",
@@ -486,7 +487,13 @@
       "remove_user_confirm": "¿Está seguro de que desea eliminar <strong>{user}</> como <strong>{role}</strong>?",
       "remove": "Para eliminar",
       "cancel": "Cancelar",
-      "default_error": "Ocurrió algo mal, inténtalo de nuevo más tarde."
+      "default_error": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
+      "settings_tab": "Configuración",
+      "versions_tab": "Versiones",
+      "settings_accordion": "Configuración avanzada",
+      "description": "Administrar información básica de inteligencia.",
+      "save_success_title": "¡La inteligencia cambió con éxito!",
+      "save_success_message": "La información de inteligencia se cambió con éxito 😉"
     },
     "roles": {
       "user": "Usuario",
@@ -507,7 +514,15 @@
       "help_text": "Cuando su bot recibe un mensaje, puede usar un reconocedor para examinarlo e identificar la intención.",
       "delete_text": "¿Está seguro? Este ejemplo será eliminado.",
       "delete": "Borrar",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "sent_to_training": "¡Sentencias enviadas para entrenamiento!",
+      "sent_to_training_info": "Las frases que seleccionaste han sido enviadas con éxito para entrenar. Para entrenar inteligencia con estas frases, ve al menú Entrenar inteligencia. 😉",
+      "sent_to_test": "¡Oraciones enviadas a prueba!",
+      "sent_to_test_info": "Las frases que seleccionaste se enviaron con éxito para probarlas. Para probarlas, ve al menú Prueba. 😉",
+      "version_name": "Nombre de la versión",
+      "principal_version_label": "¿Hacer de esta la versión principal de la inteligencia?",
+      "principal_version_text": "Versión principal",
+      "principal_version_info": "Habilitar esta opción hará que esta sea la versión predeterminada de la Inteligencia"
     },
     "trainings": {
       "grid_text1": "Entrenar una nueva oración",
@@ -844,7 +859,28 @@
       "version": "Versión",
       "cancel": "Cancelar",
       "add_new": "Añadir nuevo",
-      "signin": "Ingrese su cuenta para editar esta inteligencia."
+      "signin": "Ingrese su cuenta para editar esta inteligencia.",
+      "table_edit": "Editar",
+      "table_duplicate": "Duplicar",
+      "table_delete": "Eliminar",
+      "edit_title_modal": "Cambiar versión",
+      "edit_phrase_modal": "¿Realmente quieres hacer cambios en la versión {name}?",
+      "edit_success_title_modal": "¡Cambios guardados!",
+      "edit_success_phrase_modal": "Cambios realizados con éxito 😉",
+      "edit_confirm_button": "Hacer cambios",
+      "delete_title_modal": "Eliminar versión",
+      "delete_phrase_modal": "¿Realmente quieres eliminar la versión {name}? Una vez realizada la acción, no será posible revertirla.",
+      "delete_success_title_modal": "¡Versión eliminada!",
+      "delete_success_phrase_modal": "La versión fue eliminada con éxito 😉",
+      "delete_alert_text": "No se pudo eliminar la versión principal",
+      "duplicate_title_modal": "Versión duplicada {name}",
+      "duplicate_phrase_modal": "¿Qué nombre quieres para esta copia de esta versión?",
+      "duplicate_input_label": "Nombre de la versión",
+      "duplicate_input_placeholder": "Nombre",
+      "duplicate_confirm_button": "Establecer nombre",
+      "duplicate_success_title_modal": "¡Copia creada!",
+      "duplicate_success_phrase_modal": "La copia de la versión se creó con éxito 😉",
+      "duplicate_success_button_modal": "Establecer nombre"
     },
     "inbox": {
       "description": "Estas son las frases de las interacciones de los usuarios con su inteligencia.\nPueden ser útiles para su formación o sus pruebas.",

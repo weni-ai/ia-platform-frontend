@@ -15,7 +15,10 @@
               icon="cog-1"
               scheme="brand-weni-soft"
               />
-              <unnnic-tab class="mt-6" initialTab="first" :tabs="tabs">
+              <p class="settings__section__subtitle">
+                {{ $t("webapp.settings.description") }}
+              </p>
+              <unnnic-tab initialTab="first" :tabs="tabs">
                 <template slot="tab-head-first">
                   {{ $t("webapp.settings.settings_tab") }}
                 </template>
@@ -59,6 +62,17 @@
         </div>
       </div>
     </div>
+    <unnnic-modal
+      :showModal="openSuccessModal"
+      :text="$t('webapp.settings.save_success_title')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openSuccessModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.settings.save_success_message')" />
+    </unnnic-modal>
   </repository-view-base>
 </template>
 
@@ -85,6 +99,7 @@ export default {
   data() {
     return {
       tabs: ['first', 'second'],
+      openSuccessModal: false
     };
   },
   extends: RepositoryBase,
@@ -130,10 +145,7 @@ export default {
           },
         });
       }
-      this.$buefy.toast.open({
-        message: 'Repository edited!',
-        type: 'is-success',
-      });
+      this.openSuccessModal = true
     },
     onRoleSetted() {
       this.$refs.authorizationsList.updateAuthorizations();
@@ -148,6 +160,8 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
   .settings {
     font-family: $font-family;
@@ -161,10 +175,36 @@ export default {
       color: $color-fake-black;
       margin-bottom: $between-title-subtitle;
       }
+
+      &__subtitle {
+        font-size: $unnnic-font-size-body-gt;
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-dark;
+        line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
+        margin-top: $unnnic-spacing-stack-sm;
+        margin-bottom: $unnnic-spacing-stack-lg;
+      }
     }
 
     hr {
       margin: 3rem 0;
     }
   }
+  /deep/ .tab-header {
+    margin-bottom: 2rem;
+  }
+
+  /deep/ input:focus {
+    box-shadow: none;
+    border-color: #9caccc;
+  }
+  /deep/ .dropdown.active .dropdown-data {
+    z-index: 2;
+  }
+  /deep/ .unnnic-card-tag-carousel__container__slide__item {
+    margin-right: 1rem;
+  }
+  /deep/ .unnnic-tooltip-label {
+    max-width: unset;
+}
 </style>
