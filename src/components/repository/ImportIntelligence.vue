@@ -42,20 +42,6 @@
         />
       </div>
     </unnnic-modal>
-      <!-- <unnnic-modal >
-        <import-rasa-modal
-          v-if="importModalVisible"
-          @dispatchCloseModal="closeImportModal"
-          @dispatchImportNotification="dispatchNotification($event)"
-        />
-      </unnnic-modal> -->
-
-      <!-- <import-wit-modal
-        v-if="migrateModalVisible"
-        @dispatchCloseModal="closeMigrateModal"
-        @dispatchMigrateNotification="dispatchNotification($event)"
-      /> -->
-
   </div>
 </template>
 
