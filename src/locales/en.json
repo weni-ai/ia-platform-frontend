@@ -872,7 +872,7 @@
       "edit_success_phrase_modal": "Successfully made changes 😉",
       "edit_confirm_button": "Make changes",
       "delete_title_modal": "Delete version",
-      "delete_phrase_modal": "Do you really want to delete the version {name}? Once the action has been performed, it will not bepossible to revert it.",
+      "delete_phrase_modal": "Do you really want to delete the <strong>{name}</strong> version? Once the action has been performed, it will not be possible to revert it.",
       "delete_success_title_modal": "Version deleted!",
       "delete_success_phrase_modal": "The version was successfully deleted 😉",
       "delete_alert_text": "Unable to delete major version",
