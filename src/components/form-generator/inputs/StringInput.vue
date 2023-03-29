@@ -1,11 +1,11 @@
 <template>
-  <b-input
+  <unnnic-input
     :maxlength="max_length"
     :has-counter="showMaxLength"
     v-model="value"
     :placeholder="labelPlaceholder"
-    type="text"
-    @input="update()" />
+    type="text" @input="update()"
+  />
 </template>
 
 <script>

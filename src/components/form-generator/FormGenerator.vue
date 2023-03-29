@@ -6,30 +6,16 @@
       :grouped="grouped"
       :group-multiline="grouped">
       <b-field
-        v-for="field in fields"
+        v-for="field in generalGroup"
         v-show="field.type !== 'hidden'"
         :key="field.name"
         :type="field.errors && 'is-danger'"
         :class="{[`field-${field.type}`]: true}">
         <div
-          v-if="showLabels"
+          v-if="showLabels && field.type !== 'boolean'"
           slot="label"
           :class="{'field-label': true, [`field-${field.type}__title`]: true}">
-          <span>
-            {{ field.label }}
-          </span>
-          <help-widget
-            v-if="hasHelpIcon(field)"
-            :article-id="helpArticleId" />
-        </div>
-        <div
-          slot="message"
-          :class="{[`field-message--${showLabels ? 'labeled' : 'unlabeled'}`]:
-                     true,
-                   [`field-message--${showLabels ? 'labeled' : 'unlabeled'}__maxLength`]:
-          field.inputProps.max_length}">
-          <span v-if="field.errors"> {{ field.errors.join(' ') }} </span>
-          <span v-else> {{ showLabels && !hideHelp ? field.helpText : '' }} </span>
+          <unnnic-label class="my-0" :label="field.label" />
         </div>
         <component
           :v-if="field.inputComponent"
@@ -46,9 +32,65 @@
           :class="{
             'switchNewIntelligence': field.name === 'is_private' && newIntelligenceForms,
           }"
+          :name="field.name"
           @input="update()"
         />
       </b-field>
+      <entity-accordion :open.sync="isOpen">
+        <div slot="header" class="level">
+          <div class="badges-card__header">
+            <p
+              class="unnnic-form__label my-0"
+            >
+              {{ $t('webapp.settings.settings_accordion') }}
+            </p>
+          </div>
+        </div>
+        <div slot="icon" class="level example-accordion__btns-wrapper">
+          <unnnic-icon-svg
+            :icon="`${isOpen ? 'arrow-button-down-1' : 'arrow-right-1-1'}`"
+            scheme="neutral-cleanest"
+            size="xs"
+          />
+        </div>
+        <div slot="body">
+          <div class="group">
+              <b-field
+              v-for="field in advancedGroup"
+              v-show="field.type !== 'hidden'"
+              :key="field.name"
+              :type="field.errors && 'is-danger'"
+              :class="{[`field-${field.type}`]: true}">
+              <div
+                v-if="showLabels && field.type !== 'boolean'"
+                slot="label"
+                :class="{'field-label': true, [`field-${field.type}__title`]: true}">
+              </div>
+              <div
+                v-if="showLabels && field.type !== 'boolean'"
+                slot="label"
+                :class="{'field-label': true, [`field-${field.type}__title`]: true}">
+                <unnnic-label class="my-0" :label="field.label" />
+              </div>
+              <component
+                :v-if="field.inputComponent"
+                :is="field.inputComponent"
+                v-bind="field.inputProps"
+                :label-placeholder="showLabels ? '' : field.label"
+                :show-max-length="showLabels"
+                v-model="formData[field.name]"
+                :initial-data="initialData[field.name]"
+                :label="field.label"
+                :fetch="field.fetch"
+                :help-text="hideHelp ? '' : field.helpText"
+                :compact="!showLabels"
+                :name="field.name"
+                @input="update()"
+              />
+            </b-field>
+          </div>
+        </div>
+      </entity-accordion>
     </component>
   </div>
 </template>
@@ -64,6 +106,7 @@ import TextInput from './inputs/TextInput';
 import EmailInput from './inputs/EmailInput';
 import PasswordInput from './inputs/PasswordInput';
 import ImageInput from './inputs/ImageInput';
+import EntityAccordion from '@/components/shared/accordion/EntityAccordion';
 
 
 const relatedInputComponent = {
@@ -84,6 +127,7 @@ const relatedInputComponent = {
 const components = {
   Messages,
   HelpWidget,
+  EntityAccordion
 };
 
 export default {
@@ -130,11 +174,14 @@ export default {
   data() {
     return {
       formData: {},
+      isOpen: false
     };
   },
   computed: {
     fields() {
-      return Object.keys(this.schema)
+      const fields = Object.keys(this.schema)
+
+      return fields
         .map((name) => {
           const {
             type,
@@ -160,7 +207,17 @@ export default {
             fetch,
           };
         })
-        .filter(field => !!field);
+        .filter(field => !!field)
+    },
+    advancedGroup() {
+      const items = this.fields
+      return items.splice(5)
+    },
+    generalGroup() {
+      const items = this.fields
+      this.swapElements(this.fields, 2, 3)
+      this.swapElements(this.fields, 4, 3)
+      return items.slice(0, 5)
     },
     msgs() {
       /* istanbul ignore next */
@@ -181,6 +238,11 @@ export default {
     hasHelpIcon(field) {
       return field.name === 'algorithm';
     },
+    swapElements(array, indexA, indexB) {
+      const from = array[indexA];
+      array[indexA] = array[indexB];
+      array[indexB] = from;
+    }
   },
 };
 </script>
@@ -215,7 +277,7 @@ $max-length-height: 0.938rem;
 }
 
 .field {
-  margin-bottom: 0;
+  margin-bottom: 1.5rem;
 }
 
 .field-label {
@@ -231,5 +293,46 @@ $max-length-height: 0.938rem;
 }
 .field-textarea {
   min-width: 70%;
+}
+
+.group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+
+  & .field-choice {
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+  & .field-boolean {
+    margin-bottom: 0;
+    margin-right: 8rem;
+  }
+}
+
+::v-deep {
+  .input {
+    height: 46px;
+  }
+  .dropdown {
+    display: block;
+  }
+
+  .expander {
+    font-family: 'Lato';
+    border: 1px solid #E2E6ED;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+
+    &__body {
+      padding: 0;
+    }
+
+    &__trigger {
+      padding-top: 0;
+    }
+  }
 }
 </style>

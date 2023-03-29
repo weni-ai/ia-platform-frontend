@@ -9,11 +9,16 @@
       :errors="errors"
       :initial-data="initialData" />
     <div class="text-center">
-      <b-button
-        v-if="formSchema"
-        :disabled="submitting"
-        type="is-primary"
-        native-type="submit">{{ $t('webapp.settings.save') }}</b-button>
+        <unnnic-button
+          v-if="formSchema"
+          :disabled="submitting"
+          native-type="submit"
+          class="button--full"
+          type="secondary"
+          size="large"
+        >
+          {{ $t('webapp.settings.save') }}
+        </unnnic-button>
     </div>
   </form>
 </template>
@@ -97,3 +102,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.button--full {
+  width: 100%;
+}
+</style>

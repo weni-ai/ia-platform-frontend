@@ -84,7 +84,8 @@
       "integration_success_title": "Integrated intelligence",
       "integration_success_description": "The Intelligence was successfully integrated 😉",
       "integration_error_title": "Unable to integrate Intelligence",
-      "integration_error_description": "The Intelligence was not successfully integrated"
+      "integration_error_description": "The Intelligence was not successfully integrated",
+      "community_description": "Integrate ready-made, quality Intelligence into your project"
     },
     "create_repository": {
       "intelligence": "New intelligence",
@@ -467,7 +468,7 @@
       "table_delete": "Delete"
     },
     "settings": {
-      "title_edit_repository": "Edit Intelligence",
+      "title_edit_repository": "Settings",
       "manage_your_team": "Manage your team",
       "authorization_requests": "Authorization Requests",
       "request_available": "You already have a pending request. Wait for an admin to process it",
@@ -476,7 +477,7 @@
       "users": "Users:",
       "role": "Role:",
       "no_requests": "No requests.",
-      "save": "Save",
+      "save": "Save changes",
       "request": "Request",
       "invite": "Send Invite",
       "no_users": "No users in your team.",
@@ -486,7 +487,13 @@
       "remove_user_confirm": "Are you sure you want to delete <strong>{user}</strong> as <strong>{role}</strong>?",
       "remove": "Remove",
       "cancel": "Cancel",
-      "default_error": "Something went wrong, try again later."
+      "default_error": "Something went wrong, try again later.",
+      "settings_tab": "Settings",
+      "versions_tab": "Versions",
+      "settings_accordion": "Advanced settings",
+      "description": "Manage basic Intelligence information.",
+      "save_success_title": "Intelligence successfully changed!",
+      "save_success_message": "Intelligence information was successfully changed 😉"
     },
     "roles": {
       "user": "User",
@@ -507,7 +514,15 @@
       "help_text": "When your bot receives a message, your bot can use a recognizer to examine the message and determine intent.",
       "delete_text": "Are you sure? The example will be deleted.",
       "delete": "Delete",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "sent_to_training": "Sentences sent for training!",
+      "sent_to_training_info": "The phrases you selected have been successfully sent for training. To train intelligence with these phrases, go to the Train Intelligence menu. 😉",
+      "sent_to_test": "Sentences sent to test!",
+      "sent_to_test_info": "The phrases you selected were successfully sent for testing. To test them, go to the Test menu. 😉",
+      "version_name": "Version name",
+      "principal_version_label": "Make this the main version of the intelligence?",
+      "principal_version_text": "Major version",
+      "principal_version_info": "Enabling this option will make this the default version of the Intelligence"
     },
     "trainings": {
       "grid_text1": "Train a new sentence",
@@ -849,7 +864,28 @@
       "version": "Version",
       "cancel": "Cancel",
       "add_new": "Add new",
-      "signin": "Sign in to your account to edit this repository."
+      "signin": "Sign in to your account to edit this repository.",
+      "table_edit": "Edit",
+      "table_duplicate": "Duplicate",
+      "table_delete": "Delete",
+      "edit_title_modal": "Change version",
+      "edit_phrase_modal": "Do you really want to make changes to version {name}?",
+      "edit_success_title_modal": "Changes saved!",
+      "edit_success_phrase_modal": "Successfully made changes 😉",
+      "edit_confirm_button": "Make changes",
+      "delete_title_modal": "Delete version",
+      "delete_phrase_modal": "Do you really want to delete the <strong>{name}</strong> version? Once the action has been performed, it will not be possible to revert it.",
+      "delete_success_title_modal": "Version deleted!",
+      "delete_success_phrase_modal": "The version was successfully deleted 😉",
+      "delete_alert_text": "Unable to delete major version",
+      "duplicate_title_modal": "Duplicate version {name}",
+      "duplicate_phrase_modal": "What name do you want to name this copy of this version?",
+      "duplicate_input_label": "Version name",
+      "duplicate_input_placeholder": "Name",
+      "duplicate_confirm_button": "Set name",
+      "duplicate_success_title_modal": "Copy created!",
+      "duplicate_success_phrase_modal": "The version copy was successfully created 😉",
+      "duplicate_success_button_modal": "Set name"
     },
     "inbox": {
       "description": "These are phrases of actual user interaction with your data set.\n          They can be useful for your training or testing.",

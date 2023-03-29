@@ -4,55 +4,62 @@
       class="import-and-export-intelligence__title">
       {{ $t('webapp.import_and_export_intelligence.title') }}
     </h2>
-    <p>
+    <p class="import-and-export-intelligence__description">
       {{ $t('webapp.import_and_export_intelligence.subtitle') }}
     </p>
     <div class="import-and-export-intelligence__buttons">
-      <b-button
-        v-if="intelligenceFile === null"
+      <unnnic-button
         ref="setVisibleImport"
-        type="is-primary"
-        class="import-and-export-intelligence__buttons__import-button"
+        type="secondary"
+        class="mr-4"
         @click.native="setVisibleImportModal()">
         {{ $t('webapp.import_and_export_intelligence.import_rasa') }}
-      </b-button>
-      <b-button
-        v-if="intelligenceFile === null"
+      </unnnic-button>
+      <unnnic-button
         ref="setVisibleMigrate"
-        type="is-primary"
-        class="import-and-export-intelligence__buttons__import-button"
+        type="secondary"
         @click.native="setVisibleMigrateModal()">
         {{ $t('webapp.import_and_export_intelligence.migrate_wit') }}
-      </b-button>
+      </unnnic-button>
     </div>
 
-    <import-data-modal
-      :is-modal-visible="importModalVisible"
-      :is-import-button-visible="intelligenceFile === null"
-      @selectedFileChanged="intelligenceFile = $event"
-      @dispatchCloseModal="closeImportModal()"
-      @dispatchImportNotification="dispatchNotification($event)"/>
-
-    <migrate-intelligence-modal
-      :is-modal-visible="migrateModalVisible"
-      @selectedFileChanged="intelligenceFile = $event"
-      @dispatchCloseModal="closeMigrateModal()"
-      @dispatchMigrateNotification="dispatchNotification($event)"/>
+    <unnnic-modal
+      :text="importModalVisible ? $t('webapp.import_and_export_intelligence.import_rasa') :
+       $t('webapp.import_and_export_intelligence.migrate_wit')"
+      :showModal="openImportModal"
+      @close="closeImportModal"
+    >
+      <div slot="message">
+        <import-rasa-modal
+          v-if="importModalVisible"
+          @dispatchCloseModal="closeImportModal"
+          @dispatchImportNotification="dispatchNotification($event)"
+        />
+        <import-wit-modal
+          v-if="migrateModalVisible"
+          @dispatchCloseModal="closeImportModal"
+          @dispatchMigrateNotification="dispatchNotification($event)"
+        />
+      </div>
+    </unnnic-modal>
   </div>
 </template>
 
 <script>
 import ImportDataModal from '@/components/shared/ImportDataModal';
 import MigrateIntelligenceModal from '@/components/shared/MigrateIntelligenceModal';
+import ImportRasaModal from '@/components/shared/ImportRasaModal';
+import ImportWitModal from '@/components/shared/ImportWitModal';
 
 export default {
   name: 'ImportIntelligence',
-  components: { ImportDataModal, MigrateIntelligenceModal },
+  components: { ImportDataModal, MigrateIntelligenceModal, ImportRasaModal, ImportWitModal },
   data() {
     return {
       intelligenceFile: null,
       importModalVisible: false,
       migrateModalVisible: false,
+      openImportModal: false
     };
   },
   methods: {
@@ -61,9 +68,12 @@ export default {
     },
     setVisibleImportModal() {
       this.importModalVisible = true;
+      this.openImportModal = true
     },
     closeImportModal() {
       this.importModalVisible = false;
+      this.migrateModalVisible = false;
+      this.openImportModal = false;
       this.intelligenceFile = null;
     },
     clearImportedFile() {
@@ -73,6 +83,7 @@ export default {
     },
     setVisibleMigrateModal() {
       this.migrateModalVisible = true;
+      this.openImportModal = true
     },
     closeMigrateModal() {
       this.migrateModalVisible = false;
@@ -96,26 +107,22 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    margin-top: -2rem;
-    padding-bottom: 1rem;
+    padding-bottom: 3rem;
     width: 100%;
 
     &__title{
-        margin-top: 2.2rem;
-        margin-bottom: $between-title-subtitle;
-        font-size: 1.75rem;
-        font-weight: $font-weight-medium;
-        color: $color-fake-black;
-        margin-bottom: $between-title-subtitle;
+        color: #4E5666;
+        margin-bottom: 1.5rem;
+        font-family: Lato;
+        font-size: 20px;
+
     }
 
     &__description {
-        text-align: justify;
-        font-size: 12px;
-        margin-bottom: $between-subtitle-content;
-        @media (max-width: $mobile-width) {
-            max-width: 80%;
-        }
+        margin-bottom: 1.5rem;
+        color: #4E5666;
+        font-family: Lato;
+        font-size: 14px;
     }
 
     &__description-train {
@@ -128,7 +135,6 @@ export default {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        margin-top: 1rem;
 
         &__import-button{
             width: 11.188rem;
@@ -149,6 +155,12 @@ export default {
     }
     @media (max-width: $mobile-width) {
         width: 25rem;
+    }
+    /deep/ .unnnic-modal-container-background-body-alert_icon {
+      display: none;
+    }
+    /deep/ .unnnic-modal-container-background-body-description {
+      padding-bottom: 0;
     }
 }
 </style>

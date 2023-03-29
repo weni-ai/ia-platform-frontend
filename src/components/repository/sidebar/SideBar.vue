@@ -390,56 +390,25 @@
             ]"
           />
 
-          <section class="settings-menu">
-            <unnnic-sidebar-item
-              v-if="getCurrentRepository.authorization.can_contribute"
-              :icon="dropSelect === 'isSettingsActive' ? 'cog-2' : 'cog-1'"
-              :text="$t('webapp.menu.settings')"
-              :enableTooltip="!collapse"
-              :active="dropSelect === 'isSettingsActive'"
-              :class="{
-                'sidebar-wrapper__body--dropdown-open': dropSelect === 'isSettingsActive',
-                'sidebar-wrapper__body__element': true
-              }"
-              @click="openDropdown('isSettingsActive')"
-            >
-            </unnnic-sidebar-item>
-            <div
-              v-show="dropSelect === 'isSettingsActive' && collapse"
-              class="sidebar-wrapper__body__item"
-            >
-              <unnnic-sidebar-item
-                :text="$t('webapp.menu.general')"
-                @click.native="
-                  setSelectMenu({
-                    name: 'repository-settings',
-                    to: 'repository-settings',
-                    closeDrop: false
-                  })
-                "
-                :class="[
-                  checkSelectedMenu('repository-settings')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element'
-                ]"
-              />
-              <unnnic-sidebar-item
-                :text="$t('webapp.menu.versions')"
-                @click.native="
-                  setSelectMenu({
-                    name: 'repository-versions',
-                    to: 'repository-versions',
-                    closeDrop: false
-                  })
-                "
-                :class="[
-                  checkSelectedMenu('repository-versions')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element'
-                ]"
-              />
-            </div>
-          </section>
+          <unnnic-sidebar-item
+            v-if="getCurrentRepository.authorization.can_contribute"
+            :icon="checkSelectedMenu('repository-settings') ? 'cog-2' : 'cog-1'"
+            :text="$t('webapp.menu.settings')"
+            :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-settings')"
+            :class="[
+              checkSelectedMenu('repository-settings')
+                ? 'sidebar-wrapper__body--active'
+                : 'sidebar-wrapper__body__element'
+            ]"
+            @click="
+              setSelectMenu({
+                name: 'repository-settings',
+                to: 'repository-settings',
+                closeDrop: true
+              })
+            "
+          />
         </unnnic-sidebar-menu>
       </section>
       <div slot="footer" class="sidebar-wrapper__footer">

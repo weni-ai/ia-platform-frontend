@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="home-intelligences-from-community__title">
-      Integre Inteligências prontas e de qualidade ao seu projeto
+      {{ $t('webapp.intelligences_lib.community_description') }}
     </h1>
     <div class="home-intelligences-from-community__wrapper">
       <home-intelligence-filter @change="filterIntelligences" />
