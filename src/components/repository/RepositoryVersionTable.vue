@@ -107,6 +107,7 @@
       :actionSecondaryLabel="$t('webapp.home.cancel')"
       @click-action-secondary="openDuplicateModal = false"
       @click-action-primary="confirmDuplicate"
+      actionPrimaryButtonType="secondary"
       :title="$t('webapp.versions.duplicate_title_modal', { name: versionName })"
     >
       <template slot="description">
@@ -226,17 +227,17 @@ export default {
         .push({
           id: 'edit',
           text: this.$t('webapp.versions.table_edit'),
-          width: '40px',
+          width: '58px',
         },
         {
           id: 'duplicate',
           text: this.$t('webapp.versions.table_duplicate'),
-          width: '40px',
+          width: '58px',
         },
         {
           id: 'delete',
           text: this.$t('webapp.versions.table_delete'),
-          width: '40px',
+          width: '58px',
         })
     }
   },
@@ -268,9 +269,9 @@ export default {
     async confirmDelete() {
       try {
         await this.deleteVersion(this.versionId);
-        this.$emit('dispatchEvent', { event: 'itemDeleted' });
+        this.$emit('dispatchEvent', { event: 'deletedVersion', value: this.selectedItems });
         this.openDeleteModal = false;
-        setTimeout(() => { this.openDeleteSuccessModal = true }, 2000);
+        this.openSuccessModal = true;
         this.successModalTitle = 'webapp.versions.delete_success_title_modal';
         this.successModalMessage = 'webapp.versions.delete_success_phrase_modal';
       } catch {
@@ -289,7 +290,7 @@ export default {
         name: this.newVersion,
       })
         .then(() => {
-          this.isNewVersionModalActive = false;
+          this.openDuplicateModal = false;
           this.$emit('dispatchEvent', { event: 'addedVersion', value: this.selectedItems });
           this.openSuccessModal = true;
           this.successModalTitle = 'webapp.versions.duplicate_success_title_modal';
@@ -309,17 +310,18 @@ export default {
           this.openSuccessModal = true;
           this.successModalTitle = 'webapp.versions.edit_success_title_modal';
           this.successModalMessage = 'webapp.versions.edit_success_phrase_modal';
+          if (isDefaultVersion) {
+            this.setDefaultVersion({
+              repositoryUuid: this.repositoryUUID,
+              id: this.selectedItem,
+              name: versionName,
+            })
+          }
+          this.$emit('dispatchEvent', { event: 'itemSave' });
         })
         .catch((error) => {
           this.$emit('error', error);
         });
-      if (isDefaultVersion) {
-        await this.setDefaultVersion({
-          repositoryUuid: this.repositoryUUID,
-          id: this.selectedItem,
-          name: versionName,
-        })
-      }
       this.selectedItem = null
     },
     cancelEditVersion() {
@@ -367,5 +369,9 @@ export default {
     width: 100%;
     margin-top: 10px;
   }
+}
+
+/deep/ .unnnic-modal.type-alert .title{
+  padding-bottom: 0px
 }
 </style>
