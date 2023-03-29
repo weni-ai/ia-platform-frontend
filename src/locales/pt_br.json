@@ -866,7 +866,7 @@
       "edit_success_phrase_modal": "Alterações feitas com sucesso 😉",
       "edit_confirm_button": "Fazer alterações",
       "delete_title_modal": "Excluir versão",
-      "delete_phrase_modal": "Deseja mesmo excluir a versão {name}? Uma vez realizada a ação não será possível revertê-la.",
+      "delete_phrase_modal": "Deseja mesmo excluir a versão <strong>{name}</strong>? Uma vez realizada a ação não será possível revertê-la.",
       "delete_success_title_modal": "Versão excluída!",
       "delete_success_phrase_modal": "A versão foi excluída com sucesso 😉",
       "delete_alert_text": "Não é possível excluir a versão principal",
