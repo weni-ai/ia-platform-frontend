@@ -84,7 +84,8 @@
       "integration_success_title": "Inteligência integrada",
       "integration_success_description": "A Inteligência foi integrada com sucesso 😉",
       "integration_error_title": "Não foi possível integrar a Inteligência",
-      "integration_error_description": "A Inteligência não foi integrada com sucesso"
+      "integration_error_description": "A Inteligência não foi integrada com sucesso",
+      "community_description": "Integre Inteligências prontas e de qualidade ao seu projeto" 
     },
     "create_repository": {
       "intelligence": "Nova inteligência",
@@ -475,7 +476,7 @@
       "users": "Usuários:",
       "role": "Papéis:",
       "no_requests": "Sem solicitações.",
-      "save": "Salvar",
+      "save": "Salvar alterações",
       "request": "Fazer pedido",
       "invite": "Enviar convite",
       "no_users": "Sem usuários no time.",
@@ -488,7 +489,10 @@
       "default_error": "Algo de errado aconteceu, tente novamente mais tarde.",
       "settings_tab": "Configurações",
       "versions_tab": "Versões",
-      "settings_accordion": "Configurações avançadas"
+      "settings_accordion": "Configurações avançadas",
+      "description": "Gerencie as informações básicas da Inteligência.",
+      "save_success_title": "Inteligência alterada com sucesso!",
+      "save_success_message": "As informações da Inteligência foram alteradas com sucesso 😉"
     },
     "roles": {
       "user": "Usuário",
@@ -864,7 +868,7 @@
       "edit_success_phrase_modal": "Alterações feitas com sucesso 😉",
       "edit_confirm_button": "Fazer alterações",
       "delete_title_modal": "Excluir versão",
-      "delete_phrase_modal": "Deseja mesmo excluir a versão {name}? Uma vez realizada a ação não será possível revertê-la.",
+      "delete_phrase_modal": "Deseja mesmo excluir a versão <strong>{name}</strong>? Uma vez realizada a ação não será possível revertê-la.",
       "delete_success_title_modal": "Versão excluída!",
       "delete_success_phrase_modal": "A versão foi excluída com sucesso 😉",
       "delete_alert_text": "Não é possível excluir a versão principal",

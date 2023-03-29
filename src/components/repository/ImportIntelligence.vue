@@ -23,18 +23,38 @@
       </unnnic-button>
     </div>
 
+    <unnnic-modal
+      :text="importModalVisible ? $t('webapp.import_and_export_intelligence.import_rasa') :
+       $t('webapp.import_and_export_intelligence.migrate_wit')"
+      :showModal="openImportModal"
+      @close="closeImportModal"
+    >
+      <div slot="message">
+        <import-rasa-modal
+          v-if="importModalVisible"
+          @dispatchCloseModal="closeImportModal"
+          @dispatchImportNotification="dispatchNotification($event)"
+        />
+        <import-wit-modal
+          v-if="migrateModalVisible"
+          @dispatchCloseModal="closeImportModal"
+          @dispatchMigrateNotification="dispatchNotification($event)"
+        />
+      </div>
+    </unnnic-modal>
+      <!-- <unnnic-modal >
+        <import-rasa-modal
+          v-if="importModalVisible"
+          @dispatchCloseModal="closeImportModal"
+          @dispatchImportNotification="dispatchNotification($event)"
+        />
+      </unnnic-modal> -->
 
-      <import-rasa-modal
-        v-if="importModalVisible"
-        @dispatchCloseModal="closeImportModal"
-        @dispatchImportNotification="dispatchNotification($event)"
-      />
-
-      <import-wit-modal
+      <!-- <import-wit-modal
         v-if="migrateModalVisible"
         @dispatchCloseModal="closeMigrateModal"
         @dispatchMigrateNotification="dispatchNotification($event)"
-      />
+      /> -->
 
   </div>
 </template>
@@ -53,6 +73,7 @@ export default {
       intelligenceFile: null,
       importModalVisible: false,
       migrateModalVisible: false,
+      openImportModal: false
     };
   },
   methods: {
@@ -61,9 +82,12 @@ export default {
     },
     setVisibleImportModal() {
       this.importModalVisible = true;
+      this.openImportModal = true
     },
     closeImportModal() {
       this.importModalVisible = false;
+      this.migrateModalVisible = false;
+      this.openImportModal = false;
       this.intelligenceFile = null;
     },
     clearImportedFile() {
@@ -73,6 +97,7 @@ export default {
     },
     setVisibleMigrateModal() {
       this.migrateModalVisible = true;
+      this.openImportModal = true
     },
     closeMigrateModal() {
       this.migrateModalVisible = false;
@@ -144,6 +169,12 @@ export default {
     }
     @media (max-width: $mobile-width) {
         width: 25rem;
+    }
+    /deep/ .unnnic-modal-container-background-body-alert_icon {
+      display: none;
+    }
+    /deep/ .unnnic-modal-container-background-body-description {
+      padding-bottom: 0;
     }
 }
 </style>

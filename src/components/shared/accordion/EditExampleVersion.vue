@@ -6,6 +6,7 @@
           <unnnic-input-next
             ref="textInput"
             :label="$t('webapp.example.version_name')"
+            size="sm"
             v-model="versionName"
             :placeholder="$t('webapp.example.enter_sentence')"
           />
@@ -112,6 +113,7 @@ export default {
     max-width: 100%;
     margin: 0;
     flex-wrap: wrap;
+    margin-top: 8px;
   }
 
   &__input {
@@ -127,14 +129,6 @@ export default {
      &__label /deep/ {
        font-weight: normal;
      }
-  }
-
-  &__add-entity-button-text {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    max-width: 50vw;
   }
 
   &-input {
@@ -167,32 +161,6 @@ export default {
     }
   }
 }
-.button--full {
-  width: 100%;
-}
-.add-entity {
-  padding: .4rem 1rem;
-  margin: .5rem .5rem 1rem;
-  border: 1px solid #E2E6ED;
-  border-radius: 8px;
-}
-.entity-input:nth-child(even) {
-  padding-left: .5rem !important;
-  padding-right: 0 !important;
-}
-
-.words-wrapper {
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.word {
-  width: 48%;
-  margin: 0 !important;
-}
-
 /deep/ .column.is-6 {
   flex: auto;
   max-width: 50%;
@@ -202,27 +170,8 @@ export default {
   flex: auto;
   padding: .5rem;
 }
-/deep/ .textarea {
-    border: .0625rem solid #e2e6ed;
-    border-radius: .25rem;
-    color: #4e5666;
-    font-weight: 400;
-    font-size: .75rem;
-    box-sizing: border-box;
-    width: 100%;
-    padding: .5rem 1rem;
-    height: 38px !important;
-}
-
 /deep/ .input {
   height: auto;
-}
-/deep/ .example-txt-w-highlighted-entities__entity {
-  font-size: .75rem;
-  border: 2px solid transparent;
-}
-/deep/ .hidden .unnnic-autocomplete__container-list{
-  display: none;
 }
 /deep/ .unnnic-form__label {
   font-family: Lato;
@@ -232,29 +181,9 @@ export default {
   font-weight: 400;
   text-decoration: solid #67738B underline;
 }
-/deep/ .unnnic-autocomplete__container-list {
-  z-index: 2;
-}
-/deep/ .example-txt-w-highlighted-entities__entity {
-  padding: 0.5rem 0.9rem;
-}
-/deep/ .expander__body, /deep/ .expander__trigger {
-  padding: 0;
-}
-/deep/ .dropdown {
-  display: block;
-}
-/deep/ .unnnic-modal-container-background-body-alert_icon {
-  display: none;
-}
 
-/deep/ .unnnic-modal-container-background-body {
-  padding-top: 2rem;
-}
-/deep/ .expander__trigger__icon {
-  margin-top: 2px;
-}
-/deep/ .unnnic-modal-container-background-body-description {
-  padding-bottom: 0;
+/deep/ .unnnic-tooltip {
+  display: flex;
+  align-items: center;
 }
 </style>

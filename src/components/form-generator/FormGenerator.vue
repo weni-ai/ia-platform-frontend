@@ -6,7 +6,7 @@
       :grouped="grouped"
       :group-multiline="grouped">
       <b-field
-        v-for="field in fields.slice(0, 5)"
+        v-for="field in generalGroup"
         v-show="field.type !== 'hidden'"
         :key="field.name"
         :type="field.errors && 'is-danger'"
@@ -56,7 +56,7 @@
         <div slot="body">
           <div class="group">
               <b-field
-              v-for="field in group"
+              v-for="field in advancedGroup"
               v-show="field.type !== 'hidden'"
               :key="field.name"
               :type="field.errors && 'is-danger'"
@@ -179,7 +179,9 @@ export default {
   },
   computed: {
     fields() {
-      return Object.keys(this.schema)
+      const fields = Object.keys(this.schema)
+
+      return fields
         .map((name) => {
           const {
             type,
@@ -207,9 +209,15 @@ export default {
         })
         .filter(field => !!field)
     },
-    group() {
+    advancedGroup() {
       const items = this.fields
       return items.splice(5)
+    },
+    generalGroup() {
+      const items = this.fields
+      this.swapElements(this.fields, 2, 3)
+      this.swapElements(this.fields, 4, 3)
+      return items.slice(0, 5)
     },
     msgs() {
       /* istanbul ignore next */
@@ -222,8 +230,6 @@ export default {
   },
   mounted() {
     this.update();
-    this.swapElements(this.fields, 2, 3)
-    this.swapElements(this.fields, 4, 3)
   },
   methods: {
     update() {

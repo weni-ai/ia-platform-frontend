@@ -6,8 +6,8 @@
       :list="versionsList"
       :repository="repository"
       :per-page="perPage"
-      @itemDeleted="onItemDeleted()"
-      @itemSave="dispatchSave"
+      @deletedVersion="onDeletedVersion"
+      @itemSave="saveVersion"
       @onEditVersion="editVersion"
       @addedVersion="onAddedVersion"
     />
@@ -125,7 +125,7 @@ export default {
         this.showError(e);
       }
     },
-    handleDefaultVersion(id, name) {
+    /* handleDefaultVersion(id, name) {
       this.$buefy.dialog.confirm({
         title: this.$t('webapp.versions.change_default_version'),
         message: this.$t('webapp.versions.message_change_default_version', { name }),
@@ -138,7 +138,7 @@ export default {
           name,
         }).then(() => this.updateVersions()),
       });
-    },
+    }, */
     onEditVersion(version) {
       const { id, name } = version;
       this.isEdit = {
@@ -147,7 +147,7 @@ export default {
         name,
       };
     },
-    handleEditVersion(name, id) {
+    /* handleEditVersion(name, id) {
       if (!name || !(name.length > 0)) {
         this.isEdit = false;
         return;
@@ -170,7 +170,7 @@ export default {
           type: 'is-danger',
         });
       });
-    },
+    }, */
     handleVersion(id, name) {
       const version = {
         id,
@@ -189,7 +189,7 @@ export default {
       this.setUpdateVersionsState(true);
       this.updateVersions();
     },
-    onDeleteVersion(id, isDefault) {
+    /* onDeleteVersion(id, isDefault) {
       if (isDefault) {
         this.$buefy.toast.open({
           duration: 5000,
@@ -207,7 +207,7 @@ export default {
           onConfirm: () => this.onDeleteVersionConfirm(id),
         });
       }
-    },
+    }, */
     async onDeleteVersionConfirm(id) {
       try {
         this.loadingList = true;
@@ -227,15 +227,16 @@ export default {
         type: 'is-danger',
       });
     },
-    dispatchSave() {
-      this.updateParams(true);
-      this.$emit('onEditVersion')
+    saveVersion() {
+      this.setUpdateVersionsState(true);
+      this.updateVersions();
     },
     pageChanged() {
       this.pageWasChanged = !this.pageWasChanged;
     },
-    onItemDeleted() {
-      this.$emit('exampleDeleted');
+    onDeletedVersion() {
+      this.setUpdateVersionsState(true);
+      this.updateVersions();
     },
   },
 };
