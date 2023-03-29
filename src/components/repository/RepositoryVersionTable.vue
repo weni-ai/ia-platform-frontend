@@ -300,7 +300,7 @@ export default {
           this.$emit('error', error);
         });
     },
-    async saveVersion({ versionName, isDefaultVersion }) {
+    async saveVersion({ versionName, isDefaultVersion, isNewVersionName }) {
       if (isDefaultVersion) {
         await this.setDefaultVersion({
           repositoryUuid: this.repositoryUUID,
@@ -317,7 +317,7 @@ export default {
             this.$emit('error', error);
           });
       }
-      if (versionName !== this.item.name) {
+      if (isNewVersionName) {
         await this.editVersion({
           repositoryUuid: this.repositoryUUID,
           id: this.selectedItem,

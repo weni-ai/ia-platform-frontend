@@ -91,7 +91,8 @@ export default {
     async saveVersion() {
       this.$emit('save', {
         versionName: this.versionName,
-        isDefaultVersion: this.isDefaultVersion
+        isDefaultVersion: this.isDefaultVersion,
+        isNewVersionName: this.versionName !== this.textToEdit
       })
     }
   }
