@@ -1,5 +1,19 @@
 <template>
   <div>
+    <!-- <unnnic-modal-next
+      v-if="flowCount === 0"
+      type="alert"
+      :title="$t('modals.cant_access.title')"
+      icon="app-window-edit-1"
+      scheme="brand-weni-soft"
+      :action-primary-label="
+        $t('modals.cant_access.button_primary_label')
+      "
+      action-primary-button-type="secondary"
+      @click-action-primary="redirectToFlows"
+    > -->
+
+    <!-- temporary -->
     <unnnic-modal-next
       v-if="flowCount === 0"
       type="alert"
@@ -11,7 +25,10 @@
       "
       action-primary-button-type="secondary"
       @click-action-primary="redirectToFlows"
+      show-close-button
+      @close="flowCount = 1"
     >
+    <!-- temporary -->
       <span
         slot="description"
         v-html="$t('modals.cant_access.description')"
