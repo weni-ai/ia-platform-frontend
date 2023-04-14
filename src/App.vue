@@ -4,6 +4,8 @@
     <router-view />
     <!-- <tutorial-modal
       :open="activeMenu"/> -->
+
+    <modal-depending-on-flows-length />
   </div>
 </template>
 
@@ -14,20 +16,20 @@ import hotjar from '@/utils/plugins/hotjar';
 import unnic from '@weni/unnnic-system';
 import I18n from '@/utils/plugins/i18n';
 import store from './store';
-
-const components = {
-  NewsModal,
-  I18n
-};
+import ModalDependingOnFlowsLength from './components/ModalDependingOnFlowsLength';
 
 export default {
+  components: {
+    NewsModal,
+    I18n,
+    ModalDependingOnFlowsLength,
+  },
   name: 'App',
   data() {
     return {
       connectBaseURL: '',
     };
   },
-  components,
   computed: {
     ...mapGetters(['activeMenu']),
     dynamicTitle() {

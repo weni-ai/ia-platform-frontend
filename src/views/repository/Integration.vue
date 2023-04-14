@@ -2,107 +2,144 @@
   <repository-view-base :repository="repository" :error-code="errorCode">
     <div v-if="repository">
       <div v-if="authenticated" class="repository-analyze-text">
-        <div class="repository-analyze-text__title">
-          <h2>{{ $t("webapp.integration.title") }}</h2>
-
-          <div class="repository-analyze-text__news">
-            <span>
-              <strong class="repository-analyze-text__news__strong"
-                >{{ $t("webapp.integration.new") }} </strong
-              >{{ $t("webapp.integration.news_text") }}
-              <span class="repository-analyze-text__news__txt" @click="goToSummary()">
-                {{ $t("webapp.integration.summary") }}
-              </span>
-            </span>
-
-            <a :href="goToDocumentation" class="repository-analyze-text__news__txt">{{
-              $t("webapp.integration.see_more")
-            }}</a>
+        <div class="repository-analyze-text__header">
+          <div class="repository-analyze-text__header__title column is-8 p-0">
+            <unnnic-card
+              type="title"
+              :title="$t('webapp.integration.title')"
+              :hasInformationIcon="false"
+              icon="charger-1"
+              scheme="brand-weni-soft"
+            />
+            <p
+              v-html="$t('webapp.integration.description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
+              class="repository-analyze-text__header__subtitle">
+            </p>
           </div>
-
-          <span>{{ $t("webapp.integration.description") }}</span>
-        </div>
-        <div class="repository-analyze-text-header">
-          <div class="repository-analyze-text-header-field">
-            <p><strong>URL:</strong></p>
-            <highlighted-code code-class="plaintext">
-              {{ repository.nlp_server }}v2/parse/
-            </highlighted-code>
-          </div>
-          <div class="repository-analyze-text-header-field">
-            <div class="repository-analyze-text-header-field__label">
-              <p>
-                <strong>{{ $t("webapp.analyze_text.method_send") }}</strong>
-              </p>
-
-              <b-tooltip
-                :label="$t('webapp.analyze_text.tooltip_send')"
-                type="is-dark"
-                position="is-right"
-              >
-                <b-icon custom-size="mdi-18px" type="is-dark" icon="help-circle" />
-              </b-tooltip>
-            </div>
-            <highlighted-code code-class="json"
-              >{ "language":"[{{ $t("webapp.analyze_text.language_code") }}]" "text": "[{{
-                $t("webapp.analyze_text.text_to_analyze")
-              }}]" }
-            </highlighted-code>
+          <div class="repository-analyze-text__header__description column is-3 p-0">
+            <unnnic-button
+              v-if="hasIntegration && !hasIntegrationCheckError"
+              type="secondary"
+              :loading="!hasIntegrationDefined"
+              @click="changeIntegrateModalState(true)"
+            >
+              {{ $t("webapp.summary.remove_integrate") }}
+            </unnnic-button>
+            <unnnic-button
+              v-else-if="!hasIntegrationCheckError"
+              type="secondary"
+              :loading="!hasIntegrationDefined"
+              @click="changeIntegrateModalState(true)"
+            >
+              {{ $t("webapp.summary.integrate") }}
+            </unnnic-button>
           </div>
         </div>
-        <div class="repository-analyze-text__item">
-          <p><strong>Header:</strong></p>
-          <div class="repository-analyze-text__item__authotization-container">
-            <div class="repository-analyze-text__item__authotization-container__title">
-              <p>Access token:</p>
-              <b-tooltip label="Authorization" type="is-dark" position="is-right">
-                <b-icon custom-size="mdi-18px" type="is-dark" icon="help-circle" />
-              </b-tooltip>
-            </div>
 
-            <b-field>
-              <b-select v-model="profileAuth" placeholder="Select a character" expanded>
-                <option v-for="option in getAuthorizations" :value="option" :key="option.index">
-                  {{ option }}
-                </option>
-              </b-select>
-            </b-field>
-            <div class="repository-analyze-text__item__authotization-container__copy">
-              <strong>{{ getProfileDetail[0] }} - </strong>
-              <p>{{ getProfileDetail[1] }}</p>
-              <b-icon
-                icon="content-copy"
-                class="repository-analyze-text__item__authotization-container__copy__icon"
-                @click.native="copyText()"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column">
-            <div class="repository-analyze-text__item">
-              <p>{{ $t("webapp.analyze_text.grid1") }}</p>
-            </div>
-            <div class="repository-analyze-text__item">
-              <p>
-                <strong>{{ $t("webapp.analyze_text.response") }}</strong>
-              </p>
-              <highlighted-code code-class="json">{{ json }}</highlighted-code>
-            </div>
-          </div>
-          <div class="column">
-            <div class="repository-analyze-text__item">
-              <div>
-                <strong>{{ $t("webapp.analyze_text.code_generator") }}</strong>
+        <div class="repository-analyze-text__divider"></div>
+
+        <unnnic-tab initialTab="first" :tabs="tabs">
+          <template slot="tab-head-first">
+            {{ $t("webapp.integration.http_tab") }}
+          </template>
+          <template slot="tab-panel-first">
+            <p
+              v-html="$t('webapp.integration.http_title')"
+              class="repository-analyze-text__header__subtitle">
+            </p>
+            <div class="repository-analyze-text__url">
+              <div class="repository-analyze-text__field">
+                <h2>URL</h2>
+                <p v-html="$t('webapp.integration.url_description')"></p>
               </div>
-              <div>{{ $t("webapp.analyze_text.code_generator_text") }}</div>
+              <highlighted-code code-class="plaintext">
+                {{ repository.nlp_server }}v2/parse/
+              </highlighted-code>
+            </div>
+            <div class="repository-analyze-text__url">
+              <div class="repository-analyze-text__field">
+                <h2>Headers</h2>
+                <p v-html="$t('webapp.integration.headers_description')"></p>
+              </div>
+              <div class="repository-analyze-text__url__authorization-container">
+                <unnnic-select
+                  :label="$t('webapp.integration.token_title')"
+                  v-model="profileAuth"
+                >
+                  <option
+                    v-for="option in getAuthorizations"
+                    :key="option.index"
+                    :value="option"
+                  >
+                    {{ option }}
+                  </option>
+                </unnnic-select>
+                <div class="repository-analyze-text__item__authorization-container__copy">
+                  <highlighted-code
+                    :code="codes.curl"
+                    code-class="plaintext" />
+                </div>
+              </div>
+            </div>
+            <div class="repository-analyze-text__url">
+              <div class="repository-analyze-text__field">
+                <h2>Post Body</h2>
+                <p v-html="$t('webapp.integration.post_body_description')"></p>
+              </div>
+              <highlighted-code code-class="json"
+                >{ "language":"[{{ $t("webapp.analyze_text.language_code") }}]", "text": "[{{
+                  $t("webapp.analyze_text.text_to_analyze")
+                }}]" }
+              </highlighted-code>
+            </div>
+            <div class="repository-analyze-text__url">
+              <div class="repository-analyze-text__field">
+                <h2>Response</h2>
+                <p v-html="$t('webapp.integration.response_description')"></p>
+              </div>
+              <div class="json-code">
+                <div class="json-code__short">
+                  <pre>{{ JSON.stringify(json, null, 2).split(/\n/).slice(0,3).join('\n') }}</pre>
+                </div>
+                <div class="json-code__full" v-show-slide="codeOpen">
+                  <pre>{{ JSON.stringify(json, null, 2).split(/\n/).slice(3).join('\n') }}</pre>
+                </div>
+              </div>
+              <unnnic-button
+                size="large"
+                type="secondary"
+                @click="toggleCode"
+              >
+              {{ codeOpen ?
+                $t("webapp.integration.code_button_short") :
+                $t("webapp.integration.code_button") }}
+              </unnnic-button>
+            </div>
+          </template>
+          <template slot="tab-head-second">
+            {{ $t("webapp.integration.generator_tab") }}
+          </template>
+          <template slot="tab-panel-second">
+            <div class="repository-analyze-text__url">
+              <div class="repository-analyze-text__field">
+                <h2 v-html="$t('webapp.analyze_text.code_generator')"></h2>
+                <p v-html="$t('webapp.analyze_text.code_generator_text')"></p>
+              </div>
             </div>
             <request-generator
               :default-language-field="repository.language"
               :authorization-uuid="getProfileDetail[1] || ''"
+              class="request_generator"
             />
-          </div>
-        </div>
+          </template>
+        </unnnic-tab>
+        <integration-modal
+          :openModal="integrateModal"
+          :repository="getCurrentRepository"
+          :hasIntegration="hasIntegration"
+          @closeIntegratationModal="changeIntegrateModalState(false)"
+          @dispatchUpdateIntegration="changeIntegrationValue()"
+        />
       </div>
       <div v-else>
         <b-notification :closable="false" type="is-info">
@@ -115,12 +152,14 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import RequestGenerator from '@/components/repository/RequestGenerator';
 import LoginForm from '@/components/auth/LoginForm';
 import HighlightedCode from '@/components/shared/HighlightedCode';
 import RepositoryBase from './Base';
 import I18n from '@/utils/plugins/i18n';
+import IntegrationModal from '@/components/shared/IntegrationModal';
 
 export default {
   name: 'RepositoryIntegration',
@@ -129,7 +168,8 @@ export default {
     RequestGenerator,
     LoginForm,
     HighlightedCode,
-    I18n
+    I18n,
+    IntegrationModal
   },
   extends: RepositoryBase,
   data() {
@@ -165,21 +205,26 @@ export default {
         update_id: 47,
         language: 'en'
       },
-      profileAuth: ''
+      profileAuth: '',
+      integrateModal: false,
+      hasIntegration: null,
+      integrationError: null,
+      loading: false,
+      tabs: ['first', 'second'],
+      codeOpen: false,
     };
   },
   computed: {
+    ...mapGetters([
+      'getCurrentRepository',
+      'getProjectSelected',
+      'getOrgSelected',
+    ]),
     profileToken() {
       if (!this.repository || this.repository.authorization === 'null') {
         return null;
       }
       return this.repository.authorization;
-    },
-    goToDocumentation() {
-      if (I18n.locale === 'pt-BR') {
-        return 'https://docs.ilhasoft.mobi/l/pt/integracao-categoria/integrar-uma-intelig-ncia-ao-projeto-na-plataforma-weni';
-      }
-      return 'https://docs.ilhasoft.mobi/l/en/integration-dataset/integrate-an-intelligence-to-your-project-on-weni-platform';
     },
     getAuthorizations() {
       if (this.repository.authorization.organizations !== undefined) {
@@ -202,7 +247,20 @@ export default {
         return splitProfile;
       }
       return '';
-    }
+    },
+    hasIntegrationDefined() {
+      return this.hasIntegration !== null;
+    },
+    hasIntegrationCheckError() {
+      return this.integrationError !== null;
+    },
+    codes() {
+      return {
+        curl: [
+          `${this.getProfileDetail[0]} - ${this.getProfileDetail[1]}`
+        ].join()
+      };
+    },
   },
   watch: {
     profileToken() {
@@ -212,9 +270,42 @@ export default {
         const profileAuthorization = `${user__nickname} - Bearer ${uuid}`;
         this.profileAuth = profileAuthorization;
       }
-    }
+    },
+    getCurrentRepository() {
+      if (this.getCurrentRepository) {
+        this.checkIfHasIntegration();
+      }
+    },
   },
   methods: {
+    ...mapActions(['getIntegrationRepository']),
+    async checkIfHasIntegration() {
+      try {
+        console.log(this.getOrgSelected)
+        const { data } = await this.getIntegrationRepository({
+          repository_version: this.getCurrentRepository.repository_version_id,
+          repository_uuid: this.getCurrentRepository.uuid,
+          project_uuid: this.getProjectSelected,
+          organization: this.getOrgSelected,
+        });
+        this.hasIntegration = data.in_project;
+      } catch (err) {
+        this.integrationError = err.response && err.response.data;
+      }
+    },
+    changeIntegrationValue() {
+      this.hasIntegration = null;
+    },
+    changeIntegrateModalState(value) {
+      if (this.integrationError !== null && value) {
+        this.$buefy.toast.open({
+          message: this.integrationError.detail,
+          type: 'is-danger',
+        });
+        return;
+      }
+      this.integrateModal = value;
+    },
     copyText() {
       navigator.clipboard.writeText(this.getProfileDetail[1]);
       this.$buefy.toast.open({
@@ -222,115 +313,90 @@ export default {
         type: 'is-success'
       });
     },
-    goToSummary() {
-      this.$router.push({
-        name: 'repository-summary'
-      });
+    toggleCode() {
+      this.codeOpen = !this.codeOpen
     }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "~@/assets/scss/colors.scss";
 @import "~@/assets/scss/variables.scss";
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .repository-analyze-text {
-  font-family: $font-family;
+  font-family: $unnnic-font-family-secondary;
+  color: $unnnic-color-neutral-dark;
 
-  &__news {
-    background: rgba(0, 158, 150, 0.08);
-    height: 3.5rem;
-    border-radius: $unnnic-border-radius-sm;
+  &__header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 $unnnic-inline-sm;
-    margin-bottom: $unnnic-inline-md;
+    gap: $unnnic-spacing-stack-xgiant;
 
-    &__strong {
+    .unnnic-button {
+      min-width: 245px;
+    }
+
+    &__subtitle {
+      font-size: $unnnic-font-size-body-gt;
+      margin-top: $unnnic-spacing-stack-md;
+
+      /deep/ a {
+        color: $unnnic-color-neutral-dark;
+        text-decoration: underline;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &__divider {
+    border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+    margin: $unnnic-spacing-stack-lg 0 $unnnic-spacing-stack-md 0;
+  }
+
+  &__url {
+    margin-top: $unnnic-spacing-stack-md;
+    .unnnic-button {
+      width: 100%;
+      height: 48px;
+      background: rgba(226, 230, 237, 0.16);
+      margin-top: $unnnic-spacing-stack-sm;
+    }
+
+    .json-code {
+      background-color: $unnnic-color-neutral-lightest;
+      border: 1px solid $unnnic-color-neutral-soft;
+      border-radius: 4px;
+      padding: 24px 16px;
+      font-family: $unnnic-font-family-primary;
       color: $unnnic-color-neutral-dark;
-    }
-
-    a {
-      cursor: pointer;
-      &:hover {
-        color: $color-primary;
-      }
-    }
-
-    &__txt {
-      color: $color-primary;
-      font-weight: $unnnic-font-weight-bold;
-      font-size: $unnnic-font-size-body-lg;
-      cursor: pointer;
+      font-size: $unnnic-font-size-body-gt;
     }
   }
 
-  &__title {
-    margin-bottom: $between-subtitle-content;
-
+  &__field {
     h2 {
-      font-size: 1.75rem;
-      font-weight: $font-weight-medium;
-      color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+      font-family: $unnnic-font-family-secondary;
+    }
+    p {
+      color: $unnnic-color-neutral-cloudy;
+      font-size: $unnnic-font-size-body-gt;
+      margin: $unnnic-spacing-stack-xs 0px;
     }
   }
 
-  &__item {
-    margin: 1rem 0;
-    &__authotization-container {
-      padding: 1rem;
-      background-color: rgb(248, 248, 248);
-
-      &__title {
-        display: flex;
-      }
-
-      &__copy {
-        display: flex;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-        margin: 1.5rem 0 1rem 0;
-
-        strong {
-          font-size: 18px;
-          user-select: none;
-        }
-
-        p {
-          margin-left: 0.5rem;
-        }
-
-        &__icon {
-          margin-left: 2rem;
-          color: $color-grey-dark;
-          cursor: pointer;
-        }
-      }
-    }
+  .request_generator {
+    margin-top: $unnnic-spacing-stack-sm;
   }
-
-  &-header {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    @media screen and (max-width: $mobile-width) {
-      flex-direction: column;
-      justify-content: center;
+  .unnnic-select {
+    margin-bottom: $unnnic-spacing-stack-xs;
+    /deep/ .input {
+      height: 46px;
     }
-    &-field {
-      width: 48%;
-      &__label {
-        display: flex;
-      }
-      @media screen and (max-width: $mobile-width) {
-        width: 100%;
-      }
+    /deep/ .dropdown {
+      display: block;
     }
   }
 }

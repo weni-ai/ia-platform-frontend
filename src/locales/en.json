@@ -43,9 +43,10 @@
       "save_password": "Save password"
     },
     "intelligences_lib": {
-      "title": "Intelligences Library",
+      "title": "Artificial Intelligence",
+      "description": "Learn how to integrate an intelligence into your project by accessing the<br /><a href=\"https://docs.weni.ai/l/pt/bothub/integrar-uma-intelig-ncia-ao-projeto-na-plataforma-weni\" target=\"_blank\">how to integrate an A.I. documentation</a>",
       "new_intelligence": "New Intelligence",
-      "unused_projects": "Your project is not using intelligence linked by a classifier. Create a new one or explore among the intelligence of your organization or community in the options above.",
+      "unused_projects": "Your project is not using any intelligences. Create a new one or integrate an intelligence from your organization or from the Community intelligence gallery.",
       "created_by": "Created by",
       "open": "Open",
       "show_intents": "View intentions | View intent | View intentions",
@@ -57,17 +58,18 @@
       "intelligence_tooltip": "Uses intentions and entities to interpret and segment user messages.",
       "intelligence_tooltip_content": "Upload informational texts and the intelligence will be able to answer questions made by users based on the texts.",
       "intent": "Intents | Intent | Intents",
+      "knowledge_bases": "Knowledge bases | Knowledge base | Knowledge bases",
       "language": "Languages | Language | Languages",
       "intent_modal_title": "Intents of {nick} | Intent of {nick} | Intents of {nick}",
       "intent_modal_subtitle": "Visualize the intentions that are part of the selected intelligence.",
       "language_modal_title": "Languages of {nick} | Language of {nick} | Languages of {nick}",
       "language_modal_subtitle": "View the languages supported by the selected intelligence.",
-      "tab_project_title": "Intelligences of the Project",
-      "tab_project_subtitle": "They're intelligences in use at the project linked by classifier.",
-      "tab_org_title": "Organization's Intelligences",
-      "tab_org_subtitle": "Visualize and access intelligences created by the organization.",
-      "tab_community_title": "Community Intelligences",
-      "tab_community_subtitle": "Visualize and use intelligences that are public.",
+      "tab_project_title": "Intelligence in the project",
+      "tab_project_subtitle": "These are the intelligences in use in the project",
+      "tab_org_title": "Organization intelligences",
+      "tab_org_subtitle": "Visualize and integrate the organization's intelligence",
+      "tab_community_title": "Community Intelligence Gallery",
+      "tab_community_subtitle": "Public intelligences available for integration",
       "intent_count": "Number of intention phrases",
       "clone": {
         "success_modal_title": "Copied intelligence!",
@@ -76,7 +78,14 @@
         "confirm_modal_title": "Make a copy of the intelligence “{intelligence}”?",
         "confirm_modal_message": "By making a copy of the intelligence, you can use it in your organization and also make the changes you want.",
         "copy": "Copy"
-      }
+      },
+      "intelligence_force":"Force",
+      "intelligence_force_tooltip":"Intelligence force is a simple way to measure how well intelligence is designed. It is recommended that strength be above 80%",
+      "integration_success_title": "Integrated intelligence",
+      "integration_success_description": "The Intelligence was successfully integrated 😉",
+      "integration_error_title": "Unable to integrate Intelligence",
+      "integration_error_description": "The Intelligence was not successfully integrated",
+      "community_description": "Integrate ready-made, quality Intelligence into your project"
     },
     "create_repository": {
       "intelligence": "New intelligence",
@@ -199,7 +208,11 @@
       "not_have_results": "You do not have results yet",
       "entity_is_group": "<strong>{entity}</strong> grouped as <strong>{group}</strong>",
       "no_sentences": "No sentences.",
-      "detailed_results": "Detailed Results",
+      "detailed_results": "Manual test",
+      "summary_title1": "Hit ratio",
+      "summary_title2": "Tested phrases",
+      "summary_title3": "Languages",
+      "tooltip_alert": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       "login": "Sign in to your account to edit this repository.",
       "all_intents": "All intents",
       "all_entities": "All entities",
@@ -208,8 +221,14 @@
       "no_versions": "No results for this version"
     },
     "evaluate-manual": {
-      "header_title": "Test your data set",
-      "header_title_p": "How is your model performing? Do you have enough data? Are your intents and entities well-designed?",
+      "header_title": "Manual tests",
+      "header_title_p": "Manually add test sentences, simulating end-user input, to assess the quality of AI-trained sentences.",
+      "tips_title": "Tips for taking an effective test",
+      "tips_description": "Try to add real test phrases, but which have never been seen by the model (different phrases from the trained ones). This will allow you to test whether your AI really can abstract and understand the meaning of the intents it has been trained to correctly classify a never-before-seen test sentence.",
+      "test_title": "Take a new manual phrase test",
+      "test_p": "Run a new manual test, adding phrases that simulate actual end-user input.",
+      "test_button": "Go to manual test",
+      "historic_title": "History of manual tests",
       "header_title_p2": "Using our testing feature, you can evaluate your bot's performance easily.",
       "header_title_lang": "Select the language to run the test",
       "run_test": "Run test",
@@ -230,10 +249,24 @@
       "header_title_lang": "Select the language to run the test",
       "run_test": "Run test"
     },
+    "evaluate-automatic-new": {
+      "header_title": "Automatic tests",
+      "header_title_p": "With each new interaction, a new analysis of the phrases is automatically carried out to assess whether the AI is working properly.",
+      "quality_title": "Based on analysis of the most recent interactions, your current AI quality is:",
+      "summary_title1": "Tested phrases",
+      "summary_title2": "Test date",
+      "summary_chart_title": "Analysis history",
+      "tips_title": "Tips on how to improve AI quality",
+      "tips_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "tips_p": "Train more phrases to intent",
+      "results_title": "Detailed results",
+      "results_tab_title": "Phrases",
+      "results_tab_title2": "Graphics"
+    },
     "result": {
       "load_result": "Load Results",
       "download": "Download",
-      "test": "Test",
+      "test": "Manual test",
       "evaluate_output": "Evaluate output",
       "evaluate_output_text": "For more information about test results, see our",
       "documentation": "documentation",
@@ -315,7 +348,7 @@
       "confirm_remove_integrate": "Remove integration",
       "bases": {
         "knowledge_bases": "Knowledge bases",
-        "description": "The Knowledge bases are text sources for a Content Intelligence. Distribute the text of the intelligence in bases, gathering on each one similar informations. Find out more on our <a href='https://docs.weni.ai/l/en/content-intelligence/introducing-content-intelligence' target='_blank' class='repository-base__description__text--link'>documentation</a>.",
+        "description": "The Knowledge bases are text sources for a Content Intelligence. Distribute the text of the intelligence in bases, gathering on each one similar informations. Find out more on our <a href='https://docs.weni.ai/l/pt/content-intelligence/introducing-content-intelligence' target='_blank' class='repository-base__description__text--link'>documentation</a>.",
         "new_knowledge_base": "Add a new base",
         "adjustments": "Adjustments",
         "adjustments_subtitle": "Content Intelligence",
@@ -369,8 +402,15 @@
         "see-all_bases": "See all bases",
         "add_base":"+ Add base"
       },
-      "copy-intelligence": "Copy intelligence"
-
+      "copy-intelligence": "Copy intelligence",
+      "intelligence_filter": {
+        "title": "Filter Community Intelligences",
+        "category": "Categories",
+        "languages": "Language",
+        "languages_select": "Select a language",
+        "recommended": "Recommended",
+        "most_used": "Most used"
+      }
     },
     "summary": {
       "training_information": "Traning information",
@@ -428,7 +468,7 @@
       "table_delete": "Delete"
     },
     "settings": {
-      "title_edit_repository": "Edit Intelligence",
+      "title_edit_repository": "Settings",
       "manage_your_team": "Manage your team",
       "authorization_requests": "Authorization Requests",
       "request_available": "You already have a pending request. Wait for an admin to process it",
@@ -437,7 +477,7 @@
       "users": "Users:",
       "role": "Role:",
       "no_requests": "No requests.",
-      "save": "Save",
+      "save": "Save changes",
       "request": "Request",
       "invite": "Send Invite",
       "no_users": "No users in your team.",
@@ -447,7 +487,13 @@
       "remove_user_confirm": "Are you sure you want to delete <strong>{user}</strong> as <strong>{role}</strong>?",
       "remove": "Remove",
       "cancel": "Cancel",
-      "default_error": "Something went wrong, try again later."
+      "default_error": "Something went wrong, try again later.",
+      "settings_tab": "Settings",
+      "versions_tab": "Versions",
+      "settings_accordion": "Advanced settings",
+      "description": "Manage basic Intelligence information.",
+      "save_success_title": "Intelligence successfully changed!",
+      "save_success_message": "Intelligence information was successfully changed 😉"
     },
     "roles": {
       "user": "User",
@@ -468,7 +514,15 @@
       "help_text": "When your bot receives a message, your bot can use a recognizer to examine the message and determine intent.",
       "delete_text": "Are you sure? The example will be deleted.",
       "delete": "Delete",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "sent_to_training": "Sentences sent for training!",
+      "sent_to_training_info": "The phrases you selected have been successfully sent for training. To train intelligence with these phrases, go to the Train Intelligence menu. 😉",
+      "sent_to_test": "Sentences sent to test!",
+      "sent_to_test_info": "The phrases you selected were successfully sent for testing. To test them, go to the Test menu. 😉",
+      "version_name": "Version name",
+      "principal_version_label": "Make this the main version of the intelligence?",
+      "principal_version_text": "Major version",
+      "principal_version_info": "Enabling this option will make this the default version of the Intelligence"
     },
     "trainings": {
       "grid_text1": "Train a new sentence",
@@ -510,6 +564,9 @@
       "database": "Repository",
       "database_description": "List of all sentences trained by the intelligence.",
       "database_untrained": "This intelligence has no trained sentences. Add phrases and train them in the Training menu.",
+      "database_modal_title": "Edited sentence(s)!",
+      "database_modal_description": "The sentences were edited successfully. Run the training again so that the Intelligence recognizes these sentences 😉",
+      "database_save_button": "Send changes to training",
       "train_title": "Train Intelligence",
       "train_description": "Add sentences to improve the intelligence. <a href={link}>See our documentation</a> and learn <br> the best practices for creating an quality artificial intelligence.",
       "entities": "Entities (optional)",
@@ -721,9 +778,9 @@
       "training": "Training",
       "train": "Train",
       "suggestion": "Sentences generator",
-      "test": "Test",
-      "test-manual": "Sentences",
-      "test-automatic": "Automatic",
+      "test": "Tests",
+      "test-manual": "Manuals",
+      "test-automatic": "Automatics",
       "results": "Results",
       "inbox": "Interactions",
       "translation": "Translation",
@@ -807,7 +864,28 @@
       "version": "Version",
       "cancel": "Cancel",
       "add_new": "Add new",
-      "signin": "Sign in to your account to edit this repository."
+      "signin": "Sign in to your account to edit this repository.",
+      "table_edit": "Edit",
+      "table_duplicate": "Duplicate",
+      "table_delete": "Delete",
+      "edit_title_modal": "Change version",
+      "edit_phrase_modal": "Do you really want to make changes to version {name}?",
+      "edit_success_title_modal": "Changes saved!",
+      "edit_success_phrase_modal": "Successfully made changes 😉",
+      "edit_confirm_button": "Make changes",
+      "delete_title_modal": "Delete version",
+      "delete_phrase_modal": "Do you really want to delete the <strong>{name}</strong> version? Once the action has been performed, it will not be possible to revert it.",
+      "delete_success_title_modal": "Version deleted!",
+      "delete_success_phrase_modal": "The version was successfully deleted 😉",
+      "delete_alert_text": "Unable to delete major version",
+      "duplicate_title_modal": "Duplicate version {name}",
+      "duplicate_phrase_modal": "What name do you want to name this copy of this version?",
+      "duplicate_input_label": "Version name",
+      "duplicate_input_placeholder": "Name",
+      "duplicate_confirm_button": "Set name",
+      "duplicate_success_title_modal": "Copy created!",
+      "duplicate_success_phrase_modal": "The version copy was successfully created 😉",
+      "duplicate_success_button_modal": "Set name"
     },
     "inbox": {
       "description": "These are phrases of actual user interaction with your data set.\n          They can be useful for your training or testing.",
@@ -826,8 +904,10 @@
       "entry_error": "Intention and Sentence already exists",
       "add_to_train_error": "An error occured",
       "add_to_sentences_error": "An error occured",
-      "add_to_train_button": "Add to Train",
-      "add_to_sentence_button": "Add to Sentence",
+      "add_to_train_button": "Add to Train ({n})",
+      "add_to_sentence_button": "Add to Sentence ({n})",
+      "add_to_train": "Add to Train",
+      "add_to_sentence": "Add to Sentence",
       "remove_log_button": "Delete Sentece",
       "select_phrase": "Select a phrase",
       "select_all": "Select all",
@@ -1022,5 +1102,16 @@
   },
   "import_card": {
     "importing": "Importing.."
+  },
+  "modals": {
+    "cant_access": {
+      "title": "Ops, you can not use this module yet",
+      "description": "To integrate an artificial intelligence into your project, you need to have a conversation flow created.<br />Come back after creating a flow.",
+      "button_primary_label": "Go to the flow module"
+    },
+    "how_to_integrate": {
+      "title": "How to integrate an intelligence",
+      "description": "1. Choose the intelligence that best suits your project.<br /><br />2. Click on the “+” to integrate the intelligence into the project.<br /><br />3. Go to the flows module and click on “create message”.<br /><br />4. Select the “split by intent” option.<br /><br />5. Select the intentions you would like your chatbot to understand and click “ok”.<br /><br />6. Then assign response messages to each of the intentions."
+    }
   }
 }

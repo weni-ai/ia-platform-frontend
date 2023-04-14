@@ -8,6 +8,7 @@
           >
             {{ $t('webapp.trainings.entities') }}
             <unnnic-tool-tip
+              v-if="showHint"
               side="top"
               :text="$t('webapp.trainings.add_entity_info')"
               enabled
@@ -35,7 +36,7 @@
             v-for="entity in preparedEntities"
             :key="entity.localId"
             v-model="entity.entity"
-            :available-entities="allEntities"
+            :available-entities="filteredEntities"
             :entity-class="getEntityClass(entity)"
             :text="text"
             :selected-text-start="entity.start"
@@ -152,6 +153,10 @@ export default {
     entitiesForEdit: {
       type: Array,
       default: () => ([]),
+    },
+    showHint: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

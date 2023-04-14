@@ -85,6 +85,7 @@
           :get-all-entities="getEntitiesName"
           @saveList="updateList"
           @cancel="cancelEditSentence"
+          @dispatchToTraining="dispatchToTraining"
         />
       </template>
   </unnnic-table>
@@ -112,14 +113,14 @@
   </unnnic-modal>
   <unnnic-modal
     :showModal="openSuccessModal"
-    :text="$t('webapp.intent.delete_success_title')"
+    :text="successModal.title"
     scheme="feedback-green"
     modal-icon="check-circle-1-1"
     @close="openSuccessModal = false"
   >
     <span
     slot="message"
-    v-html="$t('webapp.intent.delete_success_subtitle')" />
+    v-html="successModal.message" />
   </unnnic-modal>
 </div>
 </template>
@@ -232,6 +233,18 @@ export default {
     selectedItems() {
       return this.list.items.filter((item) => item.selected === true)
     },
+    successModal() {
+      if (this.$route.name === 'repository-database') {
+        return {
+          title: this.$t('webapp.trainings.database_modal_title'),
+          message: this.$t('webapp.trainings.database_modal_description')
+        }
+      }
+      return {
+        title: this.$t('webapp.intent.delete_success_title'),
+        message: this.$t('webapp.intent.delete_success_subtitle')
+      }
+    }
   },
   watch: {
     selectedItems() {
@@ -267,7 +280,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['deleteEvaluateExample', 'deleteExample']),
+    ...mapActions(['deleteEvaluateExample', 'deleteExample', 'newExample']),
     getEntityClass(entity) {
       const allEntitiesName = this.repository.entities.map(
         (entityValue) => entityValue.value
@@ -320,6 +333,32 @@ export default {
       const { id } = item
       if (!this.editing) {
         this.$refs[id].active = false
+      }
+    },
+    async dispatchToTraining(event) {
+      try {
+        const sentenceId = this.selectedItem
+        await this.newExample({
+          entities: event.entities.map(entity => ({
+            entity: entity.entity,
+            start: entity.start,
+            end: entity.end,
+          })),
+          repository: this.repository.uuid,
+          intent: event.intent,
+          language: event.language,
+          text: event.text,
+          isCorrected: false,
+          repositoryVersion: this.repository.repository_version_id
+        });
+        await this.deleteExample({ id: sentenceId });
+        this.$emit('dispatchEvent', { event: 'itemDeleted' });
+        setTimeout(() => { this.openSuccessModal = true }, 2000);
+      } catch (error) {
+        this.$buefy.toast.open({
+          message: error.response.data.detail,
+          type: 'is-danger'
+        });
       }
     }
   },

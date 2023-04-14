@@ -1,5 +1,5 @@
 <template>
-  <section
+  <!-- <section
     id="tour-inbox-step-4"
     :is-previous-disabled="true"
     :is-finish-disabled="true"
@@ -41,7 +41,45 @@
           @click="addIntent"> {{ $t('webapp.inbox.add_log.add') }}</button>
       </footer>
     </div>
-  </section>
+  </section> -->
+  <unnnic-modal
+    :showModal="true"
+    :text="titleHeader"
+    @close="closeModal()"
+  >
+    <div slot="message">
+      <edit-example-accordion
+          ref="accordion"
+          :pending-example="true"
+          :entities="getLogData.entities"
+          :intent-to-edit="info.intent.name"
+          :text-to-edit="getLogData.text"
+          :sentence-id="logData.id"
+          :language-edit="getLogData.language"
+          :get-all-entities="allEntities"
+          :custom="true"
+          :open="false"
+          align="top"
+          edit-example
+          @cancel="editing = false"
+          @saveList="onSaveList"
+          @textInput="inputValues.text = $event"
+          @entitiesInput="inputValues.entities = $event"
+          @intentInput="inputValues.intent = $event"
+        />
+      </div>
+      <unnnic-button slot="options" type="terciary" @click.prevent.stop="closeModal()">
+        {{ $t("webapp.inbox.add_log.close") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        class="create-repository__container__button"
+        type="secondary"
+        @click.prevent.stop="addIntent"
+        :disabled="checkInputs"
+        :text="buttonLabel"
+      />
+  </unnnic-modal>
 </template>
 
 <script>
@@ -75,6 +113,10 @@ export default {
       default: null,
       required: true,
     },
+    buttonLabel: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -107,7 +149,7 @@ export default {
     initInputValues() {
       this.inputValues.text = this.getLogData.text;
       this.inputValues.intent = this.info.intent.name;
-      this.inputValues.entities = this.getLogData.text;
+      this.inputValues.entities = this.getLogData.entities;
     },
     addIntent() {
       this.$emit('addedIntent', this.inputValues, this.titleHeader);
@@ -155,5 +197,24 @@ export default {
 }
 p {
     font-weight: 600;
+}
+
+::v-deep  {
+  .unnnic-modal-container-background-body-alert_icon,
+  .unnnic-modal-container-background-body-close_icon {
+    display: none;
+  }
+  .unnnic-modal-container-background-body-title {
+    padding-top: 3rem;
+  }
+  .unnnic-modal-container-background-button {
+    padding-top: 0
+  }
+  .unnnic-modal-container-background-body-description {
+    padding-bottom: 1.5rem;
+  }
+  .unnnic-modal-container-background-body {
+    min-height: 13.5rem;
+  }
 }
 </style>

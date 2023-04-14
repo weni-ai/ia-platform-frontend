@@ -28,7 +28,7 @@
       </div>
       <div class="level-right">
         <unnnic-button
-          :text="$t('webapp.inbox.add_to_train_button')"
+          :text="$t('webapp.inbox.add_to_train')"
           id="tour-inbox-step-2"
           :is-previous-disabled="true"
           type="secondary"
@@ -38,7 +38,7 @@
           @click="sendToTraining()"
         />
         <unnnic-button
-          :text="$t('webapp.inbox.add_to_sentence_button')"
+          :text="$t('webapp.inbox.add_to_sentence')"
           id="tour-inbox-step-3"
           :is-previous-disabled="true"
           :is-next-disabled="true"
@@ -90,6 +90,32 @@
         </div>
       </div>
     </div>
+    <unnnic-modal
+      :showModal="openModalTraining"
+      :text="$t('webapp.example.sent_to_training')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openModalTraining = false"
+    >
+      <span
+      slot="message"
+      >
+        {{ $t('webapp.example.sent_to_training_info') }}
+      </span>
+    </unnnic-modal>
+    <unnnic-modal
+      :showModal="openModalTest"
+      :text="$t('webapp.example.sent_to_test')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openModalTest = false"
+    >
+      <span
+      slot="message"
+      >
+        {{ $t('webapp.example.sent_to_test_info') }}
+      </span>
+    </unnnic-modal>
   </div>
 </template>
 
@@ -162,6 +188,8 @@ export default {
       pageWasChanged: false,
       searchingLog: false,
       isCorrected: Boolean,
+      openModalTraining: false,
+      openModalTest: false
     };
   },
   computed: {
@@ -242,15 +270,16 @@ export default {
           repository: this.repository,
           titleHeader: typeModal,
           confidenceVerify: this.confidenceVerify,
-          logData: this.logData[0]
+          logData: this.logData[0],
+          buttonLabel: this.$t('webapp.inbox.add_to_train')
         },
         parent: this,
-        component: this.logData.length === 1 ? IntentModalEdition : IntentModal,
+        component: IntentModalEdition,
         hasModalCard: false,
         trapFocus: true,
         canCancel: false,
         events: {
-          addedIntent: value => {
+          addedIntent: (value) => {
             this.verifyIsCorrected(value);
             this.addToTraining(value);
             this.intent = value;
@@ -276,7 +305,8 @@ export default {
           info: this.nlp_log,
           repository: this.repository,
           titleHeader: typeModal,
-          logData: this.logData[0]
+          logData: this.logData[0],
+          buttonLabel: this.$t('webapp.inbox.add_to_sentence')
         },
         parent: this,
         component: this.logData.length === 1 ? IntentModalEdition : IntentModal,
@@ -307,7 +337,7 @@ export default {
       });
     },
     verifyIsCorrected(value) {
-      if (value === this.nlp.intent.name) {
+      if (value === this.nlp_log.intent.name) {
         this.isCorrected = false;
       } else {
         this.isCorrected = true;
@@ -327,10 +357,11 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
-              type: 'is-success'
-            });
+            // this.$buefy.toast.open({
+            //   message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
+            //   type: 'is-success'
+            // });
+            this.openModalTraining = true
           } else {
             await this.newExample({
               ...data,
@@ -340,10 +371,11 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              message: `${values.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
-              type: 'is-success'
-            });
+            // this.$buefy.toast.open({
+            //   type: 'is-success',
+            //  message: `${values.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
+            // });
+            this.openModalTraining = true
           }
         } catch (error) {
           this.showError(error, data, 'training');
@@ -367,10 +399,11 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_sentence')}`,
-              type: 'is-success'
-            });
+            // this.$buefy.toast.open({
+            // message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_sentence')}`,
+            //   type: 'is-success'
+            // });
+            this.openModalTest = true
           } else {
             await this.newEvaluateExample({
               ...data,
@@ -380,12 +413,13 @@ export default {
               isCorrected: this.isCorrected,
               repositoryVersion: this.version
             });
-            this.$buefy.toast.open({
-              message: `${values.text.bold()}, ${this.$t(
-                'webapp.inbox.entry_has_add_to_sentence'
-              )}`,
-              type: 'is-success'
-            });
+            // this.$buefy.toast.open({
+            //   message: `${values.text.bold()}, ${this.$t(
+            //     'webapp.inbox.entry_has_add_to_sentence'
+            //   )}`,
+            //   type: 'is-success'
+            // });
+            this.openModalTest = true
           }
         } catch (error) {
           this.showError(error, data, 'evaluate');
@@ -396,6 +430,7 @@ export default {
       });
     },
     showError(error, log, type) {
+      console.log(error.response.data)
       let messages = '';
       if (type === 'evaluate') {
         messages = Object.values(error.response.data.non_field_errors).length >= 1

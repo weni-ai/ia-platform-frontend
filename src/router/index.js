@@ -248,12 +248,12 @@ const router = new Router({
           name: 'repository-result',
           component: RepositoryResult,
         },
-        ...((runtimeVariables.get('VUE_APP_VERSION_ENABLED'))
-          ? [{
-            path: ':ownerNickname/:slug/versions/',
-            name: 'repository-versions',
-            component: RepositoryVersions,
-          }] : []),
+        // ...((runtimeVariables.get('VUE_APP_VERSION_ENABLED'))
+        //   ? [{
+        //     path: ':ownerNickname/:slug/versions/',
+        //     name: 'repository-versions',
+        //     component: RepositoryVersions,
+        //   }] : []),
       ],
     },
     ...(runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')

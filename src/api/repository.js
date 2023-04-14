@@ -123,12 +123,15 @@ export default {
   deleteVersion(id) {
     return request.$http.delete(`/v2/repository/version/${id}/`);
   },
-  search(limit, offset) {
+  search(limit, offset,) {
     const queryString = qs.stringify(limit, offset);
     return request.$http.get(`/v2/repository/repositories/?${queryString}`);
   },
-  communityRepository(query, limit = 20) {
-    return new utils.Page('/v2/repository/repositories/', limit, query);
+  communityRepository(limit = 20, offset, language, categories, recommended, most_used) {
+    const queryString = qs.stringify(
+      limit, offset, language, categories, recommended, most_used
+    );
+    return request.$http.get(`/v2/repository/repositories/?${queryString}`);
   },
   searchByOrg(orgNickname, limit = 20, search, categories, language) {
     return new utils.Page('/v2/repository/search-repositories/', limit, {

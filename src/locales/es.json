@@ -43,9 +43,10 @@
       "save_password": "Guardar contraseña"
     },
     "intelligences_lib": {
-      "title": "Biblioteca de inteligencia",
+      "title": "Inteligencia Artificial",
+      "description": "Aprenda a integrar una inteligencia en su proyecto accediendo a la documentación<br /><a href=\"https://docs.weni.ai/l/pt/bothub/integrar-uma-intelig-ncia-ao-projeto-na-plataforma-weni\" target=\"_blank\">sobre cómo integrar una I.A.</a>",
       "new_intelligence": "Nueva Inteligencia",
-      "unused_projects": "Su proyecto no está utilizando la inteligencia vinculada por un clasificador. Cree un nuevo o explore la inteligencia de su organización o comunidad en las opciones anteriores.",
+      "unused_projects": "Tu proyecto no está utilizando ninguna inteligencia. Crea una nueva o integra una inteligencia de tu organización o de la galería de inteligencia de la comunidad.",
       "created_by": "Creado por",
       "open": "Abierto",
       "show_intents": "Ver intenciones | Ver intención | Ver intenciones",
@@ -57,17 +58,18 @@
       "intelligence_tooltip": "Utiliza intenciones y entidades para interpretar y segmentar mensajes de usuario.",
       "intelligence_tooltip_content": "Registrar textos e inteligencia informativos podrán responder a las preguntas formuladas por los usuarios según el texto.",
       "intent": "Intenciones | Intención | Intenciones",
+      "knowledge_bases": "Bases de conocimiento | Base de conocimiento | Bases de conocimiento",
       "language": "Idiomas | Idioma | Idiomas",
       "intent_modal_title": "Intenciones de {nick} | Intención de {nick} | Intenciones de {nick}",
       "intent_modal_subtitle": "Ver las intenciones que forman parte de la inteligencia seleccionada.",
       "language_modal_title": "Idiomas de {nick} | Idioma de {nick} | Idiomas de {nick}",
       "language_modal_subtitle": "Ver los idiomas compatibles con la inteligencia seleccionada.",
-      "tab_project_title": "Inteligencias en el Proyecto",
-      "tab_project_subtitle": "Son inteligencias en uso en el proyecto integrado por el clasificador.",
-      "tab_org_title": "Inteligencias de la Organización",
-      "tab_org_subtitle": "Visualiza y accede a las inteligencias creadas por la organización.",
-      "tab_community_title": "Inteligencia Comunitaria",
-      "tab_community_subtitle": "Ver y usar inteligencias que son públicas.",
+      "tab_project_title": "Inteligencia en el proyecto",
+      "tab_project_subtitle": "Estas son las inteligencias en uso en el proyecto",
+      "tab_org_title": "Inteligencias de la organización",
+      "tab_org_subtitle": "Visualizar e integrar la inteligencia de la organización",
+      "tab_community_title": "Galería de inteligencia comunitaria",
+      "tab_community_subtitle": "Inteligencias públicas disponibles para integración",
       "intent_count": "Número de oraciones de intención",
       "clone": {
         "success_modal_title": "¡Inteligencia copiada!",
@@ -76,7 +78,14 @@
         "confirm_modal_title": "¿Hacer una copia de la inteligencia “{intelligence}”?",
         "confirm_modal_message": "Al hacer una copia de la inteligencia, puedes usarla en tu organización y también hacer los cambios que quieras.",
         "copy": "Copiar"
-      }
+      },
+      "intelligence_force":"Fuerza",
+      "intelligence_force_tooltip":"La fuerza de la inteligencia es una forma sencilla de medir qué tan bien está diseñada la inteligencia. Se recomienda que la fuerza esté por encima del 80%",
+      "integration_success_title": "Inteligencia integrada",
+      "integration_success_description": "La inteligencia se integró conéxito 😉",
+      "integration_error_title": "No se puede integrar la inteligencia",
+      "integration_error_description": "La inteligencia no se integró correctamente",
+      "community_description": "Integre inteligencia de calidad lista para usar en su proyecto"
     },
     "create_repository": {
       "intelligence": "Nueva inteligencia",
@@ -199,7 +208,11 @@
       "not_have_results": "No tienes resultados todavía",
       "entity_is_group": "<strong>{entity}</strong> pertenece a <strong>{group}</strong>",
       "no_sentences": "No hay frases.",
-      "detailed_results": "Resultados Detallados",
+      "detailed_results": "Prueba manual",
+      "summary_title1": "Tasa de aciertos",
+      "summary_title2": "Frases probadas",
+      "summary_title3": "Idiomas",
+      "tooltip_alert": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       "login": "Inicia sesión en tu cuenta para editar esta inteligencia.",
       "all_intents": "Todas las Intenciones",
       "all_entities": "Todas las entidades",
@@ -209,8 +222,14 @@
       "no_versions": "No hay resultados para esta versión"
     },
     "evaluate-manual": {
-      "header_title": "Prueba tu inteligencia",
-      "header_title_p": "¿Cómo se realiza tu modelo? ¿Tienes datos suficientes? ¿Están sus intenciones y entidades bien dibujadas?",
+      "header_title": "Pruebas manuales",
+      "header_title_p": "Agregue manualmente oraciones de prueba, simulando la entrada del usuario final, para evaluar la calidad de las oraciones entrenadas por IA.",
+      "tips_title": "Consejos para tomar una prueba efectiva",
+      "tips_description": "Intente agregar frases de prueba reales, pero que nunca hayan sido vistas por el modelo (frases diferentes de las entrenadas). Esto le permitirá probar si su IA realmente puede abstraer y comprender el significado de las intenciones que ha sido entrenada para clasificar correctamente una oración de prueba nunca antes vista.",
+      "test_title": "Tomar otra prueba de oración manual",
+      "test_p": "Ejecute una nueva prueba manual, agregando frases que simulen la entrada real del usuario final.",
+      "test_button": "Ir a prueba manual",
+      "historic_title": "Historia de las pruebas manuales",
       "header_title_p2": "Usando nuestra función de prueba, puede evaluar el rendimiento de su inteligencia fácilmente.",
       "header_title_lang": "Seleccione el idioma para ejecutar la prueba.",
       "run_test": "Prueba prueba",
@@ -231,10 +250,24 @@
       "header_title_lang": "Seleccione el idioma para ejecutar la prueba.",
       "run_test": "Prueba prueba"
     },
+    "evaluate-automatic-new": {
+      "header_title": "Pruebas automáticas",
+      "header_title_p": "Con cada nueva interacción, automáticamente se realiza un nuevo análisis de las frases para evaluar si la IA está funcionando correctamente.",
+      "quality_title": "Según el análisis de las interacciones más recientes, su calidad actual de IA es:",
+      "summary_title1": "Frases probadas",
+      "summary_title2": "Fecha de la prueba",
+      "summary_chart_title": "Historial de análisis",
+      "tips_title": "Consejos sobre cómo mejorar la calidad de la IA",
+      "tips_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "tips_p": "Entrena más frases a la intención",
+      "results_title": "Resultados detallados",
+      "results_tab_title": "Frases",
+      "results_tab_title2": "Gráficos"
+    },
     "result": {
       "load_result": "Resultados de carga",
       "download": "Descargar",
-      "test": "Prueba",
+      "test": "Prueba manual",
       "evaluate_output": "Resultados de la prueba",
       "evaluate_output_text": "Para más información, vea nuestra",
       "documentation": "documentación",
@@ -371,8 +404,15 @@
         "see-all_bases": "Ver todas las bases",
         "add_base": "+ Añadir base"
       },
-      "copy-intelligence": "Copiar inteligencia"
-
+      "copy-intelligence": "Copiar inteligencia",
+      "intelligence_filter": {
+        "title": "Filtrar las inteligencias de la comunidad",
+        "category": "Categorías",
+        "languages": "Idioma",
+        "languages_select": "Seleccione un idioma",
+        "recommended": "Recomendado",
+        "most_used": "Más usado"
+      }
     },
     "summary": {
       "training_information": "Información de Entrenamiento",
@@ -430,7 +470,7 @@
       "table_delete": "Eliminar"
     },
     "settings": {
-      "title_edit_repository": "Editar Inteligencia",
+      "title_edit_repository": "Ajustes",
       "manage_your_team": "Administra tu equipo",
       "authorization_requests": "Solicitudes de Autorización",
       "request_available": "Ya tienes una solicitud pendiente. Esperar la respuesta de un administrador",
@@ -439,7 +479,7 @@
       "users": "Usuarios:",
       "role": "Documentos:",
       "no_requests": "No hay solicitudes.",
-      "save": "Ahorrar",
+      "save": "Guardar ediciones",
       "request": "Hacer pedido",
       "invite": "Enviar invitacion",
       "no_users": "Sin usuarios en el equipo.",
@@ -449,7 +489,13 @@
       "remove_user_confirm": "¿Está seguro de que desea eliminar <strong>{user}</> como <strong>{role}</strong>?",
       "remove": "Para eliminar",
       "cancel": "Cancelar",
-      "default_error": "Ocurrió algo mal, inténtalo de nuevo más tarde."
+      "default_error": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
+      "settings_tab": "Configuración",
+      "versions_tab": "Versiones",
+      "settings_accordion": "Configuración avanzada",
+      "description": "Administrar información básica de inteligencia.",
+      "save_success_title": "¡La inteligencia cambió con éxito!",
+      "save_success_message": "La información de inteligencia se cambió con éxito 😉"
     },
     "roles": {
       "user": "Usuario",
@@ -470,7 +516,15 @@
       "help_text": "Cuando su bot recibe un mensaje, puede usar un reconocedor para examinarlo e identificar la intención.",
       "delete_text": "¿Está seguro? Este ejemplo será eliminado.",
       "delete": "Borrar",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "sent_to_training": "¡Sentencias enviadas para entrenamiento!",
+      "sent_to_training_info": "Las frases que seleccionaste han sido enviadas con éxito para entrenar. Para entrenar inteligencia con estas frases, ve al menú Entrenar inteligencia. 😉",
+      "sent_to_test": "¡Oraciones enviadas a prueba!",
+      "sent_to_test_info": "Las frases que seleccionaste se enviaron con éxito para probarlas. Para probarlas, ve al menú Prueba. 😉",
+      "version_name": "Nombre de la versión",
+      "principal_version_label": "¿Hacer de esta la versión principal de la inteligencia?",
+      "principal_version_text": "Versión principal",
+      "principal_version_info": "Habilitar esta opción hará que esta sea la versión predeterminada de la Inteligencia"
     },
     "trainings": {
       "grid_text1": "Entrenar una nueva oración",
@@ -512,6 +566,9 @@
       "database": "Repositorio",
       "database_description": "Lista de todas las oraciones entrenadas por la inteligencia",
       "database_untrained": "Esta inteligencia no tiene frases entrenadas. Agregue frases y entrénelas en el menú Entrenamiento.",
+      "database_modal_title": "¡Frase(s) editada(s)!",
+      "database_modal_description": "Las frases fueron editadas exitosamente. Vuelve a ejecutar el entrenamiento para que la Inteligencia reconozca estas frases 😉",
+      "database_save_button": "Enviar cambios para entrenamiento",
       "train_title": "Entrenar Inteligencia",
       "train_description": "Agrega oraciones para mejorar la inteligencia. <a href={link}>Consulta nuestra documentación</a> y aprende <br> las mejores prácticas para crear una inteligencia artificial de calidad.",
       "entities": "Entidades (opcional)",
@@ -719,8 +776,8 @@
       "training": "Capacitación",
       "train": "Entrenar",
       "suggestion": "Generador de frases",
-      "test": "Prueba",
-      "test-manual": "Frases",
+      "test": "Pruebas",
+      "test-manual": "Manuales",
       "test-automatic": "Automático",
       "results": "Resultados",
       "inbox": "Interacciones",
@@ -804,7 +861,28 @@
       "version": "Versión",
       "cancel": "Cancelar",
       "add_new": "Añadir nuevo",
-      "signin": "Ingrese su cuenta para editar esta inteligencia."
+      "signin": "Ingrese su cuenta para editar esta inteligencia.",
+      "table_edit": "Editar",
+      "table_duplicate": "Duplicar",
+      "table_delete": "Eliminar",
+      "edit_title_modal": "Cambiar versión",
+      "edit_phrase_modal": "¿Realmente quieres hacer cambios en la versión {name}?",
+      "edit_success_title_modal": "¡Cambios guardados!",
+      "edit_success_phrase_modal": "Cambios realizados con éxito 😉",
+      "edit_confirm_button": "Hacer cambios",
+      "delete_title_modal": "Eliminar versión",
+      "delete_phrase_modal": "¿Realmente desea eliminar la versión de <strong>{name}</strong>? Una vez realizada la acción, no será posible revertirla",
+      "delete_success_title_modal": "¡Versión eliminada!",
+      "delete_success_phrase_modal": "La versión fue eliminada con éxito 😉",
+      "delete_alert_text": "No se pudo eliminar la versión principal",
+      "duplicate_title_modal": "Versión duplicada {name}",
+      "duplicate_phrase_modal": "¿Qué nombre quieres para esta copia de esta versión?",
+      "duplicate_input_label": "Nombre de la versión",
+      "duplicate_input_placeholder": "Nombre",
+      "duplicate_confirm_button": "Establecer nombre",
+      "duplicate_success_title_modal": "¡Copia creada!",
+      "duplicate_success_phrase_modal": "La copia de la versión se creó con éxito 😉",
+      "duplicate_success_button_modal": "Establecer nombre"
     },
     "inbox": {
       "description": "Estas son las frases de las interacciones de los usuarios con su inteligencia.\nPueden ser útiles para su formación o sus pruebas.",
@@ -823,8 +901,10 @@
       "entry_error": "La intención y la frase ya existen.",
       "add_to_train_error": "Pasó un error",
       "add_to_sentences_error": "Ocurrió un error.",
-      "add_to_train_button": "Añadir a la formación",
-      "add_to_sentence_button": "Añadir a las frases de prueba",
+      "add_to_train_button": "Añadir a la formación ({n})",
+      "add_to_sentence_button": "Añadir a las frases de prueba ({n})",
+      "add_to_train": "Añadir a la formación",
+      "add_to_sentence": "Añadir a las frases de prueba",
       "remove_log_button": "Eliminar una oración",
       "select_phrase": "Seleccione una frase",
       "select_all": "Seleccionar todo",
@@ -1000,6 +1080,17 @@
     },
     "infinite_scroll": {
       "title": "Cargando"
+    }
+  },
+  "modals": {
+    "cant_access": {
+      "title": "Ops, aún no puede usar este módulo",
+      "description": "Para integrar una inteligencia artificial en su proyecto, debe crear un flujo de conversación creado.<br />Regrese después de crear un flujo.",
+      "button_primary_label": "Ir al módulo de flujo"
+    },
+    "how_to_integrate": {
+      "title": "Cómo integrar una inteligencia",
+      "description": "1. Elija la inteligencia que mejor se adapte a su proyecto.<br /><br />2. Haz clic en el “+” para integrar la inteligencia en el proyecto.<br /><br />3. Vaya al módulo de flujos y haga clic en “crear mensaje”.<br /><br />4. Selecciona la opción “dividir por intención”.<br /><br />5. Selecciona las intenciones que quieres que entienda tu chatbot y haz clic en “ok”.<br /><br />6. A continuación, asigna mensajes de respuesta a cada una de las intenciones."
     }
   }
 }

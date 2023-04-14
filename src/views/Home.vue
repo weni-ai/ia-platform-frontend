@@ -2,58 +2,53 @@
   <div>
     <div class="home">
       <section class="home__header">
-          <unnnic-card
-            :title="$t('webapp.intelligences_lib.title')"
-            icon="science-fiction-robot-1"
-            type="title"
-            :has-information-icon="false"
-            scheme="aux-blue"/>
+        <unnnic-card
+          :title="$t('webapp.intelligences_lib.title')"
+          icon="science-fiction-robot-1"
+          type="title"
+          :has-information-icon="false"
+          scheme="aux-blue"
+        />
+
+        <div
+          class="description unnnic-font secondary body-gt color-neutral-dark"
+          v-html="$t('webapp.intelligences_lib.description')"
+        />
       </section>
 
       <home-tab-navigation @changeTabValue="onTabSelected"/>
       <div :class="[loading ? 'hidden' : 'visible']">
-        <home-intelligence-from-project
+        <home-intelligence-from-community
           @loading="loading = $event"
           v-show="howTabIsShown === 0"/>
+
+        <home-intelligence-from-project
+          @loading="loading = $event"
+          v-show="howTabIsShown === 1"/>
 
         <home-intelligence-from-org
           @loading="loading = $event"
           :key="update"
-          v-show="howTabIsShown === 1"/>
-
-        <home-intelligence-from-community
-          @loading="loading = $event"
           v-show="howTabIsShown === 2"/>
+
       </div>
 
       <div :class="['home-loading', !loading ? 'hidden' : 'visible']">
-      <!-- <div class="home-loading__header">
-        <unnnic-skeleton-loading
-          class="home-loading__title"
-          tag="div"
-          width="40px"
-          height="40px"
-        />
-        <unnnic-skeleton-loading tag="div" width="189px" height="40px" />
-      </div>
-      <div class="home-loading__description">
-        <unnnic-skeleton-loading tag="div" width="30vw" height="96px" />
-        <unnnic-skeleton-loading tag="div" width="30vw" height="96px" />
-        <unnnic-skeleton-loading tag="div" width="30vw" height="96px" />
-      </div>
-
-      <unnnic-skeleton-loading tag="hr" width="100px" height="1px" /> -->
 
       <div v-if="howTabIsShown === 0" class="home-loading__project">
-        <unnnic-skeleton-loading tag="div" width="529px" height="60px" />
-        <unnnic-skeleton-loading tag="div" width="346px" height="60px" />
+        <unnnic-skeleton-loading tag="div" class="mb-5" width="510px" height="46px" />
+
+        <div class="home-loading__cards">
+          <unnnic-skeleton-loading tag="div" width="31vw" height="480px" />
+          <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+          <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+        </div>
       </div>
 
-      <div v-else class="home-loading__cards">
-        <unnnic-skeleton-loading tag="div" width="23vw" height="260px" />
-        <unnnic-skeleton-loading tag="div" width="23vw" height="260px" />
-        <unnnic-skeleton-loading tag="div" width="23vw" height="260px" />
-        <unnnic-skeleton-loading tag="div" width="23vw" height="260px" />
+      <div v-if="howTabIsShown !== 0" class="home-loading__cards">
+        <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+        <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+        <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
       </div>
 
       </div>
@@ -106,6 +101,19 @@ export default {
 
     &__header{
       padding: $unnnic-inline-md;
+      padding-bottom: $unnnic-spacing-stack-sm;
+
+      .description {
+        margin-top: $unnnic-spacing-stack-nano;
+        margin-left: $unnnic-spacing-inline-xl + $unnnic-spacing-inline-sm;
+
+        ::v-deep a {
+          text-decoration: underline;
+          text-underline-offset: 3px;
+          font-weight: $unnnic-font-weight-bold;
+          color: inherit;
+        }
+      }
     }
 }
 .home-loading {
@@ -115,7 +123,7 @@ export default {
   height: 100vh;
   padding-bottom: $unnnic-spacing-stack-sm;
   background: white;
-  padding: 1.5rem;
+  padding: 1.5rem 1.75rem;
 
   &__title {
     margin: $unnnic-spacing-inline-xs 0;
@@ -131,12 +139,6 @@ export default {
   &__description {
     display: flex;
     justify-content: space-between;
-  }
-
-  &__project {
-    margin: auto;
-    text-align: center;
-    height: 70vh;
   }
 
   &__cards {

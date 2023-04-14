@@ -61,6 +61,15 @@
         </b-button>
       </div>
     </div>
+    <repository-debug
+        v-if="showDebug"
+        :repositoryUUID="repositoryUuid"
+        :version="version"
+        :language="language"
+        :text="text"
+        @closeModal="showDebug = false"
+      />
+      <raw-info v-if="showRaw" :info="data" @closeModal="showRaw = false" />
   </div>
 </template>
 
@@ -77,6 +86,8 @@ export default {
   components: {
     Loading,
     HighlightedText,
+    RawInfo,
+    RepositoryDebug
   },
   props: {
     text: {
@@ -103,6 +114,8 @@ export default {
       error: null,
       highlighted: null,
       repositoryStatus: {},
+      showRaw: false,
+      showDebug: false
     };
   },
   computed: {
@@ -173,30 +186,10 @@ export default {
       }
     },
     showRawInfo() {
-      this.$buefy.modal.open({
-        props: { info: this.data },
-        parent: this,
-        width: 562,
-        canCancel: false,
-        component: RawInfo,
-        hasModalCard: false,
-        trapFocus: true,
-      });
+      this.showRaw = true
     },
     debug() {
-      this.$buefy.modal.open({
-        parent: this,
-        canCancel: false,
-        component: RepositoryDebug,
-        props: {
-          repositoryUUID: this.repositoryUuid,
-          version: this.version,
-          language: this.language,
-          text: this.text,
-        },
-        hasModalCard: false,
-        trapFocus: true,
-      });
+      this.showDebug = true
     },
   },
 };

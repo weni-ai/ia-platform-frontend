@@ -318,5 +318,10 @@ export default {
   /deep/ .dropdown {
     display: block;
   }
+
+  /deep/ input:focus {
+    box-shadow: none;
+    border-color: #9caccc;
+  }
 }
 </style>
