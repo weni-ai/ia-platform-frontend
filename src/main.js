@@ -14,6 +14,7 @@ import '@mdi/font/css/materialdesignicons.css';
 import hljs from 'highlight.js';
 import VueHighlightJS from 'vue-highlightjs';
 import LogRocket from 'logrocket';
+import VShowSlide from 'v-show-slide';
 
 LogRocket.init(runtimeVariables.get('VUE_APP_LOGROCKET_ID'), {
   mergeIframes: true,
@@ -26,6 +27,7 @@ Vue.use(API);
 Vue.use(VueTour);
 Vue.use(hljs.vuePlugin);
 Vue.use(VueHighlightJS);
+Vue.use(VShowSlide);
 
 Vue.config.productionTip = false;
 
