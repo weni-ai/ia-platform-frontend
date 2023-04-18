@@ -600,8 +600,15 @@
       "ok": "ok"
     },
     "translate": {
+      "title_status_page": "Tradução",
+      "description_status_page": "Gerencie e traduza as frases da sua Inteligência",
+      "title_language_card": "Idiomas da Inteligência",
+      "description_progress_bar": "Frases traduzidas",
+      "new_status_card": "Adicionar novo idioma",
+      "description_create_modal": "Qual novo idioma que você quer adicionar à Inteligência?",
+      "select_language_label": "Selecione o idioma",
+      "button_create_modal": "Prosseguir",
       "title_translate": "Traduzir uma frase",
-      "subtitle_translate": "Gerencie e traduza as frases de sua inteligência.",
       "title_export": "Exportar tradução",
       "subtitle_export": "Se preferir, você pode exportar e importar traduções por uma planilha.",
       "not_can_edit_repository": "Você não pode contribuir com essa inteligência",
