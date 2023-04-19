@@ -26,7 +26,8 @@
       <template slot="tab-panel-first">
         <highlighted-code
           :code="codes.curl"
-          code-class="bash" />
+          code-class="bash"
+          :style="{ padding: '24px 0px' }" />
       </template>
       <template slot="tab-head-second">
         Python
@@ -34,7 +35,8 @@
       <template slot="tab-panel-second">
         <highlighted-code
           :code="codes.python"
-          code-class="python" />
+          code-class="python"
+          :style="{ padding: '24px 0px' }" />
       </template>
       <template slot="tab-head-third">
         Javascript
@@ -42,7 +44,8 @@
       <template slot="tab-panel-third">
         <highlighted-code
           :code="codes.javascript"
-          code-class="javascript" />
+          code-class="javascript"
+          :style="{ padding: '24px 0px' }"/>
       </template>
     </unnnic-tab>
   </div>
@@ -98,11 +101,13 @@ export default {
     codes() {
       return {
         curl: [
-          'curl -X POST \\',
-          `  -H 'Authorization: ${this.authorizationUuid}' \\`,
-          `  -F 'language=${this.language}' \\`,
-          `  -F "text=${this.text_escaped.curl}" \\`,
-          `  ${runtimeVariables.get('VUE_APP_BOTHUB_NLP_BASE_URL')}v2/parse/`,
+          `  curl --location '${runtimeVariables.get('VUE_APP_BOTHUB_NLP_BASE_URL')}v2/parse/' \\`,
+          `  --header 'Authorization: ${this.authorizationUuid}' \\`,
+          '  --header Content-Type: application/json \\',
+          '  --data { ',
+          `  "language": ${this.language}, `,
+          `  "text": ${this.text_escaped.curl} `,
+          '  } ',
         ].join('\n'),
         python: [
           'import requests',
