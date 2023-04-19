@@ -11,11 +11,9 @@
       side="top"
       maxWidth="15rem"
     >
-      <unnnic-button
+      <unnnic-button-icon
         size="small"
-        text=""
-        type="secondary"
-        iconLeft="copy-paste-1"
+        icon="copy-paste-1"
         @click.native="copyURL()"
       />
     </unnnic-tool-tip>
@@ -57,24 +55,26 @@ export default {
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 .highlighted-pre {
   white-space: pre-wrap;
-  min-height: 85px;
+  min-height: 68px;
   background-color: $unnnic-color-neutral-lightest;
   border: 1px solid $unnnic-color-neutral-soft;
   border-radius: 4px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 16px;
+  padding: 0px;
 
   code {
     font-family: $unnnic-font-family-primary;
     color: $unnnic-color-neutral-dark;
     font-size: $unnnic-font-size-body-gt;
+    margin-left: $unnnic-spacing-stack-sm;
   }
 
   .unnnic-tooltip {
     display: flex;
     align-items: center;
+    margin-right: $unnnic-spacing-stack-sm;
   }
 }
 </style>

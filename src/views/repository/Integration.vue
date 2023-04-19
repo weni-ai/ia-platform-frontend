@@ -36,8 +36,6 @@
           </div>
         </div>
 
-        <div class="repository-analyze-text__divider"></div>
-
         <unnnic-tab initialTab="first" :tabs="tabs">
           <template slot="tab-head-first">
             {{ $t("webapp.integration.http_tab") }}
@@ -334,6 +332,7 @@ export default {
     display: flex;
     align-items: center;
     gap: $unnnic-spacing-stack-xgiant;
+    margin-bottom: 40px;
 
     .unnnic-button {
       min-width: 245px;
@@ -351,18 +350,13 @@ export default {
     }
   }
 
-  &__divider {
-    border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-    margin: $unnnic-spacing-stack-lg 0 $unnnic-spacing-stack-md 0;
-  }
-
   &__url {
     margin-top: $unnnic-spacing-stack-md;
     .unnnic-button {
       width: 100%;
       height: 48px;
       background: rgba(226, 230, 237, 0.16);
-      margin-top: $unnnic-spacing-stack-sm;
+      margin: $unnnic-spacing-stack-sm 0px 40px 0px;
     }
 
     .json-code {
