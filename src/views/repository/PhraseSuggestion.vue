@@ -1,5 +1,7 @@
 <template>
   <repository-view-base :repository="repository" :error-code="errorCode">
+    <phrase-suggestion-loading slot="loader" />
+
     <div v-if="repository">
       <div v-if="authenticated">
         <loading v-if="loading" />
@@ -14,12 +16,6 @@
                   icon="copy-paste-1"
                   scheme="feedback-blue"
                 />
-                <b-field>
-                  <b-tag class="phrase-suggestion__beta-badge" size="is-medium" type="is-primary">
-                    BETA
-                  </b-tag>
-                </b-field>
-
               </div>
 
               <div class="phrase-suggestion__header__container">
@@ -344,6 +340,7 @@ import WordCard from '@/components/shared/accordion/WordCard';
 import GeneratedSentencesTable from '@/components/repository/GeneratedSentencesTable';
 import PaginatedList from '@/components/shared/PaginatedList';
 import IntentSuggestion from '@/components/shared/accordion/IntentSuggestion';
+import PhraseSuggestionLoading from './PhraseSuggestionLoading';
 
 
 export default {
@@ -360,6 +357,7 @@ export default {
     WordCard,
     GeneratedSentencesTable,
     PaginatedList,
+    PhraseSuggestionLoading,
   },
   extends: RepositoryBase,
   data() {
