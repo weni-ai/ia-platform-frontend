@@ -154,7 +154,12 @@
               />
             </div>
 
-            <unnnic-button class="button--full mt-2" @click="addVariations" type="secondary">
+            <unnnic-button
+              class="button--full mt-2"
+              @click="addVariations"
+              type="secondary"
+              :loading="loadingSelectingWords"
+            >
               {{ $t('webapp.phrase-suggestion.finish_selection') }}
             </unnnic-button>
 
@@ -238,7 +243,8 @@
               class="button--full mb-5"
               @click="goToGeneratedSentences"
               type="secondary"
-              >
+              :loading="loadingGenerateSentences"
+            >
               {{ $t('webapp.phrase-suggestion.generate_sentences') }}
             </unnnic-button>
 
@@ -383,7 +389,9 @@ export default {
       submittingToTraining: false,
       openFinishModal: false,
       sentencesIntents: IntentSuggestion,
-      token: null
+      token: null,
+      loadingSelectingWords: false,
+      loadingGenerateSentences: false,
     };
   },
   computed: {
@@ -467,12 +475,12 @@ export default {
       this.splitSentence()
       this.pageItem = 2
     },
-    addVariations() {
-      this.addWordVariation()
+    async addVariations() {
+      await this.addWordVariation();
       this.pageItem = 3
     },
-    goToGeneratedSentences() {
-      this.generateSentences()
+    async goToGeneratedSentences() {
+      await this.generateSentences();
       this.pageItem = 4
     },
     async addIntents(intent) {
@@ -503,7 +511,7 @@ export default {
       this.wordsList = words
     },
     async addWordVariation() {
-      this.loading = true
+      this.loadingSelectingWords = true
       try {
         const { data } = await this.suggestWords({
           isQuestion: this.isQuestion,
@@ -536,7 +544,7 @@ export default {
           type: 'is-danger',
         });
       } finally {
-        this.loading = false
+        this.loadingSelectingWords = true
       }
     },
     updateWordsList(props) {
@@ -549,7 +557,7 @@ export default {
       });
     },
     async generateSentences() {
-      this.loading = true
+      this.loadingGenerateSentences = true
       try {
         const { data } = await this.suggestSentences({
           isQuestion: this.isQuestion,
@@ -568,7 +576,7 @@ export default {
           type: 'is-danger',
         });
       } finally {
-        this.loading = false
+        this.loadingGenerateSentences = false
       }
     },
     deleteSentence(item) {
