@@ -16,6 +16,34 @@
       :repository-uuid="repository.uuid"
       @onAuthorizationRequested="updateRepository(false)" />
     <div v-else-if="repository" class="translations">
+      <!-- <div class="column is-3">
+          <translation-status-search
+            v-model="statusQuery" />
+        </div>
+        <div class="column">
+          <translation-status-info
+            :completed-languages="completedLanguages"
+            :languages="availableLanguages"
+            :repository-uuid="repository.uuid" />
+        </div> -->
+      <!-- <translations-status
+        ref="translationsStatus"
+        :update="updateStatus"
+        :query="statusQuery"
+        :repository-uuid="repository.uuid"
+        v-model="toLanguage"
+        class="translations__status"
+        @updated="statusUpdated"
+        @addLanguage="newStatusCard"
+        /> -->
+      <!-- <hr v-show="!(availableLanguages && availableLanguages.length <= 1)">
+      <div class="translations__list">
+      </div> -->
+      <!-- <translations-list
+        ref="translationsList"
+        :repository="repository"
+        :to-language="toLanguage"
+        @exampleUpdated="exampleUpdated()" /> -->
       <div class="translations__title">
         <unnnic-card
           type="title"
@@ -33,55 +61,16 @@
         v-html="$t('webapp.translate.title_language_card')"
         class="translations__card-title">
       </p>
-      <div class="translations__container">
-        <div
-          v-for="{ status, language } in filteredLanguagesStatus"
-          :key="language"
-          :ref="`status-${language}`"
-          class="translations__container__status-card"
-        >
-          <h2>{{ language|languageVerbose }}</h2>
-          <unnnic-progress-bar
-            :value="status.base_translations.percentage"
-            inline
-            :title="$t('webapp.translate.description_progress_bar')" />
-        </div>
-        <div class="translations__container__status-card">
-          <h2>Spanish</h2>
-          <unnnic-progress-bar
-            :value="25"
-            inline
-            :title="$t('webapp.translate.description_progress_bar')" />
-        </div>
-        <div class="translations__container__status-card">
-          <h2>Spanish</h2>
-          <unnnic-progress-bar
-            :value="25"
-            inline
-            :title="$t('webapp.translate.description_progress_bar')" />
-        </div>
-        <div class="translations__container__status-card">
-          <h2>Spanish</h2>
-          <unnnic-progress-bar
-            :value="25"
-            inline
-            :title="$t('webapp.translate.description_progress_bar')" />
-        </div>
-        <div
-          class="translations__container__new-status-card"
-          @click="newStatusCard()"
-        >
-          <unnnic-icon
-            scheme="neutral-cleanest"
-            icon="add-1"
-            size="xl"
-          />
-
-          <div class="u font secondary body-sm color-neutral-cloudy">
-            {{ $t('webapp.translate.new_status_card') }}
-          </div>
-        </div>
-      </div>
+      <translations-status
+        ref="translationsStatus"
+        :update="updateStatus"
+        :query="statusQuery"
+        :repository-uuid="repository.uuid"
+        v-model="toLanguage"
+        class="translations__status"
+        @updated="statusUpdated"
+        @addLanguage="newStatusCard"
+      />
       <unnnic-modal-next
         v-if="openModal"
         type="alert"
@@ -167,6 +156,7 @@ export default {
   computed: {
     ...mapGetters([
       'authenticated',
+      'getSelectedVersion'
     ]),
     languageList() {
       return Object.keys(LANGUAGES)
@@ -187,6 +177,20 @@ export default {
           a.status.base_translations.percentage
           < b.status.base_translations.percentage));
     },
+    computedLanguagesStatus() {
+      if (!this.languagesStatus) {
+        return [];
+      }
+      return Object.keys(this.languagesStatus)
+        .map(language => ({
+          language,
+          status: this.languagesStatus[language],
+          verbose: this.languages[language],
+          selected: this.selected === language,
+        }))
+        .filter(languageStatus => (languageStatus.status.is_base_language
+        || languageStatus.status.base_translations.percentage > 0));
+    },
   },
   methods: {
     ...mapActions([
@@ -199,6 +203,7 @@ export default {
       try {
         const response = await this.getRepositoryLanguagesStatus({
           repositoryUUID: this.repositoryUuid,
+          version: this.getSelectedVersion,
         });
         this.languagesStatus = response.data.languages_status;
       } catch (e) {
