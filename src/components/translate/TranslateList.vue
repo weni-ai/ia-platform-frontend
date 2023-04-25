@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="repository-translate__list__options">
+    <!-- <div class="repository-translate__list__options">
       <div class="repository-translate__list__options__check">
         <b-checkbox
           :disabled="editing"
@@ -32,11 +32,12 @@
           icon-right="close-thick"
           @click="editing = false" />
       </div>
-    </div>
-    <paginatedList
+    </div> -->
+    <intent-pagination
       v-if="translateList"
       :list="translateList"
-      :item-component="translateExampleItem"
+      :item-component="sentencesTable"
+      showIntents
       :per-page="perPage"
       :translate-to="to"
       :empty-message="$t('webapp.translate.no_examples')"
@@ -56,11 +57,15 @@
 import { mapActions, mapGetters } from 'vuex';
 import PaginatedList from '@/components/shared/PaginatedList';
 import TranslateExampleItem from './NewTranslateExampleItem';
+import IntentPagination from '@/components/shared/IntentPagination';
+import TranslateExampleTable from './TranslateExampleTable';
 
 export default {
   name: 'TranslateList',
   components: {
     PaginatedList,
+    IntentPagination,
+    TranslateExampleTable,
   },
   props: {
     repositoryUuid: {
@@ -77,7 +82,7 @@ export default {
     },
     perPage: {
       type: Number,
-      default: 12,
+      default: 10,
     },
     query: {
       type: Object,
@@ -99,6 +104,7 @@ export default {
       selectAll: false,
       editing: false,
       editCache: {},
+      sentencesTable: TranslateExampleTable
     };
   },
   computed: {
