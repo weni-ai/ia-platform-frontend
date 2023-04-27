@@ -2,9 +2,6 @@
   <div>
     <loading
       v-if="loading" />
-    <p
-      v-else-if="filteredLanguagesStatus.length === 0 && computedLanguagesStatus.length !== 0"
-      class="has-text-centered"> {{ $t('webapp.translate.no_translated') }} </p>
     <!-- <transition-group
       name="list"
       mode="out-in"
@@ -14,7 +11,7 @@
           v-for="(language, index) in filteredLanguagesStatus"
           :key="index"
           :ref="`status-${language.language}`"
-          class="translations__container__status-card"
+          class="translations__container__status-card column is-4"
           @click="select(language)">
           <!-- <div class="columns is-vcentered">
             <p class="card-language has-text-centered column is-2">
@@ -39,20 +36,14 @@
             inline
             :title="$t('webapp.translate.description_progress_bar')" />
         </div>
-        <div
-          class="translations__container__new-status-card"
-          @click="newLanguage()"
-        >
-          <unnnic-icon
-            scheme="neutral-cleanest"
-            icon="add-1"
-            size="xl"
-          />
-
-          <div class="u font secondary body-sm color-neutral-cloudy">
-            {{ $t('webapp.translate.new_status_card') }}
-          </div>
-        </div>
+        <unnnic-card
+          clickable
+          :text="$t('webapp.translate.new_status_card')"
+          type="blank"
+          icon="add-1"
+          class="translations__container__new-status-card column is-4"
+          @click.native="newLanguage()"
+        />
       </div>
     <!-- </transition-group> -->
     <!-- <p
@@ -312,61 +303,78 @@ export default {
 }
 .translations {
   &__container {
+    display: flex;
+    gap: $unnnic-spacing-stack-sm;
+    flex-wrap: wrap;
+
+    &__status-card, &__new-status-card {
+      /* width: 332px; */
+      height: 106px;
+      padding: 24px;
+      border: 1px solid $unnnic-color-neutral-soft;
+      border-radius: 8px;
+      cursor: pointer;
+
+      h2 {
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-darkest;
+        font-weight: 700;
+        font-size: $unnnic-font-size-body-lg;
+        margin-bottom: 12px;
+      }
+
+      .unnnic-progress-bar.primary {
+        background-color: #fff;
+        box-shadow: none;
+        padding: 0px;
+
+        /deep/ .progress-bar-container .progress-container {
+          min-width: 100px;
+          height: 4px;
+        }
+
+        /deep/ .title {
+          font-size: 12px;
+        }
+      }
+    }
+
+    &__new-status-card {
       display: flex;
-      gap: $unnnic-spacing-stack-sm;
-      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
 
-      &__status-card, &__new-status-card {
-        width: 332px;
-        height: 106px;
-        padding: 24px;
-        border: 1px solid $unnnic-color-neutral-soft;
-        border-radius: 8px;
-        cursor: pointer;
-
-        h2 {
-          font-family: $unnnic-font-family-secondary;
-          color: $unnnic-color-neutral-darkest;
-          font-weight: 700;
-          font-size: $unnnic-font-size-body-lg;
-        }
-
-        .unnnic-progress-bar.primary {
-          background-color: #fff;
-          box-shadow: none;
-          padding: 0px;
-
-          /deep/ .progress-bar-container .progress-container {
-            min-width: 100px;
-            height: 4px;
-          }
-
-          /deep/ .title {
-            font-size: 12px;
-          }
-        }
+      .unnnic-icon {
+        margin-bottom: $unnnic-spacing-stack-sm;
       }
-
-      &__new-status-card {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-
-        .unnnic-icon {
-          margin-bottom: $unnnic-spacing-stack-sm;
-        }
-      }
-    }
-}
-.unnnic-select {
-    /deep/ .input {
-      height: 46px;
-    }
-    /deep/ .dropdown {
-      display: block;
     }
   }
+}
+
+.unnnic-modal {
+  /deep/ .container {
+    padding-top: 4px;
+  }
+
+  /deep/ .unnnic-form__label {
+    margin-top: $unnnic-spacing-stack-lg;
+  }
+}
+
+/deep/ .unnnic-modal.type-alert .container .actions {
+  margin-top: $unnnic-spacing-stack-lg;
+}
+
+.unnnic-select {
+  text-align: left;
+  /deep/ .input {
+    height: 46px;
+  }
+  /deep/ .dropdown {
+    display: block;
+  }
+}
 
 </style>

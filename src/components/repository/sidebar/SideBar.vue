@@ -373,7 +373,7 @@
           <unnnic-sidebar-item
             :icon="
               checkSelectedMenu('repository-translations-status' || 'repository-translate')
-                ? 'layout-dashboard-2' : 'layout-dashboard-1'
+                ? 'translate-2' : 'translate-1'
             "
             :text="$t('webapp.menu.translation')"
             :enableTooltip="!collapse"
