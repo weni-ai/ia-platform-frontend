@@ -1,5 +1,6 @@
 <template>
   <repository-view-base :repository="repository" :error-code="errorCode">
+    <integration-loading slot="loader" />
     <div v-if="repository">
       <div v-if="authenticated" class="repository-analyze-text">
         <div class="repository-analyze-text__header">
@@ -158,6 +159,7 @@ import HighlightedCode from '@/components/shared/HighlightedCode';
 import RepositoryBase from './Base';
 import I18n from '@/utils/plugins/i18n';
 import IntegrationModal from '@/components/shared/IntegrationModal';
+import IntegrationLoading from '@/views/repository/loadings/Integration';
 
 export default {
   name: 'RepositoryIntegration',
@@ -167,7 +169,8 @@ export default {
     LoginForm,
     HighlightedCode,
     I18n,
-    IntegrationModal
+    IntegrationModal,
+    IntegrationLoading
   },
   extends: RepositoryBase,
   data() {

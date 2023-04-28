@@ -2,50 +2,90 @@
   <div>
     <loading
       v-if="loading" />
-    <p
-      v-else-if="filteredLanguagesStatus.length === 0 && computedLanguagesStatus.length !== 0"
-      class="has-text-centered"> {{ $t('webapp.translate.no_translated') }} </p>
-    <transition-group
+    <!-- <transition-group
       name="list"
       mode="out-in"
-      tag="div">
-      <div
-        v-for="{ status, language, verbose, selected } in filteredLanguagesStatus"
-        :key="language"
-        :ref="`status-${language}`"
-        class="card list-item"
-        @click="select(language)">
-        <div class="columns is-vcentered">
-          <p class="card-language has-text-centered column is-2">
-            <span>{{ verbose }}</span>
-          </p>
-          <div
-            :class="{ selected }"
-            class="column is-9">
-            <div class="card-percentage__wrapper">
-              <div
-                :style="percentageStyle(status.base_translations.percentage)"
-                class="card-percentage" />
+      tag="div"> -->
+      <div class="translations__container">
+        <div
+          v-for="(language, index) in filteredLanguagesStatus"
+          :key="index"
+          :ref="`status-${language.language}`"
+          class="translations__container__status-card column is-4"
+          @click="select(language)">
+          <!-- <div class="columns is-vcentered">
+            <p class="card-language has-text-centered column is-2">
+              <span>{{ verbose }}</span>
+            </p>
+            <div
+              :class="{ selected }"
+              class="column is-9">
+              <div class="card-percentage__wrapper">
+                <div
+                  :style="percentageStyle(status.base_translations.percentage)"
+                  class="card-percentage" />
+              </div>
             </div>
-          </div>
-          <strong class="column has-text-centered is-1">
-            {{ Number(status.base_translations.percentage.toFixed(2)) }}%
-          </strong>
+            <strong class="column has-text-centered is-1">
+              {{ Number(status.base_translations.percentage.toFixed(2)) }}%
+            </strong>
+          </div> -->
+          <h2>{{ language.verbose }}</h2>
+          <unnnic-progress-bar
+            :value="Number(language.status.base_translations.percentage.toFixed(2))"
+            inline
+            :title="$t('webapp.translate.description_progress_bar')" />
         </div>
+        <unnnic-card
+          clickable
+          :text="$t('webapp.translate.new_status_card')"
+          type="blank"
+          icon="add-1"
+          class="translations__container__new-status-card column is-4"
+          @click.native="newLanguage()"
+        />
       </div>
-    </transition-group>
-    <p
+    <!-- </transition-group> -->
+    <!-- <p
       v-show="!loading && filteredLanguagesStatus.length > 0"
       class="card-count">
       {{ $t('webapp.translate.showing',
             { available: languageCount, count: filteredLanguagesStatus.length }) }}
-    </p>
+    </p> -->
+    <unnnic-modal-next
+        v-if="openModal"
+        type="alert"
+        :title="$t('webapp.translate.new_status_card')"
+        :actionPrimaryLabel="$t('webapp.translate.button_create_modal')"
+        :actionSecondaryLabel="$t('webapp.home.cancel')"
+        @click-action-secondary="openModal = false"
+        @click-action-primary="addLanguage"
+        actionPrimaryButtonType="secondary"
+      >
+        <template slot="description">
+          {{ $t('webapp.translate.description_create_modal') }}
+          <unnnic-select
+            :label="$t('webapp.translate.select_language_label')"
+            v-model="languageSelected"
+            class="select-add-modal"
+          >
+            <option
+              v-for="[option, label] in languageList"
+              :key="option"
+              :value="option"
+              @select="languageSelected = option"
+            >
+              {{ label }}
+            </option>
+          </unnnic-select>
+        </template>
+      </unnnic-modal-next>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { formatters, languageListToDict } from '@/utils';
+import { formatters, languageListToDict, LANGUAGES } from '@/utils';
 import Loading from '@/components/shared/Loading';
 
 const components = {
@@ -78,6 +118,8 @@ export default {
       languagesStatus: null,
       selected: this.value,
       loading: false,
+      openModal: false,
+      languageSelected: ''
     };
   },
   computed: {
@@ -126,6 +168,10 @@ export default {
         .sort((a, b) => (
           a.status.base_translations.percentage
           < b.status.base_translations.percentage ? 1 : -1));
+    },
+    languageList() {
+      return Object.keys(LANGUAGES)
+        .map(lang => ([lang, LANGUAGES[lang]]));
     },
   },
   watch: {
@@ -177,8 +223,16 @@ export default {
       }
     },
     select(language) {
-      this.selected = language;
+      this.selected = language.language;
+      this.$router.push({ name: 'repository-translate', params: { language: language.language, name: language.verbose, baseLanguage: this.computedLanguagesStatus[0].language } });
     },
+    newLanguage(){
+      // this.$emit('addLanguage')
+      this.openModal = true
+    },
+    addLanguage() {
+      this.$router.push({ name: 'repository-translate', params: { language: this.languageSelected, name: this.languages[this.languageSelected], baseLanguage: this.computedLanguagesStatus[0].language } })
+    }
   },
 };
 </script>
@@ -186,7 +240,8 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/utilities.scss';
 @import '~@/assets/scss/colors.scss';
-
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 .list-enter-active, .list-leave-active {
   transition: all 1s;
 }
@@ -246,4 +301,81 @@ export default {
     }
   }
 }
+.translations {
+  &__container {
+    display: flex;
+    gap: $unnnic-spacing-stack-sm;
+    flex-wrap: wrap;
+
+    &__status-card, &__new-status-card {
+      /* width: 332px; */
+      height: 106px;
+      padding: 24px;
+      border: 1px solid $unnnic-color-neutral-soft;
+      border-radius: 8px;
+      cursor: pointer;
+
+      h2 {
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-darkest;
+        font-weight: 700;
+        font-size: $unnnic-font-size-body-lg;
+        margin-bottom: 12px;
+      }
+
+      .unnnic-progress-bar.primary {
+        background-color: #fff;
+        box-shadow: none;
+        padding: 0px;
+
+        /deep/ .progress-bar-container .progress-container {
+          min-width: 100px;
+          height: 4px;
+        }
+
+        /deep/ .title {
+          font-size: 12px;
+          color: $unnnic-color-neutral-cloudy;
+        }
+      }
+    }
+
+    &__new-status-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      .unnnic-icon {
+        margin-bottom: $unnnic-spacing-stack-sm;
+      }
+    }
+  }
+}
+
+.unnnic-modal {
+  /deep/ .container {
+    padding-top: 4px;
+  }
+
+  /deep/ .unnnic-form__label {
+    margin-top: $unnnic-spacing-stack-lg;
+  }
+}
+
+/deep/ .unnnic-modal.type-alert .container .actions {
+  margin-top: $unnnic-spacing-stack-lg;
+}
+
+.unnnic-select {
+  text-align: left;
+  /deep/ .input {
+    height: 46px;
+  }
+  /deep/ .dropdown {
+    display: block;
+  }
+}
+
 </style>
