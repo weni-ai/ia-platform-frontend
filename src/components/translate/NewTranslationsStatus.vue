@@ -335,6 +335,7 @@ export default {
 
         /deep/ .title {
           font-size: 12px;
+          color: $unnnic-color-neutral-cloudy;
         }
       }
     }

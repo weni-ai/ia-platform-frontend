@@ -619,7 +619,7 @@
       "title_status_page": "Traducción",
       "description_status_page": "Gestiona y traduce las frases de tu Inteligencia",
       "title_language_card": "Lenguajes de inteligencia",
-      "description_progress_bar": "Frases traducidas",
+      "description_progress_bar": "Estado de traducción",
       "new_status_card": "Añadir nuevo idioma",
       "description_create_modal": "¿Qué nuevo idioma desea agregar a Intelligence?",
       "select_language_label": "Seleccione el idioma",

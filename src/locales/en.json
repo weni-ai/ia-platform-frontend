@@ -617,7 +617,7 @@
       "title_status_page": "Translation",
       "description_status_page": "Manage and translate the phrases of your Intelligence",
       "title_language_card": "Languages ​​of Intelligence",
-      "description_progress_bar": "Translated phrases",
+      "description_progress_bar": "Translation status",
       "new_status_card": "Add new language",
       "description_create_modal": "What new language do you want to add to Intelligence?",
       "select_language_label": "Select the language",
