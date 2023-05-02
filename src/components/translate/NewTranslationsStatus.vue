@@ -360,7 +360,7 @@ export default {
   }
 
   /deep/ .unnnic-form__label {
-    margin-top: $unnnic-spacing-stack-lg;
+    margin: $unnnic-spacing-stack-lg 0px $unnnic-spacing-stack-xs;
   }
 }
 
