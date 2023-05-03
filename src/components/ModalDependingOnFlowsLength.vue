@@ -50,6 +50,10 @@ export default {
     iframessa.get('hasFlows', ({ data: hasFlows }) => {
       this.hasFlows = hasFlows;
     });
+
+    iframessa.on('update:hasFlows', ({ data: hasFlows }) => {
+      this.hasFlows = hasFlows;
+    });
   },
 
   computed: {
