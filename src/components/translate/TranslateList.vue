@@ -37,13 +37,14 @@
       v-if="translateList"
       :list="translateList"
       :item-component="sentencesTable"
-      showIntents
+      :showIntents="tab === 'not_translated'"
       :per-page="perPage"
       :translate-to="to"
-      :empty-message="$t('webapp.translate.no_examples')"
+      :empty-message="$t('webapp.translate.no_examples', {language: to})"
       :add-attributes="{repositoryUuid, editing, initialData: editCache}"
       :external-token="externalToken"
       item-key="id"
+      @onUpdateSelected="updateSelected"
       @onChange="updateCache($event)"
       @translated="onTranslated()"
       @eventStep="dispatchStep()"
@@ -82,7 +83,7 @@ export default {
     },
     perPage: {
       type: Number,
-      default: 10,
+      default: 50,
     },
     query: {
       type: Object,
@@ -93,6 +94,10 @@ export default {
       default: false,
     },
     externalToken: {
+      type: String,
+      default: null,
+    },
+    tab: {
       type: String,
       default: null,
     },
@@ -188,6 +193,9 @@ export default {
     },
     dispatchStep() {
       this.$emit('eventStep');
+    },
+    updateSelected(params) {
+      this.$emit('onUpdateSelected', params)
     },
   },
 };

@@ -121,6 +121,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    repository: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -233,14 +237,14 @@ export default {
     },
     select(language) {
       this.selected = language.language;
-      this.$router.push({ name: 'repository-translate', params: { language: language.language, name: language.verbose, baseLanguage: this.computedLanguagesStatus[0].language } });
+      this.$router.push({ name: 'repository-translate', params: { language: language.language, name: language.verbose, baseLanguage: this.repository.language } });
     },
     newLanguage(){
       // this.$emit('addLanguage')
       this.openModal = true
     },
     addLanguage() {
-      this.$router.push({ name: 'repository-translate', params: { language: this.languageSelected, name: this.languages[this.languageSelected], baseLanguage: this.computedLanguagesStatus[0].language } })
+      this.$router.push({ name: 'repository-translate', params: { language: this.languageSelected, name: this.languages[this.languageSelected], baseLanguage: this.repository.language } })
     }
   },
 };

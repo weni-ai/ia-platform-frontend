@@ -42,6 +42,9 @@
               {{ $t("webapp.translate.intent") + ' ' + item.intent }}
               </span>
             </div>
+            <div v-if="!showIntents" class="example-accordion__original">
+              {{ item.original_example_text }}
+            </div>
           </template>
 
           <template v-if="repository.authorization.can_contribute" v-slot:edit>
@@ -72,16 +75,15 @@
           :highlighted.sync="highlighted"
           :intent="intent"
         /> -->
-
-        <edit-example-intent
+        <edit-translation
           v-if="item.id === selectedItem"
           :entities="item.entities"
           :intent-to-edit="item.intent"
-          :edit-example="true"
           :text-to-edit="item.text"
           :sentence-id="item.id"
           :language-edit="item.language"
           :get-all-entities="getEntitiesName"
+          :original-example="item.original_example"
           @saveList="updateList"
           @cancel="cancelEditSentence"
           @dispatchToTraining="dispatchToTraining"
@@ -90,14 +92,14 @@
   </unnnic-table>
   <unnnic-modal
     :showModal="openModal"
-    :text="$t('webapp.trainings.delete_title')"
+    :text="$t('webapp.translate.delete_sentence')"
     scheme="feedback-red"
     modal-icon="alert-circle-1"
     @close="openModal = false"
   >
     <span
     slot="message"
-    v-html="$t('webapp.trainings.delete_phrase_modal')" />
+    v-html="$t('webapp.translate.delete_confirm')" />
     <unnnic-button slot="options" type="terciary" @click="openModal = false">
       {{ $t("webapp.home.cancel") }}
     </unnnic-button>
@@ -107,7 +109,7 @@
       scheme="feedback-red"
       @click="confirmDelete()"
     >
-      {{ $t("webapp.trainings.delete_title") }}
+      {{ $t("webapp.translate.delete_sentence") }}
     </unnnic-button>
   </unnnic-modal>
   <unnnic-modal
@@ -134,9 +136,10 @@ import SentenceAccordion from '@/components/shared/accordion/SentenceAccordion';
 import HighlightedEntity from '@/components/shared/HighlightedEntity';
 import LanguageBadge from '@/components/shared/LanguageBadge';
 import BadgesCard from '@/components/repository/BadgesCard';
+import EditTranslation from './EditTranslation';
 
 export default {
-  name: 'SentencesIntentTable',
+  name: 'TranslateExampleTable',
   components: {
     SentenceAccordion,
     ExampleInfo,
@@ -145,6 +148,7 @@ export default {
     HighlightedEntity,
     LanguageBadge,
     BadgesCard,
+    EditTranslation,
   },
   props: {
     text: {
@@ -256,19 +260,34 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
+    await this.$nextTick()
     if (this.repository.authorization.can_contribute) {
-      this.table.headers
-        .unshift({
-          id: 'checkarea',
-          text: '',
-          width: '32px',
-          condensed: true,
-        })
+      if (this.showIntents) {
+        this.table.headers
+          .unshift({
+            id: 'checkarea',
+            text: '',
+            width: '32px',
+            condensed: true,
+          })
+      } else {
+        this.table.headers
+          .push({
+            id: 'edit',
+            text: this.$t('webapp.intent.table_edit'),
+            width: '40px',
+          },
+          {
+            id: 'delete',
+            text: this.$t('webapp.intent.table_delete'),
+            width: '40px',
+          })
+      }
     }
   },
   methods: {
-    ...mapActions(['deleteEvaluateExample', 'deleteExample', 'newExample']),
+    ...mapActions(['deleteEvaluateExample', 'deleteTranslation', 'newExample']),
     getEntityClass(entity) {
       const allEntitiesName = this.repository.entities.map(
         (entityValue) => entityValue.value
@@ -282,12 +301,16 @@ export default {
     },
     async confirmDelete() {
       try {
-        await this.deleteExample({ id: this.sentenceId });
-        this.$emit('dispatchEvent', { event: 'itemDeleted' });
+        await this.deleteTranslation({
+          translationId: this.sentenceId,
+        });
+        this.$emit('updateList');
         this.openModal = false;
-        setTimeout(() => { this.openSuccessModal = true }, 2000);
-      } catch {
-        this.$emit('dispatchEvent', { event: 'error' });
+      } catch (error) {
+        this.$buefy.toast.open({
+          message: error.response.data,
+          type: 'is-danger',
+        });
       }
     },
     cancelEditSentence() {
@@ -384,6 +407,11 @@ export default {
   &__sentence {
     color: $unnnic-color-neutral-darkest;
     display: flex;
+  }
+
+  &__original {
+    color: $unnnic-color-neutral-cloudy;
+    font-size: $unnnic-font-size-body-md;
   }
 }
 
