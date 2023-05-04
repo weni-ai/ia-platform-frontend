@@ -62,11 +62,11 @@
                   </div>
                 </div> -->
               </div>
-              <div class="repository-translate__header">
+              <div v-if="totalItems.total > 0" class="repository-translate__header">
                 <div class="translate-description">
                   <h1>{{ $t('webapp.translate.select_sentences_title') }}</h1>
                   <p>{{ $t('webapp.translate.select_sentences_subtitle',
-                    {selected: 0, total: 0}) }}
+                    {selected: selectedItems.length, total: totalItems.total}) }}
                   </p>
                 </div>
                 <div class="repository-translate__header__buttons">
@@ -92,7 +92,26 @@
                 </div>
               </div>
               <div v-if="!!translate.to">
-                <b-modal
+                <unnnic-modal class="importModal"
+                  :closeIcon="false"
+                  :showModal="isImportFileVisible"
+                >
+                  <unnnic-modal-upload
+                  slot="message"
+                  v-model="translationFile"
+                  :textCancel="$t('webapp.import_dataset.cancel')"
+                  :acceptMultiple="false"
+                  :textTitle="$t('webapp.translate.import_title')"
+                  :textAction="$t('webapp.import_dataset.importar')"
+                  :isUploading="waitDownloadFile"
+                  supportedFormats=".txt,.json"
+                  canImport
+                  @action="importTranslation()"
+                  @cancel="closeImportModal()"
+                  @close="closeImportModal()"
+                  />
+                </unnnic-modal>
+                <!-- <b-modal
                   :active.sync="isImportFileVisible"
                   :destroy-on-hide="false"
                   :can-cancel="false"
@@ -164,9 +183,37 @@
                       </div>
                     </footer>
                   </div>
-                </b-modal>
+                </b-modal> -->
 
-                <b-modal
+                <unnnic-modal-next
+                  v-if="isExportFileVisible"
+                  type="alert"
+                  :title="$t('webapp.translate.export_title')"
+                  :actionPrimaryLabel="$t('webapp.translate.export_button')"
+                  :actionSecondaryLabel="$t('webapp.home.cancel')"
+                  @click-action-secondary="closeExportModal()"
+                  @click-action-primary="exportTranslation()"
+                  actionPrimaryButtonType="secondary"
+                >
+                    <template slot="description">
+                    {{ $t('webapp.translate.export_description') }}
+                    <unnnic-select
+                      :label="$t('webapp.translate.export_method')"
+                      v-model="allTranslations"
+                      class="select-translation"
+                    >
+                      <option
+                        v-for="option in exportOption"
+                        :key="option.id"
+                        :value="option.value"
+                        @select="allTranslations = option.value"
+                      >
+                        {{ option.label }}
+                      </option>
+                    </unnnic-select>
+                  </template>
+                </unnnic-modal-next>
+                <!-- <b-modal
                   :active.sync="isExportFileVisible"
                   :destroy-on-hide="false"
                   :can-cancel="false"
@@ -217,9 +264,9 @@
                       </div>
                     </footer>
                   </div>
-                </b-modal>
+                </b-modal> -->
                 <div class="repository-translate__list">
-                  <div class="repository-translate__list__search">
+                  <div v-if="totalItems.total > 0" class="repository-translate__list__search">
                     <!-- <translation-sentence-status
                       :key="`${translate.from}-${translate.to}-${translate.update}-${translating}`"
                       :repository-uuid="repository.uuid"
@@ -235,25 +282,33 @@
                       :entities="repository.entities"
                       @querystringformatted="onSearch($event)"/>
                   </div>
-                  <div
-                    v-if="translating"
-                    class="has-text-centered">
-                    <loading />
-                    <span> {{ $t('webapp.translate.auto_translate_progress') }} </span>
+                  <div class="repository-translate__progress" v-if="translating">
+                    <unnnic-modal :showModal="true" :closeIcon="false">
+                      <div slot="message">
+                        <unnnic-progress-bar
+                          :value="33"
+                          :title="$t('webapp.translate.translate_progress')"
+                          inline
+                        />
+                      </div>
+                    </unnnic-modal>
                   </div>
                   <translate-list
                     v-if="!translating"
+                    tab="not_translated"
                     :repository-uuid="repository.uuid"
                     :query="query"
                     :from="repository.language"
                     :to="translate.to"
+                    @listPhrase="updateTotal"
+                    @onUpdateSelected="updateSelected"
                     @translated="examplesTranslated()"
                     @eventStep="dispatchClick()"
                     @isLoadingContent="loadingList = $event"/>
                 </div>
               </div>
 
-              <div v-show="!!translate.to">
+              <div v-show="!!translate.to && totalItems.total > 0">
                 <!-- <train
                   ref="train"
                   :key="update"
@@ -280,13 +335,13 @@
                     type="secondary"
                     class="mr-4"
                     @click="checkLanguageToImport()">
-                    {{ $t('webapp.translate.import_title') }}
+                    {{ $t('webapp.translate.import_button') }}
                   </unnnic-button>
 
                   <unnnic-button
                     type="secondary"
                     @click="checkLanguageToExport()">
-                    {{ $t('webapp.translate.export_title') }}
+                    {{ $t('webapp.translate.export_button') }}
                   </unnnic-button>
 
                 </div>
@@ -337,134 +392,8 @@
                 </div> -->
               </div>
               <div v-if="!!translate.to">
-                <b-modal
-                  :active.sync="isImportFileVisible"
-                  :destroy-on-hide="false"
-                  :can-cancel="false"
-                  has-modal-card
-                  trap-focus
-                  aria-role="dialog"
-                  aria-modal>
-                  <div
-                    class="modal-card repository-translate__modalStyle">
-                    <header class="modal-card-head">
-                      <p class="modal-card-title">{{ $t('webapp.translate.import_title') }}</p>
-                    </header>
-                    <section class="modal-card-body">
-                      <b-field
-                        class="custom-file-upload">
-                        <div class="custom-file-upload__input">
-                          <b-upload
-                            v-model="translationFile"
-                          >
-                            <a class="button custom-file-upload__input__button">
-                              <b-icon
-                                icon="upload"
-                                type="is-white"/>
-                            </a>
-                          </b-upload>
-
-                          <div
-                            v-if="translationFile"
-                            class="custom-file-upload__input__file">
-                            {{ translationFile.name }}
-
-                            <div
-                              class="custom-file-upload__input__icon"
-                              @click="removeSelectedFile">
-                              <b-icon
-                                icon="close-circle"
-                                custom-size="mdi-18px"
-                              />
-                            </div>
-                          </div>
-
-                          <div
-                            v-else
-                            class="custom-file-upload__input__file">
-                            <span>{{ $t('webapp.translate.import_field_text') }}</span>
-                          </div>
-                        </div>
-                        <p>{{ errorMessage }}</p>
-
-                      </b-field>
-                    </section>
-                    <footer class="modal-card-foot">
-                      <div class="repository-translate__modalStyle__styleButton">
-                        <b-button
-                          class="modalButton"
-                          type="is-white"
-                          @click="closeImportModal()">
-                          {{ $t('webapp.translate.import_button_cancel') }}
-                        </b-button>
-
-                        <b-button
-                          :loading="waitDownloadFile"
-                          :disabled="translationFile === null"
-                          class="modalButton"
-                          type="is-primary"
-                          @click="importTranslation()">
-                          {{ $t('webapp.translate.import_button') }}
-                        </b-button>
-                      </div>
-                    </footer>
-                  </div>
-                </b-modal>
-
-                <b-modal
-                  :active.sync="isExportFileVisible"
-                  :destroy-on-hide="false"
-                  :can-cancel="false"
-                  has-modal-card
-                  trap-focus
-                  aria-role="dialog"
-                  aria-modal>
-                  <div
-                    class="modal-card repository-translate__modalStyle">
-                    <header class="modal-card-head">
-                      <p class="modal-card-title">{{ $t('webapp.translate.export_title') }}</p>
-                    </header>
-                    <section class="modal-card-body">
-                      <div class="repository-translate__selection__section">
-                        <b-field>
-                          <b-select
-                            v-model="allTranslations"
-                            expanded
-                            size="is-medium"
-                            class="repository-translate__selection__section__expanded"
-                            placeholder="Select a name">
-                            <option
-                              v-for="option in exportOption"
-                              :value="option.value"
-                              :key="option.id">
-                              {{ option.label }}
-                            </option>
-                          </b-select>
-                        </b-field>
-                      </div>
-                    </section>
-
-                    <footer class="modal-card-foot">
-                      <div class="repository-translate__modalStyle__styleButton">
-                        <b-button
-                          class="modalButton"
-                          type="is-white"
-                          @click="closeExportModal()">
-                          {{ $t('webapp.translate.import_button_cancel') }}
-                        </b-button>
-                        <b-button
-                          :loading="waitDownloadFile"
-                          type="is-primary"
-                          class="modalButton"
-                          @click="exportTranslation()">
-                          {{ $t('webapp.translate.export_button') }}
-                        </b-button>
-                      </div>
-                    </footer>
-                  </div>
-                </b-modal>
                 <div class="repository-translate__list">
-                  <div class="repository-translate__list__search">
+                  <div v-if="totalItems.total > 0"  class="repository-translate__list__search">
                     <!-- <translation-sentence-status
                       :key="`${translate.from}-${translate.to}-${translate.update}-${translating}`"
                       :repository-uuid="repository.uuid"
@@ -480,18 +409,16 @@
                       :entities="repository.entities"
                       @querystringformatted="onSearch($event)"/>
                   </div>
-                  <div
-                    v-if="translating"
-                    class="has-text-centered">
-                    <loading />
-                    <span> {{ $t('webapp.translate.auto_translate_progress') }} </span>
-                  </div>
-                  <translate-list
+                  <translations-list
+                    tab="translated"
                     v-if="!translating"
                     :repository-uuid="repository.uuid"
                     :query="query"
                     :from="repository.language"
-                    :to="translate.to"
+                    :repository="repository"
+                    :to-language="translate.to"
+                    @listPhrase="updateTotal"
+                    @exampleUpdated="exampleUpdated()"
                     @translated="examplesTranslated()"
                     @eventStep="dispatchClick()"
                     @isLoadingContent="loadingList = $event"/>
@@ -542,21 +469,24 @@
         <template slot="description">
           {{ $t('webapp.translate.select_method') }}
           <unnnic-select
-            :label="$t('webapp.translate.select_language_label')"
+            :label="$t('webapp.translate.translate_method')"
             v-model="methodSelected"
-            class="select-add-modal"
+            class="select-translation"
           >
             <option
-              v-for="option in ['Tradução automática', 'Enviar para tradutores']"
-              :key="option"
-              :value="option"
-              @select="methodSelected = option"
+              v-for="option in methodOption"
+              :key="option.id"
+              :value="option.value"
+              @select="methodSelected = option.value"
             >
-              {{ option }}
+              {{ option.label }}
             </option>
           </unnnic-select>
         </template>
       </unnnic-modal-next>
+      <template v-slot:loader>
+        <translate-loader />
+      </template>
   </repository-view-base>
 </template>
 
@@ -579,6 +509,9 @@ import {
 } from '@/utils/index';
 import RepositoryBase from './Base';
 import SentenceFilters from '@/components/repository/repository-evaluate/example/SentenceFilters';
+import TranslationsList from '@/components/translate/TranslationsList';
+import TranslateLoader from '@/views/repository/loadings/Translate';
+
 
 export default {
   name: 'RepositoryTranslate',
@@ -596,12 +529,14 @@ export default {
     TranslateTokenModal,
     TranslateList,
     SentenceFilters,
+    TranslationsList,
+    TranslateLoader
   },
   extends: RepositoryBase,
   data() {
     return {
       update: null,
-      translationFile: null,
+      translationFile: [],
       isExportFileVisible: false,
       isImportFileVisible: false,
       waitDownloadFile: false,
@@ -629,7 +564,13 @@ export default {
       languageName: this.$route.params.name,
       activeTab: 'not_translated',
       openTranslateModal: false,
-      methodSelected: ''
+      methodSelected: '',
+      selectedItems: [],
+      totalItems: [],
+      methodOption: [
+        { id: 0, label: this.$t('webapp.translate.auto_translate'), value: 'auto' },
+        // { id: 1, label: this.$t('webapp.translate.send_to_translators'), value: 'translator' },
+      ],
     };
   },
   computed: {
@@ -640,7 +581,7 @@ export default {
       'getRequirements',
     ]),
     baseLanguage() {
-      const languageObject = Object.values(
+      const languageObject = Object.keys(
         languageListToDict([this.repository.language]),
       );
       return languageObject;
@@ -678,27 +619,18 @@ export default {
           }
         }
       }
-    }
+    },
   },
   mounted() {
-    this.translate.to = this.$route.params.language
     this.sentenceFilter = {
       key: 'not_translated',
       query: {
         has_not_translation_to: this.$route.params.language,
         language: this.$route.params.baseLanguage
       }
-    }
+    };
+    this.translate.to = this.$route.params.language
   },
-  // updated() {
-  //   this.sentenceFilter = {
-  //     key: 'not_translated',
-  //     query: {
-  //       has_not_translation_to: 'de',
-  //       language: 'en'
-  //     }
-  //   }
-  // },
   methods: {
     ...mapActions([
       'getRepository',
@@ -708,6 +640,7 @@ export default {
       'autoTranslate',
       'autoTranslateExternal',
       'getAutoTranslateProgress',
+      'searchExamples'
     ]),
     updateTrainingStatus(trainStatus) {
       Object.assign(this.repository, trainStatus);
@@ -750,7 +683,7 @@ export default {
         this.errorMessage = this.$t('webapp.translate.import_select_error');
       }
       this.waitDownloadFile = !this.waitDownloadFile;
-      this.translationFile = null;
+      this.translationFile = [];
       return false;
     },
     dispatchClick() {
@@ -783,7 +716,7 @@ export default {
       }
     },
     removeSelectedFile() {
-      this.translationFile = null;
+      this.translationFile = [];
     },
     examplesTranslated() {
       this.translate.update = !this.translate.update;
@@ -847,7 +780,7 @@ export default {
       })
     },
     selectMethod(method) {
-      if (method === 'Tradução automática') {
+      if (method === 'auto') {
         this.openTranslateModal = false
         this.sendAutoTranslate()
       } else {
@@ -896,7 +829,14 @@ export default {
         repositoryUUID: this.repository.uuid,
         repositoryVersion: this.getSelectedVersion,
         targetLanguage: this.translate.to,
+        items: this.selectedItems.map(e => e.id)
       });
+    },
+    updateSelected(params) {
+      this.selectedItems = params
+    },
+    updateTotal(params) {
+      this.totalItems = params
     },
   },
 };
@@ -1067,6 +1007,34 @@ hr {
       cursor:default
     }
   }
+
+  &__progress {
+    height: 25px;
+    width: 60%;
+    p {
+      font-size: 13px;
+      font-weight: $font-weight-bolder;
+    }
+     .unnnic-modal-container-background {
+      height: 88px;
+    }
+     .unnnic-modal-container-background-body {
+      padding: 0
+    }
+     .unnnic-modal-container-background-body-title {
+      padding: 0
+    }
+     .unnnic-modal-container-background-body-spacing_header {
+      display: none;
+    }
+     .unnnic-progress-bar.primary {
+      padding: 2rem 1.5rem;
+      white-space: nowrap;
+    }
+     .unnnic-modal {
+      z-index: 1;
+    }
+  }
 }
 
 .translate-description{
@@ -1149,6 +1117,28 @@ hr {
   }
   .dropdown {
     display: block;
+  }
+}
+.importModal {
+  .unnnic-modal-container-background-body {
+    padding: 0
+  }
+  .unnnic-modal-container-background-body-title {
+    padding: 0
+  }
+  .unnnic-modal-container-background-body-spacing_header {
+    display: none;
+  }
+  .unnnic-modal-container-background-body-description {
+    padding-bottom: 0;
+  }
+  .footer {
+    padding: 1rem;
+  }
+}
+.select-translation {
+  .unnnic-form__label {
+    text-align: left;
   }
 }
 </style>
