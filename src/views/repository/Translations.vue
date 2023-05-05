@@ -63,6 +63,7 @@
       </p>
       <translations-status
         ref="translationsStatus"
+        :repository="repository"
         :update="updateStatus"
         :query="statusQuery"
         :repository-uuid="repository.uuid"
@@ -99,6 +100,9 @@
         </template>
       </unnnic-modal-next>
     </div>
+    <template v-slot:loader>
+      <translations-loader />
+    </template>
   </repository-view-base>
 </template>
 
@@ -113,6 +117,7 @@ import TranslationsList from '@/components/translate/TranslationsList';
 import LoginForm from '@/components/auth/LoginForm';
 import RepositoryBase from './Base';
 import { LANGUAGES } from '@/utils';
+import TranslationsLoader from '@/views/repository/loadings/Translations';
 
 export default {
   name: 'RepositoryTranslations',
@@ -124,6 +129,7 @@ export default {
     AuthorizationRequestNotification,
     TranslationStatusSearch,
     LoginForm,
+    TranslationsLoader
   },
   extends: RepositoryBase,
   props: {

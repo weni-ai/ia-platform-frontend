@@ -226,8 +226,10 @@ export default {
   }
 
   &__message {
-    text-align: center;
     width: 100%;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-gt;
+    color: $unnnic-color-neutral-dark;
   }
 }
 </style>

@@ -1,21 +1,7 @@
 <template>
   <div>
-    <!-- <unnnic-modal-next
-      v-if="flowCount === 0"
-      type="alert"
-      :title="$t('modals.cant_access.title')"
-      icon="app-window-edit-1"
-      scheme="brand-weni-soft"
-      :action-primary-label="
-        $t('modals.cant_access.button_primary_label')
-      "
-      action-primary-button-type="secondary"
-      @click-action-primary="redirectToFlows"
-    > -->
-
-    <!-- temporary -->
     <unnnic-modal-next
-      v-if="flowCount === 0"
+      v-if="hasFlows === false"
       type="alert"
       :title="$t('modals.cant_access.title')"
       icon="app-window-edit-1"
@@ -25,10 +11,7 @@
       "
       action-primary-button-type="secondary"
       @click-action-primary="redirectToFlows"
-      show-close-button
-      @close="flowCount = 1"
     >
-    <!-- temporary -->
       <span
         slot="description"
         v-html="$t('modals.cant_access.description')"
@@ -53,39 +36,41 @@
 </template>
 
 <script>
+import iframessa from 'iframessa';
+
 export default {
   data() {
     return {
       showHowToIntegrate: false,
-      flowCount: null,
+      hasFlows: null,
     };
   },
 
   created() {
-    window.parent.postMessage({ event: 'ia:get-flows-length' }, '*');
+    iframessa.get('hasFlows', ({ data: hasFlows }) => {
+      this.hasFlows = hasFlows;
+    });
 
-    window.addEventListener('message', event => {
-      if (event.data?.event === 'connect:set-flows-length') {
-        this.flowCount = event.data.flowsLength;
-      }
+    iframessa.on('update:hasFlows', ({ data: hasFlows }) => {
+      this.hasFlows = hasFlows;
     });
   },
 
   computed: {
-    projectUuidAndFlowCount() {
+    projectUuidAndHasFlows() {
       return [
         this.$store.state.Auth.project,
-        this.flowCount,
+        this.hasFlows,
       ].join(':');
     },
   },
 
   watch: {
-    projectUuidAndFlowCount: {
+    projectUuidAndHasFlows: {
       immediate: true,
 
       handler() {
-        if (this.flowCount === null) {
+        if (this.hasFlows === null) {
           return;
         }
 
@@ -98,7 +83,7 @@ export default {
 
           const projectUuid = this.$store.state.Auth.project;
 
-          if (this.flowCount >= 1 && !data.includes(projectUuid)) {
+          if (this.hasFlows && !data.includes(projectUuid)) {
             this.showHowToIntegrate = true;
 
             data.push(projectUuid);
@@ -117,13 +102,7 @@ export default {
 
   methods: {
     redirectToFlows() {
-      window.parent.postMessage(
-        {
-          event: 'flows:redirect',
-          path: 'init',
-        },
-        '*',
-      );
+      iframessa.emit('redirectToFlows', { path: 'init' });
     },
   },
 };

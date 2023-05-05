@@ -15,6 +15,9 @@ import hljs from 'highlight.js';
 import VueHighlightJS from 'vue-highlightjs';
 import LogRocket from 'logrocket';
 import VShowSlide from 'v-show-slide';
+import iframessa from 'iframessa';
+
+iframessa.register('ai');
 
 LogRocket.init(runtimeVariables.get('VUE_APP_LOGROCKET_ID'), {
   mergeIframes: true,
