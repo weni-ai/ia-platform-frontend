@@ -44,7 +44,9 @@
       @event_removeLog="removeLogStructure($event)"
       @pageChanged="pageChanged()"
       @onUpdateSelected="updateSelected"
-    />
+    >
+      <intent-data-loading slot="loader" />
+    </intent-pagination>
 
     <h4 v-if="list && list.empty && !loading" class="repository-log-list__empty-message">
       {{ $t("webapp.inbox.list_empty") }}
@@ -59,6 +61,8 @@ import LogAccordion from '@/components/shared/accordion/LogAccordion';
 import IntentModal from '@/components/repository/IntentModal';
 import IntentModalEdition from '@/components/repository/IntentModalWithEdition';
 import LogTable from '@/components/repository/LogTable';
+import IntentDataLoading from '@/views/repository/loadings/IntentData';
+
 
 export default {
   name: 'RepositoryLogList',
@@ -66,7 +70,8 @@ export default {
     IntentPagination,
     LogAccordion,
     IntentModal,
-    IntentModalEdition
+    IntentModalEdition,
+    IntentDataLoading
   },
   props: {
     query: {
