@@ -258,7 +258,7 @@
   padding-bottom: $unnnic-spacing-stack-sm;
 
   &__table-header {
-    margin: 32px 0px 31px;
+    margin-bottom: 31px;
   }
 
   &__container {

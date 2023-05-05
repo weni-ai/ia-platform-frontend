@@ -2,6 +2,7 @@
   <repository-view-base
     :repository="repository"
     :error-code="errorCode">
+    <settings-versions-loading slot="loader" />
 
     <div
       v-if="!authenticated">
@@ -29,6 +30,7 @@ import RepositoryVersionList from '@/components/repository/RepositoryVersionList
 import { mapGetters } from 'vuex';
 import LoginForm from '@/components/auth/LoginForm';
 import RepositoryBase from './Base';
+import SettingsVersionsLoading from '@/views/repository/loadings/SettingsVersions';
 
 export default {
   name: 'RepositoryVersions',
@@ -36,6 +38,7 @@ export default {
     RepositoryViewBase,
     RepositoryVersionList,
     LoginForm,
+    SettingsVersionsLoading,
   },
   extends: RepositoryBase,
   data() {
