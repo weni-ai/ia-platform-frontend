@@ -1,24 +1,6 @@
 <template>
   <div>
     <unnnic-modal-next
-      v-if="hasFlows === false"
-      type="alert"
-      :title="$t('modals.cant_access.title')"
-      icon="app-window-edit-1"
-      scheme="brand-weni-soft"
-      :action-primary-label="
-        $t('modals.cant_access.button_primary_label')
-      "
-      action-primary-button-type="secondary"
-      @click-action-primary="redirectToFlows"
-    >
-      <span
-        slot="description"
-        v-html="$t('modals.cant_access.description')"
-      ></span>
-    </unnnic-modal-next>
-
-    <unnnic-modal-next
       v-if="showHowToIntegrate && step === 1"
       type="alert"
       class="integrate-modal"
@@ -93,7 +75,6 @@ export default {
     projectUuidAndHasFlows() {
       return [
         this.$store.state.Auth.project,
-        this.hasFlows,
       ].join(':');
     },
   },
@@ -103,10 +84,6 @@ export default {
       immediate: true,
 
       handler() {
-        if (this.hasFlows === null) {
-          return;
-        }
-
         let data = {};
 
         try {
@@ -116,7 +93,7 @@ export default {
 
           const projectUuid = this.$store.state.Auth.project;
 
-          if (this.hasFlows && !data.includes(projectUuid)) {
+          if (!data.includes(projectUuid)) {
             this.showHowToIntegrate = true;
 
             data.push(projectUuid);
