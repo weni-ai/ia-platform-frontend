@@ -42,8 +42,8 @@ export default {
   async getAutoTranslateProgress(store, { repositoryUUID, repositoryVersion }) {
     return translate.autoTranslateStatus(repositoryUUID, repositoryVersion);
   },
-  async autoTranslate(store, { repositoryUUID, repositoryVersion, targetLanguage }) {
-    return translate.auto(repositoryUUID, repositoryVersion, targetLanguage);
+  async autoTranslate(store, { repositoryUUID, repositoryVersion, targetLanguage, items }) {
+    return translate.auto(repositoryUUID, repositoryVersion, targetLanguage, items);
   },
   createExternalToken(store, { repositoryVersion, language }) {
     return translate.createExternalToken(repositoryVersion, language);
