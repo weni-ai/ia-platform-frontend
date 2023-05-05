@@ -19,17 +19,49 @@
     </unnnic-modal-next>
 
     <unnnic-modal-next
-      v-if="showHowToIntegrate"
+      v-if="showHowToIntegrate && step === 1"
       type="alert"
+      class="integrate-modal"
       :title="$t('modals.how_to_integrate.title')"
-      icon="science-fiction-robot-2"
       scheme="brand-weni-soft"
       show-close-button
       @close="showHowToIntegrate = false"
+      :action-primary-label="
+        $t('modals.how_to_integrate.first_step.next_step')
+      "
+      action-primary-button-type="secondary"
+      @click-action-primary="step = 2"
     >
+    <div class="integrate-modal__wrapper" slot="description">
+      <img :src="require(`../assets/gifs/ia-1.gif`)" class="integrate-modal__image">
+    </div>
       <span
         slot="description"
-        v-html="$t('modals.how_to_integrate.description')"
+        v-html="$t('modals.how_to_integrate.first_step.description')"
+      ></span>
+    </unnnic-modal-next>
+    <unnnic-modal-next
+      v-if="showHowToIntegrate && step === 2"
+      type="alert"
+      class="integrate-modal"
+      :title="$t('modals.how_to_integrate.title')"
+      scheme="brand-weni-soft"
+      show-close-button
+      @close="showHowToIntegrate = false"
+      :action-primary-label="$t('modals.how_to_integrate.second_step.close_button')"
+      action-primary-button-type="secondary"
+      @click-action-primary="showHowToIntegrate = false"
+      :action-secondary-label="
+        $t('modals.how_to_integrate.second_step.back_button')
+      "
+      @click-action-secondary="step = 1"
+    >
+    <div class="integrate-modal__wrapper" slot="description">
+      <img :src="require(`../assets/gifs/ia-2.gif`)" class="integrate-modal__image">
+    </div>
+      <span
+        slot="description"
+        v-html="$t('modals.how_to_integrate.second_step.description')"
       ></span>
     </unnnic-modal-next>
   </div>
@@ -43,6 +75,7 @@ export default {
     return {
       showHowToIntegrate: false,
       hasFlows: null,
+      step: 1
     };
   },
 
@@ -118,6 +151,19 @@ export default {
 
   .title {
     margin-bottom: 0 !important;
+  }
+  .integrate-modal {
+    .icon {
+      display: none;
+    }
+
+    &__image {
+      width: 80%;
+    }
+
+    &__wrapper {
+      margin-bottom: 1.5rem;
+    }
   }
 }
 </style>
