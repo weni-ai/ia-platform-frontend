@@ -42,94 +42,100 @@
             {{ $t("webapp.integration.http_tab") }}
           </template>
           <template slot="tab-panel-first">
-            <p
-              v-html="$t('webapp.integration.http_title')"
-              class="repository-analyze-text__header__subtitle">
-            </p>
-            <div class="repository-analyze-text__url">
-              <div class="repository-analyze-text__field">
-                <h2>URL</h2>
-                <p v-html="$t('webapp.integration.url_description')"></p>
+            <integration-request-loading v-if="loadingRequest" slot="loader" />
+            <span v-else>
+              <p
+                v-html="$t('webapp.integration.http_title')"
+                class="repository-analyze-text__header__subtitle">
+              </p>
+              <div class="repository-analyze-text__url">
+                <div class="repository-analyze-text__field">
+                  <h2>URL</h2>
+                  <p v-html="$t('webapp.integration.url_description')"></p>
+                </div>
+                <highlighted-code code-class="plaintext">
+                  {{ repository.nlp_server }}v2/parse/
+                </highlighted-code>
               </div>
-              <highlighted-code code-class="plaintext">
-                {{ repository.nlp_server }}v2/parse/
-              </highlighted-code>
-            </div>
-            <div class="repository-analyze-text__url">
-              <div class="repository-analyze-text__field">
-                <h2>Headers</h2>
-                <p v-html="$t('webapp.integration.headers_description')"></p>
-              </div>
-              <div class="repository-analyze-text__url__authorization-container">
-                <unnnic-select
-                  :label="$t('webapp.integration.token_title')"
-                  v-model="profileAuth"
-                >
-                  <option
-                    v-for="option in getAuthorizations"
-                    :key="option.index"
-                    :value="option"
+              <div class="repository-analyze-text__url">
+                <div class="repository-analyze-text__field">
+                  <h2>Headers</h2>
+                  <p v-html="$t('webapp.integration.headers_description')"></p>
+                </div>
+                <div class="repository-analyze-text__url__authorization-container">
+                  <unnnic-select
+                    :label="$t('webapp.integration.token_title')"
+                    v-model="profileAuth"
                   >
-                    {{ option }}
-                  </option>
-                </unnnic-select>
-                <div class="repository-analyze-text__item__authorization-container__copy">
-                  <highlighted-code
-                    :code="codes.curl"
-                    code-class="plaintext" />
+                    <option
+                      v-for="option in getAuthorizations"
+                      :key="option.index"
+                      :value="option"
+                    >
+                      {{ option }}
+                    </option>
+                  </unnnic-select>
+                  <div class="repository-analyze-text__item__authorization-container__copy">
+                    <highlighted-code
+                      :code="codes.curl"
+                      code-class="plaintext" />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="repository-analyze-text__url">
-              <div class="repository-analyze-text__field">
-                <h2>Post Body</h2>
-                <p v-html="$t('webapp.integration.post_body_description')"></p>
-              </div>
-              <highlighted-code code-class="json"
-                >{ "language":"[{{ $t("webapp.analyze_text.language_code") }}]", "text": "[{{
-                  $t("webapp.analyze_text.text_to_analyze")
-                }}]" }
-              </highlighted-code>
-            </div>
-            <div class="repository-analyze-text__url">
-              <div class="repository-analyze-text__field">
-                <h2>Response</h2>
-                <p v-html="$t('webapp.integration.response_description')"></p>
-              </div>
-              <div class="json-code">
-                <div class="json-code__short">
-                  <pre>{{ JSON.stringify(json, null, 2).split(/\n/).slice(0,3).join('\n') }}</pre>
+              <div class="repository-analyze-text__url">
+                <div class="repository-analyze-text__field">
+                  <h2>Post Body</h2>
+                  <p v-html="$t('webapp.integration.post_body_description')"></p>
                 </div>
-                <div class="json-code__full" v-show-slide="codeOpen">
-                  <pre>{{ JSON.stringify(json, null, 2).split(/\n/).slice(3).join('\n') }}</pre>
-                </div>
+                <highlighted-code code-class="json"
+                  >{ "language":"[{{ $t("webapp.analyze_text.language_code") }}]", "text": "[{{
+                    $t("webapp.analyze_text.text_to_analyze")
+                  }}]" }
+                </highlighted-code>
               </div>
-              <unnnic-button
-                size="large"
-                type="secondary"
-                @click="toggleCode"
-              >
-              {{ codeOpen ?
-                $t("webapp.integration.code_button_short") :
-                $t("webapp.integration.code_button") }}
-              </unnnic-button>
-            </div>
+              <div class="repository-analyze-text__url">
+                <div class="repository-analyze-text__field">
+                  <h2>Response</h2>
+                  <p v-html="$t('webapp.integration.response_description')"></p>
+                </div>
+                <div class="json-code">
+                  <div class="json-code__short">
+                    <pre>{{ JSON.stringify(json, null, 2).split(/\n/).slice(0,3).join('\n') }}</pre>
+                  </div>
+                  <div class="json-code__full" v-show-slide="codeOpen">
+                    <pre>{{ JSON.stringify(json, null, 2).split(/\n/).slice(3).join('\n') }}</pre>
+                  </div>
+                </div>
+                <unnnic-button
+                  size="large"
+                  type="secondary"
+                  @click="toggleCode"
+                >
+                {{ codeOpen ?
+                  $t("webapp.integration.code_button_short") :
+                  $t("webapp.integration.code_button") }}
+                </unnnic-button>
+              </div>
+            </span>
           </template>
           <template slot="tab-head-second">
             {{ $t("webapp.integration.generator_tab") }}
           </template>
           <template slot="tab-panel-second">
-            <div class="repository-analyze-text__url">
-              <div class="repository-analyze-text__field">
-                <h2 v-html="$t('webapp.analyze_text.code_generator')"></h2>
-                <p v-html="$t('webapp.analyze_text.code_generator_text')"></p>
+            <integration-generator-loading v-if="loadingGenerator" slot="loader" />
+            <span v-else>
+              <div class="repository-analyze-text__url">
+                <div class="repository-analyze-text__field">
+                  <h2 v-html="$t('webapp.analyze_text.code_generator')"></h2>
+                  <p v-html="$t('webapp.analyze_text.code_generator_text')"></p>
+                </div>
               </div>
-            </div>
-            <request-generator
-              :default-language-field="repository.language"
-              :authorization-uuid="getProfileDetail[1] || ''"
-              class="request_generator"
-            />
+              <request-generator
+                :default-language-field="repository.language"
+                :authorization-uuid="getProfileDetail[1] || ''"
+                class="request_generator"
+              />
+            </span>
           </template>
         </unnnic-tab>
         <integration-modal
@@ -160,6 +166,8 @@ import RepositoryBase from './Base';
 import I18n from '@/utils/plugins/i18n';
 import IntegrationModal from '@/components/shared/IntegrationModal';
 import IntegrationLoading from '@/views/repository/loadings/Integration';
+import IntegrationRequestLoading from '@/views/repository/loadings/IntegrationRequest';
+import IntegrationGeneratorLoading from '@/views/repository/loadings/IntegrationGenerator';
 
 export default {
   name: 'RepositoryIntegration',
@@ -170,7 +178,9 @@ export default {
     HighlightedCode,
     I18n,
     IntegrationModal,
-    IntegrationLoading
+    IntegrationLoading,
+    IntegrationRequestLoading,
+    IntegrationGeneratorLoading,
   },
   extends: RepositoryBase,
   data() {
@@ -213,6 +223,8 @@ export default {
       loading: false,
       tabs: ['first', 'second'],
       codeOpen: false,
+      loadingRequest: false,
+      loadingGenerator: false,
     };
   },
   computed: {
