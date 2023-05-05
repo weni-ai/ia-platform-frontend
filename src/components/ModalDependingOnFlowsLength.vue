@@ -55,7 +55,7 @@ import iframessa from 'iframessa';
 export default {
   data() {
     return {
-      showHowToIntegrate: true,
+      showHowToIntegrate: false,
       hasFlows: null,
       step: 1
     };
