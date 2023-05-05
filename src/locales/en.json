@@ -614,15 +614,8 @@
       "ok": "ok"
     },
     "translate": {
-      "title_status_page": "Translation",
-      "description_status_page": "Manage and translate the phrases of your Intelligence",
-      "title_language_card": "Languages ​​of Intelligence",
-      "description_progress_bar": "Translation status",
-      "new_status_card": "Add new language",
-      "description_create_modal": "What new language do you want to add to Intelligence?",
-      "select_language_label": "Select the language",
-      "button_create_modal": "Proceed",
       "title_translate": "Translate a sentence",
+      "subtitle_translate": "Manage and translate the sentences of your intelligence.",
       "title_export": "Export translation",
       "subtitle_export": "If you prefer, you can export and import translations as a editable sheet.",
       "not_can_edit_repository": "You can not contribute to this intelligence",

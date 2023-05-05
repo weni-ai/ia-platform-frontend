@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <!-- <paginated-list
+  <div v-if="translationsList">
+    <paginated-list
       :item-component="translationItemElem"
       :list="translationsList"
       :repository="repository"
@@ -11,19 +11,7 @@
       <a
         class="outline-text"
         @click="goToTranslate()">{{ $t('webapp.translate.click_here') }}</a>
-    </p> -->
-    <intent-pagination
-      :item-component="sentencesTable"
-      :list="translationsList"
-      :repository="repository"
-      @itemSave="updateTranslations()"
-      @itemDeleted="examplesDeleted()"
-    />
-      <div v-if="translationsList.total === 0">
-        <p
-        class="no-examples">{{ $t('webapp.translate.no_translation', {language: toLanguage}) }}
-        </p>
-      </div>
+    </p>
   </div>
 </template>
 
@@ -31,13 +19,10 @@
 import { mapActions, mapGetters } from 'vuex';
 import PaginatedList from '@/components/shared/PaginatedList';
 import TranslationItem from './TranslationItem';
-import IntentPagination from '@/components//shared/IntentPagination';
-import TranslateExampleTable from './TranslateExampleTable';
 
 
 const components = {
   PaginatedList,
-  IntentPagination
 };
 
 export default {
@@ -52,16 +37,11 @@ export default {
       type: String,
       default: undefined,
     },
-    query: {
-      type: Object,
-      default: null,
-    },
   },
   data() {
     return {
       translationsList: null,
       translationItemElem: TranslationItem,
-      sentencesTable: TranslateExampleTable
     };
   },
   computed: {
@@ -71,7 +51,6 @@ export default {
   },
   watch: {
     toLanguage() { this.updateTranslations(); },
-    query() { this.updateTranslations(); },
   },
   async mounted() {
     await this.updateTranslations();
@@ -82,12 +61,10 @@ export default {
     ]),
     async updateTranslations() {
       this.translationsList = await this.getTranslations({
-        ...this.query,
         repositoryUuid: this.repository.uuid,
         to_language: this.toLanguage,
         repositoryVersion: this.repositoryVersion,
       });
-      this.$emit('listPhrase', this.translationsList);
     },
     goToTranslate() {
       this.$router.push({
@@ -101,13 +78,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
-.no-examples {
-  font-family: $unnnic-font-family-secondary;
-  font-size: $unnnic-font-size-body-gt;
-  color: $unnnic-color-neutral-dark;
-}
-</style>

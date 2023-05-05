@@ -55,7 +55,7 @@ import iframessa from 'iframessa';
 export default {
   data() {
     return {
-      showHowToIntegrate: false,
+      showHowToIntegrate: true,
       hasFlows: null,
       step: 1
     };
@@ -140,6 +140,13 @@ export default {
 
     &__wrapper {
       margin-bottom: 1.5rem;
+    }
+
+    .container {
+      max-height: 95vh !important;
+    }
+    .actions {
+      margin-top: 2.5rem !important;
     }
   }
 }
