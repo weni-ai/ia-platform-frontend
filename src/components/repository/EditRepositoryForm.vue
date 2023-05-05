@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="onSubmit()">
-    <loading v-if="!formSchema" />
+    <settings-tab-loading v-if="!formSchema" slot="loader" />
     <form-generator
       v-if="formSchema"
       :settings="true"
@@ -27,11 +27,13 @@
 import { mapActions } from 'vuex';
 import FormGenerator from '@/components/form-generator/FormGenerator';
 import Loading from '@/components/shared/Loading';
+import SettingsTabLoading from '@/views/repository/loadings/SettingsTab';
 
 
 const components = {
   FormGenerator,
   Loading,
+  SettingsTabLoading,
 };
 
 export default {
