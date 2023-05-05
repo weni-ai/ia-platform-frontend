@@ -10,7 +10,9 @@
       @itemSave="saveVersion"
       @onEditVersion="editVersion"
       @addedVersion="onAddedVersion"
-    />
+    >
+    <settings-versions-loading slot="loader" />
+    </intent-pagination>
   </div>
 </template>
 
@@ -20,12 +22,14 @@ import PaginatedList from '@/components/shared/PaginatedList';
 import { formatters } from '@/utils/index';
 import IntentPagination from '../shared/IntentPagination';
 import RepositoryVersionTable from '@/components/repository/RepositoryVersionTable';
+import SettingsVersionsLoading from '@/views/repository/loadings/SettingsVersions';
 
 export default {
   name: 'RepositoryVersionList',
   components: {
     PaginatedList,
-    IntentPagination
+    IntentPagination,
+    SettingsVersionsLoading
   },
   props: {
     repository: {
@@ -40,7 +44,7 @@ export default {
   data() {
     return {
       maxEditLength: 40,
-      versionsList: null,
+      versionsList: {},
       asc: false,
       isEdit: {},
       currentPage: 1,

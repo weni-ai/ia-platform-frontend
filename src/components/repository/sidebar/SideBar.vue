@@ -319,7 +319,7 @@
             ]"
           />
 
-          <!-- <section class="translate-menu">
+          <section class="translate-menu">
             <unnnic-sidebar-item
               v-if="getCurrentRepository.authorization.can_contribute"
               :icon="dropSelect === 'isTranslationsActive' ? 'translate-2' : 'translate-1'"
@@ -368,30 +368,7 @@
                 ]"
               />
             </div>
-          </section> -->
-
-          <unnnic-sidebar-item
-            :icon="
-              checkSelectedMenu('repository-translations-status' || 'repository-translate')
-                ? 'translate-2' : 'translate-1'
-            "
-            :text="$t('webapp.menu.translation')"
-            :enableTooltip="!collapse"
-            :active="checkSelectedMenu('repository-translations-status' || 'repository-translate')"
-            @click.native="
-              setSelectMenu({
-                name: 'repository-translations-status',
-                dropdown: '',
-                to: 'repository-translations-status',
-                closeDrop: true
-              })
-            "
-            :class="[
-              checkSelectedMenu('repository-translations-status' || 'repository-translate')
-                ? 'sidebar-wrapper__body--active'
-                : 'sidebar-wrapper__body__element'
-            ]"
-          />
+          </section>
 
           <unnnic-sidebar-item
             :icon="checkSelectedMenu('repository-integration') ? 'phone-charger-1' : 'charger-1'"

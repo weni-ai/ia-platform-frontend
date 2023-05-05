@@ -616,15 +616,8 @@
       "ok": "ok"
     },
     "translate": {
-      "title_status_page": "Traducción",
-      "description_status_page": "Gestiona y traduce las frases de tu Inteligencia",
-      "title_language_card": "Lenguajes de inteligencia",
-      "description_progress_bar": "Estado de traducción",
-      "new_status_card": "Añadir nuevo idioma",
-      "description_create_modal": "¿Qué nuevo idioma desea agregar a Intelligence?",
-      "select_language_label": "Seleccione el idioma",
-      "button_create_modal": "Proceder",
       "title_translate": "Traducir una frase",
+      "subtitle_translate": "Gestiona y traduce las frases de su inteligencia.",
       "title_export": "Traducción de exportación",
       "subtitle_export": "Si lo prefiere, puede exportar e importar traducciones a través de una hoja de trabajo.",
       "not_can_edit_repository": "No puedes contribuir a esta inteligencia",
@@ -1109,7 +1102,15 @@
     },
     "how_to_integrate": {
       "title": "Cómo integrar una inteligencia",
-      "description": "1. Elija la inteligencia que mejor se adapte a su proyecto.<br /><br />2. Haz clic en el “+” para integrar la inteligencia en el proyecto.<br /><br />3. Vaya al módulo de flujos y haga clic en “crear mensaje”.<br /><br />4. Selecciona la opción “dividir por intención”.<br /><br />5. Selecciona las intenciones que quieres que entienda tu chatbot y haz clic en “ok”.<br /><br />6. A continuación, asigna mensajes de respuesta a cada una de las intenciones."
+      "first_step": {
+        "description": "1. Abra el módulo de Inteligencia Artificial en la plataforma Weni.<br />2. En la pestaña “Galería de Inteligencia Comunitaria”, elija la opción que mejor se adapte a su proyecto.<br />3. Haga clic en el Botón “+” para integrar la Inteligencia Artificial en su proyecto.<br />4. ¡Listo! Ahora la inteligencia estará disponible para su uso en el módulo Weni Fluxos.",
+        "next_step": "Siguiente"
+      },
+      "second_step": {
+        "description": "5. Acceda al módulo de flujos en la plataforma Weni.<br />6. Elija el flujo de su elección y use la tarjeta “Dividir por intención”.<br />7. Seleccione la inteligencia que integró antes y elija los criterios de intención que debe usar el chatbot.<br />8. ¡Excelente! Ahora su chatbot puede hablar con las personas de manera más inteligente y efectiva con la nueva inteligencia.",
+        "back_button": "Atrás",
+        "close_button": "Iniciar"
+      }
     }
   }
 }

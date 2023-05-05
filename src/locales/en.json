@@ -614,15 +614,8 @@
       "ok": "ok"
     },
     "translate": {
-      "title_status_page": "Translation",
-      "description_status_page": "Manage and translate the phrases of your Intelligence",
-      "title_language_card": "Languages ​​of Intelligence",
-      "description_progress_bar": "Translation status",
-      "new_status_card": "Add new language",
-      "description_create_modal": "What new language do you want to add to Intelligence?",
-      "select_language_label": "Select the language",
-      "button_create_modal": "Proceed",
       "title_translate": "Translate a sentence",
+      "subtitle_translate": "Manage and translate the sentences of your intelligence.",
       "title_export": "Export translation",
       "subtitle_export": "If you prefer, you can export and import translations as a editable sheet.",
       "not_can_edit_repository": "You can not contribute to this intelligence",
@@ -1130,7 +1123,15 @@
     },
     "how_to_integrate": {
       "title": "How to integrate an intelligence",
-      "description": "1. Choose the intelligence that best suits your project.<br /><br />2. Click on the “+” to integrate the intelligence into the project.<br /><br />3. Go to the flows module and click on “create message”.<br /><br />4. Select the “split by intent” option.<br /><br />5. Select the intentions you would like your chatbot to understand and click “ok”.<br /><br />6. Then assign response messages to each of the intentions."
+      "first_step": {
+        "description": "1. Open the Artificial Intelligence module on the Weni platform.<br />2. In the “Community Intelligence Gallery” tab, choose the option that best suits your project.<br />3. Click on the “+” button to integrate the Artificial Intelligence into your project.<br />4. Done! Now the intelligence will be available for use in the Weni Fluxos module.",
+        "next_step": "Next"
+      },
+      "second_step": {
+        "description": "5. Access the flows module on the Weni platform.<br />6. Choose the flow of your choice and use the “Divide by Intent” card.<br />7. Select the intelligence you integrated before, and choose the intent criteria the chatbot should use.<br />8. Great! Now your chatbot can talk to people smarter and more effectively with the new intelligence.",
+        "back_button": "Back",
+        "close_button": "Start"
+      }
     }
   }
 }
