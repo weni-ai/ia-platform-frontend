@@ -5,47 +5,68 @@
     <p
       v-else-if="filteredLanguagesStatus.length === 0 && computedLanguagesStatus.length !== 0"
       class="has-text-centered"> {{ $t('webapp.translate.no_translated') }} </p>
-    <transition-group
-      name="list"
-      mode="out-in"
-      tag="div">
-      <div
-        v-for="{ status, language, verbose, selected } in filteredLanguagesStatus"
-        :key="language"
-        :ref="`status-${language}`"
-        class="card list-item"
-        @click="select(language)">
-        <div class="columns is-vcentered">
-          <p class="card-language has-text-centered column is-2">
-            <span>{{ verbose }}</span>
-          </p>
-          <div
-            :class="{ selected }"
-            class="column is-9">
-            <div class="card-percentage__wrapper">
-              <div
-                :style="percentageStyle(status.base_translations.percentage)"
-                class="card-percentage" />
-            </div>
+      <div class="translations__container">
+        <div
+          v-for="(language, index) in filteredLanguagesStatus"
+          :key="index"
+          :ref="`status-${language.language}`"
+          class="translations__container__status-card"
+          @click="select(language)">
+          <h2>{{ language.verbose }}</h2>
+          <unnnic-progress-bar
+            :value="Number(language.status.base_translations.percentage.toFixed(2))"
+            inline
+            :title="$t('webapp.translate.description_progress_bar')" />
+        </div>
+        <div
+          class="translations__container__new-status-card"
+          @click="newLanguage()"
+        >
+          <unnnic-icon
+            scheme="neutral-cleanest"
+            icon="add-1"
+            size="xl"
+          />
+
+          <div class="u font secondary body-md color-neutral-cloudy">
+            {{ $t('webapp.translate.new_status_card') }}
           </div>
-          <strong class="column has-text-centered is-1">
-            {{ Number(status.base_translations.percentage.toFixed(2)) }}%
-          </strong>
         </div>
       </div>
-    </transition-group>
-    <p
-      v-show="!loading && filteredLanguagesStatus.length > 0"
-      class="card-count">
-      {{ $t('webapp.translate.showing',
-            { available: languageCount, count: filteredLanguagesStatus.length }) }}
-    </p>
+    <unnnic-modal-next
+        v-if="openModal"
+        type="alert"
+        :title="$t('webapp.translate.new_status_card')"
+        :actionPrimaryLabel="$t('webapp.translate.button_create_modal')"
+        :actionSecondaryLabel="$t('webapp.home.cancel')"
+        @click-action-secondary="openModal = false"
+        @click-action-primary="addLanguage"
+        actionPrimaryButtonType="secondary"
+      >
+        <template slot="description">
+          {{ $t('webapp.translate.description_create_modal') }}
+          <unnnic-select
+            :label="$t('webapp.translate.select_language_label')"
+            v-model="languageSelected"
+            class="select-add-modal"
+          >
+            <option
+              v-for="[option, label] in languageList"
+              :key="option"
+              :value="option"
+              @select="languageSelected = option"
+            >
+              {{ label }}
+            </option>
+          </unnnic-select>
+        </template>
+      </unnnic-modal-next>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { formatters, languageListToDict } from '@/utils';
+import { formatters, languageListToDict, LANGUAGES } from '@/utils';
 import Loading from '@/components/shared/Loading';
 
 const components = {
@@ -72,12 +93,18 @@ export default {
       type: Object,
       default: () => {},
     },
+    repository: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
       languagesStatus: null,
       selected: this.value,
       loading: false,
+      openModal: false,
+      languageSelected: ''
     };
   },
   computed: {
@@ -126,6 +153,10 @@ export default {
         .sort((a, b) => (
           a.status.base_translations.percentage
           < b.status.base_translations.percentage ? 1 : -1));
+    },
+    languageList() {
+      return Object.keys(LANGUAGES)
+        .map(lang => ([lang, LANGUAGES[lang]]));
     },
   },
   watch: {
@@ -177,8 +208,16 @@ export default {
       }
     },
     select(language) {
-      this.selected = language;
+      this.selected = language.language;
+      this.$router.push({ name: 'repository-translate', params: { language: language.language, name: language.verbose, baseLanguage: this.repository.language } });
     },
+    newLanguage(){
+      // this.$emit('addLanguage')
+      this.openModal = true
+    },
+    addLanguage() {
+      this.$router.push({ name: 'repository-translate', params: { language: this.languageSelected, name: this.languages[this.languageSelected], baseLanguage: this.repository.language } })
+    }
   },
 };
 </script>
@@ -186,7 +225,8 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/utilities.scss';
 @import '~@/assets/scss/colors.scss';
-
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 .list-enter-active, .list-leave-active {
   transition: all 1s;
 }
@@ -246,4 +286,63 @@ export default {
     }
   }
 }
+.translations {
+  &__container {
+      display: flex;
+      gap: $unnnic-spacing-stack-sm;
+      flex-wrap: wrap;
+
+      &__status-card, &__new-status-card {
+        width: 332px;
+        height: 106px;
+        padding: 24px;
+        border: 1px solid $unnnic-color-neutral-soft;
+        border-radius: 8px;
+        cursor: pointer;
+
+        h2 {
+          font-family: $unnnic-font-family-secondary;
+          color: $unnnic-color-neutral-darkest;
+          font-weight: 700;
+          font-size: $unnnic-font-size-body-lg;
+        }
+
+        .unnnic-progress-bar.primary {
+          background-color: #fff;
+          box-shadow: none;
+          padding: 0px;
+
+          /deep/ .progress-bar-container .progress-container {
+            min-width: 100px;
+            height: 4px;
+          }
+
+          /deep/ .title {
+            font-size: 12px;
+          }
+        }
+      }
+
+      &__new-status-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        .unnnic-icon {
+          margin-bottom: $unnnic-spacing-stack-sm;
+        }
+      }
+    }
+}
+.unnnic-select {
+    /deep/ .input {
+      height: 46px;
+    }
+    /deep/ .dropdown {
+      display: block;
+    }
+  }
+
 </style>

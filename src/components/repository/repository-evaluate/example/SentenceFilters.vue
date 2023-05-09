@@ -9,7 +9,7 @@
         :debounce="debounceTime"
       />
       <div :class="wrapperClasses">
-        <div class="filter-evaluate-example__filters__wrapper__text">
+        <div v-if="entities" class="filter-evaluate-example__filters__wrapper__text">
           {{ $t("webapp.dashboard.filter_by") }}:
         </div>
         <div>
