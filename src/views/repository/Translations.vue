@@ -16,34 +16,6 @@
       :repository-uuid="repository.uuid"
       @onAuthorizationRequested="updateRepository(false)" />
     <div v-else-if="repository" class="translations">
-      <!-- <div class="column is-3">
-          <translation-status-search
-            v-model="statusQuery" />
-        </div>
-        <div class="column">
-          <translation-status-info
-            :completed-languages="completedLanguages"
-            :languages="availableLanguages"
-            :repository-uuid="repository.uuid" />
-        </div> -->
-      <!-- <translations-status
-        ref="translationsStatus"
-        :update="updateStatus"
-        :query="statusQuery"
-        :repository-uuid="repository.uuid"
-        v-model="toLanguage"
-        class="translations__status"
-        @updated="statusUpdated"
-        @addLanguage="newStatusCard"
-        /> -->
-      <!-- <hr v-show="!(availableLanguages && availableLanguages.length <= 1)">
-      <div class="translations__list">
-      </div> -->
-      <!-- <translations-list
-        ref="translationsList"
-        :repository="repository"
-        :to-language="toLanguage"
-        @exampleUpdated="exampleUpdated()" /> -->
       <div class="translations__title">
         <unnnic-card
           type="title"

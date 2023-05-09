@@ -28,13 +28,6 @@
                 icon="add-1"
                 class="mr-2"
               />
-              <unnnic-button-icon
-                v-else
-                @click.prevent.stop="changeIntegrateModalState(true)"
-                size="small"
-                icon="subtract-circle-1"
-                class="mr-2 unnnic-card-intelligence__header__buttons__dropdown--reddish"
-              />
             </unnnic-tool-tip>
           </div>
 

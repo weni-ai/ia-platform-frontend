@@ -2,6 +2,7 @@
   <repository-view-base
     :repository="repository"
     :error-code="errorCode">
+    <settings-loading slot="loader" />
     <div class="settings">
       <div v-if="repository">
         <div v-if="authenticated">
@@ -84,7 +85,7 @@ import ImportIntelligence from '@/components/repository/ImportIntelligence';
 import LoginForm from '@/components/auth/LoginForm';
 import RepositoryBase from './Base';
 import Versions from './Versions';
-
+import SettingsLoading from '@/views/repository/loadings/Settings';
 
 export default {
   name: 'RepositorySettings',
@@ -95,6 +96,7 @@ export default {
     AuthorizationRequestNotification,
     ImportIntelligence,
     Versions,
+    SettingsLoading
   },
   data() {
     return {

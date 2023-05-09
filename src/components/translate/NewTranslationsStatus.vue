@@ -5,10 +5,6 @@
     <p
       v-else-if="filteredLanguagesStatus.length === 0 && computedLanguagesStatus.length !== 0"
       class="has-text-centered"> {{ $t('webapp.translate.no_translated') }} </p>
-    <!-- <transition-group
-      name="list"
-      mode="out-in"
-      tag="div"> -->
       <div class="translations__container">
         <div
           v-for="(language, index) in filteredLanguagesStatus"
@@ -16,23 +12,6 @@
           :ref="`status-${language.language}`"
           class="translations__container__status-card"
           @click="select(language)">
-          <!-- <div class="columns is-vcentered">
-            <p class="card-language has-text-centered column is-2">
-              <span>{{ verbose }}</span>
-            </p>
-            <div
-              :class="{ selected }"
-              class="column is-9">
-              <div class="card-percentage__wrapper">
-                <div
-                  :style="percentageStyle(status.base_translations.percentage)"
-                  class="card-percentage" />
-              </div>
-            </div>
-            <strong class="column has-text-centered is-1">
-              {{ Number(status.base_translations.percentage.toFixed(2)) }}%
-            </strong>
-          </div> -->
           <h2>{{ language.verbose }}</h2>
           <unnnic-progress-bar
             :value="Number(language.status.base_translations.percentage.toFixed(2))"
@@ -54,13 +33,6 @@
           </div>
         </div>
       </div>
-    <!-- </transition-group> -->
-    <!-- <p
-      v-show="!loading && filteredLanguagesStatus.length > 0"
-      class="card-count">
-      {{ $t('webapp.translate.showing',
-            { available: languageCount, count: filteredLanguagesStatus.length }) }}
-    </p> -->
     <unnnic-modal-next
         v-if="openModal"
         type="alert"

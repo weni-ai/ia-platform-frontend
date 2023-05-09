@@ -167,14 +167,15 @@
       "language_code": "código do idioma",
       "text_to_analyze": "texto para análise",
       "response": "Resposta:",
-      "code_generator": "Gerador de código:",
+      "code_generator": "Gerador de código",
       "code_generator_text": "Gere código para sua linguagem de programação preferida.",
       "notification_info": "Faça o login na sua conta pra contribuir nessa inteligência.",
       "analyze_text": "Analisar Texto",
       "analyze": "Analisar",
       "no_detected": "Não detectado",
       "language": "Idioma",
-      "message": "Mensagem"
+      "message": "Mensagem",
+      "message_placeholder": "Digite uma mensagem que você deseja"
     },
     "quick_test": {
       "quick_test": "TESTE RÁPIDO",
@@ -435,7 +436,18 @@
     },
     "integration":{
       "title": "API",
-      "description": "Faça uma requisição HTTP para o serviço NLP, seguindo o exemplo abaixo",
+      "description": "Integre esta inteligência com Weni fluxos em apenas um clique, veja a  <a href='https://docs.weni.ai/l/pt/bothub/integrar-uma-intelig-ncia-ao-projeto-na-plataforma-weni#' target='_blank'>documentação</a> completa de como utilizar esse recurso, você também pode ter acesso a nossa <a href='https://dash.weni.ai/api/intelligence/index' target='_blank'>API’s</a> de inteligência artificial.",
+      "http_tab": "Requisição HTTP",
+      "generator_tab": "Gerador de código",
+      "http_title": "Faça uma requisição HTTP para o serviço NLP, seguindo o exemplo abaixo",
+      "url_description": "A base URL é a URL raiz da API, ou seja, é o endereço inicial para acessar as funcionalidades e recursos disponíveis. É como o ponto de partida para explorar e interagir com a API.",
+      "headers_description": "Authentication é um dos tipos de Headers mais importantes em solicitações de API. Ele fornece informações sobre a autenticação do usuário que está fazendo a solicitação, garantindo que a API possa identificar corretamente o usuário e verificar se ele tem permissão para realizar a solicitação.",
+      "post_body_description": "O POST Body é uma parte da solicitação de API que contém os dados enviados para realizar uma determinada tarefa, como informações de mensagens do usuário. É importante que seja formatado corretamente em JSON para que a API possa processar as informações adequadamente.",
+      "response_description": "O response de uma API é a resposta que a API envia de volta informações para o cliente que fez uma solicitação. É como se fosse uma mensagem que a API envia de volta ao usuário, com as informações solicitadas ou indicando um erro que ocorreu durante o processamento da solicitação.",
+      "token_title": "Acesso ao token:",
+      "code_button": "Expandir código",
+      "code_button_short": "Retrair código",
+      "copy_label": "Copiar",
       "copy": "Token copiado",
       "my_user":"Meu usuário",
       "new": "Novo! ",
@@ -1123,8 +1135,16 @@
       "button_primary_label": "Ir para o módulo fluxo"
     },
     "how_to_integrate": {
-      "title": "Como integrar uma inteligência",
-      "description": "1. Escolha a inteligência que melhor se adeque ao seu projeto.<br /><br />2. Clique no “+” para integrar a inteligência ao projeto.<br /><br />3. Vá ao módulo fluxos e clique em “criar mensagem”.<br /><br />4. Selecione a opção “dividir por intenção”.<br /><br />5. Selecione as intenções que você gostaria que seu chatbot entendesse e clique em “ok”.<br /><br />6. Em seguida, atribua mensagens de respostas a cada uma das intenções."
+      "title": "Como integrar Inteligência Artificial",
+      "first_step": {
+        "description": "1. Abra o módulo de Inteligência Artificial na plataforma Weni.<br />2. Na aba “Galeria de Inteligências da comunidade”, escolha a opção que melhor se adequa ao seu projeto.<br />3. Clique no botão “+” para integrar a Inteligência Artificial ao seu projeto.<br />4. Pronto! Agora a inteligência estará disponível para uso no módulo Weni Fluxos.",
+        "next_step":  "Próximo"
+      },
+      "second_step": {
+        "description": "5. Acesse o módulo de fluxos na plataforma Weni.<br />6. Escolha o fluxo de sua preferência e utilize o card “Dividir por Intenção”.<br />7. Selecione a inteligência que você integrou antes, e escolha os critérios de intenções que o chatbot deve usar.<br />8. Ótimo! Agora o seu chatbot pode conversar com as pessoas de forma mais inteligente e eficaz com a nova inteligência.",
+        "back_button": "Voltar",
+        "close_button": "Começar"
+      }
     }
   }
 }

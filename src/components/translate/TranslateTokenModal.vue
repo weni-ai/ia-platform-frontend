@@ -1,35 +1,4 @@
 <template>
-  <!-- <b-modal :active="open" :can-cancel="false" width="650px" @close="onClose()">
-    <div class="token-modal">
-      <h2 class="token-modal__header has-text-centered">
-        {{ $t("webapp.translate.share_title") }}
-      </h2>
-      <div class="token-modal__content">
-        <p class="token-modal__subtitle has-text-centered">
-          {{ $t("webapp.translate.share_subtitle") }}
-        </p>
-        <paginated-list
-          :url-generator="urlGenerator"
-          :item-component="itemComponent"
-          :list="list"
-          :per-page="4"
-          class="token-modal__content__pagination"
-          @deleted="onDelete"
-        />
-        <div class="token-modal__create">
-          <p @click="createToken()">{{ $t("webapp.translate.create_new_token") }}</p>
-        </div>
-      </div>
-      <div class="token-modal__footer">
-        <b-button
-          :label="$t('webapp.translate.ok')"
-          class="token-modal__footer__button"
-          type="is-primary"
-          @click="onClose()"
-        />
-      </div>
-    </div>
-  </b-modal> -->
   <unnnic-modal
       :text="$t('webapp.translate.share_title')"
       :showModal="open"

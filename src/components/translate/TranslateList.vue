@@ -1,38 +1,5 @@
 <template>
   <div>
-    <!-- <div class="repository-translate__list__options">
-      <div class="repository-translate__list__options__check">
-        <b-checkbox
-          :disabled="editing"
-          v-model="selectAll"/>
-          <span>{{ $t('webapp.translate.select_all') }}</span>
-      </div>
-      <div class="repository-translate__list__options__buttons">
-        <b-button
-          v-show="!editing"
-          type="is-primary"
-          icon-right="pencil"
-          @click="editing = true"/>
-        <b-button
-          v-show="!editing"
-          type="is-primary"
-          icon-right="delete"
-          @click="deleteAll" />
-        <b-tooltip
-          :label="$t('webapp.translate.save_all')">
-          <b-button
-            v-show="editing"
-            type="is-primary"
-            icon-right="check-bold"
-            @click="saveAll" />
-        </b-tooltip>
-        <b-button
-          v-show="editing"
-          type="is-primary"
-          icon-right="close-thick"
-          @click="editing = false" />
-      </div>
-    </div> -->
     <intent-pagination
       v-if="translateList"
       :list="translateList"

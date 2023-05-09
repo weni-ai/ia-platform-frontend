@@ -9,7 +9,9 @@
       @deleted="onItemDeleted(item.id)"
       @updateList="onSaveUpdate"
       @dispatchEvent="onDispatchEvent($event)" />
-    <loading v-show="isLoading" class="pagination__message" />
+      <slot v-if="isLoading" name="loader" >
+        <loading class="pagination__message" />
+      </slot>
     <div v-if="!loadAll" class="pagination__bottom">
       <p v-show="!isLoading" class="text-center">
         {{ listStatusErrorCode | statusCodeVerbose }}

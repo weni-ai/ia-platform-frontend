@@ -319,61 +319,10 @@
             ]"
           />
 
-          <!-- <section class="translate-menu">
-            <unnnic-sidebar-item
-              v-if="getCurrentRepository.authorization.can_contribute"
-              :icon="dropSelect === 'isTranslationsActive' ? 'translate-2' : 'translate-1'"
-              :text="$t('webapp.menu.translation')"
-              :enableTooltip="!collapse"
-              :active="dropSelect === 'isTranslationsActive'"
-              :class="{
-                'sidebar-wrapper__body--dropdown-open': dropSelect === 'isTranslationsActive',
-                'sidebar-wrapper__body__element': true
-              }"
-              @click="openDropdown('isTranslationsActive')"
-            >
-            </unnnic-sidebar-item>
-            <div
-              v-show="dropSelect === 'isTranslationsActive' && collapse"
-              class="sidebar-wrapper__body__item"
-            >
-              <unnnic-sidebar-item
-                :text="$t('webapp.menu.translate')"
-                @click="
-                  setSelectMenu({
-                    name: 'repository-translate',
-                    to: 'repository-translate',
-                    closeDrop: false
-                  })
-                "
-                :class="[
-                  checkSelectedMenu('repository-translate')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element'
-                ]"
-              />
-              <unnnic-sidebar-item
-                :text="$t('webapp.menu.translation_status')"
-                @click="
-                  setSelectMenu({
-                    name: 'repository-translations-status',
-                    to: 'repository-translations-status',
-                    closeDrop: false
-                  })
-                "
-                :class="[
-                  checkSelectedMenu('repository-translations-status')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element'
-                ]"
-              />
-            </div>
-          </section> -->
-
           <unnnic-sidebar-item
             :icon="
               checkSelectedMenu('repository-translations-status' || 'repository-translate')
-                ? 'layout-dashboard-2' : 'layout-dashboard-1'
+                ? 'translate-2' : 'translate-1'
             "
             :text="$t('webapp.menu.translation')"
             :enableTooltip="!collapse"
