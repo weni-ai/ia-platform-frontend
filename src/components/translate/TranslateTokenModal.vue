@@ -1,35 +1,34 @@
 <template>
-  <b-modal :active="open" :can-cancel="false" width="650px" @close="onClose()">
-    <div class="token-modal">
-      <h2 class="token-modal__header has-text-centered">
-        {{ $t("webapp.translate.share_title") }}
-      </h2>
-      <div class="token-modal__content">
-        <p class="token-modal__subtitle has-text-centered">
-          {{ $t("webapp.translate.share_subtitle") }}
-        </p>
-        <paginated-list
-          :url-generator="urlGenerator"
-          :item-component="itemComponent"
-          :list="list"
-          :per-page="4"
-          class="token-modal__content__pagination"
-          @deleted="onDelete"
-        />
-        <div class="token-modal__create">
-          <p @click="createToken()">{{ $t("webapp.translate.create_new_token") }}</p>
+  <unnnic-modal
+      :text="$t('webapp.translate.share_title')"
+      :showModal="open"
+      :closeIcon="false"
+    >
+    <span slot="message" v-html="$t('webapp.translate.share_subtitle')" />
+    <div slot="message">
+      <div class="token-modal">
+        <div class="token-modal__content">
+          <paginated-list
+            :url-generator="urlGenerator"
+            :item-component="itemComponent"
+            :list="list"
+            :per-page="4"
+            class="token-modal__content__pagination"
+            @deleted="onDelete"
+          />
+          <div class="token-modal__create">
+            <p @click="createToken()">{{ $t("webapp.translate.create_new_token") }}</p>
+          </div>
         </div>
-      </div>
-      <div class="token-modal__footer">
-        <b-button
-          :label="$t('webapp.translate.ok')"
-          class="token-modal__footer__button"
-          type="is-primary"
-          @click="onClose()"
-        />
+          <unnnic-button
+            :text="$t('webapp.translate.ok')"
+            class="token-modal__footer__button"
+            type="secondary"
+            @click="onClose()"
+          />
       </div>
     </div>
-  </b-modal>
+  </unnnic-modal>
 </template>
 
 <script>
@@ -116,8 +115,7 @@ export default {
 @import "~@/assets/scss/variables.scss";
 
 .token-modal {
-  overflow: hidden;
-  background-color: white;
+  // overflow: hidden;
   border-radius: $radius-medium;
   font-family: $font-family;
 
@@ -155,11 +153,7 @@ export default {
     border: 1px solid $color-grey;
 
     &__button {
-      box-shadow: 0px 3px 6px #00000029;
-      border-radius: 6px;
-      width: 159px;
-      height: 40px;
-      font-weight: $font-weight-medium;
+      width: 100%;
     }
   }
 
