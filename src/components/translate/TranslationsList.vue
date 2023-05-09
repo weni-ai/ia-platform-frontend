@@ -1,18 +1,7 @@
 <template>
   <div>
-    <!-- <paginated-list
-      :item-component="translationItemElem"
-      :list="translationsList"
-      :repository="repository"
-      @itemDeleted="examplesDeleted()"/>
-    <p
-      v-if="translationsList.empty"
-      class="no-examples">{{ $t('webapp.translate.no_translation') }},
-      <a
-        class="outline-text"
-        @click="goToTranslate()">{{ $t('webapp.translate.click_here') }}</a>
-    </p> -->
     <intent-pagination
+      :showUntrained="true"
       :item-component="sentencesTable"
       :list="translationsList"
       :repository="repository"

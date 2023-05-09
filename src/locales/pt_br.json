@@ -682,7 +682,8 @@
       "translate_progress": "Traduzindo frases",
       "translate_method": "Formato de tradução",
       "export_description": "Quais frases que deseja exportar?",
-      "export_method": "Selecione as frases que deseja exportar"
+      "export_method": "Selecione as frases que deseja exportar",
+      "examples_untrained": "{n} frases traduzidas ainda não foram treinadas pela Inteligência"
     },
     "orgs": {
       "owner": "Pertence a",
