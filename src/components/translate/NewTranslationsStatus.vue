@@ -28,7 +28,7 @@
             size="xl"
           />
 
-          <div class="u font secondary body-sm color-neutral-cloudy">
+          <div class="u font secondary body-md color-neutral-cloudy">
             {{ $t('webapp.translate.new_status_card') }}
           </div>
         </div>

@@ -91,7 +91,7 @@
                   </template>
                 </unnnic-modal-next>
                 <div class="repository-translate__list">
-                  <div v-if="totalItems.total > 0" class="repository-translate__list__search">
+                  <div class="repository-translate__list__search">
                     <sentence-filters
                       :intents="repository.intents_list"
                       :entities="repository.entities"
@@ -182,10 +182,11 @@
                         </unnnic-button>
                     </div>
                   </div>
-                  <div v-if="totalItems.total > 0"  class="repository-translate__list__search">
+                  <div
+                    class="repository-translate__list__search"
+                  >
                     <sentence-filters
                       :intents="repository.intents_list"
-                      :entities="repository.entities"
                       @querystringformatted="onSearch($event)"/>
                   </div>
                   <translations-list
@@ -578,7 +579,7 @@ export default {
     updateTotal(params) {
       this.totalItems = params
     },
-    goToTranining() {
+    goToTraining() {
       this.$router.push({
         name: 'repository-training',
         params: {
