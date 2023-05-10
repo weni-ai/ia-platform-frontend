@@ -41,6 +41,19 @@
               >
               {{ $t("webapp.translate.intent") + ' ' + item.intent }}
               </span>
+              <unnnic-tool-tip
+              v-if="showUntrained && !item.is_trained"
+              side="top"
+              text="Frase não treinada. Execute o treinamento para que a Inteligência a compreenda"
+              enabled
+            >
+              <unnnic-icon-svg
+                class="ml-2"
+                icon="alert-circle-1"
+                size="sm"
+                scheme="feedback-yellow"
+              />
+            </unnnic-tool-tip>
             </div>
             <div v-if="!showIntents" class="example-accordion__original">
               {{ item.original_example_text }}
@@ -176,6 +189,10 @@ export default {
       default: () => {},
     },
     showIntents: {
+      type: Boolean,
+      default: false,
+    },
+    showUntrained: {
       type: Boolean,
       default: false,
     },
@@ -407,6 +424,7 @@ export default {
   &__sentence {
     color: $unnnic-color-neutral-darkest;
     display: flex;
+    align-items: center;
   }
 
   &__original {
@@ -449,6 +467,11 @@ export default {
 }
 /deep/ .test .unnnic-table .item {
   background: black;
+}
+
+/deep/ .unnnic-tooltip-label {
+  margin-left: .3rem;
+  z-index: 10;
 }
 
 </style>

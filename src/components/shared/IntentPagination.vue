@@ -5,6 +5,7 @@
       :is="itemComponent"
       :list="list"
       :show-intents="showIntents"
+      :show-untrained="showUntrained"
       @deleted="onItemDeleted(item.id)"
       @updateList="onSaveUpdate"
       @dispatchEvent="onDispatchEvent($event)" />
@@ -77,6 +78,10 @@ export default {
       default: false,
     },
     showIntents: {
+      type: Boolean,
+      default: false,
+    },
+    showUntrained: {
       type: Boolean,
       default: false,
     },

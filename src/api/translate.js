@@ -65,9 +65,9 @@ export default {
         responseType: 'arraybuffer',
       });
   },
-  auto(repositoryUuid, versionUUID, targetLanguage) {
+  auto(repositoryUuid, versionUUID, targetLanguage, items) {
     return request.$http.post(`/v2/repository/info/${repositoryUuid}/${versionUUID}/auto_translation/`,
-      { target_language: targetLanguage });
+      { target_language: targetLanguage, ids: items });
   },
   autoTranslateStatus(repositoryUUID, repositoryVersion) {
     const queryString = qs.stringify({

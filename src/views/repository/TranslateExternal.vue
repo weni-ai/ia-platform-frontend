@@ -171,21 +171,21 @@ export default {
   }
 }
 
-.translate-description{
-  margin-top: $between-subtitle-content;
-  h1{
-    font-size: 28px;
-    margin-bottom: $between-title-subtitle;
-    color: $color-fake-black;
-    font-family: $font-family;
-    font-weight: $font-weight-bolder;
-  }
-  p{
-    margin-bottom: $between-subtitle-content;
-    color: $color-fake-black;
-    font-family: $font-family;
-    font-size: $font-size
-  }
-}
+// .translate-description{
+//   margin-top: $between-subtitle-content;
+//   h1{
+//     font-size: 28px;
+//     margin-bottom: $between-title-subtitle;
+//     color: $color-fake-black;
+//     font-family: $font-family;
+//     font-weight: $font-weight-bolder;
+//   }
+//   p{
+//     margin-bottom: $between-subtitle-content;
+//     color: $color-fake-black;
+//     font-family: $font-family;
+//     font-size: $font-size
+//   }
+// }
 
 </style>
