@@ -54,7 +54,7 @@
                   :textTitle="$t('webapp.translate.import_title')"
                   :textAction="$t('webapp.import_dataset.importar')"
                   :isUploading="waitDownloadFile"
-                  supportedFormats=".txt,.json"
+                  supportedFormats=".xlsx"
                   canImport
                   @action="importTranslation()"
                   @cancel="closeImportModal()"
@@ -187,6 +187,7 @@
                   >
                     <sentence-filters
                       :intents="repository.intents_list"
+                      :entities="repository.entities"
                       @querystringformatted="onSearch($event)"/>
                   </div>
                   <translations-list
