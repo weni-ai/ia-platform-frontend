@@ -1110,11 +1110,11 @@
     "how_to_integrate": {
       "title": "Cómo integrar una inteligencia",
       "first_step": {
-        "description": "1. Abra el módulo de Inteligencia Artificial en la plataforma Weni.<br />2. En la pestaña “Galería de Inteligencia Comunitaria”, elija la opción que mejor se adapte a su proyecto.<br />3. Haga clic en el Botón “+” para integrar la Inteligencia Artificial en su proyecto.<br />4. ¡Listo! Ahora la inteligencia estará disponible para su uso en el módulo Weni Fluxos.",
+        "description": "1. En la pestaña “Galería de Inteligencia Comunitaria”, elija la opción que mejor se adapte a su proyecto.<br />2. Haga clic en el Botón “+” para integrar la Inteligencia Artificial en su proyecto.<br />3. ¡Listo! Ahora la inteligencia estará disponible para su uso en el módulo Weni Fluxos.<br />4. Acceda al módulo de flujos en la plataforma Weni.",
         "next_step": "Siguiente"
       },
       "second_step": {
-        "description": "5. Acceda al módulo de flujos en la plataforma Weni.<br />6. Elija el flujo de su elección y use la tarjeta “Dividir por intención”.<br />7. Seleccione la inteligencia que integró antes y elija los criterios de intención que debe usar el chatbot.<br />8. ¡Excelente! Ahora su chatbot puede hablar con las personas de manera más inteligente y efectiva con la nueva inteligencia.",
+        "description": "5. Elija el flujo de su elección y use la tarjeta “Dividir por intención”.<br />6. Seleccione la inteligencia que integró antes y elija los criterios de intención que debe usar el chatbot.<br />7. ¡Excelente! Ahora su chatbot puede hablar con las personas de manera más inteligente y efectiva con la nueva inteligencia.",
         "back_button": "Atrás",
         "close_button": "Iniciar"
       }

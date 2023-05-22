@@ -1,56 +1,55 @@
 <template>
   <div>
     <unnnic-modal-next
-      v-if="showHowToIntegrate && step === 1"
-      type="alert"
-      class="integrate-modal"
-      :title="$t('modals.how_to_integrate.title')"
-      scheme="brand-weni-soft"
-      show-close-button
+      class="integrate"
+      v-if="showHowToIntegrate"
       @close="showHowToIntegrate = false"
-      :action-primary-label="
-        $t('modals.how_to_integrate.first_step.next_step')
-      "
-      action-primary-button-type="secondary"
-      @click-action-primary="step = 2"
+      show-close-button
     >
-    <div class="integrate-modal__wrapper" slot="description">
-      <img :src="require(`../assets/gifs/ia-1.gif`)" class="integrate-modal__image">
+    <div class="integrate--title">
+      {{ $t('modals.how_to_integrate.title') }}
     </div>
+
+    <div class="integrate__content">
+      <img class="integrate__gif" :src="currentImage" alt="" />
+
       <span
-        slot="description"
+        v-if="step === 1"
+        class="integrate__description"
         v-html="$t('modals.how_to_integrate.first_step.description')"
-      ></span>
-    </unnnic-modal-next>
-    <unnnic-modal-next
-      v-if="showHowToIntegrate && step === 2"
-      type="alert"
-      class="integrate-modal"
-      :title="$t('modals.how_to_integrate.title')"
-      scheme="brand-weni-soft"
-      show-close-button
-      @close="showHowToIntegrate = false"
-      :action-primary-label="$t('modals.how_to_integrate.second_step.close_button')"
-      action-primary-button-type="secondary"
-      @click-action-primary="showHowToIntegrate = false"
-      :action-secondary-label="
-        $t('modals.how_to_integrate.second_step.back_button')
-      "
-      @click-action-secondary="step = 1"
-    >
-    <div class="integrate-modal__wrapper" slot="description">
-      <img :src="require(`../assets/gifs/ia-2.gif`)" class="integrate-modal__image">
-    </div>
+      />
       <span
-        slot="description"
+        v-else
+        class="integrate__description"
         v-html="$t('modals.how_to_integrate.second_step.description')"
-      ></span>
-    </unnnic-modal-next>
+      />
+    </div>
+
+    <div class="integrate__buttons">
+      <unnnic-button
+        v-if="step === 2"
+        type="terciary"
+        @click.stop="step = 1"
+        :text="$t('modals.how_to_integrate.second_step.back_button')"
+      />
+      <unnnic-button
+        type="secondary"
+        @click="nextStep"
+        :text="
+          step === 2 ? $t('modals.how_to_integrate.second_step.close_button')
+          :
+          $t('modals.how_to_integrate.first_step.next_step')
+        "
+      />
+    </div>
+  </unnnic-modal-next>
   </div>
 </template>
 
 <script>
 import iframessa from 'iframessa';
+import IntelligenceFirstGif from '@/assets/gifs/ia-1.gif';
+import IntelligenceSecondGif from '@/assets/gifs/ia-2.gif';
 
 export default {
   data() {
@@ -76,6 +75,11 @@ export default {
       return [
         this.$store.state.Auth.project,
       ].join(':');
+    },
+    currentImage() {
+      if (this.step === 2) return IntelligenceSecondGif;
+
+      return IntelligenceFirstGif;
     },
   },
 
@@ -114,32 +118,90 @@ export default {
     redirectToFlows() {
       iframessa.emit('redirectToFlows', { path: 'init' });
     },
+    nextStep() {
+      if (this.step === 1) this.step = 2;
+      else this.showHowToIntegrate = false;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-::v-deep {
-  .icon {
-    display: block;
-    height: initial;
-    width: initial;
-  }
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
-  .title {
-    margin-bottom: 0 !important;
-  }
-  .integrate-modal {
-    .icon {
-      display: none;
+.unnnic-modal ::v-deep > .container > .content {
+  box-sizing: initial;
+}
+
+.modal--title {
+  text-align: center;
+  margin-bottom: $unnnic-spacing-stack-sm;
+}
+
+.integrate {
+  font-family: $unnnic-font-family-secondary;
+
+  ::v-deep {
+    .container {
+      padding: $unnnic-squish-md !important;
     }
 
-    &__image {
-      width: 80%;
+    .header {
+      margin-bottom: $unnnic-spacing-stack-nano !important;
     }
 
-    &__wrapper {
-      margin-bottom: 1.5rem;
+    .content {
+      display: flex;
+      flex-direction: column;
+      overflow: auto !important;
+    }
+  }
+
+  &--title {
+    text-align: center;
+    margin-bottom: $unnnic-spacing-stack-xs;
+    font-weight: $unnnic-font-weight-black;
+    font-size: $unnnic-font-size-title-sm;
+    line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
+    color: $unnnic-color-neutral-darkest;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+    color: $unnnic-color-neutral-cloudy;
+  }
+
+  &__gif {
+    height: 167px;
+    width: 368px;
+    margin: 0 auto;
+  }
+
+  &__description {
+    padding-right: .5rem;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+    color: $unnnic-color-neutral-cloudy;
+    text-align: left;
+    margin-top: $unnnic-spacing-stack-sm;
+
+    flex: 1;
+    overflow: overlay;
+  }
+
+  &__buttons {
+    margin-top: $unnnic-spacing-stack-sm;
+    display: flex;
+    gap: $unnnic-spacing-inline-lg;
+
+    .unnnic-button {
+      width: 100%;
     }
   }
 }
