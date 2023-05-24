@@ -1,48 +1,17 @@
 <template>
   <div>
-    <div class="repository-translate__list__options">
-      <div class="repository-translate__list__options__check">
-        <b-checkbox
-          :disabled="editing"
-          v-model="selectAll"/>
-          <span>{{ $t('webapp.translate.select_all') }}</span>
-      </div>
-      <div class="repository-translate__list__options__buttons">
-        <b-button
-          v-show="!editing"
-          type="is-primary"
-          icon-right="pencil"
-          @click="editing = true"/>
-        <b-button
-          v-show="!editing"
-          type="is-primary"
-          icon-right="delete"
-          @click="deleteAll" />
-        <b-tooltip
-          :label="$t('webapp.translate.save_all')">
-          <b-button
-            v-show="editing"
-            type="is-primary"
-            icon-right="check-bold"
-            @click="saveAll" />
-        </b-tooltip>
-        <b-button
-          v-show="editing"
-          type="is-primary"
-          icon-right="close-thick"
-          @click="editing = false" />
-      </div>
-    </div>
-    <paginatedList
+    <intent-pagination
       v-if="translateList"
       :list="translateList"
-      :item-component="translateExampleItem"
+      :item-component="sentencesTable"
+      :showIntents="tab === 'not_translated'"
       :per-page="perPage"
       :translate-to="to"
-      :empty-message="$t('webapp.translate.no_examples')"
+      :empty-message="$t('webapp.translate.no_examples', {language: to})"
       :add-attributes="{repositoryUuid, editing, initialData: editCache}"
       :external-token="externalToken"
       item-key="id"
+      @onUpdateSelected="updateSelected"
       @onChange="updateCache($event)"
       @translated="onTranslated()"
       @eventStep="dispatchStep()"
@@ -56,11 +25,15 @@
 import { mapActions, mapGetters } from 'vuex';
 import PaginatedList from '@/components/shared/PaginatedList';
 import TranslateExampleItem from './NewTranslateExampleItem';
+import IntentPagination from '@/components/shared/IntentPagination';
+import TranslateExampleTable from './TranslateExampleTable';
 
 export default {
   name: 'TranslateList',
   components: {
     PaginatedList,
+    IntentPagination,
+    TranslateExampleTable,
   },
   props: {
     repositoryUuid: {
@@ -77,7 +50,7 @@ export default {
     },
     perPage: {
       type: Number,
-      default: 12,
+      default: 50,
     },
     query: {
       type: Object,
@@ -91,6 +64,10 @@ export default {
       type: String,
       default: null,
     },
+    tab: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
@@ -99,6 +76,7 @@ export default {
       selectAll: false,
       editing: false,
       editCache: {},
+      sentencesTable: TranslateExampleTable
     };
   },
   computed: {
@@ -182,6 +160,9 @@ export default {
     },
     dispatchStep() {
       this.$emit('eventStep');
+    },
+    updateSelected(params) {
+      this.$emit('onUpdateSelected', params)
     },
   },
 };

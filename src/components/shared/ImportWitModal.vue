@@ -36,7 +36,7 @@
             size="large"
             :loading="isButtonLoading"
             :disabled="checkInputs"
-            type="primary"
+            type="secondary"
             @click="dispatchMigrate()">
             {{ $t('webapp.migrate_intelligence.migrate') }}
           </unnnic-button>

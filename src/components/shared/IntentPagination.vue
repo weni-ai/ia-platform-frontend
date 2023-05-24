@@ -5,10 +5,13 @@
       :is="itemComponent"
       :list="list"
       :show-intents="showIntents"
+      :show-untrained="showUntrained"
       @deleted="onItemDeleted(item.id)"
       @updateList="onSaveUpdate"
       @dispatchEvent="onDispatchEvent($event)" />
-    <loading v-show="isLoading" class="pagination__message" />
+      <slot v-if="isLoading" name="loader" >
+        <loading class="pagination__message" />
+      </slot>
     <div v-if="!loadAll" class="pagination__bottom">
       <p v-show="!isLoading" class="text-center">
         {{ listStatusErrorCode | statusCodeVerbose }}
@@ -75,6 +78,10 @@ export default {
       default: false,
     },
     showIntents: {
+      type: Boolean,
+      default: false,
+    },
+    showUntrained: {
       type: Boolean,
       default: false,
     },
@@ -226,8 +233,10 @@ export default {
   }
 
   &__message {
-    text-align: center;
     width: 100%;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-gt;
+    color: $unnnic-color-neutral-dark;
   }
 }
 </style>

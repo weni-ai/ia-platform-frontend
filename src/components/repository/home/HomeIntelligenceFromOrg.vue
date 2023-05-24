@@ -1,35 +1,37 @@
 <template>
-  <home-intelligence-container>
-    <div class="home-intelligences-from-org">
-      <div class="home-intelligences-from-org__cards">
-        <unnnic-card
-          clickable
-          :text="$t('webapp.intelligences_lib.new_intelligence')"
-          type="blank"
-          icon="add-1"
-          class="home-intelligences-from-org__cards__new"
-          @click.native="createNewIntelligence()"
-        />
-        <home-repository-card
-          v-for="list in repositoryOrgList"
-          :key="list.uuid"
-          :repository-detail="list"
-          @dispatchShowModal="showModal($event)"
-          @onCopySuccess="getOrgsRepositories()"
+  <div class="home-intelligences-from-org__wrapper">
+    <home-intelligence-container>
+      <div class="home-intelligences-from-org">
+        <div class="home-intelligences-from-org__cards">
+          <unnnic-card
+            clickable
+            :text="$t('webapp.intelligences_lib.new_intelligence')"
+            type="blank"
+            icon="add-1"
+            class="home-intelligences-from-org__cards__new"
+            @click.native="createNewIntelligence()"
+          />
+          <home-repository-card
+            v-for="list in repositoryOrgList"
+            :key="list.uuid"
+            :repository-detail="list"
+            @dispatchShowModal="showModal($event)"
+            @onCopySuccess="getOrgsRepositories()"
+          />
+        </div>
+        <infinite-scroll
+          v-show="!isComplete"
+          @intersect="getOrgsRepositories()"
         />
       </div>
-      <infinite-scroll
-        v-show="!isComplete"
-        @intersect="getOrgsRepositories()"
-      />
-    </div>
-    <modal-container
-      :info-modal="modalInfo"
-      :show-modal="openModal"
-      @closeModal="openModal = false"
-    >
-    </modal-container>
-  </home-intelligence-container>
+      <modal-container
+        :info-modal="modalInfo"
+        :show-modal="openModal"
+        @closeModal="openModal = false"
+      >
+      </modal-container>
+    </home-intelligence-container>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
@@ -99,15 +101,23 @@ export default {
   &__cards {
     display: grid;
     justify-content: space-between;
-    grid-template-columns: repeat(4, 24%);
+    grid-template-columns: repeat(3, 33%);
+    gap: 1rem;
     @media screen and (max-width: 1400px) {
-      grid-template-columns: repeat(3, 32%);
+      grid-template-columns: repeat(3, 33%);
     }
 
     &__new {
-      height: 16.8125rem;
-      margin-bottom: $unnnic-inline-sm;
+      height: 260px;
+      // margin-bottom: $unnnic-inline-sm;
     }
+  }
+
+  &__wrapper {
+    display: grid;
+    // grid-template-columns: 1fr 2fr;
+    margin: 1.5rem;
+    gap: 1rem;
   }
 }
 </style>

@@ -16,10 +16,10 @@
             v-model="entity"
             :data="filteredData"
             @icon-right-click="removeEntity()"
-            @click="hideDropdown = false"
-            :openWithFocus="true"
+            open-with-focus
             :iconRight="entity ? 'delete-1-1' : ''"
-            :class="hideDropdown ? 'hidden' : ''"
+            :class="{ hidden: filteredData.length === 0 }"
+            highlight
           />
       </div>
     </div>
@@ -64,7 +64,6 @@ export default {
   data() {
     return {
       entity: '',
-      hideDropdown: true
     };
   },
   computed: {
@@ -77,8 +76,13 @@ export default {
       ];
     },
     filteredData() {
-      return (this.availableEntities || []).filter(entity => entity
-        .startsWith(this.entity.toLowerCase()));
+      return (this.availableEntities || []).filter(
+        entity => entity.length === 0
+          || (
+            entity.includes(this.entity.toLowerCase())
+            && entity !== this.entity.toLowerCase()
+          )
+      );
     },
     selectedText() {
       return this.text.substring(this.selectedTextStart, this.selectedTextEnd);

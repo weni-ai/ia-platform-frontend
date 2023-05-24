@@ -2,18 +2,44 @@
   <repository-view-base
     :repository="repository"
     :error-code="errorCode">
+    <settings-loading slot="loader" />
     <div class="settings">
       <div v-if="repository">
         <div v-if="authenticated">
           <div
             v-if="repository.authorization.can_write">
             <div class="settings__section">
-              <h1>{{ $t('webapp.settings.title_edit_repository') }}</h1>
-              <edit-repository-form
-                :owner-nickname="repository.owner.nickname"
-                :slug="repository.slug"
-                :initial-data="getEditInitialData()"
-                @edited="onEdited($event)" />
+              <unnnic-card
+              type="title"
+              :title="$t('webapp.settings.title_edit_repository')"
+              :hasInformationIcon="false"
+              icon="cog-1"
+              scheme="brand-weni-soft"
+              />
+              <p class="settings__section__subtitle">
+                {{ $t("webapp.settings.description") }}
+              </p>
+              <unnnic-tab initialTab="first" :tabs="tabs">
+                <template slot="tab-head-first">
+                  {{ $t("webapp.settings.settings_tab") }}
+                </template>
+                <template slot="tab-panel-first">
+                  <edit-repository-form
+                    :owner-nickname="repository.owner.nickname"
+                    :slug="repository.slug"
+                    :initial-data="getEditInitialData()"
+                    @edited="onEdited($event)"
+                  />
+                  <hr>
+                  <import-intelligence/>
+                </template>
+                <template slot="tab-head-second">
+                  {{ $t("webapp.settings.versions_tab") }}
+                </template>
+                <template slot="tab-panel-second">
+                  <versions />
+                </template>
+            </unnnic-tab>
             </div>
           </div>
           <authorization-request-notification
@@ -24,9 +50,6 @@
         </div>
       </div>
 
-            <hr>
-            <import-intelligence/>
-            <hr>
 
       <div
         v-if="!authenticated">
@@ -40,6 +63,17 @@
         </div>
       </div>
     </div>
+    <unnnic-modal
+      :showModal="openSuccessModal"
+      :text="$t('webapp.settings.save_success_title')"
+      scheme="feedback-green"
+      modal-icon="check-circle-1-1"
+      @close="openSuccessModal = false"
+    >
+      <span
+      slot="message"
+      v-html="$t('webapp.settings.save_success_message')" />
+    </unnnic-modal>
   </repository-view-base>
 </template>
 
@@ -50,7 +84,8 @@ import EditRepositoryForm from '@/components/repository/EditRepositoryForm';
 import ImportIntelligence from '@/components/repository/ImportIntelligence';
 import LoginForm from '@/components/auth/LoginForm';
 import RepositoryBase from './Base';
-
+import Versions from './Versions';
+import SettingsLoading from '@/views/repository/loadings/Settings';
 
 export default {
   name: 'RepositorySettings',
@@ -60,6 +95,14 @@ export default {
     LoginForm,
     AuthorizationRequestNotification,
     ImportIntelligence,
+    Versions,
+    SettingsLoading
+  },
+  data() {
+    return {
+      tabs: ['first', 'second'],
+      openSuccessModal: false
+    };
   },
   extends: RepositoryBase,
   methods: {
@@ -104,10 +147,7 @@ export default {
           },
         });
       }
-      this.$buefy.toast.open({
-        message: 'Repository edited!',
-        type: 'is-success',
-      });
+      this.openSuccessModal = true
     },
     onRoleSetted() {
       this.$refs.authorizationsList.updateAuthorizations();
@@ -122,6 +162,8 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
+@import "~@weni/unnnic-system/dist/unnnic.css";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
   .settings {
     font-family: $font-family;
@@ -135,6 +177,36 @@ export default {
       color: $color-fake-black;
       margin-bottom: $between-title-subtitle;
       }
+
+      &__subtitle {
+        font-size: $unnnic-font-size-body-gt;
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-dark;
+        line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
+        margin-top: $unnnic-spacing-stack-sm;
+        margin-bottom: $unnnic-spacing-stack-lg;
+      }
+    }
+
+    hr {
+      margin: 3rem 0;
     }
   }
+  /deep/ .tab-header {
+    margin-bottom: 2rem;
+  }
+
+  /deep/ input:focus {
+    box-shadow: none;
+    border-color: #9caccc;
+  }
+  /deep/ .dropdown.active .dropdown-data {
+    z-index: 2;
+  }
+  /deep/ .unnnic-card-tag-carousel__container__slide__item {
+    margin-right: 1rem;
+  }
+  /deep/ .unnnic-tooltip-label {
+    max-width: unset;
+}
 </style>

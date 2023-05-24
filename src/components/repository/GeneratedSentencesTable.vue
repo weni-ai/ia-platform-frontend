@@ -60,7 +60,6 @@
       </unnnic-table-row>
       <edit-example-intent
         v-if="item.id === selectedItem"
-        from="suggestions"
         :entities="item.entities"
         :intent-to-edit="item.intent"
         :edit-example="true"

@@ -193,7 +193,7 @@
             :tooltip-hover="!isValid ? validationErrors : null"
             :loading="submitting"
             @click.prevent.stop="saveSentence">
-            <slot v-if="!submitting">{{ $t('webapp.trainings.save_button') }}</slot>
+            <slot v-if="!submitting">{{ $t(saveButtonLabel) }}</slot>
           </unnnic-button>
         </div>
         <!-- <div>
@@ -227,7 +227,7 @@ export default {
     from: {
       type: String,
       default: null
-    }
+    },
   },
   data() {
     return {
@@ -236,7 +236,7 @@ export default {
       entityModal: false,
       isEntityInputActive: false,
       selectedEntities: [],
-      entity: ''
+      entity: '',
     }
   },
   extends: EditExampleBase,
@@ -267,6 +267,9 @@ export default {
         intent,
         entities: allEntities,
       };
+    },
+    saveButtonLabel() {
+      return this.$route.name === 'repository-database' ? 'webapp.trainings.database_save_button' : 'webapp.trainings.save_button'
     }
   },
   methods: {
@@ -274,11 +277,15 @@ export default {
       this.$emit('cancel')
     },
     async saveSentence() {
-      if (this.from !== 'suggestions') {
-        await this.onSubmit();
+      const from = this.$route.name
+      if (from === 'repository-suggestion') {
+        this.$emit('dispatchSave', this.sentence)
+        this.cancelEditSentence();
+      } else if (from === 'repository-database') {
+        this.$emit('dispatchToTraining', this.sentence);
         this.cancelEditSentence();
       } else {
-        this.$emit('dispatchSave', this.sentence)
+        await this.onSubmit();
         this.cancelEditSentence();
       }
     },
