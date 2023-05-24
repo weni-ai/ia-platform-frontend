@@ -243,6 +243,14 @@ export default {
 
 .evaluate {
 
+  &__content-header {
+    p {
+      font-family: $unnnic-font-family-secondary;
+      color: $unnnic-color-neutral-dark;
+      font-size: $unnnic-font-size-body-gt;
+    }
+  }
+
   &__divider {
     height: 1px;
     background-color: $unnnic-color-neutral-soft;
@@ -257,10 +265,18 @@ export default {
     background-color: white;
     border: 1px solid $unnnic-color-neutral-soft;
     border-radius: 8px;
+    padding: 1rem;
 
     /deep/ .icon {
       background: rgba(0, 158, 150, 0.08);
       border-radius: 4px;
+    }
+
+    /deep/ .content .title {
+      font-family: $unnnic-font-family-secondary;
+      color: $unnnic-color-neutral-dark;
+      font-size: $unnnic-font-size-body-lg;
+      margin-bottom: 16px;
     }
   }
 
@@ -275,19 +291,22 @@ export default {
     justify-content: space-between;
 
     .text {
-      margin-left: 10px;
-
       h2 {
         font-family: $unnnic-font-family-secondary;
         color: $unnnic-color-neutral-dark;
         font-size: $unnnic-font-size-title-sm;
+        line-height: 20px;
       }
 
       p {
-        margin-top: $unnnic-spacing-stack-sm;
+        margin-top: 12px;
         font-family: $unnnic-font-family-secondary;
         color: $unnnic-color-neutral-dark;
         font-size: 14px;
+      }
+
+      &.column {
+        padding: 0px;
       }
     }
 
@@ -304,6 +323,13 @@ export default {
       h2 {
         font-family: $unnnic-font-family-secondary;
         color: $unnnic-color-neutral-dark;
+      }
+
+      p {
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-cloudy;
+        font-size: $unnnic-font-size-body-md;
+        margin-top: 32px;
       }
     }
   }

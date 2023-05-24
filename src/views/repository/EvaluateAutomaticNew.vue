@@ -278,14 +278,30 @@ export default {
 
 .evaluate {
 
+  &__content-header {
+    p {
+      font-family: $unnnic-font-family-secondary;
+      color: $unnnic-color-neutral-dark;
+      font-size: $unnnic-font-size-body-gt;
+    }
+  }
+
   &__quality {
     background-color: rgba(0, 158, 150, 0.08);
     border-radius: 8px;
     height: 60px;
     display: flex;
     align-items: center;
-    margin-top: $unnnic-spacing-stack-md;
+    margin-top: 32px;
     padding-left: $unnnic-spacing-stack-sm;
+    h2 {
+      color: $unnnic-color-neutral-dark;
+    }
+
+    h2, p {
+      font-size: $unnnic-font-size-title-sm;
+      font-family: $unnnic-font-family-secondary;
+    }
 
     p {
       font-weight: 900;
@@ -297,20 +313,21 @@ export default {
   &__divider {
     height: 1px;
     background-color: $unnnic-color-neutral-soft;
-    margin-top: $unnnic-spacing-stack-md;
+    margin-top: 24px;
   }
 
   &__summary {
     display: flex;
 
     &__infos {
-      width: 35%;
+      width: 40%;
       display: flex;
       flex-direction: column;
     }
     .unnnic-card-number {
       background-color: #fff;
       max-width: 333px;
+      height: 96px;
       border: 1px solid #E2E6ED;
       margin-top: $unnnic-spacing-stack-sm;
 
@@ -324,13 +341,14 @@ export default {
         font-family: $unnnic-font-family-secondary;
         color: $unnnic-color-neutral-dark;
         font-size: $unnnic-font-size-title-sm;
+/*         line-height: 0px; */
       }
     }
 
     &__chart {
       margin-left: $unnnic-spacing-stack-sm;
       margin-top: $unnnic-spacing-stack-sm;
-      width: 60%;
+      width: 80%;
 
       .unnnic-chart-line {
         height: 100%;
@@ -346,10 +364,18 @@ export default {
     background-color: white;
     border: 1px solid $unnnic-color-neutral-soft;
     border-radius: 8px;
+    padding: 1rem;
 
     /deep/ .icon {
       background: rgba(0, 158, 150, 0.08);
       border-radius: 4px;
+    }
+
+    /deep/ .content .title {
+      font-family: $unnnic-font-family-secondary;
+      color: $unnnic-color-neutral-dark;
+      font-size: $unnnic-font-size-body-lg;
+      margin-bottom: 16px;
     }
   }
 
@@ -364,6 +390,30 @@ export default {
 
     .tab {
       margin-top: $unnnic-spacing-stack-md;
+    }
+
+    .unnnic-chart-bar {
+      /deep/ .main .groups .group .bars .bar.color-1 {
+        background-color: $unnnic-color-aux-blue;
+      }
+      /deep/ .main .groups .group .bars .bar.color-2 {
+        background-color: $unnnic-color-aux-blue;
+      }
+      /deep/ .main .groups .group .bars .bar.color-3 {
+        background-color: $unnnic-color-aux-blue;
+      }
+      /deep/ .main .groups .group .bars .bar.color-4 {
+        background-color: $unnnic-color-aux-blue;
+      }
+      /deep/ .main .groups .group .bars .bar.color-5 {
+        background-color: $unnnic-color-aux-blue;
+      }
+      /deep/ .main .groups .group .bars .bar.color-6 {
+        background-color: $unnnic-color-aux-blue;
+      }
+      /deep/ .main .groups .group .bars .bar.color-7 {
+        background-color: $unnnic-color-aux-blue;
+      }
     }
   }
 
