@@ -305,10 +305,10 @@ export default {
       eventClickFinish: false,
       loadingList: true,
       hasPhrases: false,
-      allTranslations: false,
+      allTranslations: '',
       exportOption: [
-        { id: 0, label: this.$t('webapp.translate.export_all_sentences'), value: false },
-        { id: 1, label: this.$t('webapp.translate.export_only_translated'), value: true },
+        { id: 0, label: this.$t('webapp.translate.export_all_sentences'), value: 'false' },
+        { id: 1, label: this.$t('webapp.translate.export_only_translated'), value: 'true' },
       ],
       query: {},
       sentenceFilter: { key: null, query: null },
@@ -404,7 +404,7 @@ export default {
           versionUUID: this.getSelectedVersion,
           fromLanguage: this.repository.language,
           toLanguagem: this.translate.to,
-          statusTranslation: !this.allTranslations,
+          statusTranslation: Boolean(this.allTranslations),
         });
         this.forceFileDownload(xlsFile);
         this.$buefy.toast.open({
