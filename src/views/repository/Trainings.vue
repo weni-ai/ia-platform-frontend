@@ -35,7 +35,7 @@
             </div>
             <new-example-form
               :repository="repository"
-              @created="updatedExampleList()"
+              @created="updateExampleList()"
               @eventStep="dispatchClick()"
             />
             <div
@@ -86,14 +86,14 @@
               />
             </div>
             <examples-pending-training
-              :update="update"
+              :update="updateList"
               :is-train="trainProgress"
               class="trainings-repository__new-example__pending-example"
-              @exampleDeleted="onExampleDeleted"
+              @exampleDeleted="updateExampleList"
               @noPhrases="noPhrasesYet = false"
               @onUpdateSelected="updateSelected"
               @onUpdateList="updateCount"
-              @onEditSentence="updateRepository(false)"
+              @onEditSentence="updateExampleList"
             />
           </div>
           <authorization-request-notification
@@ -282,6 +282,7 @@ export default {
       openSuccessModal: false,
       examplesList: null,
       tabs: ['first', 'second'],
+      updateList: false,
     };
   },
   computed: {
@@ -354,10 +355,6 @@ export default {
       this.update = !this.update;
       this.updateRepository(false)
     },
-    onExampleDeleted() {
-      this.updateTrainingStatus();
-      this.updatedExampleList();
-    },
     updateSelected(params) {
       this.selectedItems = params
     },
@@ -368,10 +365,14 @@ export default {
         this.openDeleteModal = false;
         this.openSuccessModal = true;
       });
-      await this.onExampleDeleted()
+      await this.updateExampleList()
     },
     updateCount(value) {
       this.examplesList = value
+    },
+    updateExampleList() {
+      this.updateList = !this.updateList;
+      this.updateTrainingStatus();
     }
   },
 };
