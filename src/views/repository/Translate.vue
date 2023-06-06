@@ -405,7 +405,7 @@ export default {
           versionUUID: this.getSelectedVersion,
           fromLanguage: this.repository.language,
           toLanguagem: this.translate.to,
-          statusTranslation: !this.allTranslations,
+          statusTranslation: Boolean(this.allTranslations),
         });
 
         const workbook = XLSX.utils.book_new();
