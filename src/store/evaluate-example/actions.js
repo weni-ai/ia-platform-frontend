@@ -40,17 +40,20 @@ export default {
     const response = await evaluateExample.get(id, version);
     return response.data;
   },
-  async runNewEvaluate(store, { repositoryUUID, language, version }) {
-    const response = await evaluateExample.runEvaluate(repositoryUUID, language, version);
+  async runNewEvaluate(store, { repositoryUUID, version, type }) {
+    const response = await evaluateExample.runEvaluate(repositoryUUID, version, type);
     return response;
   },
-  getAllResults(store, { repositoryUuid, version, limit = 20 }) {
-    return evaluateExample.allVersions(repositoryUuid, version, limit);
+  getAllResults(store, { repositoryUuid, version, limit = 20, type }) {
+    return evaluateExample.allVersions(repositoryUuid, version, limit, type);
   },
   getResultsData(store, { repositoryUuid, resultId }) {
     return evaluateExample.getResultsData(repositoryUuid, resultId);
   },
   getAllResultsLog(store, { repositoryUuid, resultId, page = 1 }) {
     return evaluateExample.getAllResultsLog(repositoryUuid, resultId, page);
+  },
+  getResultsByType(store, { repositoryUuid, query }) {
+    return evaluateExample.getResults(repositoryUuid, query);
   },
 };

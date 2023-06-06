@@ -168,6 +168,7 @@ export default {
   methods: {
     ...mapActions([
       'analyzeText',
+      'runNewEvaluate'
     ]),
     async load() {
       this.loading = true;
@@ -179,6 +180,11 @@ export default {
           text: this.text,
         });
         this.data = response.data;
+        this.runNewEvaluate({
+          repositoryUUID: this.repositoryUuid,
+          version: this.version,
+          type: 1,
+        });
       } catch (e) {
         this.error = e;
       } finally {
