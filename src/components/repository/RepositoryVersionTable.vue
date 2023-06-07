@@ -8,7 +8,10 @@
       <template v-slot:item="{ item }">
         <unnnic-table-row :headers="table.headers">
           <template v-slot:version>
-            {{ item.name }}
+            <a href="#" @click.prevent="handleVersion(item.name)">
+              {{ item.name }}
+            </a>
+
             <unnnic-button
               :class="item.is_default ? 'button-green' : 'button-disabled'">
               {{ $t('webapp.versions.main') }}
@@ -246,8 +249,32 @@ export default {
       'deleteVersion',
       'setDefaultVersion',
       'editVersion',
-      'addNewVersion'
+      'addNewVersion',
+      'setRepositoryVersion',
     ]),
+    handleVersion(value) {
+      const versionResult = this.list.items.find(option => option.name === value);
+      const version = {
+        id: versionResult.id,
+        name: versionResult.name
+      };
+
+      let defaultVersions;
+
+      try {
+        defaultVersions = JSON.parse(localStorage.getItem('default-versions')) || {};
+      } catch {
+        defaultVersions = {};
+      }
+
+      defaultVersions[this.repositoryUUID] = versionResult.name;
+      localStorage.setItem('default-versions', JSON.stringify(defaultVersions));
+
+      this.setRepositoryVersion({
+        version,
+        repositoryUUID: this.repositoryUUID
+      });
+    },
     deleteThisVersion(id, versionName, isDefaultVersion) {
       if (isDefaultVersion) {
         unnnicCallAlert({
@@ -355,6 +382,10 @@ export default {
 @import "~@/assets/scss/variables.scss";
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+a {
+  color: inherit;
+}
 
 .button-green {
   background: rgba(0, 158, 150, 0.16);

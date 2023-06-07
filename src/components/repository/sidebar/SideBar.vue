@@ -254,7 +254,7 @@
               v-show="dropSelect === 'isTestsActive' && collapse"
               class="sidebar-wrapper__body__item"
             >
-              <unnnic-sidebar-item
+              <!-- <unnnic-sidebar-item
                 :text="$t('webapp.menu.test-automatic')"
                 :class="[
                   checkSelectedMenu('repository-test-automatic')
@@ -268,7 +268,7 @@
                     closeDrop: false
                   })
                 "
-              />
+              /> -->
               <unnnic-sidebar-item
                 :text="$t('webapp.menu.test-manual')"
                 :class="[
@@ -407,7 +407,11 @@ export default {
       optionsHeader: [
         {
           text: this.$t('webapp.dashboard.all_versions'),
-          click: () => this.routerHandle('repository-versions')
+          click: () => this.routerHandle('repository-settings', {
+            query: {
+              tab: 'versions',
+            },
+          })
         }
       ]
     };
@@ -441,6 +445,17 @@ export default {
       }
     },
     selectedVersion() {
+      let defaultVersions;
+
+      try {
+        defaultVersions = JSON.parse(localStorage.getItem('default-versions')) || {};
+      } catch {
+        defaultVersions = {};
+      }
+
+      defaultVersions[this.repositoryUUID] = this.selectedVersion;
+      localStorage.setItem('default-versions', JSON.stringify(defaultVersions));
+
       this.handleVersion(this.selectedVersion);
     },
     getUpdateVersionsState() {
@@ -465,6 +480,18 @@ export default {
       } finally {
         this.isLoading = false;
       }
+
+      let defaultVersions;
+
+      try {
+        defaultVersions = JSON.parse(localStorage.getItem('default-versions')) || {};
+      } catch {
+        defaultVersions = {};
+      }
+
+      if (defaultVersions[this.repositoryUUID]) {
+        this.selectedVersion = defaultVersions[this.repositoryUUID];
+      }
     },
     handleVersion(value) {
       const versionResult = this.allVersions.find(option => option.name === value);
@@ -477,10 +504,11 @@ export default {
         repositoryUUID: this.repositoryUUID
       });
     },
-    routerHandle(path) {
-      if (path !== this.$router.currentRoute.name) {
+    routerHandle(path, opts = {}) {
+      if (path !== this.$router.currentRoute.name || path === 'repository-settings') {
         this.$router.push({
-          name: `${path}`
+          name: `${path}`,
+          ...opts,
         });
       }
     },

@@ -47,7 +47,7 @@
     />
     <unnnic-modal
       :showModal="showEvaluateSuccess"
-      text="Frases testadas com sucesso! O índice de acerto foi de 82%"
+      :text="'Frases testadas com sucesso! O índice de acerto foi de ' + accuracy + '%'"
       scheme="feedback-green"
       modal-icon="check-circle-1-1"
       @close="openSuccessModal = false"
@@ -187,7 +187,8 @@ export default {
       evaluateResult: {},
       alertForce: false,
       intentsCount: '',
-      intentsSuccess: ''
+      intentsSuccess: '',
+      accuracy: ''
     };
   },
   computed: {
@@ -435,6 +436,7 @@ export default {
         this.evaluateResult = result
         this.intentsCount = result.intents_count
         this.intentsSuccess = result.intents_success
+        this.accuracy = result.accuracy
         this.showEvaluateSuccess = true;
       } catch (error) {
         this.$buefy.toast.open({
