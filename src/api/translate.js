@@ -51,9 +51,7 @@ export default {
       for_the_language: toLanguagem,
       with_translation: statusTranslation,
     });
-    return request.$http.get(`/v2/repository/translation-export/${repositoryUuid}/${versionUUID}/?${queryString}`, {
-      responseType: 'arraybuffer',
-    });
+    return request.$http.get(`/v2/repository/translation-export/${repositoryUuid}/${versionUUID}/?${queryString}`);
   },
   importTranslate(repositoryUuid, versionUUID, formData) {
     return request.$http.put(`/v2/repository/translation-export/${repositoryUuid}/${versionUUID}/`,
@@ -62,7 +60,6 @@ export default {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        responseType: 'arraybuffer',
       });
   },
   auto(repositoryUuid, versionUUID, targetLanguage, items) {

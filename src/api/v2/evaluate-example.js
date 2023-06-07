@@ -45,13 +45,13 @@ export default {
   delete(exampleId, repositoryUuid) {
     return request.$http.delete(`/v2/repository/evaluate/${exampleId}/?repository_uuid=${repositoryUuid}`);
   },
-  search(repositoryUuid, repositoryVersion, query = {}, limit = 20) {
+  search(repositoryUuid, repositoryVersion, query = {}, perPage = 20) {
     const searchQuery = {
       repository_uuid: repositoryUuid,
       repository_version: repositoryVersion,
       ...query,
     };
-    return new utils.Page('/v2/repository/evaluate/', limit, searchQuery);
+    return new utils.Page('/v2/repository/evaluate/results/', perPage, searchQuery);
   },
   getResultsData(repositoryUuid, resultId) {
     return request.$http.get(`/v2/repository/evaluate/results/${resultId}/?repository_uuid=${repositoryUuid}`);
@@ -59,8 +59,8 @@ export default {
   getAllResultsLog(repositoryUuid, resultId, page = 1) {
     return request.$http.get(`/v2/repository/evaluate/results/${resultId}/?repository_uuid=${repositoryUuid}&page_intent=${page}`);
   },
-  allVersions(repositoryUuid, version, perPage = 20) {
-    return new utils.Page('/v2/repository/evaluate/results/', perPage, { repository_uuid: repositoryUuid, repository_version: version });
+  allVersions(repositoryUuid, version, perPage = 20, type) {
+    return new utils.Page('/v2/repository/evaluate/results/', perPage, { repository_uuid: repositoryUuid, repository_version: version, type });
   },
   async resultSearch(repositoryUuid, query = {}) {
     const queryString = qs.stringify({
@@ -69,13 +69,20 @@ export default {
     });
     return request.$http.get(`/v2/repository/evaluate/results/1/?${queryString}`);
   },
-  runEvaluate(repositoryUUID, language, version) {
+  runEvaluate(repositoryUUID, version, type) {
     return request.$http.post(
       `v2/repository/repository-details/${repositoryUUID}/evaluate/`,
       {
-        language,
         repository_version: version,
+        evaluate_type: type
       },
     );
+  },
+  getResults(repositoryUuid, query = {}) {
+    const queryString = qs.stringify({
+      repository_uuid: repositoryUuid,
+      ...query,
+    });
+    return request.$http.get(`/v2/repository/evaluate/results/?${queryString}`);
   },
 };

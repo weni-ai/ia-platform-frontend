@@ -1,9 +1,5 @@
 <template>
   <div>
-    <h3
-      class="evaluate-result-example-list__title">
-      {{ $t('webapp.result.sentence_details') }}
-    </h3>
     <div
       v-if="busy"
       class="evaluate-result-example-list__loading">
@@ -11,9 +7,17 @@
     </div>
     <p v-else-if="error">{{ $t('webapp.result.error') }}</p>
     <div v-else-if="resultExampleList && resultExampleList.length > 0">
-      <p>
-        {{ $t('webapp.result.sentence_details_text') }}
-      </p>
+      <!-- <intent-pagination
+        v-if="resultExampleList"
+        :item-component="sentencesTable"
+        :list="resultExampleList"
+        :repository="repository"
+        :per-page="perPage"
+        @itemDeleted="onItemDeleted()"
+        @itemSave="dispatchSave"
+        :show-intents="true"
+        @onUpdateSelected="updateSelected"
+      /> -->
       <evaluate-result-example-item
         v-for="(item, i) in resultExampleList"
         id="tour-evaluate_result-step-0"
@@ -54,6 +58,7 @@ import { mapActions, mapState, mapGetters } from 'vuex';
 import EvaluateResultExampleItem from '@/components/repository/repository-evaluate/results/EvaluateResultExampleItem';
 import Loading from '@/components/shared/Loading';
 import Tour from '@/components/Tour';
+import IntentPagination from '@/components/shared/IntentPagination';
 
 export default {
   name: 'EvaluateResultExampleList',
@@ -61,6 +66,7 @@ export default {
     EvaluateResultExampleItem,
     Loading,
     Tour,
+    IntentPagination
   },
   props: {
     id: {
@@ -76,6 +82,7 @@ export default {
       error: null,
       pages: 0,
       page: 1,
+      sentencesTable: EvaluateResultExampleItem
     };
   },
   computed: {
@@ -116,6 +123,7 @@ export default {
         this.resultExampleList = data.results;
         this.pages = data.total_pages;
         this.error = null;
+        this.$emit('getResult', response.data)
       } catch (error) {
         this.error = error;
       } finally {
