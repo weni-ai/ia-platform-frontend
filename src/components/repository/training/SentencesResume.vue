@@ -40,7 +40,7 @@
         <unnnic-button
           type="secondary"
           size="large"
-          :disabled="buttonDisabled"
+          :disabled="repository ? !repository.has_training : ''"
           :loading="evaluating"
           iconLeft="check-square-1"
           @click="newEvaluate()"
@@ -143,7 +143,9 @@ export default {
     ImportPhrasesModal,
   },
   computed: {
-    ...mapGetters(['getCurrentRepository']),
+    ...mapGetters({
+      repository: 'getCurrentRepository',
+    }),
     stats() {
       if (this.examplesList) {
         return {

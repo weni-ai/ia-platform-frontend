@@ -254,7 +254,7 @@
               v-show="dropSelect === 'isTestsActive' && collapse"
               class="sidebar-wrapper__body__item"
             >
-              <unnnic-sidebar-item
+              <!-- <unnnic-sidebar-item
                 :text="$t('webapp.menu.test-automatic')"
                 :class="[
                   checkSelectedMenu('repository-test-automatic')
@@ -268,7 +268,7 @@
                     closeDrop: false
                   })
                 "
-              />
+              /> -->
               <unnnic-sidebar-item
                 :text="$t('webapp.menu.test-manual')"
                 :class="[

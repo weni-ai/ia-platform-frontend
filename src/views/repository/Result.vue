@@ -39,7 +39,7 @@
 
             <unnnic-card-number
               :description="$t('webapp.evaluate.summary_title2')"
-              :number="result.log ? (result.log.total_pages * result.log.results.length) : ''"
+              :number="result.count_logs"
             />
 
             <unnnic-card-number
@@ -188,9 +188,19 @@ export default {
         version,
         intents_list,
         entities_list,
-        recommendations
+        recommendations,
+        count_logs
       } = this.resultData;
-      return { accuracy, log, results, version, intents_list, entities_list, recommendations }
+      return {
+        accuracy,
+        log,
+        results,
+        version,
+        intents_list,
+        entities_list,
+        recommendations,
+        count_logs
+      }
     },
     intentChart() {
       if (this.result.intents_list) {
