@@ -60,7 +60,6 @@ export default {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        responseType: 'arraybuffer',
       });
   },
   auto(repositoryUuid, versionUUID, targetLanguage, items) {
