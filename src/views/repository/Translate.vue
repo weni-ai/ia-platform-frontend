@@ -666,6 +666,33 @@ export default {
         }
       }];
 
+      worksheet['!cols'] = [
+        null,
+        {
+          wpx: 127.5,
+        },
+        {
+          wpx: 85,
+        },
+        null,
+        {
+          wpx: 170,
+        },
+        {
+          wpx: 170,
+        },
+        {
+          wpx: 170,
+        },
+      ];
+
+      worksheet['!rows'] = [
+        null,
+        {
+          hpx: 36,
+        },
+      ];
+
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Translate');
 
       XLSX.writeFile(workbook, filename);
