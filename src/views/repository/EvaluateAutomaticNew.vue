@@ -30,7 +30,7 @@
             <div class="evaluate__summary__infos column is-4 p-0">
               <unnnic-card-number
                 :description="$t('webapp.evaluate-automatic-new.summary_title1')"
-                :number="result.log ? (result.log.total_pages * result.log.results.length) : ''"
+                :number="result.count_logs"
               />
 
               <unnnic-card-number
@@ -191,7 +191,8 @@ export default {
         intents_list,
         entities_list,
         recommendations,
-        created = new Date(this.evaluateResult?.created_at).toLocaleString() || ''
+        created = new Date(this.evaluateResult?.created_at).toLocaleString() || '',
+        count_logs
       } = this.evaluateResult;
       return {
         accuracy,
@@ -202,7 +203,8 @@ export default {
         intents_list,
         entities_list,
         recommendations,
-        created
+        created,
+        count_logs
       }
     },
     intentChart() {

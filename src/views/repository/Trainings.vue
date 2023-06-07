@@ -49,7 +49,7 @@
                 :is-previous-disabled="true"
                 class="trainings-repository__list-wrapper__tutorialStep">
                 <train
-                  :key="update"
+                  :key="updateList"
                   :show-button="getRequirements.ready_for_train || !noPhrasesYet"
                   :repository="repository"
                   :authenticated="authenticated"
