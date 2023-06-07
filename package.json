@@ -14,7 +14,7 @@
     "@mdi/font": "^5.2.45",
     "@sentry/browser": "^5.29.2",
     "@sentry/integrations": "^5.29.2",
-    "@weni/unnnic-system": "1.16.4",
+    "@weni/unnnic-system": "1.16.12",
     "ansi-regex": "5.0.1",
     "axios": "0.21.2",
     "buefy": "^0.9.4",
@@ -59,7 +59,8 @@
     "vue-tour": "^1.5.0",
     "vuedraggable": "^2.24.3",
     "vuex": "^3.4.0",
-    "ws": "7.4.6"
+    "ws": "7.4.6",
+    "xlsx-with-styles": "^0.17.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

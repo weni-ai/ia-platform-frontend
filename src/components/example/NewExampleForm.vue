@@ -242,6 +242,7 @@ export default {
   methods: {
     ...mapActions([
       'newExample',
+      'newEvaluateExample',
     ]),
     onEnter() {
       if (this.shouldSubmit) this.onSubmit();
@@ -262,6 +263,11 @@ export default {
 
       try {
         await this.newExample({
+          repository: this.repository.uuid,
+          repositoryVersion: this.repository.repository_version_id,
+          ...this.data,
+        });
+        await this.newEvaluateExample({
           repository: this.repository.uuid,
           repositoryVersion: this.repository.repository_version_id,
           ...this.data,

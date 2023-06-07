@@ -8,57 +8,56 @@
           v-if="repository.authorization.can_write"
           class="evaluate">
           <div class="evaluate__content-header">
-            <h2 class="evaluate__content-header__title">
-              {{ $t('webapp.evaluate-manual.header_title') }}
-            </h2>
-            <p>{{ $t('webapp.evaluate-manual.header_title_p') }}</p>
-            <p>{{ $t('webapp.evaluate-manual.header_title_p2') }}</p>
-            <div class="evaluate__content-header__wrapper">
-              <div
-                class="evaluate__content-header__wrapper__language-select">
-                <p class="evaluate__content-header__wrapper__language-select__text">
-                  <strong>
-                    {{ $t('webapp.evaluate-manual.header_title_lang') }}
-                  </strong>
-                </p>
-                <div
-                  id="tour-evaluate-step-1"
-                  :is-previous-disabled="true">
-                  <b-select
-                    v-model="currentLanguage"
-                    expanded>
-                    <option
-                      v-for="language in languages"
-                      :key="language.id"
-                      :selected="language.value === currentLanguage"
-                      :value="language.value">
-                      {{ language.title }}
-                    </option>
-                  </b-select>
-                </div>
-              </div>
-              <b-button
-                id="tour-evaluate-step-5"
-                ref="runNewTestButton"
-                :is-finish-disabled="true"
-                :is-previous-disabled="true"
-                :is-next-disabled="true"
-                :loading="evaluating"
-                :disabled="evaluating"
-                type="is-secondary"
-                @click="newEvaluate()">
-                {{ $t('webapp.evaluate-manual.run_test') }}
-              </b-button>
-            </div>
+            <unnnic-card
+              :title="$t('webapp.evaluate-manual.header_title')"
+              icon="check-square-1"
+              type="title"
+              :has-information-icon="false"
+              scheme="aux-orange"
+            />
+              <p
+                v-html="$t('webapp.evaluate-manual.header_title_p')"
+                class="column is-7"></p>
           </div>
-          <div class="evaluate__divider" />
-          <div class="evaluate__content-wrapper">
-            <base-evaluate-examples
-              :filter-by-language="currentLanguage"
-              @created="updateTrainingStatus()"
-              @deleted="updateTrainingStatus()"
-              @eventStep="dispatchClick()"
-              @eventError="dispatchSkip()"/>
+
+          <div class="evaluate__divider"></div>
+
+          <div class="evaluate__test">
+            <div class="text column is-7">
+              <h2
+                v-html="$t('webapp.evaluate-manual.test_title')"></h2>
+              <p
+                v-html="$t('webapp.evaluate-manual.test_p')"></p>
+            </div>
+            <unnnic-button
+              type="secondary"
+              :text="$t('webapp.evaluate-manual.test_button')"
+              size="large"
+              @click="goToTraining"
+            />
+          </div>
+
+          <unnnic-card
+            type="account"
+            :title="$t('webapp.evaluate-manual.tips_title')"
+            :description="$t('webapp.evaluate-manual.tips_description')"
+            icon="study-light-idea-1"
+            scheme="brand-weni-soft"
+            class="evaluate__tips"
+          />
+
+          <div class="evaluate__historic">
+            <div class="evaluate__historic__title">
+              <h2>{{ $t("webapp.evaluate-manual.historic_title") }}</h2>
+            </div>
+
+            <paginated-list
+              v-if="versionsList"
+              :item-component="evaluateItem"
+              :list="versionsList" />
+            <p
+              v-if="versionsList && versionsList.empty"
+              class="no-examples">{{ $t('webapp.evaluate.no_versions') }}</p>
           </div>
         </div>
         <div class="evaluate__container">
@@ -101,6 +100,8 @@ import { LANGUAGES } from '@/utils';
 import Tour from '@/components/Tour';
 import LoginForm from '@/components/auth/LoginForm';
 import RepositoryBase from './Base';
+import EvaluateVersionItem from '@/components/repository/repository-evaluate/versions/EvaluateVersionItem';
+import PaginatedList from '@/components/shared/PaginatedList';
 
 export default {
   name: 'RepositoryEvaluateManual',
@@ -110,6 +111,8 @@ export default {
     BaseEvaluateExamples,
     AuthorizationRequestNotification,
     Tour,
+    EvaluateVersionItem,
+    PaginatedList,
   },
   extends: RepositoryBase,
   data() {
@@ -121,6 +124,8 @@ export default {
       eventClickFinish: false,
       eventReset: false,
       eventSkip: false,
+      evaluateItem: EvaluateVersionItem,
+      versionsList: null,
     };
   },
   computed: {
@@ -130,6 +135,8 @@ export default {
     ...mapGetters({
       repositoryVersion: 'getSelectedVersion',
       activeTutorial: 'activeTutorial',
+      repository: 'getCurrentRepository',
+      version: 'getSelectedVersion',
     }),
     languages() {
       if (!this.selectedRepository || !this.selectedRepository.evaluate_languages_count) return [];
@@ -140,6 +147,9 @@ export default {
           title: `${LANGUAGES[lang]} (${this.$tc('webapp.evaluate-manual.get_examples_test_sentences', this.selectedRepository.evaluate_languages_count[lang])})`,
         }));
     },
+  },
+  mounted() {
+    this.updateVersionList();
   },
   watch: {
     selectedRepository() {
@@ -152,6 +162,7 @@ export default {
     ...mapActions([
       'runNewEvaluate',
       'getTrainingStatus',
+      'getAllResults',
     ]),
     dispatchClick() {
       this.eventClick = !this.eventClick;
@@ -187,8 +198,8 @@ export default {
       try {
         const result = await this.runNewEvaluate({
           repositoryUUID: this.repository.uuid,
-          language: this.currentLanguage,
           version: this.repositoryVersion,
+          type: 0,
         });
         this.evaluating = false;
         this.$router.push({
@@ -213,6 +224,24 @@ export default {
       }
       return false;
     },
+    async updateVersionList(force = false) {
+      if (!this.resultExampleList || force) {
+        this.versionsList = await this.getAllResults({
+          repositoryUuid: this.repository.uuid,
+          version: this.version,
+          type: 0
+        });
+      }
+    },
+    goToTraining() {
+      this.$router.push({
+        name: 'repository-training',
+        params: {
+          ownerNickname: this.repository.owner__nickname,
+          slug: this.repository.slug,
+        }
+      })
+    },
   },
 };
 </script>
@@ -220,14 +249,100 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
-
+@import '~@weni/unnnic-system/dist/unnnic.css';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .evaluate {
 
+  &__content-header {
+    p {
+      font-family: $unnnic-font-family-secondary;
+      color: $unnnic-color-neutral-dark;
+      font-size: $unnnic-font-size-body-gt;
+    }
+  }
+
   &__divider {
     height: 1px;
-    background-color: #d5d5d5;
-    margin: 2.5rem 0 0 0;
+    background-color: $unnnic-color-neutral-soft;
+    margin-top: $unnnic-spacing-stack-md;
+  }
+
+  &__tips {
+    margin-top: $unnnic-spacing-stack-sm;
+  }
+
+  .unnnic-card-account {
+    background-color: white;
+    border: 1px solid $unnnic-color-neutral-soft;
+    border-radius: 8px;
+    padding: 1rem;
+
+    /deep/ .icon {
+      background: rgba(0, 158, 150, 0.08);
+      border-radius: 4px;
+    }
+
+    /deep/ .content .title {
+      font-family: $unnnic-font-family-secondary;
+      color: $unnnic-color-neutral-dark;
+      font-size: $unnnic-font-size-body-lg;
+      margin-bottom: 16px;
+    }
+  }
+
+  &__test {
+    margin-top: $unnnic-spacing-stack-lg;
+    border: 1px solid $unnnic-color-neutral-soft;
+    border-radius: 8px;
+    height: 132px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .text {
+      h2 {
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-dark;
+        font-size: $unnnic-font-size-title-sm;
+        line-height: 20px;
+      }
+
+      p {
+        margin-top: 12px;
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-dark;
+        font-size: 14px;
+      }
+
+      &.column {
+        padding: 0px;
+      }
+    }
+
+    .unnnic-button {
+      height: 48px;
+      width: 300px;
+    }
+  }
+
+  &__historic {
+    margin-top: $unnnic-spacing-stack-lg;
+
+    &__title {
+      h2 {
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-dark;
+      }
+
+      p {
+        font-family: $unnnic-font-family-secondary;
+        color: $unnnic-color-neutral-cloudy;
+        font-size: $unnnic-font-size-body-md;
+        margin-top: 32px;
+      }
+    }
   }
 
   &__navigation {
@@ -281,42 +396,8 @@ export default {
       }
     }
   }
-
-  &__content-header {
-    text-align: left;
-
-    &__buttons {
-      margin: 2rem 1rem;
-    }
-
-    &__title {
-      margin-top: 2rem;
-      font-size: 1.75rem;
-      font-weight: $font-weight-medium;
-      color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
-    }
-
-    &__wrapper {
-      display: flex;
-      align-items: flex-end;
-      margin-top: 1rem;
-
-      &__language-select {
-        flex: 1;
-        margin-right: .5rem;
-        text-align: left;
-
-        &__text{
-          margin-bottom: 1rem;
-        }
-      }
-    }
-  }
-
-  &__content-wrapper {
-    max-width: 100%;
-    margin: 0 auto;
+  /deep/ .pagination__bottom__controls {
+    display: none;
   }
 }
 </style>

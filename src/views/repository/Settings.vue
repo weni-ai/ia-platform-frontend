@@ -19,11 +19,11 @@
               <p class="settings__section__subtitle">
                 {{ $t("webapp.settings.description") }}
               </p>
-              <unnnic-tab initialTab="first" :tabs="tabs">
-                <template slot="tab-head-first">
+              <unnnic-tab v-model="activeTab" :tabs="tabs">
+                <template slot="tab-head-settings">
                   {{ $t("webapp.settings.settings_tab") }}
                 </template>
-                <template slot="tab-panel-first">
+                <template slot="tab-panel-settings">
                   <edit-repository-form
                     :owner-nickname="repository.owner.nickname"
                     :slug="repository.slug"
@@ -33,10 +33,10 @@
                   <hr>
                   <import-intelligence/>
                 </template>
-                <template slot="tab-head-second">
+                <template slot="tab-head-versions">
                   {{ $t("webapp.settings.versions_tab") }}
                 </template>
-                <template slot="tab-panel-second">
+                <template slot="tab-panel-versions">
                   <versions />
                 </template>
             </unnnic-tab>
@@ -100,11 +100,37 @@ export default {
   },
   data() {
     return {
-      tabs: ['first', 'second'],
+      activeTab: 'settings',
+      tabs: ['settings', 'versions'],
       openSuccessModal: false
     };
   },
   extends: RepositoryBase,
+  watch: {
+    '$route.query.tab': {
+      immediate: true,
+      handler() {
+        const requestedTab = this.$route.query.tab;
+
+        if (this.tabs.includes(requestedTab) && this.activeTab !== requestedTab) {
+          this.activeTab = requestedTab;
+        }
+      },
+    },
+    activeTab: {
+      immediate: true,
+      handler() {
+        if (this.activeTab !== this.$route.query.tab) {
+          this.$router.push({
+            name: this.$route.name,
+            query: {
+              tab: this.activeTab,
+            },
+          });
+        }
+      },
+    },
+  },
   methods: {
     getEditInitialData() {
       const {

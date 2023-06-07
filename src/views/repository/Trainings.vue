@@ -2,23 +2,27 @@
   <repository-view-base
     :repository="repository"
     :error-code="errorCode">
-    <div v-if="repository">
-      <div class="trainings-repository__new-example">
+    <div class="trainings-repository__new-example" v-if="repository">
+      <div class="mb-5">
+        <unnnic-card
+          type="title"
+          :title="$t('webapp.trainings.train_title')"
+          :hasInformationIcon="false"
+          icon="graph-status-circle-1"
+          scheme="aux-purple"
+        />
+        <p
+          v-html="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
+          class="trainings-repository__description column is-6 p-0" />
+      </div>
+      <unnnic-tab initialTab="first" :tabs="tabs">
+        <template slot="tab-head-first">
+          {{ $t("webapp.trainings.grid_text1") }}
+        </template>
+        <template slot="tab-panel-first">
+          <div class="trainings-repository__new-example pt-4">
         <div v-if="authenticated">
           <div v-if="repository.authorization.can_contribute">
-            <div>
-              <unnnic-card
-                type="title"
-                :title="$t('webapp.trainings.train_title')"
-                :hasInformationIcon="false"
-                icon="graph-status-circle-1"
-                scheme="aux-purple"
-              />
-              <p
-                v-html="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
-                class="trainings-repository__description column is-6 p-0" />
-            </div>
-            <hr class="divider" />
             <div class="trainings-repository__list-wrapper">
               <div>
                 <h2 class="trainings-repository__list-wrapper__title">
@@ -45,7 +49,7 @@
                 :is-previous-disabled="true"
                 class="trainings-repository__list-wrapper__tutorialStep">
                 <train
-                  :key="update"
+                  :key="updateList"
                   :show-button="getRequirements.ready_for_train || !noPhrasesYet"
                   :repository="repository"
                   :authenticated="authenticated"
@@ -107,6 +111,78 @@
           <login-form hide-forgot-password />
         </div>
       </div>
+        </template>
+        <template slot="tab-head-second">
+          {{ $t("webapp.trainings.import_title") }}
+        </template>
+        <template slot="tab-panel-second">
+          <div>
+            <h2 class="trainings-repository__list-wrapper__title pt-4">
+              {{ $t('webapp.trainings.import_title') }}
+            </h2>
+          </div>
+          <import-rasa-modal
+            @dispatchImportNotification="dispatchNotification"
+          />
+          <div
+              v-if="examplesList && examplesList.count > 0"
+              class="trainings-repository__new-example__train"
+            >
+              <div
+                :id="getRequirements.ready_for_train
+                || !noPhrasesYet ? 'tour-training-step-6' : ''"
+                :is-next-disabled="true"
+                :is-previous-disabled="true"
+                class="trainings-repository__list-wrapper__tutorialStep">
+                <train
+                  :key="update"
+                  :show-button="getRequirements.ready_for_train || !noPhrasesYet"
+                  :repository="repository"
+                  :authenticated="authenticated"
+                  :version="getSelectedVersion"
+                  :update-repository="async () => { updateRepository(false) }"
+                  :examples-list="examplesList"
+                  @trainProgressUpdated="trainProgress = $event"
+                  @statusUpdated="updateTrainingStatus($event)"
+                  @finishedTutorial="dispatchFinish()"
+                  @tutorialReset="dispatchReset()"
+                  @onTrain="sendEvent(); dispatchClick();"
+                  @onTrainComplete="noPhrasesYet = true"
+                  @onTrainReady="dispatchClick()"
+                  @unauthorized="signIn()"
+                  @updateItems="updatedExampleList()"
+                />
+              </div>
+            </div>
+          <div
+              v-if="examplesList && examplesList.count > 0"
+              class="is-flex is-align-items-baseline is-justify-content-space-between mt-6 mb-5"
+            >
+              <h2 class="trainings-repository__list-wrapper__title mb-0">
+                {{ $t('webapp.trainings.sentences_to_train') }}
+              </h2>
+              <unnnic-button
+                @click="openDeleteModal = true"
+                type="secondary"
+                size="large"
+                :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
+                :disabled="sentencesCounter === 0"
+                class="trainings-repository__button"
+                iconLeft="delete-1-1"
+              />
+            </div>
+            <examples-pending-training
+              :update="update"
+              :is-train="trainProgress"
+              class="trainings-repository__new-example__pending-example"
+              @exampleDeleted="onExampleDeleted"
+              @noPhrases="noPhrasesYet = false"
+              @onUpdateSelected="updateSelected"
+              @onUpdateList="updateCount"
+              @onEditSentence="updateRepository(false)"
+            />
+        </template>
+      </unnnic-tab>
     </div>
     <tour
       v-if="activeTutorial === 'training'"
@@ -169,6 +245,7 @@ import Train from '@/components/repository/training/Train';
 import Tour from '@/components/Tour';
 import RepositoryBase from './Base';
 import TrainingsLoader from '@/views/repository/loadings/Trainings';
+import ImportRasaModal from '@/components/shared/ImportRasaModal';
 
 export default {
   name: 'RepositoryTrainings',
@@ -182,7 +259,8 @@ export default {
     Loading,
     Train,
     Tour,
-    TrainingsLoader
+    TrainingsLoader,
+    ImportRasaModal
   },
   extends: RepositoryBase,
   data() {
@@ -203,6 +281,7 @@ export default {
       openDeleteModal: false,
       openSuccessModal: false,
       examplesList: null,
+      tabs: ['first', 'second'],
       updateList: false,
     };
   },
@@ -418,6 +497,7 @@ export default {
       font-size: 14px;
       color: #4E5666;
       margin-top: 1rem;
+      margin-bottom: 2rem;
 
       /deep/ a {
         color: #4E5666;

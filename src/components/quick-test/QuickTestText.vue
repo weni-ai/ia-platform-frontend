@@ -168,6 +168,7 @@ export default {
   methods: {
     ...mapActions([
       'analyzeText',
+      'runNewEvaluate'
     ]),
     async load() {
       this.loading = true;

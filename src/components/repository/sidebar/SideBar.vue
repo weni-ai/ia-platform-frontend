@@ -175,58 +175,46 @@
                 : 'sidebar-wrapper__body__element'
             ]"
           />
-          <section class="training-menu">
-            <unnnic-sidebar-item
-              v-if="getCurrentRepository.authorization.can_contribute"
-              :icon="
-                dropSelect === 'isTrainActive' ? 'graph-status-circle-1-1' : 'graph-status-circle-1'
-              "
-              :text="$t('webapp.menu.training')"
-              :enableTooltip="!collapse"
-              :active="dropSelect === 'isTrainActive'"
-              :class="{
-                'sidebar-wrapper__body--dropdown-open': dropSelect === 'isTrainActive',
-                'sidebar-wrapper__body__element': true
-              }"
-              @click.native="openDropdown('isTrainActive')"
-            >
-            </unnnic-sidebar-item>
-            <div
-              v-show="dropSelect === 'isTrainActive' && collapse"
-              class="sidebar-wrapper__body__item"
-            >
-              <unnnic-sidebar-item
-                :text="$t('webapp.menu.train')"
-                :class="[
-                  checkSelectedMenu('repository-training')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element'
-                ]"
-                @click="
-                  setSelectMenu({
-                    name: 'repository-training',
-                    to: 'repository-training',
-                    closeDrop: false
-                  })
-                "
-              />
-              <unnnic-sidebar-item
-                :text="$t('webapp.menu.suggestion')"
-                :class="[
+
+          <unnnic-sidebar-item
+            :text="$t('webapp.menu.training')"
+            :icon="checkSelectedMenu('repository-training')
+              ? 'graph-status-circle-1-1' : 'graph-status-circle-1'"
+            :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-training')"
+            :class="[
+              checkSelectedMenu('repository-training')
+                ? 'sidebar-wrapper__body--active'
+                : 'sidebar-wrapper__body__element'
+            ]"
+            @click="
+              setSelectMenu({
+                name: 'repository-training',
+                to: 'repository-training',
+                closeDrop: true
+              })
+            "
+          />
+
+          <unnnic-sidebar-item
+            :text="$t('webapp.menu.suggestion')"
+            :icon="checkSelectedMenu('repository-suggestion')
+              ? 'copy-paste-1' : 'copy-paste-1'"
+            :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-suggestion')"
+            :class="[
                   checkSelectedMenu('repository-suggestion')
                     ? 'sidebar-wrapper__body--active'
                     : 'sidebar-wrapper__body__element'
                 ]"
-                @click="
+            @click="
                   setSelectMenu({
                     name: 'repository-suggestion',
                     to: 'repository-suggestion',
                     closeDrop: false
                   })
                 "
-              />
-            </div>
-          </section>
+          />
 
           <unnnic-sidebar-item
             v-if="getCurrentRepository.authorization.can_contribute"
@@ -266,6 +254,21 @@
               v-show="dropSelect === 'isTestsActive' && collapse"
               class="sidebar-wrapper__body__item"
             >
+              <!-- <unnnic-sidebar-item
+                :text="$t('webapp.menu.test-automatic')"
+                :class="[
+                  checkSelectedMenu('repository-test-automatic')
+                    ? 'sidebar-wrapper__body--active'
+                    : 'sidebar-wrapper__body__element'
+                ]"
+                @click="
+                  setSelectMenu({
+                    name: 'repository-test-automatic',
+                    to: 'repository-test-automatic',
+                    closeDrop: false
+                  })
+                "
+              /> -->
               <unnnic-sidebar-item
                 :text="$t('webapp.menu.test-manual')"
                 :class="[
@@ -277,21 +280,6 @@
                   setSelectMenu({
                     name: 'repository-test-manual',
                     to: 'repository-test-manual',
-                    closeDrop: false
-                  })
-                "
-              />
-              <unnnic-sidebar-item
-                :text="$t('webapp.menu.results')"
-                :class="[
-                  checkSelectedMenu('repository-results')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element'
-                ]"
-                @click="
-                  setSelectMenu({
-                    name: 'repository-results',
-                    to: 'repository-results',
                     closeDrop: false
                   })
                 "
@@ -419,7 +407,11 @@ export default {
       optionsHeader: [
         {
           text: this.$t('webapp.dashboard.all_versions'),
-          click: () => this.routerHandle('repository-versions')
+          click: () => this.routerHandle('repository-settings', {
+            query: {
+              tab: 'versions',
+            },
+          })
         }
       ]
     };
@@ -453,6 +445,17 @@ export default {
       }
     },
     selectedVersion() {
+      let defaultVersions;
+
+      try {
+        defaultVersions = JSON.parse(localStorage.getItem('default-versions')) || {};
+      } catch {
+        defaultVersions = {};
+      }
+
+      defaultVersions[this.repositoryUUID] = this.selectedVersion;
+      localStorage.setItem('default-versions', JSON.stringify(defaultVersions));
+
       this.handleVersion(this.selectedVersion);
     },
     getUpdateVersionsState() {
@@ -477,6 +480,18 @@ export default {
       } finally {
         this.isLoading = false;
       }
+
+      let defaultVersions;
+
+      try {
+        defaultVersions = JSON.parse(localStorage.getItem('default-versions')) || {};
+      } catch {
+        defaultVersions = {};
+      }
+
+      if (defaultVersions[this.repositoryUUID]) {
+        this.selectedVersion = defaultVersions[this.repositoryUUID];
+      }
     },
     handleVersion(value) {
       const versionResult = this.allVersions.find(option => option.name === value);
@@ -489,10 +504,11 @@ export default {
         repositoryUUID: this.repositoryUUID
       });
     },
-    routerHandle(path) {
-      if (path !== this.$router.currentRoute.name) {
+    routerHandle(path, opts = {}) {
+      if (path !== this.$router.currentRoute.name || path === 'repository-settings') {
         this.$router.push({
-          name: `${path}`
+          name: `${path}`,
+          ...opts,
         });
       }
     },
