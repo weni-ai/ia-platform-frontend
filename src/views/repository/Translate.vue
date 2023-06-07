@@ -408,86 +408,7 @@ export default {
           statusTranslation: Boolean(this.allTranslations),
         });
 
-        const workbook = XLSX.utils.book_new();
-
-        const json = [];
-
-        const style = {
-          fill: {
-            patternType: 'solid',
-            fgColor: { rgb: '01D1D5' },
-          },
-          font: {
-            bold: true,
-            color: { rgb: '28464D' },
-          },
-        };
-
-        json.push([]);
-
-        json.push([{ v: 'Entities', s: style }]);
-
-        data.data.entities.forEach((entity) => {
-          json.push([entity]);
-        });
-
-        json.push([]);
-
-        json.push([
-          null,
-          null,
-          'To define which entity in a sentence to use square brackets to isolate the word and then use parentheses to identify the entity',
-        ]);
-        json.push([null, null, 'Example: good [word](entity)']);
-
-        json.push([]);
-        json.push([]);
-        json.push([]);
-        json.push([]);
-        json.push([]);
-
-        json.push(['Translation']);
-
-        json.push([
-          { v: 'ID', s: style },
-          { v: 'Repository Version', s: style },
-          { v: 'Language', s: style },
-          { v: 'Original Text', s: style },
-          { v: 'Translate', s: style },
-          { v: 'Translation Error', s: style },
-        ]);
-
-        data.data.translations.forEach((translation) => {
-          json.push([
-            translation.id,
-            translation.repository_version,
-            translation.language,
-            translation.original_text,
-            translation.translate,
-            translation.translation_error,
-          ]);
-        });
-
-        const worksheet = XLSX.utils.json_to_sheet(json, { skipHeader: true, origin: 'B2' });
-
-        const logoWeniBase64 = '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';
-
-        worksheet['!images'] = [{
-          name: 'image.png',
-          data: logoWeniBase64,
-          opts: { base64: true },
-          type: 'png',
-          position: {
-            type: 'twoCellAnchor',
-            attrs: { editAs: 'oneCell' },
-            from: { col: 1, row: 1 },
-            to: { col: 2, row: 2 }
-          }
-        }];
-
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Translate');
-
-        XLSX.writeFile(workbook, 'Weni Artificial Intelligence.xlsx');
+        this.createXlsxFromJSON(data, 'Weni Artificial Intelligence.xlsx');
 
         this.$buefy.toast.open({
           message: 'Downloading File',
@@ -502,16 +423,17 @@ export default {
     async importTranslation() {
       this.waitDownloadFile = !this.waitDownloadFile;
       const formData = new FormData();
-      formData.append('file', this.translationFile);
+      formData.append('file', this.translationFile[0]);
       formData.append('language', this.translate.to);
 
       try {
-        const importDownload = await this.importTranslations({
+        const { data } = await this.importTranslations({
           repositoryUuid: this.repository.uuid,
           versionUUID: this.getSelectedVersion,
           formData,
         });
-        this.forceFileDownload(importDownload);
+
+        this.createXlsxFromJSON(data, 'Weni Artificial Intelligence Response.xlsx');
       } catch (error) {
         this.errorMessage = this.$t('webapp.translate.import_select_error');
       }
@@ -525,13 +447,7 @@ export default {
     dispatchFinish() {
       this.eventClickFinish = !this.eventClickFinish;
     },
-    forceFileDownload(response) {
-      const blob = new Blob([response.data], { type: response.headers['content-type'] });
-      const result = document.createElement('a');
-      result.href = window.URL.createObjectURL(blob);
-      result.download = 'bothub.xlsx';
-      result.click();
-    },
+
     checkLanguageToImport() {
       if (this.translate.to) {
         if (this.activeTutorial === 'translate') {
@@ -671,6 +587,89 @@ export default {
         }
       })
     },
+
+    createXlsxFromJSON(data, filename) {
+      const workbook = XLSX.utils.book_new();
+
+      const json = [];
+
+      const style = {
+        fill: {
+          patternType: 'solid',
+          fgColor: { rgb: '01D1D5' },
+        },
+        font: {
+          bold: true,
+          color: { rgb: '28464D' },
+        },
+      };
+
+      json.push([]);
+
+      json.push([{ v: 'Entities', s: style }]);
+
+      data.data.entities.forEach((entity) => {
+        json.push([entity]);
+      });
+
+      json.push([]);
+
+      json.push([
+        null,
+        null,
+        'To define which entity in a sentence to use square brackets to isolate the word and then use parentheses to identify the entity',
+      ]);
+      json.push([null, null, 'Example: good [word](entity)']);
+
+      json.push([]);
+      json.push([]);
+      json.push([]);
+      json.push([]);
+      json.push([]);
+
+      json.push(['Translation']);
+
+      json.push([
+        { v: 'ID', s: style },
+        { v: 'Repository Version', s: style },
+        { v: 'Language', s: style },
+        { v: 'Original Text', s: style },
+        { v: 'Translate', s: style },
+        { v: 'Translation Error', s: style },
+      ]);
+
+      data.data.translations.forEach((translation) => {
+        json.push([
+          translation.id,
+          translation.repository_version,
+          translation.language,
+          translation.original_text,
+          translation.translate,
+          translation.translation_error,
+        ]);
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(json, { skipHeader: true, origin: 'B2' });
+
+      const logoWeniBase64 = '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';
+
+      worksheet['!images'] = [{
+        name: 'image.png',
+        data: logoWeniBase64,
+        opts: { base64: true },
+        type: 'png',
+        position: {
+          type: 'twoCellAnchor',
+          attrs: { editAs: 'oneCell' },
+          from: { col: 1, row: 1 },
+          to: { col: 2, row: 2 }
+        }
+      }];
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Translate');
+
+      XLSX.writeFile(workbook, filename);
+    }
   },
 };
 </script>
