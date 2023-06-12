@@ -47,21 +47,20 @@
     />
     <unnnic-modal
       :showModal="showEvaluateSuccess"
-      :text="'Frases testadas com sucesso! O índice de acerto foi de ' + accuracy + '%'"
+      :text="$tc('webapp.trainings.accuracy', accuracy)"
       scheme="feedback-green"
       modal-icon="check-circle-1-1"
-      @close="openSuccessModal = false"
-      :closeIcon="false"
+      @close="showEvaluateSuccess = false"
     >
       <span
         slot="message"
       >
-        Das {{ intentsCount }} frases enviadas para teste,
-        a IA compreendeu corretamente {{ intentsSuccess }}.
-        Veja os resultados detalhados do teste ou envie as frases direto para treinamento.
+        {{ $t('webapp.trainings.evaluate_results',
+          {count: intentsCount, success: intentsSuccess})
+        }}
       </span>
       <unnnic-button slot="options" type="terciary" @click.prevent.stop="verifyTrain()">
-        Enviar para treinamento
+        {{ $t('webapp.inbox.add_to_train') }}
       </unnnic-button>
       <unnnic-button
         slot="options"
@@ -69,7 +68,7 @@
         type="secondary"
         @click.prevent.stop="goToEvaluateResult()"
       >
-        Ver resultado
+        {{ $t('webapp.trainings.see_result') }}
       </unnnic-button>
     </unnnic-modal>
     <unnnic-modal
