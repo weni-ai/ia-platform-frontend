@@ -220,7 +220,11 @@
       "all_labels": "Todas las Categorias",
       "all_languages": "Todos los idiomas",
       "intent": "Intención",
-      "no_versions": "No hay resultados para esta versión"
+      "no_versions": "No hay resultados para esta versión",
+      "add_sentences_intent": "Agregar más oraciones para la intención",
+      "intent_precision": "Informe de precisión de intención",
+      "entity_precision": "Informe de precisión de la entidad",
+      "precision_description": "Una puntuación de precisión perfecta de 1.0 significa que todos los resultados de las pruebas fueron positivos."
     },
     "evaluate-manual": {
       "header_title": "Pruebas manuales",
@@ -592,7 +596,10 @@
       "add_entity_field_label": "Agregar o seleccionar una entidad",
       "add_entity_checkbox_title": "Seleccione la(s) palabra(s) de la oración relacionada con esta entidad",
       "add_entity_finish_edit": "Finalizar",
-      "add_entity_cancel": "Cancelar"
+      "add_entity_cancel": "Cancelar",
+      "evaluate_results": "De las {count} oraciones enviadas para la prueba, la IA entendió correctamente {success}. Vea los resultados detallados de la prueba o envíe las oraciones directamente al entrenamiento.",
+      "see_result": "Ver resultado",
+      "accuracy": "¡Oraciones probadas con éxito! La tasa de aciertos fue {accuracy}%"
     },
     "resumeSentences": {
       "title": "Resumen de frases enviadas para entrenamiento",
