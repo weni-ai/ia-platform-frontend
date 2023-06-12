@@ -219,7 +219,11 @@
       "all_entities": "All entities",
       "all_languages": "All languages",
       "intent": "Intent",
-      "no_versions": "No results for this version"
+      "no_versions": "No results for this version",
+      "add_sentences_intent": "Add more sentences for the intent",
+      "intent_precision": "Intent Accuracy Report",
+      "entity_precision": "Entity Precision Report",
+      "precision_description": "A perfect precision score of 1.0 means that all test results were positive."
     },
     "evaluate-manual": {
       "header_title": "Manual tests",
@@ -590,7 +594,10 @@
       "add_entity_field_label": "Add or select an entity",
       "add_entity_checkbox_title": "Select the word(s) of the sentence related to this entity",
       "add_entity_finish_edit": "Finish",
-      "add_entity_cancel": "Cancel"
+      "add_entity_cancel": "Cancel",
+      "evaluate_results": "Of the {count} sentences sent for testing, the AI correctly understood {success}. View detailed test results or send the sentences directly to training.",
+      "see_result": "View result",
+      "accuracy": "Successfully tested sentences! The hit rate was {accuracy}%"
     },
     "resumeSentences": {
       "title": "Summary of sentences sent for training",
