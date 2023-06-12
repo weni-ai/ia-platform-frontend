@@ -220,7 +220,11 @@
       "all_labels": "Todas as Categorias",
       "all_languages": "Todos os idiomas",
       "intent": "Intenção",
-      "no_versions": "Sem resultados para esta versão"
+      "no_versions": "Sem resultados para esta versão",
+      "add_sentences_intent": "Adicione mais frases para a intenção",
+      "intent_precision": "Relatório de Precisão das Intenções",
+      "entity_precision": "Relatório de Precisão das Entidades",
+      "precision_description": "Uma pontuação de precisão perfeita de 1.0 significa que todos os resultados dos testes foram positivos."
     },
     "evaluate-manual": {
       "header_title": "Testes manuais",
@@ -589,7 +593,10 @@
       "add_entity_finish_edit": "Concluir",
       "add_entity_cancel": "Cancelar",
       "run_tests": "Testar frases",
-      "import_title": "Importar frases"
+      "import_title": "Importar frases",
+      "evaluate_results": "Das {count} frases enviadas para teste, a IA compreendeu corretamente {success}. Veja os resultados detalhados do teste ou envie as frases direto para treinamento.",
+      "see_result": "Ver resultado",
+      "accuracy": "Frases testadas com sucesso! O índice de acerto foi de {accuracy}%"
     },
     "resumeSentences": {
       "title": "Resumo das frases adicionadas",

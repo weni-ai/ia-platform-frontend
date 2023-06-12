@@ -64,7 +64,7 @@
                 v-for="recommendation in recommendations"
                 :key="recommendation"
                 class="description">
-                  Adicione mais frases para a intenção
+                  {{ $t('webapp.evaluate.add_sentences_intent') }}
                   <span class="intent">{{ recommendation }}</span>
               </div>
             </div>
@@ -90,20 +90,18 @@
                 {{ $t("webapp.evaluate-automatic-new.results_tab_title2") }}
               </template>
               <template slot="tab-panel-second">
-                <h2 class="evaluate__chart__title">Relatório de Precisão das Intenções</h2>
+                <h2 class="evaluate__chart__title">{{ $t('webapp.evaluate.intent_precision') }}</h2>
                 <p class="evaluate__chart__subtitle">
-                  Uma pontuação de precisão perfeita de 1.0 significa
-                  que todos os resultados dos testes foram positivos.
+                  {{ $t('webapp.evaluate.precision_description') }}
                 </p>
                 <unnnic-chart-bar
                   condensed
                   :groups="intentChart"
                   :fixedMaxValue="1"
                 />
-                <h2 class="evaluate__chart__title">Relatório de Precisão das Entidades</h2>
+                <h2 class="evaluate__chart__title">{{ $t('webapp.evaluate.entity_precision') }}</h2>
                 <p class="evaluate__chart__subtitle">
-                  Uma pontuação de precisão perfeita de 1.0 significa
-                  que todos os resultados dos testes foram positivos.
+                  {{ $t('webapp.evaluate.precision_description') }}
                 </p>
                 <unnnic-chart-bar
                   condensed
