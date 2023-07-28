@@ -41,7 +41,7 @@ if ((runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_USE_SENTRY'))
   Sentry.init({
     dsn: runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_SENTRY'),
     integrations: [new VueIntegration({ Vue, attachProps: true })],
-    environment: process.env.NODE_ENV,
+    environment: runtimeVariables.get('SENTRY_ENVIRONMENT'),
     logErrors: true,
 
     beforeSend: (event) => {

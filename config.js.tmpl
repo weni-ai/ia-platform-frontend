@@ -23,6 +23,7 @@ const runtimeVariables = (() => ({
   VUE_APP_QA_FLOW_CHANNEL: ('${VUE_APP_QA_FLOW_CHANNEL}' || ''),
   VUE_APP_LOGROCKET_ID: ('${VUE_APP_LOGROCKET_ID}' || ''),
   VUE_APP_LOGROCKET_PARENT_DOMAIN: ('${VUE_APP_LOGROCKET_PARENT_DOMAIN}' || ''),
+  SENTRY_ENVIRONMENT: ('${SENTRY_ENVIRONMENT}' || ''),
   get(name){
     return this[name];
   }
