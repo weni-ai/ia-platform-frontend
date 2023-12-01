@@ -16,7 +16,7 @@
         v-model="intelligence.description"
       />
 
-      <div
+      <!-- <div
         :class="[
           'create-repository__intelligence__type__label',
           'unnnic-font secondary body-gt color-neutral-cloudy'
@@ -46,7 +46,7 @@
           :enabled="intelligence.repository_type === 'content'"
           @click.native="intelligence.repository_type = 'content'"
         />
-      </div>
+      </div> -->
       <div class="create-repository__intelligence__buttons">
         <unnnic-button
           type="terciary"
@@ -77,7 +77,7 @@ export default {
       intelligence: {
         name: '',
         description: '',
-        repository_type: ''
+        repository_type: 'content'
       }
     };
   },
