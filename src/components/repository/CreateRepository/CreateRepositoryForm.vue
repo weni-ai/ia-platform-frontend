@@ -1,26 +1,16 @@
 <template>
   <div class="create-repository">
     <div class="create-repository__container">
-      <div class="create-repository__container__indicator">
-        <unnnic-indicator
-          :numberOfSteps="2"
-          :currentStep="current + 1"
-          :titles="[
-            `${$t('webapp.create_repository.first_indicator')}`,
-            `${$t('webapp.create_repository.second_indicator')}`
-          ]"
-        />
-      </div>
-      <section v-show="current === 0" class="create-repository__container__steps">
+      <section class="create-repository__container__steps">
         <intelligence-tab
           @nextStep="changeStepContent($event, 1)"
-          @backModal="onChangeModalState(true)"
         />
       </section>
-      <section v-show="current === 1" class="create-repository__container__steps">
+      <section class="create-repository__container__steps">
         <definitions-tab
           @previousStep="changeStepContent($event, 0)"
           @createRepository="createRepository($event)"
+          @backModal="onChangeModalState(true)"
         />
       </section>
       <section v-show="current == 2" class="create-repository__container__steps">
@@ -50,20 +40,22 @@
         :showModal="openModal"
         :text="$t('webapp.create_repository.modal_title')"
         scheme="feedback-yellow"
-        modal-icon="alert-circle-1"
+        modal-icon="warning"
         @close="onChangeModalState(false)"
       >
         <span slot="message" v-html="$t('webapp.create_repository.modal_description')" />
-        <unnnic-button slot="options" type="terciary" @click="navigateToHomepage()">
-          {{ $t("webapp.create_repository.modal_exit_button") }}
-        </unnnic-button>
         <unnnic-button
           slot="options"
-          class="create-repository__container__button"
-          type="primary"
+          type="tertiary"
           @click="onChangeModalState(false)"
         >
           {{ $t("webapp.create_repository.modal_continue_button") }}
+        </unnnic-button>
+        <unnnic-button
+          slot="options"
+          @click="navigateToHomepage()"
+        >
+          {{ $t("webapp.create_repository.modal_exit_button") }}
         </unnnic-button>
       </unnnic-modal>
     </div>
@@ -180,7 +172,7 @@ export default {
       const { organization, categories, isPrivate, ...data } = this.data;
       const updatedModel = updateAttrsValues(model, {
         ...data,
-        is_private: isPrivate,
+        is_private: true,
         organization: this.getOrgSelected,
         categories
       });
@@ -267,5 +259,11 @@ export default {
       background-color: $unnnic-color-feedback-yellow;
     }
   }
+
+}
+::v-deep {
+    .text-input.size--sm .icon-right {
+      top: 15px;
+    }
 }
 </style>

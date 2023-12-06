@@ -88,7 +88,7 @@
       "community_description": "Integre Inteligências prontas e de qualidade ao seu projeto" 
     },
     "create_repository": {
-      "intelligence": "Nova inteligência",
+      "intelligence": "Nova Inteligência Artificial",
       "definitions": "Definições da inteligência",
       "first_indicator":"Inteligência",
       "second_indicator":"Definições",
@@ -117,10 +117,10 @@
       "repository_created_first": "A inteligência foi criada e já pode ser",
       "repository_created_second": "alimentada",
       "navigate_to_intelligence_button": "Ir até para a inteligência",
-      "modal_title": "Cancelar a criação da Inteligência?",
-      "modal_description": "Se você sair agora esta inteligência não será criada.",
+      "modal_title": "Cancelar a criação da IA",
+      "modal_description": "Tem certeza que deseja cancelar a criação da IA? <br> Ao confirmar, a IA não será criada",
       "modal_exit_button": "Sair e não criar",
-      "modal_continue_button": "Continuar criando"
+      "modal_continue_button": "Cancelar"
     },
     "register_form": {
       "already_have_account": "Já tem uma conta?",
@@ -328,12 +328,12 @@
         "knowledge_bases": "Bases de conhecimento",
         "description": "As Bases de Conhecimento são as fontes de texto de uma Inteligência de Conteúdo. Distribua o texto da inteligência em bases, reunindo informações semelhantes sobre cada uma. Saiba mais em nossa <a href='https://docs.weni.ai/l/pt/bothub/introdu-o-intelig-ncia-de-conte-do' target='_blank' class='repository-base__description__text--link'>documentação</a>.",
         "new_knowledge_base": "Adicionar nova base",
-        "adjustments": "Ajustes",
-        "adjustments_subtitle": "Inteligência de conteúdo",
+        "adjustments": "Configurações",
+        "adjustments_subtitle": "Gerencie as configurações básicas da Inteligência",
         "adjustments_button": "Salvar alterações",
         "adjustments_button_back": "Voltar",
         "adjustuments_modal_title": "Alterações salvas!",
-        "adjustments_modal_description": "Ajustes feitos com sucesso 😉",
+        "adjustments_modal_description": "As alterações foram salvas",
         "adjustuments_modal_alert_title": "Salvar alterações antes de sair?",
         "adjustments_modal_alert_description": "Os ajustes não serão aplicados a menos que você salve.",
         "adjustments_modal_alert_save": "Salvar alterações",

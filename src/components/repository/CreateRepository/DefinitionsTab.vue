@@ -1,8 +1,5 @@
 <template>
   <div class="create-repository__definitions">
-    <h1 class="create-repository__definitions__title">
-      {{ $t("webapp.create_repository.definitions") }}
-    </h1>
     <div class="create-repository__definitions__wrapper">
       <section class="create-repository__definitions__wrapper__fields">
         <unnnic-label :label="$t('webapp.create_repository.language_label')"/>
@@ -35,44 +32,17 @@
         <loading v-else />
       </section>
 
-      <section class="create-repository__definitions__intelligence-privacy">
-        <unnnic-label :label="$t('webapp.create_repository.privacy_label')" />
-        <div class="create-repository__definitions__intelligence-privacy__cards">
-          <unnnic-card
-            clickable
-            :title="$t('webapp.create_repository.privacy_type_public_title')"
-            :description="$t('webapp.create_repository.privacy_type_public_description')"
-            type="content"
-            icon="lock-unlock-1-1"
-            class="create-repository__definitions__intelligence-privacy__cards__content"
-            :enabled="!definition.isPrivate"
-            @click.native="definition.isPrivate = false"
-          />
-
-          <unnnic-card
-            clickable
-            :title="$t('webapp.create_repository.privacy_type_private_title')"
-            :description="$t('webapp.create_repository.privacy_type_private_description')"
-            type="content"
-            icon="lock-2-1"
-            class="create-repository__definitions__intelligence-privacy__cards__content"
-            :enabled="definition.isPrivate"
-            @click.native="definition.isPrivate = true"
-          />
-        </div>
-      </section>
 
       <section class="create-repository__definitions__buttons">
         <unnnic-button
-          type="terciary"
+          type="tertiary"
           class="create-repository__definitions__buttons__btn"
-          @click.native="dispatchPreviousStep()"
+          @click.native="dispatchBackModal()"
         >
-          {{$t('webapp.create_repository.navigate_to_previous_button')}}
+          {{$t('webapp.create_repository.cancel_create_intelligence_button')}}
         </unnnic-button>
 
         <unnnic-button
-          type="secondary"
           class="create-repository__definitions__buttons__btn"
           :disabled="!checkHasValue"
           @click.native="dispatchCreateRepository()"
@@ -80,6 +50,15 @@
           {{$t('webapp.create_repository.create_intelligence_button')}}
         </unnnic-button>
       </section>
+
+      <unnnic-card
+      class="create-repository__definitions__info-card"
+      type="default"
+      title="Sobre a WeniGPT - IA Generativa"
+      description="Crie bases de conteúdo e a IA Generativa será capaz de responder perguntas
+       baseada nesse conteúdo sem treinamento. Ideal para textos informativos e FAQs."
+      scheme="feedback-yellow"
+      />
     </div>
   </div>
 </template>
@@ -98,7 +77,7 @@ export default {
     return {
       definition: {
         language: '',
-        isPrivate: false,
+        isPrivate: true,
         categories: []
       },
       categoryList: []
@@ -145,7 +124,10 @@ export default {
     },
     dispatchCreateRepository() {
       this.$emit('createRepository', this.definition);
-    }
+    },
+    dispatchBackModal() {
+      this.$emit('backModal');
+    },
   }
 };
 </script>
@@ -205,6 +187,21 @@ export default {
 
       &__btn {
         width: 47%;
+      }
+    }
+
+    &__info-card {
+      border: 1px solid $unnnic-color-weni-200;
+      background: $unnnic-color-weni-100;
+      margin-bottom: $unnnic-spacing-lg;
+
+      ::v-deep {
+        .unnnic-card-default__description {
+          white-space: unset;
+          overflow: unset;
+          text-overflow: unset;
+          max-width: unset;
+        }
       }
     }
   }

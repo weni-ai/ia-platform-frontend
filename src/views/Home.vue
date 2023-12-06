@@ -36,21 +36,12 @@
         </div>
 
             <unnnic-input
-              v-model="organizationName"
               icon-left="search-1"
               placeholder="Pesquisar inteligência"
             />
       </div>
 
-      <!-- <home-tab-navigation @changeTabValue="onTabSelected"/> -->
       <div :class="[loading ? 'hidden' : 'visible']">
-        <!-- <home-intelligence-from-community
-          @loading="loading = $event"
-          v-show="howTabIsShown === 0"/>
-
-        <home-intelligence-from-project
-          @loading="loading = $event"
-          v-show="howTabIsShown === 1"/> -->
 
         <home-intelligence-from-org
           @loading="loading = $event"
