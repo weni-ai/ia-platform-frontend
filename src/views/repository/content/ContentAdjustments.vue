@@ -2,22 +2,18 @@
   <repository-view-base :repository="repository" :error-code="errorCode">
     <section v-if="repository" class="repository-adjustments">
       <section class="repository-adjustments__description">
-        <div class="repository-adjustments__title">
-          <unnnic-card
-            type="title"
-            :title="$t('webapp.home.bases.adjustments')"
-            enabled
-            icon="cog-1"
-            infoPosition="right"
-            :hasInformationIcon="false"
-            scheme="brand-weni-soft"
-          />
+        <div class="repository-adjustments__description__title">
+          <div @click="goToSummary" class="repository-adjustments__description__back-button">
+            <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
+          </div>
+          <h1>
+            {{ $t("webapp.home.bases.adjustments") }}
+          </h1>
         </div>
-        <p class="repository-adjustments__description__text">
-          {{ $t("webapp.home.bases.adjustments_subtitle") }}
-        </p>
+        <div class="repository-adjustments__description__subtitle">
+          <p v-html="$t('webapp.home.bases.adjustments_subtitle')" />
+        </div>
       </section>
-      <!-- title -->
       <hr />
       <section class="repository-adjustments__wrapper">
         <unnnic-input
@@ -59,32 +55,6 @@
         <loading v-else />
       </section>
       <!-- categories -->
-      <section class="repository-adjustments__privacy">
-        <unnnic-label :label="$t('webapp.create_repository.privacy_label')" />
-        <div class="repository-adjustments__privacy__cards">
-          <unnnic-card
-            clickable
-            :title="$t('webapp.create_repository.privacy_type_public_title')"
-            :description="$t('webapp.create_repository.privacy_type_public_description')"
-            type="content"
-            icon="lock-unlock-1-1"
-            class="repository-adjustments__privacy__cards__content"
-            :enabled="!intelligence.is_private"
-            @click.native="intelligence.is_private = false"
-          />
-          <unnnic-card
-            clickable
-            :title="$t('webapp.create_repository.privacy_type_private_title')"
-            :description="$t('webapp.create_repository.privacy_type_private_description')"
-            type="content"
-            icon="lock-2-1"
-            class="repository-adjustments__privacy__cards__content"
-            :enabled="intelligence.is_private"
-            @click.native="intelligence.is_private = true"
-          />
-        </div>
-      </section>
-      <!-- privacy -->
       <section class="repository-adjustments__wrapper__buttons">
         <unnnic-button
           type="terciary"
@@ -95,7 +65,6 @@
         >
         </unnnic-button>
         <unnnic-button
-          type="secondary"
           size="large"
           :text="$t('webapp.home.bases.adjustments_button')"
           @click="onSubmit()"
@@ -105,16 +74,12 @@
         </unnnic-button>
       </section>
     </section>
-    <modal
-      v-if="isSavedModalOpen"
-      type="alert"
-      :data="{
-        scheme: 'feedback-green',
-        icon: 'check-circle-1-1',
-        title: this.$t('webapp.home.bases.adjustuments_modal_title'),
-        description: this.$t('webapp.home.bases.adjustments_modal_description')
-      }"
-      @close="isSavedModalOpen = false"
+    <unnnic-alert
+      v-if="isAlertOpen"
+      :text="$t('webapp.home.bases.adjustments_modal_description')"
+      scheme="feedback-green"
+      seconds="5"
+      @close="isAlertOpen = false"
     />
     <unnnic-modal
       :show-modal="openModal"
@@ -164,7 +129,7 @@ export default {
         name: '',
         description: '',
         repository_type: '',
-        is_private: false,
+        is_private: true,
         language: '',
         categories: []
       },
@@ -172,7 +137,7 @@ export default {
       languages: LANGUAGES,
       submitting: false,
       errors: {},
-      isSavedModalOpen: false,
+      isAlertOpen: false,
       isDiscardModalOpen: false,
       openModal: false,
       localNext: null
@@ -284,7 +249,7 @@ export default {
           repositoryUuid: this.repository.uuid
         });
         this.submitting = false;
-        this.isSavedModalOpen = true;
+        this.isAlertOpen = true;
         this.repository = new Repository({ ...response.data });
         return true;
       } catch (error) {
@@ -316,6 +281,9 @@ export default {
       if (this.localNext) {
         this.localNext();
       }
+    },
+    goToSummary() {
+      this.$router.push(`/dashboard/${this.$route.params.ownerNickname}/${this.$route.params.slug}/content/bases`)
     }
   },
   mounted() {
@@ -361,36 +329,60 @@ export default {
   }
   &__wrapper {
     &__fields {
-      margin-bottom: $unnnic-inset-lg;
+      margin-bottom: $unnnic-spacing-sm;
     }
   }
   &__description {
-    &__text {
-      font-family: Lato, sans-serif;
-      font-weight: $unnnic-font-weight-regular;
-      line-height: 1.375rem;
-      font-size: $unnnic-font-size-body-gt;
-      color: #67738b;
-      margin-top: $unnnic-inset-nano;
-      ul li {
-        list-style-type: disc;
+    &__title {
+      display: flex;
+      margin-bottom: $unnnic-spacing-sm;
+    }
+
+    &__subtitle {
+      p {
+        font-family: "Lato";
+        font-size: 14px;
+        color: #4e5666;
       }
+    }
+
+    h1 {
+      font-family: "Aleo";
+      font-size: 20px;
+      color: #272b33;
+    }
+
+    &__back-button {
+      cursor: pointer;
+      margin-right: 1rem;
     }
   }
   &__wrapper {
     &__buttons {
       display: flex;
       justify-content: space-between;
-      margin-bottom: $unnnic-inset-lg;
+      margin: $unnnic-inset-lg 0 $unnnic-spacing-lg;
+      gap: $unnnic-spacing-sm;
     }
   }
   &__buttons {
-    width: 48.8%;
+    width: 50%;
   }
 }
 ::v-deep {
   .unnnic-select.unnic--clickable {
     width: 100%;
+  }
+
+  .input.size-md {
+    height: auto;
+  }
+
+  .text-input.size--sm .icon-right {
+    top: 15px;
+  }
+  .unnnic-form {
+    margin-bottom: $unnnic-spacing-sm;
   }
 }
 </style>

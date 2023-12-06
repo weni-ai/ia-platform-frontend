@@ -16,55 +16,6 @@
         v-model="intelligence.description"
       />
 
-      <!-- <div
-        :class="[
-          'create-repository__intelligence__type__label',
-          'unnnic-font secondary body-gt color-neutral-cloudy'
-        ]"
-      >
-        {{ $t('webapp.create_repository.intelligence_type') }}
-      </div>
-
-      <div class="create-repository__intelligence__type">
-        <unnnic-card
-          clickable
-          :title="$t('webapp.create_repository.intelligence_type_classification_title')"
-          :description="$t('webapp.create_repository.intelligence_type_classification_description')"
-          type="content"
-          icon="typing-1"
-          class="create-repository__intelligence__type__content"
-          :enabled="intelligence.repository_type === 'classifier'"
-          @click.native="intelligence.repository_type = 'classifier'"
-        />
-        <unnnic-card
-          clickable
-          :title="$t('webapp.create_repository.intelligence_type_content_title')"
-          :description="$t('webapp.create_repository.intelligence_type_content_description')"
-          type="content"
-          icon="paginate-filter-text-1"
-          class="create-repository__intelligence__type__content"
-          :enabled="intelligence.repository_type === 'content'"
-          @click.native="intelligence.repository_type = 'content'"
-        />
-      </div> -->
-      <div class="create-repository__intelligence__buttons">
-        <unnnic-button
-          type="terciary"
-          class="create-repository__intelligence__buttons__btn"
-          @click.native="dispatchBackModal()"
-        >
-          {{ $t("webapp.create_repository.cancel_create_intelligence_button") }}
-        </unnnic-button>
-
-        <unnnic-button
-          type="secondary"
-          class="create-repository__intelligence__buttons__btn"
-          :disabled="!checkHasValue"
-          @click.native="dispatchNextStep()"
-        >
-          {{ $t("webapp.create_repository.navigate_to_next_button") }}
-        </unnnic-button>
-      </div>
     </div>
   </div>
 </template>
@@ -86,6 +37,20 @@ export default {
       return this.intelligence.name !== '' && this.intelligence.description !== '';
     }
   },
+  watch: {
+    'intelligence.description': {
+      handler() {
+        this.dispatchNextStep()
+      },
+      deep: true
+    },
+    'intelligence.name': {
+      handler() {
+        this.dispatchNextStep()
+      },
+      deep: true
+    },
+  },
   methods: {
     dispatchBackModal() {
       this.$emit('backModal');
@@ -106,7 +71,7 @@ export default {
 .create-repository {
   &__intelligence {
     width: 100%;
-    height: 30.625rem;
+    // height: 30.625rem;
 
     &__title {
       text-align: center;
