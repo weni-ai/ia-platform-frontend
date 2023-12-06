@@ -605,9 +605,6 @@ export default {
       &__select {
         z-index: 10;
         padding-bottom: $unnnic-spacing-stack-sm;
-        .icon-right {
-          transform: translateY(110%)
-        }
         .dropdown > div > input {
           height: auto;
         }

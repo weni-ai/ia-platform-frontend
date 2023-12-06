@@ -552,9 +552,6 @@ export default {
       align-items: center;
     }
   }
-  .icon-right {
-    transform: translateY(100%);
-  }
   .input.size-md {
     height: 46px;
   }

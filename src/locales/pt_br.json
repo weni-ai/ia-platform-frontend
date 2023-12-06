@@ -325,9 +325,9 @@
       "confirm_with_username_placeholder": "Confirme seu nome de usuário para excluir a conta",
       "confirm_remove_integrate": "Remover integração",
       "bases": {
-        "knowledge_bases": "Bases de conhecimento",
+        "knowledge_bases": "{n} base de conteúdo adicionada | {n} bases de conteúdo adicionadas",
         "description": "As Bases de Conhecimento são as fontes de texto de uma Inteligência de Conteúdo. Distribua o texto da inteligência em bases, reunindo informações semelhantes sobre cada uma. Saiba mais em nossa <a href='https://docs.weni.ai/l/pt/bothub/introdu-o-intelig-ncia-de-conte-do' target='_blank' class='repository-base__description__text--link'>documentação</a>.",
-        "new_knowledge_base": "Adicionar nova base",
+        "new_knowledge_base": "Criar base de conteúdo",
         "adjustments": "Configurações",
         "adjustments_subtitle": "Gerencie as configurações básicas da Inteligência",
         "adjustments_button": "Salvar alterações",

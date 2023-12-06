@@ -5,70 +5,70 @@
         <div class="repository-base__title">
           <unnnic-card
             type="title"
-            :title="$t('webapp.home.description')"
+            :title="repository.name"
             enabled
-            icon="paginate-filter-text-1"
+            icon="neurology"
             infoPosition="right"
             :hasInformationIcon="false"
-            scheme="aux-orange"
+            scheme="aux-blue"
           />
         </div>
-        <div>
-          <vue-markdown
-            :source="repository.description"
-            show
-            html
-            :breaks="false"
-            :linkify="false"
-            emoji
-            typographer
-            toc
-            toc-id="toc"
-            class="repository-base__description__text markdown-body"
-          />
-          <p v-if="repository.description" class="repository-base__description__text" />
-          <p v-else>
-            <i class="text-color-grey-dark">{{ $t("webapp.home.no_description") }}</i>
-          </p>
-        </div>
-        <div class="repository-base__description__header">
+        <section class="repository-base__description__header">
           <div>
-            <unnnic-tag
-              v-for="(category, index) in getAllCategories"
-              :key="index"
-              class="repository-base__header__tag"
-              :text="category"
-              disabled
-              scheme="background-sky"
+            <vue-markdown
+              :source="repository.description"
+              show
+              html
+              :breaks="false"
+              :linkify="false"
+              emoji
+              typographer
+              toc
+              toc-id="toc"
+              class="repository-base__description__text markdown-body"
             />
+            <p v-if="repository.description" class="repository-base__description__text" />
+            <p v-else>
+              <i class="text-color-grey-dark">{{ $t("webapp.home.no_description") }}</i>
+            </p>
+            <div style="display: flex">
+                <unnnic-tag
+                  v-for="(category, index) in getAllCategories"
+                  :key="index"
+                  class="repository-base__header__tag"
+                  :text="category"
+                  disabled
+                  scheme="background-sky"
+                />
+            </div>
           </div>
-        </div>
+          <!-- <unnnic-button
+            @click.prevent.stop="changeIntegrateModalState(true)"
+            iconCenter="settings"
+            type="secondary"
+          /> -->
+          <repository-content-navigation />
+        </section>
       </div>
       <hr />
-      <div>
-        <unnnic-card
-          type="title"
-          :title="$t('webapp.home.bases.knowledge_bases')"
-          enabled
-          icon="book-address-1-2"
-          infoPosition="right"
-          :hasInformationIcon="false"
-          scheme="aux-pink"
+      <div class="repository-base__bases-count">
+        <h1
+          class="u font secondary title-sm bold"
+          v-html="$tc('webapp.home.bases.knowledge_bases', this.bases.length)"
         />
-        <p
-          class="repository-base__description__text"
-          v-html="$t('webapp.home.bases.description')"
-        ></p>
+        <unnnic-button @click="createNewBase" class="ml-auto" iconLeft="add-1">
+          {{ $t('webapp.home.bases.new_knowledge_base') }}
+        </unnnic-button>
       </div>
-      <div class="repository-base__cards">
-        <unnnic-card
-          clickable
-          :text="$t('webapp.home.bases.new_knowledge_base')"
-          type="blank"
-          icon="add-1"
-          class="repository-base__cards__new"
-          @click.native="createNewBase()"
+
+      <div class="repository-base__search-base">
+        <unnnic-input
+          icon-left="search-1"
+          placeholder="Pesquisar base de conteúdo"
         />
+      </div>
+
+      <div class="repository-base__cards">
         <home-repository-card
           type="base"
           v-for="base in bases"
@@ -86,13 +86,15 @@ import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import VueMarkdown from 'vue-markdown';
 import RepositoryBase from '../Base';
 import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard';
+import RepositoryContentNavigation from './Navigation';
 
 export default {
   name: 'RepositoryBase',
   components: {
     RepositoryViewBase,
     VueMarkdown,
-    HomeRepositoryCard
+    HomeRepositoryCard,
+    RepositoryContentNavigation
   },
   extends: RepositoryBase,
   data() {
@@ -161,19 +163,6 @@ export default {
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .repository-base {
-  &__title {
-    font-size: 1.75rem;
-    font-weight: $font-weight-medium;
-    display: flex;
-    align-items: center;
-    font-family: $font-family;
-    color: $color-fake-black;
-
-    div {
-      margin: 0 0 0.2rem 0.2rem;
-    }
-  }
-
   &__header {
     display: flex;
 
@@ -188,7 +177,6 @@ export default {
     &__header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
     }
 
     &__text, i {
@@ -215,6 +203,28 @@ export default {
       margin-bottom: $unnnic-inline-sm;
     }
   }
+
+  &__search-base {
+      margin: $unnnic-spacing-md 0 $unnnic-spacing-sm;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: $unnnic-spacing-stack-sm $unnnic-spacing-inline-md;
+
+      .unnnic-form {
+        flex: 1;
+      }
+    }
+
+    &__bases-count {
+      display: flex;
+      align-items: center;
+    }
+    ::v-deep {
+      .input.size-md {
+        height: auto;
+      }
+    }
 }
 .tooltipStyle::after {
   font-size: $unnnic-font-size-body-md;
@@ -223,7 +233,7 @@ export default {
   font-family: $font-family;
 }
 .markdown-body {
-  margin: 1.5rem 0;
+  margin: 1rem 0;
 
   a {
     color: $color-primary;
@@ -243,7 +253,7 @@ export default {
     display: none;
   }
   .unnnic-card-intelligence__description {
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 2;
   }
   .repository-base__description__text--link {
     color: $unnnic-color-neutral-dark;
@@ -255,4 +265,5 @@ hr {
   background: $unnnic-color-neutral-soft;
   height: 1px;
 }
+
 </style>
