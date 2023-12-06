@@ -14,7 +14,7 @@
         </div>
 
         <div class="unnnic-card-intelligence__header__buttons">
-          <div v-if="hasIntegrationDefined && !hasIntegrationCheckError">
+          <div v-if="type !== 'base' && hasIntegrationDefined && !hasIntegrationCheckError">
             <unnnic-tool-tip
                side="top"
                :text="hasIntegration ?
@@ -33,8 +33,22 @@
             </unnnic-tool-tip>
           </div>
 
+          <div v-else>
+            <unnnic-tool-tip
+               side="top"
+               text="Teste rápido"
+               enabled
+             >
+              <unnnic-button
+                iconCenter="mode_comment"
+                size="small"
+                class="mr-2"
+                type="alternative"
+              />
+            </unnnic-tool-tip>
+          </div>
+
           <unnnic-dropdown
-            v-if="type === 'repository'"
             position="bottom-left"
             :open.sync="dropdownOpen"
           >
@@ -48,7 +62,7 @@
               />
             </div>
 
-            <div v-if=" repositoryDetail.repository_type === 'classifier'">
+            <div v-if="repositoryDetail.repository_type === 'classifier'">
               <unnnic-dropdown-item @click="showDetailModal(intentModal)">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="graph-stats-1" />
@@ -87,7 +101,18 @@
 
             </div>
 
-            <div v-else>
+            <div v-else-if="type === 'base'">
+              <unnnic-dropdown-item>
+                <div class="unnnic-card-intelligence__header__buttons__dropdown">
+                  <unnnic-icon-svg size="sm" icon="delete" scheme="feedback-red"/>
+                  <div :style="{color: '#E53E3E'}">
+                    Excluir base
+                  </div>
+                </div>
+              </unnnic-dropdown-item>
+            </div>
+
+            <div v-else-if="type === 'repository'">
               <unnnic-dropdown-item>
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="article" />
@@ -388,9 +413,9 @@ export default {
       };
     },
     intelligenceForce() {
-      const scoreObject = this.repositoryDetail.repository_score;
-      const scoreResult = (scoreObject.evaluate_size_score
-      + scoreObject.intents_balance_score + scoreObject.intents_size_score) / 3;
+      const scoreObject = this.repositoryDetail?.repository_score;
+      const scoreResult = (scoreObject?.evaluate_size_score
+      + scoreObject?.intents_balance_score + scoreObject?.intents_size_score) / 3;
       return scoreResult.toFixed(0);
     },
   },

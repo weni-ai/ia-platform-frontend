@@ -73,8 +73,8 @@ export default {
     },
 
     basesNewOrBasesEdit() {
-      return this.$route.name === 'repository-content-bases-new'
-        || this.$route.name === 'repository-content-bases-edit'
+      return (this.$route.name === 'repository-content-bases-new'
+        || this.$route.name === 'repository-content-bases-edit') || this.$route.name.includes('content')
     },
   },
   destroyed(){
