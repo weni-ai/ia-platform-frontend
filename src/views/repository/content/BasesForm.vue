@@ -85,12 +85,14 @@
 </template>
 
 <script>
+import { get } from 'lodash';
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import RepositoryBase from '../Base';
 import { mapActions } from 'vuex';
 import { LANGUAGES } from '@/utils/index';
 import router from '@/router/index';
 import Tests from './Tests';
+import { unnnicCallAlert } from '@weni/unnnic-system';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -135,6 +137,11 @@ export default {
       'updateQAText',
       'editQAKnowledgeBase'
     ]),
+
+    alertError(title) {
+      unnnicCallAlert({ props: { title, scheme: 'feedback-red', icon: 'alert-circle-1', }, seconds: 5 });
+    },
+
     onTitleChange(event) {
       this.knowledgeBase.title = event.srcElement.textContent;
     },
@@ -173,32 +180,41 @@ export default {
         language: this.knowledgeBase.text.language
       };
 
-      this.submitting = true;
 
-      const responseEditKnowledgeBase = await this.editQAKnowledgeBase({
-        repositoryUUID: this.repositoryUUID,
-        id: this.$route.params.id,
-        title: this.knowledgeBase.title
-      });
+      try {
+        this.submitting = true;
 
-      this.knowledgeBase.oldTitle = responseEditKnowledgeBase.data.title;
+        const responseEditKnowledgeBase = await this.editQAKnowledgeBase({
+          repositoryUUID: this.repositoryUUID,
+          id: this.$route.params.id,
+          title: this.knowledgeBase.title
+        });
 
-      if (data.text) {
-        const action = data.id ? this.updateQAText : this.createQAText;
+        this.knowledgeBase.oldTitle = responseEditKnowledgeBase.data.title;
 
-        const responseText = await action(data);
+        if (data.text) {
+          const action = data.id ? this.updateQAText : this.createQAText;
 
-        if (!this.knowledgeBase.text.id) {
-          this.knowledgeBase.text.id = responseText.data.id;
+          const responseText = await action(data);
+
+          if (!this.knowledgeBase.text.id) {
+            this.knowledgeBase.text.id = responseText.data.id;
+          }
+
+          this.knowledgeBase.text.oldValue = responseText.data.text;
+          this.knowledgeBase.text.oldLanguage = responseText.data.language;
+          this.knowledgeBase.text.lastUpdate = responseText.data.last_update;
         }
-
-        this.knowledgeBase.text.oldValue = responseText.data.text;
-        this.knowledgeBase.text.oldLanguage = responseText.data.language;
-        this.knowledgeBase.text.lastUpdate = responseText.data.last_update;
         this.isAlertOpen = true;
-      }
+      } catch (error) {
+        const errorMessage = get(error, 'response.data.text.0', '');
 
-      this.submitting = false;
+        if (errorMessage) {
+          this.alertError(errorMessage);
+        }
+      } finally {
+        this.submitting = false;
+      }
     },
     discardUpdate() {
       this.openModal = false;
