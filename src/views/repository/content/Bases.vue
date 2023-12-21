@@ -28,9 +28,6 @@
               class="repository-base__description__text markdown-body"
             />
             <p v-if="repository.description" class="repository-base__description__text" />
-            <p v-else>
-              <i class="text-color-grey-dark">{{ $t("webapp.home.no_description") }}</i>
-            </p>
             <div style="display: flex">
                 <unnnic-tag
                   v-for="(category, index) in getAllCategories"
@@ -56,7 +53,7 @@
           class="u font secondary title-sm bold"
           v-html="$tc('webapp.home.bases.knowledge_bases', this.bases.length)"
         />
-        <unnnic-button @click="createNewBase" class="ml-auto" iconLeft="add-1">
+        <unnnic-button @click="openModal = true" class="ml-auto" iconLeft="add-1">
           {{ $t('webapp.home.bases.new_knowledge_base') }}
         </unnnic-button>
       </div>
@@ -74,9 +71,41 @@
           v-for="base in bases"
           :key="base.id"
           :repository-detail="base"
+          @deleteBase="openDeleteModal"
         />
       </div>
     </div>
+    <modal
+      v-if="isDeleteModalOpen"
+      type="confirm"
+      :data="modalData"
+      @close="isDeleteModalOpen = false"
+    />
+    <unnnic-modal text="Nova base de conteúdo" :closeIcon="false" v-show="openModal">
+      <div class="text-left">
+        <unnnic-input
+          v-model="title"
+          label="Nome da base"
+        />
+        <unnnic-text-area
+          v-model="description"
+          label="Descrição"
+          :maxLength="80"
+          class="mt-4"
+        />
+      </div>
+      <unnnic-button slot="options" type="tertiary" @click.prevent.stop="this.openModal = false">
+        {{ $t("webapp.home.cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        class="create-repository__container__button"
+        @click="createNewBase()"
+        :disabled="!this.title || !this.description"
+      >
+        Criar base de conteúdo
+      </unnnic-button>
+    </unnnic-modal>
   </repository-view-base>
 </template>
 
@@ -87,6 +116,7 @@ import VueMarkdown from 'vue-markdown';
 import RepositoryBase from '../Base';
 import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard';
 import RepositoryContentNavigation from './Navigation';
+import Modal from '@/components/repository/CreateRepository/Modal';
 
 export default {
   name: 'RepositoryBase',
@@ -94,14 +124,20 @@ export default {
     RepositoryViewBase,
     VueMarkdown,
     HomeRepositoryCard,
-    RepositoryContentNavigation
+    RepositoryContentNavigation,
+    Modal
   },
   extends: RepositoryBase,
   data() {
     return {
       repositoryUUID: null,
 
-      bases: []
+      bases: [],
+      isDeleteModalOpen: false,
+      modalData: {},
+      openModal: false,
+      title: '',
+      description: ''
     };
   },
   mounted() {},
@@ -127,7 +163,32 @@ export default {
       this.repositoryUUID = this.repository.uuid;
     },
 
-    async repositoryUUID() {
+    repositoryUUID() {
+      this.fetchBases();
+    }
+  },
+  methods: {
+    ...mapActions(['getQAKnowledgeBases', 'deleteQAKnowledgeBase', 'createQAKnowledgeBase', 'editQAKnowledgeBase', 'createQAText']),
+
+    async createNewBase() {
+      const { data } = await this.createQAKnowledgeBase({
+        repositoryUUID: this.repositoryUUID,
+        title: this.title,
+      });
+
+      await this.createQAText({
+        repositoryUUID: this.repositoryUUID,
+        title: this.title,
+        knowledgeBaseId: data.id,
+        text: this.description,
+        language: this.repository.language
+      });
+
+      this.openModal = false;
+      this.fetchBases();
+    },
+    async fetchBases() {
+      this.bases = [];
       const response = await this.getQAKnowledgeBases({
         repositoryUUID: this.repositoryUUID,
         page: 0
@@ -142,16 +203,34 @@ export default {
           description
         });
       });
-    }
-  },
-  methods: {
-    ...mapActions(['getQAKnowledgeBases']),
+    },
+    openDeleteModal(repository) {
+      this.isDeleteModalOpen = true;
 
-    createNewBase() {
-      this.$router.push({
-        name: 'repository-content-bases-new'
+      this.modalData = {
+        icon: 'error',
+        scheme: 'feedback-red',
+        persistent: true,
+        title: this.$t('webapp.home.bases.edit-base_modal_delete_title'),
+        description: this.$tc('webapp.home.bases.edit-base_modal_delete_text', repository.name),
+        cancelText: this.$t('webapp.home.bases.edit-base_modal_delete_button_cancel'),
+        confirmText: this.$t('webapp.home.bases.edit-base_modal_delete_button_confirm'),
+        onConfirm: async (justClose, { setLoading }) => {
+          setLoading(true);
+          await this.deleteBase(repository.id);
+          setLoading(false);
+          justClose();
+
+          this.fetchBases();
+        }
+      };
+    },
+    async deleteBase(id) {
+      await this.deleteQAKnowledgeBase({
+        repositoryUUID: this.repositoryUUID,
+        id
       });
-    }
+    },
   }
 };
 </script>
@@ -194,6 +273,7 @@ export default {
     justify-content: space-between;
     grid-template-columns: repeat(4, 24%);
     margin-top: $unnnic-inset-md;
+    gap: $unnnic-spacing-sm;
     @media screen and (max-width: 1400px) {
       grid-template-columns: repeat(3, 32%);
     }
@@ -258,6 +338,10 @@ export default {
   .repository-base__description__text--link {
     color: $unnnic-color-neutral-dark;
     text-decoration: underline;
+  }
+
+  .unnnic-modal-container-background-body-description-container {
+    padding-bottom: $unnnic-spacing-sm;
   }
 }
 
