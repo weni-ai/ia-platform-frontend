@@ -30,7 +30,7 @@
         </div>
 
         <div class="actions">
-          <unnnic-button type="terciary" @click="close" :disabled="loading">
+          <unnnic-button type="tertiary" @click="close" :disabled="loading">
             {{ data.cancelText }}
           </unnnic-button>
 
@@ -185,7 +185,6 @@ export default {
       $scroll-size: $unnnic-inline-nano;
 
       flex: 1;
-      overflow: overlay;
 
       padding-right: calc(#{$unnnic-inline-xs} + #{$scroll-size});
       width: 100%;

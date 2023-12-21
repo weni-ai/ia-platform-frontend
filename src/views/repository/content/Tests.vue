@@ -3,37 +3,14 @@
     <section v-if="repository" class="repository-tests">
       <section class="repository-tests__description">
         <div class="repository-tests__title">
-          <unnnic-card
-            type="title"
-            :title="$t('webapp.home.bases.tests')"
-            enabled
-            icon="messages-bubble-1"
-            infoPosition="right"
-            :hasInformationIcon="false"
-            scheme="aux-lemon"
+          <h1
+          class="u font secondary body-lg bold"
+          v-html="'Teste rápido'"
           />
-          <p class="repository-tests__description__text">
-            {{ $t("webapp.home.bases.tests_subtitle") }}
-          </p>
-        </div>
-        <div class="repository-tests__select__inputs">
-          <div class="repository-tests__select__input">
-            <unnnicSelect v-if="bases.length" size="md" placeholder="" v-model="baseIdLang">
-              <option
-                v-for="base in bases"
-                :value="[base.knowledge_base, base.language].join('⇝')"
-                :key="base.knowledge_base"
-                size="sm"
-              >
-                {{ base.title }}
-              </option>
-            </unnnicSelect>
-          </div>
         </div>
       </section>
       <!-- title -->
     </section>
-    <hr />
     <section>
       <div v-if="initText" id="webchat" />
       <div class="error-text" v-else>
@@ -179,6 +156,9 @@ export default {
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .repository-tests {
+  border-radius: 4px 4px 0px 0px;
+  border-bottom: 1px solid $unnnic-color-neutral-cleanest;
+  padding: $unnnic-spacing-ant $unnnic-spacing-sm;
 
   &__description {
     display: flex;
@@ -216,7 +196,7 @@ export default {
       box-shadow: none;
 
       @media (min-width: 1440px) {
-        height: 700px;
+        height: 500px;
       }
     }
     .push-poweredby-container {
@@ -236,6 +216,7 @@ export default {
       background-color: #fff !important;
       padding: 16px;
       height: unset;
+      gap: $unnnic-spacing-xs;
 
       input {
         border: solid $unnnic-color-neutral-clean 1px;
@@ -245,13 +226,13 @@ export default {
         margin-right: $unnnic-inset-sm;
       }
       .push-send {
-        background-color: transparent !important;
+        background-color: $unnnic-color-weni-50;
       }
     }
     // caixa de resposta
     .push-response {
       padding: 20px;
-      border-radius: 4px 32px 32px 32px;
+      border-radius: 8px 8px 8px 4px;
       border: 1px solid $unnnic-color-neutral-soft;
       max-width: 50%;
       &:hover {
@@ -263,7 +244,7 @@ export default {
       h2 {
         font-family: $unnnic-font-family-secondary;
         font-weight: $unnnic-font-weight-bold;
-        color: $unnnic-color-neutral-darkest;
+        color: $unnnic-color-neutral-dark;
       }
       h4 {
         strong {
@@ -283,12 +264,13 @@ export default {
     }
     // pergunta
     .push-client {
-      border: 1px solid #009e963d;
-      border-radius: 32px 4px 32px 32px;
-      padding: 24px 32px 24px 24px;
+      border-radius: 8px 8px 4px 8px;
+      padding: $unnnic-spacing-xs;
+      justify-content: flex-end;
+      align-items: flex-start;
+      background-color: $unnnic-color-weni-100;
       // texto da pergunta
       &:before {
-        content: "Sua pergunta\a";
         font-family: $unnnic-font-family-secondary;
         white-space: pre;
         font-weight: $unnnic-font-weight-bold;
@@ -306,10 +288,10 @@ export default {
     }
     // botao de perguntar
     .push-send {
-      border: dashed $unnnic-color-neutral-clean 1px;
-      padding: 0.75rem;
+      border: 1px solid $unnnic-color-neutral-cleanest;
+      padding: $unnnic-spacing-ant $unnnic-spacing-sm;
       border-radius: $unnnic-border-radius-sm;
-      width: 45px;
+      width: 12px;
       img {
         display: none;
       }
@@ -317,8 +299,7 @@ export default {
         background-image: url("~@/assets/imgs/send.svg");
         background-repeat: no-repeat;
         background-position: center;
-        background-position-x: left;
-        padding: 0.75rem;
+        padding: 0 $unnnic-spacing-xs;
         content: " ";
         font-family: $unnnic-font-family-secondary;
         font-weight: $unnnic-font-weight-regular;
@@ -334,6 +315,7 @@ export default {
       font-family: $unnnic-font-family-secondary;
       font-weight: $unnnic-font-weight-regular;
       font-size: $unnnic-font-size-body-gt;
+      color: $unnnic-color-neutral-dark;
     }
     .push-message {
       margin-bottom: 1rem;
@@ -418,6 +400,13 @@ export default {
       margin-block-end: 4px;
       font-size: 18px;
     }
+
+    .push-new-message {
+      padding: $unnnic-spacing-ant $unnnic-spacing-sm;
+      border-radius: 4px;
+      border: 1px solid $unnnic-color-neutral-cleanest;
+      height: 20px;
+    }
   }
 }
 
@@ -427,5 +416,17 @@ export default {
 
 .error-text {
   font-family: $unnnic-font-family-secondary;
+}
+
+/deep/ .icon-right {
+  transform: translateY(100%);
+}
+
+/deep/ .rpstr-vw-bs__wrapper__content {
+  margin: 0;
+}
+
+hr {
+  margin: $unnnic-spacing-ant 0 $unnnic-spacing-sm;
 }
 </style>

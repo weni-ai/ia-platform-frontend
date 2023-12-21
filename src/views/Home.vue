@@ -2,29 +2,46 @@
   <div>
     <div class="home">
       <section class="home__header">
-        <unnnic-card
-          :title="$t('webapp.intelligences_lib.title')"
-          icon="science-fiction-robot-1"
-          type="title"
-          :has-information-icon="false"
-          scheme="aux-blue"
-        />
+        <div>
+          <unnnic-card
+            :title="$t('webapp.intelligences_lib.title')"
+            icon="neurology"
+            type="title"
+            :has-information-icon="false"
+            scheme="aux-blue"
+          />
+          <div
+            class="description unnnic-font secondary body-gt color-neutral-dark"
+            v-html="$t('webapp.intelligences_lib.description')"
+          />
+        </div>
 
-        <div
-          class="description unnnic-font secondary body-gt color-neutral-dark"
-          v-html="$t('webapp.intelligences_lib.description')"
-        />
+        <unnnic-button @click="createNewIntelligence" class="ml-auto" iconLeft="add-1">
+          Criar Inteligência
+        </unnnic-button>
+
       </section>
 
-      <home-tab-navigation @changeTabValue="onTabSelected"/>
-      <div :class="[loading ? 'hidden' : 'visible']">
-        <home-intelligence-from-community
-          @loading="loading = $event"
-          v-show="howTabIsShown === 0"/>
+      <hr class="divider" />
 
-        <home-intelligence-from-project
-          @loading="loading = $event"
-          v-show="howTabIsShown === 1"/>
+      <div class="filters">
+        <div class="u font secondary body-gt">
+          Filtrar:
+        </div>
+        <div>
+          <unnnic-select
+            placeholder="Categorias"
+            size="sm"
+          />
+        </div>
+
+            <unnnic-input
+              icon-left="search-1"
+              placeholder="Pesquisar inteligência"
+            />
+      </div>
+
+      <div :class="[loading ? 'hidden' : 'visible']">
 
         <home-intelligence-from-org
           @loading="loading = $event"
@@ -32,6 +49,30 @@
           v-show="howTabIsShown === 2"/>
 
       </div>
+
+      <!-- <unnnic-tab
+        class="home__intelligences"
+        initialTab="first"
+        :tabs="['first', 'second']"
+      >
+        <template slot="tab-head-first">
+          {{ $t('webapp.intelligences_lib.tab_org_title') }}
+        </template>
+        <template slot="tab-panel-first">
+          <home-intelligence-from-org
+            @loading="loading = $event"
+            :key="update"
+          />
+        </template>
+        <template slot="tab-head-second">
+          {{ $t('webapp.intelligences_lib.tab_community_title') }}
+        </template>
+        <template slot="tab-panel-second">
+          <home-intelligence-from-community
+            @loading="loading = $event"
+          />
+        </template>
+      </unnnic-tab> -->
 
       <div :class="['home-loading', !loading ? 'hidden' : 'visible']">
 
@@ -54,6 +95,14 @@
       </div>
     </div>
 
+    <unnnic-modal-next
+        v-if="openModal"
+      >
+        <create-repository-form
+          @cancelCreation="openModal = false"
+        />
+      </unnnic-modal-next>
+
   </div>
 </template>
 
@@ -62,6 +111,7 @@ import HomeTabNavigation from '@/components/repository/home/HomeTabNavigation';
 import HomeIntelligenceFromProject from '@/components/repository/home/HomeIntelligenceFromProject';
 import HomeIntelligenceFromCommunity from '../components/repository/home/HomeIntelligenceFromCommunity';
 import HomeIntelligenceFromOrg from '../components/repository/home/HomeIntelligenceFromOrg';
+import CreateRepositoryForm from '../components/repository/CreateRepository/CreateRepositoryForm';
 
 export default {
   name: 'Home',
@@ -69,20 +119,28 @@ export default {
     HomeTabNavigation,
     HomeIntelligenceFromProject,
     HomeIntelligenceFromOrg,
-    HomeIntelligenceFromCommunity
+    HomeIntelligenceFromCommunity,
+    CreateRepositoryForm
   },
   data() {
     return {
-      howTabIsShown: 0,
+      howTabIsShown: 2,
       update: false,
-      loading: false
+      loading: false,
+      openModal: false
     };
   },
   methods: {
     onTabSelected(event) {
       this.howTabIsShown = event
       this.update = !this.update
-    }
+    },
+    createNewIntelligence() {
+      // this.$router.push({
+      //   name: 'new',
+      // });
+      this.openModal = true
+    },
   }
 };
 </script>
@@ -102,10 +160,11 @@ export default {
     &__header{
       padding: $unnnic-inline-md;
       padding-bottom: $unnnic-spacing-stack-sm;
+      display: flex;
+      align-items: center;
 
       .description {
-        margin-top: $unnnic-spacing-stack-nano;
-        margin-left: $unnnic-spacing-inline-xl + $unnnic-spacing-inline-sm;
+        margin-top: $unnnic-spacing-stack-sm;
 
         ::v-deep a {
           text-decoration: underline;
@@ -114,6 +173,10 @@ export default {
           color: inherit;
         }
       }
+    }
+
+    &__intelligences {
+      margin: $unnnic-spacing-stack-sm $unnnic-spacing-stack-md $unnnic-spacing-stack-md;
     }
 }
 .home-loading {
@@ -150,4 +213,35 @@ export default {
 .hidden {
   display: none;
 }
+.divider {
+  background: #E2E6ED;
+  height: 1px;
+  margin: $unnnic-spacing-md;
+}
+.filters {
+      margin-bottom: $unnnic-spacing-stack-sm;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: $unnnic-spacing-stack-sm $unnnic-spacing-inline-md;
+      padding: 0 $unnnic-spacing-md;
+
+      .unnnic-form {
+        flex: 1;
+        min-width: 14rem;
+      }
+    }
+    ::v-deep {
+      .text-input.size--sm .icon-right {
+        top: 15px;
+      }
+
+      .input.size-md {
+        height: auto;
+      }
+
+      .unnnic-modal.type-default .container {
+        max-width: 750px;
+      }
+    }
 </style>

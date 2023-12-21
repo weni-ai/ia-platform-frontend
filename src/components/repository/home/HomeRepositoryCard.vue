@@ -7,33 +7,48 @@
             {{ repositoryDetail.name }}
           </div>
 
-          <div class="unnnic-card-intelligence__header__detail__subtitle">
+          <!-- <div class="unnnic-card-intelligence__header__detail__subtitle">
             {{ $t("webapp.intelligences_lib.created_by") }}
             <strong>{{ repositoryDetail.owner__nickname }}</strong>
-          </div>
+          </div> -->
         </div>
 
         <div class="unnnic-card-intelligence__header__buttons">
-          <div v-if="hasIntegrationDefined && !hasIntegrationCheckError">
+          <div v-if="type !== 'base' && hasIntegrationDefined && !hasIntegrationCheckError">
             <unnnic-tool-tip
                side="top"
                :text="hasIntegration ?
                 $t('webapp.home.remove_integrate') : $t('webapp.home.integrate')"
                enabled
              >
-              <unnnic-button-icon
+              <unnnic-button
                 v-if="!hasIntegration"
                 @click.prevent.stop="changeIntegrateModalState(true)"
+                iconCenter="add-1"
                 size="small"
                 icon="add-1"
                 class="mr-2"
+                type="alternative"
+              />
+            </unnnic-tool-tip>
+          </div>
+
+          <div v-else>
+            <unnnic-tool-tip
+               side="top"
+               text="Teste rápido"
+               enabled
+             >
+              <unnnic-button
+                iconCenter="mode_comment"
+                size="small"
+                class="mr-2"
+                type="alternative"
               />
             </unnnic-tool-tip>
           </div>
 
           <unnnic-dropdown
-            v-show=" repositoryDetail.repository_type === 'classifier'"
-            v-if="type === 'repository'"
             position="bottom-left"
             :open.sync="dropdownOpen"
           >
@@ -47,41 +62,87 @@
               />
             </div>
 
-            <unnnic-dropdown-item @click="showDetailModal(intentModal)">
-              <div class="unnnic-card-intelligence__header__buttons__dropdown">
-                <unnnic-icon-svg size="sm" icon="graph-stats-1" />
-                <div>
-                  {{
-                    $tc("webapp.intelligences_lib.show_intents",
-                      this.repositoryDetail.intents.length)
-                  }}
+            <div v-if="repositoryDetail.repository_type === 'classifier'">
+              <unnnic-dropdown-item @click="showDetailModal(intentModal)">
+                <div class="unnnic-card-intelligence__header__buttons__dropdown">
+                  <unnnic-icon-svg size="sm" icon="graph-stats-1" />
+                  <div>
+                    {{
+                      $tc("webapp.intelligences_lib.show_intents",
+                        this.repositoryDetail.intents.length)
+                    }}
+                  </div>
                 </div>
-              </div>
-            </unnnic-dropdown-item>
+              </unnnic-dropdown-item>
 
-            <unnnic-dropdown-item @click="showDetailModal(laguagueModal)">
-              <div class="unnnic-card-intelligence__header__buttons__dropdown">
-                <unnnic-icon-svg size="sm" icon="translate-1" />
-                <div>
-                  {{
-                    $tc(
-                      "webapp.intelligences_lib.show_languages",
-                      this.repositoryDetail.available_languages.length
-                    )
-                  }}
+              <unnnic-dropdown-item @click="showDetailModal(laguagueModal)">
+                <div class="unnnic-card-intelligence__header__buttons__dropdown">
+                  <unnnic-icon-svg size="sm" icon="translate-1" />
+                  <div>
+                    {{
+                      $tc(
+                        "webapp.intelligences_lib.show_languages",
+                        this.repositoryDetail.available_languages.length
+                      )
+                    }}
+                  </div>
                 </div>
-              </div>
-            </unnnic-dropdown-item>
+              </unnnic-dropdown-item>
 
-            <unnnic-dropdown-item
-              v-if="!repositoryDetail.is_private"
-              @click="openCopyConfirm(repositoryDetail.name)"
-            >
-              <div class="unnnic-card-intelligence__header__buttons__dropdown">
-                <unnnic-icon-svg size="sm" icon="copy-paste-1" />
-                <div>{{ $t("webapp.home.copy-intelligence") }}</div>
-              </div>
-            </unnnic-dropdown-item>
+              <unnnic-dropdown-item
+                v-if="!repositoryDetail.is_private"
+                @click="openCopyConfirm(repositoryDetail.name)"
+              >
+                <div class="unnnic-card-intelligence__header__buttons__dropdown">
+                  <unnnic-icon-svg size="sm" icon="copy-paste-1" />
+                  <div>{{ $t("webapp.home.copy-intelligence") }}</div>
+                </div>
+              </unnnic-dropdown-item>
+
+            </div>
+
+            <div v-else-if="type === 'base'">
+              <unnnic-dropdown-item @click="deleteBase(repositoryDetail)">
+                <div class="unnnic-card-intelligence__header__buttons__dropdown">
+                  <unnnic-icon-svg size="sm" icon="delete" scheme="feedback-red"/>
+                  <div :style="{color: '#E53E3E'}">
+                    Excluir base
+                  </div>
+                </div>
+              </unnnic-dropdown-item>
+            </div>
+
+            <div v-else-if="type === 'repository'">
+              <unnnic-dropdown-item>
+                <div class="unnnic-card-intelligence__header__buttons__dropdown">
+                  <unnnic-icon-svg size="sm" icon="article" />
+                  <div>
+                    <!-- {{
+                      $tc("webapp.intelligences_lib.show_intents",
+                        this.repositoryDetail.intents.length)
+                    }} -->
+                    Visualizar bases
+                  </div>
+                </div>
+              </unnnic-dropdown-item>
+
+              <unnnic-dropdown-item>
+                <div class="unnnic-card-intelligence__header__buttons__dropdown">
+                  <unnnic-icon-svg size="sm" icon="delete" scheme="feedback-red"/>
+                  <div :style="{color: '#E53E3E'}">
+                    <!-- {{
+                      $tc(
+                        "webapp.intelligences_lib.show_languages",
+                        this.repositoryDetail.available_languages.length
+                      )
+                    }} -->
+                    Excluir inteligência
+                  </div>
+                </div>
+              </unnnic-dropdown-item>
+
+            </div>
+
           </unnnic-dropdown>
         </div>
       </section>
@@ -90,7 +151,7 @@
         {{ repositoryDetail.description }}
       </section>
 
-      <section v-if="type === 'repository'" class="unnnic-card-intelligence__type">
+      <!-- <section v-if="type === 'repository'" class="unnnic-card-intelligence__type">
         <div class="unnnic-card-intelligence__type__text">
           {{ $t(`webapp.intelligences_lib.repository_type.${repositoryDetail.repository_type}`) }}
         </div>
@@ -120,7 +181,7 @@
             size="sm"
           />
         </unnnic-tool-tip>
-      </section>
+      </section> -->
 
       <div class="unnnic-card-intelligence__divider" />
 
@@ -160,8 +221,8 @@
             <unnnic-avatar-icon
               class="unnnic-card-intelligence__detail__content__data__info__icon"
               size="xs"
-              icon="book-address-1-2"
-              scheme="aux-orange"
+              icon="article"
+              scheme="aux-purple"
             />
 
             <div class="unnnic-card-intelligence__detail__content__data__info__number">
@@ -170,7 +231,10 @@
           </div>
         </div>
 
-        <div class="unnnic-card-intelligence__detail__content">
+        <div
+          v-if="type === 'repository' && repositoryDetail.repository_type === 'classifier'"
+          class="unnnic-card-intelligence__detail__content"
+        >
           <div class="unnnic-card-intelligence__detail__content__data">
             {{
               $tc(
@@ -349,9 +413,9 @@ export default {
       };
     },
     intelligenceForce() {
-      const scoreObject = this.repositoryDetail.repository_score;
-      const scoreResult = (scoreObject.evaluate_size_score
-      + scoreObject.intents_balance_score + scoreObject.intents_size_score) / 3;
+      const scoreObject = this.repositoryDetail?.repository_score;
+      const scoreResult = (scoreObject?.evaluate_size_score
+      + scoreObject?.intents_balance_score + scoreObject?.intents_size_score) / 3;
       return scoreResult.toFixed(0);
     },
   },
@@ -453,6 +517,9 @@ export default {
     openCopyConfirm(intelligence) {
       this.selectedIntelligence = intelligence
       this.openConfirmModal = true
+    },
+    deleteBase(repository) {
+      this.$emit('deleteBase', repository)
     }
   }
 };
@@ -484,6 +551,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     &__detail {
       &__title {

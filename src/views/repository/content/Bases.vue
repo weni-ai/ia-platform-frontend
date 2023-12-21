@@ -5,78 +5,107 @@
         <div class="repository-base__title">
           <unnnic-card
             type="title"
-            :title="$t('webapp.home.description')"
+            :title="repository.name"
             enabled
-            icon="paginate-filter-text-1"
+            icon="neurology"
             infoPosition="right"
             :hasInformationIcon="false"
-            scheme="aux-orange"
+            scheme="aux-blue"
           />
         </div>
-        <div>
-          <vue-markdown
-            :source="repository.description"
-            show
-            html
-            :breaks="false"
-            :linkify="false"
-            emoji
-            typographer
-            toc
-            toc-id="toc"
-            class="repository-base__description__text markdown-body"
-          />
-          <p v-if="repository.description" class="repository-base__description__text" />
-          <p v-else>
-            <i class="text-color-grey-dark">{{ $t("webapp.home.no_description") }}</i>
-          </p>
-        </div>
-        <div class="repository-base__description__header">
+        <section class="repository-base__description__header">
           <div>
-            <unnnic-tag
-              v-for="(category, index) in getAllCategories"
-              :key="index"
-              class="repository-base__header__tag"
-              :text="category"
-              disabled
-              scheme="background-sky"
+            <vue-markdown
+              :source="repository.description"
+              show
+              html
+              :breaks="false"
+              :linkify="false"
+              emoji
+              typographer
+              toc
+              toc-id="toc"
+              class="repository-base__description__text markdown-body"
             />
+            <p v-if="repository.description" class="repository-base__description__text" />
+            <div style="display: flex">
+                <unnnic-tag
+                  v-for="(category, index) in getAllCategories"
+                  :key="index"
+                  class="repository-base__header__tag"
+                  :text="category"
+                  disabled
+                  scheme="background-sky"
+                />
+            </div>
           </div>
-        </div>
+          <!-- <unnnic-button
+            @click.prevent.stop="changeIntegrateModalState(true)"
+            iconCenter="settings"
+            type="secondary"
+          /> -->
+          <repository-content-navigation />
+        </section>
       </div>
       <hr />
-      <div>
-        <unnnic-card
-          type="title"
-          :title="$t('webapp.home.bases.knowledge_bases')"
-          enabled
-          icon="book-address-1-2"
-          infoPosition="right"
-          :hasInformationIcon="false"
-          scheme="aux-pink"
+      <div class="repository-base__bases-count">
+        <h1
+          class="u font secondary title-sm bold"
+          v-html="$tc('webapp.home.bases.knowledge_bases', this.bases.length)"
         />
-        <p
-          class="repository-base__description__text"
-          v-html="$t('webapp.home.bases.description')"
-        ></p>
+        <unnnic-button @click="openModal = true" class="ml-auto" iconLeft="add-1">
+          {{ $t('webapp.home.bases.new_knowledge_base') }}
+        </unnnic-button>
       </div>
-      <div class="repository-base__cards">
-        <unnnic-card
-          clickable
-          :text="$t('webapp.home.bases.new_knowledge_base')"
-          type="blank"
-          icon="add-1"
-          class="repository-base__cards__new"
-          @click.native="createNewBase()"
+
+      <div class="repository-base__search-base">
+        <unnnic-input
+          icon-left="search-1"
+          placeholder="Pesquisar base de conteúdo"
         />
+      </div>
+
+      <div class="repository-base__cards">
         <home-repository-card
           type="base"
           v-for="base in bases"
           :key="base.id"
           :repository-detail="base"
+          @deleteBase="openDeleteModal"
         />
       </div>
     </div>
+    <modal
+      v-if="isDeleteModalOpen"
+      type="confirm"
+      :data="modalData"
+      @close="isDeleteModalOpen = false"
+    />
+    <unnnic-modal text="Nova base de conteúdo" :closeIcon="false" v-show="openModal">
+      <div class="text-left">
+        <unnnic-input
+          v-model="title"
+          label="Nome da base"
+        />
+        <unnnic-text-area
+          v-model="description"
+          label="Descrição"
+          :maxLength="80"
+          class="mt-4"
+        />
+      </div>
+      <unnnic-button slot="options" type="tertiary" @click.prevent.stop="this.openModal = false">
+        {{ $t("webapp.home.cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        class="create-repository__container__button"
+        @click="createNewBase()"
+        :disabled="!this.title || !this.description"
+      >
+        Criar base de conteúdo
+      </unnnic-button>
+    </unnnic-modal>
   </repository-view-base>
 </template>
 
@@ -86,20 +115,29 @@ import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import VueMarkdown from 'vue-markdown';
 import RepositoryBase from '../Base';
 import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard';
+import RepositoryContentNavigation from './Navigation';
+import Modal from '@/components/repository/CreateRepository/Modal';
 
 export default {
   name: 'RepositoryBase',
   components: {
     RepositoryViewBase,
     VueMarkdown,
-    HomeRepositoryCard
+    HomeRepositoryCard,
+    RepositoryContentNavigation,
+    Modal
   },
   extends: RepositoryBase,
   data() {
     return {
       repositoryUUID: null,
 
-      bases: []
+      bases: [],
+      isDeleteModalOpen: false,
+      modalData: {},
+      openModal: false,
+      title: '',
+      description: ''
     };
   },
   mounted() {},
@@ -125,7 +163,32 @@ export default {
       this.repositoryUUID = this.repository.uuid;
     },
 
-    async repositoryUUID() {
+    repositoryUUID() {
+      this.fetchBases();
+    }
+  },
+  methods: {
+    ...mapActions(['getQAKnowledgeBases', 'deleteQAKnowledgeBase', 'createQAKnowledgeBase', 'editQAKnowledgeBase', 'createQAText']),
+
+    async createNewBase() {
+      const { data } = await this.createQAKnowledgeBase({
+        repositoryUUID: this.repositoryUUID,
+        title: this.title,
+      });
+
+      await this.createQAText({
+        repositoryUUID: this.repositoryUUID,
+        title: this.title,
+        knowledgeBaseId: data.id,
+        text: this.description,
+        language: this.repository.language
+      });
+
+      this.openModal = false;
+      this.fetchBases();
+    },
+    async fetchBases() {
+      this.bases = [];
       const response = await this.getQAKnowledgeBases({
         repositoryUUID: this.repositoryUUID,
         page: 0
@@ -140,16 +203,34 @@ export default {
           description
         });
       });
-    }
-  },
-  methods: {
-    ...mapActions(['getQAKnowledgeBases']),
+    },
+    openDeleteModal(repository) {
+      this.isDeleteModalOpen = true;
 
-    createNewBase() {
-      this.$router.push({
-        name: 'repository-content-bases-new'
+      this.modalData = {
+        icon: 'error',
+        scheme: 'feedback-red',
+        persistent: true,
+        title: this.$t('webapp.home.bases.edit-base_modal_delete_title'),
+        description: this.$tc('webapp.home.bases.edit-base_modal_delete_text', repository.name),
+        cancelText: this.$t('webapp.home.bases.edit-base_modal_delete_button_cancel'),
+        confirmText: this.$t('webapp.home.bases.edit-base_modal_delete_button_confirm'),
+        onConfirm: async (justClose, { setLoading }) => {
+          setLoading(true);
+          await this.deleteBase(repository.id);
+          setLoading(false);
+          justClose();
+
+          this.fetchBases();
+        }
+      };
+    },
+    async deleteBase(id) {
+      await this.deleteQAKnowledgeBase({
+        repositoryUUID: this.repositoryUUID,
+        id
       });
-    }
+    },
   }
 };
 </script>
@@ -161,19 +242,6 @@ export default {
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .repository-base {
-  &__title {
-    font-size: 1.75rem;
-    font-weight: $font-weight-medium;
-    display: flex;
-    align-items: center;
-    font-family: $font-family;
-    color: $color-fake-black;
-
-    div {
-      margin: 0 0 0.2rem 0.2rem;
-    }
-  }
-
   &__header {
     display: flex;
 
@@ -188,7 +256,6 @@ export default {
     &__header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
     }
 
     &__text, i {
@@ -206,6 +273,7 @@ export default {
     justify-content: space-between;
     grid-template-columns: repeat(4, 24%);
     margin-top: $unnnic-inset-md;
+    gap: $unnnic-spacing-sm;
     @media screen and (max-width: 1400px) {
       grid-template-columns: repeat(3, 32%);
     }
@@ -215,6 +283,28 @@ export default {
       margin-bottom: $unnnic-inline-sm;
     }
   }
+
+  &__search-base {
+      margin: $unnnic-spacing-md 0 $unnnic-spacing-sm;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: $unnnic-spacing-stack-sm $unnnic-spacing-inline-md;
+
+      .unnnic-form {
+        flex: 1;
+      }
+    }
+
+    &__bases-count {
+      display: flex;
+      align-items: center;
+    }
+    ::v-deep {
+      .input.size-md {
+        height: auto;
+      }
+    }
 }
 .tooltipStyle::after {
   font-size: $unnnic-font-size-body-md;
@@ -223,7 +313,7 @@ export default {
   font-family: $font-family;
 }
 .markdown-body {
-  margin: 1.5rem 0;
+  margin: 1rem 0;
 
   a {
     color: $color-primary;
@@ -243,11 +333,15 @@ export default {
     display: none;
   }
   .unnnic-card-intelligence__description {
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 2;
   }
   .repository-base__description__text--link {
     color: $unnnic-color-neutral-dark;
     text-decoration: underline;
+  }
+
+  .unnnic-modal-container-background-body-description-container {
+    padding-bottom: $unnnic-spacing-sm;
   }
 }
 
@@ -255,4 +349,5 @@ hr {
   background: $unnnic-color-neutral-soft;
   height: 1px;
 }
+
 </style>

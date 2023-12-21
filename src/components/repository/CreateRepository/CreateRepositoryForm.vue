@@ -1,69 +1,38 @@
 <template>
   <div class="create-repository">
     <div class="create-repository__container">
-      <div class="create-repository__container__indicator">
-        <unnnic-indicator
-          :numberOfSteps="2"
-          :currentStep="current + 1"
-          :titles="[
-            `${$t('webapp.create_repository.first_indicator')}`,
-            `${$t('webapp.create_repository.second_indicator')}`
-          ]"
-        />
-      </div>
-      <section v-show="current === 0" class="create-repository__container__steps">
+      <section class="create-repository__container__steps">
         <intelligence-tab
           @nextStep="changeStepContent($event, 1)"
-          @backModal="onChangeModalState(true)"
         />
       </section>
-      <section v-show="current === 1" class="create-repository__container__steps">
+      <section class="create-repository__container__steps">
         <definitions-tab
           @previousStep="changeStepContent($event, 0)"
           @createRepository="createRepository($event)"
+          @backModal="onChangeModalState(true)"
         />
-      </section>
-      <section v-show="current == 2" class="create-repository__container__steps">
-        <div class="create-repository__container__steps__wrapper">
-          <div class="create-repository__container__steps__wrapper__title">
-            <h1>
-              {{ $t("webapp.create_repository.repository_created_first") }} <br />
-              {{ $t("webapp.create_repository.repository_created_second") }}
-              <emoji name="Winking Face" />
-            </h1>
-          </div>
-
-          <div class="create-repository__container__steps__wrapper__button">
-            <router-link :to="repositoryDetailsRouterParams()">
-              <unnnic-button
-                type="secondary"
-                @click.native="sendEvent()"
-                class="create-repository__container__steps__wrapper__button__btn"
-              >
-                {{ $t("webapp.create_repository.navigate_to_intelligence_button") }}
-              </unnnic-button>
-            </router-link>
-          </div>
-        </div>
       </section>
       <unnnic-modal
         :showModal="openModal"
         :text="$t('webapp.create_repository.modal_title')"
         scheme="feedback-yellow"
-        modal-icon="alert-circle-1"
+        modal-icon="warning"
         @close="onChangeModalState(false)"
       >
         <span slot="message" v-html="$t('webapp.create_repository.modal_description')" />
-        <unnnic-button slot="options" type="terciary" @click="navigateToHomepage()">
-          {{ $t("webapp.create_repository.modal_exit_button") }}
-        </unnnic-button>
         <unnnic-button
           slot="options"
-          class="create-repository__container__button"
-          type="primary"
+          type="tertiary"
           @click="onChangeModalState(false)"
         >
           {{ $t("webapp.create_repository.modal_continue_button") }}
+        </unnnic-button>
+        <unnnic-button
+          slot="options"
+          @click="navigateToHomepage()"
+        >
+          {{ $t("webapp.create_repository.modal_exit_button") }}
         </unnnic-button>
       </unnnic-modal>
     </div>
@@ -161,7 +130,7 @@ export default {
       };
     },
     createRepository(value) {
-      this.changeStepContent(value, 2);
+      this.data = { ...value, ...this.data }
       this.onSubmit();
     },
     onChangeModalState(value) {
@@ -169,9 +138,7 @@ export default {
     },
     navigateToHomepage() {
       this.openModal = false;
-      this.$router.push({
-        name: 'home'
-      });
+      this.$emit('cancelCreation')
     },
     onSubmit() {
       this.submit(this.drfRepositoryModel);
@@ -180,7 +147,7 @@ export default {
       const { organization, categories, isPrivate, ...data } = this.data;
       const updatedModel = updateAttrsValues(model, {
         ...data,
-        is_private: isPrivate,
+        is_private: true,
         organization: this.getOrgSelected,
         categories
       });
@@ -191,8 +158,8 @@ export default {
         const response = await updatedModel.save();
         const { owner__nickname, slug } = response.response.data;
         this.createdRepository = response.response.data;
-        this.current = 2;
         this.resultParams = { ownerNickname: owner__nickname, slug };
+        this.$router.push(this.repositoryDetailsRouterParams())
         return true;
       } catch (error) {
         this.errors = this.drfRepositoryModel.errors;
@@ -212,7 +179,6 @@ export default {
 
 .create-repository {
   padding: 2rem 4rem;
-  background-color: $unnnic-color-background-snow;
 
   display: flex;
   justify-content: center;
@@ -224,12 +190,11 @@ export default {
   }
 
   &__container {
-    width: 68%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 6.25rem;
 
     &__indicator {
       width: 18%;
@@ -267,5 +232,11 @@ export default {
       background-color: $unnnic-color-feedback-yellow;
     }
   }
+
+}
+::v-deep {
+    .text-input.size--sm .icon-right, .text-input.size--sm .icon-left {
+      top: 15px;
+    }
 }
 </style>

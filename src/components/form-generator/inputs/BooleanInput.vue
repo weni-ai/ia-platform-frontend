@@ -81,6 +81,11 @@ export default {
       return this.value ? this.$t('webapp.layout.yes') : this.$t('webapp.layout.no');
     },
   },
+  watch: {
+    value() {
+      this.update();
+    }
+  },
   mounted() {
     this.update();
   },
