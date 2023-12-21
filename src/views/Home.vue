@@ -95,6 +95,14 @@
       </div>
     </div>
 
+    <unnnic-modal-next
+        v-if="openModal"
+      >
+        <create-repository-form
+          @cancelCreation="openModal = false"
+        />
+      </unnnic-modal-next>
+
   </div>
 </template>
 
@@ -103,6 +111,7 @@ import HomeTabNavigation from '@/components/repository/home/HomeTabNavigation';
 import HomeIntelligenceFromProject from '@/components/repository/home/HomeIntelligenceFromProject';
 import HomeIntelligenceFromCommunity from '../components/repository/home/HomeIntelligenceFromCommunity';
 import HomeIntelligenceFromOrg from '../components/repository/home/HomeIntelligenceFromOrg';
+import CreateRepositoryForm from '../components/repository/CreateRepository/CreateRepositoryForm';
 
 export default {
   name: 'Home',
@@ -110,13 +119,15 @@ export default {
     HomeTabNavigation,
     HomeIntelligenceFromProject,
     HomeIntelligenceFromOrg,
-    HomeIntelligenceFromCommunity
+    HomeIntelligenceFromCommunity,
+    CreateRepositoryForm
   },
   data() {
     return {
       howTabIsShown: 2,
       update: false,
-      loading: false
+      loading: false,
+      openModal: false
     };
   },
   methods: {
@@ -125,9 +136,10 @@ export default {
       this.update = !this.update
     },
     createNewIntelligence() {
-      this.$router.push({
-        name: 'new',
-      });
+      // this.$router.push({
+      //   name: 'new',
+      // });
+      this.openModal = true
     },
   }
 };
@@ -226,6 +238,10 @@ export default {
 
       .input.size-md {
         height: auto;
+      }
+
+      .unnnic-modal.type-default .container {
+        max-width: 750px;
       }
     }
 </style>

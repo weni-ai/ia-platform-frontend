@@ -13,29 +13,6 @@
           @backModal="onChangeModalState(true)"
         />
       </section>
-      <section v-show="current == 2" class="create-repository__container__steps">
-        <div class="create-repository__container__steps__wrapper">
-          <div class="create-repository__container__steps__wrapper__title">
-            <h1>
-              {{ $t("webapp.create_repository.repository_created_first") }} <br />
-              {{ $t("webapp.create_repository.repository_created_second") }}
-              <emoji name="Winking Face" />
-            </h1>
-          </div>
-
-          <div class="create-repository__container__steps__wrapper__button">
-            <router-link :to="repositoryDetailsRouterParams()">
-              <unnnic-button
-                type="secondary"
-                @click.native="sendEvent()"
-                class="create-repository__container__steps__wrapper__button__btn"
-              >
-                {{ $t("webapp.create_repository.navigate_to_intelligence_button") }}
-              </unnnic-button>
-            </router-link>
-          </div>
-        </div>
-      </section>
       <unnnic-modal
         :showModal="openModal"
         :text="$t('webapp.create_repository.modal_title')"
@@ -153,7 +130,7 @@ export default {
       };
     },
     createRepository(value) {
-      this.changeStepContent(value, 2);
+      this.data = { ...value, ...this.data }
       this.onSubmit();
     },
     onChangeModalState(value) {
@@ -161,9 +138,7 @@ export default {
     },
     navigateToHomepage() {
       this.openModal = false;
-      this.$router.push({
-        name: 'home'
-      });
+      this.$emit('cancelCreation')
     },
     onSubmit() {
       this.submit(this.drfRepositoryModel);
@@ -183,8 +158,8 @@ export default {
         const response = await updatedModel.save();
         const { owner__nickname, slug } = response.response.data;
         this.createdRepository = response.response.data;
-        this.current = 2;
         this.resultParams = { ownerNickname: owner__nickname, slug };
+        this.$router.push(this.repositoryDetailsRouterParams())
         return true;
       } catch (error) {
         this.errors = this.drfRepositoryModel.errors;
@@ -204,7 +179,6 @@ export default {
 
 .create-repository {
   padding: 2rem 4rem;
-  background-color: $unnnic-color-background-snow;
 
   display: flex;
   justify-content: center;
@@ -216,12 +190,11 @@ export default {
   }
 
   &__container {
-    width: 68%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 6.25rem;
 
     &__indicator {
       width: 18%;
@@ -262,7 +235,7 @@ export default {
 
 }
 ::v-deep {
-    .text-input.size--sm .icon-right {
+    .text-input.size--sm .icon-right, .text-input.size--sm .icon-left {
       top: 15px;
     }
 }

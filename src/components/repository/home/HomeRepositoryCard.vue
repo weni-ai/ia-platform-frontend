@@ -102,7 +102,7 @@
             </div>
 
             <div v-else-if="type === 'base'">
-              <unnnic-dropdown-item>
+              <unnnic-dropdown-item @click="deleteBase(repositoryDetail)">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="delete" scheme="feedback-red"/>
                   <div :style="{color: '#E53E3E'}">
@@ -517,6 +517,9 @@ export default {
     openCopyConfirm(intelligence) {
       this.selectedIntelligence = intelligence
       this.openConfirmModal = true
+    },
+    deleteBase(repository) {
+      this.$emit('deleteBase', repository)
     }
   }
 };
