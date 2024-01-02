@@ -117,7 +117,6 @@ export default {
     display: grid;
     // grid-template-columns: 1fr 2fr;
     // margin: 1.5rem;
-    padding: $unnnic-spacing-md;
     gap: 1rem;
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="home">
+    <div :class="['home', `page--${$route.name}`]">
       <section class="home__header">
         <div>
           <unnnic-card
@@ -156,6 +156,22 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: $unnnic-color-background-snow;
+
+  &.page--home {
+    padding: $unnnic-spacing-md $unnnic-font-size * 8;
+
+    .home__header {
+      padding: 0;
+    }
+
+    .divider {
+      margin-inline: 0;
+    }
+
+    .filters {
+      padding-inline: 0;
+    }
+  }
 
     &__header{
       padding: $unnnic-inline-md;
