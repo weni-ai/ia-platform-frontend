@@ -1,4 +1,7 @@
 {
+  "announcements": {
+    "new_artificial_intelligence_module_is_here": "Chegou o novo módulo de Inteligência Artificial! Explore as novidades e saiba como criar chatbots ainda mais incríveis!"
+  },
   "webapp": {
     "layout": {
       "newbot": "nova inteligência",

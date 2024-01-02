@@ -15,8 +15,7 @@
         />
 
           <span>
-            Chegou o novo módulo de Inteligência Artificial!
-            Explore as novidades e saiba como criar chatbots ainda mais incríveis!
+            {{ $t('announcements.new_artificial_intelligence_module_is_here') }}
           </span>
       </div>
 
