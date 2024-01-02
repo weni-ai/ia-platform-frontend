@@ -2,6 +2,10 @@
   "announcements": {
     "new_artificial_intelligence_module_is_here": "The new Artificial Intelligence module is here! Explore what's new and learn how to create even more amazing chatbots!"
   },
+  "intelligences": {
+    "own_intelligences": "Own intelligences",
+    "public_intelligences": "Public intelligences"
+  },
   "webapp": {
     "layout": {
       "newbot": "new bot",

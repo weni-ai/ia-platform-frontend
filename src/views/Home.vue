@@ -19,36 +19,68 @@
         <unnnic-button @click="createNewIntelligence" class="ml-auto" iconLeft="add-1">
           Criar Inteligência
         </unnnic-button>
-
       </section>
 
-      <hr class="divider" />
+      <unnnic-tab size="md" v-model="tab" :tabs='["own_intelligences","public_intelligences"]'>
+        <template slot="tab-head-own_intelligences">
+          {{ $t('intelligences.own_intelligences') }}
+        </template>
 
-      <div class="filters">
-        <div class="u font secondary body-gt">
-          Filtrar:
-        </div>
-        <div>
-          <unnnic-select
-            placeholder="Categorias"
-            size="sm"
-          />
-        </div>
+        <template slot="tab-panel-own_intelligences">
+          <div class="filters">
+            <div class="u font secondary body-gt">
+              Filtrar:
+            </div>
+            <div>
+              <unnnic-select
+                placeholder="Categorias"
+                size="sm"
+              />
+            </div>
 
-            <unnnic-input
-              icon-left="search-1"
-              placeholder="Pesquisar inteligência"
-            />
-      </div>
+                <unnnic-input
+                  icon-left="search-1"
+                  placeholder="Pesquisar inteligência"
+                />
+          </div>
 
-      <div :class="[loading ? 'hidden' : 'visible']">
+          <div :class="[loading ? 'hidden' : 'visible']">
 
-        <home-intelligence-from-org
-          @loading="loading = $event"
-          :key="update"
-          v-show="howTabIsShown === 2"/>
+            <home-intelligence-from-org
+              @loading="loading = $event"
+              :key="update"
+              v-show="howTabIsShown === 2"/>
 
-      </div>
+          </div>
+
+          <div :class="['home-loading', !loading ? 'hidden' : 'visible']">
+            <div v-if="howTabIsShown === 0" class="home-loading__project">
+              <unnnic-skeleton-loading tag="div" class="mb-5" width="510px" height="46px" />
+
+              <div class="home-loading__cards">
+                <unnnic-skeleton-loading tag="div" width="31vw" height="480px" />
+                <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+                <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+              </div>
+            </div>
+
+            <div v-if="howTabIsShown !== 0" class="home-loading__cards">
+              <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+              <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+              <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
+            </div>
+
+          </div>
+        </template>
+
+        <template slot="tab-head-public_intelligences">
+          {{ $t('intelligences.public_intelligences') }}
+        </template>
+
+        <template slot="tab-panel-public_intelligences">
+        </template>
+      </unnnic-tab>
+
 
       <!-- <unnnic-tab
         class="home__intelligences"
@@ -73,26 +105,6 @@
           />
         </template>
       </unnnic-tab> -->
-
-      <div :class="['home-loading', !loading ? 'hidden' : 'visible']">
-
-      <div v-if="howTabIsShown === 0" class="home-loading__project">
-        <unnnic-skeleton-loading tag="div" class="mb-5" width="510px" height="46px" />
-
-        <div class="home-loading__cards">
-          <unnnic-skeleton-loading tag="div" width="31vw" height="480px" />
-          <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
-          <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
-        </div>
-      </div>
-
-      <div v-if="howTabIsShown !== 0" class="home-loading__cards">
-        <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
-        <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
-        <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
-      </div>
-
-      </div>
     </div>
 
     <unnnic-modal-next
@@ -124,6 +136,7 @@ export default {
   },
   data() {
     return {
+      tab: 'own_intelligences',
       howTabIsShown: 2,
       update: false,
       loading: false,
@@ -164,10 +177,6 @@ export default {
       padding: 0;
     }
 
-    .divider {
-      margin-inline: 0;
-    }
-
     .filters {
       padding-inline: 0;
     }
@@ -176,6 +185,7 @@ export default {
     &__header{
       padding: $unnnic-inline-md;
       padding-bottom: $unnnic-spacing-stack-sm;
+      margin-bottom: $unnnic-spacing-lg;
       display: flex;
       align-items: center;
 
@@ -229,11 +239,7 @@ export default {
 .hidden {
   display: none;
 }
-.divider {
-  background: #E2E6ED;
-  height: 1px;
-  margin: $unnnic-spacing-md;
-}
+
 .filters {
       margin-bottom: $unnnic-spacing-stack-sm;
       display: flex;
