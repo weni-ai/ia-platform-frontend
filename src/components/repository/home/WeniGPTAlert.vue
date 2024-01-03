@@ -7,7 +7,7 @@
         display: canShow ? null : 'none',
       }"
     >
-      <div class="warning-bar__content is-flex is-align-items-center mx-auto">
+      <div class="warning-bar__content">
         <img
           class="doris-face"
           src="~@/assets/imgs/doris.png"
@@ -54,9 +54,13 @@ export default {
   gap: $unnnic-spacing-xs;
   min-height: $unnnic-font-size * 3.5;
   box-shadow: $unnnic-shadow-level-near;
+  box-sizing: border-box;
 
   &__content {
     padding-left: 50px + $unnnic-spacing-xs;
+    display: flex;
+    align-items: center;
+    margin-inline: auto;
 
     .doris-face {
       position: absolute;

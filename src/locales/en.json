@@ -4,7 +4,11 @@
   },
   "intelligences": {
     "own_intelligences": "Own intelligences",
-    "public_intelligences": "Public intelligences"
+    "public_intelligences": "Public intelligences",
+    "create_button": "Create Intelligence",
+    "search_intelligence_placeholder": "Search Intelligence",
+    "categories_placeholder": "Categories",
+    "filter_label": "Filter:"
   },
   "webapp": {
     "layout": {

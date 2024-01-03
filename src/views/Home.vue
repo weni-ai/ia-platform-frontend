@@ -17,7 +17,7 @@
         </div>
 
         <unnnic-button @click="createNewIntelligence" class="create-ia-button" iconLeft="add-1">
-          Criar Inteligência
+          {{ $t('intelligences.create_button') }}
         </unnnic-button>
       </section>
 
@@ -28,19 +28,17 @@
 
         <template slot="tab-panel-own_intelligences">
           <div class="filters">
-            <div class="u font secondary body-gt">
-              Filtrar:
+            <div class="u font secondary body-gt color-neutral-dark">
+              {{ $t('intelligences.filter_label') }}
             </div>
             <div>
-              <unnnic-select
-                placeholder="Categorias"
-                size="sm"
-              />
+              <unnnic-select-smart size="sm" v-model="category" :options="categories" />
             </div>
 
                 <unnnic-input
+                  size="sm"
                   icon-left="search-1"
-                  placeholder="Pesquisar inteligência"
+                  :placeholder="$t('intelligences.search_intelligence_placeholder')"
                 />
           </div>
 
@@ -140,10 +138,51 @@ export default {
       howTabIsShown: 2,
       update: false,
       loading: false,
-      openModal: false
+      openModal: false,
+      category: [],
+      categories: [
+        {
+          value: '',
+          label: this.$t('intelligences.categories_placeholder'),
+        },
+        {
+          value: '1',
+          label: 'Option 1',
+        },
+        {
+          value: '2',
+          label: 'Option 2',
+          description: 'This is the first option'
+        },
+      ],
+
+      bulmaStyles: [],
     };
   },
+
+  mounted() {
+    this.removeBulmaStyles();
+  },
+
+  beforeDestroy() {
+    this.retoreBulmaStyles();
+  },
+
   methods: {
+    removeBulmaStyles() {
+      document.styleSheets.forEach((style) => {
+        if (style.ownerNode.innerHTML.startsWith('/* Bulma Utilities */')) {
+          this.bulmaStyles.push(style.ownerNode.parentNode.removeChild(style.ownerNode));
+        }
+      });
+    },
+
+    retoreBulmaStyles() {
+      this.bulmaStyles.forEach((style) => {
+        document.head.appendChild(style);
+      });
+    },
+
     onTabSelected(event) {
       this.howTabIsShown = event
       this.update = !this.update
@@ -159,9 +198,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/utilities.scss';
-@import '~@/assets/scss/variables.scss';
-@import '~@weni/unnnic-system/dist/unnnic.css';
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .home {
@@ -247,7 +283,7 @@ export default {
 }
 
 .filters {
-      margin-bottom: $unnnic-spacing-stack-sm;
+      margin-bottom: $unnnic-spacing-md;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -260,9 +296,9 @@ export default {
       }
     }
     ::v-deep {
-      .text-input.size--sm .icon-right {
-        top: 15px;
-      }
+      // .text-input.size--sm .icon-right {
+      //   top: 15px;
+      // }
 
       .input.size-md {
         height: auto;
