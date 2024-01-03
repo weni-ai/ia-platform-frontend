@@ -8,7 +8,8 @@
     "create_button": "Crear Inteligencia",
     "search_intelligence_placeholder": "Buscar Inteligencia",
     "categories_placeholder": "Categorías",
-    "filter_label": "Filtrar:"
+    "filter_label": "Filtrar:",
+    "no_intelligence_added": "Ninguna Inteligencia añadida"
   },
   "webapp": {
     "layout": {

@@ -16,7 +16,12 @@
           />
         </div>
 
-        <unnnic-button @click="createNewIntelligence" class="create-ia-button" iconLeft="add-1">
+        <unnnic-button
+          v-if="!(tab === 'own_intelligences' && intelligencesStatus === 'empty')"
+          @click="createNewIntelligence"
+          class="create-ia-button"
+          iconLeft="add-1"
+        >
           {{ $t('intelligences.create_button') }}
         </unnnic-button>
       </section>
@@ -40,6 +45,18 @@
                   icon-left="search-1"
                   :placeholder="$t('intelligences.search_intelligence_placeholder')"
                 />
+          </div>
+
+          <div v-if="intelligencesStatus === 'empty'" class="intelligences-list--empty">
+            <img src="../assets/imgs/doris-doubt-reaction.png" alt="Doris Doubt Reaction">
+
+            <h1 class="intelligences-list__title">
+              {{ $t('intelligences.no_intelligence_added') }}
+            </h1>
+
+            <unnnic-button @click="createNewIntelligence" class="create-ia-button" iconLeft="add-1">
+              {{ $t('intelligences.create_button') }}
+            </unnnic-button>
           </div>
 
           <div :class="[loading ? 'hidden' : 'visible']">
@@ -135,6 +152,7 @@ export default {
   data() {
     return {
       tab: 'own_intelligences',
+      intelligencesStatus: 'empty',
       howTabIsShown: 2,
       update: false,
       loading: false,
@@ -199,6 +217,31 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.intelligences-list {
+  &--empty {
+    padding-top: $unnnic-spacing-sm;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .create-ia-button {
+      min-width: 15.625 * $unnnic-font-size;
+    }
+  }
+
+  &__title {
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-title-sm;
+    line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
+    font-weight: $unnnic-font-weight-bold;
+    color: $unnnic-color-neutral-darkest;
+    text-align: center;
+
+    margin-block: $unnnic-spacing-md;
+  }
+}
 
 .home {
   flex: 1;
