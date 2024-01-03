@@ -16,7 +16,7 @@
           />
         </div>
 
-        <unnnic-button @click="createNewIntelligence" class="ml-auto" iconLeft="add-1">
+        <unnnic-button @click="createNewIntelligence" class="create-ia-button" iconLeft="add-1">
           Criar Inteligência
         </unnnic-button>
       </section>
@@ -188,6 +188,12 @@ export default {
       margin-bottom: $unnnic-spacing-lg;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      gap: $unnnic-spacing-sm;
+
+      .create-ia-button {
+        min-width: 18.75 * $unnnic-font-size;
+      }
 
       .description {
         margin-top: $unnnic-spacing-stack-sm;
