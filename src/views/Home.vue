@@ -245,7 +245,7 @@ export default {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: $unnnic-spacing-stack-sm $unnnic-spacing-inline-md;
+      gap: $unnnic-spacing-stack-sm;
       padding: 0 $unnnic-spacing-md;
 
       .unnnic-form {
