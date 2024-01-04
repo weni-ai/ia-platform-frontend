@@ -17,7 +17,7 @@
         </div>
 
         <unnnic-button
-          v-if="!(tab === 'own_intelligences' && intelligencesStatus === 'empty')"
+          v-if="!(tab === 'own_intelligences' && isListEmpty)"
           @click="createNewIntelligence"
           class="create-ia-button"
           iconLeft="add-1"
@@ -47,7 +47,7 @@
                 />
           </div>
 
-          <div v-if="intelligencesStatus === 'empty'" class="intelligences-list--empty">
+          <div v-if="isListEmpty" class="intelligences-list--empty">
             <img src="../assets/imgs/doris-doubt-reaction.png" alt="Doris Doubt Reaction">
 
             <h1 class="intelligences-list__title">
@@ -59,32 +59,24 @@
             </unnnic-button>
           </div>
 
-          <div :class="[loading ? 'hidden' : 'visible']">
+          <div v-else class="intelligences-list">
+            <intelligence-from-project-item
+              v-for="project in intelligencesFromProject.data"
+              :key="project.uuid"
+              :project="project"
+            />
 
-            <home-intelligence-from-org
-              @loading="loading = $event"
-              :key="update"
-              v-show="howTabIsShown === 2"/>
+            <intelligence-from-org-item
+              v-for="intelligence in intelligencesFromOrg.data"
+              :key="intelligence.uuid"
+              :intelligence="intelligence"
+            />
 
-          </div>
+            <template v-if="isLoading">
+              <unnnic-skeleton-loading v-for="i in 3" :key="i" tag="div" height="230px" />
+            </template>
 
-          <div :class="['home-loading', !loading ? 'hidden' : 'visible']">
-            <div v-if="howTabIsShown === 0" class="home-loading__project">
-              <unnnic-skeleton-loading tag="div" class="mb-5" width="510px" height="46px" />
-
-              <div class="home-loading__cards">
-                <unnnic-skeleton-loading tag="div" width="31vw" height="480px" />
-                <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
-                <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
-              </div>
-            </div>
-
-            <div v-if="howTabIsShown !== 0" class="home-loading__cards">
-              <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
-              <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
-              <unnnic-skeleton-loading tag="div" width="31vw" height="260px" />
-            </div>
-
+            <div v-show="!isLoading" ref="end-of-list-element"></div>
           </div>
         </template>
 
@@ -139,6 +131,9 @@ import HomeIntelligenceFromProject from '@/components/repository/home/HomeIntell
 import HomeIntelligenceFromCommunity from '../components/repository/home/HomeIntelligenceFromCommunity';
 import HomeIntelligenceFromOrg from '../components/repository/home/HomeIntelligenceFromOrg';
 import CreateRepositoryForm from '../components/repository/CreateRepository/CreateRepositoryForm';
+import { mapActions } from 'vuex';
+import IntelligenceFromProjectItem from '../components/repository/home/IntelligenceFromProjectItem';
+import IntelligenceFromOrgItem from '../components/repository/home/IntelligenceFromOrgItem';
 
 export default {
   name: 'Home',
@@ -147,12 +142,13 @@ export default {
     HomeIntelligenceFromProject,
     HomeIntelligenceFromOrg,
     HomeIntelligenceFromCommunity,
-    CreateRepositoryForm
+    CreateRepositoryForm,
+    IntelligenceFromProjectItem,
+    IntelligenceFromOrgItem,
   },
   data() {
     return {
       tab: 'own_intelligences',
-      intelligencesStatus: 'empty',
       howTabIsShown: 2,
       update: false,
       loading: false,
@@ -174,19 +170,72 @@ export default {
         },
       ],
 
+      intelligencesFromProject: {
+        data: [],
+        status: null,
+      },
+
+      intelligencesFromOrg: {
+        limit: 20,
+        offset: 0,
+        owner_id: this.$store.getters.getOrgSelected,
+        data: [],
+        next: null,
+        status: null,
+      },
+
+      intersectionObserver: null,
+      isShowingEndOfList: false,
+
       bulmaStyles: [],
     };
   },
 
   mounted() {
     this.removeBulmaStyles();
+
+    this.loadIntelligencesFromProject();
+    this.loadIntelligencesFromOrg();
+
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        this.isShowingEndOfList = entry.isIntersecting;
+      });
+    });
+
+    this.intersectionObserver.observe(this.$refs['end-of-list-element']);
   },
 
   beforeDestroy() {
     this.retoreBulmaStyles();
+
+    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
+  },
+
+  computed: {
+    isLoading() {
+      return this.intelligencesFromProject.status === 'loading' || this.intelligencesFromOrg.status === 'loading';
+    },
+
+    isListEmpty() {
+      return this.intelligencesFromProject.status === 'complete'
+        && this.intelligencesFromOrg.status === 'complete'
+        && this.intelligencesFromProject.data.length === 0
+        && this.intelligencesFromOrg.data.length === 0;
+    },
+  },
+
+  watch: {
+    isShowingEndOfList() {
+      if (this.isShowingEndOfList && this.intelligencesFromOrg.status !== 'complete') {
+        this.loadIntelligencesFromOrg();
+      }
+    },
   },
 
   methods: {
+    ...mapActions(['searchProjectWithFlow', 'getRepositories']),
+
     removeBulmaStyles() {
       document.styleSheets.forEach((style) => {
         if (style.ownerNode.innerHTML.startsWith('/* Bulma Utilities */')) {
@@ -199,6 +248,52 @@ export default {
       this.bulmaStyles.forEach((style) => {
         document.head.appendChild(style);
       });
+    },
+
+    async loadIntelligencesFromProject() {
+      try {
+        this.intelligencesFromProject.status = 'loading';
+
+        const { data } = await this.searchProjectWithFlow({
+          projectUUID: this.$store.getters.getProjectSelected
+        });
+
+        this.intelligencesFromProject.data = data;
+
+        localStorage.setItem('in_project',
+          JSON.stringify(data.map(({ uuid, version_default }) => ({
+            repository_uuid: uuid,
+            repository_version: version_default.id,
+            project_uuid: this.$store.getters.getProjectSelected,
+            organization: this.$store.getters.getOrgSelected,
+          }))));
+      } finally {
+        this.intelligencesFromProject.status = 'complete';
+      }
+    },
+
+    async loadIntelligencesFromOrg() {
+      try {
+        this.intelligencesFromOrg.status = 'loading';
+
+        const { data } = await this.getRepositories({
+          limit: this.intelligencesFromOrg.limit,
+          offset: this.intelligencesFromOrg.offset,
+          owner_id: this.intelligencesFromOrg.owner_id,
+          next: this.intelligencesFromOrg.next,
+        });
+
+        this.intelligencesFromOrg.data = [...this.intelligencesFromOrg.data, ...data.results];
+        this.intelligencesFromOrg.next = data.next;
+
+        if (!data.next) {
+          this.intelligencesFromOrg.status = 'complete';
+        }
+      } finally {
+        if (this.intelligencesFromOrg.status === 'loading') {
+          this.intelligencesFromOrg.status = null;
+        }
+      }
     },
 
     onTabSelected(event) {
@@ -219,6 +314,10 @@ export default {
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .intelligences-list {
+  display: grid;
+  gap: $unnnic-spacing-sm;
+  grid-template-columns: repeat(auto-fill, minmax(20.625 * $unnnic-font-size, 1fr));
+
   &--empty {
     padding-top: $unnnic-spacing-sm;
 

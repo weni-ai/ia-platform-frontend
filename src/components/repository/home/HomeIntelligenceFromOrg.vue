@@ -1,3 +1,5 @@
+<!-- depreciated -->
+
 <template>
   <div class="home-intelligences-from-org__wrapper">
     <home-intelligence-container>

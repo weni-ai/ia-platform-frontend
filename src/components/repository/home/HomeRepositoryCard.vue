@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div :style="{
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  }">
     <div @click.prevent.stop="repositoryDetailsRouterParams()" class="unnnic-card-intelligence">
       <section class="unnnic-card-intelligence__header">
         <div class="unnnic-card-intelligence__header__detail">
@@ -538,6 +542,7 @@ export default {
   border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
   // margin-bottom: $unnnic-inline-sm;
   cursor: pointer;
+  flex: 1;
 
   &:hover {
     box-shadow: 0 0.25rem 8px lightgrey;
