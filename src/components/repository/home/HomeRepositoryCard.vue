@@ -60,6 +60,7 @@
               <unnnic-icon-svg
                 icon="navigation-menu-vertical-1"
                 class="unnnic-card-intelligence__header__buttons__icon"
+                scheme="neutral-clean"
                 size="sm"
                 slot="trigger"
                 clickable
