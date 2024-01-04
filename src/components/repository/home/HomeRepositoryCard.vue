@@ -128,20 +128,18 @@
                 </div>
               </unnnic-dropdown-item>
 
-              <unnnic-dropdown-item>
+              <!--
+              waiting backend for integration
+
+              <unnnic-dropdown-item @click="isDeleteIntelligenceConfirmationOpen = true">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="delete" scheme="feedback-red"/>
+
                   <div :style="{color: '#E53E3E'}">
-                    <!-- {{
-                      $tc(
-                        "webapp.intelligences_lib.show_languages",
-                        this.repositoryDetail.available_languages.length
-                      )
-                    }} -->
-                    Excluir inteligência
+                    {{ $t('intelligences.delete_intelligence') }}
                   </div>
                 </div>
-              </unnnic-dropdown-item>
+              </unnnic-dropdown-item> -->
 
             </div>
 
@@ -344,6 +342,37 @@
       :name="repositoryDetail.name"
       :intelligence-uuid="repositoryDetail.uuid"
     />
+
+    <unnnic-modal
+      :showModal="isDeleteIntelligenceConfirmationOpen"
+      :text="$t('intelligences.delete_intelligence')"
+      scheme="aux-red-500"
+      modal-icon="error"
+      @close="isDeleteIntelligenceConfirmationOpen = false"
+    >
+      <span
+        slot="message"
+        v-html="
+          $t('intelligences.delete_intelligence_confirmation_modal_description', {
+            name: repositoryDetail.name
+          })
+        "
+      ></span>
+
+      <unnnic-button
+        slot="options"
+        type="tertiary"
+        @click="isDeleteIntelligenceConfirmationOpen = false"
+      >
+        {{ $t("cancel") }}
+      </unnnic-button>
+      <unnnic-button
+        slot="options"
+        type="warning"
+      >
+        {{ $t("delete") }}
+      </unnnic-button>
+    </unnnic-modal>
   </div>
 </template>
 
@@ -369,6 +398,7 @@ export default {
       notificationModalMessage: '',
       selectedIntelligence: '',
       isViewBasesOpen: false,
+      isDeleteIntelligenceConfirmationOpen: false,
     };
   },
   props: {

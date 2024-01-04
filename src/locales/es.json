@@ -1,4 +1,6 @@
 {
+  "delete": "Eliminar",
+  "cancel": "Cancelar",
   "announcements": {
     "new_artificial_intelligence_module_is_here": "¡Ya está aquí el nuevo módulo de Inteligencia Artificial! Explora las novedades y aprende a crear chatbots aún más increíbles."
   },
@@ -12,7 +14,9 @@
     "no_intelligence_added": "Ninguna Inteligencia añadida",
     "view_bases": "Visualizar bases",
     "sidebar_view_content_bases_title": "Bases de contenidos de {name}",
-    "sidebar_view_content_bases_description": "Visualizar las bases de contenidos que forman parte de esta IA."
+    "sidebar_view_content_bases_description": "Visualizar las bases de contenidos que forman parte de esta IA.",
+    "delete_intelligence": "Eliminar Inteligencia",
+    "delete_intelligence_confirmation_modal_description": "¿Está seguro de que quiere excluir a la inteligencia <b>{name}</b>?<br>Esta acción no puede ser revertida."
   },
   "webapp": {
     "layout": {
