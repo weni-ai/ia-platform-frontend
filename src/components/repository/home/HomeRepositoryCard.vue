@@ -118,15 +118,12 @@
             </div>
 
             <div v-else-if="type === 'repository'">
-              <unnnic-dropdown-item>
+              <unnnic-dropdown-item @click="viewContentBases">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="article" />
+
                   <div>
-                    <!-- {{
-                      $tc("webapp.intelligences_lib.show_intents",
-                        this.repositoryDetail.intents.length)
-                    }} -->
-                    Visualizar bases
+                    {{ $t('intelligences.view_bases') }}
                   </div>
                 </div>
               </unnnic-dropdown-item>
@@ -341,16 +338,23 @@
         v-html="notificationModalMessage" />
       </unnnic-modal>
 
+    <side-bar-content-bases
+      v-if="isViewBasesOpen"
+      @close="isViewBasesOpen = false"
+      :name="repositoryDetail.name"
+      :intelligence-uuid="repositoryDetail.uuid"
+    />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import IntegrationModal from '@/components/shared/IntegrationModal';
+import SideBarContentBases from './SideBarContentBases';
 
 export default {
   name: 'HomeRepositoryCard',
-  components: { IntegrationModal },
+  components: { IntegrationModal, SideBarContentBases },
   data() {
     return {
       dropdownOpen: false,
@@ -363,7 +367,8 @@ export default {
       notificationModalTitle: '',
       notificationModalType: '',
       notificationModalMessage: '',
-      selectedIntelligence: ''
+      selectedIntelligence: '',
+      isViewBasesOpen: false,
     };
   },
   props: {
@@ -431,6 +436,11 @@ export default {
       'updateIntegratedProjects',
       'cloneRepository'
     ]),
+
+    viewContentBases() {
+      this.isViewBasesOpen = true;
+    },
+
     async checkIfHasIntegration() {
       try {
         const inProject = JSON.parse(localStorage.getItem('in_project'));

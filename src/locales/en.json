@@ -9,7 +9,10 @@
     "search_intelligence_placeholder": "Search Intelligence",
     "categories_placeholder": "Categories",
     "filter_label": "Filter:",
-    "no_intelligence_added": "No Intelligence added"
+    "no_intelligence_added": "No Intelligence added",
+    "view_bases": "Visualizar bases",
+    "sidebar_view_content_bases_title": "{name}'s content bases",
+    "sidebar_view_content_bases_description": "Visualize the content bases that are part of this AI."
   },
   "webapp": {
     "layout": {

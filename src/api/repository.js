@@ -21,6 +21,21 @@ export default {
       },
     });
   },
+
+  getQAKnowledgeBasesNext({ repositoryUUID, limit, offset, next }) {
+    if (next) {
+      return request.$http.get(next);
+    }
+
+    return request.$http.get('v2/repository/qa/knowledge-base/', {
+      params: {
+        repository_uuid: repositoryUUID,
+        limit,
+        offset,
+      },
+    });
+  },
+
   createQAKnowledgeBase(repositoryUUID, title) {
     return request.$http.post('v2/repository/qa/knowledge-base/', {
       repository: repositoryUUID,

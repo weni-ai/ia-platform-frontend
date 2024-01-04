@@ -9,7 +9,10 @@
     "search_intelligence_placeholder": "Buscar Inteligencia",
     "categories_placeholder": "Categorías",
     "filter_label": "Filtrar:",
-    "no_intelligence_added": "Ninguna Inteligencia añadida"
+    "no_intelligence_added": "Ninguna Inteligencia añadida",
+    "view_bases": "Visualizar bases",
+    "sidebar_view_content_bases_title": "Bases de contenidos de {name}",
+    "sidebar_view_content_bases_description": "Visualizar las bases de contenidos que forman parte de esta IA."
   },
   "webapp": {
     "layout": {
