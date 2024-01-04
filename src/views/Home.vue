@@ -31,55 +31,6 @@
           {{ $t('intelligences.own_intelligences') }}
         </template>
 
-        <template slot="tab-panel-own_intelligences">
-          <div class="filters">
-            <div class="u font secondary body-gt color-neutral-dark">
-              {{ $t('intelligences.filter_label') }}
-            </div>
-            <div>
-              <unnnic-select-smart size="sm" v-model="category" :options="categories" />
-            </div>
-
-                <unnnic-input
-                  size="sm"
-                  icon-left="search-1"
-                  :placeholder="$t('intelligences.search_intelligence_placeholder')"
-                />
-          </div>
-
-          <div v-if="isListEmpty" class="intelligences-list--empty">
-            <img src="../assets/imgs/doris-doubt-reaction.png" alt="Doris Doubt Reaction">
-
-            <h1 class="intelligences-list__title">
-              {{ $t('intelligences.no_intelligence_added') }}
-            </h1>
-
-            <unnnic-button @click="createNewIntelligence" class="create-ia-button" iconLeft="add-1">
-              {{ $t('intelligences.create_button') }}
-            </unnnic-button>
-          </div>
-
-          <div v-else class="intelligences-list">
-            <intelligence-from-project-item
-              v-for="project in intelligencesFromProject.data"
-              :key="project.uuid"
-              :project="project"
-            />
-
-            <intelligence-from-org-item
-              v-for="intelligence in intelligencesFromOrg.data"
-              :key="intelligence.uuid"
-              :intelligence="intelligence"
-            />
-
-            <template v-if="isLoading">
-              <unnnic-skeleton-loading v-for="i in 3" :key="i" tag="div" height="230px" />
-            </template>
-
-            <div v-show="!isLoading" ref="end-of-list-element"></div>
-          </div>
-        </template>
-
         <template slot="tab-head-public_intelligences">
           {{ $t('intelligences.public_intelligences') }}
         </template>
@@ -87,6 +38,55 @@
         <template slot="tab-panel-public_intelligences">
         </template>
       </unnnic-tab>
+
+      <div v-show="tab === 'own_intelligences'">
+        <div class="filters">
+          <div class="u font secondary body-gt color-neutral-dark">
+            {{ $t('intelligences.filter_label') }}
+          </div>
+          <div>
+            <unnnic-select-smart size="sm" v-model="category" :options="categories" />
+          </div>
+
+              <unnnic-input
+                size="sm"
+                icon-left="search-1"
+                :placeholder="$t('intelligences.search_intelligence_placeholder')"
+              />
+        </div>
+
+        <div v-if="isListEmpty" class="intelligences-list--empty">
+          <img src="../assets/imgs/doris-doubt-reaction.png" alt="Doris Doubt Reaction">
+
+          <h1 class="intelligences-list__title">
+            {{ $t('intelligences.no_intelligence_added') }}
+          </h1>
+
+          <unnnic-button @click="createNewIntelligence" class="create-ia-button" iconLeft="add-1">
+            {{ $t('intelligences.create_button') }}
+          </unnnic-button>
+        </div>
+
+        <div v-else class="intelligences-list">
+          <intelligence-from-project-item
+            v-for="project in intelligencesFromProject.data"
+            :key="project.uuid"
+            :project="project"
+          />
+
+          <intelligence-from-org-item
+            v-for="intelligence in intelligencesFromOrg.data"
+            :key="intelligence.uuid"
+            :intelligence="intelligence"
+          />
+
+          <template v-if="isLoading">
+            <unnnic-skeleton-loading v-for="i in 3" :key="i" tag="div" height="230px" />
+          </template>
+
+          <div v-show="!isLoading" ref="end-of-list-element"></div>
+        </div>
+      </div>
 
 
       <!-- <unnnic-tab
