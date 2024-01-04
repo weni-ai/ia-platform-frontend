@@ -74,11 +74,14 @@ export default {
     // height: 30.625rem;
 
     &__title {
-      text-align: center;
       color: $unnnic-color-neutral-darkest;
-      font-family: $unnnic-font-family-primary;
-      font-size: 1.5rem;
-      margin-bottom: 2rem;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-black;
+      font-size: $unnnic-font-size-title-sm;
+      line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
+
+      text-align: center;
+      margin-block: 0 $unnnic-spacing-sm;
     }
 
     &__wrapper {

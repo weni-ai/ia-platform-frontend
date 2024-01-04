@@ -193,7 +193,6 @@ export default {
     &__info-card {
       border: 1px solid $unnnic-color-weni-200;
       background: $unnnic-color-weni-100;
-      margin-bottom: $unnnic-spacing-lg;
 
       ::v-deep {
         .unnnic-card-default__description {

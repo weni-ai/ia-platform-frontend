@@ -114,14 +114,13 @@
       </unnnic-tab> -->
     </div>
 
-    <unnnic-modal-next
-        v-if="openModal"
-      >
+    <div v-if="openModal" class="create-intelligence-modal__background">
+      <div class="create-intelligence-modal__container">
         <create-repository-form
           @cancelCreation="openModal = false"
         />
-      </unnnic-modal-next>
-
+      </div>
+    </div>
   </div>
 </template>
 
@@ -312,6 +311,38 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.create-intelligence-modal {
+  &__background {
+    position: fixed;
+    background-color: rgba($unnnic-color-neutral-darkest, $unnnic-opacity-level-clarifying);
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: auto;
+  }
+
+  &__container {
+    flex: 1;
+    max-width: 46.875 * $unnnic-font-size;
+    border-radius: $unnnic-border-radius-sm;
+    background-color: $unnnic-color-neutral-light;
+    box-shadow: $unnnic-shadow-level-separated;
+    box-sizing: border-box;
+
+    padding-block: $unnnic-spacing-giant $unnnic-spacing-lg;
+    padding-inline: $unnnic-spacing-md;
+
+    margin: auto;
+  }
+}
 
 .intelligences-list {
   display: grid;

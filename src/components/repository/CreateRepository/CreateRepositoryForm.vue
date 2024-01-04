@@ -178,8 +178,6 @@ export default {
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .create-repository {
-  padding: 2rem 4rem;
-
   display: flex;
   justify-content: center;
   align-items: center;
