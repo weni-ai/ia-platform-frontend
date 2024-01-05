@@ -24,12 +24,32 @@
 
       <section class="create-repository__definitions__wrapper__fields">
         <unnnic-label :label="$t('webapp.create_repository.category_label')" />
-        <unnnic-carousel
-          :tagItems="categoryList"
-          v-if="categoryList.length > 0"
-          v-model="definition.categories"
-        />
-        <loading v-else />
+
+        <div class="categories-list">
+          <template v-if="categoryListLoading">
+            <unnnic-skeleton-loading
+              v-for="i in 10"
+              :key="i" tag="div"
+              :width="80 + Math.floor(Math.random() * 40) + 'px'"
+              height="32px"
+            />
+          </template>
+
+          <unnnic-tag
+            v-else
+            v-for="category in categoryList"
+            :key="category.id"
+            :text="category.name"
+            :disabled="definition.categories.includes(category.id)"
+            @click.native="
+              definition.categories.includes(category.id)
+                ? definition.categories.splice(definition.categories.indexOf(category.id), 1)
+                : definition.categories.push(category.id)
+            "
+            clickable
+            type="brand"
+          />
+        </div>
       </section>
 
 
@@ -80,6 +100,7 @@ export default {
         isPrivate: true,
         categories: []
       },
+      categoryListLoading: false,
       categoryList: []
     };
   },
@@ -105,7 +126,7 @@ export default {
   methods: {
     ...mapActions(['getAllCategories']),
     async getCategories() {
-      this.loading = true;
+      this.categoryListLoading = true;
       try {
         const { data } = await this.getAllCategories();
         const sortedData = data.sort((previous, next) => previous.id - next.id);
@@ -116,7 +137,7 @@ export default {
           type: 'is-danger'
         });
       } finally {
-        this.loading = false;
+        this.categoryListLoading = false;
       }
     },
     dispatchPreviousStep() {
@@ -137,6 +158,12 @@ export default {
 @import "~@/assets/scss/variables.scss";
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $unnnic-spacing-xs;
+}
 
 .create-repository {
   padding: 2rem 4rem;
