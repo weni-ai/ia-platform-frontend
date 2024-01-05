@@ -16,9 +16,10 @@
       <unnnic-modal
         :showModal="openModal"
         :text="$t('webapp.create_repository.modal_title')"
-        scheme="feedback-yellow"
+        scheme="aux-yellow-500"
         modal-icon="warning"
         @close="onChangeModalState(false)"
+        :close-icon="false"
       >
         <span slot="message" v-html="$t('webapp.create_repository.modal_description')" />
         <unnnic-button
@@ -31,6 +32,7 @@
         <unnnic-button
           slot="options"
           @click="navigateToHomepage()"
+          class="attention-button"
         >
           {{ $t("webapp.create_repository.modal_exit_button") }}
         </unnnic-button>
@@ -176,6 +178,18 @@ export default {
 @import "~@/assets/scss/variables.scss";
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.attention-button {
+  background-color: $unnnic-color-aux-yellow-500;
+
+  &:hover:enabled {
+    background-color: $unnnic-color-aux-yellow-700;
+  }
+
+  &:active:enabled {
+    background-color: $unnnic-color-aux-yellow-900;
+  }
+}
 
 .create-repository {
   display: flex;
