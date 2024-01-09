@@ -65,7 +65,6 @@ export default {
 
   watch: {
     isShowingEndOfList() {
-      console.log('changed', this.isShowingEndOfList);
       if (
         this.isShowingEndOfList
         && this.$store.state.Repository.publicIntelligences.status !== 'complete'

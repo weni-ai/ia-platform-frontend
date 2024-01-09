@@ -19,6 +19,9 @@
     "delete_intelligence": "Delete Intelligence",
     "delete_intelligence_confirmation_modal_description": "Are you sure you want to delete <b>{name}</b> intelligence?<br>This action cannot be reversed."
   },
+  "content_bases": {
+    "quick_test": "Quick test"
+  },
   "webapp": {
     "layout": {
       "newbot": "new bot",

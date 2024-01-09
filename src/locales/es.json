@@ -19,6 +19,9 @@
     "delete_intelligence": "Eliminar Inteligencia",
     "delete_intelligence_confirmation_modal_description": "¿Está seguro de que quiere excluir a la inteligencia <b>{name}</b>?<br>Esta acción no puede ser revertida."
   },
+  "content_bases": {
+    "quick_test": "Prueba rápida"
+  },
   "webapp": {
     "layout": {
       "newbot": "nueva inteligencia",

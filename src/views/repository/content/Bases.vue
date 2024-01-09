@@ -50,7 +50,7 @@
           </div>
         </div>
 
-        <repository-content-navigation />
+        <repository-content-navigation v-if="canContribute" />
       </div>
 
       <hr />
@@ -62,7 +62,12 @@
             {{ $t('intelligences.no_content_base_added') }}
           </h1>
 
-          <unnnic-button @click="openModal = true" class="create-base-button" iconLeft="add-1">
+          <unnnic-button
+            v-if="canContribute"
+            @click="openModal = true"
+            class="create-base-button"
+            iconLeft="add-1"
+          >
             {{ $t('webapp.home.bases.new_knowledge_base') }}
           </unnnic-button>
       </div>
@@ -83,7 +88,12 @@
             v-html="$tc('webapp.home.bases.knowledge_bases', bases.count)"
           ></h1>
 
-          <unnnic-button @click="openModal = true" class="create-base-button" iconLeft="add-1">
+          <unnnic-button
+            v-if="canContribute"
+            @click="openModal = true"
+            class="create-base-button"
+            iconLeft="add-1"
+          >
             {{ $t('webapp.home.bases.new_knowledge_base') }}
           </unnnic-button>
         </div>
@@ -101,6 +111,7 @@
             v-for="base in bases.data"
             :key="base.id"
             :repository-detail="base"
+            :can-contribute="canContribute"
             @deleteBase="openDeleteModal"
           />
 
@@ -230,6 +241,10 @@ export default {
   computed: {
     ...mapGetters(['getCurrentRepository', 'getProjectSelected', 'getOrgSelected']),
 
+    canContribute() {
+      return this.repository.authorization?.can_contribute;
+    },
+
     getAllCategories() {
       if (!this.repository.categories_list) {
         return [];
@@ -288,25 +303,25 @@ export default {
       });
 
       this.openModal = false;
+
+      this.reloadBases();
+    },
+
+    reloadBases() {
+      this.bases = {
+        count: null,
+        limit: 20,
+        offset: 0,
+        repositoryUuid: this.repositoryUUID,
+        data: [],
+        next: null,
+        status: null,
+      };
+
       this.fetchBases();
     },
+
     async fetchBases() {
-      // this.bases = [];
-      // const response = await this.getQAKnowledgeBases({
-      //   repositoryUUID: this.repositoryUUID,
-      //   page: 0
-      // });
-
-      // response.data.results.forEach(({ id, title, user_name, language_count, description }) => {
-      //   this.bases.push({
-      //     id,
-      //     name: title,
-      //     owner__nickname: user_name,
-      //     available_languages: false,
-      //     description
-      //   });
-      // });
-
       try {
         this.bases.status = 'loading';
 
@@ -347,7 +362,7 @@ export default {
           setLoading(false);
           justClose();
 
-          this.fetchBases();
+          this.reloadBases();
         }
       };
     },

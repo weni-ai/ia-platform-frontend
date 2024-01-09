@@ -43,7 +43,7 @@
           <div v-else>
             <unnnic-tool-tip
                side="top"
-               text="Teste rápido"
+               :text="$t('content_bases.quick_test')"
                enabled
              >
               <unnnic-button
@@ -56,6 +56,7 @@
           </div>
 
           <unnnic-dropdown
+            v-if="(type === 'base' && canContribute) || type !== 'base'"
             position="bottom-left"
             :open.sync="dropdownOpen"
           >
@@ -109,7 +110,7 @@
 
             </div>
 
-            <div v-else-if="type === 'base'">
+            <div v-else-if="type === 'base' && canContribute">
               <unnnic-dropdown-item @click="deleteBase(repositoryDetail)">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="delete" scheme="feedback-red"/>
@@ -413,7 +414,9 @@ export default {
     repositoryDetail: {
       type: [Object, Array],
       default: null
-    }
+    },
+
+    canContribute: Boolean,
   },
   mounted() {
     this.checkIfHasIntegration();
