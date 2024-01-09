@@ -1,60 +1,56 @@
 <template>
   <div class="content-bases-page-container">
     <div class="repository-base">
-      <div class="repository-base__description">
-        <div class="repository-base__title">
-          <unnnic-card
-            type="title"
-            :title="repository.name"
-            enabled
-            icon="neurology"
-            infoPosition="right"
-            :hasInformationIcon="false"
-            scheme="aux-blue"
-          />
-        </div>
-        <section class="repository-base__description__header">
-          <div>
+      <div class="repository-base__header">
+        <div class="repository-base__header__details">
+          <div class="repository-base__header__title">
+            <unnnic-avatar-icon icon="neurology" size="sm" scheme="weni-600" />
+
             <unnnic-skeleton-loading
               v-if="repository.uuid === null"
               tag="div"
-              width="300px"
-              height="22px"
+              width="120px"
+              height="32px"
             />
 
-            <vue-markdown
-              v-else
-              :source="repository.description"
-              show
-              html
-              :breaks="false"
-              :linkify="false"
-              emoji
-              typographer
-              toc
-              toc-id="toc"
-              class="repository-base__description__text markdown-body"
-            />
-            <p v-if="repository.description" class="repository-base__description__text" />
-
-            <div style="display: flex">
-                <unnnic-tag
-                  v-for="(category, index) in getAllCategories"
-                  :key="index"
-                  class="repository-base__header__tag"
-                  :text="category"
-                  disabled
-                  scheme="background-sky"
-                />
-            </div>
+            <h1 v-else>{{ repository.name }}</h1>
           </div>
-          <!-- <unnnic-button
-            @click.prevent.stop="changeIntegrateModalState(true)"
-            iconCenter="settings"
-            type="secondary"
-          /> -->
-          <repository-content-navigation />
-        </section>
+
+          <unnnic-skeleton-loading
+            v-if="repository.uuid === null"
+            tag="div"
+            width="300px"
+            height="22px"
+          />
+
+          <p v-else class="repository-base__header__description">
+            {{ repository.description }}
+          </p>
+
+          <div class="repository-base__header__categories">
+            <template v-if="repository.uuid === null">
+              <unnnic-skeleton-loading
+                v-for="i in 3"
+                :key="i"
+                tag="div"
+                :width="40 + Math.floor(Math.random() * 80) + 'px'"
+                height="28px"
+              />
+            </template>
+
+            <unnnic-tag
+              v-else
+              v-for="(category, index) in getAllCategories"
+              :key="index"
+              class="repository-base__header__tag"
+              :text="category"
+              disabled
+              scheme="background-sky"
+            />
+          </div>
+        </div>
+
+        <repository-content-navigation />
       </div>
 
       <hr />
@@ -113,7 +109,7 @@
               v-for="i in 3"
               :key="i"
               tag="div"
-              height="230px"
+              height="178px"
             />
           </template>
 
@@ -406,11 +402,51 @@ export default {
 .repository-base {
   &__header {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $unnnic-spacing-sm;
+
+    &__details {
+      display: flex;
+      flex-direction: column;
+      row-gap: $unnnic-spacing-sm;
+    }
+
+    &__title {
+      display: flex;
+      column-gap: $unnnic-spacing-sm;
+      align-items: center;
+
+      h1 {
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-title-md;
+        line-height: $unnnic-font-size-title-md + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-bold;
+        color: $unnnic-color-neutral-darkest;
+
+        margin: 0;
+      }
+    }
+
+    &__description {
+      color: $unnnic-color-neutral-dark;
+      font-family: $unnnic-font-family-secondary;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+      font-weight: $unnnic-font-weight-regular;
+
+      margin: 0;
+    }
+
+    &__categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $unnnic-spacing-xs;
+    }
 
     &__tag {
       padding: 0 $unnnic-inset-lg;
       font-size: 15px;
-      margin-right: $unnnic-inset-nano;
     }
   }
 
