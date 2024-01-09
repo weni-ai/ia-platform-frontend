@@ -4,7 +4,10 @@
     display: 'flex',
     flexDirection: 'column',
   }">
-    <div @click.prevent.stop="repositoryDetailsRouterParams()" class="unnnic-card-intelligence">
+    <div
+      @click.prevent.stop="repositoryDetailsRouterParams()"
+      :class="['unnnic-card-intelligence', `unnnic-card-intelligence--${type}`]"
+    >
       <section class="unnnic-card-intelligence__header">
         <div class="unnnic-card-intelligence__header__detail">
           <div class="unnnic-card-intelligence__header__detail__title">
@@ -584,6 +587,12 @@ export default {
   // margin-bottom: $unnnic-inline-sm;
   cursor: pointer;
   flex: 1;
+
+  &--base {
+    .unnnic-card-intelligence__description {
+      margin: 0;
+    }
+  }
 
   &:hover {
     box-shadow: 0 0.25rem 8px lightgrey;

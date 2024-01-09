@@ -109,7 +109,7 @@
               v-for="i in 3"
               :key="i"
               tag="div"
-              height="178px"
+              height="146px"
             />
           </template>
 
