@@ -13,6 +13,7 @@
     "filter_label": "Filtrar:",
     "no_intelligence_added": "Nenhuma Inteligência adicionada",
     "view_bases": "Visualizar bases",
+    "no_content_base_added": "Nenhuma base de conteúdo adicionada",
     "sidebar_view_content_bases_title": "Bases de conteúdo de {name}",
     "sidebar_view_content_bases_description": "Visualize as bases de conteúdo que fazem parte dessa IA.",
     "delete_intelligence": "Excluir Inteligência",

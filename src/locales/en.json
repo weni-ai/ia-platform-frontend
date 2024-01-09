@@ -13,6 +13,7 @@
     "filter_label": "Filter:",
     "no_intelligence_added": "No Intelligence added",
     "view_bases": "Visualizar bases",
+    "no_content_base_added": "No content base added",
     "sidebar_view_content_bases_title": "{name}'s content bases",
     "sidebar_view_content_bases_description": "View the content bases that are part of this AI.",
     "delete_intelligence": "Delete Intelligence",

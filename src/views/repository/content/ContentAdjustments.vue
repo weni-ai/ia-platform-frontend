@@ -146,7 +146,7 @@ export default {
   computed: {
     hasUpdates() {
       if (
-        ['name', 'description', 'respository_type', 'is_private', 'language'].some(
+        ['name', 'description', 'repository_type', 'is_private', 'language'].some(
           key => this.intelligence[key] !== this.repository[key]
         )
       ) {

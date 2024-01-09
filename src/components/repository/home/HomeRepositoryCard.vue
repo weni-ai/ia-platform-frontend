@@ -8,7 +8,7 @@
       <section class="unnnic-card-intelligence__header">
         <div class="unnnic-card-intelligence__header__detail">
           <div class="unnnic-card-intelligence__header__detail__title">
-            {{ repositoryDetail.name }}
+            {{ repositoryDetail.name || repositoryDetail.title }}
           </div>
 
           <!-- <div class="unnnic-card-intelligence__header__detail__subtitle">
