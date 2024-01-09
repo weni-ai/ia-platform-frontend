@@ -34,9 +34,6 @@
         <template slot="tab-head-public_intelligences">
           {{ $t('intelligences.public_intelligences') }}
         </template>
-
-        <template slot="tab-panel-public_intelligences">
-        </template>
       </unnnic-tab>
 
       <div v-show="tab === 'own_intelligences'">
@@ -75,7 +72,13 @@
           />
 
           <intelligence-from-org-item
-            v-for="intelligence in intelligencesFromOrg.data"
+            v-for="
+              intelligence in intelligencesFromOrg.data.filter(
+                ({ uuid }) =>
+                  !intelligencesFromProject.data
+                    .some(intelligenceFromProject => uuid === intelligenceFromProject.uuid)
+              )
+            "
             :key="intelligence.uuid"
             :intelligence="intelligence"
           />
@@ -88,6 +91,7 @@
         </div>
       </div>
 
+      <intelligences-public-list v-show="tab === 'public_intelligences'" />
 
       <!-- <unnnic-tab
         class="home__intelligences"
@@ -133,6 +137,7 @@ import CreateRepositoryForm from '../components/repository/CreateRepository/Crea
 import { mapActions } from 'vuex';
 import IntelligenceFromProjectItem from '../components/repository/home/IntelligenceFromProjectItem';
 import IntelligenceFromOrgItem from '../components/repository/home/IntelligenceFromOrgItem';
+import IntelligencesPublicList from '../components/intelligences/IntelligencesPublicList';
 
 export default {
   name: 'Home',
@@ -144,6 +149,7 @@ export default {
     CreateRepositoryForm,
     IntelligenceFromProjectItem,
     IntelligenceFromOrgItem,
+    IntelligencesPublicList,
   },
   data() {
     return {

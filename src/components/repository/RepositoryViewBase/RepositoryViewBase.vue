@@ -10,7 +10,7 @@
         :repository="repository" />
       <div
         v-if="repository && !repository.fatal && repository.name"
-        class="rpstr-vw-bs__wrapper__content">
+        :class="['rpstr-vw-bs__wrapper__content', `page--${$route.name}`]">
         <slot />
       </div>
     </div>
@@ -26,7 +26,7 @@
     </div>
     <div
       v-else-if="!repository || (repository && !repository.name && repository.loading)"
-      class="rpstr-vw-bs__wrapper__content">
+      :class="['rpstr-vw-bs__wrapper__content']">
       <slot name="loader">
         <loading/>
       </slot>
@@ -158,6 +158,7 @@ export default {
 
 
 <style lang="scss" scoped>
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
   @import '~@/assets/scss/colors.scss';
   @import '~@/assets/scss/variables.scss';
 
@@ -263,6 +264,12 @@ export default {
 
       &__content {
         margin: 0.1rem 3rem;
+
+        &.page--repository-content-bases {
+          margin: 0;
+          padding: $unnnic-spacing-md $unnnic-font-size * 8;
+          padding-top: 0;
+        }
       }
 
       @media screen and (max-width: $wrapper-width) {

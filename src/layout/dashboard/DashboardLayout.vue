@@ -4,7 +4,8 @@
       :class="[collapse
         ? 'dashboard-layout__main-panel'
         : 'dashboard-layout__main-panel--collapsed',
-        basesNewOrBasesEdit ? 'none' : null]"
+        basesNewOrBasesEdit ? 'none' : null,
+        `page--${$route.name}`]"
         >
           <side-bar v-if="!basesNewOrBasesEdit" @collapse="collapseHandle()" />
       <router-view />
@@ -142,6 +143,10 @@ html{
     position: relative;
     float: right;
     padding: 0 1rem;
+
+    &.page--repository-content-bases {
+      padding: 0;
+    }
 
     &--collapsed {
        position: relative;
