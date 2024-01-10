@@ -169,7 +169,6 @@
 import { mapGetters, mapActions } from 'vuex';
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import VueMarkdown from 'vue-markdown';
-import RepositoryBase from '../Base';
 import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard';
 import RepositoryContentNavigation from './Navigation';
 import Modal from '@/components/repository/CreateRepository/Modal';
@@ -186,7 +185,6 @@ export default {
     RepositoryContentNavigation,
     Modal
   },
-  // extends: RepositoryBase,
   data() {
     return {
       loadingIntelligence: false,

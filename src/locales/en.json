@@ -20,7 +20,10 @@
     "delete_intelligence_confirmation_modal_description": "Are you sure you want to delete <b>{name}</b> intelligence?<br>This action cannot be reversed."
   },
   "content_bases": {
-    "quick_test": "Quick test"
+    "quick_test": "Quick test",
+    "write_content": "Write content",
+    "write_content_help": "Not sure how to add content to the AI knowledge base? <a href=\"#\" target=\"_blank\">Check out the documentation</a>",
+    "changes_saved": "Changes saved"
   },
   "webapp": {
     "layout": {

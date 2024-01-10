@@ -20,7 +20,10 @@
     "delete_intelligence_confirmation_modal_description": "Tem certeza que deseja excluir a inteligência <b>{name}</b>?<br>Essa ação não poderá ser revertida."
   },
   "content_bases": {
-    "quick_test": "Teste rápido"
+    "quick_test": "Teste rápido",
+    "write_content": "Escrever conteúdo",
+    "write_content_help": "Não sabe como adicionar conteúdo à base de conhecimento da IA? <a href=\"#\" target=\"_blank\">Veja a documentação</a>",
+    "changes_saved": "Alterações salvas"
   },
   "webapp": {
     "layout": {
