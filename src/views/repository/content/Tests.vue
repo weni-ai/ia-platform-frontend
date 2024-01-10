@@ -1,23 +1,7 @@
 <template>
-  <repository-view-base :repository="repository" :error-code="errorCode">
-    <section v-if="repository" class="repository-tests">
-      <section class="repository-tests__description">
-        <div class="repository-tests__title">
-          <h1
-          class="u font secondary body-lg bold"
-          v-html="'Teste rápido'"
-          />
-        </div>
-      </section>
-      <!-- title -->
-    </section>
-    <section>
-      <div v-if="initText" id="webchat" />
-      <div class="error-text" v-else>
-        Não foi possível consultar a base de conhecimento. tente de novo mais tarde.
-      </div>
-    </section>
-  </repository-view-base>
+  <section>
+    <div id="webchat"></div>
+  </section>
 </template>
 <script>
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
@@ -34,7 +18,7 @@ export default {
       selectedBase: null,
       textToSend: null,
       selectedBaseText: null,
-      baseIdLang: ''
+      baseIdLang: '',
     };
   },
   components: {

@@ -90,6 +90,8 @@ export default {
     async profileInfo() {
       const { data } = await this.getMyProfileInfo();
       if (data){
+        this.$set(this.$store.state.User, 'me', data);
+
         this.setUserName(data.name)
         if (data.language.includes('-')) {
           const [first, second] = data.language.split('-');

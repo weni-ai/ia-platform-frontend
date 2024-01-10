@@ -85,7 +85,12 @@
           'repository-base-edit__wrapper__card-test-container'
         ]"
       >
-        <tests />
+        {{ configTest }}
+
+        <!-- <tests
+          v-if="configTest"
+          :config="configTest"
+        /> -->
       </div>
     </section>
 
@@ -168,7 +173,9 @@ export default {
       destroyVerifying: null,
       provisoryTitle: '',
       languages: LANGUAGES,
-      isAlertOpen: false
+      isAlertOpen: false,
+
+      repositoryConfig: '',
     };
   },
   methods: {
@@ -178,7 +185,7 @@ export default {
       'getQATexts',
       'createQAText',
       'updateQAText',
-      'editQAKnowledgeBase'
+      'editQAKnowledgeBase',
     ]),
 
     alertError(title) {
@@ -298,7 +305,13 @@ export default {
       this.loadingText = false;
 
       if (responseText.data.results.length) {
-        const { id, language, text } = responseText.data.results[0];
+        const { id, language, text, knowledge_base } = responseText.data.results[0];
+
+        this.repositoryConfig = [
+          `Bearer ${this.repository?.authorization?.uuid}`,
+          knowledge_base,
+          language,
+        ].join('⇝');
 
         this.knowledgeBase.text.id = id;
         this.knowledgeBase.text.value = text;
@@ -368,6 +381,14 @@ export default {
     }
   },
   computed: {
+    configTest() {
+      if (this.$store.state.User.me.language && this.repositoryConfig) {
+        return [this.$store.state.User.me.language, this.repositoryConfig].join('⇝');
+      }
+
+      return '';
+    },
+
     hasUpdates() {
       if (this.knowledgeBase.title !== this.knowledgeBase.oldTitle) {
         return true;
