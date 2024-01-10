@@ -85,12 +85,14 @@
           'repository-base-edit__wrapper__card-test-container'
         ]"
       >
-        {{ configTest }}
+        <div class="repository-base-edit__wrapper__card-test-container__header">
+          {{ $t('content_bases.quick_test') }}
+        </div>
 
-        <!-- <tests
+        <tests
           v-if="configTest"
           :config="configTest"
-        /> -->
+        />
       </div>
     </section>
 
@@ -511,13 +513,34 @@ export default {
     gap: $unnnic-spacing-sm;
 
     &__card-test-container {
+      outline-style: solid;
+      outline-color: $unnnic-color-neutral-cleanest;
+      outline-width: $unnnic-border-width-thinner;
+      outline-offset: -$unnnic-border-width-thinner;
+      border-radius: $unnnic-border-radius-sm;
+
       width: 18.4375 * $unnnic-font-size;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+
+      &__header {
+        color: $unnnic-color-neutral-darkest;
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-body-lg;
+        line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-bold;
+        padding-inline: $unnnic-spacing-sm;
+        padding-top: $unnnic-spacing-ant;
+        padding-bottom: $unnnic-spacing-ant - $unnnic-border-width-thinner;
+        margin-inline: -$unnnic-spacing-sm;
+        margin-top: -$unnnic-spacing-sm;
+        margin-bottom: $unnnic-spacing-sm;
+        border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
+      }
     }
 
     &__card {
-      border: 1px solid #E2E6ED;
-      border-radius: 8px;
       padding: $unnnic-spacing-sm;
 
       &__header {
