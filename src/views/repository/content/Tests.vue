@@ -379,6 +379,7 @@ export default {
 
     .push-conversation-container {
       overflow: visible;
+      animation: none;
     }
 
     .push-sender {
@@ -386,6 +387,7 @@ export default {
       margin-top: $unnnic-spacing-xs;
       display: flex;
       column-gap: $unnnic-spacing-nano;
+      height: 2.875 * $unnnic-font-size;
 
       .push-new-message {
         background-color: $unnnic-color-neutral-snow;

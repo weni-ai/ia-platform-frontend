@@ -225,6 +225,7 @@ export default {
     repositoryV2
       .shortcut(this.$route.params.ownerNickname, this.$route.params.slug)
       .then(({ data }) => {
+        this.$store.state.Repository.current = data;
         this.repository = data;
       })
       .finally(() => {

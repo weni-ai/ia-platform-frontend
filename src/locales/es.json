@@ -21,6 +21,8 @@
   },
   "content_bases": {
     "quick_test": "Prueba rápida",
+    "sidebar_quick_test_title": "Prueba rápida de la base {name}",
+    "sidebar_quick_test_description": "Envíe un mensaje para probar esta base de contenidos y averiguar qué preguntas puede responder",
     "write_content": "Escriba el contenido",
     "write_content_help": "¿No está seguro de cómo añadir contenidos a la base de conocimientos de IA? <a href=\"#\" target=\"_blank\">Consulte la documentación</a>",
     "changes_saved": "Cambios guardados"

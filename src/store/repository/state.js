@@ -14,4 +14,5 @@ export default {
     next: null,
     status: null,
   },
+  current: {},
 };

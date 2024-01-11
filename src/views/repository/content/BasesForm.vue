@@ -79,7 +79,16 @@
           <span v-html="$t('content_bases.write_content_help')"></span>
         </div>
       </div>
+
+      <unnnic-skeleton-loading
+        v-if="!configTest"
+        width="295px"
+        height="100%"
+        tag="div"
+      />
+
       <div
+        v-else
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container'
@@ -90,7 +99,6 @@
         </div>
 
         <tests
-          v-if="configTest"
           :config="configTest"
         />
       </div>

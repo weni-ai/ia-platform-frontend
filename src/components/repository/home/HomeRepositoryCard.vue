@@ -51,6 +51,7 @@
                 size="small"
                 class="mr-2"
                 type="alternative"
+                @click.stop="isQuickTestOpen = true"
               />
             </unnnic-tool-tip>
           </div>
@@ -347,6 +348,14 @@
       :intelligence-uuid="repositoryDetail.uuid"
     />
 
+    <side-bar-quick-test
+      v-if="isQuickTestOpen"
+      @close="isQuickTestOpen = false"
+      :name="repositoryDetail.title"
+      :repository-uuid="repositoryDetail.repository"
+      :id="repositoryDetail.id"
+    />
+
     <unnnic-modal
       :showModal="isDeleteIntelligenceConfirmationOpen"
       :text="$t('intelligences.delete_intelligence')"
@@ -384,10 +393,11 @@
 import { mapActions, mapGetters } from 'vuex';
 import IntegrationModal from '@/components/shared/IntegrationModal';
 import SideBarContentBases from './SideBarContentBases';
+import SideBarQuickTest from './SideBarQuickTest';
 
 export default {
   name: 'HomeRepositoryCard',
-  components: { IntegrationModal, SideBarContentBases },
+  components: { IntegrationModal, SideBarContentBases, SideBarQuickTest },
   data() {
     return {
       dropdownOpen: false,
@@ -402,6 +412,7 @@ export default {
       notificationModalMessage: '',
       selectedIntelligence: '',
       isViewBasesOpen: false,
+      isQuickTestOpen: false,
       isDeleteIntelligenceConfirmationOpen: false,
     };
   },
