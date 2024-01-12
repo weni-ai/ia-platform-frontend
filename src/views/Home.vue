@@ -37,20 +37,11 @@
       </unnnic-tab>
 
       <div v-show="tab === 'own_intelligences'">
-        <div class="filters">
-          <div class="u font secondary body-gt color-neutral-dark">
-            {{ $t('intelligences.filter_label') }}
-          </div>
-          <div>
-            <unnnic-select-smart size="sm" v-model="category" :options="categories" />
-          </div>
-
-              <unnnic-input
-                size="sm"
-                icon-left="search-1"
-                :placeholder="$t('intelligences.search_intelligence_placeholder')"
-              />
-        </div>
+        <intelligences-filter
+          class="filters"
+          :name.sync="filterIntelligenceName"
+          :type.sync="fitlerIntelligenceType"
+        />
 
         <div v-if="isListEmpty" class="intelligences-list--empty">
           <img src="../assets/imgs/doris-doubt-reaction.png" alt="Doris Doubt Reaction">
@@ -66,21 +57,9 @@
 
         <div v-else class="intelligences-list">
           <intelligence-from-project-item
-            v-for="project in intelligencesFromProject.data"
+            v-for="project in intelligences"
             :key="project.uuid"
             :project="project"
-          />
-
-          <intelligence-from-org-item
-            v-for="
-              intelligence in intelligencesFromOrg.data.filter(
-                ({ uuid }) =>
-                  !intelligencesFromProject.data
-                    .some(intelligenceFromProject => uuid === intelligenceFromProject.uuid)
-              )
-            "
-            :key="intelligence.uuid"
-            :intelligence="intelligence"
           />
 
           <template v-if="isLoading">
@@ -138,6 +117,7 @@ import { mapActions } from 'vuex';
 import IntelligenceFromProjectItem from '../components/repository/home/IntelligenceFromProjectItem';
 import IntelligenceFromOrgItem from '../components/repository/home/IntelligenceFromOrgItem';
 import IntelligencesPublicList from '../components/intelligences/IntelligencesPublicList';
+import IntelligencesFilter from '../components/intelligences/IntelligencesFilter';
 
 export default {
   name: 'Home',
@@ -150,9 +130,12 @@ export default {
     IntelligenceFromProjectItem,
     IntelligenceFromOrgItem,
     IntelligencesPublicList,
+    IntelligencesFilter,
   },
   data() {
     return {
+      filterIntelligenceName: '',
+      fitlerIntelligenceType: 'generative',
       tab: 'own_intelligences',
       howTabIsShown: 2,
       update: false,
@@ -218,6 +201,26 @@ export default {
   },
 
   computed: {
+    intelligences() {
+      const data = this.intelligencesFromProject.data.concat(this.intelligencesFromOrg.data.filter(
+        ({ uuid }) => !this.intelligencesFromProject.data
+          .some(intelligenceFromProject => uuid === intelligenceFromProject.uuid)
+      )).filter(intelligence => intelligence.repository_type === ({
+        generative: 'content',
+        classification: 'classifier',
+      }[this.fitlerIntelligenceType])).filter(intelligence => {
+        if (this.filterIntelligenceName) {
+          return String(intelligence.name)
+            .toLocaleLowerCase()
+            .includes(this.filterIntelligenceName.toLowerCase());
+        }
+
+        return true;
+      })
+
+      return data;
+    },
+
     isLoading() {
       return this.intelligencesFromProject.status === 'loading' || this.intelligencesFromOrg.status === 'loading';
     },
@@ -225,8 +228,7 @@ export default {
     isListEmpty() {
       return this.intelligencesFromProject.status === 'complete'
         && this.intelligencesFromOrg.status === 'complete'
-        && this.intelligencesFromProject.data.length === 0
-        && this.intelligencesFromOrg.data.length === 0;
+        && this.intelligences.length === 0;
     },
   },
 
@@ -481,17 +483,7 @@ export default {
 }
 
 .filters {
-      margin-bottom: $unnnic-spacing-md;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: $unnnic-spacing-stack-sm;
-      padding: 0 $unnnic-spacing-md;
-
-      .unnnic-form {
-        flex: 1;
-        min-width: 14rem;
-      }
+  margin-bottom: $unnnic-spacing-md;
     }
     ::v-deep {
       // .text-input.size--sm .icon-right {

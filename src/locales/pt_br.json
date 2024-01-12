@@ -17,7 +17,9 @@
     "sidebar_view_content_bases_title": "Bases de conteúdo de {name}",
     "sidebar_view_content_bases_description": "Visualize as bases de conteúdo que fazem parte dessa IA.",
     "delete_intelligence": "Excluir Inteligência",
-    "delete_intelligence_confirmation_modal_description": "Tem certeza que deseja excluir a inteligência <b>{name}</b>?<br>Essa ação não poderá ser revertida."
+    "delete_intelligence_confirmation_modal_description": "Tem certeza que deseja excluir a inteligência <b>{name}</b>?<br>Essa ação não poderá ser revertida.",
+    "filter_type_generative_label": "IAs Generativas",
+    "filter_type_classification_label": "IAs de Classificação"
   },
   "content_bases": {
     "quick_test": "Teste rápido",

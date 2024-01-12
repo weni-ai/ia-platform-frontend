@@ -1,8 +1,15 @@
 <template>
   <div>
+    <intelligences-filter
+      class="filters"
+      :name.sync="filterIntelligenceName"
+      :type.sync="fitlerIntelligenceType"
+      :category.sync="filterIntelligenceCategory"
+    />
+
     <div class="intelligences-list">
       <intelligence-from-project-item
-        v-for="project in $store.state.Repository.publicIntelligences.data"
+        v-for="project in intelligences"
         :key="project.uuid"
         :project="project"
       />
@@ -27,15 +34,21 @@
 <script>
 import repository from '../../api/repository';
 import IntelligenceFromProjectItem from '../repository/home/IntelligenceFromProjectItem';
+import IntelligencesFilter from './IntelligencesFilter';
 
 export default {
   components: {
     IntelligenceFromProjectItem,
+    IntelligencesFilter,
   },
 
   data() {
     return {
       isShowingEndOfList: false,
+
+      filterIntelligenceName: '',
+      fitlerIntelligenceType: 'generative',
+      filterIntelligenceCategory: [],
 
       publicIntelligences: {
         limit: 20,
@@ -45,6 +58,26 @@ export default {
         status: null,
       },
     };
+  },
+
+  computed: {
+    intelligences() {
+      const data = this.$store.state.Repository.publicIntelligences.data
+        .filter(intelligence => intelligence.repository_type === ({
+          generative: 'content',
+          classification: 'classifier',
+        }[this.fitlerIntelligenceType])).filter(intelligence => {
+          if (this.filterIntelligenceName) {
+            return String(intelligence.name)
+              .toLocaleLowerCase()
+              .includes(this.filterIntelligenceName.toLowerCase());
+          }
+
+          return true;
+        })
+
+      return data;
+    },
   },
 
   mounted() {
@@ -72,6 +105,18 @@ export default {
         this.loadIntelligences();
       }
     },
+
+    filterIntelligenceCategory() {
+      this.$store.state.Repository.publicIntelligences = {
+        limit: 20,
+        offset: 0,
+        data: [],
+        next: null,
+        status: null,
+      };
+
+      this.loadIntelligences();
+    },
   },
 
   methods: {
@@ -83,6 +128,10 @@ export default {
           next: this.$store.state.Repository.publicIntelligences.next,
           limit: this.$store.state.Repository.publicIntelligences.limit,
           offset: this.$store.state.Repository.publicIntelligences.offset,
+
+          params: {
+            categories: this.filterIntelligenceCategory[0]?.label,
+          }
         });
 
         this.$store.state.Repository.publicIntelligences.data = [
@@ -107,6 +156,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.filters {
+  margin-bottom: $unnnic-spacing-md;
+}
 
 .intelligences-list {
   display: grid;

@@ -17,7 +17,9 @@
     "sidebar_view_content_bases_title": "{name}'s content bases",
     "sidebar_view_content_bases_description": "View the content bases that are part of this AI.",
     "delete_intelligence": "Delete Intelligence",
-    "delete_intelligence_confirmation_modal_description": "Are you sure you want to delete <b>{name}</b> intelligence?<br>This action cannot be reversed."
+    "delete_intelligence_confirmation_modal_description": "Are you sure you want to delete <b>{name}</b> intelligence?<br>This action cannot be reversed.",
+    "filter_type_generative_label": "Generative AIs",
+    "filter_type_classification_label": "Classification AIs"
   },
   "content_bases": {
     "quick_test": "Quick test",
