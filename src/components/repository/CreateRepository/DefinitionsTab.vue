@@ -7,7 +7,8 @@
           class="unnic--clickable"
           size="sm"
           :placeholder="$t('webapp.create_repository.language_placeholder')"
-          v-model="definition.language"
+          :value="language"
+          @input="$emit('update:language', $event)"
           search
           :search-placeholder="$t('webapp.create_repository.language_placeholder_search')"
         >
@@ -21,6 +22,30 @@
           </option>
         </unnnic-select>
       </section>
+
+      <div v-if="repository_type === 'classifier'" class="intelligence-private-or-public">
+        <unnnic-card
+          clickable
+          :title="$t('webapp.create_repository.privacy_type_public_title')"
+          :description="$t('webapp.create_repository.privacy_type_public_description')"
+          type="content"
+          icon="lock-unlock-1-1"
+          class="intelligence-private-or-public__item"
+          :enabled="!is_private"
+          @click.native="$emit('update:is_private', false)"
+        />
+
+        <unnnic-card
+          clickable
+          :title="$t('webapp.create_repository.privacy_type_private_title')"
+          :description="$t('webapp.create_repository.privacy_type_private_description')"
+          type="content"
+          icon="lock-2-1"
+          class="intelligence-private-or-public__item"
+          :enabled="is_private"
+          @click.native="$emit('update:is_private', true)"
+        />
+      </div>
 
       <section class="create-repository__definitions__wrapper__fields">
         <unnnic-label :label="$t('webapp.create_repository.category_label')" />
@@ -40,11 +65,11 @@
             v-for="category in categoryList"
             :key="category.id"
             :text="category.name"
-            :disabled="definition.categories.includes(category.id)"
+            :disabled="categories.includes(category.id)"
             @click.native="
-              definition.categories.includes(category.id)
-                ? definition.categories.splice(definition.categories.indexOf(category.id), 1)
-                : definition.categories.push(category.id)
+              $emit('update:categories', categories.includes(category.id)
+                ? categories.filter((id) => id !== category.id)
+                : [...categories, category.id])
             "
             clickable
             type="brand"
@@ -64,7 +89,6 @@
 
         <unnnic-button
           class="create-repository__definitions__buttons__btn"
-          :disabled="!checkHasValue"
           @click.native="dispatchCreateRepository()"
         >
           {{$t('webapp.create_repository.create_intelligence_button')}}
@@ -90,31 +114,26 @@ import Loading from '@/components/shared/Loading';
 
 export default {
   name: 'DefinitionsTab',
+  props: {
+    repository_type: String,
+    language: String,
+    is_private: Boolean,
+    categories: Array,
+  },
   components: {
     Loading
   },
   data() {
     return {
-      definition: {
-        language: '',
-        isPrivate: true,
-        categories: []
-      },
       categoryListLoading: false,
       categoryList: []
     };
   },
+
   mounted() {
     this.getCategories();
   },
   computed: {
-    checkHasValue() {
-      return (
-        this.definition.language !== ''
-        && this.definition.isPrivate !== null
-        && this.definition.categories.length > 0
-      );
-    },
     languages() {
       return Object.keys(LANGUAGES).map((lang, index) => ({
         id: index + 1,
@@ -140,11 +159,8 @@ export default {
         this.categoryListLoading = false;
       }
     },
-    dispatchPreviousStep() {
-      this.$emit('previousStep', this.definition);
-    },
     dispatchCreateRepository() {
-      this.$emit('createRepository', this.definition);
+      this.$emit('createRepository');
     },
     dispatchBackModal() {
       this.$emit('backModal');
@@ -154,10 +170,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.intelligence-private-or-public {
+  display: flex;
+  gap: $unnnic-spacing-xs;
+
+  &__item {
+    flex: 1;
+
+    ::v-deep .unnnic-card-content__content__title {
+      font-weight: $unnnic-font-weight-regular;
+    }
+  }
+}
 
 .categories-list {
   display: flex;
@@ -172,11 +198,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  @media (max-width: $mobile-width * 1.5) {
-    flex-direction: column;
-    align-items: center;
-  }
 
   &__definitions {
     width: 100%;

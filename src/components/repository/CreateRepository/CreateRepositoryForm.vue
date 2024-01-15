@@ -3,16 +3,23 @@
     <div class="create-repository__container">
       <section class="create-repository__container__steps">
         <intelligence-tab
-          @nextStep="changeStepContent($event, 1)"
+          :name.sync="data.name"
+          :description.sync="data.description"
+          :repository_type.sync="data.repository_type"
         />
       </section>
       <section class="create-repository__container__steps">
         <definitions-tab
-          @previousStep="changeStepContent($event, 0)"
           @createRepository="createRepository($event)"
           @backModal="onChangeModalState(true)"
+
+          :repository_type="data.repository_type"
+          :language.sync="data.language"
+          :is_private.sync="data.is_private"
+          :categories.sync="data.categories"
         />
       </section>
+
       <unnnic-modal
         :showModal="openModal"
         :text="$t('webapp.create_repository.modal_title')"
@@ -50,6 +57,7 @@ import Analytics from '@/utils/plugins/analytics';
 import IntelligenceTab from '@/components/repository/CreateRepository/IntelligenceTab';
 import DefinitionsTab from '@/components/repository/CreateRepository/DefinitionsTab';
 import Emoji from '@/components/shared/Emoji';
+import repositoryV2 from '../../../api/v2/repository';
 
 export default {
   name: 'CreateRepositoryForm',
@@ -61,7 +69,14 @@ export default {
   data() {
     return {
       formSchema: null,
-      data: {},
+      data: {
+        language: '',
+        is_private: true,
+        categories: [],
+        name: '',
+        description: '',
+        repository_type: 'content',
+      },
       submitting: false,
       errors: {},
       drfRepositoryModel: {},
@@ -132,7 +147,6 @@ export default {
       };
     },
     createRepository(value) {
-      this.data = { ...value, ...this.data }
       this.onSubmit();
     },
     onChangeModalState(value) {
@@ -146,37 +160,35 @@ export default {
       this.submit(this.drfRepositoryModel);
     },
     async submit(model) {
-      const { organization, categories, isPrivate, ...data } = this.data;
-      const updatedModel = updateAttrsValues(model, {
-        ...data,
-        is_private: true,
-        organization: this.getOrgSelected,
-        categories
-      });
       this.submitting = true;
       this.errors = {};
 
       try {
-        const response = await updatedModel.save();
-        const { owner__nickname, slug } = response.response.data;
-        this.createdRepository = response.response.data;
+        const response = await repositoryV2
+          .create({
+            organization: this.getOrgSelected,
+            name: this.data.name,
+            description: this.data.description,
+            language: this.data.language,
+            repository_type: this.data.repository_type,
+            categories: this.data.categories,
+            is_private: this.data.repository_type === 'classifier' ? this.data.is_private : true,
+          });
+
+        const { owner__nickname, slug } = response.data;
+        this.createdRepository = response.data;
         this.resultParams = { ownerNickname: owner__nickname, slug };
         this.$router.push(this.repositoryDetailsRouterParams())
         return true;
-      } catch (error) {
-        this.errors = this.drfRepositoryModel.errors;
+      } finally {
         this.submitting = false;
       }
-      return false;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .attention-button {
@@ -195,11 +207,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  @media (max-width: $mobile-width * 1.5) {
-    flex-direction: column;
-    align-items: center;
-  }
 
   &__container {
     width: 100%;

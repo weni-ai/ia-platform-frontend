@@ -7,15 +7,40 @@
       <unnnic-input-next
         :label="$t('webapp.create_repository.intelligence_name_label')"
         :placeholder="$t('webapp.create_repository.intelligence_name_placeholder')"
-        v-model="intelligence.name"
+        :value="name"
+        @input="$emit('update:name', $event)"
         maxlength="64"
       />
       <unnnic-input-next
         :label="$t('webapp.create_repository.description_label')"
         :placeholder="$t('webapp.create_repository.description_placeholder')"
-        v-model="intelligence.description"
+        :value="description"
+        @input="$emit('update:description', $event)"
       />
 
+      <section class="intelligence-types">
+        <unnnic-card
+          clickable
+          :title="$t('webapp.create_repository.intelligence_type_classification_title')"
+          :description="$t('webapp.create_repository.intelligence_type_classification_description')"
+          type="content"
+          icon="typing-1"
+          class="intelligence-types__item"
+          :enabled="repository_type === 'classifier'"
+          @click.native="$emit('update:repository_type', 'classifier')"
+        />
+
+        <unnnic-card
+          clickable
+          :title="$t('webapp.create_repository.intelligence_type_content_title')"
+          :description="$t('webapp.create_repository.intelligence_type_content_description')"
+          type="content"
+          icon="paginate-filter-text-1"
+          class="intelligence-types__item"
+          :enabled="repository_type === 'content'"
+          @click.native="$emit('update:repository_type', 'content')"
+        />
+      </section>
     </div>
   </div>
 </template>
@@ -23,50 +48,32 @@
 <script>
 export default {
   name: 'IntelligenceTab',
+  props: {
+    name: String,
+    description: String,
+    repository_type: String,
+  },
   data() {
-    return {
-      intelligence: {
-        name: '',
-        description: '',
-        repository_type: 'content'
-      }
-    };
+    return {};
   },
-  computed: {
-    checkHasValue() {
-      return this.intelligence.name !== '' && this.intelligence.description !== '';
-    }
-  },
-  watch: {
-    'intelligence.description': {
-      handler() {
-        this.dispatchNextStep()
-      },
-      deep: true
-    },
-    'intelligence.name': {
-      handler() {
-        this.dispatchNextStep()
-      },
-      deep: true
-    },
-  },
-  methods: {
-    dispatchBackModal() {
-      this.$emit('backModal');
-    },
-    dispatchNextStep() {
-      this.$emit('nextStep', this.intelligence);
-    }
-  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.intelligence-types {
+  display: flex;
+  gap: $unnnic-spacing-xs;
+
+  &__item {
+    flex: 1;
+
+    ::v-deep .unnnic-card-content__content__title {
+      font-weight: $unnnic-font-weight-regular;
+    }
+  }
+}
 
 .create-repository {
   &__intelligence {
