@@ -97,13 +97,15 @@
       </unnnic-tab> -->
     </div>
 
-    <div v-if="openModal" class="create-intelligence-modal__background">
-      <div class="create-intelligence-modal__container">
-        <create-repository-form
-          @cancelCreation="openModal = false"
-        />
-      </div>
-    </div>
+    <modal-next
+      v-if="openModal"
+      :title="$t('webapp.create_repository.intelligence')"
+      max-width="750px"
+    >
+      <create-repository-form
+        @cancelCreation="openModal = false"
+      />
+    </modal-next>
   </div>
 </template>
 
@@ -118,6 +120,7 @@ import IntelligenceFromProjectItem from '../components/repository/home/Intellige
 import IntelligenceFromOrgItem from '../components/repository/home/IntelligenceFromOrgItem';
 import IntelligencesPublicList from '../components/intelligences/IntelligencesPublicList';
 import IntelligencesFilter from '../components/intelligences/IntelligencesFilter';
+import ModalNext from '../components/ModalNext';
 
 export default {
   name: 'Home',
@@ -131,6 +134,7 @@ export default {
     IntelligenceFromOrgItem,
     IntelligencesPublicList,
     IntelligencesFilter,
+    ModalNext,
   },
   data() {
     return {
@@ -338,38 +342,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
-.create-intelligence-modal {
-  &__background {
-    position: fixed;
-    background-color: rgba($unnnic-color-neutral-darkest, $unnnic-opacity-level-clarifying);
-
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: auto;
-  }
-
-  &__container {
-    flex: 1;
-    max-width: 46.875 * $unnnic-font-size;
-    border-radius: $unnnic-border-radius-sm;
-    background-color: $unnnic-color-neutral-light;
-    box-shadow: $unnnic-shadow-level-separated;
-    box-sizing: border-box;
-
-    padding-block: $unnnic-spacing-giant $unnnic-spacing-lg;
-    padding-inline: $unnnic-spacing-md;
-
-    margin: auto;
-  }
-}
 
 .intelligences-list {
   display: grid;
