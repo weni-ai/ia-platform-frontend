@@ -64,7 +64,7 @@
 
           <unnnic-button
             v-if="canContribute"
-            @click="openModal = true"
+            @click="isAddContentBaseOpen = true"
             class="create-base-button"
             iconLeft="add-1"
           >
@@ -90,7 +90,7 @@
 
           <unnnic-button
             v-if="canContribute"
-            @click="openModal = true"
+            @click="isAddContentBaseOpen = true"
             class="create-base-button"
             iconLeft="add-1"
           >
@@ -137,31 +137,51 @@
       :data="modalData"
       @close="isDeleteModalOpen = false"
     />
-    <unnnic-modal text="Nova base de conteúdo" :closeIcon="false" v-show="openModal">
-      <div class="text-left">
+    <modal-next
+      v-if="isAddContentBaseOpen"
+      :title="$t('bases.create.title')"
+      max-width="600px"
+    >
+      <unnnic-form-element
+        :label="$t('bases.create.form.name.label')"
+        class="create-base__form-element"
+      >
         <unnnic-input
           v-model="title"
-          label="Nome da base"
+          maxlength="25"
+          :placeholder="$t('bases.create.form.name.placeholder')"
         />
+      </unnnic-form-element>
+
+      <unnnic-form-element
+        :label="$t('bases.create.form.description.label')"
+        class="create-base__form-element"
+      >
         <unnnic-text-area
           v-model="description"
-          label="Descrição"
-          :maxLength="80"
-          class="mt-4"
+          :max-length="80"
+          class="create-base__description-textarea"
+          :placeholder="$t('bases.create.form.description.placeholder')"
+        />
+      </unnnic-form-element>
+
+      <div class="create-base__actions">
+        <unnnic-button
+          size="large"
+          :text="$t('webapp.home.cancel')"
+          type="tertiary"
+          @click.prevent.stop="isAddContentBaseOpen = false"
+        />
+
+        <unnnic-button
+          size="large"
+          :text="$t('webapp.home.bases.new_knowledge_base')"
+          type="primary"
+          @click="createNewBase"
+          :disabled="!this.title || !this.description"
         />
       </div>
-      <unnnic-button slot="options" type="tertiary" @click.prevent.stop="this.openModal = false">
-        {{ $t("webapp.home.cancel") }}
-      </unnnic-button>
-      <unnnic-button
-        slot="options"
-        class="create-repository__container__button"
-        @click="createNewBase()"
-        :disabled="!this.title || !this.description"
-      >
-        {{ $t('webapp.home.bases.new_knowledge_base') }}
-      </unnnic-button>
-    </unnnic-modal>
+    </modal-next>
   </div>
 </template>
 
@@ -174,6 +194,7 @@ import RepositoryContentNavigation from './Navigation';
 import Modal from '@/components/repository/CreateRepository/Modal';
 import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
 import repositoryV2 from '../../../api/v2/repository';
+import ModalNext from '../../../components/ModalNext';
 
 export default {
   name: 'RepositoryBase',
@@ -183,7 +204,8 @@ export default {
     VueMarkdown,
     HomeRepositoryCard,
     RepositoryContentNavigation,
-    Modal
+    Modal,
+    ModalNext,
   },
   data() {
     return {
@@ -201,7 +223,7 @@ export default {
 
       isDeleteModalOpen: false,
       modalData: {},
-      openModal: false,
+      isAddContentBaseOpen: false,
       title: '',
       description: '',
 
@@ -301,9 +323,14 @@ export default {
         language: this.repository.language
       });
 
-      this.openModal = false;
+      this.isAddContentBaseOpen = false;
 
-      this.reloadBases();
+      this.$router.push({
+        name: 'repository-content-bases-edit',
+        params: {
+          id: data.id,
+        }
+      });
     },
 
     reloadBases() {
@@ -377,6 +404,25 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.create-base__form-element + .create-base__form-element {
+  margin-top: $unnnic-spacing-sm;
+}
+
+.create-base__description-textarea ::v-deep textarea {
+  display: block;
+  min-height: 4.6875 * $unnnic-font-size;
+}
+
+.create-base__actions {
+  display: flex;
+  margin-top: $unnnic-spacing-lg;
+  column-gap: $unnnic-spacing-sm;
+
+  & > * {
+    flex: 1;
+  }
+}
 
 .content-bases-page-container {
   padding: $unnnic-spacing-md $unnnic-font-size * 8;

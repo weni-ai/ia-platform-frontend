@@ -21,6 +21,21 @@
     "filter_type_generative_label": "IAs Generativas",
     "filter_type_classification_label": "IAs de Clasificación"
   },
+  "bases": {
+    "create": {
+      "title": "Nueva base de contenidos",
+      "form": {
+        "name": {
+          "label": "Nombre de la base",
+          "placeholder": "Nombre"
+        },
+        "description": {
+          "label": "Descripción",
+          "placeholder": "Descripción"
+        }
+      }
+    }
+  },
   "content_bases": {
     "quick_test": "Prueba rápida",
     "sidebar_quick_test_title": "Prueba rápida de la base {name}",

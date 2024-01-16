@@ -1,8 +1,5 @@
 <template>
   <div class="create-repository__intelligence">
-    <h1 class="create-repository__intelligence__title">
-      {{ $t("webapp.create_repository.intelligence") }}
-    </h1>
     <div class="create-repository__intelligence__wrapper">
       <unnnic-input-next
         :label="$t('webapp.create_repository.intelligence_name_label')"
@@ -79,17 +76,6 @@ export default {
   &__intelligence {
     width: 100%;
     // height: 30.625rem;
-
-    &__title {
-      color: $unnnic-color-neutral-darkest;
-      font-family: $unnnic-font-family-secondary;
-      font-weight: $unnnic-font-weight-black;
-      font-size: $unnnic-font-size-title-sm;
-      line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
-
-      text-align: center;
-      margin-block: 0 $unnnic-spacing-sm;
-    }
 
     &__wrapper {
       .unnnic-input {
