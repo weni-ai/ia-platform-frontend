@@ -402,7 +402,7 @@
         "description": "Las bases de conocimiento son las fuentes de texto de la inteligencia de contenido. Distribuya el texto de la inteligencia en las bases, reuniendo información similar sobre cada uno. Obtenga más información en nuestro <a href='https://docs.weni.ai/l/pt/bothub/introdu-o-intelig-ncia-de-conte-do' target='_blank' class='repository-base__description__text--link'>documentación</a>.",
         "new_knowledge_base": "Añadir nueva base",
         "adjustments": "Ajustes",
-        "adjustments_subtitle": "Inteligencia de contenido",
+        "adjustments_subtitle": "Gestionar los ajustes básicos de Inteligencia",
         "adjustments_button": "Guardar ediciones",
         "adjustments_button_back": "Volver",
         "adjustuments_modal_title": "Cambios guardados!",

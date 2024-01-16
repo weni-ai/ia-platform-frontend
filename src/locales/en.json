@@ -401,7 +401,7 @@
         "description": "The Knowledge bases are text sources for a Content Intelligence. Distribute the text of the intelligence in bases, gathering on each one similar informations. Find out more on our <a href='https://docs.weni.ai/l/pt/content-intelligence/introducing-content-intelligence' target='_blank' class='repository-base__description__text--link'>documentation</a>.",
         "new_knowledge_base": "Add a new base",
         "adjustments": "Adjustments",
-        "adjustments_subtitle": "Content Intelligence",
+        "adjustments_subtitle": "Manage basic Intelligence settings",
         "adjustments_button": "Save changes",
         "adjustments_button_back": "Back",
         "adjustuments_modal_title": "The changes were saved!",

@@ -61,8 +61,6 @@ export default {
       };
 
       if (this.$store.state.Category.allCategories) {
-        console.log('here', this.$store.state.Category.allCategories);
-
         return [placeholder].concat(
           this.$store.state.Category.allCategories.map((category) => ({
             value: category.id,
