@@ -1,38 +1,9 @@
 <template>
-  <div class="content-bases-page-container">
-    <section class="repository-base-edit">
-      <section class="repository-base-edit__header">
-        <unnnic-button
-          size="small"
-          type="tertiary"
-          icon-center="arrow_left_alt"
-          scheme="neutral-dark"
-          @click="routerHandle('repository-content-bases')"
-        />
-
-        <div>
-          <div class="repository-base-edit__header--content">
-            <unnnic-skeleton-loading
-              v-if="loadingTitle"
-              tag="div"
-              width="180px"
-              height="28px"
-            />
-
-            <h1
-              v-else
-              ref="focusInput"
-              class="repository-base-edit__title"
-              contenteditable="true"
-              @input="onTitleChange"
-              id="titleId"
-            >
-              {{ provisoryTitle }}
-            </h1>
-          </div>
-        </div>
-      </section>
-    </section>
+  <page-container
+    :loading-title="loadingTitle"
+    :title="provisoryTitle"
+    @back="routerHandle('repository-content-bases')"
+  >
     <section class="repository-base-edit__wrapper">
       <unnnic-skeleton-loading
         v-if="loadingText"
@@ -40,6 +11,7 @@
         height="100%"
         class="repository-base-edit__wrapper__card-content"
       />
+
       <div
         v-else
         :class="[
@@ -55,7 +27,8 @@
             @click="saveText()"
             size="small"
             class="repository-base-edit__wrapper__card-content__header__save-button"
-            :disabled="!knowledgeBase.text.value.trim()"
+            :disabled="!knowledgeBase.text.value.trim()
+              || knowledgeBase.text.value === knowledgeBase.text.oldValue"
           >
             {{ $t('webapp.settings.save') }}
           </unnnic-button>
@@ -68,6 +41,7 @@
           cols="30"
           rows="10"
           class="repository-base-edit__textarea"
+          :placeholder="$t('content_bases.write_content_placeholder')"
         ></textarea>
 
         <div
@@ -106,27 +80,26 @@
 
     <unnnic-modal
       :show-modal="openModal"
-      scheme="feedback-yellow"
+      scheme="aux-yellow-500"
       modal-icon="warning"
       :text="$t('webapp.home.bases.edit-base_modal_alert_title')"
       :description="$t('webapp.home.bases.edit-base_modal_alert_description')"
       :close-icon="false"
+      class="exit-content-base-modal"
     >
       <unnnic-button
         slot="options"
         class="create-repository__container__button"
-        type="terciary"
-        @click="discardUpdate()"
+        type="tertiary"
+        @click="openModal = false"
       >
         {{ $t("webapp.home.bases.edit-base_modal_alert_discard") }}
       </unnnic-button>
       <unnnic-button
         slot="options"
-        class="create-repository__container__button"
+        class="create-repository__container__button attention-button"
         type="primary"
-        scheme="feedback-yellow"
-        @click="saveClose()"
-        :loading="submitting"
+        @click="discardUpdate()"
       >
         {{ $t("webapp.home.bases.edit-base_modal_alert_save") }}
       </unnnic-button>
@@ -138,7 +111,7 @@
       seconds="5"
       @close="isAlertOpen = false"
     />
-  </div>
+  </page-container>
 </template>
 
 <script>
@@ -150,11 +123,13 @@ import Tests from './Tests';
 import { unnnicCallAlert } from '@weni/unnnic-system';
 import LoadRepository from '../../../utils/LoadRepository';
 import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
+import PageContainer from '../../../components/PageContainer';
 
 export default {
   name: 'RepositoryBaseEdit',
   components: {
-    Tests
+    Tests,
+    PageContainer,
   },
   mixins: [LoadRepository, RemoveBulmaMixin],
   data() {
@@ -436,6 +411,21 @@ export default {
 <style lang="scss" scoped>
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
+.exit-content-base-modal ::v-deep .unnnic-modal-container-background-body-description-container {
+  padding-bottom: $unnnic-spacing-xs;
+}
+
+.attention-button {
+  background-color: $unnnic-color-aux-yellow-500;
+
+  &:hover:enabled {
+    background-color: $unnnic-color-aux-yellow-700;
+  }
+
+  &:active:enabled {
+    background-color: $unnnic-color-aux-yellow-900;
+  }
+}
 .content-bases-page-container {
   padding: $unnnic-spacing-md $unnnic-font-size * 8;
   min-height: 100vh;
@@ -482,26 +472,7 @@ export default {
       margin-right: $unnnic-spacing-xs;
     }
   }
-  &__title {
-    border: none;
-    margin-right: $unnnic-inset-nano;
-    padding: 0;
-    margin: 0;
 
-    color: $unnnic-color-neutral-darkest;
-    font-family: $unnnic-font-family-secondary;
-    font-size: $unnnic-font-size-title-sm;
-    line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
-    font-weight: $unnnic-font-weight-bold;
-
-    &:focus {
-      border: none;
-      border-radius: 2pt;
-      box-shadow: 0 0 0 1pt grey;
-      outline: none;
-      transition: 0.1s;
-    }
-  }
   &__text {
     font-family: $unnnic-font-family-secondary;
     font-size: $unnnic-font-size-body-md;

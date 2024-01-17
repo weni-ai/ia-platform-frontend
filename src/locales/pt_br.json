@@ -41,6 +41,7 @@
     "sidebar_quick_test_title": "Teste rápido da base {name}",
     "sidebar_quick_test_description": "Envie uma mensagem para testar essa base de conteúdo e saiba quais perguntas ela é capaz de responder",
     "write_content": "Escrever conteúdo",
+    "write_content_placeholder": "Escreva aqui o conteúdo",
     "write_content_help": "Não sabe como adicionar conteúdo à base de conhecimento da IA? <a href=\"#\" target=\"_blank\">Veja a documentação</a>",
     "changes_saved": "Alterações salvas"
   },

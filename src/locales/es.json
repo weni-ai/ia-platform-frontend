@@ -41,6 +41,7 @@
     "sidebar_quick_test_title": "Prueba rápida de la base {name}",
     "sidebar_quick_test_description": "Envíe un mensaje para probar esta base de contenidos y averiguar qué preguntas puede responder",
     "write_content": "Escriba el contenido",
+    "write_content_placeholder": "Escriba aquí el contenido",
     "write_content_help": "¿No está seguro de cómo añadir contenidos a la base de conocimientos de IA? <a href=\"#\" target=\"_blank\">Consulte la documentación</a>",
     "changes_saved": "Cambios guardados"
   },
@@ -451,6 +452,10 @@
         "edit-base_modal_delete_button_confirm": "Excluir la base",
         "edit-base_modal_delete_button_cancel": "Cancelar",
         "edit-base_modal_delete_button_validation": "Escriba ${this.knowledgeBase.title} para confirmar la eliminación",
+        "edit-base_modal_alert_title": "Salir de la base de contenidos",
+        "edit-base_modal_alert_description": "¿Estás seguro de que quieres salir de la base de contenidos ahora? El contenido que no se guarde se descartará",
+        "edit-base_modal_alert_save": "Salir",
+        "edit-base_modal_alert_discard": "Cancelar",
         "see-all_bases": "Ver todas las bases",
         "add_base": "+ Añadir base"
       },

@@ -41,6 +41,7 @@
     "sidebar_quick_test_title": "Quick test of the {name} base",
     "sidebar_quick_test_description": "Send a message to test this content base and find out what questions it can answer",
     "write_content": "Write content",
+    "write_content_placeholder": "Write the content here",
     "write_content_help": "Not sure how to add content to the AI knowledge base? <a href=\"#\" target=\"_blank\">Check out the documentation</a>",
     "changes_saved": "Changes saved"
   },
@@ -450,7 +451,11 @@
         "edit-base_modal_delete_button_confirm": "Delete base",
         "edit-base_modal_delete_button_cancel": "Cancel",
         "see-all_bases": "See all bases",
-        "add_base":"+ Add base"
+        "add_base":"+ Add base",
+        "edit-base_modal_alert_title": "Exit the content base",
+        "edit-base_modal_alert_description": "Are you sure you want to leave the content base now? Content that is not saved will be discarded",
+        "edit-base_modal_alert_save": "Exit",
+        "edit-base_modal_alert_discard": "Cancel"
       },
       "copy-intelligence": "Copy intelligence",
       "intelligence_filter": {

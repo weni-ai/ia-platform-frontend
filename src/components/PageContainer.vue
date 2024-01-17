@@ -57,6 +57,7 @@ export default {
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .content-bases-page-container {
+  background-color: $unnnic-color-background-snow;
   padding: $unnnic-spacing-md $unnnic-font-size * 8;
   min-height: 100vh;
   box-sizing: border-box;
