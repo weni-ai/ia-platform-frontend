@@ -95,14 +95,14 @@
         </unnnic-button>
       </section>
 
-      <unnnic-card
+      <!-- <unnnic-card
       class="create-repository__definitions__info-card"
       type="default"
       title="Sobre a WeniGPT - IA Generativa"
       description="Crie bases de conteúdo e a IA Generativa será capaz de responder perguntas
        baseada nesse conteúdo sem treinamento. Ideal para textos informativos e FAQs."
       scheme="feedback-yellow"
-      />
+      /> -->
     </div>
   </div>
 </template>
