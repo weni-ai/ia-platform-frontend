@@ -131,12 +131,40 @@
         </div>
       </template>
     </div>
-    <modal
+
+    <unnnic-modal
+      class="delete-base-modal"
+      persistent
+      :close-icon="false"
+      :text="$t('webapp.home.bases.edit-base_modal_delete_title')"
+      :description="$t(
+        'webapp.home.bases.edit-base_modal_delete_text',
+        { name: isDeleteModalOpen.name },
+      )"
       v-if="isDeleteModalOpen"
-      type="confirm"
-      :data="modalData"
-      @close="isDeleteModalOpen = false"
-    />
+      @close="isDeleteModalOpen = null"
+    >
+      <unnnic-icon
+        slot="icon"
+        icon="error"
+        scheme="aux-red-500"
+        size="lg"
+      />
+
+      <unnnic-button slot="options" type="tertiary" @click="isDeleteModalOpen = null">
+        {{ $t('webapp.home.bases.edit-base_modal_delete_button_cancel') }}
+      </unnnic-button>
+
+      <unnnic-button
+        slot="options"
+        type="warning"
+        :loading="isDeleteModalOpen.loading"
+        @click="deleteBase"
+      >
+        {{ $t('webapp.home.bases.edit-base_modal_delete_button_confirm') }}
+      </unnnic-button>
+    </unnnic-modal>
+
     <modal-next
       v-if="isAddContentBaseOpen"
       :title="$t('bases.create.title')"
@@ -221,7 +249,7 @@ export default {
 
       repositoryUUID: null,
 
-      isDeleteModalOpen: false,
+      isDeleteModalOpen: null,
       modalData: {},
       isAddContentBaseOpen: false,
       title: '',
@@ -371,32 +399,26 @@ export default {
         }
       }
     },
+
     openDeleteModal(repository) {
-      this.isDeleteModalOpen = true;
-
-      this.modalData = {
-        icon: 'error',
-        scheme: 'feedback-red',
-        persistent: true,
-        title: this.$t('webapp.home.bases.edit-base_modal_delete_title'),
-        description: this.$tc('webapp.home.bases.edit-base_modal_delete_text', repository.name),
-        cancelText: this.$t('webapp.home.bases.edit-base_modal_delete_button_cancel'),
-        confirmText: this.$t('webapp.home.bases.edit-base_modal_delete_button_confirm'),
-        onConfirm: async (justClose, { setLoading }) => {
-          setLoading(true);
-          await this.deleteBase(repository.id);
-          setLoading(false);
-          justClose();
-
-          this.reloadBases();
-        }
-      };
+      this.isDeleteModalOpen = {
+        name: repository.name,
+        id: repository.id,
+        loading: false,
+      }
     },
-    async deleteBase(id) {
+
+    async deleteBase() {
+      this.isDeleteModalOpen.loading = true;
+
       await this.deleteQAKnowledgeBase({
         repositoryUUID: this.repositoryUUID,
-        id
+        id: this.isDeleteModalOpen.id,
       });
+
+      this.isDeleteModalOpen = null;
+
+      this.reloadBases();
     },
   }
 };
@@ -404,6 +426,29 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.delete-base-modal ::v-deep {
+  .unnnic-modal-container-background-body {
+    padding-top: $unnnic-spacing-giant;
+  }
+
+  .unnnic-modal-container-background-body__icon-slot {
+    margin-bottom: $unnnic-spacing-sm;
+  }
+
+  .unnnic-modal-container-background-body-title {
+    padding-bottom: $unnnic-spacing-sm;
+  }
+
+  .unnnic-modal-container-background-body-description-container {
+    padding-bottom: 0;
+  }
+
+  .unnnic-modal-container-background-button {
+    padding-top: $unnnic-spacing-lg;
+    padding-bottom: $unnnic-spacing-lg;
+  }
+}
 
 .create-base__form-element + .create-base__form-element {
   margin-top: $unnnic-spacing-sm;
