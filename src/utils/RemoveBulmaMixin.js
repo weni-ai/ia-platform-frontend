@@ -1,5 +1,7 @@
 export default {
-  data() {},
+  data() {
+    return {};
+  },
 
   mounted() {
     document.documentElement.classList.add('not-bulma');
