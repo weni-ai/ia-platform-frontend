@@ -172,12 +172,21 @@ export default {
 <style lang="scss">
 @import "~@/assets/scss/utilities.scss";
 @import "~@/assets/scss/default.scss";
-@import "~bulma";
-@import "~buefy/src/scss/buefy";
 @import "~@/assets/scss/colors.scss";
 @import "~@/assets/scss/variables.scss";
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+html:not(.not-bulma) {
+  @import "~bulma";
+  @import "~buefy/src/scss/buefy";
+
+}
+
+html.not-bulma body {
+  background-color: $unnnic-color-background-snow;
+  min-height: 100vh;
+}
 
 ::-webkit-scrollbar {
   width: 4px;

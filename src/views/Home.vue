@@ -121,6 +121,7 @@ import IntelligenceFromOrgItem from '../components/repository/home/IntelligenceF
 import IntelligencesPublicList from '../components/intelligences/IntelligencesPublicList';
 import IntelligencesFilter from '../components/intelligences/IntelligencesFilter';
 import ModalNext from '../components/ModalNext';
+import RemoveBulmaMixin from '../utils/RemoveBulmaMixin';
 
 export default {
   name: 'Home',
@@ -136,6 +137,7 @@ export default {
     IntelligencesFilter,
     ModalNext,
   },
+  mixins: [RemoveBulmaMixin],
   data() {
     return {
       filterIntelligenceName: '',
@@ -178,14 +180,10 @@ export default {
 
       intersectionObserver: null,
       isShowingEndOfList: false,
-
-      bulmaStyles: [],
     };
   },
 
   mounted() {
-    this.removeBulmaStyles();
-
     this.loadIntelligencesFromProject();
     this.loadIntelligencesFromOrg();
 
@@ -199,8 +197,6 @@ export default {
   },
 
   beforeDestroy() {
-    this.retoreBulmaStyles();
-
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
   },
 
@@ -244,41 +240,8 @@ export default {
     },
   },
 
-  updated() {
-    document.styleSheets.forEach((style) => {
-      if (style.ownerNode.innerHTML.startsWith('/* Bulma Utilities */')) {
-        this.bulmaStyles.push(style.ownerNode.parentNode.removeChild(style.ownerNode));
-      }
-    });
-  },
-
   methods: {
     ...mapActions(['searchProjectWithFlow', 'getRepositories']),
-
-    removeBulmaStyles() {
-      document.styleSheets.forEach((style) => {
-        if (style.ownerNode.innerHTML.startsWith('/* Bulma Utilities */')) {
-          this.bulmaStyles.push(style.ownerNode.parentNode.removeChild(style.ownerNode));
-        }
-      });
-
-      const style = document.createElement('style');
-
-      style.setAttribute('class', 'remove-body-margin');
-      style.innerHTML = 'body { margin: 0; }';
-
-      document.head.appendChild(style);
-    },
-
-    retoreBulmaStyles() {
-      this.bulmaStyles.forEach((style) => {
-        document.head.appendChild(style);
-      });
-
-      const style = document.querySelector('.remove-body-margin');
-
-      style.parentNode.removeChild(style);
-    },
 
     async loadIntelligencesFromProject() {
       try {
