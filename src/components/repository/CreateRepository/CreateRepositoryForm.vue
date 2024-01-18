@@ -53,6 +53,13 @@
         </unnnic-button>
       </unnnic-modal>
     </div>
+
+    <unnnic-alert
+      v-if="errorDetail"
+      :text="errorDetail"
+      scheme="feedback-red"
+      @close="errorDetail = ''"
+    />
   </div>
 </template>
 
@@ -66,6 +73,7 @@ import IntelligenceTab from '@/components/repository/CreateRepository/Intelligen
 import DefinitionsTab from '@/components/repository/CreateRepository/DefinitionsTab';
 import Emoji from '@/components/shared/Emoji';
 import repositoryV2 from '../../../api/v2/repository';
+import { get } from 'lodash';
 
 export default {
   name: 'CreateRepositoryForm',
@@ -76,6 +84,7 @@ export default {
   },
   data() {
     return {
+      errorDetail: '',
       formSchema: null,
       data: {
         language: '',
@@ -187,6 +196,12 @@ export default {
         this.createdRepository = response.data;
         this.resultParams = { ownerNickname: owner__nickname, slug };
         this.$router.push(this.repositoryDetailsRouterParams())
+      } catch (error) {
+        const detail = get(error, 'response.data.detail', '');
+
+        if (detail) {
+          this.errorDetail = detail;
+        }
       } finally {
         this.submitting = false;
       }
