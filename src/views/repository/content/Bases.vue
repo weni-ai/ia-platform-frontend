@@ -457,6 +457,21 @@ export default {
 .create-base__description-textarea ::v-deep textarea {
   display: block;
   min-height: 4.6875 * $unnnic-font-size;
+  outline-style: solid;
+  outline-color: $unnnic-color-neutral-soft;
+  outline-width: $unnnic-border-width-thinner;
+  outline-offset: -$unnnic-border-width-thinner;
+  color: $unnnic-color-neutral-dark;
+  caret-color: $unnnic-color-neutral-clean;
+
+  &::placeholder {
+    color: $unnnic-color-neutral-cleanest;
+    opacity: 1; /* Firefox */
+  }
+
+  &:focus {
+    outline-color: $unnnic-color-neutral-clean;
+  }
 }
 
 .create-base__actions {
