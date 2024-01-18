@@ -12,7 +12,15 @@
         <definitions-tab
           @createRepository="createRepository($event)"
           @backModal="onChangeModalState(true)"
-
+          :disabled-submit="
+            !data.name
+            || !data.description
+            || !data.repository_type
+            || !data.repository_type
+            || !data.language
+            || !data.is_private
+            || !data.categories.length
+          "
           :repository_type="data.repository_type"
           :language.sync="data.language"
           :is_private.sync="data.is_private"
@@ -179,7 +187,6 @@ export default {
         this.createdRepository = response.data;
         this.resultParams = { ownerNickname: owner__nickname, slug };
         this.$router.push(this.repositoryDetailsRouterParams())
-        return true;
       } finally {
         this.submitting = false;
       }

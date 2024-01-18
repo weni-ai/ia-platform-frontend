@@ -101,6 +101,7 @@
       v-if="openModal"
       :title="$t('webapp.create_repository.intelligence')"
       max-width="750px"
+      class="create-intelligence-modal"
     >
       <create-repository-form
         @cancelCreation="openModal = false"
@@ -305,6 +306,12 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.create-intelligence-modal {
+  ::v-deep .create-intelligence-modal__container {
+    padding-bottom: $unnnic-spacing-md;
+  }
+}
 
 .intelligences-list {
   display: grid;

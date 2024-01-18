@@ -90,6 +90,7 @@
         <unnnic-button
           class="create-repository__definitions__buttons__btn"
           @click.native="dispatchCreateRepository()"
+          :disabled="disabledSubmit"
         >
           {{$t('webapp.create_repository.create_intelligence_button')}}
         </unnnic-button>
@@ -115,6 +116,7 @@ import Loading from '@/components/shared/Loading';
 export default {
   name: 'DefinitionsTab',
   props: {
+    disabledSubmit: Boolean,
     repository_type: String,
     language: String,
     is_private: Boolean,
@@ -231,7 +233,6 @@ export default {
     &__buttons {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 2rem;
 
       &__btn {
         width: 47%;
