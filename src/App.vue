@@ -183,7 +183,7 @@ html:not(.not-bulma) {
 
 }
 
-html.not-bulma body {
+body {
   background-color: $unnnic-color-background-snow;
   min-height: 100vh;
 }
