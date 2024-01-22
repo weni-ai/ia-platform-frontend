@@ -1,12 +1,17 @@
 <template>
   <page-container
-    :loading-title="loadingTitle"
-    :title="provisoryTitle"
-    @back="routerHandle('repository-content-bases')"
+    :loading-title="loadingContentBase"
+    :title="contentBase.title"
+    @back="$router.push({
+      name: 'intelligence-home',
+      params: {
+        intelligenceUuid: $route.params.intelligenceUuid,
+      },
+    })"
   >
     <section class="repository-base-edit__wrapper">
       <unnnic-skeleton-loading
-        v-if="loadingText"
+        v-if="loadingContentBaseText"
         tag="div"
         height="100%"
         class="repository-base-edit__wrapper__card-content"
@@ -24,7 +29,7 @@
 
           <unnnic-button
             :loading="submitting"
-            @click="saveText()"
+            @click="saveText"
             size="small"
             class="repository-base-edit__wrapper__card-content__header__save-button"
             :disabled="!knowledgeBase.text.value.trim()
@@ -121,9 +126,9 @@ import { LANGUAGES } from '@/utils/index';
 import router from '@/router/index';
 import Tests from './Tests';
 import { unnnicCallAlert } from '@weni/unnnic-system';
-import LoadRepository from '../../../utils/LoadRepository';
 import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
 import PageContainer from '../../../components/PageContainer';
+import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -131,9 +136,16 @@ export default {
     Tests,
     PageContainer,
   },
-  mixins: [LoadRepository, RemoveBulmaMixin],
+  mixins: [RemoveBulmaMixin],
   data() {
     return {
+      loadingContentBase: false,
+      loadingContentBaseText: false,
+
+      contentBase: {
+        title: '',
+      },
+
       loadingTitle: false,
       loadingText: false,
       repositoryUUID: null,
@@ -148,6 +160,7 @@ export default {
         oldTitle: '',
         text: {
           id: null,
+          uuid: null,
           value: '',
           oldValue: '',
           language: '',
@@ -219,27 +232,15 @@ export default {
       try {
         this.submitting = true;
 
-        const responseEditKnowledgeBase = await this.editQAKnowledgeBase({
-          repositoryUUID: this.repositoryUUID,
-          id: this.$route.params.id,
-          title: this.knowledgeBase.title
-        });
+        const { data: contentBaseTextData } = await nexusaiAPI
+          .updateIntelligenceContentBaseText({
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+            contentBaseTextUuid: this.knowledgeBase.text.uuid,
+            text: this.knowledgeBase.text.value,
+          });
 
-        this.knowledgeBase.oldTitle = responseEditKnowledgeBase.data.title;
+        this.knowledgeBase.text.oldValue = contentBaseTextData.text;
 
-        if (data.text) {
-          const action = data.id ? this.updateQAText : this.createQAText;
-
-          const responseText = await action(data);
-
-          if (!this.knowledgeBase.text.id) {
-            this.knowledgeBase.text.id = responseText.data.id;
-          }
-
-          this.knowledgeBase.text.oldValue = responseText.data.text;
-          this.knowledgeBase.text.oldLanguage = responseText.data.language;
-          this.knowledgeBase.text.lastUpdate = responseText.data.last_update;
-        }
         this.isAlertOpen = true;
       } catch (error) {
         const errorMessage = get(error, 'response.data.text.0', '');
@@ -335,35 +336,38 @@ export default {
     }
   },
   watch: {
-    // eslint-disable-next-line
-    repository: {
-      handler() {
-        if (
-          !this.repository?.language
-          || !this.repository?.uuid
-          || this.repository?.uuid === 'null'
-        ) {
-          return false;
-        }
+    '$route.params.intelligenceUuid': {
+      immediate: true,
 
-        this.repositoryUUID = this.repository.uuid;
+      async handler() {
+        this.loadingContentBase = true;
+        this.loadingContentBaseText = true;
 
-        return true;
+        const { data: contentBaseData } = await nexusaiAPI
+          .readIntelligenceContentBase({
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+          });
+
+        this.loadingContentBase = false;
+
+        this.contentBase.title = contentBaseData.title;
+
+
+        const { data: contentBaseTextsData } = await nexusaiAPI
+          .listIntelligenceContentBaseTexts({
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+          })
+
+        const text = get(contentBaseTextsData, 'results.0.text', '');
+
+        this.knowledgeBase.text.uuid = get(contentBaseTextsData, 'results.0.uuid', '');
+        this.knowledgeBase.text.value = text;
+        this.knowledgeBase.text.oldValue = text;
+
+        this.loadingContentBaseText = false;
       },
-
-      deep: true,
-      immediate: true
     },
-    async repositoryUUID() {
-      if (this.$route.name === 'repository-content-bases-edit') {
-        this.init();
-      } else {
-        this.provisoryTitle = this.$t('webapp.home.bases.edit-base-notitle');
-        this.knowledgeBase.title = this.provisoryTitle;
-        this.knowledgeBase.text.language = this.repository.language;
-        this.knowledgeBase.text.oldLanguage = this.repository.language;
-      }
-    }
   },
   computed: {
     configTest() {

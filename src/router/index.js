@@ -152,6 +152,11 @@ const router = new Router({
       component: RepositoryContentAdjustment,
     },
     {
+      path: '/intelligences/:intelligenceUuid/bases/:contentBaseUuid/edit',
+      name: 'intelligence-content-base-edit',
+      component: RepositoryContentBasesForm,
+    },
+    {
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardLayout,
@@ -164,11 +169,6 @@ const router = new Router({
         {
           path: ':ownerNickname/:slug/content/bases/new',
           name: 'repository-content-bases-new',
-          component: RepositoryContentBasesForm,
-        },
-        {
-          path: ':ownerNickname/:slug/content/bases/:id/edit',
-          name: 'repository-content-bases-edit',
           component: RepositoryContentBasesForm,
         },
         {

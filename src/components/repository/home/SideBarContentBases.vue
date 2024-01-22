@@ -51,6 +51,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
   props: {
@@ -105,12 +106,11 @@ export default {
       try {
         this.contentBases.status = 'loading';
 
-        const { data } = await this.getQAKnowledgeBasesNext({
-          limit: this.contentBases.limit,
-          offset: this.contentBases.offset,
-          repositoryUUID: this.contentBases.repositoryUuid,
-          next: this.contentBases.next,
-        });
+        const { data } = await nexusaiAPI
+          .listIntelligencesContentBases({
+            intelligenceUuid: this.intelligenceUuid,
+            next: this.contentBases.next,
+          });
 
         this.contentBases.data = [...this.contentBases.data, ...data.results];
         this.contentBases.next = data.next;

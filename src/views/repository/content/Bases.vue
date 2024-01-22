@@ -78,6 +78,7 @@
 
         <div class="repository-base__search-base">
           <unnnic-input
+            v-model="searchBaseName"
             icon-left="search-1"
             placeholder="Pesquisar base de conteúdo"
           />
@@ -86,7 +87,9 @@
         <div class="bases-list">
           <home-repository-card
             type="base"
-            v-for="base in bases.data"
+            v-for="base in bases.data
+              .filter(({ title }) => searchBaseName ?
+                title.toLowerCase().includes(searchBaseName.toLowerCase()) : true)"
             :key="base.id"
             :repository-detail="base"
             :can-contribute="canContribute"
@@ -202,6 +205,7 @@ import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
 import repositoryV2 from '../../../api/v2/repository';
 import ModalNext from '../../../components/ModalNext';
 import nexusaiAPI from '../../../api/nexusaiAPI';
+import { get } from 'lodash';
 
 export default {
   name: 'RepositoryBase',
@@ -216,6 +220,8 @@ export default {
   },
   data() {
     return {
+      searchBaseName: '',
+
       loadingIntelligence: false,
 
       repository: {
@@ -275,7 +281,7 @@ export default {
         this.isShowingEndOfList
         && this.bases.status !== 'complete'
       ) {
-        // this.fetchBases();
+        this.fetchBases();
       }
     },
 
@@ -332,27 +338,43 @@ export default {
   methods: {
     ...mapActions(['getQAKnowledgeBasesNext', 'deleteQAKnowledgeBase', 'createQAKnowledgeBase', 'editQAKnowledgeBase', 'createQAText']),
 
-    async createNewBase() {
-      const { data } = await this.createQAKnowledgeBase({
-        repositoryUUID: this.repositoryUUID,
-        title: this.title,
-      });
+    async waitTillTextHaveFullyIntegrated(contentBaseUuid) {
+      const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
-      await this.createQAText({
-        repositoryUUID: this.repositoryUUID,
-        title: this.title,
-        knowledgeBaseId: data.id,
-        text: this.description,
-        language: this.repository.language
-      });
+      const { data } = await nexusaiAPI
+        .listIntelligenceContentBaseTexts({
+          contentBaseUuid,
+        });
+
+
+      if (!get(data, 'results.0.text', '')) {
+        await sleep(1.5);
+        await this.waitTillTextHaveFullyIntegrated(contentBaseUuid);
+      }
+    },
+
+    async createNewBase() {
+      const { data: contentBaseData } = await nexusaiAPI
+        .createIntelligenceContentBase({
+          intelligenceUuid: this.$route.params.intelligenceUuid,
+          title: this.title,
+        });
+
+      const { data: contentBaseTextData } = await nexusaiAPI
+        .createIntelligenceContentBaseText({
+          contentBaseUuid: contentBaseData.uuid,
+          text: this.description,
+        });
+
+      await this.waitTillTextHaveFullyIntegrated(contentBaseData.uuid);
 
       this.isAddContentBaseOpen = false;
 
       this.$router.push({
-        name: 'repository-content-bases-edit',
+        name: 'intelligence-content-base-edit',
         params: {
-          id: data.id,
-        }
+          contentBaseUuid: contentBaseData.uuid,
+        },
       });
     },
 
@@ -374,12 +396,11 @@ export default {
       try {
         this.bases.status = 'loading';
 
-        const { data } = await this.getQAKnowledgeBasesNext({
-          limit: this.bases.limit,
-          offset: this.bases.offset,
-          repositoryUUID: this.repositoryUUID,
-          next: this.bases.next,
-        });
+        const { data } = await nexusaiAPI
+          .listIntelligencesContentBases({
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+            next: this.bases.next,
+          });
 
         this.bases.data = [...this.bases.data, ...data.results];
         this.bases.next = data.next;
@@ -399,6 +420,7 @@ export default {
       this.isDeleteModalOpen = {
         name: repository.name,
         id: repository.id,
+        contentBaseUuid: repository.uuid,
         loading: false,
       }
     },
@@ -406,10 +428,11 @@ export default {
     async deleteBase() {
       this.isDeleteModalOpen.loading = true;
 
-      await this.deleteQAKnowledgeBase({
-        repositoryUUID: this.repositoryUUID,
-        id: this.isDeleteModalOpen.id,
-      });
+      await nexusaiAPI
+        .deleteIntelligenceContentBase({
+          intelligenceUuid: this.$route.params.intelligenceUuid,
+          contentBaseUuid: this.isDeleteModalOpen.contentBaseUuid,
+        });
 
       this.isDeleteModalOpen = null;
 

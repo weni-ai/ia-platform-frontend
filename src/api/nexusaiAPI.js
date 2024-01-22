@@ -25,29 +25,91 @@ const request = {
   },
 };
 
+function forceHttps(receivedUrl) {
+  const url = new URL(receivedUrl);
+
+  url.protocol = 'https:';
+
+  return url.toString();
+}
+
 export default {
   listIntelligences({ next, orgUuid } = {}) {
-    return request.$http.get(`api/${orgUuid}/intelligences/`, {
-      params: { next },
-    });
+    if (next) {
+      return request.$http.get(forceHttps(next));
+    }
+
+    return request.$http.get(`api/${orgUuid}/intelligences/`);
   },
 
   createIntelligence({ orgUuid, name, description }) {
-    return request.$http.post(`api/${orgUuid}/intelligences/`, { name, description });
-  },
-
-  readIntelligence({ orgUuid, intelligenceUuid }) {
-    return request.$http.get(`api/${orgUuid}/intelligences/${intelligenceUuid}/`);
-  },
-
-  updateIntelligence({ orgUuid, intelligenceUuid, name, description }) {
-    return request.$http.put(`api/${orgUuid}/intelligences/${intelligenceUuid}/`, {
+    return request.$http.post(`api/${orgUuid}/intelligences/`, {
       name,
       description,
     });
   },
 
+  readIntelligence({ orgUuid, intelligenceUuid }) {
+    return request.$http.get(
+      `api/${orgUuid}/intelligences/${intelligenceUuid}/`,
+    );
+  },
+
+  updateIntelligence({ orgUuid, intelligenceUuid, name, description }) {
+    return request.$http.put(
+      `api/${orgUuid}/intelligences/${intelligenceUuid}/`,
+      {
+        name,
+        description,
+      },
+    );
+  },
+
   deleteIntelligence({ orgUuid, intelligenceUuid }) {
-    return request.$http.delete(`api/${orgUuid}/intelligences/${intelligenceUuid}/`);
+    return request.$http.delete(
+      `api/${orgUuid}/intelligences/${intelligenceUuid}/`,
+    );
+  },
+
+  createIntelligenceContentBase({ intelligenceUuid, title }) {
+    return request.$http.post(`api/${intelligenceUuid}/content-bases/`, {
+      title,
+    });
+  },
+
+  listIntelligencesContentBases({ intelligenceUuid, next }) {
+    if (next) {
+      return request.$http.get(forceHttps(next));
+    }
+
+    return request.$http.get(`api/${intelligenceUuid}/content-bases/`);
+  },
+
+  readIntelligenceContentBase({ intelligenceUuid, contentBaseUuid }) {
+    return request.$http.get(
+      `api/${intelligenceUuid}/content-bases/${contentBaseUuid}/`,
+    );
+  },
+
+  deleteIntelligenceContentBase({ intelligenceUuid, contentBaseUuid }) {
+    return request.$http.delete(
+      `api/${intelligenceUuid}/content-bases/${contentBaseUuid}/`,
+    );
+  },
+
+  createIntelligenceContentBaseText({ contentBaseUuid, text }) {
+    return request.$http.post(`api/${contentBaseUuid}/content-bases-text/`, {
+      text,
+    });
+  },
+
+  listIntelligenceContentBaseTexts({ contentBaseUuid }) {
+    return request.$http.get(`api/${contentBaseUuid}/content-bases-text/`);
+  },
+
+  updateIntelligenceContentBaseText({ contentBaseUuid, contentBaseTextUuid, text }) {
+    return request.$http.put(`api/${contentBaseUuid}/content-bases-text/${contentBaseTextUuid}/`, {
+      text,
+    });
   },
 };

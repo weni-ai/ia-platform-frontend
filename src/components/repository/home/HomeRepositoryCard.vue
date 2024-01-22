@@ -554,10 +554,11 @@ export default {
         });
       } else if (this.type === 'base') {
         this.$router.push({
-          name: 'repository-content-bases-edit',
+          name: 'intelligence-content-base-edit',
           params: {
-            id: this.repositoryDetail.id,
-          }
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+            contentBaseUuid: this.repositoryDetail.uuid,
+          },
         });
       } else if (this.type === 'intelligence') {
         this.$router.push({
