@@ -12,15 +12,7 @@
         <definitions-tab
           @createRepository="createRepository($event)"
           @backModal="onChangeModalState(true)"
-          :disabled-submit="
-            !data.name
-            || !data.description
-            || !data.repository_type
-            || !data.repository_type
-            || !data.language
-            || !data.is_private
-            || !data.categories.length
-          "
+          :disabled-submit="disabledSubmit"
           :repository_type="data.repository_type"
           :language.sync="data.language"
           :is_private.sync="data.is_private"
@@ -74,6 +66,7 @@ import DefinitionsTab from '@/components/repository/CreateRepository/Definitions
 import Emoji from '@/components/shared/Emoji';
 import repositoryV2 from '../../../api/v2/repository';
 import { get } from 'lodash';
+import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
   name: 'CreateRepositoryForm',
@@ -106,6 +99,21 @@ export default {
   },
   computed: {
     ...mapGetters(['getOrgSelected']),
+
+    disabledSubmit() {
+      if (this.data.repository_type === 'content') {
+        return !this.data.name
+            || !this.data.description;
+      }
+
+      return !this.data.name
+            || !this.data.description
+            || !this.data.repository_type
+            || !this.data.language
+            || !this.data.is_private
+            || !this.data.categories.length;
+    },
+
     computedSchema() {
       const computed = Object.entries(this.formSchema).reduce((schema, entry) => {
         const [key, value] = entry;
@@ -181,21 +189,36 @@ export default {
       this.errors = {};
 
       try {
-        const response = await repositoryV2
-          .create({
-            organization: this.getOrgSelected,
+        if (this.data.repository_type === 'content') {
+          const { data } = await nexusaiAPI.createIntelligence({
+            orgUuid: this.$store.state.Auth.connectOrgUuid,
             name: this.data.name,
             description: this.data.description,
-            language: this.data.language,
-            repository_type: this.data.repository_type,
-            categories: this.data.categories,
-            is_private: this.data.repository_type === 'classifier' ? this.data.is_private : true,
           });
 
-        const { owner__nickname, slug } = response.data;
-        this.createdRepository = response.data;
-        this.resultParams = { ownerNickname: owner__nickname, slug };
-        this.$router.push(this.repositoryDetailsRouterParams())
+          this.$router.push({
+            name: 'intelligence-home',
+            params: {
+              intelligenceUuid: data.uuid,
+            },
+          })
+        } else {
+          const response = await repositoryV2
+            .create({
+              organization: this.getOrgSelected,
+              name: this.data.name,
+              description: this.data.description,
+              language: this.data.language,
+              repository_type: this.data.repository_type,
+              categories: this.data.categories,
+              is_private: this.data.repository_type === 'classifier' ? this.data.is_private : true,
+            });
+
+          const { owner__nickname, slug } = response.data;
+          this.createdRepository = response.data;
+          this.resultParams = { ownerNickname: owner__nickname, slug };
+          this.$router.push(this.repositoryDetailsRouterParams())
+        }
       } catch (error) {
         const detail = get(error, 'response.data.detail', '');
 

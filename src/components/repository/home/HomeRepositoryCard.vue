@@ -40,7 +40,7 @@
             </unnnic-tool-tip>
           </div>
 
-          <div v-else>
+          <div v-else-if="type !== 'intelligence'">
             <unnnic-tool-tip
                side="top"
                :text="$t('content_bases.quick_test')"
@@ -111,7 +111,7 @@
 
             </div>
 
-            <div v-else-if="type === 'base' && canContribute">
+            <div v-else-if="(type === 'base' && canContribute) || type === 'intelligences'">
               <unnnic-dropdown-item @click="deleteBase(repositoryDetail)">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="delete" scheme="feedback-red"/>
@@ -122,7 +122,7 @@
               </unnnic-dropdown-item>
             </div>
 
-            <div v-else-if="type === 'repository'">
+            <div v-else-if="type === 'repository' || type === 'intelligence'">
               <unnnic-dropdown-item @click="viewContentBases">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="article" />
@@ -133,9 +133,6 @@
                 </div>
               </unnnic-dropdown-item>
 
-              <!--
-              waiting backend for integration
-
               <unnnic-dropdown-item @click="isDeleteIntelligenceConfirmationOpen = true">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="delete" scheme="feedback-red"/>
@@ -144,7 +141,7 @@
                     {{ $t('intelligences.delete_intelligence') }}
                   </div>
                 </div>
-              </unnnic-dropdown-item> -->
+              </unnnic-dropdown-item>
 
             </div>
 
@@ -211,14 +208,17 @@
         </div>
 
         <div
-          v-if="type === 'repository' && repositoryDetail.repository_type === 'content'"
+          v-if="
+            (type === 'repository' && repositoryDetail.repository_type === 'content')
+            || type === 'intelligence'
+          "
           class="unnnic-card-intelligence__detail__content"
         >
           <div class="unnnic-card-intelligence__detail__content__data">
             {{
               $tc(
                 'webapp.intelligences_lib.knowledge_bases',
-                repositoryDetail.count_knowledge_bases
+                repositoryDetail.count_knowledge_bases || repositoryDetail.content_bases_count
               )
             }}
           </div>
@@ -231,7 +231,7 @@
             />
 
             <div class="unnnic-card-intelligence__detail__content__data__info__number">
-              {{ repositoryDetail.count_knowledge_bases }}
+              {{ repositoryDetail.count_knowledge_bases || repositoryDetail.content_bases_count }}
             </div>
           </div>
         </div>
@@ -382,6 +382,8 @@
       <unnnic-button
         slot="options"
         type="warning"
+        @click="deleteIntelligence"
+        :loading="deletingIntelligence"
       >
         {{ $t("delete") }}
       </unnnic-button>
@@ -394,6 +396,7 @@ import { mapActions, mapGetters } from 'vuex';
 import IntegrationModal from '@/components/shared/IntegrationModal';
 import SideBarContentBases from './SideBarContentBases';
 import SideBarQuickTest from './SideBarQuickTest';
+import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
   name: 'HomeRepositoryCard',
@@ -414,6 +417,7 @@ export default {
       isViewBasesOpen: false,
       isQuickTestOpen: false,
       isDeleteIntelligenceConfirmationOpen: false,
+      deletingIntelligence: false,
     };
   },
   props: {
@@ -555,6 +559,13 @@ export default {
             id: this.repositoryDetail.id,
           }
         });
+      } else if (this.type === 'intelligence') {
+        this.$router.push({
+          name: 'intelligence-home',
+          params: {
+            intelligenceUuid: this.repositoryDetail.uuid,
+          },
+        });
       }
     },
     async copyIntelligence() {
@@ -582,7 +593,20 @@ export default {
     },
     deleteBase(repository) {
       this.$emit('deleteBase', repository)
-    }
+    },
+    deleteIntelligence() {
+      this.deletingIntelligence = true;
+
+      nexusaiAPI.deleteIntelligence({
+        orgUuid: this.$store.state.Auth.connectOrgUuid,
+        intelligenceUuid: this.repositoryDetail.uuid,
+      }).then(() => {
+        this.isDeleteIntelligenceConfirmationOpen = false;
+        this.$emit('removed');
+      }).finally(() => {
+        this.deletingIntelligence = false;
+      });
+    },
   }
 };
 </script>

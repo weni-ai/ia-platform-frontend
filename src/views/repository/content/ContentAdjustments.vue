@@ -6,7 +6,7 @@
   >
     <hr class="divider" />
 
-    <section v-if="repository" class="repository-adjustments">
+    <section class="repository-adjustments">
       <unnnic-skeleton-loading
         v-if="loadingIntelligence"
         class="unnnic-form"
@@ -18,8 +18,7 @@
       <unnnic-input
         v-else
         :label="$t('webapp.create_repository.intelligence_name_label')"
-        :placeholder="$t('')"
-        v-model="intelligence.name"
+        v-model="name"
       />
 
       <unnnic-skeleton-loading
@@ -34,66 +33,9 @@
         v-else
         :label="$t('webapp.create_repository.description_label')"
         :placeholder="$t('')"
-        v-model="intelligence.description"
+        v-model="description"
       />
 
-      <!-- name and description -->
-
-      <unnnic-skeleton-loading
-        v-if="loadingIntelligence"
-        class="unnnic-form"
-        tag="div"
-        width="100%"
-        height="76px"
-      />
-
-      <section v-else class="repository-adjustments__wrapper__fields">
-        <unnnic-label :label="$t('webapp.create_repository.language_label')" />
-        <unnnic-select
-          class="unnic--clickable"
-          size="sm"
-          :placeholder="$t('webapp.create_repository.language_placeholder')"
-          v-model="intelligence.language"
-          search
-          :search-placeholder="$t('webapp.create_repository.language_placeholder_search')"
-        >
-          <option v-for="(language, key) in languages" :value="key" :key="key" size="sm">
-            {{ language }}
-          </option>
-        </unnnic-select>
-      </section>
-
-      <section class="repository-adjustments__wrapper__fields">
-        <unnnic-label :label="$t('webapp.create_repository.category_label')" />
-
-        <div class="categories-list">
-          <template v-if="categoryListLoading || loadingIntelligence">
-            <unnnic-skeleton-loading
-              v-for="i in 10"
-              :key="i" tag="div"
-              :width="80 + Math.floor(Math.random() * 40) + 'px'"
-              height="32px"
-            />
-          </template>
-
-          <unnnic-tag
-            v-else
-            v-for="category in categoryList"
-            :key="category.id"
-            :text="category.name"
-            :disabled="intelligence.categories.includes(category.id)"
-            @click.native="
-              intelligence.categories =
-                intelligence.categories.includes(category.id)
-                ? intelligence.categories.filter((id) => id !== category.id)
-                : [...intelligence.categories, category.id]
-            "
-            clickable
-            type="brand"
-          />
-        </div>
-      </section>
-      <!-- categories -->
       <section class="repository-adjustments__wrapper__buttons">
         <unnnic-button
           type="tertiary"
@@ -118,16 +60,15 @@
       v-if="isAlertOpen"
       :text="$t('webapp.home.bases.adjustments_modal_description')"
       scheme="feedback-green"
-      seconds="5"
       @close="isAlertOpen = false"
     />
     <unnnic-modal
-      :show-modal="openModal"
+      :show-modal="isDiscardModalOpen"
       scheme="feedback-yellow"
       modal-icon="alert-circle-1"
       :text="$t('webapp.home.bases.adjustuments_modal_alert_title')"
       :description="$t('webapp.home.bases.adjustments_modal_alert_description')"
-      @close="openModal = false"
+      @close="isDiscardModalOpen = false"
     >
       <unnnic-button
         slot="options"
@@ -153,54 +94,46 @@
 
 <script>
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
-import RepositoryBase from '../Base';
 import { mapActions } from 'vuex';
-import { LANGUAGES } from '@/utils/index';
 import Loading from '@/components/shared/Loading';
 import Modal from '@/components/repository/CreateRepository/Modal';
 import Repository from '@/models/repository';
 import router from '@/router/index';
-import LoadRepository from '@/utils/LoadRepository';
 import RemoveBulmaMixin from '@/utils/RemoveBulmaMixin';
 import PageContainer from '@/components/PageContainer';
+import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
   name: 'RepositoryContentAdjustment',
   data() {
     return {
+      loadingIntelligence: false,
+
+      name: '',
+      description: '',
+
       intelligence: {
         name: '',
         description: '',
-        repository_type: '',
-        is_private: true,
-        language: '',
-        categories: []
       },
 
-      categoryListLoading: false,
-      categoryList: [],
-
-      languages: LANGUAGES,
       submitting: false,
       errors: {},
       isAlertOpen: false,
       isDiscardModalOpen: false,
-      openModal: false,
-      localNext: null
+      localNext: null,
+
+      removePageExitAdvisor: null,
     };
   },
-  mixins: [LoadRepository, RemoveBulmaMixin],
+  mixins: [RemoveBulmaMixin],
   computed: {
     hasUpdates() {
       if (
-        ['name', 'description', 'repository_type', 'is_private', 'language'].some(
-          key => this.intelligence[key] !== this.repository[key]
+        ['name', 'description'].some(
+          key => this.intelligence[key] !== this[key]
         )
       ) {
-        return true;
-      }
-
-      if (!this.isEqualsArrays(this.intelligence.categories, this.repository.categories)) {
         return true;
       }
 
@@ -213,32 +146,54 @@ export default {
     Modal,
     PageContainer,
   },
-  extends: RepositoryBase,
+
+  mounted() {
+    this.removePageExitAdvisor = router.beforeEach((to, from, next) => {
+      if (this.hasUpdates) {
+        this.isDiscardModalOpen = true;
+        this.localNext = next;
+      } else {
+        next();
+      }
+    });
+  },
+
+  beforeDestroy() {
+    this.removePageExitAdvisor();
+  },
+
   watch: {
-    // eslint-disable-next-line
-    "repository.is_private"() {
-      this.setRealValues();
+    '$route.params.intelligenceUuid': {
+      immediate: true,
+
+      handler() {
+        this.loadingIntelligence = true;
+
+        nexusaiAPI
+          .readIntelligence({
+            orgUuid: this.$store.state.Auth.connectOrgUuid,
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+          })
+          .then(({ data }) => {
+            /*
+              uuid
+              content_bases_count: Number
+              description: String
+              name: String
+            */
+
+            this.$store.state.Repository.current = data;
+
+            this.intelligence = data;
+
+            this.name = data.name;
+            this.description = data.description;
+          })
+          .finally(() => {
+            this.loadingIntelligence = false;
+          });
+      },
     },
-    // eslint-disable-next-line
-    "repository.name"() {
-      this.setRealValues();
-    },
-    // eslint-disable-next-line
-    "repository.description"() {
-      this.setRealValues();
-    },
-    // eslint-disable-next-line
-    "repository.repository_type"() {
-      this.setRealValues();
-    },
-    // eslint-disable-next-line
-    "repository.language"() {
-      this.setRealValues();
-    },
-    // eslint-disable-next-line
-    "repository.categories"() {
-      this.setRealValues();
-    }
   },
   methods: {
     isEqualsArrays(arrayA, arrayB) {
@@ -272,51 +227,45 @@ export default {
     selectCategory(category) {
       this.intelligence.categories = category;
     },
-    async getCategories() {
-      this.categoryListLoading = true;
-      try {
-        const { data } = await this.getAllCategories();
-        const sortedData = data.sort((previous, next) => previous.id - next.id);
-        this.categoryList = sortedData;
-      } catch (error) {
-        this.$buefy.toast.open({
-          message: error,
-          type: 'is-danger'
-        });
-      } finally {
-        this.categoryListLoading = false;
-      }
-    },
     async onSubmit() {
-      this.submitting = true;
       this.errors = {};
 
       try {
-        const response = await this.editRepository({
-          ...this.intelligence,
-          repositoryUuid: this.repository.uuid
-        });
+        this.submitting = true;
+
+        const { data } = await nexusaiAPI
+          .updateIntelligence({
+            orgUuid: this.$store.state.Auth.connectOrgUuid,
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+            name: this.name,
+            description: this.description,
+          });
+
+        this.$store.state.Repository.current = data;
+
+        this.intelligence.name = data.name;
+        this.intelligence.description = data.description;
+
         this.submitting = false;
         this.isAlertOpen = true;
-        this.repository = new Repository({ ...response.data });
         return true;
       } catch (error) {
         const data = error.response && error.response.data;
         if (data) {
           this.errors = data;
         }
+      } finally {
         this.submitting = false;
       }
 
       return false;
     },
     showModal(value) {
-      this.openModal = true;
+      this.isDiscardModalOpen = true;
       this.modalInfo = { ...value };
     },
     discardUpdate() {
-      this.setRealValues();
-      this.openModal = false;
+      this.isDiscardModalOpen = false;
 
       if (this.localNext) {
         this.localNext();
@@ -324,27 +273,21 @@ export default {
     },
     async saveClose() {
       await this.onSubmit();
-      this.openModal = false;
+      this.isDiscardModalOpen = false;
 
       if (this.localNext) {
         this.localNext();
       }
     },
     goToSummary() {
-      this.$router.push(`/dashboard/${this.$route.params.ownerNickname}/${this.$route.params.slug}/content/bases`)
+      this.$router.push({
+        name: 'intelligence-home',
+        params: {
+          intelligenceUuid: this.$route.params.intelligenceUuid,
+        },
+      });
     }
   },
-  mounted() {
-    this.getCategories();
-    router.beforeEach((to, from, next) => {
-      if (this.hasUpdates) {
-        this.openModal = true;
-        this.localNext = next;
-      } else {
-        next();
-      }
-    });
-  }
 };
 </script>
 

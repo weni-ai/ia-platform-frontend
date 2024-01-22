@@ -26,28 +26,6 @@
           <p v-else class="repository-base__header__description">
             {{ repository.description }}
           </p>
-
-          <div class="repository-base__header__categories">
-            <template v-if="repository.uuid === null">
-              <unnnic-skeleton-loading
-                v-for="i in 3"
-                :key="i"
-                tag="div"
-                :width="40 + Math.floor(Math.random() * 80) + 'px'"
-                height="28px"
-              />
-            </template>
-
-            <unnnic-tag
-              v-else
-              v-for="(category, index) in getAllCategories"
-              :key="index"
-              class="repository-base__header__tag"
-              :text="category"
-              disabled
-              scheme="background-sky"
-            />
-          </div>
         </div>
 
         <repository-content-navigation v-if="canContribute" />
@@ -76,7 +54,7 @@
 
         <div class="repository-base__bases-count">
           <unnnic-skeleton-loading
-            v-if="bases.count === null"
+            v-if="repository.uuid === null"
             tag="div"
             width="300px"
             height="28px"
@@ -85,7 +63,7 @@
           <h1
             v-else
             class="u font secondary title-sm bold"
-            v-html="$tc('webapp.home.bases.knowledge_bases', bases.count)"
+            v-html="$tc('webapp.home.bases.knowledge_bases', repository.content_bases_count)"
           ></h1>
 
           <unnnic-button
@@ -223,6 +201,7 @@ import Modal from '@/components/repository/CreateRepository/Modal';
 import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
 import repositoryV2 from '../../../api/v2/repository';
 import ModalNext from '../../../components/ModalNext';
+import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
   name: 'RepositoryBase',
@@ -241,10 +220,9 @@ export default {
 
       repository: {
         uuid: null,
-        language: '',
         name: '',
         description: '',
-        categories_list: [],
+        content_bases_count: 0,
       },
 
       repositoryUUID: null,
@@ -269,19 +247,7 @@ export default {
     };
   },
 
-  mounted() {
-    this.loadingIntelligence = true;
-
-    repositoryV2
-      .shortcut(this.$route.params.ownerNickname, this.$route.params.slug)
-      .then(({ data }) => {
-        this.$store.state.Repository.current = data;
-        this.repository = data;
-      })
-      .finally(() => {
-        this.loadingIntelligence = false;
-      });
-  },
+  mounted() {},
 
   beforeDestroy() {
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
@@ -291,7 +257,7 @@ export default {
     ...mapGetters(['getCurrentRepository', 'getProjectSelected', 'getOrgSelected']),
 
     canContribute() {
-      return this.repository.authorization?.can_contribute;
+      return true;
     },
 
     getAllCategories() {
@@ -309,8 +275,37 @@ export default {
         this.isShowingEndOfList
         && this.bases.status !== 'complete'
       ) {
-        this.fetchBases();
+        // this.fetchBases();
       }
+    },
+
+    '$route.params.intelligenceUuid': {
+      immediate: true,
+
+      handler() {
+        this.loadingIntelligence = true;
+
+        nexusaiAPI
+          .readIntelligence({
+            orgUuid: this.$store.state.Auth.connectOrgUuid,
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+          })
+          .then(({ data }) => {
+            /*
+              uuid
+              content_bases_count: Number
+              description: String
+              name: String
+            */
+
+            this.$store.state.Repository.current = data;
+
+            this.repository = data;
+          })
+          .finally(() => {
+            this.loadingIntelligence = false;
+          });
+      },
     },
 
     // eslint-disable-next-line
