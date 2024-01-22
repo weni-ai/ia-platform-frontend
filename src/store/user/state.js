@@ -1,5 +1,6 @@
 export default {
   nicknameAuthenticated: null,
   profiles: {},
-  username: null
+  username: null,
+  me: {},
 };

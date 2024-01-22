@@ -1,4 +1,50 @@
 {
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "announcements": {
+    "new_artificial_intelligence_module_is_here": "The new Artificial Intelligence module is here! Explore what's new and learn how to create even more amazing chatbots!"
+  },
+  "intelligences": {
+    "own_intelligences": "Own intelligences",
+    "public_intelligences": "Public intelligences",
+    "create_button": "Create Intelligence",
+    "search_intelligence_placeholder": "Search Intelligence",
+    "categories_placeholder": "Categories",
+    "filter_label": "Filter:",
+    "no_intelligence_added": "No Intelligence added",
+    "view_bases": "Visualizar bases",
+    "no_content_base_added": "No content base added",
+    "sidebar_view_content_bases_title": "{name}'s content bases",
+    "sidebar_view_content_bases_description": "View the content bases that are part of this AI.",
+    "delete_intelligence": "Delete Intelligence",
+    "delete_intelligence_confirmation_modal_description": "Are you sure you want to delete <b>{name}</b> intelligence?<br>This action cannot be reversed.",
+    "filter_type_generative_label": "Content AIs",
+    "filter_type_classification_label": "Classification AIs"
+  },
+  "bases": {
+    "create": {
+      "title": "New content base",
+      "form": {
+        "name": {
+          "label": "Base name",
+          "placeholder": "Name"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Description"
+        }
+      }
+    }
+  },
+  "content_bases": {
+    "quick_test": "Quick test",
+    "sidebar_quick_test_title": "Quick test of the {name} base",
+    "sidebar_quick_test_description": "Send a message to test this content base and find out what questions it can answer",
+    "write_content": "Write content",
+    "write_content_placeholder": "Write the content here",
+    "write_content_help": "Not sure how to add content to the AI knowledge base? <a href=\"#\" target=\"_blank\">Check out the documentation</a>",
+    "changes_saved": "Changes saved"
+  },
   "webapp": {
     "layout": {
       "newbot": "new bot",
@@ -356,7 +402,7 @@
         "description": "The Knowledge bases are text sources for a Content Intelligence. Distribute the text of the intelligence in bases, gathering on each one similar informations. Find out more on our <a href='https://docs.weni.ai/l/pt/content-intelligence/introducing-content-intelligence' target='_blank' class='repository-base__description__text--link'>documentation</a>.",
         "new_knowledge_base": "Add a new base",
         "adjustments": "Adjustments",
-        "adjustments_subtitle": "Content Intelligence",
+        "adjustments_subtitle": "Manage basic Intelligence settings",
         "adjustments_button": "Save changes",
         "adjustments_button_back": "Back",
         "adjustuments_modal_title": "The changes were saved!",
@@ -405,7 +451,11 @@
         "edit-base_modal_delete_button_confirm": "Delete base",
         "edit-base_modal_delete_button_cancel": "Cancel",
         "see-all_bases": "See all bases",
-        "add_base":"+ Add base"
+        "add_base":"+ Add base",
+        "edit-base_modal_alert_title": "Exit the content base",
+        "edit-base_modal_alert_description": "Are you sure you want to leave the content base now? Content that is not saved will be discarded",
+        "edit-base_modal_alert_save": "Exit",
+        "edit-base_modal_alert_discard": "Cancel"
       },
       "copy-intelligence": "Copy intelligence",
       "intelligence_filter": {

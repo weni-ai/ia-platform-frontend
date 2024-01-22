@@ -98,7 +98,7 @@ export default {
           const projectUuid = this.$store.state.Auth.project;
 
           if (!data.includes(projectUuid)) {
-            this.showHowToIntegrate = true;
+            // this.showHowToIntegrate = true;
 
             data.push(projectUuid);
 

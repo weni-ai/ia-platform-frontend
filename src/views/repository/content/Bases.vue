@@ -1,39 +1,45 @@
 <template>
-  <repository-view-base :repository="repository" :error-code="errorCode">
-    <div v-if="repository" class="repository-base">
-      <div class="repository-base__description">
-        <div class="repository-base__title">
-          <unnnic-card
-            type="title"
-            :title="$t('webapp.home.description')"
-            enabled
-            icon="paginate-filter-text-1"
-            infoPosition="right"
-            :hasInformationIcon="false"
-            scheme="aux-orange"
+  <div class="content-bases-page-container">
+    <div class="repository-base">
+      <div class="repository-base__header">
+        <div class="repository-base__header__details">
+          <div class="repository-base__header__title">
+            <unnnic-avatar-icon icon="neurology" size="sm" scheme="weni-600" />
+
+            <unnnic-skeleton-loading
+              v-if="repository.uuid === null"
+              tag="div"
+              width="120px"
+              height="32px"
+            />
+
+            <h1 v-else>{{ repository.name }}</h1>
+          </div>
+
+          <unnnic-skeleton-loading
+            v-if="repository.uuid === null"
+            tag="div"
+            width="300px"
+            height="22px"
           />
-        </div>
-        <div>
-          <vue-markdown
-            :source="repository.description"
-            show
-            html
-            :breaks="false"
-            :linkify="false"
-            emoji
-            typographer
-            toc
-            toc-id="toc"
-            class="repository-base__description__text markdown-body"
-          />
-          <p v-if="repository.description" class="repository-base__description__text" />
-          <p v-else>
-            <i class="text-color-grey-dark">{{ $t("webapp.home.no_description") }}</i>
+
+          <p v-else class="repository-base__header__description">
+            {{ repository.description }}
           </p>
-        </div>
-        <div class="repository-base__description__header">
-          <div>
+
+          <div class="repository-base__header__categories">
+            <template v-if="repository.uuid === null">
+              <unnnic-skeleton-loading
+                v-for="i in 3"
+                :key="i"
+                tag="div"
+                :width="40 + Math.floor(Math.random() * 80) + 'px'"
+                height="28px"
+              />
+            </template>
+
             <unnnic-tag
+              v-else
               v-for="(category, index) in getAllCategories"
               :key="index"
               class="repository-base__header__tag"
@@ -43,68 +49,250 @@
             />
           </div>
         </div>
+
+        <repository-content-navigation v-if="canContribute" />
       </div>
+
       <hr />
-      <div>
-        <unnnic-card
-          type="title"
-          :title="$t('webapp.home.bases.knowledge_bases')"
-          enabled
-          icon="book-address-1-2"
-          infoPosition="right"
-          :hasInformationIcon="false"
-          scheme="aux-pink"
-        />
-        <p
-          class="repository-base__description__text"
-          v-html="$t('webapp.home.bases.description')"
-        ></p>
+
+      <div v-if="bases.count === 0" class="bases-list--empty">
+        <img src="../../../assets/imgs/doris-yawning.png" alt="Doris Yawning">
+
+          <h1 class="bases-list__title">
+            {{ $t('intelligences.no_content_base_added') }}
+          </h1>
+
+          <unnnic-button
+            v-if="canContribute"
+            @click="isAddContentBaseOpen = true"
+            class="create-base-button"
+            iconLeft="add-1"
+          >
+            {{ $t('webapp.home.bases.new_knowledge_base') }}
+          </unnnic-button>
       </div>
-      <div class="repository-base__cards">
-        <unnnic-card
-          clickable
-          :text="$t('webapp.home.bases.new_knowledge_base')"
-          type="blank"
-          icon="add-1"
-          class="repository-base__cards__new"
-          @click.native="createNewBase()"
-        />
-        <home-repository-card
-          type="base"
-          v-for="base in bases"
-          :key="base.id"
-          :repository-detail="base"
-        />
-      </div>
+
+      <template v-else>
+
+        <div class="repository-base__bases-count">
+          <unnnic-skeleton-loading
+            v-if="bases.count === null"
+            tag="div"
+            width="300px"
+            height="28px"
+          />
+
+          <h1
+            v-else
+            class="u font secondary title-sm bold"
+            v-html="$tc('webapp.home.bases.knowledge_bases', bases.count)"
+          ></h1>
+
+          <unnnic-button
+            v-if="canContribute"
+            @click="isAddContentBaseOpen = true"
+            class="create-base-button"
+            iconLeft="add-1"
+          >
+            {{ $t('webapp.home.bases.new_knowledge_base') }}
+          </unnnic-button>
+        </div>
+
+        <div class="repository-base__search-base">
+          <unnnic-input
+            icon-left="search-1"
+            placeholder="Pesquisar base de conteúdo"
+          />
+        </div>
+
+        <div class="bases-list">
+          <home-repository-card
+            type="base"
+            v-for="base in bases.data"
+            :key="base.id"
+            :repository-detail="base"
+            :can-contribute="canContribute"
+            @deleteBase="openDeleteModal"
+          />
+
+          <template v-if="bases.count === null || bases.status === 'loading'">
+            <unnnic-skeleton-loading
+              v-for="i in 3"
+              :key="i"
+              tag="div"
+              height="146px"
+            />
+          </template>
+
+          <div
+            v-show="bases.status !== 'loading'"
+            ref="end-of-list-element"
+          ></div>
+        </div>
+      </template>
     </div>
-  </repository-view-base>
+
+    <unnnic-modal
+      class="delete-base-modal"
+      persistent
+      :close-icon="false"
+      :text="$t('webapp.home.bases.edit-base_modal_delete_title')"
+      :description="$t(
+        'webapp.home.bases.edit-base_modal_delete_text',
+        { name: isDeleteModalOpen.name },
+      )"
+      v-if="isDeleteModalOpen"
+      @close="isDeleteModalOpen = null"
+    >
+      <unnnic-icon
+        slot="icon"
+        icon="error"
+        scheme="aux-red-500"
+        size="lg"
+      />
+
+      <unnnic-button slot="options" type="tertiary" @click="isDeleteModalOpen = null">
+        {{ $t('webapp.home.bases.edit-base_modal_delete_button_cancel') }}
+      </unnnic-button>
+
+      <unnnic-button
+        slot="options"
+        type="warning"
+        :loading="isDeleteModalOpen.loading"
+        @click="deleteBase"
+      >
+        {{ $t('webapp.home.bases.edit-base_modal_delete_button_confirm') }}
+      </unnnic-button>
+    </unnnic-modal>
+
+    <modal-next
+      v-if="isAddContentBaseOpen"
+      :title="$t('bases.create.title')"
+      max-width="600px"
+    >
+      <unnnic-form-element
+        :label="$t('bases.create.form.name.label')"
+        class="create-base__form-element"
+      >
+        <unnnic-input
+          v-model="title"
+          maxlength="25"
+          :placeholder="$t('bases.create.form.name.placeholder')"
+        />
+      </unnnic-form-element>
+
+      <unnnic-form-element
+        :label="$t('bases.create.form.description.label')"
+        class="create-base__form-element"
+      >
+        <unnnic-text-area
+          v-model="description"
+          :max-length="80"
+          class="create-base__description-textarea"
+          :placeholder="$t('bases.create.form.description.placeholder')"
+        />
+      </unnnic-form-element>
+
+      <div class="create-base__actions">
+        <unnnic-button
+          size="large"
+          :text="$t('webapp.home.cancel')"
+          type="tertiary"
+          @click.prevent.stop="isAddContentBaseOpen = false"
+        />
+
+        <unnnic-button
+          size="large"
+          :text="$t('webapp.home.bases.new_knowledge_base')"
+          type="primary"
+          @click="createNewBase"
+          :disabled="!this.title || !this.description"
+        />
+      </div>
+    </modal-next>
+  </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import VueMarkdown from 'vue-markdown';
-import RepositoryBase from '../Base';
 import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard';
+import RepositoryContentNavigation from './Navigation';
+import Modal from '@/components/repository/CreateRepository/Modal';
+import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
+import repositoryV2 from '../../../api/v2/repository';
+import ModalNext from '../../../components/ModalNext';
 
 export default {
   name: 'RepositoryBase',
+  mixins: [RemoveBulmaMixin],
   components: {
     RepositoryViewBase,
     VueMarkdown,
-    HomeRepositoryCard
+    HomeRepositoryCard,
+    RepositoryContentNavigation,
+    Modal,
+    ModalNext,
   },
-  extends: RepositoryBase,
   data() {
     return {
+      loadingIntelligence: false,
+
+      repository: {
+        uuid: null,
+        language: '',
+        name: '',
+        description: '',
+        categories_list: [],
+      },
+
       repositoryUUID: null,
 
-      bases: []
+      isDeleteModalOpen: null,
+      modalData: {},
+      isAddContentBaseOpen: false,
+      title: '',
+      description: '',
+
+      isShowingEndOfList: false,
+
+      bases: {
+        count: null,
+        limit: 20,
+        offset: 0,
+        repositoryUuid: this.repositoryUUID,
+        data: [],
+        next: null,
+        status: null,
+      },
     };
   },
-  mounted() {},
+
+  mounted() {
+    this.loadingIntelligence = true;
+
+    repositoryV2
+      .shortcut(this.$route.params.ownerNickname, this.$route.params.slug)
+      .then(({ data }) => {
+        this.$store.state.Repository.current = data;
+        this.repository = data;
+      })
+      .finally(() => {
+        this.loadingIntelligence = false;
+      });
+  },
+
+  beforeDestroy() {
+    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
+  },
+
   computed: {
     ...mapGetters(['getCurrentRepository', 'getProjectSelected', 'getOrgSelected']),
+
+    canContribute() {
+      return this.repository.authorization?.can_contribute;
+    },
 
     getAllCategories() {
       if (!this.repository.categories_list) {
@@ -116,6 +304,15 @@ export default {
     }
   },
   watch: {
+    isShowingEndOfList() {
+      if (
+        this.isShowingEndOfList
+        && this.bases.status !== 'complete'
+      ) {
+        this.fetchBases();
+      }
+    },
+
     // eslint-disable-next-line
     "repository.uuid"() {
       if (!this.repository.uuid || this.repository.uuid === 'null') {
@@ -123,64 +320,253 @@ export default {
       }
 
       this.repositoryUUID = this.repository.uuid;
-    },
 
-    async repositoryUUID() {
-      const response = await this.getQAKnowledgeBases({
-        repositoryUUID: this.repositoryUUID,
-        page: 0
-      });
+      this.$nextTick(() => {
+        this.fetchBases();
 
-      response.data.results.forEach(({ id, title, user_name, language_count, description }) => {
-        this.bases.push({
-          id,
-          name: title,
-          owner__nickname: user_name,
-          available_languages: false,
-          description
+        this.intersectionObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            this.isShowingEndOfList = entry.isIntersecting;
+          });
         });
+
+        this.intersectionObserver.observe(this.$refs['end-of-list-element']);
       });
-    }
+    },
   },
   methods: {
-    ...mapActions(['getQAKnowledgeBases']),
+    ...mapActions(['getQAKnowledgeBasesNext', 'deleteQAKnowledgeBase', 'createQAKnowledgeBase', 'editQAKnowledgeBase', 'createQAText']),
 
-    createNewBase() {
-      this.$router.push({
-        name: 'repository-content-bases-new'
+    async createNewBase() {
+      const { data } = await this.createQAKnowledgeBase({
+        repositoryUUID: this.repositoryUUID,
+        title: this.title,
       });
-    }
+
+      await this.createQAText({
+        repositoryUUID: this.repositoryUUID,
+        title: this.title,
+        knowledgeBaseId: data.id,
+        text: this.description,
+        language: this.repository.language
+      });
+
+      this.isAddContentBaseOpen = false;
+
+      this.$router.push({
+        name: 'repository-content-bases-edit',
+        params: {
+          id: data.id,
+        }
+      });
+    },
+
+    reloadBases() {
+      this.bases = {
+        count: null,
+        limit: 20,
+        offset: 0,
+        repositoryUuid: this.repositoryUUID,
+        data: [],
+        next: null,
+        status: null,
+      };
+
+      this.fetchBases();
+    },
+
+    async fetchBases() {
+      try {
+        this.bases.status = 'loading';
+
+        const { data } = await this.getQAKnowledgeBasesNext({
+          limit: this.bases.limit,
+          offset: this.bases.offset,
+          repositoryUUID: this.repositoryUUID,
+          next: this.bases.next,
+        });
+
+        this.bases.data = [...this.bases.data, ...data.results];
+        this.bases.next = data.next;
+        this.bases.count = data.count;
+
+        if (!data.next) {
+          this.bases.status = 'complete';
+        }
+      } finally {
+        if (this.bases.status === 'loading') {
+          this.bases.status = null;
+        }
+      }
+    },
+
+    openDeleteModal(repository) {
+      this.isDeleteModalOpen = {
+        name: repository.name,
+        id: repository.id,
+        loading: false,
+      }
+    },
+
+    async deleteBase() {
+      this.isDeleteModalOpen.loading = true;
+
+      await this.deleteQAKnowledgeBase({
+        repositoryUUID: this.repositoryUUID,
+        id: this.isDeleteModalOpen.id,
+      });
+
+      this.isDeleteModalOpen = null;
+
+      this.reloadBases();
+    },
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
-.repository-base {
-  &__title {
-    font-size: 1.75rem;
-    font-weight: $font-weight-medium;
-    display: flex;
-    align-items: center;
-    font-family: $font-family;
-    color: $color-fake-black;
+.delete-base-modal ::v-deep {
+  .unnnic-modal-container-background-body {
+    padding-top: $unnnic-spacing-giant;
+  }
 
-    div {
-      margin: 0 0 0.2rem 0.2rem;
+  .unnnic-modal-container-background-body__icon-slot {
+    margin-bottom: $unnnic-spacing-sm;
+  }
+
+  .unnnic-modal-container-background-body-title {
+    padding-bottom: $unnnic-spacing-sm;
+  }
+
+  .unnnic-modal-container-background-body-description-container {
+    padding-bottom: 0;
+  }
+
+  .unnnic-modal-container-background-button {
+    padding-top: $unnnic-spacing-lg;
+    padding-bottom: $unnnic-spacing-lg;
+  }
+}
+
+.create-base__form-element + .create-base__form-element {
+  margin-top: $unnnic-spacing-sm;
+}
+
+.create-base__description-textarea ::v-deep textarea {
+  display: block;
+  min-height: 4.6875 * $unnnic-font-size;
+  outline-style: solid;
+  outline-color: $unnnic-color-neutral-soft;
+  outline-width: $unnnic-border-width-thinner;
+  outline-offset: -$unnnic-border-width-thinner;
+  color: $unnnic-color-neutral-dark;
+  caret-color: $unnnic-color-neutral-clean;
+
+  &::placeholder {
+    color: $unnnic-color-neutral-cleanest;
+    opacity: 1; /* Firefox */
+  }
+
+  &:focus {
+    outline-color: $unnnic-color-neutral-clean;
+  }
+}
+
+.create-base__actions {
+  display: flex;
+  margin-top: $unnnic-spacing-lg;
+  column-gap: $unnnic-spacing-sm;
+
+  & > * {
+    flex: 1;
+  }
+}
+
+.content-bases-page-container {
+  padding: $unnnic-spacing-md $unnnic-font-size * 8;
+}
+
+.create-base-button {
+  min-width: 20.625 * $unnnic-font-size;
+}
+
+.bases-list {
+  display: grid;
+  gap: $unnnic-spacing-sm;
+  grid-template-columns: repeat(auto-fill, minmax(20.625 * $unnnic-font-size, 1fr));
+
+  &--empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .create-base-button {
+      min-width: 15.625 * $unnnic-font-size;
     }
   }
 
+  &__title {
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-title-sm;
+    line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
+    font-weight: $unnnic-font-weight-bold;
+    color: $unnnic-color-neutral-darkest;
+    text-align: center;
+
+    margin-block: $unnnic-spacing-md;
+  }
+}
+
+.repository-base {
   &__header {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $unnnic-spacing-sm;
+
+    &__details {
+      display: flex;
+      flex-direction: column;
+      row-gap: $unnnic-spacing-sm;
+    }
+
+    &__title {
+      display: flex;
+      column-gap: $unnnic-spacing-sm;
+      align-items: center;
+
+      h1 {
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-title-md;
+        line-height: $unnnic-font-size-title-md + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-bold;
+        color: $unnnic-color-neutral-darkest;
+
+        margin: 0;
+      }
+    }
+
+    &__description {
+      color: $unnnic-color-neutral-dark;
+      font-family: $unnnic-font-family-secondary;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+      font-weight: $unnnic-font-weight-regular;
+
+      margin: 0;
+    }
+
+    &__categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $unnnic-spacing-xs;
+    }
 
     &__tag {
       padding: 0 $unnnic-inset-lg;
       font-size: 15px;
-      margin-right: $unnnic-inset-nano;
     }
   }
 
@@ -188,7 +574,6 @@ export default {
     &__header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
     }
 
     &__text, i {
@@ -206,6 +591,7 @@ export default {
     justify-content: space-between;
     grid-template-columns: repeat(4, 24%);
     margin-top: $unnnic-inset-md;
+    gap: $unnnic-spacing-sm;
     @media screen and (max-width: 1400px) {
       grid-template-columns: repeat(3, 32%);
     }
@@ -215,26 +601,42 @@ export default {
       margin-bottom: $unnnic-inline-sm;
     }
   }
-}
-.tooltipStyle::after {
-  font-size: $unnnic-font-size-body-md;
-  line-height: 13px;
-  padding: 1rem 0.5rem;
-  font-family: $font-family;
-}
-.markdown-body {
-  margin: 1.5rem 0;
 
-  a {
-    color: $color-primary;
-    text-decoration: none;
-  }
+  &__search-base {
+      margin: $unnnic-spacing-md 0 $unnnic-spacing-sm;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: $unnnic-spacing-stack-sm $unnnic-spacing-inline-md;
 
-  h1,
-  h2 {
-    border-bottom: 1px solid $color-primary;
-  }
+      .unnnic-form {
+        flex: 1;
+      }
+    }
+
+    &__bases-count {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: $unnnic-spacing-sm;
+
+      h1 {
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-title-sm;
+        line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-bold;
+        color: $unnnic-color-neutral-darkest;
+
+        margin: 0;
+      }
+    }
+    ::v-deep {
+      .input.size-md {
+        height: auto;
+      }
+    }
 }
+
 ::v-deep {
   .unnnic-card-intelligence__detail {
     display: none;
@@ -243,16 +645,27 @@ export default {
     display: none;
   }
   .unnnic-card-intelligence__description {
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 2;
   }
   .repository-base__description__text--link {
     color: $unnnic-color-neutral-dark;
     text-decoration: underline;
   }
+
+  .unnnic-modal-container-background-body-description-container {
+    padding-bottom: $unnnic-spacing-sm;
+  }
 }
 
 hr {
-  background: $unnnic-color-neutral-soft;
-  height: 1px;
+  all: unset;
+  width: 100%;
+  border: 0;
+  display: block;
+  height: $unnnic-border-width-thinner;
+  background-color: $unnnic-color-neutral-soft;
+  margin: $unnnic-spacing-lg 0;
+  margin-top: $unnnic-spacing-lg - $unnnic-border-width-thinner;
 }
+
 </style>

@@ -20,9 +20,16 @@ export default {
       '/v2/account/my-profile/',
     );
   },
-  searchByOwner(limit, offset, owner_id) {
-    const queryString = qs.stringify(limit, offset, owner_id);
-    return request.$http.get(`/v2/repository/search-repositories/?${queryString}`);
+  searchByOwner(limit, offset, owner_id, next) {
+    if (next) {
+      return request.$http.get(next);
+    }
+
+    return request.$http.get('/v2/repository/search-repositories/', {
+      params: {
+        limit, offset, owner_id, next,
+      }
+    });
   },
   permissionRepositories() {
     return request.$http.get('/v2/repository/repositories-permissions/');

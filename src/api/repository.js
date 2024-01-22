@@ -21,6 +21,21 @@ export default {
       },
     });
   },
+
+  getQAKnowledgeBasesNext({ repositoryUUID, limit, offset, next }) {
+    if (next) {
+      return request.$http.get(next);
+    }
+
+    return request.$http.get('v2/repository/qa/knowledge-base/', {
+      params: {
+        repository_uuid: repositoryUUID,
+        limit,
+        offset,
+      },
+    });
+  },
+
   createQAKnowledgeBase(repositoryUUID, title) {
     return request.$http.post('v2/repository/qa/knowledge-base/', {
       repository: repositoryUUID,
@@ -133,6 +148,17 @@ export default {
     );
     return request.$http.get(`/v2/repository/repositories/?${queryString}`);
   },
+
+  listPublicIntelligences({ next, params }) {
+    if (next) {
+      return request.$http.get(next);
+    }
+
+    return request.$http.get('v2/repository/repositories/', {
+      params,
+    });
+  },
+
   searchByOrg(orgNickname, limit = 20, search, categories, language) {
     return new utils.Page('/v2/repository/search-repositories/', limit, {
       nickname: orgNickname, search, categories, language,

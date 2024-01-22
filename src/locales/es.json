@@ -1,4 +1,50 @@
 {
+  "delete": "Eliminar",
+  "cancel": "Cancelar",
+  "announcements": {
+    "new_artificial_intelligence_module_is_here": "¡Ya está aquí el nuevo módulo de Inteligencia Artificial! Explora las novedades y aprende a crear chatbots aún más increíbles."
+  },
+  "intelligences": {
+    "own_intelligences": "Inteligencias propias",
+    "public_intelligences": "Inteligencias públicas",
+    "create_button": "Crear Inteligencia",
+    "search_intelligence_placeholder": "Buscar Inteligencia",
+    "categories_placeholder": "Categorías",
+    "filter_label": "Filtrar:",
+    "no_intelligence_added": "Ninguna Inteligencia añadida",
+    "view_bases": "Visualizar bases",
+    "no_content_base_added": "Ninguna base de contenido añadida",
+    "sidebar_view_content_bases_title": "Bases de contenidos de {name}",
+    "sidebar_view_content_bases_description": "Visualizar las bases de contenidos que forman parte de esta IA.",
+    "delete_intelligence": "Eliminar Inteligencia",
+    "delete_intelligence_confirmation_modal_description": "¿Está seguro de que quiere excluir a la inteligencia <b>{name}</b>?<br>Esta acción no puede ser revertida.",
+    "filter_type_generative_label": "IAs de Contenidos",
+    "filter_type_classification_label": "IAs de Clasificación"
+  },
+  "bases": {
+    "create": {
+      "title": "Nueva base de contenidos",
+      "form": {
+        "name": {
+          "label": "Nombre de la base",
+          "placeholder": "Nombre"
+        },
+        "description": {
+          "label": "Descripción",
+          "placeholder": "Descripción"
+        }
+      }
+    }
+  },
+  "content_bases": {
+    "quick_test": "Prueba rápida",
+    "sidebar_quick_test_title": "Prueba rápida de la base {name}",
+    "sidebar_quick_test_description": "Envíe un mensaje para probar esta base de contenidos y averiguar qué preguntas puede responder",
+    "write_content": "Escriba el contenido",
+    "write_content_placeholder": "Escriba aquí el contenido",
+    "write_content_help": "¿No está seguro de cómo añadir contenidos a la base de conocimientos de IA? <a href=\"#\" target=\"_blank\">Consulte la documentación</a>",
+    "changes_saved": "Cambios guardados"
+  },
   "webapp": {
     "layout": {
       "newbot": "nueva inteligencia",
@@ -357,7 +403,7 @@
         "description": "Las bases de conocimiento son las fuentes de texto de la inteligencia de contenido. Distribuya el texto de la inteligencia en las bases, reuniendo información similar sobre cada uno. Obtenga más información en nuestro <a href='https://docs.weni.ai/l/pt/bothub/introdu-o-intelig-ncia-de-conte-do' target='_blank' class='repository-base__description__text--link'>documentación</a>.",
         "new_knowledge_base": "Añadir nueva base",
         "adjustments": "Ajustes",
-        "adjustments_subtitle": "Inteligencia de contenido",
+        "adjustments_subtitle": "Gestionar los ajustes básicos de Inteligencia",
         "adjustments_button": "Guardar ediciones",
         "adjustments_button_back": "Volver",
         "adjustuments_modal_title": "Cambios guardados!",
@@ -406,6 +452,10 @@
         "edit-base_modal_delete_button_confirm": "Excluir la base",
         "edit-base_modal_delete_button_cancel": "Cancelar",
         "edit-base_modal_delete_button_validation": "Escriba ${this.knowledgeBase.title} para confirmar la eliminación",
+        "edit-base_modal_alert_title": "Salir de la base de contenidos",
+        "edit-base_modal_alert_description": "¿Estás seguro de que quieres salir de la base de contenidos ahora? El contenido que no se guarde se descartará",
+        "edit-base_modal_alert_save": "Salir",
+        "edit-base_modal_alert_discard": "Cancelar",
         "see-all_bases": "Ver todas las bases",
         "add_base": "+ Añadir base"
       },

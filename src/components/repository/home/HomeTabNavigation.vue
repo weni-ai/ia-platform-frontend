@@ -7,6 +7,7 @@
           :title="$t('webapp.intelligences_lib.tab_community_title')"
           type="default"
           :description="$t('webapp.intelligences_lib.tab_community_subtitle')"
+
           :class="{'tab-navigation__container__content--selected': currentTab === 0}"
           @click.native="handleChangeTag(0)"
           />
@@ -18,7 +19,8 @@
             type="default"
             :description="$t('webapp.intelligences_lib.tab_project_subtitle',
               {project: 'Mississipi'})"
-            :class="{'tab-navigation__container__content--selected': currentTab === 1}"
+
+              :class="{'tab-navigation__container__content--selected': currentTab === 1}"
             @click.native="handleChangeTag(1)"
             />
         </div>
@@ -28,11 +30,11 @@
             :title="$t('webapp.intelligences_lib.tab_org_title')"
             type="default"
             :description="$t('webapp.intelligences_lib.tab_org_subtitle', {org: 'Weni'})"
+
             :class="{'tab-navigation__container__content--selected': currentTab === 2}"
             @click.native="handleChangeTag(2)"
             />
         </div>
-
     </section>
   </div>
 </template>
@@ -40,18 +42,18 @@
 <script>
 export default {
   name: 'HomeTabNavigation',
-  data(){
+  data() {
     return {
       currentTab: 0,
     }
   },
   watch: {
-    currentTab(){
+    currentTab() {
       this.$emit('changeTabValue', this.currentTab)
     }
   },
   methods: {
-    handleChangeTag(tab){
+    handleChangeTag(tab) {
       this.currentTab = tab;
     }
   }
@@ -66,7 +68,7 @@ export default {
   padding: 0 $unnnic-inline-md;
   background-color: $unnnic-color-background-snow;
 
-  &__container{
+  &__container {
     display: flex;
     align-items: center;
     // justify-content: space-between;
@@ -74,7 +76,7 @@ export default {
     padding-bottom: $unnnic-inline-md;
     border-bottom: 1px solid $unnnic-color-neutral-soft;
 
-    &__content{
+    &__content {
       width: 33%;
       height: 6.125rem;
 
@@ -91,5 +93,4 @@ export default {
     }
   }
 }
-
 </style>

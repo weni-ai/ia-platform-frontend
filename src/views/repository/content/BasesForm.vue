@@ -1,164 +1,142 @@
 <template>
-  <repository-view-base :repository="repository" :error-code="errorCode">
-    <section class="repository-base-edit">
-      <section class="repository-base-edit__header">
-        <span @click="routerHandle('repository-content-bases')">
-          <unnnic-icon-svg icon="keyboard-arrow-left-1" />
-        </span>
-        <div>
-          <div class="repository-base-edit__header--content">
-            <h1
-              ref="focusInput"
-              class="repository-base-edit__title"
-              contenteditable="true"
-              @input="onTitleChange"
-              id="titleId"
-            >
-              {{ provisoryTitle }}
-            </h1>
-          </div>
-          <p v-if="knowledgeBase.text.lastUpdate" class="repository-base-edit__text">
-            {{ formatDate(this.knowledgeBase.text.lastUpdate) }}
-          </p>
-        </div>
-      </section>
-      <section class="repository-base-edit__header">
-        <div class="repository-base-edit__header__buttons">
-          <unnnic-tool-tip
-            :text="$t('webapp.home.bases.edit-base-save')"
-            enabled
-            side="bottom"
-            maxWidth="15rem"
-          >
-            <unnnicButton
-              type="secondary"
-              iconLeft="floppy-disk-1"
-              :iconRight="null"
-              :disabled="false"
-              :loading="submitting"
-              @click="saveText()"
-              class="repository-base-edit__header__button"
-            />
-          </unnnic-tool-tip>
-          <unnnic-tool-tip
-            :text="$t('webapp.home.bases.edit-base-delete')"
-            enabled
-            side="bottom"
-            maxWidth="15rem"
-          >
-            <unnnicButton
-              type="secondary"
-              iconLeft="bin-1-1"
-              :iconRight="null"
-              :disabled="false"
-              :loading="false"
-              @click="openDeleteModal()"
-              class="repository-base-edit__header__button"
-            />
-          </unnnic-tool-tip>
-          <unnnic-tool-tip
-            :text="$t('webapp.home.bases.edit-base-test')"
-            enabled
-            side="bottom"
-            maxWidth="15rem"
-          >
-            <unnnicButton
-              type="secondary"
-              iconLeft="messages-bubble-4"
-              :iconRight="null"
-              :disabled="false"
-              :loading="false"
-              class="repository-base-edit__header__button"
-              @click="goToTests()"
-            />
-          </unnnic-tool-tip>
-        </div>
-        <div>
-          <unnnic-select
-            class="unnic--clickable"
-            size="md"
-            :placeholder="$t('webapp.create_repository.language_placeholder')"
-            v-model="knowledgeBase.text.language"
-            search
-            :search-placeholder="$t('webapp.create_repository.language_placeholder_search')"
-          >
-            <option v-for="(language, key) in languages" :value="key" :key="key" size="sm">
-              {{ language }}
-            </option>
-          </unnnic-select>
-        </div>
-      </section>
-      <!-- buttons and select -->
-    </section>
-    <section>
-      <textarea
-        v-model="knowledgeBase.text.value"
-        name=""
-        id="textId"
-        cols="30"
-        rows="10"
-        class="repository-base-edit__textarea"
+  <page-container
+    :loading-title="loadingTitle"
+    :title="provisoryTitle"
+    @back="routerHandle('repository-content-bases')"
+  >
+    <section class="repository-base-edit__wrapper">
+      <unnnic-skeleton-loading
+        v-if="loadingText"
+        tag="div"
+        height="100%"
+        class="repository-base-edit__wrapper__card-content"
+      />
+
+      <div
+        v-else
+        :class="[
+          'repository-base-edit__wrapper__card',
+          'repository-base-edit__wrapper__card-content',
+        ]"
       >
-      </textarea>
+        <div class="repository-base-edit__wrapper__card-content__header">
+          {{ $t('content_bases.write_content') }}
+
+          <unnnic-button
+            :loading="submitting"
+            @click="saveText()"
+            size="small"
+            class="repository-base-edit__wrapper__card-content__header__save-button"
+            :disabled="!knowledgeBase.text.value.trim()
+              || knowledgeBase.text.value === knowledgeBase.text.oldValue"
+          >
+            {{ $t('webapp.settings.save') }}
+          </unnnic-button>
+        </div>
+
+        <textarea
+          v-model="knowledgeBase.text.value"
+          name=""
+          id="textId"
+          cols="30"
+          rows="10"
+          class="repository-base-edit__textarea"
+          :placeholder="$t('content_bases.write_content_placeholder')"
+        ></textarea>
+
+        <div
+          v-if="!knowledgeBase.text.value.trim()"
+          class="repository-base-edit__wrapper__card-content__info"
+        >
+          <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
+
+          <span v-html="$t('content_bases.write_content_help')"></span>
+        </div>
+      </div>
+
+      <unnnic-skeleton-loading
+        v-if="!configTest"
+        width="295px"
+        height="100%"
+        tag="div"
+      />
+
+      <div
+        v-else
+        :class="[
+          'repository-base-edit__wrapper__card',
+          'repository-base-edit__wrapper__card-test-container'
+        ]"
+      >
+        <div class="repository-base-edit__wrapper__card-test-container__header">
+          {{ $t('content_bases.quick_test') }}
+        </div>
+
+        <tests
+          :config="configTest"
+        />
+      </div>
     </section>
 
-    <modal
-      v-if="isDeleteModalOpen"
-      type="confirm"
-      :data="modalData"
-      @close="isDeleteModalOpen = false"
-    />
     <unnnic-modal
       :show-modal="openModal"
-      scheme="feedback-yellow"
-      modal-icon="alert-circle-1"
-      :text="$t('webapp.home.bases.adjustuments_modal_alert_title')"
-      :description="$t('webapp.home.bases.adjustments_modal_alert_description')"
-      @close="openModal = false"
+      scheme="aux-yellow-500"
+      modal-icon="warning"
+      :text="$t('webapp.home.bases.edit-base_modal_alert_title')"
+      :description="$t('webapp.home.bases.edit-base_modal_alert_description')"
+      :close-icon="false"
+      class="exit-content-base-modal"
     >
       <unnnic-button
         slot="options"
         class="create-repository__container__button"
-        type="terciary"
-        @click="discardUpdate()"
+        type="tertiary"
+        @click="openModal = false"
       >
-        {{ $t("webapp.home.bases.adjustments_modal_alert_discard") }}
+        {{ $t("webapp.home.bases.edit-base_modal_alert_discard") }}
       </unnnic-button>
       <unnnic-button
         slot="options"
-        class="create-repository__container__button"
+        class="create-repository__container__button attention-button"
         type="primary"
-        scheme="feedback-yellow"
-        @click="saveClose()"
-        :loading="submitting"
+        @click="discardUpdate()"
       >
-        {{ $t("webapp.home.bases.adjustments_modal_alert_save") }}
+        {{ $t("webapp.home.bases.edit-base_modal_alert_save") }}
       </unnnic-button>
     </unnnic-modal>
-  </repository-view-base>
+    <unnnic-alert
+      v-if="isAlertOpen"
+      :text="$t('content_bases.changes_saved')"
+      scheme="feedback-green"
+      seconds="5"
+      @close="isAlertOpen = false"
+    />
+  </page-container>
 </template>
 
 <script>
 import { get } from 'lodash';
-import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
-import Modal from '@/components/repository/CreateRepository/Modal';
-import RepositoryBase from '../Base';
 import { mapActions } from 'vuex';
 import { LANGUAGES } from '@/utils/index';
 import router from '@/router/index';
+import Tests from './Tests';
 import { unnnicCallAlert } from '@weni/unnnic-system';
+import LoadRepository from '../../../utils/LoadRepository';
+import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
+import PageContainer from '../../../components/PageContainer';
 
 export default {
   name: 'RepositoryBaseEdit',
   components: {
-    RepositoryViewBase,
-    Modal
+    Tests,
+    PageContainer,
   },
-  extends: RepositoryBase,
+  mixins: [LoadRepository, RemoveBulmaMixin],
   data() {
     return {
+      loadingTitle: false,
+      loadingText: false,
       repositoryUUID: null,
-      isDeleteModalOpen: false,
       isSavedModalOpen: false,
       openModal: false,
       localNext: null,
@@ -177,10 +155,12 @@ export default {
           lastUpdate: ''
         }
       },
-      modalData: {},
       destroyVerifying: null,
       provisoryTitle: '',
-      languages: LANGUAGES
+      languages: LANGUAGES,
+      isAlertOpen: false,
+
+      repositoryConfig: '',
     };
   },
   methods: {
@@ -190,8 +170,7 @@ export default {
       'getQATexts',
       'createQAText',
       'updateQAText',
-      'deleteQAKnowledgeBase',
-      'editQAKnowledgeBase'
+      'editQAKnowledgeBase',
     ]),
 
     alertError(title) {
@@ -207,36 +186,6 @@ export default {
           name: `${path}`
         });
       }
-    },
-    openDeleteModal() {
-      this.isDeleteModalOpen = true;
-
-      this.modalData = {
-        icon: 'alert-circle-1',
-        scheme: 'feedback-red',
-        persistent: true,
-        title: `${this.$t('webapp.home.bases.edit-base_modal_delete_title')} "${
-          this.knowledgeBase.title
-        }"?`,
-        description: this.$t('webapp.home.bases.edit-base_modal_delete_text'),
-        validate: {
-          label: `
-            Type <b>${this.knowledgeBase.title}</b> to confirm the deletion
-          `,
-          placeholder: this.$t('webapp.home.bases.edit-base_modal_delete_placeholder'),
-          text: this.knowledgeBase.title
-        },
-        cancelText: this.$t('webapp.home.bases.edit-base_modal_delete_button_cancel'),
-        confirmText: this.$t('webapp.home.bases.edit-base_modal_delete_button_confirm'),
-        onConfirm: async (justClose, { setLoading }) => {
-          setLoading(true);
-          await this.deleteBase();
-          setLoading(false);
-          justClose();
-
-          this.routerHandle('repository-content-bases');
-        }
-      };
     },
     async saveText() {
       if (this.$route.name === 'repository-content-bases-new') {
@@ -291,6 +240,7 @@ export default {
           this.knowledgeBase.text.oldLanguage = responseText.data.language;
           this.knowledgeBase.text.lastUpdate = responseText.data.last_update;
         }
+        this.isAlertOpen = true;
       } catch (error) {
         const errorMessage = get(error, 'response.data.text.0', '');
 
@@ -300,14 +250,6 @@ export default {
       } finally {
         this.submitting = false;
       }
-    },
-    async deleteBase() {
-      const responseDeleteBase = await this.deleteQAKnowledgeBase({
-        repositoryUUID: this.repositoryUUID,
-        id: this.$route.params.id
-      });
-
-      this.destroyVerifying();
     },
     discardUpdate() {
       this.openModal = false;
@@ -329,6 +271,9 @@ export default {
         repositoryUUID: this.repositoryUUID,
         id: this.$route.params.id
       });
+
+      this.loadingTitle = false;
+
       const { title } = response.data;
 
       this.knowledgeBase.title = title;
@@ -342,8 +287,16 @@ export default {
         page: 0
       });
 
+      this.loadingText = false;
+
       if (responseText.data.results.length) {
-        const { id, language, text } = responseText.data.results[0];
+        const { id, language, text, knowledge_base } = responseText.data.results[0];
+
+        this.repositoryConfig = [
+          `Bearer ${this.repository?.authorization?.uuid}`,
+          knowledge_base,
+          language,
+        ].join('⇝');
 
         this.knowledgeBase.text.id = id;
         this.knowledgeBase.text.value = text;
@@ -413,6 +366,14 @@ export default {
     }
   },
   computed: {
+    configTest() {
+      if (this.$store.state.User.me.language && this.repositoryConfig) {
+        return [this.$store.state.User.me.language, this.repositoryConfig].join('⇝');
+      }
+
+      return '';
+    },
+
     hasUpdates() {
       if (this.knowledgeBase.title !== this.knowledgeBase.oldTitle) {
         return true;
@@ -426,6 +387,11 @@ export default {
     }
   },
   mounted() {
+    if (this.$route.name === 'repository-content-bases-edit') {
+      this.loadingTitle = true;
+      this.loadingText = true;
+    }
+
     this.destroyVerifying = router.beforeEach((to, from, next) => {
       if (this.hasUpdates) {
         this.openModal = true;
@@ -443,18 +409,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.exit-content-base-modal ::v-deep .unnnic-modal-container-background-body-description-container {
+  padding-bottom: $unnnic-spacing-xs;
+}
+
+.attention-button {
+  background-color: $unnnic-color-aux-yellow-500;
+
+  &:hover:enabled {
+    background-color: $unnnic-color-aux-yellow-700;
+  }
+
+  &:active:enabled {
+    background-color: $unnnic-color-aux-yellow-900;
+  }
+}
+.content-bases-page-container {
+  padding: $unnnic-spacing-md $unnnic-font-size * 8;
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
 
 .repository-base-edit {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: $unnnic-spacing-md;
+
   &__header {
     display: flex;
     align-items: center;
+    column-gap: $unnnic-spacing-ant;
+
     &__buttons {
       display: flex;
       justify-content: space-between;
@@ -479,59 +469,175 @@ export default {
     }
     span {
       cursor: pointer;
-      margin-right: $unnnic-inset-sm;
+      margin-right: $unnnic-spacing-xs;
     }
   }
-  &__title {
-    border: none;
-    font-family: $unnnic-font-family-primary;
-    font-size: $unnnic-font-size-title-sm;
-    margin-right: $unnnic-inset-nano;
-    padding: 0 4px;
-    &:focus {
-      border: none;
-      border-radius: 2pt;
-      box-shadow: 0 0 0 1pt grey;
-      outline: none;
-      transition: 0.1s;
-    }
-  }
+
   &__text {
     font-family: $unnnic-font-family-secondary;
     font-size: $unnnic-font-size-body-md;
     color: $unnnic-color-neutral-cloudy;
   }
 
-  &__textarea {
-    width: 100%;
-    resize: none;
-    height: 100vh;
-    border: 1px solid $unnnic-color-neutral-soft;
-    border-radius: $unnnic-border-radius-md;
-    margin-top: 34px;
-    padding: 40px 64px;
-    font-family: $unnnic-font-family-primary;
-    font-weight: $unnnic-font-weight-regular;
-    font-size: $unnnic-font-size-body-lg;
-    line-height: 29px;
-    text-align: justify;
-    color: $unnnic-color-neutral-dark;
-    &:focus {
-      border: none;
-      border-radius: 2pt;
-      box-shadow: 0 0 0 1pt grey;
-      outline: none;
-      transition: 0.1s;
-    }
-    &::-webkit-scrollbar {
-      margin-right: $unnnic-inset-sm;
-    }
-  }
   .input.size-md {
     height: 46px;
   }
   /deep/.input.size-md {
     height: 46px;
+  }
+
+  &__wrapper {
+    flex: 1;
+    display: flex;
+    gap: $unnnic-spacing-sm;
+
+    &__card-test-container {
+      outline-style: solid;
+      outline-color: $unnnic-color-neutral-cleanest;
+      outline-width: $unnnic-border-width-thinner;
+      outline-offset: -$unnnic-border-width-thinner;
+      border-radius: $unnnic-border-radius-sm;
+
+      width: 18.4375 * $unnnic-font-size;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+
+      &__header {
+        color: $unnnic-color-neutral-darkest;
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-body-lg;
+        line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-bold;
+        padding-inline: $unnnic-spacing-sm;
+        padding-top: $unnnic-spacing-ant;
+        padding-bottom: $unnnic-spacing-ant - $unnnic-border-width-thinner;
+        margin-inline: -$unnnic-spacing-sm;
+        margin-top: -$unnnic-spacing-sm;
+        margin-bottom: $unnnic-spacing-sm;
+        border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
+      }
+    }
+
+    &__card {
+      padding: $unnnic-spacing-sm;
+
+      &__header {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+
+    &__card-content {
+      border: 0;
+      flex: 1;
+      padding: 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      &:has(&__info) textarea {
+        border-radius: $unnnic-border-radius-sm $unnnic-border-radius-sm 0 0;
+      }
+
+      &__header {
+        color: $unnnic-color-neutral-darkest;
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-body-lg;
+        line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-bold;
+        background-color: $unnnic-color-background-snow;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: absolute;
+        margin: $unnnic-spacing-sm;
+        margin-top: $unnnic-border-width-thinner;
+        margin-bottom: 0;
+        padding-top: $unnnic-spacing-sm - $unnnic-border-width-thinner;
+        padding-bottom: $unnnic-spacing-sm;
+        left: 0;
+        right: 0;
+
+        &__save-button {
+          width: 10.625 * $unnnic-font-size;
+        }
+      }
+
+      &__info {
+        color: $unnnic-color-neutral-cloudy;
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-body-md;
+        line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-regular;
+
+        display: flex;
+        align-items: center;
+        column-gap: $unnnic-spacing-nano;
+        padding-block: $unnnic-spacing-xs ($unnnic-spacing-xs - $unnnic-border-width-thinner);
+        padding-inline: $unnnic-spacing-sm - $unnnic-border-width-thinner;
+
+        background-color: $unnnic-color-neutral-light;
+        border: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
+        border-top-width: 0;
+
+        border-radius: 0 0 $unnnic-border-radius-sm $unnnic-border-radius-sm;
+
+        ::v-deep a {
+          color: inherit;
+          text-underline-offset: $unnnic-spacing-stack-nano;
+        }
+      }
+    }
+  }
+
+  &__textarea {
+    resize: none;
+    flex: 1;
+    padding: $unnnic-spacing-sm;
+    padding-top: 4.375 * $unnnic-font-size;
+    margin: 0;
+    font-family: $unnnic-font-family-primary;
+    font-weight: $unnnic-font-weight-regular;
+    font-size: $unnnic-font-size-body-lg;
+
+    color: $unnnic-color-neutral-dark;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+    font-weight: $unnnic-font-weight-regular;
+
+    &::placeholder {
+      color: $unnnic-color-neutral-cloudy;
+      font-family: $unnnic-font-family-secondary;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+      font-weight: $unnnic-font-weight-regular;
+    }
+
+    color: $unnnic-color-neutral-dark;
+    border: none;
+
+    border-radius: $unnnic-border-radius-sm;
+
+    // &:not(:last-child) {
+    //   border-radius: $unnnic-border-radius-sm $unnnic-border-radius-sm 0 0;
+    // }
+
+    outline-style: solid;
+    outline-color: $unnnic-color-neutral-cleanest;
+    outline-width: $unnnic-border-width-thinner;
+    outline-offset: -$unnnic-border-width-thinner;
+
+    &:focus {
+      outline-color: $unnnic-color-neutral-clean;
+    }
+
+    &::-webkit-scrollbar {
+      margin-right: $unnnic-inset-sm;
+    }
   }
 }
 
@@ -552,15 +658,16 @@ export default {
       align-items: center;
     }
   }
-  .icon-right {
-    transform: translateY(100%);
-  }
   .input.size-md {
     height: 46px;
   }
 
+  .rpstr-vw-bs {
+    margin-top: 0;
+  }
 }
 .input.size-md {
   height: 46px;
 }
+
 </style>

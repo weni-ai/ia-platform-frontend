@@ -1,16 +1,18 @@
+<!-- depreciated -->
+
 <template>
   <div class="home-intelligences-from-org__wrapper">
     <home-intelligence-container>
       <div class="home-intelligences-from-org">
         <div class="home-intelligences-from-org__cards">
-          <unnnic-card
+          <!-- <unnnic-card
             clickable
             :text="$t('webapp.intelligences_lib.new_intelligence')"
             type="blank"
             icon="add-1"
             class="home-intelligences-from-org__cards__new"
             @click.native="createNewIntelligence()"
-          />
+          /> -->
           <home-repository-card
             v-for="list in repositoryOrgList"
             :key="list.uuid"
@@ -116,7 +118,7 @@ export default {
   &__wrapper {
     display: grid;
     // grid-template-columns: 1fr 2fr;
-    margin: 1.5rem;
+    // margin: 1.5rem;
     gap: 1rem;
   }
 }

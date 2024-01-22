@@ -1,38 +1,53 @@
 <template>
-  <repository-view-base :repository="repository" :error-code="errorCode">
+  <page-container
+    :title="$t('webapp.home.bases.adjustments')"
+    :description="$t('webapp.home.bases.adjustments_subtitle')"
+    @back="goToSummary"
+  >
+    <hr class="divider" />
+
     <section v-if="repository" class="repository-adjustments">
-      <section class="repository-adjustments__description">
-        <div class="repository-adjustments__title">
-          <unnnic-card
-            type="title"
-            :title="$t('webapp.home.bases.adjustments')"
-            enabled
-            icon="cog-1"
-            infoPosition="right"
-            :hasInformationIcon="false"
-            scheme="brand-weni-soft"
-          />
-        </div>
-        <p class="repository-adjustments__description__text">
-          {{ $t("webapp.home.bases.adjustments_subtitle") }}
-        </p>
-      </section>
-      <!-- title -->
-      <hr />
-      <section class="repository-adjustments__wrapper">
-        <unnnic-input
-          :label="$t('webapp.create_repository.intelligence_name_label')"
-          :placeholder="$t('')"
-          v-model="intelligence.name"
-        />
-        <unnnic-input
-          :label="$t('webapp.create_repository.description_label')"
-          :placeholder="$t('')"
-          v-model="intelligence.description"
-        />
-      </section>
+      <unnnic-skeleton-loading
+        v-if="loadingIntelligence"
+        class="unnnic-form"
+        tag="div"
+        width="100%"
+        height="76px"
+      />
+
+      <unnnic-input
+        v-else
+        :label="$t('webapp.create_repository.intelligence_name_label')"
+        :placeholder="$t('')"
+        v-model="intelligence.name"
+      />
+
+      <unnnic-skeleton-loading
+        v-if="loadingIntelligence"
+        class="unnnic-form"
+        tag="div"
+        width="100%"
+        height="76px"
+      />
+
+      <unnnic-input
+        v-else
+        :label="$t('webapp.create_repository.description_label')"
+        :placeholder="$t('')"
+        v-model="intelligence.description"
+      />
+
       <!-- name and description -->
-      <section class="repository-adjustments__wrapper__fields">
+
+      <unnnic-skeleton-loading
+        v-if="loadingIntelligence"
+        class="unnnic-form"
+        tag="div"
+        width="100%"
+        height="76px"
+      />
+
+      <section v-else class="repository-adjustments__wrapper__fields">
         <unnnic-label :label="$t('webapp.create_repository.language_label')" />
         <unnnic-select
           class="unnic--clickable"
@@ -47,74 +62,64 @@
           </option>
         </unnnic-select>
       </section>
-      <!-- language -->
+
       <section class="repository-adjustments__wrapper__fields">
         <unnnic-label :label="$t('webapp.create_repository.category_label')" />
-        <unnnic-carousel
-          :tagItems="categoryList"
-          v-if="categoryList.length > 0"
-          @change-selected="selectCategory($event)"
-          v-model="intelligence.categories"
-        />
-        <loading v-else />
-      </section>
-      <!-- categories -->
-      <section class="repository-adjustments__privacy">
-        <unnnic-label :label="$t('webapp.create_repository.privacy_label')" />
-        <div class="repository-adjustments__privacy__cards">
-          <unnnic-card
+
+        <div class="categories-list">
+          <template v-if="categoryListLoading || loadingIntelligence">
+            <unnnic-skeleton-loading
+              v-for="i in 10"
+              :key="i" tag="div"
+              :width="80 + Math.floor(Math.random() * 40) + 'px'"
+              height="32px"
+            />
+          </template>
+
+          <unnnic-tag
+            v-else
+            v-for="category in categoryList"
+            :key="category.id"
+            :text="category.name"
+            :disabled="intelligence.categories.includes(category.id)"
+            @click.native="
+              intelligence.categories =
+                intelligence.categories.includes(category.id)
+                ? intelligence.categories.filter((id) => id !== category.id)
+                : [...intelligence.categories, category.id]
+            "
             clickable
-            :title="$t('webapp.create_repository.privacy_type_public_title')"
-            :description="$t('webapp.create_repository.privacy_type_public_description')"
-            type="content"
-            icon="lock-unlock-1-1"
-            class="repository-adjustments__privacy__cards__content"
-            :enabled="!intelligence.is_private"
-            @click.native="intelligence.is_private = false"
-          />
-          <unnnic-card
-            clickable
-            :title="$t('webapp.create_repository.privacy_type_private_title')"
-            :description="$t('webapp.create_repository.privacy_type_private_description')"
-            type="content"
-            icon="lock-2-1"
-            class="repository-adjustments__privacy__cards__content"
-            :enabled="intelligence.is_private"
-            @click.native="intelligence.is_private = true"
+            type="brand"
           />
         </div>
       </section>
-      <!-- privacy -->
+      <!-- categories -->
       <section class="repository-adjustments__wrapper__buttons">
         <unnnic-button
-          type="terciary"
+          type="tertiary"
           size="large"
           :text="$t('webapp.home.bases.adjustments_button_back')"
           class="repository-adjustments__buttons"
-          @click="showModal()"
+          @click="goToSummary"
         >
         </unnnic-button>
         <unnnic-button
-          type="secondary"
           size="large"
           :text="$t('webapp.home.bases.adjustments_button')"
           @click="onSubmit()"
           :loading="submitting"
+          :disabled="!hasUpdates"
           class="repository-adjustments__buttons"
         >
         </unnnic-button>
       </section>
     </section>
-    <modal
-      v-if="isSavedModalOpen"
-      type="alert"
-      :data="{
-        scheme: 'feedback-green',
-        icon: 'check-circle-1-1',
-        title: this.$t('webapp.home.bases.adjustuments_modal_title'),
-        description: this.$t('webapp.home.bases.adjustments_modal_description')
-      }"
-      @close="isSavedModalOpen = false"
+    <unnnic-alert
+      v-if="isAlertOpen"
+      :text="$t('webapp.home.bases.adjustments_modal_description')"
+      scheme="feedback-green"
+      seconds="5"
+      @close="isAlertOpen = false"
     />
     <unnnic-modal
       :show-modal="openModal"
@@ -127,7 +132,7 @@
       <unnnic-button
         slot="options"
         class="create-repository__container__button"
-        type="terciary"
+        type="tertiary"
         @click="discardUpdate()"
       >
         {{ $t("webapp.home.bases.adjustments_modal_alert_discard") }}
@@ -143,7 +148,7 @@
         {{ $t("webapp.home.bases.adjustments_modal_alert_save") }}
       </unnnic-button>
     </unnnic-modal>
-  </repository-view-base>
+  </page-container>
 </template>
 
 <script>
@@ -155,6 +160,9 @@ import Loading from '@/components/shared/Loading';
 import Modal from '@/components/repository/CreateRepository/Modal';
 import Repository from '@/models/repository';
 import router from '@/router/index';
+import LoadRepository from '@/utils/LoadRepository';
+import RemoveBulmaMixin from '@/utils/RemoveBulmaMixin';
+import PageContainer from '@/components/PageContainer';
 
 export default {
   name: 'RepositoryContentAdjustment',
@@ -164,24 +172,28 @@ export default {
         name: '',
         description: '',
         repository_type: '',
-        is_private: false,
+        is_private: true,
         language: '',
         categories: []
       },
+
+      categoryListLoading: false,
       categoryList: [],
+
       languages: LANGUAGES,
       submitting: false,
       errors: {},
-      isSavedModalOpen: false,
+      isAlertOpen: false,
       isDiscardModalOpen: false,
       openModal: false,
       localNext: null
     };
   },
+  mixins: [LoadRepository, RemoveBulmaMixin],
   computed: {
     hasUpdates() {
       if (
-        ['name', 'description', 'respository_type', 'is_private', 'language'].some(
+        ['name', 'description', 'repository_type', 'is_private', 'language'].some(
           key => this.intelligence[key] !== this.repository[key]
         )
       ) {
@@ -198,7 +210,8 @@ export default {
   components: {
     RepositoryViewBase,
     Loading,
-    Modal
+    Modal,
+    PageContainer,
   },
   extends: RepositoryBase,
   watch: {
@@ -260,7 +273,7 @@ export default {
       this.intelligence.categories = category;
     },
     async getCategories() {
-      this.loading = true;
+      this.categoryListLoading = true;
       try {
         const { data } = await this.getAllCategories();
         const sortedData = data.sort((previous, next) => previous.id - next.id);
@@ -271,7 +284,7 @@ export default {
           type: 'is-danger'
         });
       } finally {
-        this.loading = false;
+        this.categoryListLoading = false;
       }
     },
     async onSubmit() {
@@ -284,7 +297,7 @@ export default {
           repositoryUuid: this.repository.uuid
         });
         this.submitting = false;
-        this.isSavedModalOpen = true;
+        this.isAlertOpen = true;
         this.repository = new Repository({ ...response.data });
         return true;
       } catch (error) {
@@ -316,6 +329,9 @@ export default {
       if (this.localNext) {
         this.localNext();
       }
+    },
+    goToSummary() {
+      this.$router.push(`/dashboard/${this.$route.params.ownerNickname}/${this.$route.params.slug}/content/bases`)
     }
   },
   mounted() {
@@ -333,19 +349,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $unnnic-spacing-xs;
+}
+
+hr.divider {
+  border-width: 0;
+  border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  margin: $unnnic-spacing-stack-lg 0;
+  margin-top: $unnnic-spacing-stack-lg - $unnnic-border-width-thinner - $unnnic-spacing-md;
+}
 
 .repository-adjustments {
   &__title {
     font-size: 1.75rem;
-    font-weight: $font-weight-medium;
     display: flex;
     align-items: center;
-    font-family: $font-family;
-    color: $color-fake-black;
   }
 
   &__privacy {
@@ -361,36 +384,60 @@ export default {
   }
   &__wrapper {
     &__fields {
-      margin-bottom: $unnnic-inset-lg;
+      margin-bottom: $unnnic-spacing-sm;
     }
   }
   &__description {
-    &__text {
-      font-family: Lato, sans-serif;
-      font-weight: $unnnic-font-weight-regular;
-      line-height: 1.375rem;
-      font-size: $unnnic-font-size-body-gt;
-      color: #67738b;
-      margin-top: $unnnic-inset-nano;
-      ul li {
-        list-style-type: disc;
+    &__title {
+      display: flex;
+      margin-bottom: $unnnic-spacing-sm;
+    }
+
+    &__subtitle {
+      p {
+        font-family: "Lato";
+        font-size: 14px;
+        color: #4e5666;
       }
+    }
+
+    h1 {
+      font-family: "Aleo";
+      font-size: 20px;
+      color: #272b33;
+    }
+
+    &__back-button {
+      cursor: pointer;
+      margin-right: 1rem;
     }
   }
   &__wrapper {
     &__buttons {
       display: flex;
       justify-content: space-between;
-      margin-bottom: $unnnic-inset-lg;
+      margin-top: $unnnic-inset-lg;
+      gap: $unnnic-spacing-sm;
     }
   }
   &__buttons {
-    width: 48.8%;
+    width: 50%;
   }
 }
 ::v-deep {
   .unnnic-select.unnic--clickable {
     width: 100%;
+  }
+
+  .input.size-md {
+    height: auto;
+  }
+
+  .text-input.size--sm .icon-right {
+    top: 15px;
+  }
+  .unnnic-form {
+    margin-bottom: $unnnic-spacing-sm;
   }
 }
 </style>

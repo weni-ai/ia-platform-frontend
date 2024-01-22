@@ -1,6 +1,8 @@
 <template>
   <div id="app">
     <!-- <news-modal /> -->
+    <weni-gpt-alert />
+    <WeniGPTAlert />
     <router-view />
     <!-- <tutorial-modal
       :open="activeMenu"/> -->
@@ -17,14 +19,17 @@ import unnic from '@weni/unnnic-system';
 import I18n from '@/utils/plugins/i18n';
 import store from './store';
 import ModalDependingOnFlowsLength from './components/ModalDependingOnFlowsLength';
+import WeniGPTAlert from './components/repository/home/WeniGPTAlert';
 
 export default {
   components: {
     NewsModal,
     I18n,
     ModalDependingOnFlowsLength,
+    WeniGPTAlert
   },
   name: 'App',
+
   data() {
     return {
       connectBaseURL: '',
@@ -85,6 +90,8 @@ export default {
     async profileInfo() {
       const { data } = await this.getMyProfileInfo();
       if (data){
+        this.$set(this.$store.state.User, 'me', data);
+
         this.setUserName(data.name)
         if (data.language.includes('-')) {
           const [first, second] = data.language.split('-');
@@ -165,12 +172,21 @@ export default {
 <style lang="scss">
 @import "~@/assets/scss/utilities.scss";
 @import "~@/assets/scss/default.scss";
-@import "~bulma";
-@import "~buefy/src/scss/buefy";
 @import "~@/assets/scss/colors.scss";
 @import "~@/assets/scss/variables.scss";
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+html:not(.not-bulma) {
+  @import "~bulma";
+  @import "~buefy/src/scss/buefy";
+
+}
+
+html.not-bulma body {
+  background-color: $unnnic-color-background-snow;
+  min-height: 100vh;
+}
 
 ::-webkit-scrollbar {
   width: 4px;

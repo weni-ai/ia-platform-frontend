@@ -1,8 +1,5 @@
 <template>
   <div class="create-repository__definitions">
-    <h1 class="create-repository__definitions__title">
-      {{ $t("webapp.create_repository.definitions") }}
-    </h1>
     <div class="create-repository__definitions__wrapper">
       <section class="create-repository__definitions__wrapper__fields">
         <unnnic-label :label="$t('webapp.create_repository.language_label')"/>
@@ -10,7 +7,8 @@
           class="unnic--clickable"
           size="sm"
           :placeholder="$t('webapp.create_repository.language_placeholder')"
-          v-model="definition.language"
+          :value="language"
+          @input="$emit('update:language', $event)"
           search
           :search-placeholder="$t('webapp.create_repository.language_placeholder_search')"
         >
@@ -25,61 +23,87 @@
         </unnnic-select>
       </section>
 
+      <div v-if="repository_type === 'classifier'" class="intelligence-private-or-public">
+        <unnnic-card
+          clickable
+          :title="$t('webapp.create_repository.privacy_type_public_title')"
+          :description="$t('webapp.create_repository.privacy_type_public_description')"
+          type="content"
+          icon="lock-unlock-1-1"
+          class="intelligence-private-or-public__item"
+          :enabled="!is_private"
+          @click.native="$emit('update:is_private', false)"
+        />
+
+        <unnnic-card
+          clickable
+          :title="$t('webapp.create_repository.privacy_type_private_title')"
+          :description="$t('webapp.create_repository.privacy_type_private_description')"
+          type="content"
+          icon="lock-2-1"
+          class="intelligence-private-or-public__item"
+          :enabled="is_private"
+          @click.native="$emit('update:is_private', true)"
+        />
+      </div>
+
       <section class="create-repository__definitions__wrapper__fields">
         <unnnic-label :label="$t('webapp.create_repository.category_label')" />
-        <unnnic-carousel
-          :tagItems="categoryList"
-          v-if="categoryList.length > 0"
-          v-model="definition.categories"
-        />
-        <loading v-else />
-      </section>
 
-      <section class="create-repository__definitions__intelligence-privacy">
-        <unnnic-label :label="$t('webapp.create_repository.privacy_label')" />
-        <div class="create-repository__definitions__intelligence-privacy__cards">
-          <unnnic-card
-            clickable
-            :title="$t('webapp.create_repository.privacy_type_public_title')"
-            :description="$t('webapp.create_repository.privacy_type_public_description')"
-            type="content"
-            icon="lock-unlock-1-1"
-            class="create-repository__definitions__intelligence-privacy__cards__content"
-            :enabled="!definition.isPrivate"
-            @click.native="definition.isPrivate = false"
-          />
+        <div class="categories-list">
+          <template v-if="categoryListLoading">
+            <unnnic-skeleton-loading
+              v-for="i in 10"
+              :key="i" tag="div"
+              :width="80 + Math.floor(Math.random() * 40) + 'px'"
+              height="32px"
+            />
+          </template>
 
-          <unnnic-card
+          <unnnic-tag
+            v-else
+            v-for="category in categoryList"
+            :key="category.id"
+            :text="category.name"
+            :disabled="categories.includes(category.id)"
+            @click.native="
+              $emit('update:categories', categories.includes(category.id)
+                ? categories.filter((id) => id !== category.id)
+                : [...categories, category.id])
+            "
             clickable
-            :title="$t('webapp.create_repository.privacy_type_private_title')"
-            :description="$t('webapp.create_repository.privacy_type_private_description')"
-            type="content"
-            icon="lock-2-1"
-            class="create-repository__definitions__intelligence-privacy__cards__content"
-            :enabled="definition.isPrivate"
-            @click.native="definition.isPrivate = true"
+            type="brand"
           />
         </div>
       </section>
 
+
       <section class="create-repository__definitions__buttons">
         <unnnic-button
-          type="terciary"
+          type="tertiary"
           class="create-repository__definitions__buttons__btn"
-          @click.native="dispatchPreviousStep()"
+          @click.native="dispatchBackModal()"
         >
-          {{$t('webapp.create_repository.navigate_to_previous_button')}}
+          {{$t('webapp.create_repository.cancel_create_intelligence_button')}}
         </unnnic-button>
 
         <unnnic-button
-          type="secondary"
           class="create-repository__definitions__buttons__btn"
-          :disabled="!checkHasValue"
           @click.native="dispatchCreateRepository()"
+          :disabled="disabledSubmit"
         >
           {{$t('webapp.create_repository.create_intelligence_button')}}
         </unnnic-button>
       </section>
+
+      <!-- <unnnic-card
+      class="create-repository__definitions__info-card"
+      type="default"
+      title="Sobre a WeniGPT - IA Generativa"
+      description="Crie bases de conteúdo e a IA Generativa será capaz de responder perguntas
+       baseada nesse conteúdo sem treinamento. Ideal para textos informativos e FAQs."
+      scheme="feedback-yellow"
+      /> -->
     </div>
   </div>
 </template>
@@ -91,30 +115,27 @@ import Loading from '@/components/shared/Loading';
 
 export default {
   name: 'DefinitionsTab',
+  props: {
+    disabledSubmit: Boolean,
+    repository_type: String,
+    language: String,
+    is_private: Boolean,
+    categories: Array,
+  },
   components: {
     Loading
   },
   data() {
     return {
-      definition: {
-        language: '',
-        isPrivate: false,
-        categories: []
-      },
+      categoryListLoading: false,
       categoryList: []
     };
   },
+
   mounted() {
     this.getCategories();
   },
   computed: {
-    checkHasValue() {
-      return (
-        this.definition.language !== ''
-        && this.definition.isPrivate !== null
-        && this.definition.categories.length > 0
-      );
-    },
     languages() {
       return Object.keys(LANGUAGES).map((lang, index) => ({
         id: index + 1,
@@ -126,7 +147,7 @@ export default {
   methods: {
     ...mapActions(['getAllCategories']),
     async getCategories() {
-      this.loading = true;
+      this.categoryListLoading = true;
       try {
         const { data } = await this.getAllCategories();
         const sortedData = data.sort((previous, next) => previous.id - next.id);
@@ -137,24 +158,40 @@ export default {
           type: 'is-danger'
         });
       } finally {
-        this.loading = false;
+        this.categoryListLoading = false;
       }
     },
-    dispatchPreviousStep() {
-      this.$emit('previousStep', this.definition);
-    },
     dispatchCreateRepository() {
-      this.$emit('createRepository', this.definition);
-    }
+      this.$emit('createRepository');
+    },
+    dispatchBackModal() {
+      this.$emit('backModal');
+    },
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.intelligence-private-or-public {
+  display: flex;
+  gap: $unnnic-spacing-xs;
+
+  &__item {
+    flex: 1;
+
+    ::v-deep .unnnic-card-content__content__title {
+      font-weight: $unnnic-font-weight-regular;
+    }
+  }
+}
+
+.categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $unnnic-spacing-xs;
+}
 
 .create-repository {
   padding: 2rem 4rem;
@@ -163,11 +200,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  @media (max-width: $mobile-width * 1.5) {
-    flex-direction: column;
-    align-items: center;
-  }
 
   &__definitions {
     width: 100%;
@@ -201,10 +233,23 @@ export default {
     &__buttons {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 2rem;
 
       &__btn {
         width: 47%;
+      }
+    }
+
+    &__info-card {
+      border: 1px solid $unnnic-color-weni-200;
+      background: $unnnic-color-weni-100;
+
+      ::v-deep {
+        .unnnic-card-default__description {
+          white-space: unset;
+          overflow: unset;
+          text-overflow: unset;
+          max-width: unset;
+        }
       }
     }
   }

@@ -13,6 +13,9 @@ export default {
   getQAKnowledgeBases(store, { repositoryUUID, page }) {
     return repository.getQAKnowledgeBases(repositoryUUID, page);
   },
+  getQAKnowledgeBasesNext(store, props) {
+    return repository.getQAKnowledgeBasesNext(props);
+  },
   createQAKnowledgeBase(store, { repositoryUUID, title }) {
     return repository.createQAKnowledgeBase(repositoryUUID, title);
   },
