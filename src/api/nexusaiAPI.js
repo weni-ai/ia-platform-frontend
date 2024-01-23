@@ -107,9 +107,53 @@ export default {
     return request.$http.get(`api/${contentBaseUuid}/content-bases-text/`);
   },
 
-  updateIntelligenceContentBaseText({ contentBaseUuid, contentBaseTextUuid, text }) {
-    return request.$http.put(`api/${contentBaseUuid}/content-bases-text/${contentBaseTextUuid}/`, {
-      text,
-    });
+  updateIntelligenceContentBaseText({
+    contentBaseUuid,
+    contentBaseTextUuid,
+    text,
+  }) {
+    return request.$http.put(
+      `api/${contentBaseUuid}/content-bases-text/${contentBaseTextUuid}/`,
+      {
+        text,
+      },
+    );
+  },
+
+  intelligences: {
+    contentBases: {
+      files: {
+        create({ contentBaseUuid, file, extension_file, onUploadProgress }) {
+          const form = new FormData();
+
+          form.append('file', file);
+          form.append('extension_file', extension_file);
+
+          return request.$http.post(
+            `api/${contentBaseUuid}/content-bases-file/`,
+            form,
+            {
+              onUploadProgress,
+            },
+          );
+        },
+
+        list({ next, contentBaseUuid }) {
+          if (next) {
+            return request.$http.get(forceHttps(next));
+          }
+
+          return request.$http.get(
+            `api/${contentBaseUuid}/content-bases-file/`,
+          );
+        },
+
+        delete({ contentBaseUuid, fileUuid }) {
+          return request.$http.delete(
+            `api/${contentBaseUuid}/content-bases-file/${fileUuid}/`,
+          );
+        },
+      },
+    },
   },
 };

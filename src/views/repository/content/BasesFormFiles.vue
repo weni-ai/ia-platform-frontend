@@ -6,7 +6,11 @@
     ]"
   >
     <div class="files-area__scrollable">
-      <div :class="['paste-area']">
+      <div
+        :class="['paste-area', { 'paste-area--active': isClientDragging }]"
+        @dragover.prevent
+        @drop.prevent="drop"
+      >
         <div class="paste-area__title">
           {{ $t('content_bases.files.upload_content') }}
         </div>
@@ -17,77 +21,323 @@
           <small v-html="$t('content_bases.files.supported_files')"></small>
         </div>
 
-        <unnnic-button size="small" type="primary" class="paste-area__button">
+        <input
+          v-show="false"
+          ref="browser-file-input"
+          type="file"
+          multiple
+          @change="drop"
+        />
+
+        <unnnic-button
+          @click="$refs['browser-file-input'].click()"
+          size="small"
+          type="primary"
+          class="paste-area__button"
+        >
           {{ $t('content_bases.files.browse_file') }}
         </unnnic-button>
       </div>
 
-      <div v-if="true" class="files-list__container">
+      <div v-if="files.data.length" class="files-list__container">
         <div class="files-list__header">
           {{ $t('content_bases.files.uploaded_files') }}
         </div>
 
         <div class="files-list__content">
+          <bases-form-files-item
+            v-for="file in files.data"
+            :key="file.uuid"
+            :file="file"
+            @remove="openDeleteFileModal(file.uuid, file.file)"
+          />
+
+          <template v-if="files.status === 'loading'">
+            <unnnic-skeleton-loading
+              v-for="i in 3"
+              :key="i"
+              tag="div"
+              height="56px"
+            />
+          </template>
+
           <div
-            v-for="i in 100"
-            :key="i"
-            :class="[
-              'files-list__content__file',
-              { 'files-list__content__file--loaded': true },
-            ]"
-          >
-            <div class="files-list__content__file__icon">
-              <unnnic-icon
-                icon="picture_as_pdf"
-                class="files-list__content__file__icon__itself"
-                size="avatar-nano"
-              />
-            </div>
-
-            <div class="files-list__content__file__content">
-              <div class="files-list__content__file__content__title">
-                lhamas.pdf fds fs fds fds fsdf s
-              </div>
-
-              <div class="files-list__content__file__content__status">
-                Conteúdo carregado
-              </div>
-            </div>
-
-            <div class="files-list__content__file__actions">
-              <unnnic-icon
-                icon="download"
-                size="sm"
-                class="files-list__content__file__actions__icon"
-              />
-
-              <unnnic-icon
-                icon="delete"
-                size="sm"
-                class="files-list__content__file__actions__icon"
-              />
-            </div>
-
-            <div class="files-list__content__file__status-bar">
-              <div class="files-list__content__file__status-bar__filled"></div>
-            </div>
-          </div>
+            v-show="!['loading', 'complete'].includes(files.status)"
+            ref="end-of-list-element"
+          ></div>
         </div>
       </div>
     </div>
+
+    <unnnic-alert
+      v-if="alert"
+      :key="alert.text"
+      @close="alert = null"
+      :type="alert.type"
+      :text="alert.text"
+    ></unnnic-alert>
+
+    <unnnic-modal
+      v-if="modalDeleteFile"
+      :text="$t('content_bases.files.delete_file.title')"
+      :close-icon="false"
+      class="delete-file-modal"
+      persistent
+    >
+      <unnnic-icon slot="icon" icon="error" size="md" scheme="aux-red-500" />
+
+      <div
+        slot="message"
+        v-html="
+          $t('content_bases.files.delete_file.description', {
+            name: modalDeleteFile.name,
+          })
+        "
+      ></div>
+
+      <unnnic-button
+        slot="options"
+        class="create-repository__container__button"
+        type="tertiary"
+        @click="modalDeleteFile = false"
+      >
+        {{ $t('content_bases.files.delete_file.cancel') }}
+      </unnnic-button>
+
+      <unnnic-button
+        slot="options"
+        class="create-repository__container__button attention-button"
+        type="warning"
+        @click="remove"
+        :loading="modalDeleteFile.status === 'deleting'"
+      >
+        {{ $t('content_bases.files.delete_file.delete') }}
+      </unnnic-button>
+    </unnnic-modal>
   </div>
 </template>
 
 <script>
+import nexusaiAPI from '../../../api/nexusaiAPI';
+import { get } from 'lodash';
+import BasesFormFilesItem from './BasesFormFilesItem';
+
 export default {
+  components: { BasesFormFilesItem },
+
   props: {
     flatBottom: Boolean,
+    files: Object,
+  },
+
+  data() {
+    return {
+      alert: null,
+
+      isShowingEndOfList: false,
+      intersectionObserver: null,
+
+      isClientDragging: false,
+      leave: null,
+
+      modalDeleteFile: null,
+
+      events: {
+        dragover: (event) => {
+          event.preventDefault();
+
+          clearTimeout(this.leave);
+
+          this.isClientDragging = true;
+        },
+
+        dragleave: () => {
+          clearTimeout(this.leave);
+
+          this.leave = setTimeout(() => {
+            this.isClientDragging = false;
+          }, 100);
+        },
+
+        drop: () => {
+          this.isClientDragging = false;
+        },
+      },
+    };
+  },
+
+  mounted() {
+    Object.keys(this.events).forEach((eventName) => {
+      window.addEventListener(eventName, this.events[eventName]);
+    });
+
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        this.isShowingEndOfList = entry.isIntersecting;
+      });
+    });
+
+    this.intersectionObserver.observe(this.$refs['end-of-list-element']);
+  },
+
+  beforeDestroy() {
+    Object.keys(this.events).forEach((eventName) => {
+      window.removeEventListener(eventName, this.events[eventName]);
+    });
+
+    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
+  },
+
+  computed: {
+    countUploading() {
+      return this.files.data.filter(({ status }) => status === 'uploading')
+        .length;
+    },
+  },
+
+  watch: {
+    isShowingEndOfList() {
+      if (this.isShowingEndOfList && this.files.status === null) {
+        this.$emit('load-more');
+      }
+    },
+
+    countUploading(currentValue, pastValue) {
+      if (this.countUploading === 0) {
+        this.alert = {
+          type: 'success',
+          text: this.$t(
+            'content_bases.files.content_of_the_files_has_been_added',
+          ),
+        };
+      }
+
+      if (currentValue > pastValue) {
+        this.alert = {
+          type: 'default',
+          text: this.$t('content_bases.files.content_of_the_files_is_loading'),
+        };
+      }
+    },
+  },
+
+  methods: {
+    drop(event) {
+      const files = get(event, 'dataTransfer.files') || get(event, 'srcElement.files');
+
+      if (!get(files, 'length', 0)) {
+        return;
+      }
+
+      files.forEach(this.addFile);
+    },
+
+    updateFileItem(uuid, key, value) {
+      this.$emit('update:files', {
+        ...this.files,
+        data: this.files.data.map((file) => {
+          if (file.uuid !== uuid) {
+            return file;
+          }
+
+          return {
+            ...file,
+            key: value,
+          };
+        }),
+      });
+    },
+
+    addFile(file) {
+      const extension = file.name.lastIndexOf('.') === -1
+        ? file.name
+        : file.name.slice(file.name.lastIndexOf('.') + 1);
+
+      const fileItem = {
+        uuid: `temp-${Math.floor(Math.random() * 1e9)}`,
+        file: file.name,
+        status: 'waiting',
+        progress: 0,
+      };
+
+      this.files.data.push(fileItem);
+
+      fileItem.status = 'uploading';
+
+      nexusaiAPI.intelligences.contentBases.files
+        .create({
+          contentBaseUuid: this.$route.params.contentBaseUuid,
+          file,
+          extension_file: extension,
+
+          onUploadProgress: (event) => {
+            fileItem.progress = event.loaded / event.total;
+          },
+        })
+        .then(() => {
+          fileItem.status = 'uploaded';
+        });
+    },
+
+    openDeleteFileModal(fileUuid, fileName) {
+      const name = fileName.lastIndexOf('/') === -1
+        ? fileName
+        : fileName.slice(fileName.lastIndexOf('/') + 1);
+
+      this.modalDeleteFile = {
+        uuid: fileUuid,
+        name,
+        status: null,
+      };
+    },
+
+    remove() {
+      this.modalDeleteFile.status = 'deleting';
+
+      nexusaiAPI.intelligences.contentBases.files
+        .delete({
+          contentBaseUuid: this.$route.params.contentBaseUuid,
+          fileUuid: this.modalDeleteFile.uuid,
+        })
+        .then(() => {
+          this.alert = {
+            type: 'default',
+            text: this.$t('content_bases.files.file_removed_from_base', {
+              name: this.modalDeleteFile.name,
+            }),
+          };
+
+          this.$emit('removed', this.modalDeleteFile.uuid);
+
+          this.modalDeleteFile = null;
+        });
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.delete-file-modal ::v-deep {
+  .unnnic-modal-container-background-body-description-container {
+    padding-bottom: $unnnic-spacing-xs;
+  }
+
+  .unnnic-modal-container-background-body__icon-slot {
+    display: flex;
+    justify-content: center;
+    margin-bottom: $unnnic-spacing-sm;
+  }
+
+  .unnnic-modal-container-background-body-title {
+    padding-bottom: $unnnic-spacing-sm;
+  }
+
+  .unnnic-modal-container-background-body {
+    padding-top: $unnnic-spacing-giant;
+  }
+}
 
 .files-list {
   &__container {
@@ -112,92 +362,6 @@ export default {
       auto-fill,
       minmax(16 * $unnnic-font-size, 1fr)
     );
-
-    &__file {
-      outline-style: solid;
-      outline-color: $unnnic-color-neutral-soft;
-      outline-width: $unnnic-border-width-thinner;
-      outline-offset: -$unnnic-border-width-thinner;
-
-      border-radius: $unnnic-border-radius-sm;
-
-      padding: $unnnic-spacing-xs;
-      display: flex;
-      column-gap: $unnnic-spacing-ant;
-      align-items: center;
-      position: relative;
-
-      &__icon {
-        display: flex;
-        background-color: $unnnic-color-neutral-light;
-        border-radius: $unnnic-border-radius-sm;
-        padding: 0.6875 * $unnnic-font-size;
-
-        &__itself {
-          color: $unnnic-color-neutral-clean;
-        }
-      }
-
-      &__content {
-        display: flex;
-        flex-direction: column;
-
-        &__title {
-          color: $unnnic-color-neutral-dark;
-          font-family: $unnnic-font-family-secondary;
-          font-size: $unnnic-font-size-body-gt;
-          line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-          font-weight: $unnnic-font-weight-regular;
-        }
-
-        &__status {
-          color: $unnnic-color-neutral-clean;
-          font-family: $unnnic-font-family-secondary;
-          font-size: $unnnic-font-size-body-md;
-          line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
-          font-weight: $unnnic-font-weight-regular;
-        }
-      }
-
-      &__actions {
-        display: flex;
-        column-gap: $unnnic-spacing-xs;
-        margin-left: auto;
-        margin-right: $unnnic-spacing-xs;
-
-        &__icon {
-          cursor: pointer;
-          color: $unnnic-color-neutral-cloudy;
-          user-select: none;
-        }
-      }
-
-      &__status-bar {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: $unnnic-border-width-thin;
-        background-color: $unnnic-color-weni-100;
-        border-radius: $unnnic-border-radius-pill;
-
-        &__filled {
-          width: 0;
-          height: $unnnic-border-width-thin;
-          border-radius: $unnnic-border-radius-pill;
-          background-color: $unnnic-color-weni-500;
-        }
-      }
-
-      &--loaded {
-        .files-list__content__file__icon {
-          background-color: $unnnic-color-weni-50;
-          &__itself {
-            color: $unnnic-color-weni-600;
-          }
-        }
-      }
-    }
   }
 }
 
@@ -268,6 +432,11 @@ export default {
   row-gap: $unnnic-spacing-ant;
 
   flex: none;
+
+  &--active {
+    background-color: $unnnic-color-weni-50;
+    outline-color: $unnnic-color-weni-500;
+  }
 
   &:only-child {
     flex: 1;
