@@ -43,7 +43,18 @@
     "write_content": "Escrever conteúdo",
     "write_content_placeholder": "Escreva aqui o conteúdo",
     "write_content_help": "Não sabe como adicionar conteúdo à base de conhecimento da IA? <a href=\"#\" target=\"_blank\">Veja a documentação</a>",
-    "changes_saved": "Alterações salvas"
+    "changes_saved": "Alterações salvas",
+    "tabs": {
+      "files": "Arquivos",
+      "text": "Texto"
+    },
+    "files": {
+      "upload_content": "Carregar conteúdo de arquivos",
+      "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",
+      "supported_files": "Arquivos suportados: .pdf, .doc, docx, .txt, .xls e .xlsx.<br />Limite de 250MB por arquivo.",
+      "browse_file": "Procurar arquivo",
+      "uploaded_files": "Arquivos carregados"
+    }
   },
   "webapp": {
     "layout": {

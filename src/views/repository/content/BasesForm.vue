@@ -10,53 +10,95 @@
     })"
   >
     <section class="repository-base-edit__wrapper">
-      <unnnic-skeleton-loading
-        v-if="loadingContentBaseText"
-        tag="div"
-        height="100%"
-        class="repository-base-edit__wrapper__card-content"
-      />
-
-      <div
-        v-else
-        :class="[
-          'repository-base-edit__wrapper__card',
-          'repository-base-edit__wrapper__card-content',
-        ]"
-      >
-        <div class="repository-base-edit__wrapper__card-content__header">
-          {{ $t('content_bases.write_content') }}
-
-          <unnnic-button
-            :loading="submitting"
-            @click="saveText"
-            size="small"
-            class="repository-base-edit__wrapper__card-content__header__save-button"
-            :disabled="!knowledgeBase.text.value.trim()
-              || knowledgeBase.text.value === knowledgeBase.text.oldValue"
+      <div class="repository-base-edit__wrapper__left-side">
+        <section class="base-tabs">
+          <div
+            v-for="({ name, text, icon, counter }) in tabs"
+            :key="name"
+            :class="[
+              'base-tabs__tab',
+              { 'base-tabs__tab--active': tab === name, }
+            ]"
+            @click="tab = name"
           >
-            {{ $t('webapp.settings.save') }}
-          </unnnic-button>
-        </div>
+            <unnnic-icon
+              :icon="icon"
+              scheme="weni-600"
+              size="avatar-nano"
+              class="base-tabs__tab__icon"
+            />
 
-        <textarea
-          v-model="knowledgeBase.text.value"
-          name=""
-          id="textId"
-          cols="30"
-          rows="10"
-          class="repository-base-edit__textarea"
-          :placeholder="$t('content_bases.write_content_placeholder')"
-        ></textarea>
+            {{ text }}
 
-        <div
-          v-if="!knowledgeBase.text.value.trim()"
-          class="repository-base-edit__wrapper__card-content__info"
-        >
-          <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
+            <div v-if="counter" class="base-tabs__tab__counter">
+              {{ counter }}
+            </div>
+          </div>
+        </section>
 
-          <span v-html="$t('content_bases.write_content_help')"></span>
-        </div>
+        <template v-if="tab === 'files'">
+          <bases-form-files :flat-bottom="true" />
+
+          <div
+            v-if="!knowledgeBase.text.value.trim()"
+            class="repository-base-edit__wrapper__card-content__info"
+          >
+            <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
+
+            <span v-html="$t('content_bases.write_content_help')"></span>
+          </div>
+        </template>
+
+        <template v-if="tab === 'text'">
+          <unnnic-skeleton-loading
+            v-if="loadingContentBaseText"
+            tag="div"
+            height="100%"
+            class="repository-base-edit__wrapper__card-content"
+          />
+
+          <div
+            v-else
+            :class="[
+              'repository-base-edit__wrapper__card',
+              'repository-base-edit__wrapper__card-content',
+            ]"
+          >
+            <div class="repository-base-edit__wrapper__card-content__header">
+              {{ $t('content_bases.write_content') }}
+
+              <unnnic-button
+                :loading="submitting"
+                @click="saveText"
+                size="small"
+                class="repository-base-edit__wrapper__card-content__header__save-button"
+                :disabled="!knowledgeBase.text.value.trim()
+                  || knowledgeBase.text.value === knowledgeBase.text.oldValue"
+              >
+                {{ $t('webapp.settings.save') }}
+              </unnnic-button>
+            </div>
+
+            <textarea
+              v-model="knowledgeBase.text.value"
+              name=""
+              id="textId"
+              cols="30"
+              rows="10"
+              class="repository-base-edit__textarea"
+              :placeholder="$t('content_bases.write_content_placeholder')"
+            ></textarea>
+
+            <div
+              v-if="!knowledgeBase.text.value.trim()"
+              class="repository-base-edit__wrapper__card-content__info"
+            >
+              <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
+
+              <span v-html="$t('content_bases.write_content_help')"></span>
+            </div>
+          </div>
+        </template>
       </div>
 
       <unnnic-skeleton-loading
@@ -129,16 +171,20 @@ import { unnnicCallAlert } from '@weni/unnnic-system';
 import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
 import PageContainer from '../../../components/PageContainer';
 import nexusaiAPI from '../../../api/nexusaiAPI';
+import BasesFormFiles from './BasesFormFiles';
 
 export default {
   name: 'RepositoryBaseEdit',
   components: {
     Tests,
     PageContainer,
+    BasesFormFiles,
   },
   mixins: [RemoveBulmaMixin],
   data() {
     return {
+      tab: 'files',
+
       loadingContentBase: false,
       loadingContentBaseText: false,
 
@@ -370,6 +416,19 @@ export default {
     },
   },
   computed: {
+    tabs() {
+      return [{
+        name: 'files',
+        text: this.$t('content_bases.tabs.files'),
+        icon: 'news',
+        counter: 4,
+      }, {
+        name: 'text',
+        text: this.$t('content_bases.tabs.text'),
+        icon: 'format_align_left',
+      }];
+    },
+
     configTest() {
       if (this.$store.state.User.me.language && this.repositoryConfig) {
         return [this.$store.state.User.me.language, this.repositoryConfig].join('⇝');
@@ -414,6 +473,63 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.base-tabs {
+  display: flex;
+  margin-bottom: $unnnic-spacing-sm;
+  cursor: pointer;
+  user-select: none;
+  column-gap: $unnnic-spacing-sm;
+
+  &__tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    column-gap: $unnnic-spacing-xs;
+
+    outline-style: solid;
+    outline-color: $unnnic-color-neutral-cleanest;
+    outline-width: $unnnic-border-width-thinner;
+    outline-offset: -$unnnic-border-width-thinner;
+
+    border-radius: $unnnic-border-radius-sm;
+    padding: $unnnic-spacing-ant $unnnic-spacing-sm;
+
+    color: $unnnic-color-neutral-cloudy;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-lg;
+    line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+    font-weight: $unnnic-font-weight-bold;
+
+    &__icon {
+      color: $unnnic-color-neutral-cloudy;
+    }
+
+    &__counter {
+      color: $unnnic-color-neutral-clean;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+      border-radius: $unnnic-border-radius-sm;
+      background-color: $unnnic-color-neutral-soft;
+      padding: 0.0625 * $unnnic-font-size $unnnic-spacing-xs;
+      margin-left: auto;
+    }
+
+    &--active {
+      outline-color: $unnnic-color-weni-600;
+      color: $unnnic-color-weni-600;
+
+      .base-tabs__tab__icon {
+        color: $unnnic-color-weni-600;
+      }
+
+      .base-tabs__tab__counter {
+        color: $unnnic-color-weni-600;
+        background-color: $unnnic-color-weni-100;
+      }
+    }
+  }
+}
 
 .exit-content-base-modal ::v-deep .unnnic-modal-container-background-body-description-container {
   padding-bottom: $unnnic-spacing-xs;
@@ -494,6 +610,12 @@ export default {
     flex: 1;
     display: flex;
     gap: $unnnic-spacing-sm;
+
+    &__left-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
 
     &__card-test-container {
       outline-style: solid;

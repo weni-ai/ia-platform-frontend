@@ -43,7 +43,18 @@
     "write_content": "Write content",
     "write_content_placeholder": "Write the content here",
     "write_content_help": "Not sure how to add content to the AI knowledge base? <a href=\"#\" target=\"_blank\">Check out the documentation</a>",
-    "changes_saved": "Changes saved"
+    "changes_saved": "Changes saved",
+    "tabs": {
+      "files": "Files",
+      "text": "Text"
+    },
+    "files": {
+      "upload_content": "Upload content from files",
+      "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
+      "supported_files": "Supported files: .pdf, .doc, docx, .txt, .xls and .xlsx.<br />250MB limit per file.",
+      "browse_file": "Browse file",
+      "uploaded_files": "Uploaded files"
+    }
   },
   "webapp": {
     "layout": {
