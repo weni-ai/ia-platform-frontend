@@ -56,7 +56,8 @@
       "uploaded_files": "Archivos cargados",
       "status": {
         "uploading": "Cargando contenido",
-        "uploaded": "Contenido cargado"
+        "uploaded": "Contenido cargado",
+        "processing": "Procesando el contenido"
       },
       "content_of_the_files_has_been_added": "El contenido de los ficheros se ha añadido a la base",
       "content_of_the_files_is_loading": "El contenido de los ficheros se está cargando, puedes realizar otras acciones en la plataforma mientras tanto",

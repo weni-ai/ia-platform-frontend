@@ -49,7 +49,7 @@
             v-for="file in files.data"
             :key="file.uuid"
             :file="file"
-            @remove="openDeleteFileModal(file.uuid, file.file)"
+            @remove="openDeleteFileModal(file.uuid, file.file || '')"
           />
 
           <template v-if="files.status === 'loading'">
@@ -142,6 +142,9 @@ export default {
 
       modalDeleteFile: null,
 
+      filesBeingProcessedIndex: 0,
+      listOfFilesBeingProcessedTimeOut: null,
+
       events: {
         dragover: (event) => {
           event.preventDefault();
@@ -186,12 +189,18 @@ export default {
     });
 
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
+
+    clearTimeout(this.listOfFilesBeingProcessedTimeOut);
   },
 
   computed: {
     countUploading() {
       return this.files.data.filter(({ status }) => status === 'uploading')
         .length;
+    },
+
+    listOfFilesBeingProcessed() {
+      return this.files.data.filter(({ status }) => status === 'processing');
     },
   },
 
@@ -200,6 +209,20 @@ export default {
       if (this.isShowingEndOfList && this.files.status === null) {
         this.$emit('load-more');
       }
+    },
+
+    listOfFilesBeingProcessed: {
+      deep: true,
+      immediate: true,
+
+      handler() {
+        if (this.listOfFilesBeingProcessed.length) {
+          this.listOfFilesBeingProcessedTimeOut = setTimeout(
+            this.waitTillURLBeCreated,
+            6000
+          );
+        }
+      },
     },
 
     countUploading(currentValue, pastValue) {
@@ -256,6 +279,7 @@ export default {
       const fileItem = {
         uuid: `temp-${Math.floor(Math.random() * 1e9)}`,
         file: file.name,
+        extension_file: extension,
         status: 'waiting',
         progress: 0,
       };
@@ -274,8 +298,47 @@ export default {
             fileItem.progress = event.loaded / event.total;
           },
         })
-        .then(() => {
-          fileItem.status = 'uploaded';
+        .then(({ data }) => {
+          fileItem.uuid = data.uuid;
+          fileItem.extension_file = data.extension_file;
+
+          if (data.file) {
+            fileItem.status = 'uploaded';
+            fileItem.file = data.file;
+          } else {
+            fileItem.status = 'processing';
+          }
+        });
+    },
+
+    waitTillURLBeCreated() {
+      if (this.listOfFilesBeingProcessed.length === 0) {
+        return;
+      }
+
+      const fileItem = this.listOfFilesBeingProcessed[
+        this.filesBeingProcessedIndex % this.listOfFilesBeingProcessed.length
+      ];
+
+      nexusaiAPI.intelligences.contentBases.files
+        .read({
+          contentBaseUuid: this.$route.params.contentBaseUuid,
+          fileUuid: fileItem.uuid,
+        })
+        .then(({ data }) => {
+          if (data.file) {
+            fileItem.status = 'uploaded';
+            fileItem.file = data.file;
+          } else {
+            this.filesBeingProcessedIndex += 1;
+          }
+
+          if (this.listOfFilesBeingProcessed.length) {
+            this.listOfFilesBeingProcessedTimeOut = setTimeout(
+              this.waitTillURLBeCreated,
+              6000,
+            );
+          }
         });
     },
 

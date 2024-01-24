@@ -26,18 +26,19 @@
           {{ $t('content_bases.files.status.uploading') }}
         </template>
 
+        <template v-else-if="file.status === 'processing'">
+          {{ $t('content_bases.files.status.processing') }}
+        </template>
+
         <template v-else-if="file.status === 'uploaded'">
           {{ $t('content_bases.files.status.uploaded') }}
         </template>
       </div>
     </div>
 
-    <div
-      v-if="file.status === 'uploaded'"
-      class="files-list__content__file__actions"
-    >
+    <div class="files-list__content__file__actions">
       <unnnic-icon
-        v-if="file.file.startsWith('https:')"
+        v-if="file.status === 'uploaded' && fileName.startsWith('https:')"
         icon="download"
         size="sm"
         class="files-list__content__file__actions__icon"
@@ -45,7 +46,7 @@
       />
 
       <unnnic-icon
-        v-if="file.file.startsWith('https:')"
+        v-if="!file.uuid.startsWith('temp-')"
         icon="delete"
         size="sm"
         class="files-list__content__file__actions__icon"
@@ -72,10 +73,14 @@ export default {
   },
 
   computed: {
+    fileName() {
+      return this.file?.file || '';
+    },
+
     extension() {
-      return this.file.file.lastIndexOf('.') === -1
-        ? this.file.file
-        : this.file.file.slice(this.file.file.lastIndexOf('.') + 1);
+      return this.fileName.lastIndexOf('.') === -1
+        ? this.fileName
+        : this.fileName.slice(this.fileName.lastIndexOf('.') + 1);
     },
 
     icon() {
@@ -92,9 +97,9 @@ export default {
     },
 
     name() {
-      const name = this.file.file.lastIndexOf('/') === -1
-        ? this.file.file
-        : this.file.file.slice(this.file.file.lastIndexOf('/') + 1);
+      const name = this.fileName.lastIndexOf('/') === -1
+        ? this.fileName
+        : this.fileName.slice(this.fileName.lastIndexOf('/') + 1);
 
       const n = name.slice(0, -this.extension.length - 1);
 
@@ -107,7 +112,7 @@ export default {
       const a = document.createElement('a');
 
       a.setAttribute('download', this.name);
-      a.setAttribute('href', this.file.file);
+      a.setAttribute('href', this.fileName);
 
       a.click();
     },

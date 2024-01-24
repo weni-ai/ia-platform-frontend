@@ -267,7 +267,7 @@ export default {
       });
 
       this.files.data = this.files.data.concat(
-        data.results.map((file) => ({ ...file, status: 'uploaded' })),
+        data.results.map((file) => ({ ...file, status: file.file ? 'uploaded' : 'processing' })),
       );
 
       this.files.next = data.next;

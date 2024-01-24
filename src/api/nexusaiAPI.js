@@ -148,6 +148,12 @@ export default {
           );
         },
 
+        read({ contentBaseUuid, fileUuid }) {
+          return request.$http.get(
+            `api/${contentBaseUuid}/content-bases-file/${fileUuid}/`,
+          );
+        },
+
         delete({ contentBaseUuid, fileUuid }) {
           return request.$http.delete(
             `api/${contentBaseUuid}/content-bases-file/${fileUuid}/`,

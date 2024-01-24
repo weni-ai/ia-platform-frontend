@@ -56,7 +56,8 @@
       "uploaded_files": "Uploaded files",
       "status": {
         "uploading": "Uploading content",
-        "uploaded": "Uploaded content"
+        "uploaded": "Uploaded content",
+        "processing": "Processing content"
       },
       "content_of_the_files_has_been_added": "The content of the files has been added to the base",
       "content_of_the_files_is_loading": "The content of the files is loading, you can do other actions on the platform in the meantime",
