@@ -4,11 +4,12 @@
       <section class="home__header">
         <div>
           <unnnic-card
+            class="home__header__icon"
             :title="$t('webapp.intelligences_lib.title')"
             icon="neurology"
             type="title"
             :has-information-icon="false"
-            scheme="aux-blue"
+            scheme="weni-600"
           />
           <div
             class="description unnnic-font secondary body-gt color-neutral-dark"
@@ -17,7 +18,6 @@
         </div>
 
         <unnnic-button
-          v-if="!(tab === 'own_intelligences' && isListEmpty)"
           @click="createNewIntelligence"
           class="create-ia-button"
           iconLeft="add-1"
@@ -49,10 +49,6 @@
           <h1 class="intelligences-list__title">
             {{ $t('intelligences.no_intelligence_added') }}
           </h1>
-
-          <unnnic-button @click="createNewIntelligence" class="create-ia-button" iconLeft="add-1">
-            {{ $t('intelligences.create_button') }}
-          </unnnic-button>
         </div>
 
         <div v-else class="intelligences-list">
@@ -252,9 +248,13 @@ export default {
 
   watch: {
     isShowingEndOfList() {
-      if (this.isShowingEndOfList && this.intelligencesFromOrg.status !== 'complete') {
-        if (this.fitlerIntelligenceType === 'classification') {
+      if (this.isShowingEndOfList) {
+        if (this.fitlerIntelligenceType === 'classification'
+          && this.intelligencesFromOrg.status !== 'complete') {
           this.loadIntelligencesFromOrg();
+        } else if (this.fitlerIntelligenceType === 'generative'
+          && this.intelligencesNexusAI.status !== 'complete') {
+          this.loadIntelligencesNexusAI();
         }
       }
     },
@@ -376,6 +376,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.home__header__icon ::v-deep .avatar-icon {
+  background-color: $unnnic-color-weni-100;
+}
+
+.home__header__icon ::v-deep .title {
+  font-weight: $unnnic-font-weight-bold;
+}
 
 .create-intelligence-modal {
   ::v-deep .create-intelligence-modal__container {

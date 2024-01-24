@@ -4,7 +4,12 @@
       <div class="repository-base__header">
         <div class="repository-base__header__details">
           <div class="repository-base__header__title">
-            <unnnic-avatar-icon icon="neurology" size="sm" scheme="weni-600" />
+            <unnnic-avatar-icon
+              class="repository-base__header__title__icon"
+              icon="neurology"
+              size="sm"
+              scheme="weni-600"
+            />
 
             <unnnic-skeleton-loading
               v-if="repository.uuid === null"
@@ -33,7 +38,7 @@
 
       <hr />
 
-      <div v-if="bases.count === 0" class="bases-list--empty">
+      <div v-if="bases.data.length === 0 && bases.status === 'complete'" class="bases-list--empty">
         <img src="../../../assets/imgs/doris-yawning.png" alt="Doris Yawning">
 
           <h1 class="bases-list__title">
@@ -404,7 +409,6 @@ export default {
 
         this.bases.data = [...this.bases.data, ...data.results];
         this.bases.next = data.next;
-        this.bases.count = data.count;
 
         if (!data.next) {
           this.bases.status = 'complete';
@@ -444,6 +448,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.repository-base__header__title__icon {
+  background-color: $unnnic-color-weni-100;
+}
 
 .delete-base-modal ::v-deep {
   .unnnic-modal-container-background-body {
