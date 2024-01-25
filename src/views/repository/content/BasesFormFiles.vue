@@ -49,7 +49,7 @@
             v-for="file in files.data"
             :key="file.uuid"
             :file="file"
-            @remove="openDeleteFileModal(file.uuid, file.file || '')"
+            @remove="openDeleteFileModal(file.uuid, file.file_name || '')"
           />
 
           <template v-if="files.status === 'loading'">
