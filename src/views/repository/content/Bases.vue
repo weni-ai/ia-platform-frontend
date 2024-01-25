@@ -346,21 +346,6 @@ export default {
   methods: {
     ...mapActions(['getQAKnowledgeBasesNext', 'deleteQAKnowledgeBase', 'createQAKnowledgeBase', 'editQAKnowledgeBase', 'createQAText']),
 
-    async waitTillTextHaveFullyIntegrated(contentBaseUuid) {
-      const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
-
-      const { data } = await nexusaiAPI
-        .listIntelligenceContentBaseTexts({
-          contentBaseUuid,
-        });
-
-
-      if (!get(data, 'results.0.text', '')) {
-        await sleep(1.5);
-        await this.waitTillTextHaveFullyIntegrated(contentBaseUuid);
-      }
-    },
-
     async createNewBase() {
       this.creatingNewBase = true;
 
@@ -370,14 +355,6 @@ export default {
           title: this.title,
           description: this.description,
         });
-
-      const { data: contentBaseTextData } = await nexusaiAPI
-        .createIntelligenceContentBaseText({
-          contentBaseUuid: contentBaseData.uuid,
-          text: '--empty--',
-        });
-
-      await this.waitTillTextHaveFullyIntegrated(contentBaseData.uuid);
 
       this.creatingNewBase = false;
       this.isAddContentBaseOpen = false;

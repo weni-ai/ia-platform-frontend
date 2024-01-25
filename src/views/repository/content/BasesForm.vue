@@ -55,7 +55,7 @@
             />
 
             <div
-              v-if="!files.data.length"
+              v-if="!files.data.length && false"
               class="repository-base-edit__wrapper__card-content__info"
             >
               <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
@@ -108,7 +108,7 @@
             ></textarea>
 
             <div
-              v-if="!knowledgeBase.text.value.trim()"
+              v-if="!knowledgeBase.text.value.trim() && false"
               class="repository-base-edit__wrapper__card-content__info"
             >
               <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
@@ -326,13 +326,23 @@ export default {
       try {
         this.submitting = true;
 
-        const { data: contentBaseTextData } = await nexusaiAPI.updateIntelligenceContentBaseText({
-          contentBaseUuid: this.$route.params.contentBaseUuid,
-          contentBaseTextUuid: this.knowledgeBase.text.uuid,
-          text: this.knowledgeBase.text.value,
-        });
+        if (this.knowledgeBase.text.uuid) {
+          const { data: contentBaseTextData } = await nexusaiAPI.updateIntelligenceContentBaseText({
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+            contentBaseTextUuid: this.knowledgeBase.text.uuid,
+            text: this.knowledgeBase.text.value,
+          });
 
-        this.knowledgeBase.text.oldValue = contentBaseTextData.text;
+          this.knowledgeBase.text.oldValue = contentBaseTextData.text;
+        } else {
+          const { data: contentBaseTextData } = await nexusaiAPI.createIntelligenceContentBaseText({
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+            text: this.knowledgeBase.text.value,
+          });
+
+          this.knowledgeBase.text.uuid = contentBaseTextData.uuid;
+          this.knowledgeBase.text.oldValue = contentBaseTextData.text;
+        }
 
         this.isAlertOpen = true;
       } catch (error) {
