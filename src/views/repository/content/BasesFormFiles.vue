@@ -287,6 +287,8 @@ export default {
         extension_file: extension,
         status: 'waiting',
         progress: 0,
+        file_name: null,
+        content_base_file: null,
       };
 
       this.files.data.push(fileItem);
@@ -313,6 +315,8 @@ export default {
 
           if (data.status === 'success') {
             fileItem.status = 'uploaded';
+            fileItem.file_name = data.file_name;
+            fileItem.content_base_file = data.content_base_file;
           } else {
             fileItem.status = 'processing';
           }
@@ -336,6 +340,8 @@ export default {
         .then(({ data }) => {
           if (data.status === 'success') {
             fileItem.status = 'uploaded';
+            fileItem.file_name = data.file_name;
+            fileItem.content_base_file = data.content_base_file;
           } else {
             this.filesBeingProcessedIndex += 1;
           }

@@ -169,6 +169,13 @@ export default {
             `api/${contentBaseUuid}/content-bases-file/${fileUuid}/`,
           );
         },
+
+        download({ file_name, content_base_file }) {
+          return request.$http.post('api/v1/download-file', {
+            file_name,
+            content_base_file,
+          });
+        },
       },
     },
   },

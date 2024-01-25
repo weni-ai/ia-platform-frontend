@@ -29,7 +29,15 @@
 
     <div class="files-list__content__file__actions">
       <unnnic-icon
-        v-if="file.status === 'uploaded'"
+        v-if="downloading"
+        icon="cached"
+        size="sm"
+        scheme="neutral-cloudy"
+        class="files-list__content__file__actions__loading"
+      />
+
+      <unnnic-icon
+        v-else-if="file.status === 'uploaded'"
         icon="download"
         size="sm"
         class="files-list__content__file__actions__icon"
@@ -58,9 +66,17 @@
 </template>
 
 <script>
+import nexusaiAPI from '../../../api/nexusaiAPI';
+
 export default {
   props: {
     file: Object,
+  },
+
+  data() {
+    return {
+      downloading: false,
+    };
   },
 
   computed: {
@@ -69,9 +85,9 @@ export default {
     },
 
     fileName() {
-      return (
-        `${this.file?.created_file_name || ''}.${this.file?.extension_file}`
-      );
+      return `${this.file?.created_file_name || ''}.${
+        this.file?.extension_file
+      }`;
     },
 
     extension() {
@@ -103,13 +119,24 @@ export default {
   },
 
   methods: {
-    download() {
-      const a = document.createElement('a');
+    async download() {
+      try {
+        this.downloading = true;
 
-      a.setAttribute('download', this.name);
-      a.setAttribute('href', this.fileName);
+        const { data } = await nexusaiAPI.intelligences.contentBases.files.download({
+          file_name: this.file.file_name,
+          content_base_file: this.file.content_base_file,
+        });
 
-      a.click();
+        const a = document.createElement('a');
+
+        a.setAttribute('download', this.fileName);
+        a.setAttribute('href', data.file);
+
+        a.click();
+      } finally {
+        this.downloading = false;
+      }
     },
   },
 };
@@ -174,6 +201,22 @@ export default {
       cursor: pointer;
       color: $unnnic-color-neutral-cloudy;
       user-select: none;
+    }
+
+    &__loading {
+      user-select: none;
+
+      animation: spinning 2s infinite ease;
+
+      @keyframes spinning {
+        0% {
+          transform: rotate(0);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     }
   }
 
