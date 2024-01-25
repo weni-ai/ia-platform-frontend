@@ -29,7 +29,7 @@
 
     <div class="files-list__content__file__actions">
       <unnnic-icon
-        v-if="file.status === 'uploaded' && fileHref.startsWith('https:')"
+        v-if="file.status === 'uploaded'"
         icon="download"
         size="sm"
         class="files-list__content__file__actions__icon"
@@ -69,7 +69,9 @@ export default {
     },
 
     fileName() {
-      return this.file?.created_file_name || '';
+      return (
+        `${this.file?.created_file_name || ''}.${this.file?.extension_file}`
+      );
     },
 
     extension() {

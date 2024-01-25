@@ -262,7 +262,7 @@ export default {
         data.results
           .map((file) => ({
             ...file,
-            status: file.file ? 'uploaded' : 'processing',
+            status: file.status === 'success' ? 'uploaded' : 'processing',
           }))
           .filter(
             ({ uuid }) => !this.files.data.some((alreadyIn) => alreadyIn.uuid === uuid),

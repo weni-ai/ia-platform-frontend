@@ -280,7 +280,10 @@ export default {
       const fileItem = {
         uuid: `temp-${Math.floor(Math.random() * 1e9)}`,
         file: file.name,
-        created_file_name: file.name,
+        created_file_name:
+          extension !== file.name
+            ? file.name.slice(0, -extension.length - 1)
+            : file.name,
         extension_file: extension,
         status: 'waiting',
         progress: 0,
@@ -308,9 +311,8 @@ export default {
             fileItem.created_file_name = data.created_file_name;
           }
 
-          if (data.file) {
+          if (data.status === 'success') {
             fileItem.status = 'uploaded';
-            fileItem.file = data.file;
           } else {
             fileItem.status = 'processing';
           }
@@ -332,9 +334,8 @@ export default {
           fileUuid: fileItem.uuid,
         })
         .then(({ data }) => {
-          if (data.file) {
+          if (data.status === 'success') {
             fileItem.status = 'uploaded';
-            fileItem.file = data.file;
           } else {
             this.filesBeingProcessedIndex += 1;
           }
