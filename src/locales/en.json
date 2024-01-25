@@ -70,6 +70,10 @@
       }
     }
   },
+  "quick_test": {
+    "send_a_message": "Send a message to test the content base...",
+    "unable_to_find_an_answer": "*Unable to find an answer to this question*"
+  },
   "webapp": {
     "layout": {
       "newbot": "new bot",

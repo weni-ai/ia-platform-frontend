@@ -70,6 +70,10 @@
       }
     }
   },
+  "quick_test": {
+    "send_a_message": "Envie uma mensagem para testar a base de conteúdo...",
+    "unable_to_find_an_answer": "*Não foi possível encontrar uma resposta para essa pergunta*"
+  },
   "webapp": {
     "layout": {
       "newbot": "nova inteligência",

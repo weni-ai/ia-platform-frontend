@@ -119,15 +119,7 @@
         </template>
       </div>
 
-      <unnnic-skeleton-loading
-        v-if="!configTest"
-        width="295px"
-        height="100%"
-        tag="div"
-      />
-
       <div
-        v-else
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container',
@@ -137,7 +129,7 @@
           {{ $t('content_bases.quick_test') }}
         </div>
 
-        <tests :config="configTest" />
+        <tests :content-base-uuid="$route.params.contentBaseUuid" />
       </div>
     </section>
 

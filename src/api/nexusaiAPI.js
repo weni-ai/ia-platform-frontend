@@ -34,6 +34,15 @@ function forceHttps(receivedUrl) {
 }
 
 export default {
+  ask: {
+    v1({ contentBaseUuid, text }) {
+      return request.$http.post('api/v1/wenigpt_question/quick-test', {
+        content_base_uuid: contentBaseUuid,
+        text,
+      });
+    },
+  },
+
   listIntelligences({ next, orgUuid } = {}) {
     if (next) {
       return request.$http.get(forceHttps(next));

@@ -352,7 +352,7 @@
       v-if="isQuickTestOpen"
       @close="isQuickTestOpen = false"
       :name="repositoryDetail.title"
-      :repository-uuid="repositoryDetail.repository"
+      :repository-uuid="repositoryDetail.uuid"
       :id="repositoryDetail.id"
     />
 
