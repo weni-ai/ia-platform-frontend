@@ -125,7 +125,7 @@ export default {
 
         const { data } = await nexusaiAPI.intelligences.contentBases.files.download({
           file_name: this.file.file_name,
-          content_base_file: this.file.content_base_file,
+          fileUuid: this.file.uuid,
         });
 
         const a = document.createElement('a');

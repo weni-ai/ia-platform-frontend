@@ -170,10 +170,10 @@ export default {
           );
         },
 
-        download({ file_name, content_base_file }) {
+        download({ fileUuid, file_name }) {
           return request.$http.post('api/v1/download-file', {
             file_name,
-            content_base_file,
+            content_base_file: fileUuid,
           });
         },
       },
