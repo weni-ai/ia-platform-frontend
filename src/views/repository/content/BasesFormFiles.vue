@@ -70,6 +70,7 @@
     </div>
 
     <unnnic-alert
+      :style="{ zIndex: 1 }"
       v-if="alert"
       :key="alert.text"
       @close="alert = null"

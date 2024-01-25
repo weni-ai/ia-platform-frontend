@@ -60,7 +60,7 @@
         "processing": "Processando conteúdo"
       },
       "content_of_the_files_has_been_added": "O conteúdo dos arquivos foi adicionado à base",
-      "content_of_the_files_is_loading": "O conteúdo dos arquivos está carregando, você pode fazer outras ações na plataforma enquanto isso",
+      "content_of_the_files_is_loading": "Carregando conteúdo dos arquivos",
       "file_removed_from_base": "{name} removido da base de conteúdo",
       "delete_file": {
         "title": "Excluir arquivo",

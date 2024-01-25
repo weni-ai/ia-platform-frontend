@@ -80,9 +80,10 @@ export default {
     );
   },
 
-  createIntelligenceContentBase({ intelligenceUuid, title }) {
+  createIntelligenceContentBase({ intelligenceUuid, title, description }) {
     return request.$http.post(`api/${intelligenceUuid}/content-bases/`, {
       title,
+      description,
     });
   },
 
