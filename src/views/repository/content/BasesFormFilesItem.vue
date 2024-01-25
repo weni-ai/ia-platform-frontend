@@ -21,24 +21,15 @@
       </div>
 
       <div class="files-list__content__file__content__status">
-
         <template v-if="file.status === 'uploading'">
           {{ $t('content_bases.files.status.uploading') }}
-        </template>
-
-        <template v-else-if="file.status === 'processing'">
-          {{ $t('content_bases.files.status.processing') }}
-        </template>
-
-        <template v-else-if="file.status === 'uploaded'">
-          {{ $t('content_bases.files.status.uploaded') }}
         </template>
       </div>
     </div>
 
     <div class="files-list__content__file__actions">
       <unnnic-icon
-        v-if="file.status === 'uploaded' && fileName.startsWith('https:')"
+        v-if="file.status === 'uploaded' && fileHref.startsWith('https:')"
         icon="download"
         size="sm"
         class="files-list__content__file__actions__icon"
@@ -73,8 +64,12 @@ export default {
   },
 
   computed: {
-    fileName() {
+    fileHref() {
       return this.file?.file || '';
+    },
+
+    fileName() {
+      return this.file?.created_file_name || '';
     },
 
     extension() {
@@ -97,13 +92,11 @@ export default {
     },
 
     name() {
-      const name = this.fileName.lastIndexOf('/') === -1
-        ? this.fileName
-        : this.fileName.slice(this.fileName.lastIndexOf('/') + 1);
+      const n = this.fileName.slice(0, -this.extension.length - 1);
 
-      const n = name.slice(0, -this.extension.length - 1);
-
-      return name.length > 15 ? `${n.slice(0, 15)}....${this.extension}` : name;
+      return this.fileName.length > 15
+        ? `${n.slice(0, 15)}....${this.extension}`
+        : this.fileName;
     },
   },
 

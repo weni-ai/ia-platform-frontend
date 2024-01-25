@@ -220,7 +220,7 @@ export default {
         if (this.listOfFilesBeingProcessed.length) {
           this.listOfFilesBeingProcessedTimeOut = setTimeout(
             this.waitTillURLBeCreated,
-            6000
+            6000,
           );
         }
       },
@@ -280,6 +280,7 @@ export default {
       const fileItem = {
         uuid: `temp-${Math.floor(Math.random() * 1e9)}`,
         file: file.name,
+        created_file_name: file.name,
         extension_file: extension,
         status: 'waiting',
         progress: 0,
@@ -302,6 +303,10 @@ export default {
         .then(({ data }) => {
           fileItem.uuid = data.uuid;
           fileItem.extension_file = data.extension_file;
+
+          if (data.created_file_name) {
+            fileItem.created_file_name = data.created_file_name;
+          }
 
           if (data.file) {
             fileItem.status = 'uploaded';
