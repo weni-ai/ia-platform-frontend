@@ -193,6 +193,7 @@
           type="primary"
           @click="createNewBase"
           :disabled="!this.title || !this.description"
+          :loading="creatingNewBase"
         />
       </div>
     </modal-next>
@@ -245,6 +246,8 @@ export default {
       description: '',
 
       isShowingEndOfList: false,
+
+      creatingNewBase: false,
 
       bases: {
         count: null,
@@ -359,20 +362,24 @@ export default {
     },
 
     async createNewBase() {
+      this.creatingNewBase = true;
+
       const { data: contentBaseData } = await nexusaiAPI
         .createIntelligenceContentBase({
           intelligenceUuid: this.$route.params.intelligenceUuid,
           title: this.title,
+          description: this.description,
         });
 
       const { data: contentBaseTextData } = await nexusaiAPI
         .createIntelligenceContentBaseText({
           contentBaseUuid: contentBaseData.uuid,
-          text: this.description,
+          text: '--empty--',
         });
 
       await this.waitTillTextHaveFullyIntegrated(contentBaseData.uuid);
 
+      this.creatingNewBase = false;
       this.isAddContentBaseOpen = false;
 
       this.$router.push({

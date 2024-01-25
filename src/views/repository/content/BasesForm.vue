@@ -449,8 +449,9 @@ export default {
           'results.0.uuid',
           '',
         );
-        this.knowledgeBase.text.value = text;
-        this.knowledgeBase.text.oldValue = text;
+
+        this.knowledgeBase.text.value = text === '--empty--' ? '' : text;
+        this.knowledgeBase.text.oldValue = this.knowledgeBase.text.value;
 
         this.loadingContentBaseText = false;
       },
