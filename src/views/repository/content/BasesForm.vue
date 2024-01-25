@@ -333,15 +333,15 @@ export default {
             text: this.knowledgeBase.text.value,
           });
 
-          this.knowledgeBase.text.oldValue = contentBaseTextData.text;
+          this.knowledgeBase.text.oldValue = contentBaseTextData.content_base_text.text;
         } else {
           const { data: contentBaseTextData } = await nexusaiAPI.createIntelligenceContentBaseText({
             contentBaseUuid: this.$route.params.contentBaseUuid,
             text: this.knowledgeBase.text.value,
           });
 
-          this.knowledgeBase.text.uuid = contentBaseTextData.uuid;
-          this.knowledgeBase.text.oldValue = contentBaseTextData.text;
+          this.knowledgeBase.text.uuid = contentBaseTextData.content_base_text.uuid;
+          this.knowledgeBase.text.oldValue = contentBaseTextData.content_base_text.text;
         }
 
         this.isAlertOpen = true;
