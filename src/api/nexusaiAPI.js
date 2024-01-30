@@ -154,7 +154,12 @@ export default {
         create({ contentBaseUuid, file, extension_file, onUploadProgress }) {
           const form = new FormData();
 
-          form.append('file', file);
+          const fileName = file.name.lastIndexOf('.') === -1
+            ? file.name
+            : file.name.slice(0, file.name.lastIndexOf('.')).replace(/\./g, ' ')
+              + file.name.slice(file.name.lastIndexOf('.'));
+
+          form.append('file', file, fileName);
           form.append('extension_file', extension_file);
 
           return request.$http.post(
