@@ -8,6 +8,12 @@
       :open="activeMenu"/> -->
 
     <modal-depending-on-flows-length />
+
+    <unnnic-alert
+      v-if="$store.state.alert"
+      v-bind="$store.state.alert"
+      @close="$store.state.alert = null"
+    ></unnnic-alert>
   </div>
 </template>
 

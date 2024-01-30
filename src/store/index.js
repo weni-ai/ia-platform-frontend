@@ -22,6 +22,10 @@ import Suggestions from './suggestions';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  state: {
+    alert: null,
+  },
+
   modules: {
     Auth,
     User,
@@ -38,7 +42,7 @@ const store = new Vuex.Store({
     External,
     Intent,
     Integration,
-    Suggestions
+    Suggestions,
   },
 });
 
