@@ -101,7 +101,7 @@
             @deleteBase="openDeleteModal"
           />
 
-          <template v-if="bases.count === null || bases.status === 'loading'">
+          <template v-if="bases.status === 'loading'">
             <unnnic-skeleton-loading
               v-for="i in 3"
               :key="i"
