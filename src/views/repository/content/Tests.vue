@@ -101,7 +101,7 @@ export default {
             answer.text = get(
               data,
               'answers.0.text',
-              this.$t('quick_test.send_a_message'),
+              this.$t('quick_test.unable_to_find_an_answer'),
             );
 
             this.scrollToLastMessage();
