@@ -4,6 +4,9 @@
   "announcements": {
     "new_artificial_intelligence_module_is_here": "¡Ya está aquí el nuevo módulo de Inteligencia Artificial! Explora las novedades y aprende a crear chatbots aún más increíbles."
   },
+  "unauthorized": "No tienes permiso para realizar esta acción",
+  "internal_server_error": "Error interno del servidor",
+  "unexpected_error": "Se ha producido un error inesperado",
   "intelligences": {
     "own_intelligences": "Inteligencias propias",
     "public_intelligences": "Inteligencias públicas",

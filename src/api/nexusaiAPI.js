@@ -1,6 +1,8 @@
 import axios from 'axios';
 import * as Sentry from '@sentry/browser';
 import store from '../store';
+import i18n from '../utils/plugins/i18n';
+import { get } from 'lodash';
 
 const request = {
   get $http() {
@@ -15,9 +17,25 @@ const request = {
     client.interceptors.response.use(
       (res) => res,
       (err) => {
+        Sentry.captureException(err);
+
         if (err.response.status === 500 || err.response.status === 408) {
-          Sentry.captureException(err);
+          store.state.alert = {
+            text: get(err, 'response.data.detail') || i18n.t('internal_server_error'),
+            type: 'error',
+          }
+        } else if (err.response.status === 401) {
+          store.state.alert = {
+            text: get(err, 'response.data.detail') || i18n.t('unauthorized'),
+            type: 'error',
+          }
+        } else {
+          store.state.alert = {
+            text: get(err, 'response.data.detail') || i18n.t('unexpected_error'),
+            type: 'error',
+          }
         }
+
         throw err;
       },
     );
