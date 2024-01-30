@@ -49,7 +49,12 @@
             v-for="file in files.data"
             :key="file.uuid"
             :file="file"
-            @remove="openDeleteFileModal(file.uuid, file.file_name || '')"
+            @remove="
+              openDeleteFileModal(
+                file.uuid,
+                file.created_file_name || '',
+                file.extension_file || ''
+              )"
           />
 
           <template v-if="files.status === 'loading'">
@@ -352,10 +357,8 @@ export default {
         });
     },
 
-    openDeleteFileModal(fileUuid, fileName) {
-      const name = fileName.lastIndexOf('/') === -1
-        ? fileName
-        : fileName.slice(fileName.lastIndexOf('/') + 1);
+    openDeleteFileModal(fileUuid, createdFileName, extensionFile) {
+      const name = `${createdFileName || ''}.${extensionFile}`;
 
       this.modalDeleteFile = {
         uuid: fileUuid,
