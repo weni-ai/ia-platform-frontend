@@ -11,6 +11,7 @@
 
     <unnnic-alert
       v-if="$store.state.alert"
+      :key="$store.state.alert.text"
       v-bind="$store.state.alert"
       @close="$store.state.alert = null"
     ></unnnic-alert>

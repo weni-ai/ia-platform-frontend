@@ -105,6 +105,8 @@ export default {
             );
 
             this.scrollToLastMessage();
+          }).catch(() => {
+            this.messages.splice(this.messages.indexOf(answer), 1);
           });
       }, 400);
     },
