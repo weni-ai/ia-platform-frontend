@@ -53,10 +53,11 @@ function forceHttps(receivedUrl) {
 
 export default {
   ask: {
-    v1({ contentBaseUuid, text }) {
+    v1({ contentBaseUuid, text, language }) {
       return request.$http.post('api/v1/wenigpt_question/quick-test', {
         content_base_uuid: contentBaseUuid,
         text,
+        language,
       });
     },
   },

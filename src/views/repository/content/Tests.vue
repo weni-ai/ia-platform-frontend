@@ -111,6 +111,7 @@ export default {
           .v1({
             contentBaseUuid: this.contentBaseUuid,
             text: message,
+            language: (this.language || '').toLowerCase(),
           })
           .then(({ data }) => {
             answer.status = 'loaded';
