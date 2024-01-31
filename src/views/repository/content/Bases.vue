@@ -106,7 +106,7 @@
               v-for="i in 3"
               :key="i"
               tag="div"
-              height="146px"
+              height="178px"
             />
           </template>
 
@@ -164,6 +164,18 @@
           v-model="title"
           maxlength="25"
           :placeholder="$t('bases.create.form.name.placeholder')"
+        />
+      </unnnic-form-element>
+
+      <unnnic-form-element
+        :label="$t('bases.create.form.language.label')"
+        class="create-base__form-element"
+      >
+        <unnnic-select-smart
+          :value="[languages.find(({ value }) => value === language)]"
+          @input="language = $event[0].value"
+          :options="languages"
+          ordered-by-index
         />
       </unnnic-form-element>
 
@@ -242,8 +254,21 @@ export default {
       isDeleteModalOpen: null,
       modalData: {},
       isAddContentBaseOpen: false,
+
       title: '',
+      language: 'pt-br',
       description: '',
+
+      languages: [{
+        value: 'pt-br',
+        label: 'PT-BR',
+      }, {
+        value: 'en-us',
+        label: 'EN-US',
+      }, {
+        value: 'es',
+        label: 'ES',
+      }],
 
       isShowingEndOfList: false,
 
@@ -284,6 +309,14 @@ export default {
     }
   },
   watch: {
+    isAddContentBaseOpen() {
+      const userLanguage = get(this.$store.state.User, 'me.language', '').toLowerCase();
+
+      this.language = ['pt-br', 'en-us', 'es'].includes(userLanguage)
+        ? userLanguage
+        : 'pt-br';
+    },
+
     isShowingEndOfList() {
       if (
         this.isShowingEndOfList
@@ -347,24 +380,29 @@ export default {
     ...mapActions(['getQAKnowledgeBasesNext', 'deleteQAKnowledgeBase', 'createQAKnowledgeBase', 'editQAKnowledgeBase', 'createQAText']),
 
     async createNewBase() {
-      this.creatingNewBase = true;
+      try {
+        this.creatingNewBase = true;
 
-      const { data: contentBaseData } = await nexusaiAPI
-        .createIntelligenceContentBase({
-          intelligenceUuid: this.$route.params.intelligenceUuid,
-          title: this.title,
-          description: this.description,
+        const { data: contentBaseData } = await nexusaiAPI
+          .createIntelligenceContentBase({
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+            title: this.title,
+            language: this.language,
+            description: this.description,
+          });
+
+        this.creatingNewBase = false;
+        this.isAddContentBaseOpen = false;
+
+        this.$router.push({
+          name: 'intelligence-content-base-edit',
+          params: {
+            contentBaseUuid: contentBaseData.uuid,
+          },
         });
-
-      this.creatingNewBase = false;
-      this.isAddContentBaseOpen = false;
-
-      this.$router.push({
-        name: 'intelligence-content-base-edit',
-        params: {
-          contentBaseUuid: contentBaseData.uuid,
-        },
-      });
+      } finally {
+        this.creatingNewBase = false;
+      }
     },
 
     reloadBases() {

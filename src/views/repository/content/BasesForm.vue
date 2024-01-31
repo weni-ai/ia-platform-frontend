@@ -129,7 +129,10 @@
           {{ $t('content_bases.quick_test') }}
         </div>
 
-        <tests :content-base-uuid="$route.params.contentBaseUuid" />
+        <tests
+          :content-base-uuid="$route.params.contentBaseUuid"
+          :content-base-language="contentBase.language"
+        />
       </div>
     </section>
 
@@ -198,6 +201,7 @@ export default {
 
       contentBase: {
         title: '',
+        language: '',
       },
 
       loadingTitle: false,
@@ -447,6 +451,7 @@ export default {
         this.loadingContentBase = false;
 
         this.contentBase.title = contentBaseData.title;
+        this.contentBase.language = contentBaseData.language;
 
         const { data: contentBaseTextsData } = await nexusaiAPI.listIntelligenceContentBaseTexts({
           contentBaseUuid: this.$route.params.contentBaseUuid,

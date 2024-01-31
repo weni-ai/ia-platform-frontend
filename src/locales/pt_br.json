@@ -32,6 +32,9 @@
           "label": "Nome da base",
           "placeholder": "Nome"
         },
+        "language": {
+          "label": "Idioma principal"
+        },
         "description": {
           "label": "Descrição",
           "placeholder": "Descrição"

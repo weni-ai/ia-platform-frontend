@@ -22,7 +22,10 @@
         </div>
 
         <div class="content-bases-list">
-          <tests :content-base-uuid="repositoryUuid" />
+          <tests
+            :content-base-uuid="repositoryUuid"
+            :content-base-language="repositoryLanguage"
+          />
         </div>
       </div>
     </div>
@@ -37,6 +40,7 @@ export default {
   props: {
     name: String,
     repositoryUuid: String,
+    repositoryLanguage: String,
     id: Number,
   },
 

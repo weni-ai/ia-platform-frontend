@@ -98,9 +98,10 @@ export default {
     );
   },
 
-  createIntelligenceContentBase({ intelligenceUuid, title, description }) {
+  createIntelligenceContentBase({ intelligenceUuid, title, language, description }) {
     return request.$http.post(`api/${intelligenceUuid}/content-bases/`, {
       title,
+      language,
       description,
     });
   },

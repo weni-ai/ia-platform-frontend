@@ -49,6 +49,7 @@ export default {
 
   props: {
     contentBaseUuid: String,
+    contentBaseLanguage: String,
   },
 
   components: {
@@ -61,6 +62,21 @@ export default {
 
       messages: [],
     };
+  },
+
+  computed: {
+    language() {
+      const language = this.contentBaseLanguage;
+
+      if (!language) {
+        return null;
+      }
+
+      return language.indexOf('-') === -1
+        ? language
+        : language.slice(0, language.indexOf('-'))
+          + language.slice(language.indexOf('-')).toUpperCase();
+    },
   },
 
   methods: {
@@ -101,7 +117,7 @@ export default {
             answer.text = get(
               data,
               'answers.0.text',
-              this.$t('quick_test.unable_to_find_an_answer'),
+              this.$t('quick_test.unable_to_find_an_answer', this.language),
             );
 
             this.scrollToLastMessage();

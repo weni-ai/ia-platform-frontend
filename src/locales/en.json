@@ -32,6 +32,9 @@
           "label": "Base name",
           "placeholder": "Name"
         },
+        "language": {
+          "label": "Main language"
+        },
         "description": {
           "label": "Description",
           "placeholder": "Description"

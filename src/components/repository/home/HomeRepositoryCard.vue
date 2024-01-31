@@ -185,7 +185,11 @@
         </unnnic-tool-tip>
       </section> -->
 
-      <div class="unnnic-card-intelligence__divider" />
+      <footer class="base__footer" v-if="type === 'base'">
+        {{ language }}
+      </footer>
+
+      <div class="unnnic-card-intelligence__divider"></div>
 
       <section class="unnnic-card-intelligence__detail">
         <div v-if="type === 'repository'" class="unnnic-card-intelligence__detail__content"
@@ -353,6 +357,7 @@
       @close="isQuickTestOpen = false"
       :name="repositoryDetail.title"
       :repository-uuid="repositoryDetail.uuid"
+      :repository-language="repositoryDetail.language"
       :id="repositoryDetail.id"
     />
 
@@ -397,6 +402,7 @@ import IntegrationModal from '@/components/shared/IntegrationModal';
 import SideBarContentBases from './SideBarContentBases';
 import SideBarQuickTest from './SideBarQuickTest';
 import nexusaiAPI from '../../../api/nexusaiAPI';
+import { get } from 'lodash';
 
 export default {
   name: 'HomeRepositoryCard',
@@ -438,6 +444,11 @@ export default {
   },
   computed: {
     ...mapGetters(['getProjectSelected', 'getOrgSelected']),
+
+    language() {
+      return get(this.repositoryDetail, 'language', '').toUpperCase();
+    },
+
     getCurrentRepository() {
       return {
         name: this.repositoryDetail.name,
@@ -613,8 +624,19 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.base__footer {
+  margin-top: 0.625 * $unnnic-font-size - $unnnic-border-width-thinner;
+  padding-top: 0.625 * $unnnic-font-size;
+  border-top: $unnnic-border-width-thinner solid $unnnic-color-neutral-light;
+
+  color: $unnnic-color-neutral-cloudy;
+  font-family: $unnnic-font-family-secondary;
+  font-size: $unnnic-font-size-body-md;
+  line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+  font-weight: $unnnic-font-weight-bold;
+}
 
 .unnnic-card-intelligence {
   display: flex;
