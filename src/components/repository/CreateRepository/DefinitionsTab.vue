@@ -1,7 +1,10 @@
 <template>
   <div class="create-repository__definitions">
     <div class="create-repository__definitions__wrapper">
-      <section class="create-repository__definitions__wrapper__fields">
+      <section
+        v-if="repository_type === 'classifier'"
+        class="create-repository__definitions__wrapper__fields"
+      >
         <unnnic-label :label="$t('webapp.create_repository.language_label')"/>
         <unnnic-select
           class="unnic--clickable"
@@ -47,7 +50,9 @@
         />
       </div>
 
-      <section class="create-repository__definitions__wrapper__fields">
+      <section
+        v-if="repository_type === 'classifier'"
+      >
         <unnnic-label :label="$t('webapp.create_repository.category_label')" />
 
         <div class="categories-list">
@@ -233,6 +238,7 @@ export default {
     &__buttons {
       display: flex;
       justify-content: space-between;
+      margin-top: $unnnic-spacing-lg;
 
       &__btn {
         width: 47%;

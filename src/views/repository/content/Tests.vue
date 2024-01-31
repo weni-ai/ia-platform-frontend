@@ -1,351 +1,293 @@
 <template>
-  <div :style="{ flex: 1 }">
-    <div id="webchat"></div>
+  <div class="quick-test">
+    <div class="messages">
+      <div class="messages__content" ref="messages">
+        <div v-if="!messages.length" class="messages__empty-text">
+          {{ $t('quick_test.send_a_message') }}
+        </div>
 
-    <div v-if="false" id="webchat">
-      <div>
-        <div class="push-widget-container push-chat-open">
-          <div class="push-conversation-container">
-            <div class="push-header-and-loading">
-              <div
-                class="push-header push-with-subtitle push-without-header-avatar"
-              >
-                <div class="push-header-buttons">
-                  <button class="push-close-button">a</button>
-                </div>
-                <div class="push-title-and-subtitle">
-                  <h4 class="push-title undefined">Title</h4>
-                  <span class="push-subtitle undefined">Subtitle</span>
-                </div>
-              </div>
-            </div>
-            <div
-              id="push-messages"
-              class="push-messages-container"
-              tabindex="0"
-            >
-              <input
-                class="push-dropzone"
-                accept=".jpeg,.jpg,.png,.svg,.pdf,.docx,.xls,.xlsx,.mp3,.wav,.mp4,.mov"
-                multiple=""
-                type="file"
-                autocomplete="off"
-                tabindex="-1"
-                style="display: none"
-              />
-              <section>
-                <!-- -->
-                <div class="push-group-message push-from-client">
-                  <div class="push-message undefined push-from-client">
-                    <div class="push-client" style="">
-                      <div class="push-message-text">qual será o tema?</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-response">
-                  <div class="push-message undefined">
-                    <div class="push-response" style="">
-                      <div class="push-message-text">
-                        <div class="push-markdown">
-                          <h4><strong>Resposta</strong></h4>
-                          <h2>
-                            "O tema da palestra será sobre o dia-a-dia em
-                            Produto e Tecnologia na Weni, como é a rotina de
-                            trabalho dentro da empresa."
-                          </h2>
-                          <p><strong>Confiança:</strong> %</p>
-                          <p>&nbsp;</p>
-                          <p><strong>Nenhuma outra resposta</strong></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-client">
-                  <div class="push-message undefined push-from-client">
-                    <div class="push-client" style="">
-                      <div class="push-message-text">e o objetivo?</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-response">
-                  <div class="push-message undefined">
-                    <div class="push-response" style="">
-                      <div class="push-message-text">
-                        <div class="push-markdown">
-                          <h4><strong>Resposta</strong></h4>
-                          <h2>"Desculpe, não possuo essa informação."</h2>
-                          <p><strong>Confiança:</strong> %</p>
-                          <p>&nbsp;</p>
-                          <p><strong>Nenhuma outra resposta</strong></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-client">
-                  <div class="push-message undefined push-from-client">
-                    <div class="push-client" style="">
-                      <div class="push-message-text">
-                        qual será o objetivo da palestra?
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-response">
-                  <div class="push-message undefined">
-                    <div class="push-response" style="">
-                      <div class="push-message-text">
-                        <div class="push-markdown">
-                          <h4><strong>Resposta</strong></h4>
-                          <h2>
-                            "O objetivo da palestra com o tema "O dia-a-dia em
-                            Produto e Tecnologia na Weni" é mostrar como
-                            funciona a rotina de trabalho dentro da Weni,
-                            focando em metodologias, ritos e comportamentos que
-                            seguimos no dia-a-dia da construção de novos
-                            produtos e tecnologia."
-                          </h2>
-                          <p><strong>Confiança:</strong> %</p>
-                          <p>&nbsp;</p>
-                          <p><strong>Nenhuma outra resposta</strong></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-client">
-                  <div class="push-message undefined push-from-client">
-                    <div class="push-client" style="">
-                      <div class="push-message-text">qual será o horário?</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-response">
-                  <div class="push-message undefined">
-                    <div class="push-response" style="">
-                      <div class="push-message-text">
-                        <div class="push-markdown">
-                          <h4><strong>Resposta</strong></h4>
-                          <h2>
-                            "O horário da palestra com o tema "O dia-a-dia em
-                            Produto e Tecnologia na Weni" será às 11:30h."
-                          </h2>
-                          <p><strong>Confiança:</strong> %</p>
-                          <p>&nbsp;</p>
-                          <p><strong>Nenhuma outra resposta</strong></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-client">
-                  <div class="push-message undefined push-from-client">
-                    <div class="push-client" style="">
-                      <div class="push-message-text">
-                        o horário será pela manhã ou a noite?
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-response">
-                  <div class="push-message undefined">
-                    <div class="push-response" style="">
-                      <div class="push-message-text">
-                        <div class="push-markdown">
-                          <h4><strong>Resposta</strong></h4>
-                          <h2>"Desculpe, não possuo essa informação."</h2>
-                          <p><strong>Confiança:</strong> %</p>
-                          <p>&nbsp;</p>
-                          <p><strong>Nenhuma outra resposta</strong></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-client">
-                  <div class="push-message undefined push-from-client">
-                    <div class="push-client" style="">
-                      <div class="push-message-text">quem é John Cordeiro?</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-response">
-                  <div class="push-message undefined">
-                    <div class="push-response" style="">
-                      <div class="push-message-text">
-                        <div class="push-markdown">
-                          <h4><strong>Resposta</strong></h4>
-                          <h2>
-                            "John Cordeiro é o diretor de produto e tecnologia
-                            da Weni, e será o palestrante da palestra sobre o
-                            dia-a-dia em Produto e Tecnologia na Weni."
-                          </h2>
-                          <p><strong>Confiança:</strong> %</p>
-                          <p>&nbsp;</p>
-                          <p><strong>Nenhuma outra resposta</strong></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-client">
-                  <div class="push-message undefined push-from-client">
-                    <div class="push-client" style="">
-                      <div class="push-message-text">
-                        obrigado pelas informações
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="push-group-message push-from-response">
-                  <div class="push-message undefined">
-                    <div class="push-response" style="">
-                      <div class="push-message-text">
-                        <div class="push-markdown">
-                          <h4><strong>Resposta</strong></h4>
-                          <h2>"Desculpe, não possuo essa informação."</h2>
-                          <p><strong>Confiança:</strong> %</p>
-                          <p>&nbsp;</p>
-                          <p><strong>Nenhuma outra resposta</strong></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>
-            <div>
-              <div></div>
-              <form class="push-sender">
-                <label for="push-file-upload"
-                  ><input
-                    multiple=""
-                    id="push-file-upload"
-                    type="file"
-                    accept=".jpeg,.jpg,.png,.svg,.pdf,.docx,.xls,.xlsx,.mp3,.wav,.mp4,.mov"
-                    style="display: none"
-                  />a</label
-                ><textarea
-                  type="text"
-                  class="push-new-message"
-                  name="message"
-                  placeholder="Mensagem"
-                  autocomplete="off"
-                ></textarea
-                ><button type="submit" class="push-send">f</button>
-              </form>
-            </div>
-            <a
-              href="https://weni.ai"
-              class="push-poweredby-container"
-              target="_blank"
-              >Powered by Weni Platform</a
-            >
-          </div>
-          <button type="button" class="push-launcher push-hide-sm">s</button>
+        <div
+          v-for="(message, index) in messages"
+          :key="index"
+          :class="`messages__${message.type}`"
+        >
+          <div v-if="message.status === 'loading'" class="dot-typing"></div>
+
+          <template v-else>
+            <vue-markdown>{{ message.text }}</vue-markdown>
+          </template>
         </div>
       </div>
+    </div>
+
+    <div class="write-message">
+      <unnnic-input
+        v-model="message"
+        class="write-message__input"
+        size="md"
+        :placeholder="$t('webapp.home.bases.tests_placeholder')"
+        @keypress.enter="sendMessage"
+      />
+
+      <unnnic-button
+        size="large"
+        icon-center="send-email-3-1"
+        type="alternative"
+        @click="sendMessage"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import VueMarkdown from 'vue-markdown';
+import nexusaiAPI from '../../../api/nexusaiAPI';
+import { get } from 'lodash';
+
 export default {
   name: 'RepositoryContentTests',
 
   props: {
-    config: String,
+    contentBaseUuid: String,
+    contentBaseLanguage: String,
+  },
+
+  components: {
+    VueMarkdown,
   },
 
   data() {
     return {
       message: '',
+
+      messages: [],
     };
+  },
+
+  computed: {
+    language() {
+      const language = this.contentBaseLanguage;
+
+      if (!language) {
+        return null;
+      }
+
+      return language.indexOf('-') === -1
+        ? language
+        : language.slice(0, language.indexOf('-'))
+          + language.slice(language.indexOf('-')).toUpperCase();
+    },
   },
 
   methods: {
     sendMessage() {
-      window.WebChat.send(this.message);
+      const message = this.message.trim();
+
+      if (!message) {
+        return;
+      }
+
+      this.messages.push({
+        type: 'question',
+        text: message,
+      });
 
       this.message = '';
+
+      this.scrollToLastMessage();
+
+      setTimeout(() => {
+        const answer = {
+          type: 'answer',
+          text: '',
+          status: 'loading',
+        };
+
+        this.messages.push(answer);
+
+        this.scrollToLastMessage();
+
+        nexusaiAPI.ask
+          .v1({
+            contentBaseUuid: this.contentBaseUuid,
+            text: message,
+            language: (this.language || '').toLowerCase(),
+          })
+          .then(({ data }) => {
+            answer.status = 'loaded';
+            answer.text = get(
+              data,
+              'answers.0.text',
+              this.$t('quick_test.unable_to_find_an_answer', this.language),
+            );
+
+            this.scrollToLastMessage();
+          }).catch(() => {
+            this.messages.splice(this.messages.indexOf(answer), 1);
+          });
+      }, 400);
     },
-  },
 
-  beforeMount() {
-    window.WebChat = null;
-  },
-
-  mounted() {
-    const message = this.config;
-
-    if (window.WebChat) {
-      window.WebChat.send(message);
-    } else {
-      const script = document.createElement('script');
-      const flowsUUID = runtimeVariables.get('VUE_APP_QA_FLOW_CHANNEL');
-      script.setAttribute(
-        'src',
-        'https://storage.googleapis.com/push-webchat/wwc-latest.js',
-      );
-      script.setAttribute('id', 'removeScript');
-      document.body.appendChild(script);
-      script.addEventListener('load', () => {
-        window.WebChat.default.init({
-          selector: '#webchat',
-          initPayload: message,
-          channelUuid: flowsUUID,
-          host: 'https://new.push.al',
-          socketUrl: 'https://websocket.weni.ai',
-          sessionId: `${
-            Math.floor(Math.random() * 1e10).toString(36)
-            + new Date().getTime().toString(36)
-          }`,
-          title: 'Title',
-          subtitle: 'Subtitle',
-          startFullScreen: false,
-          inputTextFieldHint: this.$t('webapp.home.bases.tests_placeholder'),
-          customizeWidget: {
-            userMessageBubbleColor: '#edfffe',
-            userMessageTextColor: '#272B33',
-            fullScreenBotMessageBubbleColor: '$unnnic-color-neutral-light',
-            botMessageBubbleColor: '#272B33',
-            inputBackgroundColor: '#FFFFFF',
-            inputFontColor: '#4E5666',
-            inputPlaceholderColor: '#67738B',
-          },
-        });
-
-        window.WebChat.open();
-
-        setTimeout(() => window.WebChat.send(message), 1000);
+    scrollToLastMessage() {
+      this.$nextTick(() => {
+        this.$refs.messages.lastChild.scrollIntoView({ behavior: 'smooth' });
       });
-    }
-
-    return true;
-  },
-
-  beforeDestroy() {
-    const script = document.querySelector('#removeScript');
-
-    if (script) {
-      script.parentNode.removeChild(script);
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import '~@weni/unnnic-system/dist/unnnic.css';
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.dot-typing {
+  $dot-size: 0.3125 * $unnnic-font-size;
+  $dot-color: $unnnic-color-neutral-clean;
+  $dot-min-height: -$dot-size;
+  $dot-max-height: (
+      -$unnnic-font-size-body-md - $unnnic-line-height-md + $dot-size
+    ) * 0.65;
+
+  width: $dot-size;
+  height: $dot-size;
+  margin: 0 $dot-size * 1.75;
+  margin-top: $unnnic-font-size-body-md + $unnnic-line-height-md - $dot-size;
+  // margin-bottom: ($unnnic-font-size-body-md + $unnnic-line-height-md) * 0.25;
+  border-radius: $dot-size / 2;
+  background-color: transparent;
+  box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+    0 ($dot-min-height) $dot-color,
+    $dot-size * 1.75 ($dot-min-height) $dot-color;
+  animation: dot-typing 1s infinite ease;
+
+  @keyframes dot-typing {
+    0% {
+      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+        0 ($dot-min-height) $dot-color,
+        $dot-size * 1.75 ($dot-min-height) $dot-color;
+    }
+
+    20% {
+      box-shadow: -$dot-size * 1.75 ($dot-max-height) $dot-color,
+        0 ($dot-min-height) $dot-color,
+        $dot-size * 1.75 ($dot-min-height) $dot-color;
+    }
+
+    40% {
+      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+        0 ($dot-max-height) $dot-color,
+        $dot-size * 1.75 ($dot-min-height) $dot-color;
+    }
+
+    60% {
+      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+        0 ($dot-min-height) $dot-color,
+        $dot-size * 1.75 ($dot-max-height) $dot-color;
+    }
+
+    80% {
+      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+        0 ($dot-min-height) $dot-color,
+        $dot-size * 1.75 ($dot-min-height) $dot-color;
+    }
+  }
+}
+
+.quick-test {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  row-gap: $unnnic-spacing-xs;
+
+  .messages {
+    flex: 1;
+
+    &__content {
+      height: 0;
+      display: flex;
+      flex-direction: column;
+      row-gap: $unnnic-spacing-xs;
+    }
+
+    $scroll-size: $unnnic-inline-nano;
+
+    overflow: overlay;
+
+    margin-right: -$unnnic-spacing-xs;
+    padding-right: $unnnic-spacing-xs;
+
+    &::-webkit-scrollbar {
+      width: $scroll-size;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $unnnic-color-neutral-clean;
+      border-radius: $unnnic-border-radius-pill;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $unnnic-color-neutral-soft;
+      border-radius: $unnnic-border-radius-pill;
+    }
+
+    &__empty-text {
+      color: $unnnic-color-neutral-clean;
+      font-family: $unnnic-font-family-secondary;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+      font-weight: $unnnic-font-weight-regular;
+    }
+
+    &__question,
+    &__answer {
+      color: $unnnic-color-neutral-dark;
+      font-family: $unnnic-font-family-secondary;
+      font-size: $unnnic-font-size-body-md;
+      line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+      font-weight: $unnnic-font-weight-regular;
+
+      border-radius: $unnnic-border-radius-md;
+      padding: $unnnic-spacing-xs;
+
+      ::v-deep {
+        p {
+          margin: 0;
+        }
+      }
+    }
+
+    &__question {
+      align-self: self-end;
+      background-color: $unnnic-color-weni-100;
+      border-bottom-right-radius: $unnnic-border-radius-sm;
+      margin-left: 1.875 * $unnnic-font-size;
+    }
+
+    &__answer {
+      align-self: self-start;
+      background-color: $unnnic-color-neutral-light;
+      border-bottom-left-radius: $unnnic-border-radius-sm;
+      margin-right: 1.875 * $unnnic-font-size;
+    }
+  }
+
+  .write-message {
+    display: flex;
+    column-gap: $unnnic-spacing-nano;
+
+    &__input {
+      width: 100%;
+    }
+  }
+}
 
 #webchat {
   height: 100%;
 
   ::v-deep {
-    & > div, & > div > div.push-widget-container {
+    & > div,
+    & > div > div.push-widget-container {
       height: 100%;
     }
 
@@ -391,8 +333,10 @@ export default {
 
       .push-new-message {
         background-color: $unnnic-color-neutral-snow;
-        padding: ($unnnic-spacing-ant - $unnnic-border-width-thinner) $unnnic-spacing-sm;
-        border: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
+        padding: ($unnnic-spacing-ant - $unnnic-border-width-thinner)
+          $unnnic-spacing-sm;
+        border: $unnnic-border-width-thinner solid
+          $unnnic-color-neutral-cleanest;
         border-radius: $unnnic-border-radius-sm;
         flex: 1;
 

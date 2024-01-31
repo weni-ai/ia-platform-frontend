@@ -1,71 +1,128 @@
 <template>
   <page-container
-    :loading-title="loadingTitle"
-    :title="provisoryTitle"
-    @back="routerHandle('repository-content-bases')"
+    :loading-title="loadingContentBase"
+    :title="contentBase.title"
+    @back="
+      $router.push({
+        name: 'intelligence-home',
+        params: {
+          intelligenceUuid: $route.params.intelligenceUuid,
+        },
+      })
+    "
   >
     <section class="repository-base-edit__wrapper">
-      <unnnic-skeleton-loading
-        v-if="loadingText"
-        tag="div"
-        height="100%"
-        class="repository-base-edit__wrapper__card-content"
-      />
-
-      <div
-        v-else
-        :class="[
-          'repository-base-edit__wrapper__card',
-          'repository-base-edit__wrapper__card-content',
-        ]"
-      >
-        <div class="repository-base-edit__wrapper__card-content__header">
-          {{ $t('content_bases.write_content') }}
-
-          <unnnic-button
-            :loading="submitting"
-            @click="saveText()"
-            size="small"
-            class="repository-base-edit__wrapper__card-content__header__save-button"
-            :disabled="!knowledgeBase.text.value.trim()
-              || knowledgeBase.text.value === knowledgeBase.text.oldValue"
+      <div class="repository-base-edit__wrapper__left-side">
+        <section class="base-tabs">
+          <div
+            v-for="{ name, text, icon, counter } in tabs"
+            :key="name"
+            :class="[
+              'base-tabs__tab',
+              { 'base-tabs__tab--active': tab === name },
+            ]"
+            @click="tab = name"
           >
-            {{ $t('webapp.settings.save') }}
-          </unnnic-button>
-        </div>
+            <unnnic-icon
+              :icon="icon"
+              scheme="weni-600"
+              size="avatar-nano"
+              class="base-tabs__tab__icon"
+            />
 
-        <textarea
-          v-model="knowledgeBase.text.value"
-          name=""
-          id="textId"
-          cols="30"
-          rows="10"
-          class="repository-base-edit__textarea"
-          :placeholder="$t('content_bases.write_content_placeholder')"
-        ></textarea>
+            {{ text }}
 
-        <div
-          v-if="!knowledgeBase.text.value.trim()"
-          class="repository-base-edit__wrapper__card-content__info"
-        >
-          <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
+            <div v-if="counter" class="base-tabs__tab__counter">
+              {{ counter }}
+            </div>
+          </div>
+        </section>
 
-          <span v-html="$t('content_bases.write_content_help')"></span>
-        </div>
+        <template v-if="tab === 'files'">
+          <unnnic-skeleton-loading
+            v-if="files.status === 'loading' && files.data.length === 0"
+            tag="div"
+            height="100%"
+            class="repository-base-edit__wrapper__card-content"
+          />
+
+          <template v-else>
+            <bases-form-files
+              :files.sync="files"
+              :flat-bottom="!files.data.length"
+              @load-more="loadFiles"
+              @removed="removedFile"
+            />
+
+            <div
+              v-if="!files.data.length && false"
+              class="repository-base-edit__wrapper__card-content__info"
+            >
+              <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
+
+              <span v-html="$t('content_bases.write_content_help')"></span>
+            </div>
+          </template>
+        </template>
+
+        <template v-if="tab === 'text'">
+          <unnnic-skeleton-loading
+            v-if="loadingContentBaseText"
+            tag="div"
+            height="100%"
+            class="repository-base-edit__wrapper__card-content"
+          />
+
+          <div
+            v-else
+            :class="[
+              'repository-base-edit__wrapper__card',
+              'repository-base-edit__wrapper__card-content',
+            ]"
+          >
+            <div class="repository-base-edit__wrapper__card-content__header">
+              {{ $t('content_bases.write_content') }}
+
+              <unnnic-button
+                :loading="submitting"
+                @click="saveText"
+                size="small"
+                class="repository-base-edit__wrapper__card-content__header__save-button"
+                :disabled="
+                  !knowledgeBase.text.value.trim() ||
+                  knowledgeBase.text.value === knowledgeBase.text.oldValue
+                "
+              >
+                {{ $t('webapp.settings.save') }}
+              </unnnic-button>
+            </div>
+
+            <textarea
+              v-model="knowledgeBase.text.value"
+              name=""
+              id="textId"
+              cols="30"
+              rows="10"
+              class="repository-base-edit__textarea"
+              :placeholder="$t('content_bases.write_content_placeholder')"
+            ></textarea>
+
+            <div
+              v-if="!knowledgeBase.text.value.trim() && false"
+              class="repository-base-edit__wrapper__card-content__info"
+            >
+              <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
+
+              <span v-html="$t('content_bases.write_content_help')"></span>
+            </div>
+          </div>
+        </template>
       </div>
 
-      <unnnic-skeleton-loading
-        v-if="!configTest"
-        width="295px"
-        height="100%"
-        tag="div"
-      />
-
       <div
-        v-else
         :class="[
           'repository-base-edit__wrapper__card',
-          'repository-base-edit__wrapper__card-test-container'
+          'repository-base-edit__wrapper__card-test-container',
         ]"
       >
         <div class="repository-base-edit__wrapper__card-test-container__header">
@@ -73,7 +130,8 @@
         </div>
 
         <tests
-          :config="configTest"
+          :content-base-uuid="$route.params.contentBaseUuid"
+          :content-base-language="contentBase.language"
         />
       </div>
     </section>
@@ -93,7 +151,7 @@
         type="tertiary"
         @click="openModal = false"
       >
-        {{ $t("webapp.home.bases.edit-base_modal_alert_discard") }}
+        {{ $t('webapp.home.bases.edit-base_modal_alert_discard') }}
       </unnnic-button>
       <unnnic-button
         slot="options"
@@ -101,7 +159,7 @@
         type="primary"
         @click="discardUpdate()"
       >
-        {{ $t("webapp.home.bases.edit-base_modal_alert_save") }}
+        {{ $t('webapp.home.bases.edit-base_modal_alert_save') }}
       </unnnic-button>
     </unnnic-modal>
     <unnnic-alert
@@ -121,19 +179,31 @@ import { LANGUAGES } from '@/utils/index';
 import router from '@/router/index';
 import Tests from './Tests';
 import { unnnicCallAlert } from '@weni/unnnic-system';
-import LoadRepository from '../../../utils/LoadRepository';
 import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
 import PageContainer from '../../../components/PageContainer';
+import nexusaiAPI from '../../../api/nexusaiAPI';
+import BasesFormFiles from './BasesFormFiles';
 
 export default {
   name: 'RepositoryBaseEdit',
   components: {
     Tests,
     PageContainer,
+    BasesFormFiles,
   },
-  mixins: [LoadRepository, RemoveBulmaMixin],
+  mixins: [RemoveBulmaMixin],
   data() {
     return {
+      tab: 'files',
+
+      loadingContentBase: false,
+      loadingContentBaseText: false,
+
+      contentBase: {
+        title: '',
+        language: '',
+      },
+
       loadingTitle: false,
       loadingText: false,
       repositoryUUID: null,
@@ -148,12 +218,13 @@ export default {
         oldTitle: '',
         text: {
           id: null,
+          uuid: null,
           value: '',
           oldValue: '',
           language: '',
           oldLanguage: '',
-          lastUpdate: ''
-        }
+          lastUpdate: '',
+        },
       },
       destroyVerifying: null,
       provisoryTitle: '',
@@ -161,6 +232,12 @@ export default {
       isAlertOpen: false,
 
       repositoryConfig: '',
+
+      files: {
+        status: null,
+        next: null,
+        data: [],
+      },
     };
   },
   methods: {
@@ -173,8 +250,43 @@ export default {
       'editQAKnowledgeBase',
     ]),
 
+    removedFile(fileUuid) {
+      this.files.data = this.files.data.filter(({ uuid }) => uuid !== fileUuid);
+    },
+
+    async loadFiles() {
+      this.files.status = 'loading';
+
+      const { data } = await nexusaiAPI.intelligences.contentBases.files.list({
+        contentBaseUuid: this.$route.params.contentBaseUuid,
+        next: this.files.next,
+      });
+
+      this.files.data = this.files.data.concat(
+        data.results
+          .map((file) => ({
+            ...file,
+            status: file.status === 'success' ? 'uploaded' : 'processing',
+          }))
+          .filter(
+            ({ uuid }) => !this.files.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+          ),
+      );
+
+      this.files.next = data.next;
+
+      this.files.status = null;
+
+      if (!data.next) {
+        this.files.status = 'complete';
+      }
+    },
+
     alertError(title) {
-      unnnicCallAlert({ props: { title, scheme: 'feedback-red', icon: 'alert-circle-1', }, seconds: 5 });
+      unnnicCallAlert({
+        props: { title, scheme: 'feedback-red', icon: 'alert-circle-1' },
+        seconds: 5,
+      });
     },
 
     onTitleChange(event) {
@@ -183,7 +295,7 @@ export default {
     routerHandle(path) {
       if (path !== this.$router.currentRoute.name) {
         this.$router.push({
-          name: `${path}`
+          name: `${path}`,
         });
       }
     },
@@ -191,7 +303,7 @@ export default {
       if (this.$route.name === 'repository-content-bases-new') {
         const response = await this.createQAKnowledgeBase({
           repositoryUUID: this.repositoryUUID,
-          title: this.knowledgeBase.title
+          title: this.knowledgeBase.title,
         });
         this.knowledgeBase.oldTitle = response.data.title;
 
@@ -200,8 +312,8 @@ export default {
         this.$router.push({
           name: 'repository-content-bases-edit',
           params: {
-            id: response.data.id
-          }
+            id: response.data.id,
+          },
         });
 
         this.init();
@@ -212,34 +324,30 @@ export default {
         repositoryUUID: this.repositoryUUID,
         knowledgeBaseId: this.$route.params.id,
         text: this.knowledgeBase.text.value,
-        language: this.knowledgeBase.text.language
+        language: this.knowledgeBase.text.language,
       };
-
 
       try {
         this.submitting = true;
 
-        const responseEditKnowledgeBase = await this.editQAKnowledgeBase({
-          repositoryUUID: this.repositoryUUID,
-          id: this.$route.params.id,
-          title: this.knowledgeBase.title
-        });
+        if (this.knowledgeBase.text.uuid) {
+          const { data: contentBaseTextData } = await nexusaiAPI.updateIntelligenceContentBaseText({
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+            contentBaseTextUuid: this.knowledgeBase.text.uuid,
+            text: this.knowledgeBase.text.value,
+          });
 
-        this.knowledgeBase.oldTitle = responseEditKnowledgeBase.data.title;
+          this.knowledgeBase.text.oldValue = contentBaseTextData.text;
+        } else {
+          const { data: contentBaseTextData } = await nexusaiAPI.createIntelligenceContentBaseText({
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+            text: this.knowledgeBase.text.value,
+          });
 
-        if (data.text) {
-          const action = data.id ? this.updateQAText : this.createQAText;
-
-          const responseText = await action(data);
-
-          if (!this.knowledgeBase.text.id) {
-            this.knowledgeBase.text.id = responseText.data.id;
-          }
-
-          this.knowledgeBase.text.oldValue = responseText.data.text;
-          this.knowledgeBase.text.oldLanguage = responseText.data.language;
-          this.knowledgeBase.text.lastUpdate = responseText.data.last_update;
+          this.knowledgeBase.text.uuid = contentBaseTextData.uuid;
+          this.knowledgeBase.text.oldValue = contentBaseTextData.text;
         }
+
         this.isAlertOpen = true;
       } catch (error) {
         const errorMessage = get(error, 'response.data.text.0', '');
@@ -269,7 +377,7 @@ export default {
     async init() {
       const response = await this.getQAKnowledgeBase({
         repositoryUUID: this.repositoryUUID,
-        id: this.$route.params.id
+        id: this.$route.params.id,
       });
 
       this.loadingTitle = false;
@@ -284,7 +392,7 @@ export default {
       const responseText = await this.getQATexts({
         repositoryUUID: this.repositoryUUID,
         knowledgeBaseId: this.$route.params.id,
-        page: 0
+        page: 0,
       });
 
       this.loadingText = false;
@@ -310,65 +418,82 @@ export default {
     },
     formatDate(info) {
       const date = new Date(info);
-      const day = date
-        .getDate()
-        .toString()
-        .padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const year = date.getFullYear();
-      const minutes = date
-        .getMinutes()
-        .toString()
-        .padStart(2, '0');
-      const hour = date
-        .getHours()
-        .toString()
-        .padStart(2, '0');
-      return `${this.$t('webapp.home.bases.edit-base-saved-at')} ${day}/${month}/${year} ${this.$t(
-        'webapp.home.bases.edit-base-saved-time'
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const hour = date.getHours().toString().padStart(2, '0');
+      return `${this.$t(
+        'webapp.home.bases.edit-base-saved-at',
+      )} ${day}/${month}/${year} ${this.$t(
+        'webapp.home.bases.edit-base-saved-time',
       )} ${hour}h${minutes}`;
     },
     goToTests() {
       this.$router.push({
-        name: 'repository-content-tests'
+        name: 'repository-content-tests',
       });
-    }
+    },
   },
   watch: {
-    // eslint-disable-next-line
-    repository: {
-      handler() {
-        if (
-          !this.repository?.language
-          || !this.repository?.uuid
-          || this.repository?.uuid === 'null'
-        ) {
-          return false;
-        }
+    '$route.params.intelligenceUuid': {
+      immediate: true,
 
-        this.repositoryUUID = this.repository.uuid;
+      async handler() {
+        this.loadingContentBase = true;
+        this.loadingContentBaseText = true;
 
-        return true;
+        const { data: contentBaseData } = await nexusaiAPI.readIntelligenceContentBase({
+          intelligenceUuid: this.$route.params.intelligenceUuid,
+          contentBaseUuid: this.$route.params.contentBaseUuid,
+        });
+
+        this.loadingContentBase = false;
+
+        this.contentBase.title = contentBaseData.title;
+        this.contentBase.language = contentBaseData.language;
+
+        const { data: contentBaseTextsData } = await nexusaiAPI.listIntelligenceContentBaseTexts({
+          contentBaseUuid: this.$route.params.contentBaseUuid,
+        });
+
+        const text = get(contentBaseTextsData, 'results.0.text', '');
+
+        this.knowledgeBase.text.uuid = get(
+          contentBaseTextsData,
+          'results.0.uuid',
+          '',
+        );
+
+        this.knowledgeBase.text.value = text === '--empty--' ? '' : text;
+        this.knowledgeBase.text.oldValue = this.knowledgeBase.text.value;
+
+        this.loadingContentBaseText = false;
       },
-
-      deep: true,
-      immediate: true
     },
-    async repositoryUUID() {
-      if (this.$route.name === 'repository-content-bases-edit') {
-        this.init();
-      } else {
-        this.provisoryTitle = this.$t('webapp.home.bases.edit-base-notitle');
-        this.knowledgeBase.title = this.provisoryTitle;
-        this.knowledgeBase.text.language = this.repository.language;
-        this.knowledgeBase.text.oldLanguage = this.repository.language;
-      }
-    }
   },
   computed: {
+    tabs() {
+      return [
+        {
+          name: 'files',
+          text: this.$t('content_bases.tabs.files'),
+          icon: 'news',
+          counter: this.files.next ? '10+' : this.files.data.length,
+        },
+        {
+          name: 'text',
+          text: this.$t('content_bases.tabs.text'),
+          icon: 'format_align_left',
+        },
+      ];
+    },
+
     configTest() {
       if (this.$store.state.User.me.language && this.repositoryConfig) {
-        return [this.$store.state.User.me.language, this.repositoryConfig].join('⇝');
+        return [this.$store.state.User.me.language, this.repositoryConfig].join(
+          '⇝',
+        );
       }
 
       return '';
@@ -379,12 +504,14 @@ export default {
         return true;
       }
 
-      if (this.knowledgeBase.text.language !== this.knowledgeBase.text.oldLanguage) {
+      if (
+        this.knowledgeBase.text.language !== this.knowledgeBase.text.oldLanguage
+      ) {
         return true;
       }
 
       return this.knowledgeBase.text.value !== this.knowledgeBase.text.oldValue;
-    }
+    },
   },
   mounted() {
     if (this.$route.name === 'repository-content-bases-edit') {
@@ -400,18 +527,79 @@ export default {
         next();
       }
     });
+
+    this.loadFiles();
   },
 
   destroyed() {
     this.destroyVerifying();
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-.exit-content-base-modal ::v-deep .unnnic-modal-container-background-body-description-container {
+.base-tabs {
+  display: flex;
+  margin-bottom: $unnnic-spacing-sm;
+  cursor: pointer;
+  user-select: none;
+  column-gap: $unnnic-spacing-sm;
+
+  &__tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    column-gap: $unnnic-spacing-xs;
+
+    outline-style: solid;
+    outline-color: $unnnic-color-neutral-cleanest;
+    outline-width: $unnnic-border-width-thinner;
+    outline-offset: -$unnnic-border-width-thinner;
+
+    border-radius: $unnnic-border-radius-sm;
+    padding: $unnnic-spacing-ant $unnnic-spacing-sm;
+
+    color: $unnnic-color-neutral-cloudy;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-lg;
+    line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+    font-weight: $unnnic-font-weight-bold;
+
+    &__icon {
+      color: $unnnic-color-neutral-cloudy;
+    }
+
+    &__counter {
+      color: $unnnic-color-neutral-clean;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+      border-radius: $unnnic-border-radius-sm;
+      background-color: $unnnic-color-neutral-soft;
+      padding: 0.0625 * $unnnic-font-size $unnnic-spacing-xs;
+      margin-left: auto;
+    }
+
+    &--active {
+      outline-color: $unnnic-color-weni-600;
+      color: $unnnic-color-weni-600;
+
+      .base-tabs__tab__icon {
+        color: $unnnic-color-weni-600;
+      }
+
+      .base-tabs__tab__counter {
+        color: $unnnic-color-weni-600;
+        background-color: $unnnic-color-weni-100;
+      }
+    }
+  }
+}
+
+.exit-content-base-modal
+  ::v-deep
+  .unnnic-modal-container-background-body-description-container {
   padding-bottom: $unnnic-spacing-xs;
 }
 
@@ -491,6 +679,12 @@ export default {
     display: flex;
     gap: $unnnic-spacing-sm;
 
+    &__left-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
     &__card-test-container {
       outline-style: solid;
       outline-color: $unnnic-color-neutral-cleanest;
@@ -515,7 +709,8 @@ export default {
         margin-inline: -$unnnic-spacing-sm;
         margin-top: -$unnnic-spacing-sm;
         margin-bottom: $unnnic-spacing-sm;
-        border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
+        border-bottom: $unnnic-border-width-thinner solid
+          $unnnic-color-neutral-cleanest;
       }
     }
 
@@ -527,7 +722,6 @@ export default {
         align-items: center;
       }
     }
-
 
     &__card-content {
       border: 0;
@@ -576,11 +770,13 @@ export default {
         display: flex;
         align-items: center;
         column-gap: $unnnic-spacing-nano;
-        padding-block: $unnnic-spacing-xs ($unnnic-spacing-xs - $unnnic-border-width-thinner);
+        padding-block: $unnnic-spacing-xs
+          ($unnnic-spacing-xs - $unnnic-border-width-thinner);
         padding-inline: $unnnic-spacing-sm - $unnnic-border-width-thinner;
 
         background-color: $unnnic-color-neutral-light;
-        border: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
+        border: $unnnic-border-width-thinner solid
+          $unnnic-color-neutral-cleanest;
         border-top-width: 0;
 
         border-radius: 0 0 $unnnic-border-radius-sm $unnnic-border-radius-sm;
@@ -649,7 +845,7 @@ export default {
     animation: shake 3s infinite alternate;
 
     &:after {
-      content: "\10A50";
+      content: '\10A50';
       color: red !important;
       font-size: 70px;
 
@@ -669,5 +865,4 @@ export default {
 .input.size-md {
   height: 46px;
 }
-
 </style>

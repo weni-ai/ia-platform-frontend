@@ -8,6 +8,13 @@
       :open="activeMenu"/> -->
 
     <modal-depending-on-flows-length />
+
+    <unnnic-alert
+      v-if="$store.state.alert"
+      :key="$store.state.alert.text"
+      v-bind="$store.state.alert"
+      @close="$store.state.alert = null"
+    ></unnnic-alert>
   </div>
 </template>
 
@@ -183,7 +190,7 @@ html:not(.not-bulma) {
 
 }
 
-html.not-bulma body {
+body {
   background-color: $unnnic-color-background-snow;
   min-height: 100vh;
 }

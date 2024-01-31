@@ -29,5 +29,3 @@ const runtimeVariables = (() => ({
     return this[name];
   }
 }))();
-
-

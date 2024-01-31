@@ -21,13 +21,11 @@
           </div>
         </div>
 
-        <unnnic-skeleton-loading
-          v-if="loading"
-          :style="{ height: '99%' }"
-        />
-
-        <div v-else class="content-bases-list">
-          <tests v-if="configTest" :config="configTest" />
+        <div class="content-bases-list">
+          <tests
+            :content-base-uuid="repositoryUuid"
+            :content-base-language="repositoryLanguage"
+          />
         </div>
       </div>
     </div>
@@ -42,6 +40,7 @@ export default {
   props: {
     name: String,
     repositoryUuid: String,
+    repositoryLanguage: String,
     id: Number,
   },
 
@@ -54,30 +53,6 @@ export default {
       loading: false,
       configTest: '',
     };
-  },
-
-  mounted() {
-    this.loading = true;
-    this.getQATexts({
-      repositoryUUID: this.repositoryUuid,
-      knowledgeBaseId: this.id,
-      page: 0,
-    })
-      .then((reponse) => {
-        if (reponse.data.results.length) {
-          const { language, knowledge_base } = reponse.data.results[0];
-
-          this.configTest = [
-            this.$store.state.User.me.language,
-            `Bearer ${this.$store.state.Repository.current?.authorization?.uuid}`,
-            knowledge_base,
-            language,
-          ].join('⇝');
-        }
-      })
-      .finally(() => {
-        this.loading = false;
-      });
   },
 
   methods: {

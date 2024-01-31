@@ -1,13 +1,16 @@
 <template>
   <unnnic-button
-    @click.native="routerHandle('repository-content-adjustments')"
+    @click.native="$router.push({
+      name: 'intelligence-edit',
+      params: {
+        intelligenceUuid: $route.params.intelligenceUuid,
+      },
+    })"
     iconCenter="settings"
     type="secondary"
   />
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
-
 export default {
   name: 'RepositoryContentNavigation',
   components: {},
@@ -16,14 +19,7 @@ export default {
 
     };
   },
-  methods: {
-    routerHandle(path, opts = {}) {
-      this.$router.push({
-        name: `${path}`,
-        ...opts,
-      });
-    },
-  }
+  methods: {}
 };
 </script>
 

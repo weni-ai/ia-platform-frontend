@@ -4,6 +4,9 @@
   "announcements": {
     "new_artificial_intelligence_module_is_here": "¡Ya está aquí el nuevo módulo de Inteligencia Artificial! Explora las novedades y aprende a crear chatbots aún más increíbles."
   },
+  "unauthorized": "No tienes permiso para realizar esta acción",
+  "internal_server_error": "Error interno del servidor",
+  "unexpected_error": "Se ha producido un error inesperado",
   "intelligences": {
     "own_intelligences": "Inteligencias propias",
     "public_intelligences": "Inteligencias públicas",
@@ -18,7 +21,7 @@
     "sidebar_view_content_bases_description": "Visualizar las bases de contenidos que forman parte de esta IA.",
     "delete_intelligence": "Eliminar Inteligencia",
     "delete_intelligence_confirmation_modal_description": "¿Está seguro de que quiere excluir a la inteligencia <b>{name}</b>?<br>Esta acción no puede ser revertida.",
-    "filter_type_generative_label": "IAs de Contenidos",
+    "filter_type_generative_label": "IAs Generativas",
     "filter_type_classification_label": "IAs de Clasificación"
   },
   "bases": {
@@ -28,6 +31,9 @@
         "name": {
           "label": "Nombre de la base",
           "placeholder": "Nombre"
+        },
+        "language": {
+          "label": "Idioma principal"
         },
         "description": {
           "label": "Descripción",
@@ -43,7 +49,36 @@
     "write_content": "Escriba el contenido",
     "write_content_placeholder": "Escriba aquí el contenido",
     "write_content_help": "¿No está seguro de cómo añadir contenidos a la base de conocimientos de IA? <a href=\"#\" target=\"_blank\">Consulte la documentación</a>",
-    "changes_saved": "Cambios guardados"
+    "changes_saved": "Cambios guardados",
+    "tabs": {
+      "files": "Archivos",
+      "text": "Texto"
+    },
+    "files": {
+      "upload_content": "Cargar contenido a partir de archivos",
+      "drag_and_drop_your_file_here": "Arrastre y suelte su archivo aquí para añadir el contenido a la base de conocimientos de IA.",
+      "supported_files": "Archivos compatibles: .pdf, .doc, docx, .txt, .xls y .xlsx.<br />Límite de 250 MB por archivo.",
+      "browse_file": "Examinar archivo",
+      "uploaded_files": "Archivos cargados",
+      "status": {
+        "uploading": "Cargando contenido",
+        "uploaded": "Contenido cargado",
+        "processing": "Procesando el contenido"
+      },
+      "content_of_the_files_has_been_added": "El contenido de los ficheros se ha añadido a la base",
+      "content_of_the_files_is_loading": "Cargando el contenido de los archivos",
+      "file_removed_from_base": "{name} eliminada de la base de contenidos",
+      "delete_file": {
+        "title": "Eliminar archivo",
+        "description": "¿Estás seguro de que quieres eliminar el archivo <b>{name}</b>?<br />El contenido de este archivo se eliminará de la base de datos de AI",
+        "cancel": "Cancelar",
+        "delete": "Eliminar"
+      }
+    }
+  },
+  "quick_test": {
+    "send_a_message": "Envía un mensaje para probar la base de contenidos...",
+    "unable_to_find_an_answer": "*No se puede encontrar una respuesta a esta pregunta*"
   },
   "webapp": {
     "layout": {

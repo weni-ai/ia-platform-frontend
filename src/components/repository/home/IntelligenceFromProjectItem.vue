@@ -2,7 +2,9 @@
   <div>
     <home-repository-card
       :repository-detail="project"
+      :type="project.hasOwnProperty('content_bases_count') ? 'intelligence' : 'repository'"
       @dispatchShowModal="showModal($event)"
+      @removed="$emit('removed')"
     />
 
     <modal-container

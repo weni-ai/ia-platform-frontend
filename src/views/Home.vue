@@ -4,11 +4,12 @@
       <section class="home__header">
         <div>
           <unnnic-card
+            class="home__header__icon"
             :title="$t('webapp.intelligences_lib.title')"
             icon="neurology"
             type="title"
             :has-information-icon="false"
-            scheme="aux-blue"
+            scheme="weni-600"
           />
           <div
             class="description unnnic-font secondary body-gt color-neutral-dark"
@@ -17,7 +18,6 @@
         </div>
 
         <unnnic-button
-          v-if="!(tab === 'own_intelligences' && isListEmpty)"
           @click="createNewIntelligence"
           class="create-ia-button"
           iconLeft="add-1"
@@ -49,10 +49,6 @@
           <h1 class="intelligences-list__title">
             {{ $t('intelligences.no_intelligence_added') }}
           </h1>
-
-          <unnnic-button @click="createNewIntelligence" class="create-ia-button" iconLeft="add-1">
-            {{ $t('intelligences.create_button') }}
-          </unnnic-button>
         </div>
 
         <div v-else class="intelligences-list">
@@ -60,6 +56,7 @@
             v-for="project in intelligences"
             :key="project.uuid"
             :project="project"
+            @removed="removed(project.uuid)"
           />
 
           <template v-if="isLoading">
@@ -123,6 +120,7 @@ import IntelligencesPublicList from '../components/intelligences/IntelligencesPu
 import IntelligencesFilter from '../components/intelligences/IntelligencesFilter';
 import ModalNext from '../components/ModalNext';
 import RemoveBulmaMixin from '../utils/RemoveBulmaMixin';
+import nexusaiAPI from '../api/nexusaiAPI';
 
 export default {
   name: 'Home',
@@ -179,15 +177,20 @@ export default {
         status: null,
       },
 
+      intelligencesNexusAI: {
+        firstLoad: true,
+        orgUuid: this.$store.state.Auth.connectOrgUuid,
+        data: [],
+        next: null,
+        status: null,
+      },
+
       intersectionObserver: null,
       isShowingEndOfList: false,
     };
   },
 
   mounted() {
-    this.loadIntelligencesFromProject();
-    this.loadIntelligencesFromOrg();
-
     this.intersectionObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         this.isShowingEndOfList = entry.isIntersecting;
@@ -203,13 +206,18 @@ export default {
 
   computed: {
     intelligences() {
-      const data = this.intelligencesFromProject.data.concat(this.intelligencesFromOrg.data.filter(
-        ({ uuid }) => !this.intelligencesFromProject.data
-          .some(intelligenceFromProject => uuid === intelligenceFromProject.uuid)
-      )).filter(intelligence => intelligence.repository_type === ({
-        generative: 'content',
-        classification: 'classifier',
-      }[this.fitlerIntelligenceType])).filter(intelligence => {
+      let items;
+
+      if (this.fitlerIntelligenceType === 'generative') {
+        items = this.intelligencesNexusAI.data;
+      } else {
+        items = this.intelligencesFromProject.data.concat(this.intelligencesFromOrg.data.filter(
+          ({ uuid }) => !this.intelligencesFromProject.data
+            .some(intelligenceFromProject => uuid === intelligenceFromProject.uuid)
+        ))
+      }
+
+      return items.filter(intelligence => {
         if (this.filterIntelligenceName) {
           return String(intelligence.name)
             .toLocaleLowerCase()
@@ -217,16 +225,21 @@ export default {
         }
 
         return true;
-      })
-
-      return data;
+      });
     },
 
     isLoading() {
-      return this.intelligencesFromProject.status === 'loading' || this.intelligencesFromOrg.status === 'loading';
+      return this.intelligencesFromProject.status === 'loading'
+        || this.intelligencesFromOrg.status === 'loading'
+        || this.intelligencesNexusAI.status === 'loading';
     },
 
     isListEmpty() {
+      if (this.fitlerIntelligenceType === 'generative') {
+        return this.intelligencesNexusAI.status === 'complete'
+          && this.intelligences.length === 0;
+      }
+
       return this.intelligencesFromProject.status === 'complete'
         && this.intelligencesFromOrg.status === 'complete'
         && this.intelligences.length === 0;
@@ -235,14 +248,41 @@ export default {
 
   watch: {
     isShowingEndOfList() {
-      if (this.isShowingEndOfList && this.intelligencesFromOrg.status !== 'complete') {
-        this.loadIntelligencesFromOrg();
+      if (this.isShowingEndOfList) {
+        if (this.fitlerIntelligenceType === 'classification'
+          && this.intelligencesFromOrg.status !== 'complete') {
+          this.loadIntelligencesFromOrg();
+        } else if (this.fitlerIntelligenceType === 'generative'
+          && this.intelligencesNexusAI.status !== 'complete') {
+          this.loadIntelligencesNexusAI();
+        }
       }
+    },
+
+    fitlerIntelligenceType: {
+      immediate: true,
+
+      handler() {
+        if (this.fitlerIntelligenceType === 'classification'
+          && this.intelligencesFromProject.status === null) {
+          this.loadIntelligencesFromProject();
+          this.loadIntelligencesFromOrg();
+        } else if (this.fitlerIntelligenceType === 'generative'
+          && this.intelligencesNexusAI.firstLoad) {
+          this.intelligencesNexusAI.firstLoad = false;
+          this.loadIntelligencesNexusAI();
+        }
+      },
     },
   },
 
   methods: {
     ...mapActions(['searchProjectWithFlow', 'getRepositories']),
+
+    removed(intelligenceUuid) {
+      this.intelligencesNexusAI.data = this.intelligencesNexusAI.data
+        .filter(({ uuid }) => intelligenceUuid !== uuid);
+    },
 
     async loadIntelligencesFromProject() {
       try {
@@ -277,7 +317,11 @@ export default {
           next: this.intelligencesFromOrg.next,
         });
 
-        this.intelligencesFromOrg.data = [...this.intelligencesFromOrg.data, ...data.results];
+        this.intelligencesFromOrg.data = [
+          ...this.intelligencesFromOrg.data,
+          ...data.results.filter(({ repository_type }) => repository_type === 'classifier')
+        ];
+
         this.intelligencesFromOrg.next = data.next;
 
         if (!data.next) {
@@ -286,6 +330,32 @@ export default {
       } finally {
         if (this.intelligencesFromOrg.status === 'loading') {
           this.intelligencesFromOrg.status = null;
+        }
+      }
+    },
+
+    async loadIntelligencesNexusAI() {
+      try {
+        this.intelligencesNexusAI.status = 'loading';
+
+        const { data } = await nexusaiAPI.listIntelligences({
+          orgUuid: this.intelligencesNexusAI.orgUuid,
+          next: this.intelligencesNexusAI.next,
+        });
+
+        this.intelligencesNexusAI.data = [
+          ...this.intelligencesNexusAI.data,
+          ...data.results,
+        ];
+
+        this.intelligencesNexusAI.next = data.next;
+
+        if (!data.next) {
+          this.intelligencesNexusAI.status = 'complete';
+        }
+      } finally {
+        if (this.intelligencesNexusAI.status === 'loading') {
+          this.intelligencesNexusAI.status = null;
         }
       }
     },
@@ -306,6 +376,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.home__header__icon ::v-deep .avatar-icon {
+  background-color: $unnnic-color-weni-100;
+}
+
+.home__header__icon ::v-deep .title {
+  font-weight: $unnnic-font-weight-bold;
+}
 
 .create-intelligence-modal {
   ::v-deep .create-intelligence-modal__container {

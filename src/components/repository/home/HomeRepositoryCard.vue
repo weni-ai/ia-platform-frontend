@@ -40,7 +40,7 @@
             </unnnic-tool-tip>
           </div>
 
-          <div v-else>
+          <div v-else-if="type !== 'intelligence'">
             <unnnic-tool-tip
                side="top"
                :text="$t('content_bases.quick_test')"
@@ -111,7 +111,7 @@
 
             </div>
 
-            <div v-else-if="type === 'base' && canContribute">
+            <div v-else-if="(type === 'base' && canContribute) || type === 'intelligences'">
               <unnnic-dropdown-item @click="deleteBase(repositoryDetail)">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="delete" scheme="feedback-red"/>
@@ -122,7 +122,7 @@
               </unnnic-dropdown-item>
             </div>
 
-            <div v-else-if="type === 'repository'">
+            <div v-else-if="type === 'repository' || type === 'intelligence'">
               <unnnic-dropdown-item @click="viewContentBases">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="article" />
@@ -133,9 +133,6 @@
                 </div>
               </unnnic-dropdown-item>
 
-              <!--
-              waiting backend for integration
-
               <unnnic-dropdown-item @click="isDeleteIntelligenceConfirmationOpen = true">
                 <div class="unnnic-card-intelligence__header__buttons__dropdown">
                   <unnnic-icon-svg size="sm" icon="delete" scheme="feedback-red"/>
@@ -144,7 +141,7 @@
                     {{ $t('intelligences.delete_intelligence') }}
                   </div>
                 </div>
-              </unnnic-dropdown-item> -->
+              </unnnic-dropdown-item>
 
             </div>
 
@@ -188,7 +185,11 @@
         </unnnic-tool-tip>
       </section> -->
 
-      <div class="unnnic-card-intelligence__divider" />
+      <footer class="base__footer" v-if="type === 'base'">
+        {{ language }}
+      </footer>
+
+      <div class="unnnic-card-intelligence__divider"></div>
 
       <section class="unnnic-card-intelligence__detail">
         <div v-if="type === 'repository'" class="unnnic-card-intelligence__detail__content"
@@ -211,14 +212,17 @@
         </div>
 
         <div
-          v-if="type === 'repository' && repositoryDetail.repository_type === 'content'"
+          v-if="
+            (type === 'repository' && repositoryDetail.repository_type === 'content')
+            || type === 'intelligence'
+          "
           class="unnnic-card-intelligence__detail__content"
         >
           <div class="unnnic-card-intelligence__detail__content__data">
             {{
               $tc(
                 'webapp.intelligences_lib.knowledge_bases',
-                repositoryDetail.count_knowledge_bases
+                repositoryDetail.count_knowledge_bases || repositoryDetail.content_bases_count
               )
             }}
           </div>
@@ -231,7 +235,7 @@
             />
 
             <div class="unnnic-card-intelligence__detail__content__data__info__number">
-              {{ repositoryDetail.count_knowledge_bases }}
+              {{ repositoryDetail.count_knowledge_bases || repositoryDetail.content_bases_count }}
             </div>
           </div>
         </div>
@@ -352,7 +356,8 @@
       v-if="isQuickTestOpen"
       @close="isQuickTestOpen = false"
       :name="repositoryDetail.title"
-      :repository-uuid="repositoryDetail.repository"
+      :repository-uuid="repositoryDetail.uuid"
+      :repository-language="repositoryDetail.language"
       :id="repositoryDetail.id"
     />
 
@@ -382,6 +387,8 @@
       <unnnic-button
         slot="options"
         type="warning"
+        @click="deleteIntelligence"
+        :loading="deletingIntelligence"
       >
         {{ $t("delete") }}
       </unnnic-button>
@@ -394,6 +401,8 @@ import { mapActions, mapGetters } from 'vuex';
 import IntegrationModal from '@/components/shared/IntegrationModal';
 import SideBarContentBases from './SideBarContentBases';
 import SideBarQuickTest from './SideBarQuickTest';
+import nexusaiAPI from '../../../api/nexusaiAPI';
+import { get } from 'lodash';
 
 export default {
   name: 'HomeRepositoryCard',
@@ -414,6 +423,7 @@ export default {
       isViewBasesOpen: false,
       isQuickTestOpen: false,
       isDeleteIntelligenceConfirmationOpen: false,
+      deletingIntelligence: false,
     };
   },
   props: {
@@ -434,6 +444,11 @@ export default {
   },
   computed: {
     ...mapGetters(['getProjectSelected', 'getOrgSelected']),
+
+    language() {
+      return get(this.repositoryDetail, 'language', '').toUpperCase();
+    },
+
     getCurrentRepository() {
       return {
         name: this.repositoryDetail.name,
@@ -550,10 +565,18 @@ export default {
         });
       } else if (this.type === 'base') {
         this.$router.push({
-          name: 'repository-content-bases-edit',
+          name: 'intelligence-content-base-edit',
           params: {
-            id: this.repositoryDetail.id,
-          }
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+            contentBaseUuid: this.repositoryDetail.uuid,
+          },
+        });
+      } else if (this.type === 'intelligence') {
+        this.$router.push({
+          name: 'intelligence-home',
+          params: {
+            intelligenceUuid: this.repositoryDetail.uuid,
+          },
         });
       }
     },
@@ -582,14 +605,38 @@ export default {
     },
     deleteBase(repository) {
       this.$emit('deleteBase', repository)
-    }
+    },
+    deleteIntelligence() {
+      this.deletingIntelligence = true;
+
+      nexusaiAPI.deleteIntelligence({
+        orgUuid: this.$store.state.Auth.connectOrgUuid,
+        intelligenceUuid: this.repositoryDetail.uuid,
+      }).then(() => {
+        this.isDeleteIntelligenceConfirmationOpen = false;
+        this.$emit('removed');
+      }).finally(() => {
+        this.deletingIntelligence = false;
+      });
+    },
   }
 };
 </script>
 
 <style lang="scss">
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.base__footer {
+  margin-top: 0.625 * $unnnic-font-size - $unnnic-border-width-thinner;
+  padding-top: 0.625 * $unnnic-font-size;
+  border-top: $unnnic-border-width-thinner solid $unnnic-color-neutral-light;
+
+  color: $unnnic-color-neutral-cloudy;
+  font-family: $unnnic-font-family-secondary;
+  font-size: $unnnic-font-size-body-md;
+  line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+  font-weight: $unnnic-font-weight-bold;
+}
 
 .unnnic-card-intelligence {
   display: flex;

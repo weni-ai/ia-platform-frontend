@@ -4,6 +4,9 @@
   "announcements": {
     "new_artificial_intelligence_module_is_here": "Chegou o novo módulo de Inteligência Artificial! Explore as novidades e saiba como criar chatbots ainda mais incríveis!"
   },
+  "unauthorized": "Você não tem permissão para executar essa ação",
+  "internal_server_error": "Erro interno do servidor",
+  "unexpected_error": "Ocorreu um erro inesperado",
   "intelligences": {
     "own_intelligences": "Inteligências próprias",
     "public_intelligences": "Inteligências públicas",
@@ -18,7 +21,7 @@
     "sidebar_view_content_bases_description": "Visualize as bases de conteúdo que fazem parte dessa IA.",
     "delete_intelligence": "Excluir Inteligência",
     "delete_intelligence_confirmation_modal_description": "Tem certeza que deseja excluir a inteligência <b>{name}</b>?<br>Essa ação não poderá ser revertida.",
-    "filter_type_generative_label": "IAs de Conteúdo",
+    "filter_type_generative_label": "IAs Generativas",
     "filter_type_classification_label": "IAs de Classificação"
   },
   "bases": {
@@ -28,6 +31,9 @@
         "name": {
           "label": "Nome da base",
           "placeholder": "Nome"
+        },
+        "language": {
+          "label": "Idioma principal"
         },
         "description": {
           "label": "Descrição",
@@ -43,7 +49,36 @@
     "write_content": "Escrever conteúdo",
     "write_content_placeholder": "Escreva aqui o conteúdo",
     "write_content_help": "Não sabe como adicionar conteúdo à base de conhecimento da IA? <a href=\"#\" target=\"_blank\">Veja a documentação</a>",
-    "changes_saved": "Alterações salvas"
+    "changes_saved": "Alterações salvas",
+    "tabs": {
+      "files": "Arquivos",
+      "text": "Texto"
+    },
+    "files": {
+      "upload_content": "Carregar conteúdo de arquivos",
+      "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",
+      "supported_files": "Arquivos suportados: .pdf, .doc, docx, .txt, .xls e .xlsx.<br />Limite de 250MB por arquivo.",
+      "browse_file": "Procurar arquivo",
+      "uploaded_files": "Arquivos carregados",
+      "status": {
+        "uploading": "Carregando conteúdo",
+        "uploaded": "Conteúdo carregado",
+        "processing": "Processando conteúdo"
+      },
+      "content_of_the_files_has_been_added": "O conteúdo dos arquivos foi adicionado à base",
+      "content_of_the_files_is_loading": "Carregando conteúdo dos arquivos",
+      "file_removed_from_base": "{name} removido da base de conteúdo",
+      "delete_file": {
+        "title": "Excluir arquivo",
+        "description": "Tem certeza que deseja excluir o arquivo <b>{name}</b>?<br />O conteúdo desse arquivo será removido da base da IA",
+        "cancel": "Cancelar",
+        "delete": "Excluir"
+      }
+    }
+  },
+  "quick_test": {
+    "send_a_message": "Envie uma mensagem para testar a base de conteúdo...",
+    "unable_to_find_an_answer": "*Não foi possível encontrar uma resposta para essa pergunta*"
   },
   "webapp": {
     "layout": {

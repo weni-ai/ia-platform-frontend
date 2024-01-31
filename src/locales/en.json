@@ -4,6 +4,9 @@
   "announcements": {
     "new_artificial_intelligence_module_is_here": "The new Artificial Intelligence module is here! Explore what's new and learn how to create even more amazing chatbots!"
   },
+  "unauthorized": "You do not have permission to perform this action",
+  "internal_server_error": "Internal server error",
+  "unexpected_error": "An unexpected error occurred",
   "intelligences": {
     "own_intelligences": "Own intelligences",
     "public_intelligences": "Public intelligences",
@@ -18,7 +21,7 @@
     "sidebar_view_content_bases_description": "View the content bases that are part of this AI.",
     "delete_intelligence": "Delete Intelligence",
     "delete_intelligence_confirmation_modal_description": "Are you sure you want to delete <b>{name}</b> intelligence?<br>This action cannot be reversed.",
-    "filter_type_generative_label": "Content AIs",
+    "filter_type_generative_label": "Generative AIs",
     "filter_type_classification_label": "Classification AIs"
   },
   "bases": {
@@ -28,6 +31,9 @@
         "name": {
           "label": "Base name",
           "placeholder": "Name"
+        },
+        "language": {
+          "label": "Main language"
         },
         "description": {
           "label": "Description",
@@ -43,7 +49,36 @@
     "write_content": "Write content",
     "write_content_placeholder": "Write the content here",
     "write_content_help": "Not sure how to add content to the AI knowledge base? <a href=\"#\" target=\"_blank\">Check out the documentation</a>",
-    "changes_saved": "Changes saved"
+    "changes_saved": "Changes saved",
+    "tabs": {
+      "files": "Files",
+      "text": "Text"
+    },
+    "files": {
+      "upload_content": "Upload content from files",
+      "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
+      "supported_files": "Supported files: .pdf, .doc, docx, .txt, .xls and .xlsx.<br />250MB limit per file.",
+      "browse_file": "Browse file",
+      "uploaded_files": "Uploaded files",
+      "status": {
+        "uploading": "Uploading content",
+        "uploaded": "Uploaded content",
+        "processing": "Processing content"
+      },
+      "content_of_the_files_has_been_added": "The content of the files has been added to the base",
+      "content_of_the_files_is_loading": "Loading the content of the files",
+      "file_removed_from_base": "{name} removed from content base",
+      "delete_file": {
+        "title": "Delete file",
+        "description": "Are you sure you want to delete the file <b>{name}</b>?<br />The contents of this file will be removed from the AI base",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      }
+    }
+  },
+  "quick_test": {
+    "send_a_message": "Send a message to test the content base...",
+    "unable_to_find_an_answer": "*Unable to find an answer to this question*"
   },
   "webapp": {
     "layout": {

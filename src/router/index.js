@@ -81,6 +81,9 @@ const router = new Router({
         store.dispatch('externalLogin', { token: token.replace('+', ' ') });
         store.dispatch('orgSelected', { org });
         store.dispatch('projectSelected', { project });
+
+        store.state.Auth.connectOrgUuid = to.query?.org_uuid;
+
         if (to.query.next){
           next(to.query.next)
         } else {
@@ -139,6 +142,21 @@ const router = new Router({
       ],
     },
     {
+      path: '/intelligences/:intelligenceUuid',
+      name: 'intelligence-home',
+      component: RepositoryContentBases,
+    },
+    {
+      path: '/intelligences/:intelligenceUuid/edit',
+      name: 'intelligence-edit',
+      component: RepositoryContentAdjustment,
+    },
+    {
+      path: '/intelligences/:intelligenceUuid/bases/:contentBaseUuid/edit',
+      name: 'intelligence-content-base-edit',
+      component: RepositoryContentBasesForm,
+    },
+    {
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardLayout,
@@ -152,16 +170,6 @@ const router = new Router({
           path: ':ownerNickname/:slug/content/bases/new',
           name: 'repository-content-bases-new',
           component: RepositoryContentBasesForm,
-        },
-        {
-          path: ':ownerNickname/:slug/content/bases/:id/edit',
-          name: 'repository-content-bases-edit',
-          component: RepositoryContentBasesForm,
-        },
-        {
-          path: ':ownerNickname/:slug/content/adjustment',
-          name: 'repository-content-adjustments',
-          component: RepositoryContentAdjustment,
         },
         {
           path: ':ownerNickname/:slug/content/api',

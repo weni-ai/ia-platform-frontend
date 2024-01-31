@@ -4,7 +4,12 @@
       <div class="repository-base__header">
         <div class="repository-base__header__details">
           <div class="repository-base__header__title">
-            <unnnic-avatar-icon icon="neurology" size="sm" scheme="weni-600" />
+            <unnnic-avatar-icon
+              class="repository-base__header__title__icon"
+              icon="neurology"
+              size="sm"
+              scheme="weni-600"
+            />
 
             <unnnic-skeleton-loading
               v-if="repository.uuid === null"
@@ -26,28 +31,6 @@
           <p v-else class="repository-base__header__description">
             {{ repository.description }}
           </p>
-
-          <div class="repository-base__header__categories">
-            <template v-if="repository.uuid === null">
-              <unnnic-skeleton-loading
-                v-for="i in 3"
-                :key="i"
-                tag="div"
-                :width="40 + Math.floor(Math.random() * 80) + 'px'"
-                height="28px"
-              />
-            </template>
-
-            <unnnic-tag
-              v-else
-              v-for="(category, index) in getAllCategories"
-              :key="index"
-              class="repository-base__header__tag"
-              :text="category"
-              disabled
-              scheme="background-sky"
-            />
-          </div>
         </div>
 
         <repository-content-navigation v-if="canContribute" />
@@ -55,7 +38,7 @@
 
       <hr />
 
-      <div v-if="bases.count === 0" class="bases-list--empty">
+      <div v-if="bases.data.length === 0 && bases.status === 'complete'" class="bases-list--empty">
         <img src="../../../assets/imgs/doris-yawning.png" alt="Doris Yawning">
 
           <h1 class="bases-list__title">
@@ -76,7 +59,7 @@
 
         <div class="repository-base__bases-count">
           <unnnic-skeleton-loading
-            v-if="bases.count === null"
+            v-if="repository.uuid === null"
             tag="div"
             width="300px"
             height="28px"
@@ -85,7 +68,7 @@
           <h1
             v-else
             class="u font secondary title-sm bold"
-            v-html="$tc('webapp.home.bases.knowledge_bases', bases.count)"
+            v-html="$tc('webapp.home.bases.knowledge_bases', repository.content_bases_count)"
           ></h1>
 
           <unnnic-button
@@ -100,6 +83,7 @@
 
         <div class="repository-base__search-base">
           <unnnic-input
+            v-model="searchBaseName"
             icon-left="search-1"
             placeholder="Pesquisar base de conteúdo"
           />
@@ -108,19 +92,21 @@
         <div class="bases-list">
           <home-repository-card
             type="base"
-            v-for="base in bases.data"
+            v-for="base in bases.data
+              .filter(({ title }) => searchBaseName ?
+                title.toLowerCase().includes(searchBaseName.toLowerCase()) : true)"
             :key="base.id"
             :repository-detail="base"
             :can-contribute="canContribute"
             @deleteBase="openDeleteModal"
           />
 
-          <template v-if="bases.count === null || bases.status === 'loading'">
+          <template v-if="bases.status === 'loading'">
             <unnnic-skeleton-loading
               v-for="i in 3"
               :key="i"
               tag="div"
-              height="146px"
+              height="178px"
             />
           </template>
 
@@ -182,6 +168,18 @@
       </unnnic-form-element>
 
       <unnnic-form-element
+        :label="$t('bases.create.form.language.label')"
+        class="create-base__form-element"
+      >
+        <unnnic-select-smart
+          :value="[languages.find(({ value }) => value === language)]"
+          @input="language = $event[0].value"
+          :options="languages"
+          ordered-by-index
+        />
+      </unnnic-form-element>
+
+      <unnnic-form-element
         :label="$t('bases.create.form.description.label')"
         class="create-base__form-element"
       >
@@ -207,6 +205,7 @@
           type="primary"
           @click="createNewBase"
           :disabled="!this.title || !this.description"
+          :loading="creatingNewBase"
         />
       </div>
     </modal-next>
@@ -223,6 +222,8 @@ import Modal from '@/components/repository/CreateRepository/Modal';
 import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
 import repositoryV2 from '../../../api/v2/repository';
 import ModalNext from '../../../components/ModalNext';
+import nexusaiAPI from '../../../api/nexusaiAPI';
+import { get } from 'lodash';
 
 export default {
   name: 'RepositoryBase',
@@ -237,14 +238,15 @@ export default {
   },
   data() {
     return {
+      searchBaseName: '',
+
       loadingIntelligence: false,
 
       repository: {
         uuid: null,
-        language: '',
         name: '',
         description: '',
-        categories_list: [],
+        content_bases_count: 0,
       },
 
       repositoryUUID: null,
@@ -252,10 +254,25 @@ export default {
       isDeleteModalOpen: null,
       modalData: {},
       isAddContentBaseOpen: false,
+
       title: '',
+      language: 'pt-br',
       description: '',
 
+      languages: [{
+        value: 'pt-br',
+        label: 'PT-BR',
+      }, {
+        value: 'en-us',
+        label: 'EN-US',
+      }, {
+        value: 'es',
+        label: 'ES',
+      }],
+
       isShowingEndOfList: false,
+
+      creatingNewBase: false,
 
       bases: {
         count: null,
@@ -269,19 +286,7 @@ export default {
     };
   },
 
-  mounted() {
-    this.loadingIntelligence = true;
-
-    repositoryV2
-      .shortcut(this.$route.params.ownerNickname, this.$route.params.slug)
-      .then(({ data }) => {
-        this.$store.state.Repository.current = data;
-        this.repository = data;
-      })
-      .finally(() => {
-        this.loadingIntelligence = false;
-      });
-  },
+  mounted() {},
 
   beforeDestroy() {
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
@@ -291,7 +296,7 @@ export default {
     ...mapGetters(['getCurrentRepository', 'getProjectSelected', 'getOrgSelected']),
 
     canContribute() {
-      return this.repository.authorization?.can_contribute;
+      return true;
     },
 
     getAllCategories() {
@@ -304,6 +309,14 @@ export default {
     }
   },
   watch: {
+    isAddContentBaseOpen() {
+      const userLanguage = get(this.$store.state.User, 'me.language', '').toLowerCase();
+
+      this.language = ['pt-br', 'en-us', 'es'].includes(userLanguage)
+        ? userLanguage
+        : 'pt-br';
+    },
+
     isShowingEndOfList() {
       if (
         this.isShowingEndOfList
@@ -311,6 +324,35 @@ export default {
       ) {
         this.fetchBases();
       }
+    },
+
+    '$route.params.intelligenceUuid': {
+      immediate: true,
+
+      handler() {
+        this.loadingIntelligence = true;
+
+        nexusaiAPI
+          .readIntelligence({
+            orgUuid: this.$store.state.Auth.connectOrgUuid,
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+          })
+          .then(({ data }) => {
+            /*
+              uuid
+              content_bases_count: Number
+              description: String
+              name: String
+            */
+
+            this.$store.state.Repository.current = data;
+
+            this.repository = data;
+          })
+          .finally(() => {
+            this.loadingIntelligence = false;
+          });
+      },
     },
 
     // eslint-disable-next-line
@@ -338,27 +380,29 @@ export default {
     ...mapActions(['getQAKnowledgeBasesNext', 'deleteQAKnowledgeBase', 'createQAKnowledgeBase', 'editQAKnowledgeBase', 'createQAText']),
 
     async createNewBase() {
-      const { data } = await this.createQAKnowledgeBase({
-        repositoryUUID: this.repositoryUUID,
-        title: this.title,
-      });
+      try {
+        this.creatingNewBase = true;
 
-      await this.createQAText({
-        repositoryUUID: this.repositoryUUID,
-        title: this.title,
-        knowledgeBaseId: data.id,
-        text: this.description,
-        language: this.repository.language
-      });
+        const { data: contentBaseData } = await nexusaiAPI
+          .createIntelligenceContentBase({
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+            title: this.title,
+            language: this.language,
+            description: this.description,
+          });
 
-      this.isAddContentBaseOpen = false;
+        this.creatingNewBase = false;
+        this.isAddContentBaseOpen = false;
 
-      this.$router.push({
-        name: 'repository-content-bases-edit',
-        params: {
-          id: data.id,
-        }
-      });
+        this.$router.push({
+          name: 'intelligence-content-base-edit',
+          params: {
+            contentBaseUuid: contentBaseData.uuid,
+          },
+        });
+      } finally {
+        this.creatingNewBase = false;
+      }
     },
 
     reloadBases() {
@@ -379,16 +423,14 @@ export default {
       try {
         this.bases.status = 'loading';
 
-        const { data } = await this.getQAKnowledgeBasesNext({
-          limit: this.bases.limit,
-          offset: this.bases.offset,
-          repositoryUUID: this.repositoryUUID,
-          next: this.bases.next,
-        });
+        const { data } = await nexusaiAPI
+          .listIntelligencesContentBases({
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+            next: this.bases.next,
+          });
 
         this.bases.data = [...this.bases.data, ...data.results];
         this.bases.next = data.next;
-        this.bases.count = data.count;
 
         if (!data.next) {
           this.bases.status = 'complete';
@@ -404,6 +446,7 @@ export default {
       this.isDeleteModalOpen = {
         name: repository.name,
         id: repository.id,
+        contentBaseUuid: repository.uuid,
         loading: false,
       }
     },
@@ -411,10 +454,11 @@ export default {
     async deleteBase() {
       this.isDeleteModalOpen.loading = true;
 
-      await this.deleteQAKnowledgeBase({
-        repositoryUUID: this.repositoryUUID,
-        id: this.isDeleteModalOpen.id,
-      });
+      await nexusaiAPI
+        .deleteIntelligenceContentBase({
+          intelligenceUuid: this.$route.params.intelligenceUuid,
+          contentBaseUuid: this.isDeleteModalOpen.contentBaseUuid,
+        });
 
       this.isDeleteModalOpen = null;
 
@@ -426,6 +470,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.repository-base__header__title__icon {
+  background-color: $unnnic-color-weni-100;
+}
 
 .delete-base-modal ::v-deep {
   .unnnic-modal-container-background-body {

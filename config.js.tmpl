@@ -24,6 +24,7 @@ const runtimeVariables = (() => ({
   VUE_APP_LOGROCKET_ID: ('${VUE_APP_LOGROCKET_ID}' || ''),
   VUE_APP_LOGROCKET_PARENT_DOMAIN: ('${VUE_APP_LOGROCKET_PARENT_DOMAIN}' || ''),
   SENTRY_ENVIRONMENT: ('${SENTRY_ENVIRONMENT}' || ''),
+  NEXUS_API_BASE_URL: '${NEXUS_API_BASE_URL}',
   get(name){
     return this[name];
   }
