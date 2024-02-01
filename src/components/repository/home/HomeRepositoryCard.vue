@@ -548,7 +548,17 @@ export default {
       this.integrateModal = value;
     },
     repositoryDetailsRouterParams() {
-      if (this.type === 'repository') {
+      if (this.type === 'intelligence' || (
+        this.type === 'repository'
+        && this.repositoryDetail?.repository_type === 'content'
+      )) {
+        this.$router.push({
+          name: 'intelligence-home',
+          params: {
+            intelligenceUuid: this.repositoryDetail.uuid,
+          },
+        });
+      } else if (this.type === 'repository') {
         let name;
 
         if (this.repositoryDetail.repository_type === 'content') {
@@ -569,13 +579,6 @@ export default {
           params: {
             intelligenceUuid: this.$route.params.intelligenceUuid,
             contentBaseUuid: this.repositoryDetail.uuid,
-          },
-        });
-      } else if (this.type === 'intelligence') {
-        this.$router.push({
-          name: 'intelligence-home',
-          params: {
-            intelligenceUuid: this.repositoryDetail.uuid,
           },
         });
       }
