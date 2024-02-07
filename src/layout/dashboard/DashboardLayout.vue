@@ -25,6 +25,7 @@ import CustomIcon from '@/components/shared/CustomIcon';
 import { mapActions, mapGetters } from 'vuex';
 import Tour from '@/components/Tour';
 import Analytics from '@/utils/plugins/analytics';
+import RemoveBulmaMixin from '../../utils/RemoveBulmaMixin';
 
 
 export default {
@@ -35,6 +36,9 @@ export default {
     CustomIcon,
     Tour,
   },
+
+  mixins: [RemoveBulmaMixin],
+
   data() {
     return {
       collapse: true,
