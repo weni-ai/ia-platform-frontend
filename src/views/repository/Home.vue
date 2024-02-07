@@ -72,6 +72,8 @@
 
       <div class="repository-home__divider"></div>
 
+      <divider></divider>
+
       <summary-information />
 
       <unnnic-tab
@@ -175,6 +177,7 @@
         {{ $t("webapp.home.save_changes") }}
       </unnnic-button>
     </unnnic-modal>
+
     <template v-slot:loader>
       <summary-loader />
     </template>
@@ -191,6 +194,7 @@ import SummaryInformation from '@/components/repository/SummaryInformation';
 import IntegrationModal from '@/components/shared/IntegrationModal';
 import RepositoryBase from './Base';
 import SummaryLoader from '@/views/repository/loadings/Summary';
+import Divider from '../../components/Divider';
 
 export default {
   name: 'RepositoryHome',
@@ -201,7 +205,8 @@ export default {
     EntityEdit,
     SummaryInformation,
     IntegrationModal,
-    SummaryLoader
+    SummaryLoader,
+    Divider,
   },
   extends: RepositoryBase,
   data() {
@@ -489,11 +494,6 @@ export default {
       flex-wrap: wrap;
       align-items: center;
     }
-  }
-
-  &__divider {
-    border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-    margin: $unnnic-spacing-stack-md 0;
   }
 
   &__tabs {

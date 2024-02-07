@@ -54,98 +54,24 @@ export default {
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
- /deep/ .number {
-    align-items: unset;
-    background-color: unset;
-    border-radius: 0;
-    display: unset;
-    height: 0;
-    justify-content: unset;
-    margin-right: 0;
-    min-width: unset;
-    padding: 0;
-    text-align: unset;
-   vertical-align: bottom;
- }
 
 .intelligence-force{
         display: flex;
         flex-direction: column;
-        width: 50%;
-
-        @media screen and (max-width: 70em) {
-        width: 100%;
-      }
+        flex: 1;
 
         &__title{
-            font-size: 1.75rem;
-            margin-bottom: 1.2rem;
-          h2 {
-            font-family: $font-family;
-            color: $color-fake-black;
-            margin-bottom:0.6rem;
-            font-weight: $font-weight-medium;
-            margin-right: 0.6rem;
-          }
+            margin-bottom: $unnnic-spacing-md;
         }
+  /deep/ .unnnic-tooltip-label {
+    max-width: 26.875 * $unnnic-font-size;
+  }
 
-
-    &__relevance {
-      display: flex;
-      margin-bottom: 4rem;
-
-      &__progress {
-        height: 20px;
-        width: 100%;
-        background-color: #EAEAEA;
-        box-shadow: 0px 3px 6px #00000029;
-      }
-      &__bar-field {
-        background: linear-gradient(to right, #00ded2 0%, $color-primary-dark 100%);
-        height: 20px;
-        width: 15px;
-
-        &__icon{
-          float: right;
-        }
-      }
-      &__division{
-        display:flex;
-        width: 42%;
-        position:absolute;
-
-        &__stripe{
-          border: 2px solid $color-white;
-          height: 20px;
-          margin-left: 16%;
-        }
-      }
-    }
     &__chart-wrapper{
       display: flex;
       justify-content: center;
-      margin-top: 2rem;
-    }
-    @media screen and (max-width: 45em) {
-        h2{
-            font-size: 1.4rem;
-        }
+      margin-top: $unnnic-spacing-md;
     }
 }
-  /deep/ .unnnic-chart-rainbow .content .description {
-    font-size: $unnnic-font-size-title-sm;
-  }
-  /deep/ .unnnic-card-title .title {
-    margin-bottom: 0;
-    flex: initial;
-    margin-right: 6px;
-
-  }
-  /deep/ .information {
-    bottom: 2px;
-  }
-  /deep/ .unnnic-tooltip-label {
-    max-width: 430px;
-  }
 
 </style>

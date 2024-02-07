@@ -12,60 +12,85 @@
         {{ $t('webapp.summary.general_information') }}
       </span> -->
       <div class="summary-information__info__container">
-        <div class="summary-information__info__container__general">
-          <div class="summary-information__info__container__general__data">
-          <numbers-card
-            :count="getCurrentRepository.examples__count"
-            :label="$tc('webapp.summary.information_sentences',
-                        getCurrentRepository.examples__count)"
-            clickable
-            @click="navigateToSentences"
+        <unnnic-card-number
+          class="summary-information__info__container__item--clickable"
+          :description="
+            $tc('webapp.summary.information_sentences', getCurrentRepository.examples__count)
+          "
+          :number="getCurrentRepository.examples__count"
+          clickable
+          @click.native="navigateToSentences"
+          full-size
+        />
+
+        <unnnic-card-number
+          class="summary-information__info__container__item--clickable"
+          :description="
+            $tc('webapp.summary.information_intents', getCurrentRepository.intents_list.length)
+          "
+          :number="getCurrentRepository.intents_list.length"
+          clickable
+          @click.native="scrollToIntent"
+          full-size
+        />
+
+        <unnnic-card-number
+          class="summary-information__info__container__item--clickable"
+          :description="
+            $tc('webapp.summary.information_entities', getCurrentRepository.entities.length)
+          "
+          :number="getCurrentRepository.entities.length"
+          clickable
+          @click.native="scrollToEntity"
+          full-size
+        />
+
+        <unnnic-tool-tip
+          side="bottom"
+          :text="languagesList"
+          enabled
+          max-width="15rem"
+        >
+          <unnnic-card-number
+            :description="
+              $tc(
+                'webapp.summary.information_language',
+                getCurrentRepository.available_languages.length,
+              )
+            "
+            :number="getCurrentRepository.available_languages.length"
+            full-size
           />
-          </div>
-          <div class="summary-information__info__container__general__data">
-          <numbers-card
-            :count="getCurrentRepository.intents_list.length"
-            :label="$tc('webapp.summary.information_intents',
-                        getCurrentRepository.intents_list.length)"
-            clickable
-            @click="scrollToIntent"
+        </unnnic-tool-tip>
+
+        <unnnic-tool-tip
+          side="bottom"
+          :text="contributorsList"
+          enabled
+          max-width="15rem"
+        >
+          <unnnic-card-number
+            :description="
+              $tc(
+                'webapp.summary.information_contributors',
+                getCurrentRepository.authorizations.count,
+              )
+            "
+            :number="getCurrentRepository.authorizations.count"
+            full-size
           />
-          </div>
-          <div class="summary-information__info__container__general__data">
-          <numbers-card
-            :count="getCurrentRepository.entities.length"
-            :label="$tc('webapp.summary.information_entities',
-                        getCurrentRepository.entities.length)"
-            clickable
-            @click="scrollToEntity"
-          />
-          </div>
-        </div>
-        <div class="summary-information__info__container__general">
-          <div class="summary-information__info__container__general__data">
-            <numbers-card
-              :help-text="languagesList"
-              :count="getCurrentRepository.available_languages.length"
-              :label="$tc('webapp.summary.information_language',
-                          getCurrentRepository.available_languages.length)"
-            />
-          </div>
-          <div class="summary-information__info__container__general__data">
-            <numbers-card
-              :help-text="contributorsList"
-              :count="getCurrentRepository.authorizations.count"
-              :label="$tc('webapp.summary.information_contributors',
-                          getCurrentRepository.authorizations.count)"
-            />
-          </div>
-          <div class="summary-information__info__container__general__data">
-            <numbers-card
-              :count="getCurrentRepository.count_authorizations"
-              :label="$tc('webapp.summary.information_integrations',
-                          getCurrentRepository.count_authorizations)"
-            />
-          </div>
-        </div>
+        </unnnic-tool-tip>
+
+        <unnnic-card-number
+          :description="
+            $tc(
+              'webapp.summary.information_integrations',
+              getCurrentRepository.count_authorizations,
+            )
+          "
+          :number="getCurrentRepository.count_authorizations"
+          full-size
+        />
       </div>
     </div>
     <intelligence-force/>
@@ -129,9 +154,11 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .summary-information{
   display: flex;
+  gap: $unnnic-spacing-sm;
 
   @media screen and (max-width: 70em) {
         flex-direction: column;
@@ -149,10 +176,15 @@ export default {
         }
 
         &__container{
+            margin-top: $unnnic-spacing-md;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: $unnnic-spacing-sm;
             width: 100%;
-            display: flex;
-            margin-top: 1.2rem;
-            flex-direction: column;
+
+          &__item--clickable {
+            cursor: pointer;
+          }
 
             &__training{
             display: flex;
@@ -163,57 +195,8 @@ export default {
             margin-right: 10px;
             width: 50%;
             border: 1px solid $color-border;
-
-              @media screen and (max-width: 60em) {
-                width: 100%;
-              }
-              @media screen and (max-width: 45em) {
-                height: 140px * 3;
-                flex-direction: column;
-              }
             }
 
-            &__general{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: center;
-            height: 110px;
-            width: 95%;
-            margin-top: 1rem;
-
-            @media screen and (max-width: 60em) {
-              width: 100%;
-              margin-top: 10px;
-            }
-            @media screen and (max-width: 40em) {
-              flex-direction: column;
-              margin-bottom: 10rem;
-            }
-
-              &__data{
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                height: 156px;
-                cursor: pointer;
-                margin: 0 1rem 1rem 0;
-
-                  @media screen and (max-width: 40em) {
-                    width:100%;
-                    height: 156px * 2;
-                    margin-top: 10px;
-                  }
-              }
-              &__data:nth-child(2){
-                // margin: 0 0.3rem;
-
-                @media screen and (max-width: 40em) {
-                    margin-top: 0.6rem;
-                }
-              }
-            }
               @media screen and (max-width: 60em) {
                 display: flex;
                 flex-direction: column;
