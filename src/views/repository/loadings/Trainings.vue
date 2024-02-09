@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+    <unnnic-divider />
 
     <div class="trainings-loading__info">
       <div class="trainings-loading__info__section">
@@ -27,7 +27,7 @@
       <unnnic-skeleton-loading tag="div" width="100%" height="44px" />
     </div>
 
-    <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+    <unnnic-divider />
 
     <div class="trainings-loading__card-wrapper">
       <unnnic-skeleton-loading tag="div" width="249px" height="17px" />

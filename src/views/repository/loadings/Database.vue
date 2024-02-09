@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+    <unnnic-divider />
 
     <div class="database-loading__fields">
       <div>

@@ -18,7 +18,9 @@
                 v-html="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
                 class="trainings-repository__description column is-6 p-0" />
             </div>
-            <hr class="divider" />
+
+            <unnnic-divider />
+
             <div class="trainings-repository__list-wrapper">
               <div>
                 <h2 class="trainings-repository__list-wrapper__title">
@@ -425,11 +427,6 @@ export default {
         font-weight: 700;
       }
     }
-}
-.divider {
-  background: #E2E6ED;
-  height: 1px;
-  margin: 2rem 0;
 }
 
 /deep/ input:focus, /deep/ textarea:focus {

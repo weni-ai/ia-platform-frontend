@@ -237,7 +237,7 @@
         </div>
       </div>
 
-      <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+      <unnnic-divider />
 
       <div class="settings-loading__container__table-buttons">
         <unnnic-skeleton-loading tag="div" width="70px" height="22px" />

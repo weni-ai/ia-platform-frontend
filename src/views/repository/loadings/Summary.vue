@@ -17,7 +17,7 @@
       <unnnic-skeleton-loading tag="div" width="261px" height="50px" />
     </div>
 
-    <divider></divider>
+    <unnnic-divider />
 
     <div class="summary-loading__info">
       <div class="summary-loading__info__section">
@@ -50,7 +50,7 @@
       <unnnic-skeleton-loading tag="div" width="94px" height="24px" />
     </div>
 
-    <divider></divider>
+    <unnnic-divider />
 
     <div class="summary-loading__entities">
       <unnnic-skeleton-loading tag="div" width="128px" height="36px" />
@@ -70,12 +70,8 @@
 </template>
 
 <script>
-import Divider from '../../../components/Divider';
-
 export default {
-  components: {
-    Divider,
-  },
+  components: {},
 };
 </script>
 

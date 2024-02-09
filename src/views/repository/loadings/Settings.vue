@@ -15,7 +15,7 @@
       <unnnic-skeleton-loading tag="div" width="150px" height="20px" />
     </div>
 
-    <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+    <unnnic-divider />
 
     <div class="settings-loading__container">
       <div class="settings-loading__container__field">
@@ -62,7 +62,7 @@
         <unnnic-skeleton-loading tag="div" width="1029px" height="45px" />
       </div>
 
-      <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+      <unnnic-divider />
 
       <div class="settings-loading__container__field">
         <unnnic-skeleton-loading tag="div" width="95px" height="20px" />

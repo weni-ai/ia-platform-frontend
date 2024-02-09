@@ -19,7 +19,7 @@
       <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
     </div>
 
-    <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+    <unnnic-divider />
 
     <div class="intent-loading__pagination">
       <unnnic-skeleton-loading tag="div" width="126px" height="36px" />
