@@ -14,12 +14,13 @@
                 icon="graph-status-circle-1"
                 scheme="aux-purple"
               />
+
               <p
                 v-html="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
-                class="trainings-repository__description column is-6 p-0" />
+                class="trainings-repository__description" />
             </div>
 
-            <unnnic-divider />
+            <unnnic-divider y-spacing="lg" />
 
             <div class="trainings-repository__list-wrapper">
               <div>
@@ -304,7 +305,6 @@ export default {
 <style lang="scss" scoped>
   @import '~@/assets/scss/colors.scss';
   @import '~@/assets/scss/variables.scss';
-  @import "~@weni/unnnic-system/dist/unnnic.css";
   @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 
@@ -315,10 +315,13 @@ export default {
     // margin-bottom: .5rem;
 
     &__title{
-      font-family: $unnnic-font-family-secondary;
-      font-size: $unnnic-font-size-title-sm;
+      margin: 0;
+
       color: $unnnic-color-neutral-dark;
-      margin-bottom: 1px;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-regular;
+      font-size: $unnnic-font-size-title-sm;
+      line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
     }
      &__subtitle{
       font-size: $font-size;
@@ -416,15 +419,24 @@ export default {
     }
 
     &__description {
-      font-family: 'Lato';
-      font-size: 14px;
-      color: #4E5666;
-      margin-top: 1rem;
+      color: $unnnic-color-neutral-dark;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-regular;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+
+      margin-block-start: $unnnic-spacing-sm;
+      margin-block-end: 0;
 
       /deep/ a {
-        color: #4E5666;
+        color: inherit;
         text-decoration: underline;
-        font-weight: 700;
+        text-underline-offset: $unnnic-spacing-nano;
+        font-weight: $unnnic-font-weight-bold;
+
+        &:hover {
+          color: $unnnic-color-neutral-darkest;
+        }
       }
     }
 }
