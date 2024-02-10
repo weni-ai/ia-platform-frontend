@@ -48,43 +48,36 @@
             </div>
           </div>
 
-          <div v-if="pageItem === 1 && isSentenceNew">
+          <template v-if="pageItem === 1">
             <div class="phrase-suggestion__header">
               <div class="phrase-suggestion__header__step">
                 <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
                   <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
                 </div>
-                <h1 class="ml-4 mr-5">
-                  {{ $t('webapp.phrase-suggestion.add_new') }}
+
+                <h1>
+                  {{ pageTitle }}
                 </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="1" :totalProgress="4" />
+
+                <unnnic-circle-progress-bar
+                  class="progress"
+                  :progress="pageItem"
+                  :total-progress="4"
+                />
               </div>
             </div>
 
-            <hr class="divider" />
+            <unnnic-divider y-spacing="lg" />
+          </template>
 
-            <add-sentence-form
-              :repository="repository"
-              @created="updatedExampleList()"
-              @onSubmit="addSentence"
-            />
+          <add-sentence-form
+            v-if="pageItem === 1 && isSentenceNew"
+            :repository="repository"
+            @created="updatedExampleList()"
+            @onSubmit="addSentence"
+          />
 
-          </div>
-
-          <div v-if="pageItem === 1 && !isSentenceNew">
-            <div class="phrase-suggestion__header">
-              <div class="phrase-suggestion__header__step">
-                <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
-                  <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
-                </div>
-                <h1 class="ml-4 mr-5">
-                  {{ $t('webapp.phrase-suggestion.add_existing') }}
-                </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="1" :totalProgress="4" />
-              </div>
-            </div>
-
-            <hr class="divider" />
+          <div v-else-if="pageItem === 1 && !isSentenceNew">
             <div class="column is-6 p-0">
               <unnnic-select
                 :label="$t('webapp.phrase-suggestion.select_intent')"
@@ -393,6 +386,16 @@ export default {
       repositoryUUID: 'getCurrentRepository',
       versionSelected: 'getSelectedVersion',
     }),
+
+    pageTitle() {
+      if (this.pageItem === 1) {
+        return this.isSentenceNew
+          ? this.$t('webapp.phrase-suggestion.add_new')
+          : this.$t('webapp.phrase-suggestion.add_existing');
+      }
+
+      return '';
+    },
   },
   watch: {
     versionSelected() {
@@ -684,10 +687,20 @@ export default {
       &__step {
         display: flex;
         align-items: center;
+        column-gap: $unnnic-spacing-sm;
 
         h1 {
-          font-family: $unnnic-font-family-secondary;
+          margin: 0;
+
+          color: $unnnic-color-neutral-darkest;
+          font-family: $unnnic-font-family-primary;
+          font-weight: $unnnic-font-weight-regular;
           font-size: $unnnic-font-size-title-sm;
+          line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
+        }
+
+        .progress {
+          margin-left: $unnnic-spacing-md;
         }
       }
     }

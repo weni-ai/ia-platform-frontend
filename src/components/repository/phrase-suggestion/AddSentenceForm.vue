@@ -14,17 +14,12 @@
               slot="label"
               class="unnnic-form__label"
               v-html="$t('webapp.phrase-suggestion.add_a_sentence')" />
-          <example-text-with-highlighted-entities-input
-            id="tour-training-step-1"
-            ref="textInput"
-            :is-previous-disabled="true"
-            :is-step-blocked="textSelected === null"
+
+          <input-with-hightlights
             v-model="text"
             :entities="entities"
             :placeholder="$t('webapp.example.sentence')"
-            size="normal"
-            @textSelected="setTextSelected($event)"
-            @submit="onEnter()"
+            :selected.sync="textSelected"
           />
         </b-field>
       </div>
@@ -110,6 +105,7 @@ import NewEntitiesInput from '@/components/inputs/EntitiesInput/NewEntitiesInput
 
 import { mapActions, mapGetters } from 'vuex';
 import { formatters, LANGUAGES } from '@/utils';
+import InputWithHightlights from '../../InputWithHightlights';
 
 
 export default {
@@ -117,6 +113,7 @@ export default {
   components: {
     ExampleTextWithHighlightedEntitiesInput,
     NewEntitiesInput,
+    InputWithHightlights,
   },
   props: {
     repository: {
@@ -207,6 +204,10 @@ export default {
       await this.$nextTick();
       this.intent = formatters.bothubItemKey()(this.intent.toLowerCase());
     },
+
+    text() {
+      this.textSelected = null;
+    },
   },
   mounted() {
     this.entitiesList = this.availableEntities;
@@ -222,10 +223,8 @@ export default {
       this.textSelected = value;
     },
     onEntityAdded() {
-      if (this.$refs.textInput.clearSelected) {
-        /* istanbul ignore next */
-        this.$refs.textInput.clearSelected();
-      }
+      this.textSelected = null;
+
       this.$emit('eventStep');
     },
     async onSubmit() {
