@@ -7,23 +7,14 @@
         <loading v-if="loading" />
         <div v-else-if="repository.authorization.can_contribute" class="phrase-suggestion">
           <div v-if="pageItem === 0">
-            <div class="phrase-suggestion__header">
-              <div class="phrase-suggestion__header__title">
-                <unnnic-card
-                  type="title"
-                  :title="$t('webapp.phrase-suggestion.title')"
-                  :hasInformationIcon="false"
-                  icon="copy-paste-1"
-                  scheme="feedback-blue"
-                />
-              </div>
+            <unnnic-intelligence-header
+              :title="$t('webapp.phrase-suggestion.title')"
+              icon="copy-paste-1"
+              icon-scheme="feedback-blue"
+              :description="$t('webapp.phrase-suggestion.subtitle')"
+            />
 
-              <div class="phrase-suggestion__header__container">
-                <p class="phrase-suggestion__header__subtitle">
-                  {{ $t('webapp.phrase-suggestion.subtitle') }}
-                </p>
-              </div>
-            </div>
+            <unnnic-divider />
 
             <div class="phrase-suggestion__cards">
               <p>
@@ -685,28 +676,6 @@ export default {
   font-family: $unnnic-font-family-secondary;
 
     &__header {
-      &__container {
-        display: flex;
-        align-items: center;
-        padding-bottom: $unnnic-spacing-stack-lg;
-        margin-bottom: $unnnic-spacing-stack-lg;
-        border-bottom: 1px solid $unnnic-color-neutral-soft;
-      }
-
-      &__title {
-        display: flex;
-        gap: $unnnic-spacing-stack-lg;
-        margin-bottom: $unnnic-spacing-stack-sm;
-        align-items: center;
-      }
-
-      &__subtitle {
-        max-width: 50%;
-        font-size: $unnnic-font-size-body-gt;
-        color: $unnnic-color-neutral-dark;
-        line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
-      }
-
       &__back-button {
         cursor: pointer;
       }

@@ -17,6 +17,7 @@ import LogRocket from 'logrocket';
 import VShowSlide from 'v-show-slide';
 import iframessa from 'iframessa';
 import UnnnicDivider from './components/Divider';
+import UnnnicIntelligenceHeader from './components/unnnic-intelligence/Header';
 
 iframessa.register('ai');
 
@@ -34,6 +35,7 @@ Vue.use(VueHighlightJS);
 Vue.use(VShowSlide);
 
 Vue.component('unnnic-divider', UnnnicDivider);
+Vue.component('unnnic-intelligence-header', UnnnicIntelligenceHeader);
 
 Vue.config.productionTip = false;
 

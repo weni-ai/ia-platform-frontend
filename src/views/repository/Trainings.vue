@@ -6,19 +6,12 @@
       <div class="trainings-repository__new-example">
         <div v-if="authenticated">
           <div v-if="repository.authorization.can_contribute">
-            <div>
-              <unnnic-card
-                type="title"
-                :title="$t('webapp.trainings.train_title')"
-                :hasInformationIcon="false"
-                icon="graph-status-circle-1"
-                scheme="aux-purple"
-              />
-
-              <p
-                v-html="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
-                class="trainings-repository__description" />
-            </div>
+            <unnnic-intelligence-header
+              :title="$t('webapp.trainings.train_title')"
+              icon="graph-status-circle-1"
+              icon-scheme="aux-purple"
+              :description="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
+            />
 
             <unnnic-divider y-spacing="lg" />
 
