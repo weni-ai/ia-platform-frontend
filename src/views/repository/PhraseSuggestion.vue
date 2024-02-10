@@ -14,12 +14,13 @@
               :description="$t('webapp.phrase-suggestion.subtitle')"
             />
 
-            <unnnic-divider />
+            <unnnic-divider y-spacing="lg" />
 
             <div class="phrase-suggestion__cards">
               <p>
                 {{ $t('webapp.phrase-suggestion.select_method') }}
               </p>
+
               <div class="phrase-suggestion__cards__container">
                 <div class="phrase-suggestion__cards__container-card">
                   <h3>
@@ -694,10 +695,16 @@ export default {
     &__cards {
       display: flex;
       flex-direction: column;
-      gap: $unnnic-spacing-stack-md;
+      gap: 1.125 * $unnnic-font-size;
 
       p {
+        margin: 0;
+
         color: $unnnic-color-neutral-cloudy;
+        font-family: $unnnic-font-family-secondary;
+        font-weight: $unnnic-font-weight-regular;
+        font-size: $unnnic-font-size-body-gt;
+        line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
       }
 
       &__container {
@@ -711,18 +718,18 @@ export default {
           width: 50%;
 
           h3 {
-            font-family: $unnnic-font-family-secondary;
-            font-size: $unnnic-font-size-body-lg;
-            font-weight: $unnnic-font-weight-bold;
-            margin-bottom: $unnnic-spacing-stack-nano;
+            margin: 0;
+            margin-bottom: $unnnic-spacing-nano;
+
             color: $unnnic-color-neutral-darkest;
+            font-family: $unnnic-font-family-secondary;
+            font-weight: $unnnic-font-weight-bold;
+            font-size: $unnnic-font-size-body-lg;
+            line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
           }
 
           p {
-            font-size: $unnnic-font-size-body-gt;
-            color: $unnnic-color-neutral-cloudy;
-            line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
-            margin-bottom: $unnnic-spacing-stack-sm;
+            margin-bottom: $unnnic-spacing-sm;
           }
 
           button {
@@ -781,11 +788,6 @@ export default {
         font-size: $unnnic-font-size-body-gt;
         color: $unnnic-color-neutral-cloudy;
       }
-
-      .divider {
-        margin: 2rem 0 1rem;
-        height: 1px;
-      }
     }
     .button--full {
       width: 100%;
@@ -828,11 +830,7 @@ export default {
     p, span {
       font-size: $unnnic-font-size-body-gt;
     }
-  .divider {
-    background: $unnnic-color-neutral-soft;
-    margin: $unnnic-spacing-stack-lg 0;
-    height: 1px;
-  }
+
   .add-variation {
     width: 160px;
   }
