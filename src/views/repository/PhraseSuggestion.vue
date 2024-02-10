@@ -48,7 +48,7 @@
             </div>
           </div>
 
-          <template v-if="pageItem === 1">
+          <template v-if="[1, 2].includes(pageItem)">
             <div class="phrase-suggestion__header">
               <div class="phrase-suggestion__header__step">
                 <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
@@ -111,23 +111,9 @@
           </div>
 
           <div v-if="pageItem === 2">
-            <div class="phrase-suggestion__header">
-              <div class="phrase-suggestion__header__step">
-                <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
-                  <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
-                </div>
-                <h1 class="ml-4 mr-5">
-                  {{ $t('webapp.phrase-suggestion.select_words_title') }}
-                </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="2" :totalProgress="4" />
-              </div>
-            </div>
-
-            <hr class="divider" />
-
-            <h4 class="mb-5">
+            <p>
               {{ $t('webapp.phrase-suggestion.select_words') }}
-            </h4>
+            </p>
 
             <div class="phrase-suggestion__word-cards__wrapper">
               <word-card
@@ -392,6 +378,10 @@ export default {
         return this.isSentenceNew
           ? this.$t('webapp.phrase-suggestion.add_new')
           : this.$t('webapp.phrase-suggestion.add_existing');
+      }
+
+      if (this.pageItem === 2) {
+        return this.$t('webapp.phrase-suggestion.select_words_title');
       }
 
       return '';

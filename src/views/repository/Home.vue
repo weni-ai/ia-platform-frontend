@@ -429,6 +429,7 @@ export default {
     display: flex;
     align-items: center;
     gap: $unnnic-spacing-stack-xgiant;
+    justify-content: space-between;
 
     .unnnic-button {
       min-width: 245px;
