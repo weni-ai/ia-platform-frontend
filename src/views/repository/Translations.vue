@@ -16,23 +16,26 @@
       :repository-uuid="repository.uuid"
       @onAuthorizationRequested="updateRepository(false)" />
     <div v-else-if="repository" class="translations">
-      <div class="translations__title">
-        <unnnic-card
-          type="title"
-          :title="$t('webapp.translate.title_status_page')"
-          :hasInformationIcon="false"
-          icon="translate-1"
-          scheme="feedback-blue"
-        />
-        <p
-          v-html="$t('webapp.translate.description_status_page')"
-          class="translations__title-description column is-6 p-0"></p>
-      </div>
-      <hr class="translations__divider" />
-      <p
-        v-html="$t('webapp.translate.title_language_card')"
-        class="translations__card-title">
-      </p>
+      <unnnic-intelligence-header
+        class="repository-analyze-text__header"
+        :title="$t('webapp.translate.title_status_page')"
+        icon="translate-1"
+        icon-scheme="feedback-blue"
+        :description="$t('webapp.translate.description_status_page')"
+      />
+
+      <unnnic-divider y-spacing="lg" />
+
+      <unnnic-intelligence-text
+        tag="p"
+        family="secondary"
+        size="body-gt"
+        color="neutral-dark"
+        margin-bottom="sm"
+      >
+        {{ $t('webapp.translate.title_language_card') }}
+      </unnnic-intelligence-text>
+
       <translations-status
         ref="translationsStatus"
         :repository="repository"
@@ -44,33 +47,56 @@
         @updated="statusUpdated"
         @addLanguage="newStatusCard"
       />
-      <unnnic-modal-next
-        v-if="openModal"
+
+      <!-- <unnnic-modal
+        v-if="isAddLanguageModalOpen"
         type="alert"
-        :title="$t('webapp.translate.new_status_card')"
-        :actionPrimaryLabel="$t('webapp.translate.button_create_modal')"
-        :actionSecondaryLabel="$t('webapp.home.cancel')"
-        @click-action-secondary="openModal = false"
-        actionPrimaryButtonType="secondary"
+        :text="$t('webapp.translate.new_status_card')"
+        :close-icon="false"
+        class="add-language-modal"
       >
-        <template slot="description">
-          {{ $t('webapp.translate.description_create_modal') }}
-          <unnnic-select
-            :label="$t('webapp.translate.select_language_label')"
-            v-model="languages"
-            class="select-add-modal"
+        <template>
+          <unnnic-intelligence-text
+            tag="p"
+            family="secondary"
+            size="body-lg"
+            color="neutral-cloudy"
+            margin-bottom="lg"
           >
-            <option
-              v-for="[option, label] in languageList"
-              :key="option"
-              :value="option"
-              @select="languages = option"
+            {{ $t('webapp.translate.description_create_modal') }}
+          </unnnic-intelligence-text>
+
+          <unnnic-form-element
+            :label="$t('webapp.translate.select_language_label')"
+          >
+            <unnnic-select
+              v-model="languages"
             >
-              {{ label }}
-            </option>
-          </unnnic-select>
+              <option
+                v-for="[option, label] in languageList"
+                :key="option"
+                :value="option"
+                @select="languages = option"
+              >
+                {{ label }}
+              </option>
+            </unnnic-select>
+          </unnnic-form-element>
         </template>
-      </unnnic-modal-next>
+
+        <template slot="options">
+          <unnnic-button
+            type="tertiary"
+            @click="isAddLanguageModalOpen = false"
+          >
+            {{ $t('webapp.home.cancel') }}
+          </unnnic-button>
+
+          <unnnic-button type="secondary">
+            {{ $t('webapp.translate.button_create_modal') }}
+          </unnnic-button>
+        </template>
+      </unnnic-modal> -->
     </div>
     <template v-slot:loader>
       <translations-loader />
@@ -125,7 +151,7 @@ export default {
         from: null,
         to: null,
       },
-      openModal: false,
+      isAddLanguageModalOpen: false,
       languages: this.defaultLanguageField,
       languagesStatus: null,
       selected: this.value,
@@ -201,30 +227,19 @@ export default {
       this.updateStatus = !this.updateStatus;
     },
     newStatusCard() {
-      this.openModal = true;
+      this.isAddLanguageModalOpen = true;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .translations {
   font-family: $unnnic-font-family-secondary;
   color: $unnnic-color-neutral-dark;
   font-size: $unnnic-font-size-body-gt;
-
-  &__title-description {
-    margin-top: $unnnic-spacing-stack-sm;
-  }
-
-  &__divider {
-    background: $unnnic-color-neutral-soft;
-    margin: $unnnic-spacing-stack-lg 0;
-    height: 1px;
-  }
 
   &__card-title {
     margin-bottom: $unnnic-spacing-stack-sm;
@@ -276,11 +291,6 @@ export default {
         margin-bottom: $unnnic-spacing-stack-sm;
       }
     }
-  }
-
-  .select-add-modal {
-    text-align: left;
-    margin-top: $unnnic-spacing-stack-lg,
   }
 
   .unnnic-select {
