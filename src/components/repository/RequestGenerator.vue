@@ -1,24 +1,34 @@
 <template>
   <div>
-    <unnnic-select
+    <unnnic-form-element
       :label="$t('webapp.analyze_text.language')"
-      :placeholder="$t('webapp.analyze_text.language')"
-      v-model="language"
+      class="form-element"
     >
-      <option
-        v-for="[option, label] in languageList"
-        :key="option"
-        :value="option"
-        @select="language = option"
+      <unnnic-select
+        :placeholder="$t('webapp.analyze_text.language')"
+        v-model="language"
       >
-        {{ label }}
-      </option>
-    </unnnic-select>
-    <unnnic-text-area
+        <option
+          v-for="[option, label] in languageList"
+          :key="option"
+          :value="option"
+          @select="language = option"
+        >
+          {{ label }}
+        </option>
+      </unnnic-select>
+    </unnnic-form-element>
+
+    <unnnic-form-element
       :label="$t('webapp.analyze_text.message')"
-      :placeholder="$t('webapp.analyze_text.message_placeholder')"
-      v-model="text"
-    />
+      class="form-element"
+    >
+      <unnnic-text-area
+        :placeholder="$t('webapp.analyze_text.message_placeholder')"
+        v-model="text"
+      />
+    </unnnic-form-element>
+
     <unnnic-tab initialTab="first" :tabs="tabs">
       <template slot="tab-head-first">
         cURL
@@ -27,7 +37,7 @@
         <highlighted-code
           :code="codes.curl"
           code-class="bash"
-          :style="{ padding: '24px 0px' }" />
+        />
       </template>
       <template slot="tab-head-second">
         Python
@@ -36,7 +46,7 @@
         <highlighted-code
           :code="codes.python"
           code-class="python"
-          :style="{ padding: '24px 0px' }" />
+        />
       </template>
       <template slot="tab-head-third">
         Javascript
@@ -45,7 +55,7 @@
         <highlighted-code
           :code="codes.javascript"
           code-class="javascript"
-          :style="{ padding: '24px 0px' }"/>
+        />
       </template>
     </unnnic-tab>
   </div>
@@ -145,6 +155,10 @@ export default {
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
+.form-element + .form-element {
+  margin-top: $unnnic-spacing-sm;
+}
+
 .unnnic-select {
 
   /deep/ .input {
@@ -155,15 +169,7 @@ export default {
   }
 }
 
-.unnnic-text-area {
-  margin-top: $unnnic-spacing-stack-sm;
-
-  /deep/ .label {
-    margin-bottom: $unnnic-spacing-stack-xs;
-  }
-}
-
 .tab {
-  margin-top: $unnnic-spacing-stack-lg;
+  margin-top: $unnnic-spacing-stack-md;
 }
 </style>

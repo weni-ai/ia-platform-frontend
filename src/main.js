@@ -11,7 +11,6 @@ import applyFilters from './utils/filters';
 import API from './utils/plugins/API';
 import i18n from './utils/plugins/i18n';
 import '@mdi/font/css/materialdesignicons.css';
-import hljs from 'highlight.js';
 import VueHighlightJS from 'vue-highlightjs';
 import LogRocket from 'logrocket';
 import VShowSlide from 'v-show-slide';
@@ -31,7 +30,6 @@ Vue.use(Buefy);
 Vue.use(VueMoment);
 Vue.use(API);
 Vue.use(VueTour);
-Vue.use(hljs.vuePlugin);
 Vue.use(VueHighlightJS);
 Vue.use(VShowSlide);
 

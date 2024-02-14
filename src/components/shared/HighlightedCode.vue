@@ -1,15 +1,14 @@
 <template>
-  <pre
-    v-highlightjs="finalCode"
-    class="highlighted-pre"
-  >
-    <code :class="codeClass"></code>
+  <div class="highlighted-pre">
+    <pre v-highlightjs="finalCode"><code :class="codeClass"></code></pre>
+
     <unnnic-tool-tip
       @mouseout.native="copyLabel = 'Copiar'"
       :text="$t('webapp.integration.copy_label')"
       enabled
       side="top"
       maxWidth="15rem"
+      class="copy-button"
     >
       <unnnic-button-icon
         size="small"
@@ -17,12 +16,18 @@
         @click.native="copyURL()"
       />
     </unnnic-tool-tip>
-  </pre>
+  </div>
 </template>
 
 <script>
+import 'vue-code-highlight/themes/prism-okaidia.css';
+import { component as VueCodeHighlight } from 'vue-code-highlight';
+
 export default {
   name: 'HighlightedCode',
+  components: {
+    VueCodeHighlight,
+  },
   props: {
     code: {
       type: String,
@@ -51,30 +56,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
-.highlighted-pre {
-  white-space: pre-wrap;
-  min-height: 68px;
-  background-color: $unnnic-color-neutral-lightest;
-  border: 1px solid $unnnic-color-neutral-soft;
-  border-radius: 4px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0px;
+@import '../../assets/scss/hightlight.min.css';
 
-  code {
-    font-family: $unnnic-font-family-primary;
-    color: $unnnic-color-neutral-dark;
-    font-size: $unnnic-font-size-body-gt;
-    margin-left: $unnnic-spacing-stack-sm;
+.highlighted-pre {
+  margin: 0;
+  padding: $unnnic-spacing-sm;
+  position: relative;
+  background-color: $unnnic-color-neutral-light;
+
+  outline-style: solid;
+  outline-color: $unnnic-color-neutral-soft;
+  outline-width: $unnnic-border-width-thinner;
+  outline-offset: -$unnnic-border-width-thinner;
+
+  border-radius: $unnnic-border-radius-sm;
+  box-sizing: content-box;
+  min-height: $unnnic-font-size-body-gt + $unnnic-line-height-md
+      + (0.875 * $unnnic-font-size);
+  display: flex;
+  align-items: center;
+
+  pre {
+    margin: 0;
   }
 
-  .unnnic-tooltip {
-    display: flex;
-    align-items: center;
-    margin-right: $unnnic-spacing-stack-sm;
+  code {
+    color: $unnnic-color-neutral-dark;
+    font-family: $unnnic-font-family-primary;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+    font-weight: $unnnic-font-weight-regular;
+  }
+
+  .copy-button {
+    position: absolute;
+    top: $unnnic-spacing-stack-sm;
+    right: $unnnic-spacing-stack-sm;
   }
 }
 </style>
