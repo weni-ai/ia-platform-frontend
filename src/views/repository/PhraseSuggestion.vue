@@ -98,22 +98,25 @@
 
           <div v-else-if="pageItem === 1 && !isSentenceNew">
             <div class="column is-6 p-0">
-              <unnnic-select
+              <unnnic-form-element
                 :label="$t('webapp.phrase-suggestion.select_intent')"
-                v-model="intentSelected"
-                @onChange="addIntents"
               >
-                <option
-                  v-for="intent in repository.intents"
-                  :key="intent.id"
-                  :value="intent.value"
+                <unnnic-select
+                  v-model="intentSelected"
+                  @onChange="addIntents"
                 >
-                  {{ intent.value }}
-                </option>
-              </unnnic-select>
+                  <option
+                    v-for="intent in repository.intents"
+                    :key="intent.id"
+                    :value="intent.value"
+                  >
+                    {{ intent.value }}
+                  </option>
+                </unnnic-select>
+              </unnnic-form-element>
             </div>
 
-            <hr class="divider" />
+            <unnnic-divider y-spacing="lg" />
 
             <paginated-list
               v-if="phraseList"
