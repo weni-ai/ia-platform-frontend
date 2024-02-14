@@ -1,17 +1,21 @@
 <template>
-  <div>
-    <unnnic-card
-      type="title"
-      :title="title"
-      :hasInformationIcon="false"
-      :icon="icon"
-      :scheme="iconScheme"
-    />
+  <div class="intelligence-header">
+    <div>
+      <unnnic-card
+        type="title"
+        :title="title"
+        :hasInformationIcon="false"
+        :icon="icon"
+        :scheme="iconScheme"
+      />
 
-    <p
-      v-html="description"
-      class="description"
-    ></p>
+      <p
+        v-html="description"
+        class="description"
+      ></p>
+    </div>
+
+    <slot></slot>
   </div>
 </template>
 
@@ -51,5 +55,11 @@ export default {
       color: $unnnic-color-neutral-darkest;
     }
   }
+}
+
+.intelligence-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

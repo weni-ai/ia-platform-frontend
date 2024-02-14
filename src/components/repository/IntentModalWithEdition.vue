@@ -68,7 +68,7 @@
           @intentInput="inputValues.intent = $event"
         />
       </div>
-      <unnnic-button slot="options" type="terciary" @click.prevent.stop="closeModal()">
+      <unnnic-button slot="options" type="tertiary" @click.prevent.stop="closeModal()">
         {{ $t("webapp.inbox.add_log.close") }}
       </unnnic-button>
       <unnnic-button

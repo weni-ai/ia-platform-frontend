@@ -54,7 +54,7 @@
         @close="openModal = false"
       >
         <span slot="message" v-html="deleteMessage" />
-        <unnnic-button slot="options" type="terciary" @click="openModal = false">
+        <unnnic-button slot="options" type="tertiary" @click="openModal = false">
           {{ $t("webapp.home.cancel") }}
         </unnnic-button>
         <unnnic-button

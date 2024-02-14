@@ -89,7 +89,7 @@
             <unnnic-button
               iconLeft="add-1"
               class="button--full mb-3"
-              type="terciary"
+              type="tertiary"
               size="small"
               @click.prevent.stop="addEntity"
             >
@@ -128,7 +128,7 @@
               </div>
             </div>
           </div>
-          <unnnic-button slot="options" type="terciary" @click.prevent.stop="cancelEditEntity()">
+          <unnnic-button slot="options" type="tertiary" @click.prevent.stop="cancelEditEntity()">
             {{ $t("webapp.home.cancel") }}
           </unnnic-button>
           <unnnic-button
@@ -146,7 +146,7 @@
         <div class="column p-0 is-flex is-justify-content-space-between">
           <unnnic-button
             class="mr-4 edit-sentence__btn-wrapper__button"
-            type="terciary"
+            type="tertiary"
             size="small"
             @click.prevent.stop="cancelEditSentence">
             {{ $t('webapp.trainings.cancel_button') }}

@@ -322,7 +322,7 @@
           slot="message"
           v-html="$t('webapp.intelligences_lib.clone.confirm_modal_message')"
         />
-        <unnnic-button slot="options" type="terciary" @click="openConfirmModal = false">
+        <unnnic-button slot="options" type="tertiary" @click="openConfirmModal = false">
           {{ $t("webapp.home.cancel") }}
         </unnnic-button>
         <unnnic-button

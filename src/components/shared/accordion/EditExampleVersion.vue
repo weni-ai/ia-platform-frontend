@@ -42,7 +42,7 @@
         <div class="column p-0 is-flex is-justify-content-space-between">
           <unnnic-button
             class="mr-4 edit-sentence__btn-wrapper__button"
-            type="terciary"
+            type="tertiary"
             size="small"
             @click.prevent.stop="$emit('cancel')">
             {{ $t('webapp.trainings.cancel_button') }}

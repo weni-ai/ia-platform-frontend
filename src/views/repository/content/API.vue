@@ -147,7 +147,7 @@
                         @click.prevent="prev()"
                         size="large"
                         text=""
-                        type="terciary"
+                        type="tertiary"
                         iconLeft="arrow-left-1-1"
                         :disabled="disabledPrevious"
                       >
@@ -156,7 +156,7 @@
                         @click.prevent="next()"
                         size="large"
                         text=""
-                        type="terciary"
+                        type="tertiary"
                         iconLeft="arrow-right-1-1"
                         :disabled="disabledNext"
                       >

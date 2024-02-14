@@ -23,33 +23,27 @@
         </div>
       </div>
       <div
-        v-if="authenticated && repository.authorization.can_contribute">
-        <div class="trainings-repository__header">
-          <div>
-            <unnnic-card
-              type="title"
-              :title="$t('webapp.trainings.database')"
-              :hasInformationIcon="false"
-              icon="folder-1"
-              scheme="aux-pink"
-            />
-            <p class="trainings-repository__description">
-              {{ $t('webapp.trainings.database_description') }}
-            </p>
-          </div>
-          <div>
-            <unnnic-button
-              @click="openDeleteModal = true"
-              type="secondary"
-              size="large"
-              :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
-              :disabled="sentencesCounter === 0"
-              class="trainings-repository__button"
-              iconLeft="delete-1-1"
-            />
-          </div>
-        </div>
-        <hr class="divider">
+        v-if="authenticated && repository.authorization.can_contribute"
+      >
+        <unnnic-intelligence-header
+          :title="$t('webapp.trainings.database')"
+          icon="folder-1"
+          icon-scheme="aux-pink"
+          :description="$t('webapp.trainings.database_description')"
+        >
+          <unnnic-button
+            @click="openDeleteModal = true"
+            type="secondary"
+            size="large"
+            :text="$tc('webapp.intent.delete_selected', sentencesCounter)"
+            :disabled="sentencesCounter === 0"
+            class="trainings-repository__button"
+            iconLeft="delete-1-1"
+          />
+        </unnnic-intelligence-header>
+
+        <unnnic-divider y-spacing="lg" />
+
         <sentence-filters
           v-if="showFilters"
           :intents="repository.intents_list"
@@ -78,7 +72,7 @@
       <span
       slot="message"
       v-html="$t('webapp.trainings.delete_phrase_modal')" />
-      <unnnic-button slot="options" type="terciary" @click="openDeleteModal = false">
+      <unnnic-button slot="options" type="tertiary" @click="openDeleteModal = false">
         {{ $t("webapp.home.cancel") }}
       </unnnic-button>
       <unnnic-button
@@ -325,19 +319,6 @@ export default {
       }
     }
       }
-    }
-
-    &__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    &__description {
-      font-family: 'Lato';
-      font-size: 14px;
-      color: #4E5666;
-      margin-top: 1rem;
     }
 
     &__button {

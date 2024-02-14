@@ -28,7 +28,7 @@
     <div class="integrate__buttons">
       <unnnic-button
         v-if="step === 2"
-        type="terciary"
+        type="tertiary"
         @click.stop="step = 1"
         :text="$t('modals.how_to_integrate.second_step.back_button')"
       />
