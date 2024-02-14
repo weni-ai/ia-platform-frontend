@@ -97,6 +97,7 @@ import NewEntitiesInput from '@/components/inputs/EntitiesInput/NewEntitiesInput
 import { mapActions, mapGetters } from 'vuex';
 import { formatters, LANGUAGES } from '@/utils';
 import InputWithHightlights from '../../InputWithHightlights';
+import { get } from 'lodash';
 
 
 export default {
@@ -235,26 +236,16 @@ export default {
         this.$emit('onSubmit', this.data)
         return true;
       } catch (error) {
-        /* istanbul ignore next */
+        const message = get(error, 'response.data.detail', '');
 
-        const errorResponse = error.response;
-        const errorText = error.response.data;
-        /* istanbul ignore next */
-        if (errorText.detail[0] === 'Enter a valid value that has letters in it') {
-          this.$buefy.toast.open({
-            message: this.$t('webapp.trainings.error_caracter_type'),
-            type: 'is-danger'
-          });
+        if (message) {
+          this.$store.state.alert = {
+            text: message,
+            type: 'error',
+          }
         }
-        if (errorResponse && errorText.detail[0] !== 'Enter a valid value that has letters in it') {
-          /* istanbul ignore next */
-          this.$buefy.toast.open({
-            message: this.$t('webapp.trainings.intention_or_sentence_already_exist'),
-            type: 'is-danger'
-          });
-          this.errors = errorResponse;
-        }
-        /* istanbul ignore next */
+
+
         this.submitting = false;
       }
 

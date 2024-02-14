@@ -38,7 +38,7 @@
               />
               <span
                 v-if="showIntents"
-                class="ml-4 intent-label"
+                class="intent-label"
               >
               {{ $t("webapp.translate.intent") + ' ' + item.intent }}
               </span>
@@ -400,6 +400,7 @@ export default {
 }
 
 .intent-label {
+  margin-left: $unnnic-spacing-sm;
   font-family: 'Lato';
   font-size: 12px;
   color: #67738B;

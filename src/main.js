@@ -18,6 +18,7 @@ import VShowSlide from 'v-show-slide';
 import iframessa from 'iframessa';
 import UnnnicDivider from './components/Divider';
 import UnnnicIntelligenceHeader from './components/unnnic-intelligence/Header';
+import UnnnicIntelligenceText from './components/unnnic-intelligence/Text';
 
 iframessa.register('ai');
 
@@ -36,6 +37,7 @@ Vue.use(VShowSlide);
 
 Vue.component('unnnic-divider', UnnnicDivider);
 Vue.component('unnnic-intelligence-header', UnnnicIntelligenceHeader);
+Vue.component('unnnic-intelligence-text', UnnnicIntelligenceText);
 
 Vue.config.productionTip = false;
 

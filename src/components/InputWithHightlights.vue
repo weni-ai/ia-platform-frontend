@@ -54,6 +54,7 @@ export default {
       height: style.height,
       marginBottom: `-${style.height}`,
       padding: style.padding,
+      backgroundColor: style.backgroundColor,
     }
 
     input.style.backgroundColor = 'transparent';

@@ -2,29 +2,27 @@
   <div class="edit-sentence">
     <form>
       <div class="columns edit-sentence__wrapper">
-        <div class="column is-6">
-            <p
-              slot="label"
-              class="unnnic-form__label"
-              v-html="$t('webapp.example.sentence')" />
-            <example-text-with-highlighted-entities-input
-              ref="textInput"
-              v-model="text"
-              :entities="allEntities"
-              :placeholder="$t('webapp.example.enter_sentence')"
-              size="normal"
-              @textSelected="setTextSelected($event)"
-              @entityEdited="onEditEntity($event)"
-              @entityAdded="onEntityAdded()"
-            />
-        </div>
-        <div class="column is-3">
+        <unnnic-form-element
+          size="sm"
+          :label="$t('webapp.example.sentence')"
+        >
+          <input-with-hightlights
+            v-model="text"
+            :entities="allEntities"
+            :placeholder="$t('webapp.example.enter_sentence')"
+            :selected.sync="textSelected"
+            size="sm"
+          />
+        </unnnic-form-element>
+        <unnnic-form-element
+          size="sm"
+          :label="$t('webapp.example.intent')"
+          :message="errors.non_field_errors"
+        >
           <unnnic-autocomplete
             size="sm"
-            :message="errors.non_field_errors"
             :type="errors.non_field_errors
                     && errors.non_field_errors.length > 0 ? 'error' : 'normal'"
-            :label="$t('webapp.example.intent')"
             v-model="intent"
             :data="filterIntents"
             :placeholder="$t('webapp.example.intent')"
@@ -34,11 +32,15 @@
             :class="hideDropdown ? 'hidden' : ''"
           >
           </unnnic-autocomplete>
-        </div>
-        <div class="column is-3">
+        </unnnic-form-element>
+
+        <unnnic-form-element
+          size="sm"
+          :label="$t('webapp.inbox.language')"
+          class="edit-sentence__language-select"
+        >
           <unnnic-select
             size="sm"
-            :label="$t('webapp.inbox.language')"
             :placeholder="$t('webapp.inbox.language')"
             v-model="language"
           >
@@ -51,7 +53,7 @@
               {{ label }}
             </option>
           </unnnic-select>
-        </div>
+        </unnnic-form-element>
       </div>
       <div class="add-entity">
         <entity-accordion :open.sync="isOpen">
@@ -123,7 +125,7 @@
             <unnnic-button
               iconLeft="add-1"
               class="button--full mb-3"
-              type="terciary"
+              type="tertiary"
               size="small"
               @click.prevent.stop="addEntity"
             >
@@ -162,7 +164,7 @@
               </div>
             </div>
           </div>
-          <unnnic-button slot="options" type="terciary" @click.prevent.stop="cancelEditEntity()">
+          <unnnic-button slot="options" type="tertiary" @click.prevent.stop="cancelEditEntity()">
             {{ $t("webapp.home.cancel") }}
           </unnnic-button>
           <unnnic-button
@@ -177,25 +179,23 @@
       </div>
       <div
         class="edit-sentence__btn-wrapper">
-        <div class="column p-0 is-flex is-justify-content-space-between">
-          <unnnic-button
-            class="mr-4 edit-sentence__btn-wrapper__button"
-            type="terciary"
-            size="small"
-            @click.prevent.stop="cancelEditSentence">
-            {{ $t('webapp.trainings.cancel_button') }}
-          </unnnic-button>
-          <unnnic-button
-            type="secondary"
-            size="small"
-            class="edit-sentence__btn-wrapper__button"
-            :disabled="!isValid || submitting"
-            :tooltip-hover="!isValid ? validationErrors : null"
-            :loading="submitting"
-            @click.prevent.stop="saveSentence">
-            <slot v-if="!submitting">{{ $t(saveButtonLabel) }}</slot>
-          </unnnic-button>
-        </div>
+        <unnnic-button
+          class="edit-sentence__btn-wrapper__button"
+          type="tertiary"
+          size="small"
+          @click.prevent.stop="cancelEditSentence">
+          {{ $t('webapp.trainings.cancel_button') }}
+        </unnnic-button>
+        <unnnic-button
+          type="secondary"
+          size="small"
+          class="edit-sentence__btn-wrapper__button"
+          :disabled="!isValid || submitting"
+          :tooltip-hover="!isValid ? validationErrors : null"
+          :loading="submitting"
+          @click.prevent.stop="saveSentence">
+          <slot v-if="!submitting">{{ $t(saveButtonLabel) }}</slot>
+        </unnnic-button>
         <!-- <div>
           <a
             href="https://docs.weni.ai/l/pt/bothub/testando-seu-dataset#adicionando_entidades"
@@ -214,6 +214,7 @@ import EditExampleBase from './EditExampleBase';
 import ExampleTextWithHighlightedEntitiesInput from '@/components/inputs/ExampleTextWithHighlightedEntitiesInput';
 import EntityAccordion from '@/components/shared/accordion/EntityAccordion';
 import WordCard from '@/components/shared/accordion/WordCard';
+import InputWithHightlights from '../../InputWithHightlights';
 
 
 export default {
@@ -221,7 +222,8 @@ export default {
   components: {
     ExampleTextWithHighlightedEntitiesInput,
     EntityAccordion,
-    WordCard
+    WordCard,
+    InputWithHightlights,
   },
   props: {
     from: {
@@ -237,6 +239,7 @@ export default {
       isEntityInputActive: false,
       selectedEntities: [],
       entity: '',
+      textSelected: null,
     }
   },
   extends: EditExampleBase,
@@ -333,17 +336,34 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .edit-sentence {
   background: transparent;
   border-top: 1px solid #E2E6ED;
   border-radius: 4px;
-  margin-top: 1rem;
+  margin-top: $unnnic-spacing-sm;
+  padding-top: $unnnic-spacing-sm;
 
   &__wrapper {
     max-width: 100%;
     margin: 0;
     flex-wrap: wrap;
+
+    display: flex;
+    column-gap: $unnnic-spacing-sm;
+
+    > * {
+      flex: 1;
+    }
+
+    > *:first-child {
+      flex: 2;
+    }
+  }
+
+  &__language-select ::v-deep input {
+    height: auto;
   }
 
   &__input {
@@ -377,7 +397,8 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1rem .5rem;
+    margin-top: $unnnic-spacing-sm;
+    gap: $unnnic-spacing-sm;
 
     &__button{
       width: 50%;
@@ -397,7 +418,7 @@ export default {
 }
 .add-entity {
   padding: .4rem 1rem;
-  margin: .5rem .5rem 1rem;
+  margin-top: $unnnic-spacing-sm;
   border: 1px solid #E2E6ED;
   border-radius: 8px;
 }

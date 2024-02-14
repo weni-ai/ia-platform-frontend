@@ -62,11 +62,16 @@
             </div>
             <div
               v-if="examplesList && examplesList.count > 0"
-              class="is-flex is-align-items-baseline is-justify-content-space-between mt-6 mb-5"
+              class="sentences-list"
             >
-              <h2 class="trainings-repository__list-wrapper__title mb-0">
+              <unnnic-intelligence-text
+                family="secondary"
+                size="title-sm"
+                color="neutral-dark"
+              >
                 {{ $t('webapp.trainings.sentences_to_train') }}
-              </h2>
+              </unnnic-intelligence-text>
+
               <unnnic-button
                 @click="openDeleteModal = true"
                 type="secondary"
@@ -121,7 +126,7 @@
       <span
       slot="message"
       v-html="$t('webapp.trainings.delete_phrase_modal')" />
-      <unnnic-button slot="options" type="terciary" @click="openDeleteModal = false">
+      <unnnic-button slot="options" type="tertiary" @click="openDeleteModal = false">
         {{ $t("webapp.home.cancel") }}
       </unnnic-button>
       <unnnic-button
@@ -300,7 +305,12 @@ export default {
   @import '~@/assets/scss/variables.scss';
   @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
-
+.sentences-list {
+  margin-top: $unnnic-spacing-xl;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .trainings-repository {
   &__list-wrapper {
     // display: flex;
