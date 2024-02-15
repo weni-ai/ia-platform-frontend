@@ -58,7 +58,8 @@
             </option>
           </unnnic-select>
         </div>
-        <b-field :message="errors.repository_version_name" v-show="hasVersion">
+
+        <b-field :message="errors.repository_version_name" v-if="hasVersion && versions">
           <b-autocomplete
             v-if="versions"
             v-model="versionName"
@@ -248,6 +249,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/scss/variables.scss";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .filter-evaluate-example {
   width: 100%;
@@ -273,8 +275,9 @@ export default {
     }
 
     &__wrapper {
-      display: grid;
-      grid-gap: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      grid-gap: $unnnic-spacing-sm;
 
       &__has-2-fields {
         grid-template-columns: 1fr 1fr 1fr;

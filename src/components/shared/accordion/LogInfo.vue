@@ -1,32 +1,31 @@
 <template>
   <div class="log-entities__wrapper">
     <div class="level">
-      <div
-        class="level-left">
-        <!-- <div v-if="entitiesList.length > 0">
-          <unnnic-label
-            class="mr-1 repository-log-info__label"
-            :label="$tc('webapp.inbox.entities', entitiesList.length)"
-          />
-          <entity-tag
-            v-for="(entity, i) in entitiesList"
-            :key="i"
-            :highlighted="entity.entity === highlighted"
-            :color-class="entity.class"
-            :entity-name="entity.entity"
-            @mouseenter.native.stop="$emit('update:highlighted', entity.entity)"
-            @mouseleave.native.stop="$emit('update:highlighted', null)"/>
-        </div> -->
+      <!-- <div v-if="entitiesList.length > 0">
         <unnnic-label
           class="mr-1 repository-log-info__label"
-          label="Interação recebida em:"
+          :label="$tc('webapp.inbox.entities', entitiesList.length)"
         />
-        <unnnic-label
-          class="repository-log-info__label--regular"
-          :label="formattedDate"
-        />
-      </div>
-      <div class="level-right">
+        <entity-tag
+          v-for="(entity, i) in entitiesList"
+          :key="i"
+          :highlighted="entity.entity === highlighted"
+          :color-class="entity.class"
+          :entity-name="entity.entity"
+          @mouseenter.native.stop="$emit('update:highlighted', entity.entity)"
+          @mouseleave.native.stop="$emit('update:highlighted', null)"/>
+      </div> -->
+      <unnnic-intelligence-text
+        family="secondary"
+        size="body-md"
+        color="neutral-cloudy"
+      >
+        <strong>Interação recebida em:</strong>
+
+        {{ formattedDate }}
+      </unnnic-intelligence-text>
+
+      <div class="level__actions">
         <unnnic-button
           :text="$t('webapp.inbox.add_to_train')"
           id="tour-inbox-step-2"
@@ -34,7 +33,7 @@
           type="secondary"
           iconLeft="graph-status-circle-1"
           size="small"
-          class="mr-4 repository-log-info__button--wide"
+          class="repository-log-info__button--wide"
           @click="sendToTraining()"
         />
         <unnnic-button
@@ -50,13 +49,19 @@
         />
       </div>
     </div>
-    <hr class="divider" />
-    <div class="level is-mobile">
-      <div class="level-left">
-        <unnnic-label
-          class="mr-3 repository-log-info__label"
-          label="Mais detalhes da interação:"
-        />
+
+    <unnnic-divider y-spacing="sm" />
+
+    <div class="level">
+      <div class="level__actions">
+        <unnnic-intelligence-text
+          family="secondary"
+          size="body-md"
+          color="neutral-cloudy"
+        >
+          <strong>Mais detalhes da interação:</strong>
+        </unnnic-intelligence-text>
+
         <unnnic-button
           class="repository-log-info__button mr-4"
           type="secondary"
@@ -74,22 +79,20 @@
           {{ $t('webapp.inbox.raw') }}
         </unnnic-button>
       </div>
-      <div class="level-right">
-        <div
-          v-if="intent"
-          class="level-item has-text-grey"
+
+      <div v-if="intent" class="level__actions">
+        <unnnic-intelligence-text
+          family="secondary"
+          size="body-md"
+          color="neutral-cloudy"
         >
-          <unnnic-label
-          class="mr-1 repository-log-info__label"
-          label="Versão:"
-          />
-          <unnnic-label
-          class="repository-log-info__label--regular"
-          :label="versionName"
-          />
-        </div>
+          <strong>Versão:</strong>
+
+          {{ versionName }}
+        </unnnic-intelligence-text>
       </div>
     </div>
+
     <unnnic-modal
       :showModal="openModalTraining"
       :text="$t('webapp.example.sent_to_training')"
@@ -464,6 +467,18 @@ export default {
 @import '../../../assets/scss/utilities.scss';
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.level {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    column-gap: $unnnic-spacing-sm;
+  }
+}
 .repository-log-info {
   &__button {
     width: 158px;
@@ -533,10 +548,5 @@ export default {
       }
     }
   }
-}
-.divider {
-  background: $unnnic-color-neutral-soft;
-  margin: $unnnic-spacing-stack-lg 0;
-  height: 1px;
 }
 </style>

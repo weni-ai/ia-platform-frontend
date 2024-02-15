@@ -55,6 +55,14 @@ export default {
     }
   },
   created() {
+    document.querySelectorAll('style').forEach((style) => {
+      if (style.innerHTML.includes('.temporary-bulma-style')) {
+        window.bulmaStyle = style;
+
+        style.parentNode.removeChild(style);
+      }
+    });
+
     window.addEventListener('message', (event) => {
       const prefix = 'connect:';
       const content = String(event.data);
@@ -175,6 +183,13 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+.temporary-bulma-style
+  margin: 0;
+
+@import '../node_modules/bulma/bulma.sass';
+</style>
 
 <style lang="scss">
 @import "~@/assets/scss/utilities.scss";

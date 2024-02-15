@@ -27,5 +27,11 @@ export default {
       ($unnnic-spacing-stack-lg - $unnnic-border-width-thinner)
       $unnnic-spacing-stack-lg;
   }
+
+  &--y-spacing-sm {
+    margin-block:
+      ($unnnic-spacing-stack-sm - $unnnic-border-width-thinner)
+      $unnnic-spacing-stack-sm;
+  }
 }
 </style>

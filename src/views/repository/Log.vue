@@ -1,19 +1,12 @@
 <template>
   <repository-view-base :repository="repository" :error-code="errorCode">
       <div v-if="repository && repository.authorization.can_contribute" class="repository-log">
-        <div class="repository-log__header">
-          <div class="column is-5 p-0">
-            <unnnic-card
-              type="title"
-              :title="$t('webapp.menu.inbox')"
-              :hasInformationIcon="false"
-              icon="messages-bubble-1"
-              scheme="aux-blue"
-            />
-            <p class="repository-log__subtitle">
-              {{ $t("webapp.inbox.description") }}
-            </p>
-          </div>
+        <unnnic-intelligence-header
+          :title="$t('webapp.menu.inbox')"
+          icon="messages-bubble-1"
+          icon-scheme="aux-blue"
+          :description="$t('webapp.inbox.description')"
+        >
           <div class="repository-log__header__buttons">
             <unnnic-button
               :text="$tc('webapp.inbox.add_to_train_button', sentencesCounter)"
@@ -23,7 +16,9 @@
               iconLeft="graph-status-circle-1"
               :disabled="sentencesCounter === 0"
               @click.prevent.stop="showModalTraining($t('webapp.inbox.training'))"
+              class="header-button"
             />
+
             <unnnic-button
               :text="$tc('webapp.inbox.add_to_sentence_button', sentencesCounter)"
               id="tour-inbox-step-3"
@@ -33,9 +28,13 @@
               type="secondary"
               :disabled="sentencesCounter === 0"
               @click.prevent.stop="showModalSentence($t('webapp.inbox.test_sentences'))"
+              class="header-button"
             />
           </div>
-        </div>
+        </unnnic-intelligence-header>
+
+        <unnnic-divider y-spacing="lg" />
+
         <!-- <filter-evaluate-example
           v-if="repository"
           :intents="repository.intents_list"
@@ -44,8 +43,6 @@
           :hasVersion="false"
           @querystringformatted="onSearch($event)"
         /> -->
-
-        <hr class="divider" />
 
         <sentence-filters
           :intents="repository.intents_list"
@@ -454,6 +451,11 @@ export default {
 label {
   vertical-align: middle;
 }
+
+.header-button {
+  width: 15.3125 * $unnnic-font-size;
+}
+
 .repository-log {
   font-family: $unnnic-font-family-secondary;
 
@@ -465,10 +467,6 @@ label {
     &__buttons {
       display: flex;
       gap: $unnnic-spacing-inset-sm;
-
-      button {
-        width: 245px;
-      }
     }
   }
 
