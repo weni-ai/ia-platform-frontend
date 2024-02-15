@@ -116,6 +116,7 @@
       </div>
 
       <div
+        v-if="files.data.length || knowledgeBase.text.oldValue"
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container',
@@ -666,7 +667,7 @@ export default {
       outline-offset: -$unnnic-border-width-thinner;
       border-radius: $unnnic-border-radius-sm;
 
-      width: 18.4375 * $unnnic-font-size;
+      width: 24.625 * $unnnic-font-size;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -730,7 +731,7 @@ export default {
         right: 0;
 
         &__save-button {
-          width: 10.625 * $unnnic-font-size;
+          width: 12.5 * $unnnic-font-size;
         }
       }
 

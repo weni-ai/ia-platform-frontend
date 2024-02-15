@@ -241,10 +241,11 @@ export default {
 
     &__question,
     &__answer {
+      max-width: 75%;
       color: $unnnic-color-neutral-dark;
       font-family: $unnnic-font-family-secondary;
-      font-size: $unnnic-font-size-body-md;
-      line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
       font-weight: $unnnic-font-weight-regular;
 
       border-radius: $unnnic-border-radius-md;
@@ -259,7 +260,7 @@ export default {
 
     &__question {
       align-self: self-end;
-      background-color: $unnnic-color-weni-100;
+      background-color: $unnnic-color-weni-200;
       border-bottom-right-radius: $unnnic-border-radius-sm;
       margin-left: 1.875 * $unnnic-font-size;
     }

@@ -1,12 +1,5 @@
 <template>
-  <div
-    :class="[
-      'files-list__content__file',
-      {
-        'files-list__content__file--loaded': file.status === 'uploaded',
-      },
-    ]"
-  >
+  <div class="files-list__content__file">
     <div class="files-list__content__file__icon">
       <unnnic-icon
         :icon="icon"
@@ -151,6 +144,8 @@ export default {
   outline-width: $unnnic-border-width-thinner;
   outline-offset: -$unnnic-border-width-thinner;
 
+  background-color: $unnnic-color-background-white;
+
   border-radius: $unnnic-border-radius-sm;
 
   padding: $unnnic-spacing-xs;
@@ -235,15 +230,6 @@ export default {
       border-radius: $unnnic-border-radius-pill;
       background-color: $unnnic-color-weni-500;
       transition: width 100ms;
-    }
-  }
-
-  &--loaded {
-    .files-list__content__file__icon {
-      background-color: $unnnic-color-weni-50;
-      &__itself {
-        color: $unnnic-color-weni-600;
-      }
     }
   }
 }
