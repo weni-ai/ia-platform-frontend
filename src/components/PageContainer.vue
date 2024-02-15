@@ -58,7 +58,7 @@ export default {
 
 .content-bases-page-container {
   background-color: $unnnic-color-background-snow;
-  padding: $unnnic-spacing-md $unnnic-font-size * 8;
+  padding: $unnnic-spacing-lg;
   min-height: 100vh;
   box-sizing: border-box;
   display: flex;
