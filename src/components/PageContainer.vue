@@ -31,6 +31,8 @@
             </h1>
           </div>
         </div>
+
+        <slot name="actions"></slot>
       </section>
 
       <section v-if="description" class="repository-base-edit__description">

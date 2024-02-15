@@ -165,64 +165,17 @@
       </unnnic-button>
     </unnnic-modal>
 
-    <modal-next
+    <base-settings-form
       v-if="isAddContentBaseOpen"
-      :title="$t('bases.create.title')"
-      max-width="600px"
-    >
-      <unnnic-form-element
-        :label="$t('bases.create.form.name.label')"
-        class="create-base__form-element"
-      >
-        <unnnic-input
-          v-model="title"
-          maxlength="25"
-          :placeholder="$t('bases.create.form.name.placeholder')"
-        />
-      </unnnic-form-element>
-
-      <unnnic-form-element
-        :label="$t('bases.create.form.language.label')"
-        class="create-base__form-element"
-      >
-        <unnnic-select-smart
-          :value="[languages.find(({ value }) => value === language)]"
-          @input="language = $event[0].value"
-          :options="languages"
-          ordered-by-index
-        />
-      </unnnic-form-element>
-
-      <unnnic-form-element
-        :label="$t('bases.create.form.description.label')"
-        class="create-base__form-element"
-      >
-        <unnnic-text-area
-          v-model="description"
-          :max-length="80"
-          class="create-base__description-textarea"
-          :placeholder="$t('bases.create.form.description.placeholder')"
-        />
-      </unnnic-form-element>
-
-      <div class="create-base__actions">
-        <unnnic-button
-          size="large"
-          :text="$t('webapp.home.cancel')"
-          type="tertiary"
-          @click.prevent.stop="isAddContentBaseOpen = false"
-        />
-
-        <unnnic-button
-          size="large"
-          :text="$t('webapp.home.bases.new_knowledge_base')"
-          type="primary"
-          @click="createNewBase"
-          :disabled="!this.title || !this.description"
-          :loading="creatingNewBase"
-        />
-      </div>
-    </modal-next>
+      :intelligence-uuid="$route.params.intelligenceUuid"
+      @close="isAddContentBaseOpen = false"
+      @success="$event => $router.push({
+        name: 'intelligence-content-base-edit',
+        params: {
+          contentBaseUuid: $event.uuid,
+        },
+      })"
+    ></base-settings-form>
   </div>
 </template>
 
@@ -234,10 +187,8 @@ import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard'
 import RepositoryContentNavigation from './Navigation';
 import Modal from '@/components/repository/CreateRepository/Modal';
 import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
-import repositoryV2 from '../../../api/v2/repository';
-import ModalNext from '../../../components/ModalNext';
 import nexusaiAPI from '../../../api/nexusaiAPI';
-import { get } from 'lodash';
+import BaseSettingsForm from '../../../components/BaseSettingsForm';
 
 export default {
   name: 'RepositoryBase',
@@ -248,7 +199,7 @@ export default {
     HomeRepositoryCard,
     RepositoryContentNavigation,
     Modal,
-    ModalNext,
+    BaseSettingsForm,
   },
   data() {
     return {
@@ -269,24 +220,7 @@ export default {
       modalData: {},
       isAddContentBaseOpen: false,
 
-      title: '',
-      language: 'pt-br',
-      description: '',
-
-      languages: [{
-        value: 'pt-br',
-        label: 'PT-BR',
-      }, {
-        value: 'en-us',
-        label: 'EN-US',
-      }, {
-        value: 'es',
-        label: 'ES',
-      }],
-
       isShowingEndOfList: false,
-
-      creatingNewBase: false,
 
       bases: {
         count: null,
@@ -329,14 +263,6 @@ export default {
     }
   },
   watch: {
-    isAddContentBaseOpen() {
-      const userLanguage = get(this.$store.state.User, 'me.language', '').toLowerCase();
-
-      this.language = ['pt-br', 'en-us', 'es'].includes(userLanguage)
-        ? userLanguage
-        : 'pt-br';
-    },
-
     isShowingEndOfList() {
       if (
         this.isShowingEndOfList
@@ -398,32 +324,6 @@ export default {
   },
   methods: {
     ...mapActions(['getQAKnowledgeBasesNext', 'deleteQAKnowledgeBase', 'createQAKnowledgeBase', 'editQAKnowledgeBase', 'createQAText']),
-
-    async createNewBase() {
-      try {
-        this.creatingNewBase = true;
-
-        const { data: contentBaseData } = await nexusaiAPI
-          .createIntelligenceContentBase({
-            intelligenceUuid: this.$route.params.intelligenceUuid,
-            title: this.title,
-            language: this.language,
-            description: this.description,
-          });
-
-        this.creatingNewBase = false;
-        this.isAddContentBaseOpen = false;
-
-        this.$router.push({
-          name: 'intelligence-content-base-edit',
-          params: {
-            contentBaseUuid: contentBaseData.uuid,
-          },
-        });
-      } finally {
-        this.creatingNewBase = false;
-      }
-    },
 
     reloadBases() {
       this.bases = {
@@ -511,40 +411,6 @@ export default {
   .unnnic-modal-container-background-button {
     padding-top: $unnnic-spacing-lg;
     padding-bottom: $unnnic-spacing-lg;
-  }
-}
-
-.create-base__form-element + .create-base__form-element {
-  margin-top: $unnnic-spacing-sm;
-}
-
-.create-base__description-textarea ::v-deep textarea {
-  display: block;
-  min-height: 4.6875 * $unnnic-font-size;
-  outline-style: solid;
-  outline-color: $unnnic-color-neutral-soft;
-  outline-width: $unnnic-border-width-thinner;
-  outline-offset: -$unnnic-border-width-thinner;
-  color: $unnnic-color-neutral-dark;
-  caret-color: $unnnic-color-neutral-clean;
-
-  &::placeholder {
-    color: $unnnic-color-neutral-cleanest;
-    opacity: 1; /* Firefox */
-  }
-
-  &:focus {
-    outline-color: $unnnic-color-neutral-clean;
-  }
-}
-
-.create-base__actions {
-  display: flex;
-  margin-top: $unnnic-spacing-lg;
-  column-gap: $unnnic-spacing-sm;
-
-  & > * {
-    flex: 1;
   }
 }
 

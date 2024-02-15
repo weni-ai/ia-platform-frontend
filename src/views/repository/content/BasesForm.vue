@@ -11,6 +11,14 @@
       })
     "
   >
+    <unnnic-button
+      class="settings-button"
+      slot="actions"
+      icon-center="settings"
+      type="secondary"
+      @click="isEditContentBaseOpen = true"
+    />
+
     <section class="repository-base-edit__wrapper">
       <div class="repository-base-edit__wrapper__left-side">
         <section class="base-tabs">
@@ -166,6 +174,18 @@
       seconds="5"
       @close="isAlertOpen = false"
     />
+
+    <base-settings-form
+      v-if="isEditContentBaseOpen"
+      :intelligence-uuid="$route.params.intelligenceUuid"
+      :content-base-uuid="$route.params.contentBaseUuid"
+      :pre-filled-values="{
+        title: contentBase.title,
+        description: contentBase.description,
+      }"
+      @close="isEditContentBaseOpen = false"
+      @success="receiveUdatedContentBase"
+    ></base-settings-form>
   </page-container>
 </template>
 
@@ -180,6 +200,7 @@ import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
 import PageContainer from '../../../components/PageContainer';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import BasesFormFiles from './BasesFormFiles';
+import BaseSettingsForm from '../../../components/BaseSettingsForm';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -187,6 +208,7 @@ export default {
     Tests,
     PageContainer,
     BasesFormFiles,
+    BaseSettingsForm,
   },
   mixins: [RemoveBulmaMixin],
   data() {
@@ -198,8 +220,11 @@ export default {
 
       contentBase: {
         title: '',
+        description: '',
         language: '',
       },
+
+      isEditContentBaseOpen: false,
 
       loadingTitle: false,
       loadingText: false,
@@ -246,6 +271,11 @@ export default {
       'updateQAText',
       'editQAKnowledgeBase',
     ]),
+
+    receiveUdatedContentBase({ title, description }) {
+      this.contentBase.title = title;
+      this.contentBase.description = description;
+    },
 
     removedFile(fileUuid) {
       this.files.data = this.files.data.filter(({ uuid }) => uuid !== fileUuid);
@@ -448,6 +478,7 @@ export default {
         this.loadingContentBase = false;
 
         this.contentBase.title = contentBaseData.title;
+        this.contentBase.description = contentBaseData.description;
         this.contentBase.language = contentBaseData.language;
 
         const { data: contentBaseTextsData } = await nexusaiAPI.listIntelligenceContentBaseTexts({
@@ -535,6 +566,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.settings-button {
+  margin-left: auto;
+}
 
 .base-tabs {
   display: flex;
