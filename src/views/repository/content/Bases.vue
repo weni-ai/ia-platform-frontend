@@ -94,12 +94,21 @@
           </div>
         </div>
 
+        <div
+          v-if="basesFiltered.length === 0 && bases.status === 'complete'"
+          class="bases-list--empty"
+        >
+          <img src="../../../assets/imgs/doris-doubt-reaction.png" alt="Doris Doubt Reaction">
+
+            <h1 class="bases-list__title">
+              {{ $t('intelligences.no_content_base_found') }}
+            </h1>
+        </div>
+
         <div class="bases-list">
           <home-repository-card
             type="base"
-            v-for="base in bases.data
-              .filter(({ title }) => searchBaseName ?
-                title.toLowerCase().includes(searchBaseName.toLowerCase()) : true)"
+            v-for="base in basesFiltered"
             :key="base.id"
             :repository-detail="base"
             :can-contribute="canContribute"
@@ -299,6 +308,12 @@ export default {
 
   computed: {
     ...mapGetters(['getCurrentRepository', 'getProjectSelected', 'getOrgSelected']),
+
+    basesFiltered() {
+      return this.bases.data
+        .filter(({ title }) => (this.searchBaseName
+          ? title.toLowerCase().includes(this.searchBaseName.toLowerCase()) : true));
+    },
 
     canContribute() {
       return true;

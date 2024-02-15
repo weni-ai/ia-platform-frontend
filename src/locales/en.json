@@ -17,6 +17,7 @@
     "no_intelligence_added": "No Intelligence added",
     "view_bases": "Visualizar bases",
     "no_content_base_added": "No content base added",
+    "no_content_base_found": "No content base found",
     "search_content_base_placeholder": "Search content base",
     "sidebar_view_content_bases_title": "{name}'s content bases",
     "sidebar_view_content_bases_description": "View the content bases that are part of this AI.",
