@@ -4,21 +4,30 @@
       <div class="repository-base__header">
         <div class="repository-base__header__details">
           <div class="repository-base__header__title">
-            <unnnic-avatar-icon
-              class="repository-base__header__title__icon"
-              icon="neurology"
-              size="sm"
-              scheme="weni-600"
+            <unnnic-button
+              size="small"
+              type="tertiary"
+              icon-center="arrow_left_alt"
+              scheme="neutral-dark"
+              @click="$router.push({ name: 'home' })"
             />
 
             <unnnic-skeleton-loading
               v-if="repository.uuid === null"
               tag="div"
               width="120px"
-              height="32px"
+              height="28px"
             />
 
-            <h1 v-else>{{ repository.name }}</h1>
+            <unnnic-intelligence-text
+              v-else
+              family="secondary"
+              color="neutral-darkest"
+              weight="bold"
+              size="title-sm"
+            >
+              {{ repository.name }}
+            </unnnic-intelligence-text>
           </div>
 
           <unnnic-skeleton-loading
@@ -33,43 +42,8 @@
           </p>
         </div>
 
-        <repository-content-navigation v-if="canContribute" />
-      </div>
-
-      <hr />
-
-      <div v-if="bases.data.length === 0 && bases.status === 'complete'" class="bases-list--empty">
-        <img src="../../../assets/imgs/doris-yawning.png" alt="Doris Yawning">
-
-          <h1 class="bases-list__title">
-            {{ $t('intelligences.no_content_base_added') }}
-          </h1>
-
-          <unnnic-button
-            v-if="canContribute"
-            @click="isAddContentBaseOpen = true"
-            class="create-base-button"
-            iconLeft="add-1"
-          >
-            {{ $t('webapp.home.bases.new_knowledge_base') }}
-          </unnnic-button>
-      </div>
-
-      <template v-else>
-
-        <div class="repository-base__bases-count">
-          <unnnic-skeleton-loading
-            v-if="repository.uuid === null"
-            tag="div"
-            width="300px"
-            height="28px"
-          />
-
-          <h1
-            v-else
-            class="u font secondary title-sm bold"
-            v-html="$tc('webapp.home.bases.knowledge_bases', repository.content_bases_count)"
-          ></h1>
+        <div class="repository-base__header__actions">
+          <repository-content-navigation v-if="canContribute" />
 
           <unnnic-button
             v-if="canContribute"
@@ -80,13 +54,44 @@
             {{ $t('webapp.home.bases.new_knowledge_base') }}
           </unnnic-button>
         </div>
+      </div>
 
-        <div class="repository-base__search-base">
-          <unnnic-input
-            v-model="searchBaseName"
-            icon-left="search-1"
-            placeholder="Pesquisar base de conteúdo"
+      <unnnic-divider y-spacing="lg" />
+
+      <div v-if="bases.data.length === 0 && bases.status === 'complete'" class="bases-list--empty">
+        <img src="../../../assets/imgs/doris-yawning.png" alt="Doris Yawning">
+
+          <h1 class="bases-list__title">
+            {{ $t('intelligences.no_content_base_added') }}
+          </h1>
+      </div>
+
+      <template v-else>
+        <div class="bases-list__header">
+          <unnnic-skeleton-loading
+            v-if="repository.uuid === null"
+            tag="div"
+            width="300px"
+            height="28px"
           />
+
+          <unnnic-intelligence-text
+            v-else
+            color="neutral-dark"
+            family="secondary"
+            size="title-sm"
+            weight="bold"
+          >
+            {{ $tc('webapp.home.bases.knowledge_bases', repository.content_bases_count) }}
+          </unnnic-intelligence-text>
+
+          <div class="bases-list__header__input">
+            <unnnic-input
+              v-model="searchBaseName"
+              icon-left="search-1"
+              :placeholder="$t('intelligences.search_content_base_placeholder')"
+            />
+          </div>
         </div>
 
         <div class="bases-list">
@@ -471,10 +476,6 @@ export default {
 <style lang="scss" scoped>
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
-.repository-base__header__title__icon {
-  background-color: $unnnic-color-weni-100;
-}
-
 .delete-base-modal ::v-deep {
   .unnnic-modal-container-background-body {
     padding-top: $unnnic-spacing-giant;
@@ -533,26 +534,38 @@ export default {
 }
 
 .content-bases-page-container {
-  padding: $unnnic-spacing-md $unnnic-font-size * 8;
+  padding: $unnnic-spacing-lg $unnnic-spacing-lg;
 }
 
 .create-base-button {
   min-width: 20.625 * $unnnic-font-size;
 }
 
+
+.bases-list__header {
+  display: grid;
+  align-items: center;
+  gap: $unnnic-spacing-sm;
+  grid-template-columns:
+    repeat(auto-fill, minmax(20.625 * $unnnic-font-size, 1fr));
+
+  &__input {
+    grid-column-end: -1;
+    grid-column-start: 2;
+  }
+}
+
 .bases-list {
+  margin-top: $unnnic-spacing-md;
   display: grid;
   gap: $unnnic-spacing-sm;
   grid-template-columns: repeat(auto-fill, minmax(20.625 * $unnnic-font-size, 1fr));
 
   &--empty {
+    margin-top: 7.5 * $unnnic-font-size;
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    .create-base-button {
-      min-width: 15.625 * $unnnic-font-size;
-    }
   }
 
   &__title {
@@ -582,17 +595,17 @@ export default {
 
     &__title {
       display: flex;
-      column-gap: $unnnic-spacing-sm;
+      column-gap: $unnnic-spacing-ant;
       align-items: center;
+    }
 
-      h1 {
-        font-family: $unnnic-font-family-secondary;
-        font-size: $unnnic-font-size-title-md;
-        line-height: $unnnic-font-size-title-md + $unnnic-line-height-md;
-        font-weight: $unnnic-font-weight-bold;
-        color: $unnnic-color-neutral-darkest;
+    &__actions {
+      display: flex;
+      align-items: center;
+      column-gap: $unnnic-spacing-sm;
 
-        margin: 0;
+      .create-base-button {
+        min-width: 15.625 * $unnnic-font-size;
       }
     }
 
@@ -649,40 +662,6 @@ export default {
       margin-bottom: $unnnic-inline-sm;
     }
   }
-
-  &__search-base {
-      margin: $unnnic-spacing-md 0 $unnnic-spacing-sm;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: $unnnic-spacing-stack-sm $unnnic-spacing-inline-md;
-
-      .unnnic-form {
-        flex: 1;
-      }
-    }
-
-    &__bases-count {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: $unnnic-spacing-sm;
-
-      h1 {
-        font-family: $unnnic-font-family-secondary;
-        font-size: $unnnic-font-size-title-sm;
-        line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
-        font-weight: $unnnic-font-weight-bold;
-        color: $unnnic-color-neutral-darkest;
-
-        margin: 0;
-      }
-    }
-    ::v-deep {
-      .input.size-md {
-        height: auto;
-      }
-    }
 }
 
 ::v-deep {
@@ -705,15 +684,5 @@ export default {
   }
 }
 
-hr {
-  all: unset;
-  width: 100%;
-  border: 0;
-  display: block;
-  height: $unnnic-border-width-thinner;
-  background-color: $unnnic-color-neutral-soft;
-  margin: $unnnic-spacing-lg 0;
-  margin-top: $unnnic-spacing-lg - $unnnic-border-width-thinner;
-}
 
 </style>
