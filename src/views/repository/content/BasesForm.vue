@@ -15,7 +15,7 @@
       <div class="repository-base-edit__wrapper__left-side">
         <section class="base-tabs">
           <div
-            v-for="{ name, text, icon, counter } in tabs"
+            v-for="{ name, text, icon } in tabs"
             :key="name"
             :class="[
               'base-tabs__tab',
@@ -31,10 +31,6 @@
             />
 
             {{ text }}
-
-            <div v-if="counter" class="base-tabs__tab__counter">
-              {{ counter }}
-            </div>
           </div>
         </section>
 
@@ -479,7 +475,6 @@ export default {
           name: 'files',
           text: this.$t('content_bases.tabs.files'),
           icon: 'news',
-          counter: this.files.next ? '10+' : this.files.data.length,
         },
         {
           name: 'text',
@@ -571,15 +566,6 @@ export default {
       color: $unnnic-color-neutral-cloudy;
     }
 
-    &__counter {
-      color: $unnnic-color-neutral-clean;
-      font-size: $unnnic-font-size-body-gt;
-      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-      border-radius: $unnnic-border-radius-sm;
-      background-color: $unnnic-color-neutral-soft;
-      padding: 0.0625 * $unnnic-font-size $unnnic-spacing-xs;
-      margin-left: auto;
-    }
 
     &--active {
       outline-color: $unnnic-color-weni-600;
@@ -587,11 +573,6 @@ export default {
 
       .base-tabs__tab__icon {
         color: $unnnic-color-weni-600;
-      }
-
-      .base-tabs__tab__counter {
-        color: $unnnic-color-weni-600;
-        background-color: $unnnic-color-weni-100;
       }
     }
   }
@@ -613,13 +594,6 @@ export default {
   &:active:enabled {
     background-color: $unnnic-color-aux-yellow-900;
   }
-}
-.content-bases-page-container {
-  padding: $unnnic-spacing-md $unnnic-font-size * 8;
-  min-height: 100vh;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
 }
 
 .repository-base-edit {
