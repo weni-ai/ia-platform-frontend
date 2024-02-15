@@ -791,6 +791,7 @@
       "translate_method": "Translation format",
       "export_description": "What phrases do you want to export?",
       "export_method": "Select the phrases you want to export",
+      "exporting": "The download of the file with the translations is in progress",
       "examples_untrained": "{n} translated sentences have not yet been trained by Intelligence"
     },
     "orgs": {
