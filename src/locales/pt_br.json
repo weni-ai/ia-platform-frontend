@@ -752,6 +752,7 @@
       "translate_method": "Formato de tradução",
       "export_description": "Quais frases que deseja exportar?",
       "export_method": "Selecione as frases que deseja exportar",
+      "exporting": "O download do arquivo com as traduções está em andamento",
       "examples_untrained": "{n} frases traduzidas ainda não foram treinadas pela Inteligência"
     },
     "orgs": {

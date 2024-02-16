@@ -791,6 +791,7 @@
       "translate_method": "Formato de traducción",
       "export_description": "¿Qué frases quieres exportar?",
       "export_method": "Seleccione las frases que desea exportar",
+      "exporting": "La descarga del archivo con las traducciones está en curso",
       "examples_untrained": "{n} oraciones traducidas aún no han sido entrenadas por Inteligencia"
     },
     "orgs": {
