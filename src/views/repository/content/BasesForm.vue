@@ -181,6 +181,7 @@
       :content-base-uuid="$route.params.contentBaseUuid"
       :pre-filled-values="{
         title: contentBase.title,
+        language: contentBase.language,
         description: contentBase.description,
       }"
       @close="isEditContentBaseOpen = false"
@@ -272,8 +273,9 @@ export default {
       'editQAKnowledgeBase',
     ]),
 
-    receiveUdatedContentBase({ title, description }) {
+    receiveUdatedContentBase({ title, language, description }) {
       this.contentBase.title = title;
+      this.contentBase.language = language;
       this.contentBase.description = description;
     },
 

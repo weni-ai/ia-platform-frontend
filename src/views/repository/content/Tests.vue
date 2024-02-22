@@ -33,6 +33,7 @@
         size="large"
         icon-center="send-email-3-1"
         type="alternative"
+        class="button-send-message"
         @click="sendMessage"
       />
     </div>
@@ -139,6 +140,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.button-send-message /deep/ svg .primary {
+  fill: $unnnic-color-weni-600;
+}
 
 .dot-typing {
   $dot-size: 0.3125 * $unnnic-font-size;
