@@ -15,7 +15,6 @@
     </unnnic-form-element>
 
     <unnnic-form-element
-      v-if="type === 'create'"
       :label="$t('bases.create.form.language.label')"
       class="create-base__form-element"
     >
@@ -163,6 +162,7 @@ export default {
               intelligenceUuid: this.intelligenceUuid,
               contentBaseUuid: this.contentBaseUuid,
               title: this.title,
+              language: this.language,
               description: this.description,
             });
 
