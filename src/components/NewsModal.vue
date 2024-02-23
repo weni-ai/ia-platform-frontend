@@ -42,10 +42,8 @@
 </template>
 
 <script>
-/* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import { mapGetters, mapActions } from 'vuex';
-
 
 const info = require('../assets/news/info.json');
 
