@@ -17,7 +17,7 @@
     "@weni/unnnic-system": "^1.24.8",
     "axios": "^1.6.7",
     "buefy": "^0.9.28",
-    "chart.js": "^4.4.1",
+    "chart.js": "^2.9.4",
     "core-js": "^3.8.3",
     "global": "^4.4.0",
     "iframessa": "^2.0.0",
