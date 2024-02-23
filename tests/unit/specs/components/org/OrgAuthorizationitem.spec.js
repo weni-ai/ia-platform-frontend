@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import Buefy from 'buefy';
@@ -6,7 +5,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import store from '@/store';
 import applyFilters from '@/utils/filters';
 import OrgAuthorizationItem from '@/components/org/OrgAuthorizationItem';
-
 
 const localVue = createLocalVue();
 localVue.use(Buefy);

@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
@@ -9,7 +8,7 @@ import Buefy from 'buefy';
 const localVue = createLocalVue();
 localVue.use(Buefy);
 
-jest.spyOn(ChangePasswordForm, 'mounted').mockImplementation(() => {})
+jest.spyOn(ChangePasswordForm, 'mounted').mockImplementation(() => {});
 describe('ChangePasswordForm.vue', () => {
   let wrapper;
   beforeEach(() => {
@@ -47,10 +46,7 @@ describe('ChangePasswordForm.vue', () => {
 
     test('has data', () => {
       expect(Object.keys(wrapper.vm.data)).toEqual(
-        expect.arrayContaining([
-          'current_password',
-          'password',
-        ]),
+        expect.arrayContaining(['current_password', 'password']),
       );
     });
 
@@ -87,10 +83,7 @@ describe('ChangePasswordForm.vue', () => {
 
     test('has data', () => {
       expect(Object.keys(wrapper.vm.data)).toEqual(
-        expect.arrayContaining([
-          'current_password',
-          'password',
-        ]),
+        expect.arrayContaining(['current_password', 'password']),
       );
     });
 

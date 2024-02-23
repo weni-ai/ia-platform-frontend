@@ -1,5 +1,5 @@
 /* eslint-env node, jest */
-/* eslint-disable no-console, import/first */
+/* eslint-disable no-console */
 jest.mock('../request');
 
 import List from './List';

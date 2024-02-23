@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
@@ -28,7 +27,10 @@ describe('TranslateExampleForm.vue', () => {
       wrapper = shallowMount(TranslateExampleForm, {
         localVue,
         propsData: {
-          initialData: { text: 'text', entities: [{ value: 'entity', start: 0, end: 1 }] },
+          initialData: {
+            text: 'text',
+            entities: [{ value: 'entity', start: 0, end: 1 }],
+          },
           translation: { text: 'text2', entities: [] },
         },
         mocks: {
@@ -36,7 +38,6 @@ describe('TranslateExampleForm.vue', () => {
         },
       });
     });
-
 
     test('cache text matches', () => {
       expect(wrapper.vm.initialData.text).toEqual('text');
@@ -54,7 +55,13 @@ describe('TranslateExampleForm.vue', () => {
         localVue,
         propsData: {
           initialData: null,
-          translation: { text: 'translate text', entities: [{ value: 'entity', start: 0, end: 1 }, { value: 'entity', start: 2, end: 3 }] },
+          translation: {
+            text: 'translate text',
+            entities: [
+              { value: 'entity', start: 0, end: 1 },
+              { value: 'entity', start: 2, end: 3 },
+            ],
+          },
         },
         mocks: {
           $t: () => 'some specific text',

@@ -9,6 +9,7 @@ RUN yarn install
 
 COPY . .
 
+RUN yarn lint --fix
 RUN yarn build
 
 FROM nginxinc/nginx-unprivileged:1.25

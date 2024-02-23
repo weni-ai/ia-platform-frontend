@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
@@ -10,14 +9,16 @@ import Buefy from 'buefy';
 const localVue = createLocalVue();
 localVue.use(Buefy);
 
-
 describe('RequestAuthorizationForm.vue', () => {
   let wrapper;
   beforeEach(async () => {
     store.replaceState({
       Auth: {},
     });
-    store.commit(TYPES.SET_TOKEN, 'Token 1f5e7e21d331536b58448595f69eb50a6b5e49b8');
+    store.commit(
+      TYPES.SET_TOKEN,
+      'Token 1f5e7e21d331536b58448595f69eb50a6b5e49b8',
+    );
     wrapper = shallowMount(RequestAuthorizationForm, {
       localVue,
       store,

@@ -1,6 +1,4 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
-
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
@@ -10,7 +8,6 @@ import Buefy from 'buefy';
 
 const localVue = createLocalVue();
 localVue.use(Buefy);
-
 
 describe('NewTranslateForm.vue', () => {
   let wrapper;

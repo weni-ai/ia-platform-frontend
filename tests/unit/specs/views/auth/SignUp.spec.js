@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import store from '@/store';
@@ -8,10 +7,8 @@ import SignUp from '@/views/auth/SignUp';
 import router from '@/router';
 import Buefy from 'buefy';
 
-
 const localVue = createLocalVue();
 localVue.use(Buefy);
-
 
 describe('LoginForm.vue', () => {
   let wrapper;

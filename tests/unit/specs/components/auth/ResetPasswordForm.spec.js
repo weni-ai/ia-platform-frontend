@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
@@ -12,20 +11,17 @@ localVue.use(Buefy);
 describe('ResetPasswordForm.vue', () => {
   let wrapper;
   beforeEach(() => {
-    wrapper = shallowMount(
-      ResetPasswordForm,
-      {
-        store,
-        localVue,
-        mocks: {
-          $t: () => 'some specific text',
-        },
-        propsData: {
-          nickname: 'fake',
-          token: 'token1',
-        },
+    wrapper = shallowMount(ResetPasswordForm, {
+      store,
+      localVue,
+      mocks: {
+        $t: () => 'some specific text',
       },
-    );
+      propsData: {
+        nickname: 'fake',
+        token: 'token1',
+      },
+    });
   });
 
   test('renders correctly', () => {

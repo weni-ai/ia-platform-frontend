@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
@@ -31,7 +30,7 @@ describe('ExamplesList.vue', () => {
           state,
           getters: {
             getCurrentRepository: jest.fn(),
-          }
+          },
         },
       },
     });
@@ -40,9 +39,8 @@ describe('ExamplesList.vue', () => {
       localVue,
       store,
       actions: {
-        searchExamples: ({
-          repositoryUuid, version, query, limit = 20,
-        }) => this.$api.example.search(repositoryUuid, version, query, limit),
+        searchExamples: ({ repositoryUuid, version, query, limit = 20 }) =>
+          this.$api.example.search(repositoryUuid, version, query, limit),
       },
       mocks: {
         $t: () => 'some specific text',
