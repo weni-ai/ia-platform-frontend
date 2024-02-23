@@ -28,7 +28,7 @@
     "vue-code-highlight": "^0.7.8",
     "vue-highlightjs": "^1.3.3",
     "vue-markdown": "npm:@adapttive/vue-markdown@^4.0.0",
-    "vue-mc": "^0.6.0",
+    "vue-mc": "^0.4.0",
     "vue-mc-drf-model": "https://github.com/Ilhasoft/vue-mc-drf-model",
     "vue-moment": "^4.1.0",
     "vue-router": "^3.5.1",
