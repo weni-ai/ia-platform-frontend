@@ -628,6 +628,7 @@
       "principal_version_info": "Enabling this option will make this the default version of the Intelligence"
     },
     "trainings": {
+      "export_results": "Export results",
       "grid_text1": "Train a new sentence",
       "grid_text2": "Add examples to improve your intelligence.",
       "not_can_edit_repository": "You can not contribute to this intelligence",

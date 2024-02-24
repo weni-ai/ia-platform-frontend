@@ -599,6 +599,7 @@
       "principal_version_info": "Ativar essa opção tornará essa a versão padrão da Inteligência"
     },
     "trainings": {
+      "export_results": "Exportar resultados",
       "grid_text1": "Treinar uma nova frase",
       "grid_text2": "Adicionar exemplos para melhorar sua inteligência.",
       "not_can_edit_repository": "Você não pode contribuir para essa inteligência",
