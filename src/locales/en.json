@@ -54,6 +54,7 @@
     "changes_saved": "Changes saved",
     "tabs": {
       "files": "Files",
+      "sites": "Websites",
       "text": "Text"
     },
     "files": {
@@ -75,6 +76,20 @@
         "description": "Are you sure you want to delete the file <b>{name}</b>?<br />The contents of this file will be removed from the AI base",
         "cancel": "Cancel",
         "delete": "Delete"
+      }
+    },
+    "sites": {
+      "sidebar_add": {
+        "title": "Load website content",
+        "description": "Add website content to the AI knowledge base.",
+        "fields": {
+          "link": {
+            "label": "Website link",
+            "placeholder": "www.example.com"
+          }
+        },
+        "button_more_one": "Add another website",
+        "button_load_content": "Load content"
       }
     }
   },

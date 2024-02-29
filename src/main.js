@@ -36,6 +36,8 @@ Vue.use(VShowSlide);
 Vue.use(UnnnicSystemPlugin);
 
 Vue.component('unnnic-divider', UnnnicDivider);
+Vue.component('UnnnicDivider', UnnnicDivider);
+
 Vue.component('unnnic-intelligence-header', UnnnicIntelligenceHeader);
 Vue.component('unnnic-intelligence-text', UnnnicIntelligenceText);
 

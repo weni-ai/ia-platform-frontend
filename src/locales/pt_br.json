@@ -54,6 +54,7 @@
     "changes_saved": "Alterações salvas",
     "tabs": {
       "files": "Arquivos",
+      "sites": "Sites",
       "text": "Texto"
     },
     "files": {
@@ -75,6 +76,20 @@
         "description": "Tem certeza que deseja excluir o arquivo <b>{name}</b>?<br />O conteúdo desse arquivo será removido da base da IA",
         "cancel": "Cancelar",
         "delete": "Excluir"
+      }
+    },
+    "sites": {
+      "sidebar_add": {
+        "title": "Carregar conteúdo de site",
+        "description": "Adicione o conteúdo de sites à base de conhecimento da IA.",
+        "fields": {
+          "link": {
+            "label": "Link do site",
+            "placeholder": "www.exemplo.com"
+          }
+        },
+        "button_more_one": "Adicionar mais um site",
+        "button_load_content": "Carregar conteúdos"
       }
     }
   },
