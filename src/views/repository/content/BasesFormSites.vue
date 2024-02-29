@@ -1,6 +1,57 @@
 <!-- eslint-disable vue/no-duplicate-attributes -->
 <template>
   <section class="sites__container">
+    <section
+      v-if="items.data.length === 0"
+      class="sites__content--empty"
+    >
+      <UnnnicIntelligenceText
+        tag="p"
+        family="secondary"
+        color="neutral-darkest"
+        size="body-lg"
+        weight="bold"
+        marginBottom="sm"
+      >
+        {{ $t('content_bases.sites.sidebar_add.title') }}
+      </UnnnicIntelligenceText>
+
+      <UnnnicIntelligenceText
+        tag="p"
+        family="secondary"
+        color="neutral-cloudy"
+        size="body-gt"
+        marginBottom="sm"
+      >
+        {{ $t('content_bases.sites.sidebar_add.description') }}
+      </UnnnicIntelligenceText>
+
+      <UnnnicButton
+        size="small"
+        type="primary"
+        class="sites__content__button-add-site"
+        @click.native="isAddSiteOpen = true"
+      >
+        {{ $t('content_bases.sites.add_site') }}
+      </UnnnicButton>
+    </section>
+
+    <div
+      v-else
+      class="sites__scrollable"
+    >
+      <BasesFormGenericList
+        :title="$t('content_bases.sites.uploaded_sites')"
+        :addText="$t('content_bases.sites.add_site')"
+        :items.sync="items"
+        @add="isAddSiteOpen = true"
+        @remove="
+          ($event) =>
+            openDeleteSite($event.uuid, $event.created_file_name || '')
+        "
+      ></BasesFormGenericList>
+    </div>
+
     <RightSidebar
       v-if="isAddSiteOpen"
       @close="isAddSiteOpen = false"
@@ -51,22 +102,73 @@
         </UnnnicButton>
       </form>
     </RightSidebar>
+
+    <UnnnicModal
+      v-if="modalDeleteSite"
+      :text="$t('content_bases.sites.delete_site.title')"
+      :closeIcon="false"
+      class="delete-site-modal"
+      persistent
+    >
+      <UnnnicIcon
+        slot="icon"
+        icon="error"
+        size="md"
+        scheme="aux-red-500"
+      />
+
+      <div
+        slot="message"
+        v-html="
+          $t('content_bases.sites.delete_site.description', {
+            name: modalDeleteSite.name,
+          })
+        "
+      ></div>
+
+      <UnnnicButton
+        slot="options"
+        class="create-repository__container__button"
+        type="tertiary"
+        @click="modalDeleteSite = false"
+      >
+        {{ $t('content_bases.sites.delete_site.cancel') }}
+      </UnnnicButton>
+
+      <UnnnicButton
+        slot="options"
+        class="create-repository__container__button attention-button"
+        type="warning"
+        @click="remove"
+        :loading="modalDeleteSite.status === 'deleting'"
+      >
+        {{ $t('content_bases.sites.delete_site.delete') }}
+      </UnnnicButton>
+    </UnnnicModal>
   </section>
 </template>
 
 <script>
 import RightSidebar from '../../../components/RightSidebar.vue';
+import BasesFormGenericList from './BasesFormGenericList.vue';
 
 export default {
+  props: {
+    items: Object,
+  },
+
   components: {
     RightSidebar,
+    BasesFormGenericList,
   },
 
   data() {
     return {
-      isAddSiteOpen: true,
+      isAddSiteOpen: false,
 
       sites: [{ value: '' }],
+
+      modalDeleteSite: null,
     };
   },
 
@@ -78,7 +180,53 @@ export default {
 
   methods: {
     addSites() {
-      console.log('add sites', this.sites);
+      this.$emit('update:items', {
+        ...this.items,
+        data: this.items.data.concat(
+          this.sites.map((site) => ({
+            file: null,
+            file_name: null,
+            extension_file: 'site',
+            uuid: 'site' + Math.random() * 1000,
+            created_file_name: site.value,
+            status: 'uploading',
+          })),
+        ),
+      });
+
+      this.sites = [{ value: '' }];
+
+      this.isAddSiteOpen = false;
+    },
+
+    openDeleteSite(siteUuid, siteURL) {
+      this.modalDeleteSite = {
+        uuid: siteUuid,
+        name: siteURL,
+        status: null,
+      };
+    },
+
+    remove() {
+      this.modalDeleteSite.status = 'deleting';
+
+      setTimeout(() => {
+        this.$emit('update:items', {
+          ...this.items,
+          data: this.items.data.filter(
+            ({ uuid }) => uuid !== this.modalDeleteSite.uuid,
+          ),
+        });
+
+        this.$store.state.alert = {
+          type: 'default',
+          text: this.$t('content_bases.files.file_removed_from_base', {
+            name: this.modalDeleteSite.name,
+          }),
+        };
+
+        this.modalDeleteSite = null;
+      }, 3000);
     },
 
     validURL(url) {
@@ -93,6 +241,26 @@ export default {
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
+.delete-site-modal ::v-deep {
+  .unnnic-modal-container-background-body-description-container {
+    padding-bottom: $unnnic-spacing-xs;
+  }
+
+  .unnnic-modal-container-background-body__icon-slot {
+    display: flex;
+    justify-content: center;
+    margin-bottom: $unnnic-spacing-sm;
+  }
+
+  .unnnic-modal-container-background-body-title {
+    padding-bottom: $unnnic-spacing-sm;
+  }
+
+  .unnnic-modal-container-background-body {
+    padding-top: $unnnic-spacing-giant;
+  }
+}
+
 .sites {
   &__container {
     outline-style: solid;
@@ -106,6 +274,49 @@ export default {
     flex: 1;
     display: flex;
     flex-direction: column;
+  }
+
+  &__content {
+    &--empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &__button-add-site {
+      width: 12.5 * $unnnic-font-size;
+    }
+  }
+
+  &__scrollable {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    height: 100%;
+
+    overflow: overlay;
+
+    $scroll-size: $unnnic-inline-nano;
+
+    padding-right: $unnnic-inline-nano + $scroll-size;
+    margin-right: -($unnnic-inline-nano + $scroll-size);
+
+    &::-webkit-scrollbar {
+      width: $scroll-size;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $unnnic-color-neutral-clean;
+      border-radius: $unnnic-border-radius-pill;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $unnnic-color-neutral-soft;
+      border-radius: $unnnic-border-radius-pill;
+    }
   }
 }
 

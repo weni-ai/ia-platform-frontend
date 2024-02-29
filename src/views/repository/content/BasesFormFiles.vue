@@ -55,56 +55,22 @@
         </unnnic-button>
       </div>
 
-      <div v-else class="files-list__container">
-        <div class="files-list__header">
-          <unnnic-intelligence-text
-            color="neutral-darkest"
-            family="secondary"
-            weight="bold"
-            size="body-lg"
-          >
-            {{ $t('content_bases.files.uploaded_files') }}
-            ({{ counter }})
-          </unnnic-intelligence-text>
-
-          <unnnic-button
-            @click="$refs['browser-file-input'].click()"
-            size="small"
-            type="primary"
-            class="files-list__header__button"
-          >
-            {{ $t('content_bases.files.browse_file') }}
-          </unnnic-button>
-        </div>
-
-        <div class="files-list__content">
-          <bases-form-files-item
-            v-for="file in files.data"
-            :key="file.uuid"
-            :file="file"
-            @remove="
-              openDeleteFileModal(
-                file.uuid,
-                file.created_file_name || '',
-                file.extension_file || ''
-              )"
-          />
-
-          <template v-if="files.status === 'loading'">
-            <unnnic-skeleton-loading
-              v-for="i in 3"
-              :key="i"
-              tag="div"
-              height="56px"
-            />
-          </template>
-
-          <div
-            v-show="!['loading', 'complete'].includes(files.status)"
-            ref="end-of-list-element"
-          ></div>
-        </div>
-      </div>
+      <BasesFormGenericList
+        v-else
+        :title="$t('content_bases.files.uploaded_files')"
+        :addText="$t('content_bases.files.browse_file')"
+        :items.sync="files"
+        @add="$refs['browser-file-input'].click()"
+        @remove="
+          ($event) =>
+            openDeleteFileModal(
+              $event.uuid,
+              $event.created_file_name || '',
+              $event.extension_file || '',
+            )
+        "
+        @load-more="$emit('load-more')"
+      />
     </div>
 
     <unnnic-alert
@@ -160,9 +126,13 @@
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import BasesFormFilesItem from './BasesFormFilesItem';
+import BasesFormGenericList from './BasesFormGenericList';
 
 export default {
-  components: { BasesFormFilesItem },
+  components: {
+    BasesFormFilesItem,
+    BasesFormGenericList,
+  },
 
   props: {
     flatBottom: Boolean,
@@ -172,9 +142,6 @@ export default {
   data() {
     return {
       alert: null,
-
-      isShowingEndOfList: false,
-      intersectionObserver: null,
 
       isClientDragging: false,
       leave: null,
@@ -212,22 +179,12 @@ export default {
     Object.keys(this.events).forEach((eventName) => {
       window.addEventListener(eventName, this.events[eventName]);
     });
-
-    this.intersectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        this.isShowingEndOfList = entry.isIntersecting;
-      });
-    });
-
-    this.intersectionObserver.observe(this.$refs['end-of-list-element']);
   },
 
   beforeDestroy() {
     Object.keys(this.events).forEach((eventName) => {
       window.removeEventListener(eventName, this.events[eventName]);
     });
-
-    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
 
     clearTimeout(this.listOfFilesBeingProcessedTimeOut);
   },
@@ -248,12 +205,6 @@ export default {
   },
 
   watch: {
-    isShowingEndOfList() {
-      if (this.isShowingEndOfList && this.files.status === null) {
-        this.$emit('load-more');
-      }
-    },
-
     listOfFilesBeingProcessed: {
       deep: true,
       immediate: true,
@@ -449,32 +400,6 @@ export default {
 
   .unnnic-modal-container-background-body {
     padding-top: $unnnic-spacing-giant;
-  }
-}
-
-.files-list {
-  &__container {
-    height: 0;
-  }
-
-  &__header {
-    display: flex;
-    align-items: center;
-    margin-bottom: $unnnic-spacing-sm;
-    justify-content: space-between;
-
-    &__button {
-      width: 12.5 * $unnnic-font-size;
-    }
-  }
-
-  &__content {
-    display: grid;
-    gap: $unnnic-spacing-sm;
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(16 * $unnnic-font-size, 1fr)
-    );
   }
 }
 

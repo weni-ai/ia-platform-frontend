@@ -79,6 +79,7 @@
       }
     },
     "sites": {
+      "uploaded_sites": "Sites carregados",
       "sidebar_add": {
         "title": "Carregar conteúdo de site",
         "description": "Adicione o conteúdo de sites à base de conhecimento da IA.",
@@ -90,6 +91,13 @@
         },
         "button_more_one": "Adicionar mais um site",
         "button_load_content": "Carregar conteúdos"
+      },
+      "add_site": "Adicionar site",
+      "delete_site": {
+        "title": "Excluir site",
+        "description": "Tem certeza que deseja excluir o site <b>{name}</b>?<br />O conteúdo desse site será removido da base da IA",
+        "cancel": "Cancelar",
+        "delete": "Excluir"
       }
     }
   },

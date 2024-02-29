@@ -74,7 +74,7 @@
         </template>
 
         <template v-if="tab === 'sites'">
-          <BasesFormSites />
+          <BasesFormSites :items.sync="sites" />
         </template>
 
         <template v-if="tab === 'text'">
@@ -136,7 +136,9 @@
       </div>
 
       <div
-        v-if="files.data.length || knowledgeBase.text.oldValue"
+        v-if="
+          files.data.length || sites.data.length || knowledgeBase.text.oldValue
+        "
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container',
@@ -274,6 +276,29 @@ export default {
         status: null,
         next: null,
         data: [],
+      },
+
+      sites: {
+        status: 'loading',
+        next: null,
+        data: [
+          {
+            file: null,
+            extension_file: 'site',
+            uuid: 'site1',
+            created_file_name: 'lhamas.com',
+            status: 'uploaded',
+            file_name: null,
+          },
+          {
+            file: null,
+            extension_file: 'site',
+            uuid: 'site2',
+            created_file_name: 'lhamasfofas.com',
+            status: 'uploading',
+            file_name: null,
+          },
+        ],
       },
     };
   },

@@ -79,6 +79,7 @@
       }
     },
     "sites": {
+      "uploaded_sites": "Uploaded websites",
       "sidebar_add": {
         "title": "Load website content",
         "description": "Add website content to the AI knowledge base.",
@@ -90,6 +91,13 @@
         },
         "button_more_one": "Add another website",
         "button_load_content": "Load content"
+      },
+      "add_site": "Add website",
+      "delete_file": {
+        "title": "Delete website",
+        "description": "Are you sure you want to delete the website <b>{name}</b>?<br />The contents of this website will be removed from the AI base",
+        "cancel": "Cancel",
+        "delete": "Delete"
       }
     }
   },
