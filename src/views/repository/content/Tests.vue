@@ -77,21 +77,7 @@ export default {
     return {
       message: '',
 
-      messages: [
-        {
-          type: 'question',
-          text: 'teste',
-        },
-        {
-          type: 'answer',
-          text: 'teste.',
-          status: 'loaded',
-          feedback: {
-            value: null,
-            reason: null,
-          },
-        },
-      ],
+      messages: [],
     };
   },
 
