@@ -12,8 +12,6 @@
           {{ $t('quick_test.send_a_message') }}
         </div>
 
-        <pre>{{ messages }}</pre>
-
         <div
           v-for="(message, index) in messages"
           :key="index"
