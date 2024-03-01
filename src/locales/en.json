@@ -103,7 +103,14 @@
   },
   "quick_test": {
     "send_a_message": "Send a message to test the content base...",
-    "unable_to_find_an_answer": "*Unable to find an answer to this question*"
+    "unable_to_find_an_answer": "*Unable to find an answer to this question*",
+    "rate_your_answer": "Rate your answer",
+    "completely_off_topic": "Completely off-topic",
+    "partially_correct_went_off_base": "Partially correct, went off base",
+    "partially_correct_provided_information_on_a_different_topic": "Partially correct, provided information on a different topic",
+    "no_answer_but_the_information_is_in_database": "No answer, but the information is in the database",
+    "send_feedback": "Send feedback",
+    "feedback_sent": "Feedback sent"
   },
   "webapp": {
     "layout": {

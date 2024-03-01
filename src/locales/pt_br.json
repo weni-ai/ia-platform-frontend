@@ -103,7 +103,14 @@
   },
   "quick_test": {
     "send_a_message": "Envie uma mensagem para testar a base de conteúdo...",
-    "unable_to_find_an_answer": "*Não foi possível encontrar uma resposta para essa pergunta*"
+    "unable_to_find_an_answer": "*Não foi possível encontrar uma resposta para essa pergunta*",
+    "rate_your_answer": "Classifique como foi a resposta",
+    "completely_off_topic": "Saiu completamente do assunto perguntado",
+    "partially_correct_went_off_base": "Parcialmente correta, saiu do conteúdo da base",
+    "partially_correct_provided_information_on_a_different_topic": "Parcialmente correta, trouxe informações de um tema diferente",
+    "no_answer_but_the_information_is_in_database": "Não respondeu, porém a informação consta na base",
+    "send_feedback": "Enviar feedback",
+    "feedback_sent": "Feedback enviado"
   },
   "webapp": {
     "layout": {
