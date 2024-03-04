@@ -80,6 +80,7 @@
     },
     "sites": {
       "uploaded_sites": "Sites carregados",
+      "content_of_the_sites_has_been_added": "O conteúdo dos sites foi adicionado à base",
       "sidebar_add": {
         "title": "Carregar conteúdo de site",
         "description": "Adicione o conteúdo de sites à base de conhecimento da IA.",

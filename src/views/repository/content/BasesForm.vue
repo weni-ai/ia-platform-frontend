@@ -74,7 +74,10 @@
         </template>
 
         <template v-if="tab === 'sites'">
-          <BasesFormSites :items.sync="sites" />
+          <BasesFormSites
+            :items.sync="sites"
+            @load-more="loadSites"
+          />
         </template>
 
         <template v-if="tab === 'text'">
@@ -279,13 +282,13 @@ export default {
       },
 
       sites: {
-        status: 'loading',
+        status: null,
         next: null,
         data: [
-          {
+          /* {
             file: null,
             extension_file: 'site',
-            uuid: 'site1',
+            uuid: 'temp-1',
             created_file_name: 'lhamas.com',
             status: 'uploaded',
             file_name: null,
@@ -293,11 +296,11 @@ export default {
           {
             file: null,
             extension_file: 'site',
-            uuid: 'site2',
+            uuid: 'temp-2',
             created_file_name: 'lhamasfofas.com',
             status: 'uploading',
             file_name: null,
-          },
+          }, */
         ],
       },
     };
@@ -348,6 +351,39 @@ export default {
 
       if (!data.next) {
         this.files.status = 'complete';
+      }
+    },
+
+    async loadSites() {
+      this.sites.status = 'loading';
+
+      try {
+        const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
+          {
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+            next: this.sites.next,
+          },
+        );
+
+        this.sites.data = this.sites.data.concat(
+          data.results
+            .map((file) => ({
+              ...file,
+              status: file.status === 'success' ? 'uploaded' : 'processing',
+            }))
+            .filter(
+              ({ uuid }) =>
+                !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+            ),
+        );
+
+        this.sites.next = data.next;
+
+        if (!data.next) {
+          this.sites.status = 'complete';
+        }
+      } finally {
+        this.sites.status = null;
       }
     },
 
@@ -608,6 +644,7 @@ export default {
     });
 
     this.loadFiles();
+    this.loadSites();
   },
 
   destroyed() {
