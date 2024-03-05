@@ -61,7 +61,7 @@
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
       "supported_files": "Supported formats: .pdf, .doc, docx, .txt, .xls and .xlsx.<br />250MB limit per file.",
-      "browse_file": "Upload file",
+      "browse_file": "Add file",
       "uploaded_files": "Uploaded files",
       "status": {
         "uploading": "Uploading content",
@@ -110,7 +110,11 @@
     "partially_correct_provided_information_on_a_different_topic": "Partially correct, provided information on a different topic",
     "no_answer_but_the_information_is_in_database": "No answer, but the information is in the database",
     "send_feedback": "Send feedback",
-    "feedback_sent": "Feedback sent"
+    "feedback_sent": "Feedback sent",
+    "feedback": {
+      "liked": "Good answer",
+      "disliked": "Bad answer"
+    }
   },
   "webapp": {
     "layout": {

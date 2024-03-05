@@ -21,19 +21,22 @@ const request = {
 
         if (err.response.status === 500 || err.response.status === 408) {
           store.state.alert = {
-            text: get(err, 'response.data.detail') || i18n.t('internal_server_error'),
+            text:
+              get(err, 'response.data.detail') ||
+              i18n.t('internal_server_error'),
             type: 'error',
-          }
+          };
         } else if (err.response.status === 401) {
           store.state.alert = {
             text: get(err, 'response.data.detail') || i18n.t('unauthorized'),
             type: 'error',
-          }
+          };
         } else {
           store.state.alert = {
-            text: get(err, 'response.data.detail') || i18n.t('unexpected_error'),
+            text:
+              get(err, 'response.data.detail') || i18n.t('unexpected_error'),
             type: 'error',
-          }
+          };
         }
 
         throw err;
@@ -52,13 +55,25 @@ function forceHttps(receivedUrl) {
 }
 
 export default {
-  ask: {
-    v1({ contentBaseUuid, text, language }) {
+  question: {
+    create({ contentBaseUuid, text, language }) {
       return request.$http.post('api/v1/wenigpt_question/quick-test', {
         content_base_uuid: contentBaseUuid,
         text,
         language,
       });
+    },
+
+    feedback: {
+      create({ contentBaseUuid, questionUuid, value, feedback }) {
+        return request.$http.post(
+          `api/${contentBaseUuid}/content-base-logs/${questionUuid}`,
+          {
+            value,
+            feedback,
+          },
+        );
+      },
     },
   },
 
@@ -99,7 +114,12 @@ export default {
     );
   },
 
-  createIntelligenceContentBase({ intelligenceUuid, title, language, description }) {
+  createIntelligenceContentBase({
+    intelligenceUuid,
+    title,
+    language,
+    description,
+  }) {
     return request.$http.post(`api/${intelligenceUuid}/content-bases/`, {
       title,
       language,
@@ -114,11 +134,14 @@ export default {
     language,
     description,
   }) {
-    return request.$http.patch(`api/${intelligenceUuid}/content-bases/${contentBaseUuid}/`, {
-      title,
-      language,
-      description,
-    });
+    return request.$http.patch(
+      `api/${intelligenceUuid}/content-bases/${contentBaseUuid}/`,
+      {
+        title,
+        language,
+        description,
+      },
+    );
   },
 
   listIntelligencesContentBases({ intelligenceUuid, next }) {
@@ -170,10 +193,13 @@ export default {
         create({ contentBaseUuid, file, extension_file, onUploadProgress }) {
           const form = new FormData();
 
-          const fileName = file.name.lastIndexOf('.') === -1
-            ? file.name
-            : file.name.slice(0, file.name.lastIndexOf('.')).replace(/\./g, ' ')
-              + file.name.slice(file.name.lastIndexOf('.'));
+          const fileName =
+            file.name.lastIndexOf('.') === -1
+              ? file.name
+              : file.name
+                  .slice(0, file.name.lastIndexOf('.'))
+                  .replace(/\./g, ' ') +
+                file.name.slice(file.name.lastIndexOf('.'));
 
           form.append('file', file, fileName);
           form.append('extension_file', extension_file);

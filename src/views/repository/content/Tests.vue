@@ -26,8 +26,10 @@
             <VueMarkdown>{{ message.text }}</VueMarkdown>
 
             <AnswerFeedback
-              v-if="message.type === 'answer'"
+              v-if="message.type === 'answer' && message.question_uuid"
               :feedback.sync="message.feedback"
+              :contentBaseUuid="contentBaseUuid"
+              :questionUuid="message.question_uuid"
             />
           </template>
         </div>
@@ -118,6 +120,7 @@ export default {
           type: 'answer',
           text: '',
           status: 'loading',
+          question_uuid: null,
           feedback: {
             value: null,
             reason: null,
@@ -128,14 +131,15 @@ export default {
 
         this.scrollToLastMessage();
 
-        nexusaiAPI.ask
-          .v1({
+        nexusaiAPI.question
+          .create({
             contentBaseUuid: this.contentBaseUuid,
             text: message,
             language: (this.language || '').toLowerCase(),
           })
           .then(({ data }) => {
             answer.status = 'loaded';
+            answer.question_uuid = get(data, 'question_uuid', null);
             answer.text = get(
               data,
               'answers.0.text',

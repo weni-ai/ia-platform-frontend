@@ -61,7 +61,7 @@
       "upload_content": "Carregar conteúdo de arquivos",
       "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",
       "supported_files": "Formatos suportados: .pdf, .doc, docx, .txt, .xls e .xlsx.<br />Limite de 250MB por arquivo.",
-      "browse_file": "Carregar arquivo",
+      "browse_file": "Adicionar arquivo",
       "uploaded_files": "Arquivos carregados",
       "status": {
         "uploading": "Carregando conteúdo",
@@ -110,7 +110,11 @@
     "partially_correct_provided_information_on_a_different_topic": "Parcialmente correta, trouxe informações de um tema diferente",
     "no_answer_but_the_information_is_in_database": "Não respondeu, porém a informação consta na base",
     "send_feedback": "Enviar feedback",
-    "feedback_sent": "Feedback enviado"
+    "feedback_sent": "Feedback enviado",
+    "feedback": {
+      "liked": "Boa resposta",
+      "disliked": "Resposta ruim"
+    }
   },
   "webapp": {
     "layout": {
