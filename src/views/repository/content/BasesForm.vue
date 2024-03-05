@@ -53,7 +53,6 @@
           <template v-else>
             <BasesFormFiles
               :files.sync="files"
-              :flatBottom="!files.data.length"
               @load-more="loadFiles"
               @removed="removedFile"
             />
