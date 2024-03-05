@@ -54,13 +54,14 @@
     "changes_saved": "Changes saved",
     "tabs": {
       "files": "Files",
+      "sites": "Websites",
       "text": "Text"
     },
     "files": {
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
       "supported_files": "Supported formats: .pdf, .doc, docx, .txt, .xls and .xlsx.<br />250MB limit per file.",
-      "browse_file": "Upload file",
+      "browse_file": "Add file",
       "uploaded_files": "Uploaded files",
       "status": {
         "uploading": "Uploading content",
@@ -76,11 +77,44 @@
         "cancel": "Cancel",
         "delete": "Delete"
       }
+    },
+    "sites": {
+      "uploaded_sites": "Uploaded websites",
+      "sidebar_add": {
+        "title": "Load website content",
+        "description": "Add website content to the AI knowledge base.",
+        "fields": {
+          "link": {
+            "label": "Website link",
+            "placeholder": "www.example.com"
+          }
+        },
+        "button_more_one": "Add another website",
+        "button_load_content": "Load content"
+      },
+      "add_site": "Add website",
+      "delete_file": {
+        "title": "Delete website",
+        "description": "Are you sure you want to delete the website <b>{name}</b>?<br />The contents of this website will be removed from the AI base",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      }
     }
   },
   "quick_test": {
     "send_a_message": "Send a message to test the content base...",
-    "unable_to_find_an_answer": "*Unable to find an answer to this question*"
+    "unable_to_find_an_answer": "*Unable to find an answer to this question*",
+    "rate_your_answer": "Rate your answer",
+    "completely_off_topic": "Completely off-topic",
+    "partially_correct_went_off_base": "Partially correct, went off base",
+    "partially_correct_provided_information_on_a_different_topic": "Partially correct, provided information on a different topic",
+    "no_answer_but_the_information_is_in_database": "No answer, but the information is in the database",
+    "send_feedback": "Send feedback",
+    "feedback_sent": "Feedback sent",
+    "feedback": {
+      "liked": "Good answer",
+      "disliked": "Bad answer"
+    }
   },
   "webapp": {
     "layout": {
@@ -628,6 +662,7 @@
       "principal_version_info": "Enabling this option will make this the default version of the Intelligence"
     },
     "trainings": {
+      "export_results": "Export results",
       "grid_text1": "Train a new sentence",
       "grid_text2": "Add examples to improve your intelligence.",
       "not_can_edit_repository": "You can not contribute to this intelligence",
