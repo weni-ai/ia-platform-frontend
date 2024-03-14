@@ -120,8 +120,11 @@ export default {
 .selected {
   background-color: $unnnic-color-neutral-soft;
   border-radius: $unnnic-border-radius-sm;
-  padding: 0.125 * $unnnic-font-size;
-  margin: -0.125 * $unnnic-font-size;
+
+  $inside-spacing: 0.125 * $unnnic-font-size;
+  
+  padding: $inside-spacing;
+  margin: -$inside-spacing;
   box-sizing: content-box;
 
   $entities-colors: (
