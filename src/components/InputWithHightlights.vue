@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="selected__container" :style="inputStyle">
-      <div
+  <section>
+    <p class="selected__container" :style="inputStyle">
+      <section
         v-for="(part, index) in parts"
         :key="index" class="selected__line"
         :style="{ marginLeft: -inputScrolledLeft + 'px' }"
@@ -14,8 +14,8 @@
             whiteSpace: 'pre',
           }"
         >{{ part.text }}</span>
-      </div>
-    </div>
+      </section>
+    </p>
 
     <unnnic-input
       ref="input"
@@ -23,7 +23,7 @@
       @input="$emit('input', $event)"
       v-bind="$attrs"
     />
-  </div>
+  </section>
 </template>
 
 <script>
