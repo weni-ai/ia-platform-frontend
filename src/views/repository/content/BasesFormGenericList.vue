@@ -1,6 +1,6 @@
 <template>
-  <div class="files-list__container">
-    <div class="files-list__header">
+  <section class="files-list__container">
+    <header class="files-list__header">
       <UnnnicIntelligenceText
         color="neutral-darkest"
         family="secondary"
@@ -19,9 +19,9 @@
       >
         {{ addText }}
       </UnnnicButton>
-    </div>
+    </header>
 
-    <div class="files-list__content">
+    <section class="files-list__content">
       <BasesFormFilesItem
         v-for="file in items.data"
         :key="file.uuid"
@@ -42,8 +42,8 @@
         v-show="!['loading', 'complete'].includes(items.status)"
         ref="end-of-list-element"
       ></div>
-    </div>
-  </div>
+    </section>
+  </section>
 </template>
 
 <script>
