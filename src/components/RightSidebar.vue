@@ -1,12 +1,12 @@
 <template>
-  <div
+  <aside
     class="side-bar__container"
     @click.self="$emit('close')"
   >
-    <div class="side-bar__content">
-      <div class="side-bar__content__scrollable">
-        <div class="side-bar__header">
-          <div class="side-bar__header__title">
+    <section class="side-bar__content">
+      <section class="side-bar__content__scrollable">
+        <header class="side-bar__header">
+          <section class="side-bar__header__title">
             {{ title }}
 
             <UnnnicButton
@@ -17,12 +17,12 @@
               scheme="neutral-dark"
               @click="$emit('close')"
             />
-          </div>
+          </section>
 
           <div class="side-bar__header__description">
             {{ description }}
           </div>
-        </div>
+        </header>
 
         <UnnnicDivider
           v-if="dividerYSpacing"
@@ -30,9 +30,9 @@
         />
 
         <slot></slot>
-      </div>
-    </div>
-  </div>
+      </section>
+    </section>
+  </aside>
 </template>
 
 <script>
