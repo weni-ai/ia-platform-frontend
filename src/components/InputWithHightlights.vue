@@ -81,14 +81,23 @@ export default {
 
   computed: {
     parts() {
-      return [].concat(this.selected ? {
-        textBefore: this.value.substring(0, this.selected.start),
-        text: this.value.substring(this.selected.start, this.selected.end),
-      } : []).concat(this.entities.map((entity) => ({
-        textBefore: this.value.substring(0, entity.start),
-        text: this.value.substring(entity.start, entity.end),
-        color: getEntityColor(entity.entity),
-      })));
+      const parts = [];
+
+      const getHightlightedWordObject = ({
+        start: startSelection,
+        end: endSelection,
+        entity: entityName,
+      }) => ({
+        textBefore: this.value.substring(0, startSelection),
+        text: this.value.substring(startSelection, endSelection),
+        color: entityName ? getEntityColor(entityName) : undefined,
+      });
+
+      if (this.selected) {
+        parts.push(getHightlightedWordObject(this.selected));
+      }
+
+      return parts.concat(this.entities.map(getHightlightedWordObject));
     },
   },
 };
