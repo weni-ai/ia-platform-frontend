@@ -355,6 +355,8 @@ export default {
     },
 
     async loadSites() {
+      return; // temp: waiting backend functionality
+
       this.sites.status = 'loading';
 
       try {
