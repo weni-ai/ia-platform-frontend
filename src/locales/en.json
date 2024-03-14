@@ -80,6 +80,11 @@
     "send_a_message": "Send a message to test the content base...",
     "unable_to_find_an_answer": "*Unable to find an answer to this question*"
   },
+  "log": {
+    "interaction_received_on": "Interaction received on:",
+    "more_details_of_the_interaction": "More details of the interaction:",
+    "verion": "Version:"
+  },
   "webapp": {
     "layout": {
       "newbot": "new bot",

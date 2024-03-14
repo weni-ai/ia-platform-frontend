@@ -20,7 +20,7 @@
         size="body-md"
         color="neutral-cloudy"
       >
-        <strong>Interação recebida em:</strong>
+        <strong>{{ $t('log.interaction_received_on') }}</strong>
 
         {{ formattedDate }}
       </unnnic-intelligence-text>
@@ -59,7 +59,7 @@
           size="body-md"
           color="neutral-cloudy"
         >
-          <strong>Mais detalhes da interação:</strong>
+          <strong>{{ $t('log.more_details_of_the_interaction') }}</strong>
         </unnnic-intelligence-text>
 
         <unnnic-button
@@ -86,7 +86,7 @@
           size="body-md"
           color="neutral-cloudy"
         >
-          <strong>Versão:</strong>
+          <strong>{{ $t('log.version') }}a</strong>
 
           {{ versionName }}
         </unnnic-intelligence-text>
