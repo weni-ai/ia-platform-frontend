@@ -357,36 +357,36 @@ export default {
     async loadSites() {
       return; // temp: waiting backend functionality
 
-      this.sites.status = 'loading';
+      // this.sites.status = 'loading';
 
-      try {
-        const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
-          {
-            contentBaseUuid: this.$route.params.contentBaseUuid,
-            next: this.sites.next,
-          },
-        );
+      // try {
+      //   const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
+      //     {
+      //       contentBaseUuid: this.$route.params.contentBaseUuid,
+      //       next: this.sites.next,
+      //     },
+      //   );
 
-        this.sites.data = this.sites.data.concat(
-          data.results
-            .map((file) => ({
-              ...file,
-              status: file.status === 'success' ? 'uploaded' : 'processing',
-            }))
-            .filter(
-              ({ uuid }) =>
-                !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
-            ),
-        );
+      //   this.sites.data = this.sites.data.concat(
+      //     data.results
+      //       .map((file) => ({
+      //         ...file,
+      //         status: file.status === 'success' ? 'uploaded' : 'processing',
+      //       }))
+      //       .filter(
+      //         ({ uuid }) =>
+      //           !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+      //       ),
+      //   );
 
-        this.sites.next = data.next;
+      //   this.sites.next = data.next;
 
-        if (!data.next) {
-          this.sites.status = 'complete';
-        }
-      } finally {
-        this.sites.status = null;
-      }
+      //   if (!data.next) {
+      //     this.sites.status = 'complete';
+      //   }
+      // } finally {
+      //   this.sites.status = null;
+      // }
     },
 
     alertError(title) {
