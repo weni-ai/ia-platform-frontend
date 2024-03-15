@@ -17,7 +17,7 @@
       <unnnic-skeleton-loading tag="div" width="261px" height="50px" />
     </div>
 
-    <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+    <unnnic-divider />
 
     <div class="summary-loading__info">
       <div class="summary-loading__info__section">
@@ -50,7 +50,7 @@
       <unnnic-skeleton-loading tag="div" width="94px" height="24px" />
     </div>
 
-    <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+    <unnnic-divider />
 
     <div class="summary-loading__entities">
       <unnnic-skeleton-loading tag="div" width="128px" height="36px" />
@@ -70,7 +70,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  components: {},
+};
 </script>
 
 <style lang="scss" scoped>

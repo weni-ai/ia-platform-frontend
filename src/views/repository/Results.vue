@@ -60,6 +60,15 @@ export default {
       error: {},
     };
   },
+
+  mounted() {
+    document.head.appendChild(window.bulmaStyle);
+  },
+
+  beforeDestroy() {
+    document.head.removeChild(window.bulmaStyle);
+  },
+
   computed: {
     ...mapState({
       selectedRepository: state => state.Repository.selectedRepository,

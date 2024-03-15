@@ -71,23 +71,34 @@
                   @click-action-secondary="closeExportModal()"
                   @click-action-primary="exportTranslation()"
                   actionPrimaryButtonType="secondary"
+                  :action-primary-loading="waitDownloadFile"
                 >
-                    <template slot="description">
-                    {{ $t('webapp.translate.export_description') }}
-                    <unnnic-select
-                      :label="$t('webapp.translate.export_method')"
-                      v-model="allTranslations"
-                      class="select-translation"
+                  <template slot="description">
+                    <unnnic-intelligence-text
+                      tag="p"
+                      family="secondary"
+                      size="body-lg"
+                      color="neutral-cloudy"
+                      margin-bottom="lg"
                     >
-                      <option
-                        v-for="option in exportOption"
-                        :key="option.id"
-                        :value="option.value"
-                        @select="allTranslations = option.value"
+                      {{ $t('webapp.translate.export_method') }}
+                    </unnnic-intelligence-text>
+
+                    <unnnic-form-element>
+                      <unnnic-select
+                        v-model="allTranslations"
+                        class="select-translation"
                       >
-                        {{ option.label }}
-                      </option>
-                    </unnnic-select>
+                        <option
+                          v-for="option in exportOption"
+                          :key="option.id"
+                          :value="option.value"
+                          @select="allTranslations = option.value"
+                        >
+                          {{ option.label }}
+                        </option>
+                      </unnnic-select>
+                    </unnnic-form-element>
                   </template>
                 </unnnic-modal-next>
                 <div class="repository-translate__list">
@@ -306,7 +317,7 @@ export default {
       eventClickFinish: false,
       loadingList: true,
       hasPhrases: false,
-      allTranslations: '',
+      allTranslations: 'false',
       exportOption: [
         { id: 0, label: this.$t('webapp.translate.export_all_sentences'), value: 'false' },
         { id: 1, label: this.$t('webapp.translate.export_only_translated'), value: 'true' },
@@ -410,10 +421,12 @@ export default {
 
         this.createXlsxFromJSON(data, 'Weni Artificial Intelligence.xlsx');
 
-        this.$buefy.toast.open({
-          message: 'Downloading File',
+        this.$store.state.alert = {
+          text: this.$t('webapp.translate.exporting'),
           type: 'success',
-        });
+        }
+
+        this.isExportFileVisible = false;
       } catch (error) {
         this.errors = error;
       }

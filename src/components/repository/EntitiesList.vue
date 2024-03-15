@@ -59,7 +59,7 @@
           />
         </unnnic-input>
       </div>
-      <unnnic-button slot="options" type="terciary" @click="openModal = false">
+      <unnnic-button slot="options" type="tertiary" @click="openModal = false">
         {{ $t("webapp.home.cancel") }}
       </unnnic-button>
       <unnnic-button
@@ -93,7 +93,7 @@
       <span
       slot="message"
       v-html="$t('webapp.trainings.delete_phrase_modal')" />
-      <unnnic-button slot="options" type="terciary" @click="openDeleteModal = false">
+      <unnnic-button slot="options" type="tertiary" @click="openDeleteModal = false">
         {{ $t("webapp.home.cancel") }}
       </unnnic-button>
       <unnnic-button

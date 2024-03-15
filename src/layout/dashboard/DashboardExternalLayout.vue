@@ -88,6 +88,7 @@ export default {
 @import "~@/assets/scss/utilities.scss";
 @import "~@/assets/scss/variables.scss";
 @import "~@/assets/scss/colors.scss";
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .external-dashboard-layout {
   &__notification {
@@ -100,6 +101,7 @@ export default {
     width: 100%;
     position: relative;
     float: right;
+    background-color: $unnnic-color-background-snow;
 
     &__logo {
       background: url(~@/assets/imgs/weni-logo-green.svg) no-repeat;

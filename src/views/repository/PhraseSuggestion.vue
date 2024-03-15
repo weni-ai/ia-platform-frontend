@@ -7,36 +7,40 @@
         <loading v-if="loading" />
         <div v-else-if="repository.authorization.can_contribute" class="phrase-suggestion">
           <div v-if="pageItem === 0">
-            <div class="phrase-suggestion__header">
-              <div class="phrase-suggestion__header__title">
-                <unnnic-card
-                  type="title"
-                  :title="$t('webapp.phrase-suggestion.title')"
-                  :hasInformationIcon="false"
-                  icon="copy-paste-1"
-                  scheme="feedback-blue"
-                />
-              </div>
+            <unnnic-intelligence-header
+              :title="$t('webapp.phrase-suggestion.title')"
+              icon="copy-paste-1"
+              icon-scheme="feedback-blue"
+              :description="$t('webapp.phrase-suggestion.subtitle')"
+            />
 
-              <div class="phrase-suggestion__header__container">
-                <p class="phrase-suggestion__header__subtitle">
-                  {{ $t('webapp.phrase-suggestion.subtitle') }}
-                </p>
-              </div>
-            </div>
+            <unnnic-divider y-spacing="lg" />
 
             <div class="phrase-suggestion__cards">
-              <p>
+              <unnnic-intelligence-text
+                tag="p"
+                size="body-gt"
+                color="neutral-cloudy"
+                family="secondary"
+              >
                 {{ $t('webapp.phrase-suggestion.select_method') }}
-              </p>
+              </unnnic-intelligence-text>
+
               <div class="phrase-suggestion__cards__container">
                 <div class="phrase-suggestion__cards__container-card">
                   <h3>
                     {{ $t('webapp.phrase-suggestion.new_sentence') }}
                   </h3>
-                  <p>
+
+                  <unnnic-intelligence-text
+                    tag="p"
+                    size="body-gt"
+                    color="neutral-cloudy"
+                    family="secondary"
+                  >
                     {{ $t('webapp.phrase-suggestion.new_sentence_info') }}
-                  </p>
+                  </unnnic-intelligence-text>
+
                   <unnnic-button @click="goToAddNewSentence" type="secondary">
                     {{ $t('webapp.phrase-suggestion.select_method_button') }}
                   </unnnic-button>
@@ -45,9 +49,16 @@
                   <h3>
                     {{ $t('webapp.phrase-suggestion.existing_sentence') }}
                   </h3>
-                  <p>
+
+                  <unnnic-intelligence-text
+                    tag="p"
+                    size="body-gt"
+                    color="neutral-cloudy"
+                    family="secondary"
+                  >
                     {{ $t('webapp.phrase-suggestion.select_existing') }}
-                  </p>
+                  </unnnic-intelligence-text>
+
                   <unnnic-button @click="goToAddExistingSentence" type="secondary">
                     {{ $t('webapp.phrase-suggestion.select_method_button') }}
                   </unnnic-button>
@@ -56,60 +67,56 @@
             </div>
           </div>
 
-          <div v-if="pageItem === 1 && isSentenceNew">
+          <template v-if="[1, 2, 3, 4].includes(pageItem)">
             <div class="phrase-suggestion__header">
               <div class="phrase-suggestion__header__step">
                 <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
                   <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
                 </div>
-                <h1 class="ml-4 mr-5">
-                  {{ $t('webapp.phrase-suggestion.add_new') }}
+
+                <h1>
+                  {{ pageTitle }}
                 </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="1" :totalProgress="4" />
+
+                <unnnic-circle-progress-bar
+                  class="progress"
+                  :progress="pageItem"
+                  :total-progress="4"
+                />
               </div>
             </div>
 
-            <hr class="divider" />
+            <unnnic-divider y-spacing="lg" />
+          </template>
 
-            <add-sentence-form
-              :repository="repository"
-              @created="updatedExampleList()"
-              @onSubmit="addSentence"
-            />
+          <add-sentence-form
+            v-if="pageItem === 1 && isSentenceNew"
+            :repository="repository"
+            @created="updatedExampleList()"
+            @onSubmit="addSentence"
+          />
 
-          </div>
-
-          <div v-if="pageItem === 1 && !isSentenceNew">
-            <div class="phrase-suggestion__header">
-              <div class="phrase-suggestion__header__step">
-                <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
-                  <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
-                </div>
-                <h1 class="ml-4 mr-5">
-                  {{ $t('webapp.phrase-suggestion.add_existing') }}
-                </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="1" :totalProgress="4" />
-              </div>
-            </div>
-
-            <hr class="divider" />
+          <div v-else-if="pageItem === 1 && !isSentenceNew">
             <div class="column is-6 p-0">
-              <unnnic-select
+              <unnnic-form-element
                 :label="$t('webapp.phrase-suggestion.select_intent')"
-                v-model="intentSelected"
-                @onChange="addIntents"
               >
-                <option
-                  v-for="intent in repository.intents"
-                  :key="intent.id"
-                  :value="intent.value"
+                <unnnic-select
+                  v-model="intentSelected"
+                  @onChange="addIntents"
                 >
-                  {{ intent.value }}
-                </option>
-              </unnnic-select>
+                  <option
+                    v-for="intent in repository.intents"
+                    :key="intent.id"
+                    :value="intent.value"
+                  >
+                    {{ intent.value }}
+                  </option>
+                </unnnic-select>
+              </unnnic-form-element>
             </div>
 
-            <hr class="divider" />
+            <unnnic-divider y-spacing="lg" />
 
             <paginated-list
               v-if="phraseList"
@@ -122,27 +129,18 @@
               @onSentenceSelected="onSentenceSelected"
               :load-all="true"
             />
-
           </div>
 
           <div v-if="pageItem === 2">
-            <div class="phrase-suggestion__header">
-              <div class="phrase-suggestion__header__step">
-                <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
-                  <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
-                </div>
-                <h1 class="ml-4 mr-5">
-                  {{ $t('webapp.phrase-suggestion.select_words_title') }}
-                </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="2" :totalProgress="4" />
-              </div>
-            </div>
-
-            <hr class="divider" />
-
-            <h4 class="mb-5">
+            <unnnic-intelligence-text
+              tag="p"
+              size="body-gt"
+              color="neutral-cloudy"
+              family="secondary"
+              margin-bottom="md"
+            >
               {{ $t('webapp.phrase-suggestion.select_words') }}
-            </h4>
+            </unnnic-intelligence-text>
 
             <div class="phrase-suggestion__word-cards__wrapper">
               <word-card
@@ -155,7 +153,7 @@
             </div>
 
             <unnnic-button
-              class="button--full mt-2"
+              class="button--full"
               @click="addVariations"
               type="secondary"
               :loading="loadingSelectingWords"
@@ -166,46 +164,41 @@
           </div>
 
           <div v-if="pageItem === 3">
-            <div class="phrase-suggestion__header">
-              <div class="phrase-suggestion__header__step">
-                <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
-                  <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
-                </div>
-                <h1 class="ml-4 mr-5">
-                  {{ $t('webapp.phrase-suggestion.select_variations') }}
-                </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="3" :totalProgress="4" />
-              </div>
-            </div>
-
-            <hr class="divider" />
-
-            <h4 class="mb-5">
+            <unnnic-intelligence-text
+              tag="p"
+              size="body-gt"
+              color="neutral-cloudy"
+              family="secondary"
+              margin-bottom="md"
+            >
               {{ $t('webapp.phrase-suggestion.select_variations_info') }}
-            </h4>
+            </unnnic-intelligence-text>
 
             <unnnic-accordion
               v-for="(variation, index) in wordVariations"
               :key="index"
               v-model="variation.isOpen"
               :title="variation.word"
-              class="variation-accordion mb-5"
+              class="variation-accordion"
             >
-              <span
+              <unnnic-intelligence-text
                 slot="actions"
+                size="body-gt"
+                color="neutral-cloudy"
+                family="secondary"
               >
                 {{ $tc('webapp.phrase-suggestion.variations_generated',
                 variation.inputs.length) }} /
                 {{ $tc('webapp.phrase-suggestion.variations_selected',
                 variation.suggestions.length) }}
-              </span>
+              </unnnic-intelligence-text>
+
               <div>
-                <div class="is-flex is-flex-direction-row is-flex-wrap-wrap">
+                <div class="words" @click.stop>
                   <div
-                    class="is-flex mr-5 mt-4"
                     v-for="(suggestion, index) in variation.inputs"
                     :key="index"
-                    @click.stop="setSuggestion(suggestion, variation)"
+                    @click="setSuggestion(suggestion, variation)"
                   >
                     <unnnic-checkbox
                       @change="setSuggestion(suggestion, variation)"
@@ -214,33 +207,40 @@
                     />
                   </div>
                 </div>
-                <hr class="divider" />
-                <div @click.stop="" class="is-flex">
-                  <div class="column is-4 p-0">
+
+                <unnnic-divider />
+
+                <div class="add-variation__container" @click.stop>
+                  <unnnic-form-element
+                    size="sm"
+                    :label="$t('webapp.phrase-suggestion.new_variation')"
+                    class="add-variation__input-container"
+                  >
                     <unnnic-input
                       placeholder="Variação"
-                      :label="$t('webapp.phrase-suggestion.new_variation')"
                       v-model="variation.newVariation"
                       size="sm"
+                      @keyup.enter="addNewVariation(variation)"
                     />
-                  </div>
-                    <unnnic-button
-                      @click="addNewVariation(variation)"
-                      :disabled="!variation.newVariation"
-                      class="mt-auto ml-4 add-variation"
-                      style="height: 38px"
-                      size="small"
-                      iconLeft="add-1"
-                      type="secondary"
-                    >
-                      {{ $t('webapp.phrase-suggestion.add') }}
-                    </unnnic-button>
+                  </unnnic-form-element>
+
+                  <unnnic-button
+                    @click="addNewVariation(variation)"
+                    :disabled="!variation.newVariation"
+                    class="add-variation"
+                    style="height: 38px"
+                    size="small"
+                    iconLeft="add-1"
+                    type="secondary"
+                  >
+                    {{ $t('webapp.phrase-suggestion.add') }}
+                  </unnnic-button>
                 </div>
               </div>
             </unnnic-accordion>
 
             <unnnic-button
-              class="button--full mb-5"
+              class="button--full"
               @click="goToGeneratedSentences"
               type="secondary"
               :loading="loadingGenerateSentences"
@@ -251,32 +251,29 @@
           </div>
 
           <div v-if="pageItem === 4">
-            <div class="phrase-suggestion__header">
-              <div class="phrase-suggestion__header__step">
-                <div @click="goToPreviousStep" class="phrase-suggestion__header__back-button">
-                  <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
-                </div>
-                <h1 class="ml-4 mr-5">
-                  {{ $t('webapp.phrase-suggestion.generated_sentences') }}
-                </h1>
-                <unnnic-circle-progress-bar class="ml-2" :progress="4" :totalProgress="4" />
-              </div>
-            </div>
-
-            <hr class="divider" />
-
             <div class="phrase-suggestion__cards__variation-card">
               <div>
-                <h3>
+                <unnnic-intelligence-text
+                  size="title-sm"
+                  color="neutral-dark"
+                  family="secondary"
+                  margin-bottom="xs"
+                >
                   {{ $tc('webapp.phrase-suggestion.new_sentences_generated',
                   generatedSentences.length) }}
-                </h3>
-                <p class="mb-0">
+                </unnnic-intelligence-text>
+
+                <unnnic-intelligence-text
+                  tag="p"
+                  size="body-gt"
+                  color="neutral-cloudy"
+                  family="secondary"
+                >
                   {{ $t('webapp.phrase-suggestion.generated_from_sentence') }}
-                  <span>{{ sentenceSelected.text }}</span>
+                  <strong>{{ sentenceSelected.text }}</strong>
                   {{ $t('webapp.phrase-suggestion.to_intent') }}
-                  <span>{{ intentSelected }}</span>
-                </p>
+                  <strong>{{ intentSelected }}</strong>
+                </unnnic-intelligence-text>
               </div>
               <unnnic-button
                 @click="onSubmitToTraining"
@@ -369,6 +366,8 @@ export default {
   data() {
     return {
       pageItem: 0,
+      // pageItem: 4,
+
       isSentenceNew: false,
       perPage: 300,
       loading: false,
@@ -383,7 +382,26 @@ export default {
       checked: false,
       newVariation: '',
       isQuestion: false,
+
       wordVariations: [],
+      // wordVariations: [
+      //   {
+      //     word: 'yrd',
+      //     generate: true,
+      //     entity: '',
+      //     suggestions: [
+      //       'yrd'
+      //     ],
+      //     inputs: [
+      //       {
+      //         text: 'yrd',
+      //         checked: true
+      //       }
+      //     ],
+      //     isOpen: true
+      //   }
+      // ],
+
       generatedSentences: [],
       errors: {},
       submittingToTraining: false,
@@ -401,6 +419,28 @@ export default {
       repositoryUUID: 'getCurrentRepository',
       versionSelected: 'getSelectedVersion',
     }),
+
+    pageTitle() {
+      if (this.pageItem === 1) {
+        return this.isSentenceNew
+          ? this.$t('webapp.phrase-suggestion.add_new')
+          : this.$t('webapp.phrase-suggestion.add_existing');
+      }
+
+      if (this.pageItem === 2) {
+        return this.$t('webapp.phrase-suggestion.select_words_title');
+      }
+
+      if (this.pageItem === 3) {
+        return this.$t('webapp.phrase-suggestion.select_variations');
+      }
+
+      if (this.pageItem === 4) {
+        return this.$t('webapp.phrase-suggestion.generated_sentences');
+      }
+
+      return '';
+    },
   },
   watch: {
     versionSelected() {
@@ -583,6 +623,10 @@ export default {
       this.generatedSentences = this.generatedSentences.filter(sentence => sentence !== item)
     },
     addNewVariation(variation) {
+      if (variation.newVariation === '') {
+        return;
+      }
+
       const newInput = { text: variation.newVariation, checked: false }
       this.wordVariations.find(e => e === variation)
         .inputs.push(newInput)
@@ -681,32 +725,17 @@ export default {
 @import "~@weni/unnnic-system/dist/unnnic.css";
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
+.words {
+  display: flex;
+  gap: $unnnic-spacing-sm;
+  flex-wrap: wrap;
+  cursor: initial;
+}
+
 .phrase-suggestion {
   font-family: $unnnic-font-family-secondary;
 
     &__header {
-      &__container {
-        display: flex;
-        align-items: center;
-        padding-bottom: $unnnic-spacing-stack-lg;
-        margin-bottom: $unnnic-spacing-stack-lg;
-        border-bottom: 1px solid $unnnic-color-neutral-soft;
-      }
-
-      &__title {
-        display: flex;
-        gap: $unnnic-spacing-stack-lg;
-        margin-bottom: $unnnic-spacing-stack-sm;
-        align-items: center;
-      }
-
-      &__subtitle {
-        max-width: 50%;
-        font-size: $unnnic-font-size-body-gt;
-        color: $unnnic-color-neutral-dark;
-        line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
-      }
-
       &__back-button {
         cursor: pointer;
       }
@@ -714,10 +743,20 @@ export default {
       &__step {
         display: flex;
         align-items: center;
+        column-gap: $unnnic-spacing-sm;
 
         h1 {
-          font-family: $unnnic-font-family-secondary;
+          margin: 0;
+
+          color: $unnnic-color-neutral-darkest;
+          font-family: $unnnic-font-family-primary;
+          font-weight: $unnnic-font-weight-regular;
           font-size: $unnnic-font-size-title-sm;
+          line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
+        }
+
+        .progress {
+          margin-left: $unnnic-spacing-md;
         }
       }
     }
@@ -725,11 +764,7 @@ export default {
     &__cards {
       display: flex;
       flex-direction: column;
-      gap: $unnnic-spacing-stack-md;
-
-      p {
-        color: $unnnic-color-neutral-cloudy;
-      }
+      gap: 1.125 * $unnnic-font-size;
 
       &__container {
         display: flex;
@@ -742,18 +777,18 @@ export default {
           width: 50%;
 
           h3 {
-            font-family: $unnnic-font-family-secondary;
-            font-size: $unnnic-font-size-body-lg;
-            font-weight: $unnnic-font-weight-bold;
-            margin-bottom: $unnnic-spacing-stack-nano;
+            margin: 0;
+            margin-bottom: $unnnic-spacing-nano;
+
             color: $unnnic-color-neutral-darkest;
+            font-family: $unnnic-font-family-secondary;
+            font-weight: $unnnic-font-weight-bold;
+            font-size: $unnnic-font-size-body-lg;
+            line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
           }
 
           p {
-            font-size: $unnnic-font-size-body-gt;
-            color: $unnnic-color-neutral-cloudy;
-            line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
-            margin-bottom: $unnnic-spacing-stack-sm;
+            margin-bottom: $unnnic-spacing-sm;
           }
 
           button {
@@ -781,13 +816,6 @@ export default {
             color: $unnnic-color-neutral-dark;
           }
 
-          p {
-            font-size: $unnnic-font-size-body-gt;
-            color: $unnnic-color-neutral-cloudy;
-            line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
-            margin-bottom: $unnnic-spacing-stack-sm;
-          }
-
           span {
             color: $unnnic-color-neutral-dark;
             font-weight: $unnnic-font-weight-bold;
@@ -807,16 +835,7 @@ export default {
     }
 
     .variation-accordion {
-
-      span {
-        font-size: $unnnic-font-size-body-gt;
-        color: $unnnic-color-neutral-cloudy;
-      }
-
-      .divider {
-        margin: 2rem 0 1rem;
-        height: 1px;
-      }
+      margin-bottom: $unnnic-spacing-md;
     }
     .button--full {
       width: 100%;
@@ -856,16 +875,19 @@ export default {
       color: $unnnic-color-neutral-cloudy;
     }
 
-    p, span {
-      font-size: $unnnic-font-size-body-gt;
-    }
-  .divider {
-    background: $unnnic-color-neutral-soft;
-    margin: $unnnic-spacing-stack-lg 0;
-    height: 1px;
+  .add-variation__container {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: $unnnic-spacing-sm;
+    cursor: initial;
   }
+
+  .add-variation__input-container {
+    width: 19.25 * $unnnic-font-size;
+  }
+
   .add-variation {
-    width: 160px;
+    width: 10 * $unnnic-font-size;
   }
 
   &__beta-badge {

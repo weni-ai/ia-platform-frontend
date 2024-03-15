@@ -17,6 +17,8 @@
     "no_intelligence_added": "No Intelligence added",
     "view_bases": "Visualizar bases",
     "no_content_base_added": "No content base added",
+    "no_content_base_found": "No content base found",
+    "search_content_base_placeholder": "Search content base",
     "sidebar_view_content_bases_title": "{name}'s content bases",
     "sidebar_view_content_bases_description": "View the content bases that are part of this AI.",
     "delete_intelligence": "Delete Intelligence",
@@ -57,8 +59,8 @@
     "files": {
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
-      "supported_files": "Supported files: .pdf, .doc, docx, .txt, .xls and .xlsx.<br />250MB limit per file.",
-      "browse_file": "Browse file",
+      "supported_files": "Supported formats: .pdf, .doc, docx, .txt, .xls and .xlsx.<br />250MB limit per file.",
+      "browse_file": "Upload file",
       "uploaded_files": "Uploaded files",
       "status": {
         "uploading": "Uploading content",
@@ -79,6 +81,11 @@
   "quick_test": {
     "send_a_message": "Send a message to test the content base...",
     "unable_to_find_an_answer": "*Unable to find an answer to this question*"
+  },
+  "log": {
+    "interaction_received_on": "Interaction received on:",
+    "more_details_of_the_interaction": "More details of the interaction:",
+    "version": "Version:"
   },
   "webapp": {
     "layout": {
@@ -789,6 +796,7 @@
       "translate_method": "Translation format",
       "export_description": "What phrases do you want to export?",
       "export_method": "Select the phrases you want to export",
+      "exporting": "The download of the file with the translations is in progress",
       "examples_untrained": "{n} translated sentences have not yet been trained by Intelligence"
     },
     "orgs": {

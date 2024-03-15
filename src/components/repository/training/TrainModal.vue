@@ -74,7 +74,7 @@
       <div slot="options" class="train-modal__buttons">
         <unnnic-button
           ref="trainBtn"
-          type="terciary"
+          type="tertiary"
           class="train-modal__buttons__style"
           @click="closeModal()"
         >

@@ -12,8 +12,9 @@
               scheme="aux-orange"
             />
           </div>
+
           <div class="repository-home__description__header">
-            <div>
+            <div class="repository-home__description__header__description-properly">
               <vue-markdown
                 :source="repository.description"
                 :show="show"
@@ -26,10 +27,12 @@
                 toc-id="toc"
                 class="repository-home__description__text markdown-body"
               />
+
               <p
                 v-if="repository.description"
                 class="repository-home__description__text"
-              />
+              ></p>
+
               <p v-else>
                 <i class="text-color-grey-dark">{{
                   $t("webapp.home.no_description")
@@ -37,20 +40,17 @@
               </p>
             </div>
             <div class="repository-home__description__tags-wrapper">
-              <div>
-                <unnnic-tag
-                  v-for="(category, index) in getAllCategories"
-                  :key="index"
-                  :text="category"
-                  disabled
-                  scheme="background-sky"
-                  class="repository-home__header__tag"
-                />
-              </div>
+              <unnnic-tag
+                v-for="(category, index) in getAllCategories"
+                :key="index"
+                :text="category"
+                disabled
+              />
             </div>
           </div>
         </div>
-        <div class="ml-auto">
+
+        <div>
           <unnnic-button
             v-if="hasIntegration && !hasIntegrationCheckError"
             type="secondary"
@@ -71,6 +71,8 @@
       </div>
 
       <div class="repository-home__divider"></div>
+
+      <divider></divider>
 
       <summary-information />
 
@@ -162,7 +164,7 @@
           />
         </unnnic-input>
       </div>
-      <unnnic-button slot="options" type="terciary" @click="openModal = false">
+      <unnnic-button slot="options" type="tertiary" @click="openModal = false">
         {{ $t("webapp.home.cancel") }}
       </unnnic-button>
       <unnnic-button
@@ -175,7 +177,7 @@
         {{ $t("webapp.home.save_changes") }}
       </unnnic-button>
     </unnnic-modal>
-    <b-loading :is-full-page="false" :active="loading" />
+
     <template v-slot:loader>
       <summary-loader />
     </template>
@@ -192,6 +194,7 @@ import SummaryInformation from '@/components/repository/SummaryInformation';
 import IntegrationModal from '@/components/shared/IntegrationModal';
 import RepositoryBase from './Base';
 import SummaryLoader from '@/views/repository/loadings/Summary';
+import Divider from '../../components/Divider';
 
 export default {
   name: 'RepositoryHome',
@@ -202,7 +205,8 @@ export default {
     EntityEdit,
     SummaryInformation,
     IntegrationModal,
-    SummaryLoader
+    SummaryLoader,
+    Divider,
   },
   extends: RepositoryBase,
   data() {
@@ -421,38 +425,11 @@ export default {
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .repository-home {
-  &__title {
-    font-size: 1.75rem;
-    font-weight: $font-weight-medium;
-    display: flex;
-    align-items: center;
-    font-family: $font-family;
-    color: $color-fake-black;
-
-    div {
-      margin: 0 0 0.2rem 0.2rem;
-    }
-  }
-
-  &__header {
-    display: flex;
-    margin-bottom: 1rem;
-
-    &__tag {
-      margin: 0.5rem 2rem 1rem 0;
-      font-size: 12px;
-      font-family: $unnnic-font-family-secondary;
-      color: $unnnic-color-neutral-cloudy;
-      background: $unnnic-color-neutral-lightest;
-      display: inline-flex;
-    }
-  }
-
   &__description {
-    padding: 0 0.5rem;
     display: flex;
     align-items: center;
     gap: $unnnic-spacing-stack-xgiant;
+    justify-content: space-between;
 
     .unnnic-button {
       min-width: 245px;
@@ -463,6 +440,20 @@ export default {
       justify-content: space-between;
       align-items: flex-start;
       flex-direction: column;
+
+      &__description-properly {
+        margin-top: $unnnic-spacing-xs;
+
+        color: $unnnic-color-neutral-dark;
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-body-gt;
+        line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-regular;
+
+        ::v-deep p {
+          margin: 0;
+        }
+      }
 
       &__remove-integrate {
         border: 1px solid $unnnic-color-feedback-red;
@@ -480,19 +471,18 @@ export default {
     }
 
     &__text {
-      margin: $unnnic-spacing-stack-sm 0;
-      font-family: $unnnic-font-family-secondary;
-      font-size: $unnnic-font-size-body-gt;
-      color: $unnnic-color-neutral-dark;
       ul li {
         list-style-type: disc;
       }
     }
 
     &__tags-wrapper {
+      margin-top: $unnnic-spacing-sm;
+      margin-bottom: $unnnic-spacing-xs;
+
       display: flex;
+      gap: $unnnic-spacing-sm;
       width: 100%;
-      justify-content: space-between;
     }
   }
 
@@ -505,11 +495,6 @@ export default {
       flex-wrap: wrap;
       align-items: center;
     }
-  }
-
-  &__divider {
-    border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-    margin: $unnnic-spacing-stack-md 0;
   }
 
   &__tabs {

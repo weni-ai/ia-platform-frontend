@@ -49,7 +49,7 @@
               <unnnic-button
                 iconCenter="mode_comment"
                 size="small"
-                class="mr-2"
+                class="button-quick-test"
                 type="alternative"
                 @click.stop="isQuickTestOpen = true"
               />
@@ -322,7 +322,7 @@
           slot="message"
           v-html="$t('webapp.intelligences_lib.clone.confirm_modal_message')"
         />
-        <unnnic-button slot="options" type="terciary" @click="openConfirmModal = false">
+        <unnnic-button slot="options" type="tertiary" @click="openConfirmModal = false">
           {{ $t("webapp.home.cancel") }}
         </unnnic-button>
         <unnnic-button
@@ -548,7 +548,17 @@ export default {
       this.integrateModal = value;
     },
     repositoryDetailsRouterParams() {
-      if (this.type === 'repository') {
+      if (this.type === 'intelligence' || (
+        this.type === 'repository'
+        && this.repositoryDetail?.repository_type === 'content'
+      )) {
+        this.$router.push({
+          name: 'intelligence-home',
+          params: {
+            intelligenceUuid: this.repositoryDetail.uuid,
+          },
+        });
+      } else if (this.type === 'repository') {
         let name;
 
         if (this.repositoryDetail.repository_type === 'content') {
@@ -569,13 +579,6 @@ export default {
           params: {
             intelligenceUuid: this.$route.params.intelligenceUuid,
             contentBaseUuid: this.repositoryDetail.uuid,
-          },
-        });
-      } else if (this.type === 'intelligence') {
-        this.$router.push({
-          name: 'intelligence-home',
-          params: {
-            intelligenceUuid: this.repositoryDetail.uuid,
           },
         });
       }
@@ -622,6 +625,18 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.button-quick-test {
+  margin-right: $unnnic-spacing-xs;
+
+  /deep/ .material-symbols-rounded {
+    color: $unnnic-color-weni-600;
+  }
+}
+</style>
 
 <style lang="scss">
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";

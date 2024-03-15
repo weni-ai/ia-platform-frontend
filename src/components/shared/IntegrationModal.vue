@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <unnnic-button slot="options" type="terciary" @click.prevent.stop="dispatchCloseModal()">
+    <unnnic-button slot="options" type="tertiary" @click.prevent.stop="dispatchCloseModal()">
       {{ $t("webapp.home.cancel") }}
     </unnnic-button>
     <unnnic-button

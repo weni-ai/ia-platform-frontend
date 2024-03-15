@@ -25,7 +25,7 @@ import CustomIcon from '@/components/shared/CustomIcon';
 import { mapActions, mapGetters } from 'vuex';
 import Tour from '@/components/Tour';
 import Analytics from '@/utils/plugins/analytics';
-
+import RemoveBulmaMixin from '../../utils/RemoveBulmaMixin';
 
 export default {
   name: 'DashboardLayout',
@@ -35,6 +35,9 @@ export default {
     CustomIcon,
     Tour,
   },
+
+  mixins: [RemoveBulmaMixin],
+
   data() {
     return {
       collapse: true,
@@ -122,10 +125,15 @@ export default {
   },
 };
 </script>
+<style class="aquir" lang="scss">
+// @import "~bulma";
+// @import "~buefy/src/scss/buefy";
+</style>
 <style lang="scss">
 @import '~@/assets/scss/utilities.scss';
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 html{
   overflow-y:auto
@@ -143,6 +151,7 @@ html{
     position: relative;
     float: right;
     padding: 0 1rem;
+    background-color: $unnnic-color-background-snow;
 
     &.page--repository-content-bases {
       padding: 0;

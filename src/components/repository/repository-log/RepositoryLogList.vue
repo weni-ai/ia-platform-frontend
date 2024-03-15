@@ -48,9 +48,15 @@
       <intent-data-loading slot="loader" />
     </intent-pagination>
 
-    <h4 v-if="list && list.empty && !loading" class="repository-log-list__empty-message">
-      {{ $t("webapp.inbox.list_empty") }}
-    </h4>
+    <div v-if="list && list.empty && !loading" class="repository-log-list__empty-message">
+      <unnnic-intelligence-text
+        family="secondary"
+        size="body-gt"
+        color="neutral-dark"
+      >
+        {{ $t("webapp.inbox.list_empty") }}
+      </unnnic-intelligence-text>
+    </div>
   </div>
 </template>
 

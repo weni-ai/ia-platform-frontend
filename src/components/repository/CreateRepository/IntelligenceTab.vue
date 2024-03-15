@@ -1,21 +1,30 @@
 <template>
   <div class="create-repository__intelligence">
     <div class="create-repository__intelligence__wrapper">
-      <unnnic-input-next
+      <unnnic-form-element
         :label="$t('webapp.create_repository.intelligence_name_label')"
-        :placeholder="$t('webapp.create_repository.intelligence_name_placeholder')"
-        :value="name"
-        @input="$emit('update:name', $event)"
-        maxlength="64"
-      />
-      <unnnic-input-next
-        :label="$t('webapp.create_repository.description_label')"
-        :placeholder="$t('webapp.create_repository.description_placeholder')"
-        :value="description"
-        @input="$emit('update:description', $event)"
-      />
+        class="create-intelligence__form-element"
+      >
+        <unnnic-input
+          :placeholder="$t('webapp.create_repository.intelligence_name_placeholder')"
+          :value="name"
+          @input="$emit('update:name', $event)"
+          maxlength="64"
+        />
+      </unnnic-form-element>
 
-      <section class="intelligence-types">
+      <unnnic-form-element
+        :label="$t('webapp.create_repository.description_label')"
+        class="create-intelligence__form-element"
+      >
+        <unnnic-input
+          :placeholder="$t('webapp.create_repository.description_placeholder')"
+          :value="description"
+          @input="$emit('update:description', $event)"
+        />
+      </unnnic-form-element>
+
+      <section class="intelligence-types create-intelligence__form-element">
         <unnnic-card
           clickable
           :title="$t('webapp.create_repository.intelligence_type_classification_title')"
@@ -58,6 +67,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.create-intelligence__form-element + .create-intelligence__form-element {
+  margin-top: $unnnic-spacing-sm;
+}
 
 .intelligence-types {
   display: flex;

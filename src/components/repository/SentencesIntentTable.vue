@@ -38,7 +38,7 @@
               />
               <span
                 v-if="showIntents"
-                class="ml-4 intent-label"
+                class="intent-label"
               >
               {{ $t("webapp.translate.intent") + ' ' + item.intent }}
               </span>
@@ -99,7 +99,7 @@
     <span
     slot="message"
     v-html="$t('webapp.trainings.delete_phrase_modal')" />
-    <unnnic-button slot="options" type="terciary" @click="openModal = false">
+    <unnnic-button slot="options" type="tertiary" @click="openModal = false">
       {{ $t("webapp.home.cancel") }}
     </unnnic-button>
     <unnnic-button
@@ -400,6 +400,7 @@ export default {
 }
 
 .intent-label {
+  margin-left: $unnnic-spacing-sm;
   font-family: 'Lato';
   font-size: 12px;
   color: #67738B;

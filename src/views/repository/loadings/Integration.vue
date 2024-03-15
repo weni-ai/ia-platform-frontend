@@ -16,7 +16,7 @@
       <unnnic-skeleton-loading tag="div" width="150px" height="20px" />
     </div>
 
-    <unnnic-skeleton-loading tag="hr" width="100px" height="1px" />
+    <unnnic-divider />
 
     <div class="api-loading__container">
       <div class="api-loading__container__title">

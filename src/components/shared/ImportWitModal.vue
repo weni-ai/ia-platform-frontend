@@ -28,7 +28,7 @@
         <div class="migrate-intelligence-modal__modal-style__style-button">
           <unnnic-button
             size="large"
-            type="terciary"
+            type="tertiary"
             @click="dispatchCloseMigrateModal()">
             {{ $t('webapp.migrate_intelligence.cancel') }}
           </unnnic-button>

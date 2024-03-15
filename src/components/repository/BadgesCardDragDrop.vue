@@ -120,7 +120,7 @@
               />
             </div> -->
         </div>
-        <unnnic-button slot="options" type="terciary" @click="openModal = false">
+        <unnnic-button slot="options" type="tertiary" @click="openModal = false">
           {{ $t("webapp.home.cancel") }}
         </unnnic-button>
         <unnnic-button

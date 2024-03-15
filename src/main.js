@@ -11,11 +11,13 @@ import applyFilters from './utils/filters';
 import API from './utils/plugins/API';
 import i18n from './utils/plugins/i18n';
 import '@mdi/font/css/materialdesignicons.css';
-import hljs from 'highlight.js';
 import VueHighlightJS from 'vue-highlightjs';
 import LogRocket from 'logrocket';
 import VShowSlide from 'v-show-slide';
 import iframessa from 'iframessa';
+import UnnnicDivider from './components/Divider';
+import UnnnicIntelligenceHeader from './components/unnnic-intelligence/Header';
+import UnnnicIntelligenceText from './components/unnnic-intelligence/Text';
 
 iframessa.register('ai');
 
@@ -28,9 +30,12 @@ Vue.use(Buefy);
 Vue.use(VueMoment);
 Vue.use(API);
 Vue.use(VueTour);
-Vue.use(hljs.vuePlugin);
 Vue.use(VueHighlightJS);
 Vue.use(VShowSlide);
+
+Vue.component('unnnic-divider', UnnnicDivider);
+Vue.component('unnnic-intelligence-header', UnnnicIntelligenceHeader);
+Vue.component('unnnic-intelligence-text', UnnnicIntelligenceText);
 
 Vue.config.productionTip = false;
 

@@ -63,23 +63,26 @@
           :is-next-disabled="true"
           :is-step-blocked="sentences.length === 0"
           class="quick-test__input">
-          <self-adjust-input
-            ref="textInput"
+
+          <unnnic-input
+            class="sentence-input"
             :placeholder="$t('webapp.quick_test.add_a_sentence')"
             v-model="sentenceInput"
-            :update-value="selectedLanguage"
-            contained
-            size="small"
             @keyup.enter="sendMessage"
-          >
-            <language-append-select-input
-              slot="append"
-              v-model="selectedLanguage"
-              :languages="languages"
-              dropdown-direction="is-top-left"
-              class="language-append"
-            />
-          </self-adjust-input>
+          />
+
+          <unnnic-select-smart
+            :value="[{
+              value: selectedLanguage,
+              label: verboseLanguage(selectedLanguage),
+            }]"
+            :options="languages.map((language) => ({
+              value: language,
+              label: verboseLanguage(language),
+            }))"
+            @input="selectedLanguage = $event[0].value"
+            ordered-by-index
+          />
         </div>
       </div>
     </div>
@@ -100,6 +103,7 @@ import LanguageAppendSelectInput from '@/components/inputs/LanguageAppendSelectI
 import QuickTestText from '@/components/quick-test/QuickTestText';
 import SelfAdjustInput from '@/components/inputs/SelfAdjustInput';
 import Tour from '@/components/Tour';
+import VERBOSE_LANGUAGES from '../../utils/verbose_languages';
 
 export default {
   name: 'QuickTest',
@@ -204,14 +208,20 @@ export default {
     setLanguage(language) {
       this.selectedLanguage = language;
     },
+    verboseLanguage(language) {
+      return VERBOSE_LANGUAGES[language] || language;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
-@import '~@weni/unnnic-system/dist/unnnic.css';
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.sentence-input {
+  margin-bottom: $unnnic-spacing-xs;
+}
 
  ::-webkit-scrollbar {
   width: 4px;

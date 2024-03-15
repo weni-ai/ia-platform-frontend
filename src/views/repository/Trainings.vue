@@ -6,19 +6,15 @@
       <div class="trainings-repository__new-example">
         <div v-if="authenticated">
           <div v-if="repository.authorization.can_contribute">
-            <div>
-              <unnnic-card
-                type="title"
-                :title="$t('webapp.trainings.train_title')"
-                :hasInformationIcon="false"
-                icon="graph-status-circle-1"
-                scheme="aux-purple"
-              />
-              <p
-                v-html="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
-                class="trainings-repository__description column is-6 p-0" />
-            </div>
-            <hr class="divider" />
+            <unnnic-intelligence-header
+              :title="$t('webapp.trainings.train_title')"
+              icon="graph-status-circle-1"
+              icon-scheme="aux-purple"
+              :description="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
+            />
+
+            <unnnic-divider y-spacing="lg" />
+
             <div class="trainings-repository__list-wrapper">
               <div>
                 <h2 class="trainings-repository__list-wrapper__title">
@@ -66,11 +62,16 @@
             </div>
             <div
               v-if="examplesList && examplesList.count > 0"
-              class="is-flex is-align-items-baseline is-justify-content-space-between mt-6 mb-5"
+              class="sentences-list"
             >
-              <h2 class="trainings-repository__list-wrapper__title mb-0">
+              <unnnic-intelligence-text
+                family="secondary"
+                size="title-sm"
+                color="neutral-dark"
+              >
                 {{ $t('webapp.trainings.sentences_to_train') }}
-              </h2>
+              </unnnic-intelligence-text>
+
               <unnnic-button
                 @click="openDeleteModal = true"
                 type="secondary"
@@ -125,7 +126,7 @@
       <span
       slot="message"
       v-html="$t('webapp.trainings.delete_phrase_modal')" />
-      <unnnic-button slot="options" type="terciary" @click="openDeleteModal = false">
+      <unnnic-button slot="options" type="tertiary" @click="openDeleteModal = false">
         {{ $t("webapp.home.cancel") }}
       </unnnic-button>
       <unnnic-button
@@ -302,10 +303,14 @@ export default {
 <style lang="scss" scoped>
   @import '~@/assets/scss/colors.scss';
   @import '~@/assets/scss/variables.scss';
-  @import "~@weni/unnnic-system/dist/unnnic.css";
   @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
-
+.sentences-list {
+  margin-top: $unnnic-spacing-xl;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .trainings-repository {
   &__list-wrapper {
     // display: flex;
@@ -313,10 +318,13 @@ export default {
     // margin-bottom: .5rem;
 
     &__title{
-      font-family: $unnnic-font-family-secondary;
-      font-size: $unnnic-font-size-title-sm;
+      margin: 0;
+
       color: $unnnic-color-neutral-dark;
-      margin-bottom: 1px;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-regular;
+      font-size: $unnnic-font-size-title-sm;
+      line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
     }
      &__subtitle{
       font-size: $font-size;
@@ -414,22 +422,26 @@ export default {
     }
 
     &__description {
-      font-family: 'Lato';
-      font-size: 14px;
-      color: #4E5666;
-      margin-top: 1rem;
+      color: $unnnic-color-neutral-dark;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-regular;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+
+      margin-block-start: $unnnic-spacing-sm;
+      margin-block-end: 0;
 
       /deep/ a {
-        color: #4E5666;
+        color: inherit;
         text-decoration: underline;
-        font-weight: 700;
+        text-underline-offset: $unnnic-spacing-nano;
+        font-weight: $unnnic-font-weight-bold;
+
+        &:hover {
+          color: $unnnic-color-neutral-darkest;
+        }
       }
     }
-}
-.divider {
-  background: #E2E6ED;
-  height: 1px;
-  margin: 2rem 0;
 }
 
 /deep/ input:focus, /deep/ textarea:focus {

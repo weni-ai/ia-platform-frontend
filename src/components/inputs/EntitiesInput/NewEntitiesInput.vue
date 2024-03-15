@@ -54,7 +54,7 @@
           :disabled="!text"
           iconLeft="add-1"
           class="button--full mb-3"
-          type="terciary"
+          type="tertiary"
           size="large"
           @click.prevent.stop="addEntity()"
         >
@@ -98,7 +98,7 @@
           </div>
         </div>
       </div>
-      <unnnic-button slot="options" type="terciary" @click.prevent.stop="cancelEditEntity()">
+      <unnnic-button slot="options" type="tertiary" @click.prevent.stop="cancelEditEntity()">
         {{ $t("webapp.home.cancel") }}
       </unnnic-button>
       <unnnic-button

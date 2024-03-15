@@ -82,7 +82,7 @@
       <div class="column p-0 mt-4 is-flex is-justify-content-space-between">
           <unnnic-button
             class="mr-4 example__edit-button"
-            type="terciary"
+            type="tertiary"
             size="small"
             @click.prevent.stop="cancelEditSentence">
             {{ $t('webapp.trainings.cancel_button') }}

@@ -1,11 +1,23 @@
 <template>
   <div class="sentences-resume">
-    <h1 class="sentences-resume__title">
+    <unnnic-intelligence-text
+      family="secondary"
+      size="title-sm"
+      color="neutral-dark"
+      margin-bottom="xs"
+    >
       {{$t('webapp.resumeSentences.title')}}
-    </h1>
-    <p class="sentences-resume__description">
+    </unnnic-intelligence-text>
+
+    <unnnic-intelligence-text
+      tag="p"
+      family="secondary"
+      size="body-gt"
+      color="neutral-dark"
+    >
       {{$t('webapp.resumeSentences.description')}}
-    </p>
+    </unnnic-intelligence-text>
+
     <div class="sentences-resume__wrapper">
       <div class="sentences-resume__wrapper-cards">
         <NumbersCard
@@ -37,7 +49,7 @@
           {{ $t("webapp.trainings.run_training") }}
         </unnnic-button>
         <unnnic-button
-          type="terciary"
+          type="tertiary"
           size="large"
           @click.native="setVisibleImportModal()"
         >
@@ -280,21 +292,6 @@ export default {
   border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
   border-radius: $unnnic-border-radius-md;
   padding: $unnnic-spacing-stack-md;
-
-  &__title,
-  &__description {
-    color: $unnnic-color-neutral-dark;
-    font-family: $unnnic-font-family-secondary;
-  }
-
-  &__title {
-    font-size: $unnnic-font-size-title-sm;
-  }
-
-  &__description {
-    font-size: $unnnic-font-size-body-gt;
-    margin-top: $unnnic-spacing-stack-xs;
-  }
 
   &__wrapper {
     display: flex;

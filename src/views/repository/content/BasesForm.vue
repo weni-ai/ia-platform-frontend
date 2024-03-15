@@ -11,11 +11,19 @@
       })
     "
   >
+    <unnnic-button
+      class="settings-button"
+      slot="actions"
+      icon-center="settings"
+      type="secondary"
+      @click="isEditContentBaseOpen = true"
+    />
+
     <section class="repository-base-edit__wrapper">
       <div class="repository-base-edit__wrapper__left-side">
         <section class="base-tabs">
           <div
-            v-for="{ name, text, icon, counter } in tabs"
+            v-for="{ name, text, icon } in tabs"
             :key="name"
             :class="[
               'base-tabs__tab',
@@ -31,10 +39,6 @@
             />
 
             {{ text }}
-
-            <div v-if="counter" class="base-tabs__tab__counter">
-              {{ counter }}
-            </div>
           </div>
         </section>
 
@@ -120,6 +124,7 @@
       </div>
 
       <div
+        v-if="files.data.length || knowledgeBase.text.oldValue"
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container',
@@ -169,6 +174,19 @@
       seconds="5"
       @close="isAlertOpen = false"
     />
+
+    <base-settings-form
+      v-if="isEditContentBaseOpen"
+      :intelligence-uuid="$route.params.intelligenceUuid"
+      :content-base-uuid="$route.params.contentBaseUuid"
+      :pre-filled-values="{
+        title: contentBase.title,
+        language: contentBase.language,
+        description: contentBase.description,
+      }"
+      @close="isEditContentBaseOpen = false"
+      @success="receiveUdatedContentBase"
+    ></base-settings-form>
   </page-container>
 </template>
 
@@ -183,6 +201,7 @@ import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
 import PageContainer from '../../../components/PageContainer';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import BasesFormFiles from './BasesFormFiles';
+import BaseSettingsForm from '../../../components/BaseSettingsForm';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -190,6 +209,7 @@ export default {
     Tests,
     PageContainer,
     BasesFormFiles,
+    BaseSettingsForm,
   },
   mixins: [RemoveBulmaMixin],
   data() {
@@ -201,8 +221,11 @@ export default {
 
       contentBase: {
         title: '',
+        description: '',
         language: '',
       },
+
+      isEditContentBaseOpen: false,
 
       loadingTitle: false,
       loadingText: false,
@@ -249,6 +272,12 @@ export default {
       'updateQAText',
       'editQAKnowledgeBase',
     ]),
+
+    receiveUdatedContentBase({ title, language, description }) {
+      this.contentBase.title = title;
+      this.contentBase.language = language;
+      this.contentBase.description = description;
+    },
 
     removedFile(fileUuid) {
       this.files.data = this.files.data.filter(({ uuid }) => uuid !== fileUuid);
@@ -451,6 +480,7 @@ export default {
         this.loadingContentBase = false;
 
         this.contentBase.title = contentBaseData.title;
+        this.contentBase.description = contentBaseData.description;
         this.contentBase.language = contentBaseData.language;
 
         const { data: contentBaseTextsData } = await nexusaiAPI.listIntelligenceContentBaseTexts({
@@ -479,7 +509,6 @@ export default {
           name: 'files',
           text: this.$t('content_bases.tabs.files'),
           icon: 'news',
-          counter: this.files.next ? '10+' : this.files.data.length,
         },
         {
           name: 'text',
@@ -540,6 +569,10 @@ export default {
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
+.settings-button {
+  margin-left: auto;
+}
+
 .base-tabs {
   display: flex;
   margin-bottom: $unnnic-spacing-sm;
@@ -571,15 +604,6 @@ export default {
       color: $unnnic-color-neutral-cloudy;
     }
 
-    &__counter {
-      color: $unnnic-color-neutral-clean;
-      font-size: $unnnic-font-size-body-gt;
-      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-      border-radius: $unnnic-border-radius-sm;
-      background-color: $unnnic-color-neutral-soft;
-      padding: 0.0625 * $unnnic-font-size $unnnic-spacing-xs;
-      margin-left: auto;
-    }
 
     &--active {
       outline-color: $unnnic-color-weni-600;
@@ -587,11 +611,6 @@ export default {
 
       .base-tabs__tab__icon {
         color: $unnnic-color-weni-600;
-      }
-
-      .base-tabs__tab__counter {
-        color: $unnnic-color-weni-600;
-        background-color: $unnnic-color-weni-100;
       }
     }
   }
@@ -613,13 +632,6 @@ export default {
   &:active:enabled {
     background-color: $unnnic-color-aux-yellow-900;
   }
-}
-.content-bases-page-container {
-  padding: $unnnic-spacing-md $unnnic-font-size * 8;
-  min-height: 100vh;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
 }
 
 .repository-base-edit {
@@ -692,7 +704,7 @@ export default {
       outline-offset: -$unnnic-border-width-thinner;
       border-radius: $unnnic-border-radius-sm;
 
-      width: 18.4375 * $unnnic-font-size;
+      width: 24.625 * $unnnic-font-size;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -756,7 +768,7 @@ export default {
         right: 0;
 
         &__save-button {
-          width: 10.625 * $unnnic-font-size;
+          width: 12.5 * $unnnic-font-size;
         }
       }
 

@@ -6,70 +6,59 @@
       @submit.prevent="onSubmit()"
       @keyup.enter="onEnter()"
     >
-      <div class="column is-6 pr-4">
-        <b-field
-          :message="errors.text || errors.language"
+      <unnnic-form-element
+        class="form-element"
+        :label="$t('webapp.phrase-suggestion.add_a_sentence')"
+        :message="errors.text || errors.language"
+      >
+        <input-with-hightlights
+          v-model="text"
+          :entities="entities"
+          :placeholder="$t('webapp.example.sentence')"
+          :selected.sync="textSelected"
+        />
+      </unnnic-form-element>
+
+      <unnnic-form-element
+        class="form-element"
+        :label="$t('webapp.trainings.intent')"
+        :message="errors.intent"
+      >
+        <unnnic-autocomplete
+          v-model="intent"
+          :data="filteredData"
+          :placeholder="$t('webapp.example.intent')"
+          :openWithFocus="true"
+          @focus="onInputClick('intent')"
+          @blur="onInputClick('intent')"
+          :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
+        />
+      </unnnic-form-element>
+
+      <unnnic-form-element
+        class="form-element"
+        :label="$t('webapp.create_repository.language_placeholder')"
+        :message="errors.intent"
+      >
+        <unnnic-select
+          :placeholder="$t('webapp.translate.languages_select')"
+          v-model="language"
         >
-          <p
-              slot="label"
-              class="unnnic-form__label"
-              v-html="$t('webapp.phrase-suggestion.add_a_sentence')" />
-          <example-text-with-highlighted-entities-input
-            id="tour-training-step-1"
-            ref="textInput"
-            :is-previous-disabled="true"
-            :is-step-blocked="textSelected === null"
-            v-model="text"
-            :entities="entities"
-            :placeholder="$t('webapp.example.sentence')"
-            size="normal"
-            @textSelected="setTextSelected($event)"
-            @submit="onEnter()"
-          />
-        </b-field>
-      </div>
-      <div class="column is-3 pr-4">
-        <b-field
-          id="tour-training-step-4"
-          :is-previous-disabled="true"
-          :is-step-blocked="intent === ''"
-          :message="errors.intent">
-         <unnnic-autocomplete
-            :label="$t('webapp.trainings.intent')"
-            v-model="intent"
-            :data="filteredData"
-            :placeholder="$t('webapp.example.intent')"
-            :openWithFocus="true"
-            @focus="onInputClick('intent')"
-            @blur="onInputClick('intent')"
-            :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
-          />
-        </b-field>
-      </div>
-      <div class="column is-3">
-        <b-field
-          id="tour-training-step-4"
-          :is-previous-disabled="true"
-          :is-step-blocked="intent === ''"
-          :message="errors.intent">
-          <unnnic-select
-            :placeholder="$t('webapp.translate.languages_select')"
-            :label="$t('webapp.create_repository.language_placeholder')"
-            v-model="language"
+          <option
+            v-for="[option, label] in languageList"
+            :key="option"
+            :value="option"
+            @select="language = option"
           >
-            <option
-              v-for="[option, label] in languageList"
-              :key="option"
-              :value="option"
-              @select="language = option"
-            >
-              {{ label }}
-            </option>
-          </unnnic-select>
-        </b-field>
-      </div>
-      <div class="column is-12 mt-2">
-        <b-field class="entities-wrapper" :message="errors.entities">
+            {{ label }}
+          </option>
+        </unnnic-select>
+      </unnnic-form-element>
+
+      <unnnic-form-element
+        :message="errors.entities"
+      >
+        <div class="entities-wrapper" :message="errors.entities">
           <new-entities-input
             ref="entitiesInput"
             v-model="entities"
@@ -80,26 +69,23 @@
             :available-labels="availableLabels"
             @entityAdded="onEntityAdded()"
           />
-        </b-field>
-      </div>
-      <div class="column is-12 mt-4">
-        <b-field>
-          <unnnic-button
-            id="tour-training-step-5"
-            :is-previous-disabled="true"
-            :is-next-disabled="true"
-            :disabled="!shouldSubmit"
-            :loading="submitting"
-            :is-step-blocked="!blockedNextStepTutorial"
-            native-type="submit"
-            class="button--full"
-            type="secondary"
-            size="large"
-          >
-            {{ $t('webapp.phrase-suggestion.submit') }}
-          </unnnic-button>
-        </b-field>
-      </div>
+        </div>
+      </unnnic-form-element>
+
+      <unnnic-button
+        id="tour-training-step-5"
+        :is-previous-disabled="true"
+        :is-next-disabled="true"
+        :disabled="!shouldSubmit"
+        :loading="submitting"
+        :is-step-blocked="!blockedNextStepTutorial"
+        native-type="submit"
+        class="button-submit"
+        type="secondary"
+        size="large"
+      >
+        {{ $t('webapp.phrase-suggestion.submit') }}
+      </unnnic-button>
     </form>
   </div>
 </template>
@@ -110,6 +96,8 @@ import NewEntitiesInput from '@/components/inputs/EntitiesInput/NewEntitiesInput
 
 import { mapActions, mapGetters } from 'vuex';
 import { formatters, LANGUAGES } from '@/utils';
+import InputWithHightlights from '../../InputWithHightlights';
+import { get } from 'lodash';
 
 
 export default {
@@ -117,6 +105,7 @@ export default {
   components: {
     ExampleTextWithHighlightedEntitiesInput,
     NewEntitiesInput,
+    InputWithHightlights,
   },
   props: {
     repository: {
@@ -207,6 +196,10 @@ export default {
       await this.$nextTick();
       this.intent = formatters.bothubItemKey()(this.intent.toLowerCase());
     },
+
+    text() {
+      this.textSelected = null;
+    },
   },
   mounted() {
     this.entitiesList = this.availableEntities;
@@ -222,10 +215,8 @@ export default {
       this.textSelected = value;
     },
     onEntityAdded() {
-      if (this.$refs.textInput.clearSelected) {
-        /* istanbul ignore next */
-        this.$refs.textInput.clearSelected();
-      }
+      this.textSelected = null;
+
       this.$emit('eventStep');
     },
     async onSubmit() {
@@ -245,26 +236,16 @@ export default {
         this.$emit('onSubmit', this.data)
         return true;
       } catch (error) {
-        /* istanbul ignore next */
+        const message = get(error, 'response.data.detail', '');
 
-        const errorResponse = error.response;
-        const errorText = error.response.data;
-        /* istanbul ignore next */
-        if (errorText.detail[0] === 'Enter a valid value that has letters in it') {
-          this.$buefy.toast.open({
-            message: this.$t('webapp.trainings.error_caracter_type'),
-            type: 'is-danger'
-          });
+        if (message) {
+          this.$store.state.alert = {
+            text: message,
+            type: 'error',
+          }
         }
-        if (errorResponse && errorText.detail[0] !== 'Enter a valid value that has letters in it') {
-          /* istanbul ignore next */
-          this.$buefy.toast.open({
-            message: this.$t('webapp.trainings.intention_or_sentence_already_exist'),
-            type: 'is-danger'
-          });
-          this.errors = errorResponse;
-        }
-        /* istanbul ignore next */
+
+
         this.submitting = false;
       }
 
@@ -279,6 +260,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.form-element + .form-element {
+  margin-top: $unnnic-spacing-sm;
+}
 
 .language-append {
   flex-grow: 0;
@@ -309,13 +295,15 @@ export default {
   font-family: 'Lato';
 }
 
-.button--full {
+.button-submit {
+  margin-top: $unnnic-spacing-md;
   width: 100%;
 }
 .entities-wrapper {
-  padding: 0 1rem;
-  border: 1px solid #E2E6ED;
-  border-radius: 8px;
+  margin-top: $unnnic-spacing-md;
+  padding: 0 $unnnic-spacing-sm;
+  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  border-radius: $unnnic-border-radius-md;
 }
 /deep/ .example-txt-w-highlighted-entities__entity__before {
   font-size: .875rem;
