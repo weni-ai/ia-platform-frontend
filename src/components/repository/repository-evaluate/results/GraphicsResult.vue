@@ -10,20 +10,31 @@
       <p>
         {{ $t('webapp.result.evaluate_output_text') }}
         <a
-         :href="checkDocLanguage.results"
-          target="_blank">{{ $t('webapp.result.documentation') }}</a>.
+          :href="checkDocLanguage.results"
+          target="_blank"
+          >{{ $t('webapp.result.documentation') }}</a
+        >.
       </p>
+
+      <UnnnicButton
+        @click="exportResults"
+        class="button-export-result"
+      >
+        {{ $t('webapp.trainings.export_results') }}
+      </UnnnicButton>
 
       <div class="graphics-results__info">
         <h3 class="graphics-results__title">
           {{ $t('webapp.result.recall_reports') }}
         </h3>
-        <p> {{ $t('webapp.result.recall_reports_text') }} </p>
+        <p>{{ $t('webapp.result.recall_reports_text') }}</p>
         <p>
           {{ $t('webapp.result.see_more_in') }}
           <a
             :href="checkDocLanguage.precision_recall"
-            target="_blank">{{ $t('webapp.result.documentation') }}</a>.
+            target="_blank"
+            >{{ $t('webapp.result.documentation') }}</a
+          >.
         </p>
       </div>
 
@@ -33,12 +44,14 @@
         </h5>
         <div
           v-if="!loadingIntentsChart"
-          class="graphics-results__charts__loading">
-          <loading/>
+          class="graphics-results__charts__loading"
+        >
+          <Loading />
         </div>
         <canvas
           id="intentsChart"
-          class="graphics-results__charts"/>
+          class="graphics-results__charts"
+        />
       </div>
       <div>
         <h5 class="graphics-results__subtitle">
@@ -46,13 +59,15 @@
         </h5>
         <div
           v-if="!loadingEntitiesChart"
-          class="graphics-results__charts__loading">
-          <loading/>
+          class="graphics-results__charts__loading"
+        >
+          <Loading />
         </div>
         <canvas
           id="entitiesChart"
           ref="entitiesChart"
-          class="graphics-results__charts"/>
+          class="graphics-results__charts"
+        />
       </div>
     </div>
     <div>
@@ -64,19 +79,26 @@
           {{ $t('webapp.result.intent_confusion_matrix_text') }}
           <a
             :href="checkDocLanguage.matrix"
-            target="_blank">{{ $t('webapp.result.documentation') }}</a>.
+            target="_blank"
+            >{{ $t('webapp.result.documentation') }}</a
+          >.
         </p>
       </div>
-      <div class="graphics-results__charts">
+      <div
+        class="graphics-results__charts"
+        id="matrixChart"
+      >
         <div
           v-if="!chartData.matrix_chart"
-          class="graphics-results__charts__loading">
-          <loading/>
+          class="graphics-results__charts__loading"
+        >
+          <Loading />
         </div>
         <img
           v-if="chartData.matrix_chart"
           :src="chartData.matrix_chart"
-          alt="chart1">
+          alt="chart1"
+        />
       </div>
     </div>
     <div>
@@ -85,22 +107,30 @@
           {{ $t('webapp.result.intent_confidence_distribution') }}
         </h3>
         <p>{{ $t('webapp.result.intent_confidence_distribution_text') }}</p>
-        <p>{{ $t('webapp.result.see_more_in') }}
+        <p>
+          {{ $t('webapp.result.see_more_in') }}
           <a
             :href="checkDocLanguage.confidence"
-            target="_blank">{{ $t('webapp.result.documentation') }}</a>.
+            target="_blank"
+            >{{ $t('webapp.result.documentation') }}</a
+          >.
         </p>
       </div>
-      <div class="graphics-results__charts">
+      <div
+        class="graphics-results__charts"
+        id="confidenceChart"
+      >
         <div
           v-if="!chartData.confidence_chart"
-          class="graphics-results__charts__loading">
-          <loading/>
+          class="graphics-results__charts__loading"
+        >
+          <Loading />
         </div>
         <img
           v-if="chartData.confidence_chart"
           :src="chartData.confidence_chart"
-          alt="chart2">
+          alt="chart2"
+        />
       </div>
     </div>
   </div>
@@ -108,9 +138,12 @@
 
 <script>
 import { mapState } from 'vuex';
+import { toPng } from 'dom-to-image-more';
+import { saveAs } from 'file-saver';
 import Chart from 'chart.js';
 import Loading from '@/components/shared/Loading';
 import I18n from '@/utils/plugins/i18n';
+import JSZip from 'jszip';
 
 export default {
   name: 'GraphicsResult',
@@ -131,22 +164,30 @@ export default {
   },
   computed: {
     ...mapState({
-      version: state => state.Repository.evaluateResultVersion,
+      version: (state) => state.Repository.evaluateResultVersion,
     }),
     checkDocLanguage() {
       if (I18n.locale === 'pt-BR') {
         return {
-          results: 'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#resultados',
-          precision_recall: 'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#relat_rios_de_precis_o_e_cobertura_precision_and_recall_reports',
-          matrix: 'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#matriz_de_confus_o_de_inten_es_intent_confusion_matrix',
-          confidence: 'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#distribui_o_de_confian_a_de_inten_es_intent_confidence_distribuition',
+          results:
+            'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#resultados',
+          precision_recall:
+            'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#relat_rios_de_precis_o_e_cobertura_precision_and_recall_reports',
+          matrix:
+            'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#matriz_de_confus_o_de_inten_es_intent_confusion_matrix',
+          confidence:
+            'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#distribui_o_de_confian_a_de_inten_es_intent_confidence_distribuition',
         };
       }
       return {
-        results: 'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#results',
-        precision_recall: 'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#precision_and_recall_reports',
-        matrix: 'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#intent_confusion_matrix',
-        confidence: 'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#intent_confidence_distribution',
+        results:
+          'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#results',
+        precision_recall:
+          'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#precision_and_recall_reports',
+        matrix:
+          'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#intent_confusion_matrix',
+        confidence:
+          'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#intent_confidence_distribution',
       };
     },
   },
@@ -156,6 +197,72 @@ export default {
     },
   },
   methods: {
+    exportResults() {
+      const base64FromDataURL = (dataURL) => {
+        const separator = ';base64,';
+
+        return dataURL.slice(dataURL.search(separator) + separator.length);
+      };
+
+      const renderFileFromDomQuerySelector = async (
+        filename,
+        querySelector,
+      ) => {
+        const dataURL = await toPng(document.querySelector(querySelector));
+
+        return {
+          filename,
+          base64: base64FromDataURL(dataURL),
+        };
+      };
+
+      const normalizeFileName = (string, extension) => {
+        return (
+          string.normalize('NFD').replace(/[\u0300-\u036f]/g, '') +
+          '.' +
+          extension
+        );
+      };
+
+      Promise.all([
+        renderFileFromDomQuerySelector(
+          normalizeFileName(this.$t('webapp.result.intent_report'), 'png'),
+          '#intentsChart',
+        ),
+
+        renderFileFromDomQuerySelector(
+          normalizeFileName(this.$tc('webapp.result.entity'), 'png'),
+          '#entitiesChart',
+        ),
+
+        renderFileFromDomQuerySelector(
+          normalizeFileName(
+            this.$t('webapp.result.intent_confusion_matrix_text'),
+            'png',
+          ),
+          '#matrixChart',
+        ),
+
+        renderFileFromDomQuerySelector(
+          normalizeFileName(
+            this.$t('webapp.result.intent_confidence_distribution'),
+            'png',
+          ),
+          '#confidenceChart',
+        ),
+      ]).then(async (values) => {
+        const zip = new JSZip();
+
+        values.forEach(({ filename, base64 }) => {
+          zip.file(filename, base64, { base64: true });
+        });
+
+        const content = await zip.generateAsync({ type: 'blob' });
+
+        saveAs(content, 'result.zip');
+      });
+    },
+
     updateCharts() {
       this.loadingIntentsChart = true;
       this.loadingEntitiesChart = true;
@@ -178,7 +285,7 @@ export default {
         });
       }
       new Promise(() => {
-      // eslint-disable-next-line
+        // eslint-disable-next-line
         const intentChart = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -198,17 +305,21 @@ export default {
           },
           options: {
             scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true,
-                  callback(value) {
-                    return `${value}%`;
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true,
+                    callback(value) {
+                      return `${value}%`;
+                    },
                   },
                 },
-              }],
-              xAxes: [{
-                barPercentage: 0.6,
-              }],
+              ],
+              xAxes: [
+                {
+                  barPercentage: 0.6,
+                },
+              ],
             },
           },
         });
@@ -233,7 +344,7 @@ export default {
         });
       }
       new Promise(() => {
-      // eslint-disable-next-line
+        // eslint-disable-next-line
         const entitieChart = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -253,17 +364,21 @@ export default {
           },
           options: {
             scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true,
-                  callback(value) {
-                    return `${value}%`;
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true,
+                    callback(value) {
+                      return `${value}%`;
+                    },
                   },
                 },
-              }],
-              xAxes: [{
-                barPercentage: 0.6,
-              }],
+              ],
+              xAxes: [
+                {
+                  barPercentage: 0.6,
+                },
+              ],
             },
           },
         });
@@ -279,6 +394,11 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/scss/colors.scss';
 @import '~@/assets/scss/variables.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.button-export-result {
+  margin-top: $unnnic-spacing-sm;
+}
 
 .graphics-results {
   margin: 0 auto;

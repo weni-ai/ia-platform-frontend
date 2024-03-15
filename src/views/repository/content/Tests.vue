@@ -1,8 +1,14 @@
 <template>
   <div class="quick-test">
     <div class="messages">
-      <div class="messages__content" ref="messages">
-        <div v-if="!messages.length" class="messages__empty-text">
+      <div
+        class="messages__content"
+        ref="messages"
+      >
+        <div
+          v-if="!messages.length"
+          class="messages__empty-text"
+        >
           {{ $t('quick_test.send_a_message') }}
         </div>
 
@@ -11,17 +17,29 @@
           :key="index"
           :class="`messages__${message.type}`"
         >
-          <div v-if="message.status === 'loading'" class="dot-typing"></div>
+          <div
+            v-if="message.status === 'loading'"
+            class="dot-typing"
+          ></div>
 
           <template v-else>
-            <vue-markdown>{{ message.text }}</vue-markdown>
+            <VueMarkdown :class="`messages__${message.type}__content`">
+              {{ message.text }}
+            </VueMarkdown>
+
+            <AnswerFeedback
+              v-if="message.type === 'answer' && message.question_uuid"
+              :feedback.sync="message.feedback"
+              :contentBaseUuid="contentBaseUuid"
+              :questionUuid="message.question_uuid"
+            />
           </template>
         </div>
       </div>
     </div>
 
     <div class="write-message">
-      <unnnic-input
+      <UnnnicInput
         v-model="message"
         class="write-message__input"
         size="md"
@@ -29,9 +47,9 @@
         @keypress.enter="sendMessage"
       />
 
-      <unnnic-button
+      <UnnnicButton
         size="large"
-        icon-center="send-email-3-1"
+        iconCenter="send-email-3-1"
         type="alternative"
         class="button-send-message"
         @click="sendMessage"
@@ -44,6 +62,7 @@
 import VueMarkdown from 'vue-markdown';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
+import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
 
 export default {
   name: 'RepositoryContentTests',
@@ -55,6 +74,7 @@ export default {
 
   components: {
     VueMarkdown,
+    AnswerFeedback,
   },
 
   data() {
@@ -75,8 +95,8 @@ export default {
 
       return language.indexOf('-') === -1
         ? language
-        : language.slice(0, language.indexOf('-'))
-          + language.slice(language.indexOf('-')).toUpperCase();
+        : language.slice(0, language.indexOf('-')) +
+            language.slice(language.indexOf('-')).toUpperCase();
     },
   },
 
@@ -102,20 +122,26 @@ export default {
           type: 'answer',
           text: '',
           status: 'loading',
+          question_uuid: null,
+          feedback: {
+            value: null,
+            reason: null,
+          },
         };
 
         this.messages.push(answer);
 
         this.scrollToLastMessage();
 
-        nexusaiAPI.ask
-          .v1({
+        nexusaiAPI.question
+          .create({
             contentBaseUuid: this.contentBaseUuid,
             text: message,
             language: (this.language || '').toLowerCase(),
           })
           .then(({ data }) => {
             answer.status = 'loaded';
+            answer.question_uuid = get(data, 'question_uuid', null);
             answer.text = get(
               data,
               'answers.0.text',
@@ -123,7 +149,8 @@ export default {
             );
 
             this.scrollToLastMessage();
-          }).catch(() => {
+          })
+          .catch(() => {
             this.messages.splice(this.messages.indexOf(answer), 1);
           });
       }, 400);
@@ -248,13 +275,16 @@ export default {
     &__answer {
       max-width: 75%;
       color: $unnnic-color-neutral-dark;
-      font-family: $unnnic-font-family-secondary;
-      font-size: $unnnic-font-size-body-gt;
-      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-      font-weight: $unnnic-font-weight-regular;
+
+      &__content {
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-body-gt;
+        line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-regular;
+      }
 
       border-radius: $unnnic-border-radius-md;
-      padding: $unnnic-spacing-xs;
+      padding: $unnnic-spacing-ant;
 
       ::v-deep {
         p {

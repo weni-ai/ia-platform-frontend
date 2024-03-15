@@ -54,13 +54,14 @@
     "changes_saved": "Alterações salvas",
     "tabs": {
       "files": "Arquivos",
+      "sites": "Sites",
       "text": "Texto"
     },
     "files": {
       "upload_content": "Carregar conteúdo de arquivos",
       "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",
       "supported_files": "Formatos suportados: .pdf, .doc, docx, .txt, .xls e .xlsx.<br />Limite de 250MB por arquivo.",
-      "browse_file": "Carregar arquivo",
+      "browse_file": "Adicionar arquivo",
       "uploaded_files": "Arquivos carregados",
       "status": {
         "uploading": "Carregando conteúdo",
@@ -76,11 +77,44 @@
         "cancel": "Cancelar",
         "delete": "Excluir"
       }
+    },
+    "sites": {
+      "uploaded_sites": "Sites carregados",
+      "sidebar_add": {
+        "title": "Carregar conteúdo de site",
+        "description": "Adicione o conteúdo de sites à base de conhecimento da IA.",
+        "fields": {
+          "link": {
+            "label": "Link do site",
+            "placeholder": "www.exemplo.com"
+          }
+        },
+        "button_more_one": "Adicionar mais um site",
+        "button_load_content": "Carregar conteúdos"
+      },
+      "add_site": "Adicionar site",
+      "delete_site": {
+        "title": "Excluir site",
+        "description": "Tem certeza que deseja excluir o site <b>{name}</b>?<br />O conteúdo desse site será removido da base da IA",
+        "cancel": "Cancelar",
+        "delete": "Excluir"
+      }
     }
   },
   "quick_test": {
     "send_a_message": "Envie uma mensagem para testar a base de conteúdo...",
-    "unable_to_find_an_answer": "*Não foi possível encontrar uma resposta para essa pergunta*"
+    "unable_to_find_an_answer": "*Não foi possível encontrar uma resposta para essa pergunta*",
+    "rate_your_answer": "Classifique como foi a resposta",
+    "completely_off_topic": "Saiu completamente do assunto perguntado",
+    "partially_correct_went_off_base": "Parcialmente correta, saiu do conteúdo da base",
+    "partially_correct_provided_information_on_a_different_topic": "Parcialmente correta, trouxe informações de um tema diferente",
+    "no_answer_but_the_information_is_in_database": "Não respondeu, porém a informação consta na base",
+    "send_feedback": "Enviar feedback",
+    "feedback_sent": "Feedback enviado",
+    "feedback": {
+      "liked": "Boa resposta",
+      "disliked": "Resposta ruim"
+    }
   },
   "log": {
     "interaction_received_on": "Interação recebida em:",
@@ -604,6 +638,7 @@
       "principal_version_info": "Ativar essa opção tornará essa a versão padrão da Inteligência"
     },
     "trainings": {
+      "export_results": "Exportar resultados",
       "grid_text1": "Treinar uma nova frase",
       "grid_text2": "Adicionar exemplos para melhorar sua inteligência.",
       "not_can_edit_repository": "Você não pode contribuir para essa inteligência",

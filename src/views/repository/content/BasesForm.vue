@@ -1,6 +1,6 @@
 <template>
-  <page-container
-    :loading-title="loadingContentBase"
+  <PageContainer
+    :loadingTitle="loadingContentBase"
     :title="contentBase.title"
     @back="
       $router.push({
@@ -11,10 +11,10 @@
       })
     "
   >
-    <unnnic-button
+    <UnnnicButton
       class="settings-button"
       slot="actions"
-      icon-center="settings"
+      iconCenter="settings"
       type="secondary"
       @click="isEditContentBaseOpen = true"
     />
@@ -31,7 +31,7 @@
             ]"
             @click="tab = name"
           >
-            <unnnic-icon
+            <UnnnicIcon
               :icon="icon"
               scheme="weni-600"
               size="avatar-nano"
@@ -43,7 +43,7 @@
         </section>
 
         <template v-if="tab === 'files'">
-          <unnnic-skeleton-loading
+          <UnnnicSkeletonLoading
             v-if="files.status === 'loading' && files.data.length === 0"
             tag="div"
             height="100%"
@@ -51,9 +51,8 @@
           />
 
           <template v-else>
-            <bases-form-files
+            <BasesFormFiles
               :files.sync="files"
-              :flat-bottom="!files.data.length"
               @load-more="loadFiles"
               @removed="removedFile"
             />
@@ -62,7 +61,11 @@
               v-if="!files.data.length && false"
               class="repository-base-edit__wrapper__card-content__info"
             >
-              <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
+              <UnnnicIcon
+                icon="help"
+                size="sm"
+                scheme="neutral-cloudy"
+              />
 
               <span v-html="$t('content_bases.write_content_help')"></span>
             </div>
@@ -70,7 +73,7 @@
         </template>
 
         <template v-if="tab === 'text'">
-          <unnnic-skeleton-loading
+          <UnnnicSkeletonLoading
             v-if="loadingContentBaseText"
             tag="div"
             height="100%"
@@ -87,7 +90,7 @@
             <div class="repository-base-edit__wrapper__card-content__header">
               {{ $t('content_bases.write_content') }}
 
-              <unnnic-button
+              <UnnnicButton
                 :loading="submitting"
                 @click="saveText"
                 size="small"
@@ -98,7 +101,7 @@
                 "
               >
                 {{ $t('webapp.settings.save') }}
-              </unnnic-button>
+              </UnnnicButton>
             </div>
 
             <textarea
@@ -115,7 +118,11 @@
               v-if="!knowledgeBase.text.value.trim() && false"
               class="repository-base-edit__wrapper__card-content__info"
             >
-              <unnnic-icon icon="help" size="sm" scheme="neutral-cloudy" />
+              <UnnnicIcon
+                icon="help"
+                size="sm"
+                scheme="neutral-cloudy"
+              />
 
               <span v-html="$t('content_bases.write_content_help')"></span>
             </div>
@@ -134,40 +141,40 @@
           {{ $t('content_bases.quick_test') }}
         </div>
 
-        <tests
-          :content-base-uuid="$route.params.contentBaseUuid"
-          :content-base-language="contentBase.language"
+        <Tests
+          :contentBaseUuid="$route.params.contentBaseUuid"
+          :contentBaseLanguage="contentBase.language"
         />
       </div>
     </section>
 
-    <unnnic-modal
-      :show-modal="openModal"
+    <UnnnicModal
+      :showModal="openModal"
       scheme="aux-yellow-500"
-      modal-icon="warning"
+      modalIcon="warning"
       :text="$t('webapp.home.bases.edit-base_modal_alert_title')"
       :description="$t('webapp.home.bases.edit-base_modal_alert_description')"
-      :close-icon="false"
+      :closeIcon="false"
       class="exit-content-base-modal"
     >
-      <unnnic-button
+      <UnnnicButton
         slot="options"
         class="create-repository__container__button"
         type="tertiary"
         @click="openModal = false"
       >
         {{ $t('webapp.home.bases.edit-base_modal_alert_discard') }}
-      </unnnic-button>
-      <unnnic-button
+      </UnnnicButton>
+      <UnnnicButton
         slot="options"
         class="create-repository__container__button attention-button"
         type="primary"
         @click="discardUpdate()"
       >
         {{ $t('webapp.home.bases.edit-base_modal_alert_save') }}
-      </unnnic-button>
-    </unnnic-modal>
-    <unnnic-alert
+      </UnnnicButton>
+    </UnnnicModal>
+    <UnnnicAlert
       v-if="isAlertOpen"
       :text="$t('content_bases.changes_saved')"
       scheme="feedback-green"
@@ -175,19 +182,19 @@
       @close="isAlertOpen = false"
     />
 
-    <base-settings-form
+    <BaseSettingsForm
       v-if="isEditContentBaseOpen"
-      :intelligence-uuid="$route.params.intelligenceUuid"
-      :content-base-uuid="$route.params.contentBaseUuid"
-      :pre-filled-values="{
+      :intelligenceUuid="$route.params.intelligenceUuid"
+      :contentBaseUuid="$route.params.contentBaseUuid"
+      :preFilledValues="{
         title: contentBase.title,
         language: contentBase.language,
         description: contentBase.description,
       }"
       @close="isEditContentBaseOpen = false"
       @success="receiveUdatedContentBase"
-    ></base-settings-form>
-  </page-container>
+    ></BaseSettingsForm>
+  </PageContainer>
 </template>
 
 <script>
@@ -298,7 +305,8 @@ export default {
             status: file.status === 'success' ? 'uploaded' : 'processing',
           }))
           .filter(
-            ({ uuid }) => !this.files.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+            ({ uuid }) =>
+              !this.files.data.some((alreadyIn) => alreadyIn.uuid === uuid),
           ),
       );
 
@@ -360,18 +368,20 @@ export default {
         this.submitting = true;
 
         if (this.knowledgeBase.text.uuid) {
-          const { data: contentBaseTextData } = await nexusaiAPI.updateIntelligenceContentBaseText({
-            contentBaseUuid: this.$route.params.contentBaseUuid,
-            contentBaseTextUuid: this.knowledgeBase.text.uuid,
-            text: this.knowledgeBase.text.value,
-          });
+          const { data: contentBaseTextData } =
+            await nexusaiAPI.updateIntelligenceContentBaseText({
+              contentBaseUuid: this.$route.params.contentBaseUuid,
+              contentBaseTextUuid: this.knowledgeBase.text.uuid,
+              text: this.knowledgeBase.text.value,
+            });
 
           this.knowledgeBase.text.oldValue = contentBaseTextData.text;
         } else {
-          const { data: contentBaseTextData } = await nexusaiAPI.createIntelligenceContentBaseText({
-            contentBaseUuid: this.$route.params.contentBaseUuid,
-            text: this.knowledgeBase.text.value,
-          });
+          const { data: contentBaseTextData } =
+            await nexusaiAPI.createIntelligenceContentBaseText({
+              contentBaseUuid: this.$route.params.contentBaseUuid,
+              text: this.knowledgeBase.text.value,
+            });
 
           this.knowledgeBase.text.uuid = contentBaseTextData.uuid;
           this.knowledgeBase.text.oldValue = contentBaseTextData.text;
@@ -427,7 +437,8 @@ export default {
       this.loadingText = false;
 
       if (responseText.data.results.length) {
-        const { id, language, text, knowledge_base } = responseText.data.results[0];
+        const { id, language, text, knowledge_base } =
+          responseText.data.results[0];
 
         this.repositoryConfig = [
           `Bearer ${this.repository?.authorization?.uuid}`,
@@ -472,10 +483,11 @@ export default {
         this.loadingContentBase = true;
         this.loadingContentBaseText = true;
 
-        const { data: contentBaseData } = await nexusaiAPI.readIntelligenceContentBase({
-          intelligenceUuid: this.$route.params.intelligenceUuid,
-          contentBaseUuid: this.$route.params.contentBaseUuid,
-        });
+        const { data: contentBaseData } =
+          await nexusaiAPI.readIntelligenceContentBase({
+            intelligenceUuid: this.$route.params.intelligenceUuid,
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+          });
 
         this.loadingContentBase = false;
 
@@ -483,9 +495,10 @@ export default {
         this.contentBase.description = contentBaseData.description;
         this.contentBase.language = contentBaseData.language;
 
-        const { data: contentBaseTextsData } = await nexusaiAPI.listIntelligenceContentBaseTexts({
-          contentBaseUuid: this.$route.params.contentBaseUuid,
-        });
+        const { data: contentBaseTextsData } =
+          await nexusaiAPI.listIntelligenceContentBaseTexts({
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+          });
 
         const text = get(contentBaseTextsData, 'results.0.text', '');
 
@@ -603,7 +616,6 @@ export default {
     &__icon {
       color: $unnnic-color-neutral-cloudy;
     }
-
 
     &--active {
       outline-color: $unnnic-color-weni-600;
