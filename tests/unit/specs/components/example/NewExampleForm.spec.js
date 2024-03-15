@@ -1,8 +1,6 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-
 
 import NewExampleForm from '@/components/example/NewExampleForm';
 import store from '@/store';
@@ -10,7 +8,6 @@ import Buefy from 'buefy';
 
 const localVue = createLocalVue();
 localVue.use(Buefy);
-
 
 describe('NewExampleForm.vue', () => {
   let wrapper;
@@ -120,7 +117,6 @@ describe('NewExampleForm.vue', () => {
   //     });
   //   });
   // });
-
 
   describe('entitiesInput emit entityAdded', () => {
     let entitiesInput;

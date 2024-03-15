@@ -1,18 +1,16 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 import Vuex from 'vuex';
 import Buefy from 'buefy';
-import VueRouter from 'vue-router'
+import VueRouter from 'vue-router';
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import CreateRepositoryForm from '@/components/repository/CreateRepository/CreateRepositoryForm';
 import unnic from '@weni/unnnic-system';
 
-jest.spyOn(CreateRepositoryForm, 'mounted').mockImplementation(() => {})
+jest.spyOn(CreateRepositoryForm, 'mounted').mockImplementation(() => {});
 const localVue = createLocalVue();
 localVue.use(Buefy);
 localVue.use(VueRouter);
-
 
 describe('CreateRepositoryForm', () => {
   let wrapper;
@@ -71,7 +69,7 @@ describe('CreateRepositoryForm', () => {
 
     describe('on submit', () => {
       beforeEach(() => {
-        wrapper.vm.onSubmit()
+        wrapper.vm.onSubmit();
       });
 
       test('no errors', () => {

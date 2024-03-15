@@ -18,6 +18,7 @@ import iframessa from 'iframessa';
 import UnnnicDivider from './components/Divider';
 import UnnnicIntelligenceHeader from './components/unnnic-intelligence/Header';
 import UnnnicIntelligenceText from './components/unnnic-intelligence/Text';
+import UnnnicSystemPlugin from './utils/UnnnicSystemPlugin';
 
 iframessa.register('ai');
 
@@ -32,6 +33,7 @@ Vue.use(API);
 Vue.use(VueTour);
 Vue.use(VueHighlightJS);
 Vue.use(VShowSlide);
+Vue.use(UnnnicSystemPlugin);
 
 Vue.component('unnnic-divider', UnnnicDivider);
 Vue.component('unnnic-intelligence-header', UnnnicIntelligenceHeader);
@@ -41,8 +43,10 @@ Vue.config.productionTip = false;
 
 applyFilters(Vue);
 
-if ((runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_USE_SENTRY'))
-&& runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_SENTRY')) {
+if (
+  runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_USE_SENTRY') &&
+  runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_SENTRY')
+) {
   Sentry.init({
     dsn: runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_SENTRY'),
     integrations: [new VueIntegration({ Vue, attachProps: true })],

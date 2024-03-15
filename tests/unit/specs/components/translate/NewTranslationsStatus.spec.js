@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
@@ -24,7 +23,7 @@ describe('TranslationsStatus.vue', () => {
       propsData: {
         ownerNickname: 'douglas',
         repositorySlug: 'repo1',
-        repositoryUuid: '1234'
+        repositoryUuid: '1234',
       },
     });
     await wrapper.vm.updateTranslationsStatus();

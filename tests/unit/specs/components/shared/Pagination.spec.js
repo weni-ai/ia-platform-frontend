@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
@@ -20,8 +19,8 @@ describe('Pagination.vue', () => {
       localVue,
       propsData: {
         itemComponent: Foo,
-        list: new utils.List('/repository/repositories/')
-      }
+        list: new utils.List('/repository/repositories/'),
+      },
     });
   });
 
@@ -35,7 +34,7 @@ describe('Pagination.vue', () => {
     });
 
     test('item filtered', () => {
-      wrapper.vm.list.items.forEach(item => {
+      wrapper.vm.list.items.forEach((item) => {
         expect(item.id).not.toBe(0);
       });
     });

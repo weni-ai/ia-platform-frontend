@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import VueMoment from 'vue-moment';
@@ -8,7 +7,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import applyFilters from '@/utils/filters';
 import store from '@/store';
 import TranslationItem from '@/components/translate/TranslationItem';
-
 
 const localVue = createLocalVue();
 localVue.use(VueMoment);

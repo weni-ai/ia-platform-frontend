@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import Buefy from 'buefy';
@@ -8,7 +7,6 @@ import TYPES from '@/store/types';
 import applyFilters from '@/utils/filters';
 import { ROLE_USER } from '@/utils';
 import AuthorizationItem from '@/components/repository/AuthorizationItem';
-
 
 const localVue = createLocalVue();
 localVue.use(Buefy);
@@ -21,7 +19,10 @@ describe('AuthorizationItem.vue', () => {
       Auth: {},
       User: { profiles: {} },
     });
-    store.commit(TYPES.SET_TOKEN, 'Token 1f5e7e21d331536b58448595f69eb50a6b5e49b8');
+    store.commit(
+      TYPES.SET_TOKEN,
+      'Token 1f5e7e21d331536b58448595f69eb50a6b5e49b8',
+    );
     wrapper = shallowMount(AuthorizationItem, {
       localVue,
       mocks: {

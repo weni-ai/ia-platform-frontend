@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
@@ -9,7 +8,7 @@ import Buefy from 'buefy';
 
 const localVue = createLocalVue();
 localVue.use(Buefy);
-jest.spyOn(ForgotPasswordForm, 'mounted').mockImplementation(() => {})
+jest.spyOn(ForgotPasswordForm, 'mounted').mockImplementation(() => {});
 describe('ForgotPasswordForm.vue', () => {
   let wrapper;
   beforeEach(() => {

@@ -1,4 +1,4 @@
-FROM node:12-alpine as builder
+FROM node:18.19.1-alpine3.19 as builder
 
 WORKDIR /app
 
@@ -9,6 +9,7 @@ RUN yarn install
 
 COPY . .
 
+RUN yarn lint --fix
 RUN yarn build
 
 FROM nginxinc/nginx-unprivileged:1.25

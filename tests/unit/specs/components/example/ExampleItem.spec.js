@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import VueMoment from 'vue-moment';
@@ -8,11 +7,9 @@ import store from '@/store';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ExampleItem from '@/components/example/ExampleItem';
 
-
 const localVue = createLocalVue();
 localVue.use(VueMoment);
 localVue.use(Buefy);
-
 
 describe('ExampleItem.vue', () => {
   let wrapper;
@@ -27,9 +24,7 @@ describe('ExampleItem.vue', () => {
       },
       propsData: {
         id: 1,
-        entities: [
-          { start: 0, end: 0, entity: 'entity' },
-        ],
+        entities: [{ start: 0, end: 0, entity: 'entity' }],
         created_at: '2018-05-11T11:57:40.082934Z',
         repository: {
           authorization: {

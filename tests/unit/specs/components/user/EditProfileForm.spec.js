@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
@@ -6,7 +5,7 @@ import store from '@/store';
 import EditProfileForm from '@/components/user/EditProfileForm';
 import Buefy from 'buefy';
 
-jest.spyOn(EditProfileForm, 'mounted').mockImplementation(() => {})
+jest.spyOn(EditProfileForm, 'mounted').mockImplementation(() => {});
 const localVue = createLocalVue();
 localVue.use(Buefy);
 
@@ -52,12 +51,7 @@ describe('EditProfileForm.vue', () => {
 
     test('has data', () => {
       expect(Object.keys(wrapper.vm.data)).toEqual(
-        expect.arrayContaining([
-          'nickname',
-          'email',
-          'name',
-          'locale',
-        ]),
+        expect.arrayContaining(['nickname', 'email', 'name', 'locale']),
       );
     });
 
@@ -96,12 +90,7 @@ describe('EditProfileForm.vue', () => {
 
     test('has data', () => {
       expect(Object.keys(wrapper.vm.data)).toEqual(
-        expect.arrayContaining([
-          'nickname',
-          'email',
-          'name',
-          'locale',
-        ]),
+        expect.arrayContaining(['nickname', 'email', 'name', 'locale']),
       );
     });
 

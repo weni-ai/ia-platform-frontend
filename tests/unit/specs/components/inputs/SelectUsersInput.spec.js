@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import Vue from 'vue';
@@ -6,7 +5,6 @@ import Buefy from 'buefy';
 import store from '@/store';
 import { mount, createLocalVue } from '@vue/test-utils';
 import SelectUsersInput from '@/components/inputs/SelectUsersInput';
-
 
 Vue.config.silent = true;
 const localVue = createLocalVue();

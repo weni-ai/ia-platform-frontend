@@ -1,9 +1,8 @@
 /* eslint-env node, jest */
-/* eslint-disable no-console, import/first */
+/* eslint-disable no-console */
 jest.mock('./request');
 
 import update from './update';
-
 
 describe('api/update.js', () => {
   test('search', async () => {

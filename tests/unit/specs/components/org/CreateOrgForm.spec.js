@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 import Buefy from 'buefy';
 import { shallowMount, createLocalVue } from '@vue/test-utils';

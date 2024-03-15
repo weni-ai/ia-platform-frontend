@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 jest.mock('@/api/request');
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
@@ -31,8 +30,17 @@ describe('ExamplesList.vue', () => {
     };
     actions = {
       searchEvaluateExamples: ({
-        repositoryUUID, version, query, limit = 20,
-      }) => wrapper.vm.$api.evaluateExample.search(repositoryUUID, version, query, limit),
+        repositoryUUID,
+        version,
+        query,
+        limit = 20,
+      }) =>
+        wrapper.vm.$api.evaluateExample.search(
+          repositoryUUID,
+          version,
+          query,
+          limit,
+        ),
     };
 
     store = new Vuex.Store({
