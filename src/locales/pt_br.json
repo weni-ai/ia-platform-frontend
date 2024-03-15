@@ -17,6 +17,8 @@
     "no_intelligence_added": "Nenhuma Inteligência adicionada",
     "view_bases": "Visualizar bases",
     "no_content_base_added": "Nenhuma base de conteúdo adicionada",
+    "no_content_base_found": "Nenhuma base de conteúdo encontrada",
+    "search_content_base_placeholder": "Pesquisar base de conteúdo",
     "sidebar_view_content_bases_title": "Bases de conteúdo de {name}",
     "sidebar_view_content_bases_description": "Visualize as bases de conteúdo que fazem parte dessa IA.",
     "delete_intelligence": "Excluir Inteligência",
@@ -57,8 +59,8 @@
     "files": {
       "upload_content": "Carregar conteúdo de arquivos",
       "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",
-      "supported_files": "Arquivos suportados: .pdf, .doc, docx, .txt, .xls e .xlsx.<br />Limite de 250MB por arquivo.",
-      "browse_file": "Procurar arquivo",
+      "supported_files": "Formatos suportados: .pdf, .doc, docx, .txt, .xls e .xlsx.<br />Limite de 250MB por arquivo.",
+      "browse_file": "Carregar arquivo",
       "uploaded_files": "Arquivos carregados",
       "status": {
         "uploading": "Carregando conteúdo",

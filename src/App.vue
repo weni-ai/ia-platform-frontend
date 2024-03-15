@@ -1,8 +1,6 @@
 <template>
   <div id="app">
     <!-- <news-modal /> -->
-    <weni-gpt-alert />
-    <WeniGPTAlert />
     <router-view />
     <!-- <tutorial-modal
       :open="activeMenu"/> -->
@@ -22,19 +20,17 @@
 import { mapGetters, mapActions } from 'vuex';
 import NewsModal from '@/components/NewsModal';
 import hotjar from '@/utils/plugins/hotjar';
-import unnic from '@weni/unnnic-system';
 import I18n from '@/utils/plugins/i18n';
 import store from './store';
 import ModalDependingOnFlowsLength from './components/ModalDependingOnFlowsLength';
-import WeniGPTAlert from './components/repository/home/WeniGPTAlert';
 
 export default {
   components: {
     NewsModal,
     I18n,
     ModalDependingOnFlowsLength,
-    WeniGPTAlert
   },
+
   name: 'App',
 
   data() {

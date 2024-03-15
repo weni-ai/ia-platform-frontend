@@ -31,6 +31,8 @@
             </h1>
           </div>
         </div>
+
+        <slot name="actions"></slot>
       </section>
 
       <section v-if="description" class="repository-base-edit__description">
@@ -58,7 +60,7 @@ export default {
 
 .content-bases-page-container {
   background-color: $unnnic-color-background-snow;
-  padding: $unnnic-spacing-md $unnnic-font-size * 8;
+  padding: $unnnic-spacing-lg;
   min-height: 100vh;
   box-sizing: border-box;
   display: flex;

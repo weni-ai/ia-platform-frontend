@@ -107,6 +107,20 @@ export default {
     });
   },
 
+  patchIntelligenceContentBase({
+    intelligenceUuid,
+    contentBaseUuid,
+    title,
+    language,
+    description,
+  }) {
+    return request.$http.patch(`api/${intelligenceUuid}/content-bases/${contentBaseUuid}/`, {
+      title,
+      language,
+      description,
+    });
+  },
+
   listIntelligencesContentBases({ intelligenceUuid, next }) {
     if (next) {
       return request.$http.get(forceHttps(next));

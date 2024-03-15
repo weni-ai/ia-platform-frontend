@@ -49,7 +49,7 @@
               <unnnic-button
                 iconCenter="mode_comment"
                 size="small"
-                class="mr-2"
+                class="button-quick-test"
                 type="alternative"
                 @click.stop="isQuickTestOpen = true"
               />
@@ -625,6 +625,18 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+
+.button-quick-test {
+  margin-right: $unnnic-spacing-xs;
+
+  /deep/ .material-symbols-rounded {
+    color: $unnnic-color-weni-600;
+  }
+}
+</style>
 
 <style lang="scss">
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";

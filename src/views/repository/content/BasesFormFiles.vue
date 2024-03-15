@@ -2,32 +2,48 @@
   <div
     :class="[
       'files-area__container',
-      { 'files-area__container--flat-bottom': flatBottom },
+      {
+        'files-area__container--flat-bottom': flatBottom,
+        'files-area__container--active': files.data.length && isClientDragging
+      },
     ]"
+    @dragover.prevent
+    @drop.prevent="drop"
   >
+    <input
+      v-show="false"
+      ref="browser-file-input"
+      type="file"
+      multiple
+      @change="drop"
+    />
+
     <div class="files-area__scrollable">
       <div
+        v-if="!files.data.length"
         :class="['paste-area', { 'paste-area--active': isClientDragging }]"
-        @dragover.prevent
-        @drop.prevent="drop"
       >
-        <div class="paste-area__title">
-          {{ $t('content_bases.files.upload_content') }}
-        </div>
+        <section>
+          <unnnic-intelligence-text
+            tag="p"
+            family="secondary"
+            color="neutral-darkest"
+            size="body-lg"
+            weight="bold"
+            margin-bottom="ant"
+          >
+            {{ $t('content_bases.files.upload_content') }}
+          </unnnic-intelligence-text>
 
-        <div class="paste-area__content">
-          {{ $t('content_bases.files.drag_and_drop_your_file_here') }}
-
-          <small v-html="$t('content_bases.files.supported_files')"></small>
-        </div>
-
-        <input
-          v-show="false"
-          ref="browser-file-input"
-          type="file"
-          multiple
-          @change="drop"
-        />
+          <unnnic-intelligence-text
+            tag="p"
+            family="secondary"
+            color="neutral-cloudy"
+            size="body-gt"
+          >
+            <span v-html="$t('content_bases.files.supported_files')"></span>
+          </unnnic-intelligence-text>
+        </section>
 
         <unnnic-button
           @click="$refs['browser-file-input'].click()"
@@ -39,9 +55,26 @@
         </unnnic-button>
       </div>
 
-      <div v-if="files.data.length" class="files-list__container">
+      <div v-else class="files-list__container">
         <div class="files-list__header">
-          {{ $t('content_bases.files.uploaded_files') }}
+          <unnnic-intelligence-text
+            color="neutral-darkest"
+            family="secondary"
+            weight="bold"
+            size="body-lg"
+          >
+            {{ $t('content_bases.files.uploaded_files') }}
+            ({{ counter }})
+          </unnnic-intelligence-text>
+
+          <unnnic-button
+            @click="$refs['browser-file-input'].click()"
+            size="small"
+            type="primary"
+            class="files-list__header__button"
+          >
+            {{ $t('content_bases.files.browse_file') }}
+          </unnnic-button>
         </div>
 
         <div class="files-list__content">
@@ -200,6 +233,10 @@ export default {
   },
 
   computed: {
+    counter() {
+      return this.files.next ? '10+' : this.files.data.length;
+    },
+
     countUploading() {
       return this.files.data.filter(({ status }) => status === 'uploading')
         .length;
@@ -418,22 +455,22 @@ export default {
 .files-list {
   &__container {
     height: 0;
-    margin-top: $unnnic-spacing-md;
   }
 
   &__header {
-    margin-bottom: $unnnic-spacing-ant;
+    display: flex;
+    align-items: center;
+    margin-bottom: $unnnic-spacing-sm;
+    justify-content: space-between;
 
-    color: $unnnic-color-neutral-darkest;
-    font-family: $unnnic-font-family-secondary;
-    font-size: $unnnic-font-size-body-gt;
-    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-    font-weight: $unnnic-font-weight-bold;
+    &__button {
+      width: 12.5 * $unnnic-font-size;
+    }
   }
 
   &__content {
     display: grid;
-    gap: $unnnic-spacing-xs;
+    gap: $unnnic-spacing-sm;
     grid-template-columns: repeat(
       auto-fill,
       minmax(16 * $unnnic-font-size, 1fr)
@@ -458,6 +495,11 @@ export default {
     &--flat-bottom {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
+    }
+
+    &--active {
+      outline-color: $unnnic-color-weni-500;
+      background-color: $unnnic-color-weni-50;
     }
   }
 
@@ -505,7 +547,7 @@ export default {
 
   display: flex;
   flex-direction: column;
-  row-gap: $unnnic-spacing-ant;
+  row-gap: $unnnic-spacing-sm;
 
   flex: none;
 
@@ -518,34 +560,8 @@ export default {
     flex: 1;
   }
 
-  &__title {
-    color: $unnnic-color-neutral-darkest;
-    font-family: $unnnic-font-family-secondary;
-    font-size: $unnnic-font-size-body-lg;
-    line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
-    font-weight: $unnnic-font-weight-bold;
-  }
-
-  &__content {
-    color: $unnnic-color-neutral-dark;
-    font-family: $unnnic-font-family-secondary;
-    font-size: $unnnic-font-size-body-gt;
-    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-    font-weight: $unnnic-font-weight-regular;
-
-    display: flex;
-    flex-direction: column;
-    row-gap: $unnnic-spacing-xs;
-
-    small {
-      color: $unnnic-color-neutral-cloudy;
-      font-size: $unnnic-font-size-body-md;
-      line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
-    }
-  }
-
   &__button {
-    width: 10.625 * $unnnic-font-size;
+    width: 12.5 * $unnnic-font-size;
     margin: 0 auto;
   }
 }

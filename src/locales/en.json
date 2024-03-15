@@ -17,6 +17,8 @@
     "no_intelligence_added": "No Intelligence added",
     "view_bases": "Visualizar bases",
     "no_content_base_added": "No content base added",
+    "no_content_base_found": "No content base found",
+    "search_content_base_placeholder": "Search content base",
     "sidebar_view_content_bases_title": "{name}'s content bases",
     "sidebar_view_content_bases_description": "View the content bases that are part of this AI.",
     "delete_intelligence": "Delete Intelligence",
@@ -57,8 +59,8 @@
     "files": {
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
-      "supported_files": "Supported files: .pdf, .doc, docx, .txt, .xls and .xlsx.<br />250MB limit per file.",
-      "browse_file": "Browse file",
+      "supported_files": "Supported formats: .pdf, .doc, docx, .txt, .xls and .xlsx.<br />250MB limit per file.",
+      "browse_file": "Upload file",
       "uploaded_files": "Uploaded files",
       "status": {
         "uploading": "Uploading content",

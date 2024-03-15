@@ -427,7 +427,7 @@ export default {
   background-color: $unnnic-color-background-snow;
 
   &.page--home {
-    padding: $unnnic-spacing-md $unnnic-font-size * 8;
+    padding: $unnnic-spacing-lg;
 
     .home__header {
       padding: 0;
