@@ -116,6 +116,11 @@
       "disliked": "Resposta ruim"
     }
   },
+  "log": {
+    "interaction_received_on": "Interação recebida em:",
+    "more_details_of_the_interaction": "Mais detalhes da interação:",
+    "version": "Versão:"
+  },
   "webapp": {
     "layout": {
       "newbot": "nova inteligência",

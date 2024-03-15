@@ -116,6 +116,11 @@
       "disliked": "Bad answer"
     }
   },
+  "log": {
+    "interaction_received_on": "Interaction received on:",
+    "more_details_of_the_interaction": "More details of the interaction:",
+    "version": "Version:"
+  },
   "webapp": {
     "layout": {
       "newbot": "new bot",

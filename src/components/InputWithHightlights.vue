@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="selected__container" :style="inputStyle">
-      <div
+  <section>
+    <p class="selected__container" :style="inputStyle">
+      <section
         v-for="(part, index) in parts"
         :key="index" class="selected__line"
         :style="{ marginLeft: -inputScrolledLeft + 'px' }"
@@ -14,8 +14,8 @@
             whiteSpace: 'pre',
           }"
         >{{ part.text }}</span>
-      </div>
-    </div>
+      </section>
+    </p>
 
     <unnnic-input
       ref="input"
@@ -23,7 +23,7 @@
       @input="$emit('input', $event)"
       v-bind="$attrs"
     />
-  </div>
+  </section>
 </template>
 
 <script>
@@ -81,14 +81,23 @@ export default {
 
   computed: {
     parts() {
-      return [].concat(this.selected ? {
-        textBefore: this.value.substring(0, this.selected.start),
-        text: this.value.substring(this.selected.start, this.selected.end),
-      } : []).concat(this.entities.map((entity) => ({
-        textBefore: this.value.substring(0, entity.start),
-        text: this.value.substring(entity.start, entity.end),
-        color: getEntityColor(entity.entity),
-      })));
+      const parts = [];
+
+      const getHightlightedWordObject = ({
+        start: startSelection,
+        end: endSelection,
+        entity: entityName,
+      }) => ({
+        textBefore: this.value.substring(0, startSelection),
+        text: this.value.substring(startSelection, endSelection),
+        color: entityName ? getEntityColor(entityName) : undefined,
+      });
+
+      if (this.selected) {
+        parts.push(getHightlightedWordObject(this.selected));
+      }
+
+      return parts.concat(this.entities.map(getHightlightedWordObject));
     },
   },
 };
@@ -111,8 +120,11 @@ export default {
 .selected {
   background-color: $unnnic-color-neutral-soft;
   border-radius: $unnnic-border-radius-sm;
-  padding: 0.125 * $unnnic-font-size;
-  margin: -0.125 * $unnnic-font-size;
+
+  $inside-spacing: 0.125 * $unnnic-font-size;
+  
+  padding: $inside-spacing;
+  margin: -$inside-spacing;
   box-sizing: content-box;
 
   $entities-colors: (

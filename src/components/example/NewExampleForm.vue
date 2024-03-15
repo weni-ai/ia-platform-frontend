@@ -315,14 +315,17 @@ export default {
     margin-bottom: $unnnic-spacing-md;
     gap: $unnnic-spacing-sm;
 
+    $normal-column-width: 15.3125 * $unnnic-font-size;
+    $large-column-width: 31.6875 * $unnnic-font-size;
+
     > * {
       flex: 1;
-      min-width: 15.3125 * $unnnic-font-size;
+      min-width: $normal-column-width;
     }
 
     > *:first-child {
       flex: 100;
-      min-width: 31.6875 * $unnnic-font-size;
+      min-width: $large-column-width;
     }
   }
 
@@ -339,18 +342,6 @@ export default {
     margin-bottom: $unnnic-spacing-xs;
   }
 }
-
-// /deep/ .textarea, /deep/ .input {
-//   border: .0625rem solid #e2e6ed;
-//   border-radius: .25rem;
-//   color: #4e5666;
-//   font-weight: 400;
-//   font-size: .875rem;
-//   box-sizing: border-box;
-//   width: 100%;
-//   padding: .75rem 1rem;
-//   height: 48px;
-// }
 
 /deep/ .unnnic-form__label {
   font-family: 'Lato';

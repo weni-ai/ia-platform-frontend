@@ -23,7 +23,9 @@
           ></div>
 
           <template v-else>
-            <VueMarkdown>{{ message.text }}</VueMarkdown>
+            <VueMarkdown :class="`messages__${message.type}__content`">
+              {{ message.text }}
+            </VueMarkdown>
 
             <AnswerFeedback
               v-if="message.type === 'answer' && message.question_uuid"
@@ -273,10 +275,13 @@ export default {
     &__answer {
       max-width: 75%;
       color: $unnnic-color-neutral-dark;
-      font-family: $unnnic-font-family-secondary;
-      font-size: $unnnic-font-size-body-gt;
-      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-      font-weight: $unnnic-font-weight-regular;
+
+      &__content {
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-body-gt;
+        line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-regular;
+      }
 
       border-radius: $unnnic-border-radius-md;
       padding: $unnnic-spacing-ant;

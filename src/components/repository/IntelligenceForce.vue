@@ -64,7 +64,9 @@ export default {
             margin-bottom: $unnnic-spacing-md;
         }
   /deep/ .unnnic-tooltip-label {
-    max-width: 26.875 * $unnnic-font-size;
+    $large-tooltip-width: 26.875 * $unnnic-font-size;
+
+    max-width: $large-tooltip-width;
   }
 
     &__chart-wrapper{

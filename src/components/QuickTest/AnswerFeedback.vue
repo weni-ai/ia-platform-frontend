@@ -221,6 +221,7 @@ export default {
     margin-top: $unnnic-spacing-ant;
     column-gap: $unnnic-spacing-ant;
     user-select: none;
+    line-height: 0;
   }
 
   &__reason {
