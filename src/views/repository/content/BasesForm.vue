@@ -284,24 +284,7 @@ export default {
       sites: {
         status: null,
         next: null,
-        data: [
-          /* {
-            file: null,
-            extension_file: 'site',
-            uuid: 'temp-1',
-            created_file_name: 'lhamas.com',
-            status: 'uploaded',
-            file_name: null,
-          },
-          {
-            file: null,
-            extension_file: 'site',
-            uuid: 'temp-2',
-            created_file_name: 'lhamasfofas.com',
-            status: 'uploading',
-            file_name: null,
-          }, */
-        ],
+        data: [],
       },
     };
   },
@@ -355,38 +338,36 @@ export default {
     },
 
     async loadSites() {
-      return; // temp: waiting backend functionality
+      this.sites.status = 'loading';
 
-      // this.sites.status = 'loading';
+      try {
+        const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
+          {
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+            next: this.sites.next,
+          },
+        );
 
-      // try {
-      //   const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
-      //     {
-      //       contentBaseUuid: this.$route.params.contentBaseUuid,
-      //       next: this.sites.next,
-      //     },
-      //   );
+        this.sites.data = this.sites.data.concat(
+          data
+            .map((site) => ({
+              ...site,
+              extension_file: 'site',
+              created_file_name: site.link,
+              status: site.status === 'success' ? 'uploaded' : 'processing',
+            }))
+            .filter(
+              ({ uuid }) =>
+                !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+            ),
+        );
 
-      //   this.sites.data = this.sites.data.concat(
-      //     data.results
-      //       .map((file) => ({
-      //         ...file,
-      //         status: file.status === 'success' ? 'uploaded' : 'processing',
-      //       }))
-      //       .filter(
-      //         ({ uuid }) =>
-      //           !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
-      //       ),
-      //   );
-
-      //   this.sites.next = data.next;
-
-      //   if (!data.next) {
-      //     this.sites.status = 'complete';
-      //   }
-      // } finally {
-      //   this.sites.status = null;
-      // }
+        this.sites.status = 'complete';
+      } finally {
+        if (this.sites.status !== 'complete') {
+          this.sites.status = null;
+        }
+      }
     },
 
     alertError(title) {

@@ -182,14 +182,16 @@ export default {
 
   methods: {
     addSites() {
-      const sites = this.sites.map((site) => ({
-        file: null,
-        file_name: null,
-        extension_file: 'site',
-        uuid: `temp-${Math.random() * 1000}`,
-        created_file_name: site.value,
-        status: 'uploading',
-      }));
+      const sites = this.sites
+        .filter((site) => this.validURL(site.value))
+        .map((site) => ({
+          file: null,
+          file_name: null,
+          extension_file: 'site',
+          uuid: `temp-${Math.random() * 1000}`,
+          created_file_name: site.value,
+          status: 'uploading',
+        }));
 
       this.$emit('update:items', {
         ...this.items,
