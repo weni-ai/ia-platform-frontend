@@ -189,6 +189,33 @@ export default {
 
   intelligences: {
     contentBases: {
+      sites: {
+        create({ contentBaseUuid, link }) {
+          return request.$http.post(
+            `api/${contentBaseUuid}/content-bases-link/`,
+            {
+              link,
+            },
+          );
+        },
+
+        list({ next, contentBaseUuid }) {
+          if (next) {
+            return request.$http.get(forceHttps(next));
+          }
+
+          return request.$http.get(
+            `api/${contentBaseUuid}/content-bases-link/`,
+          );
+        },
+
+        delete({ contentBaseUuid, linkUuid }) {
+          return request.$http.delete(
+            `api/${contentBaseUuid}/content-bases-link/${linkUuid}/`,
+          );
+        },
+      },
+
       files: {
         create({ contentBaseUuid, file, extension_file, onUploadProgress }) {
           const form = new FormData();

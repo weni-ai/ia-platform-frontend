@@ -72,6 +72,13 @@
           </template>
         </template>
 
+        <template v-if="tab === 'sites'">
+          <BasesFormSites
+            :items.sync="sites"
+            @load-more="loadSites"
+          />
+        </template>
+
         <template v-if="tab === 'text'">
           <UnnnicSkeletonLoading
             v-if="loadingContentBaseText"
@@ -131,7 +138,9 @@
       </div>
 
       <div
-        v-if="files.data.length || knowledgeBase.text.oldValue"
+        v-if="
+          files.data.length || sites.data.length || knowledgeBase.text.oldValue
+        "
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container',
@@ -208,6 +217,7 @@ import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
 import PageContainer from '../../../components/PageContainer';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import BasesFormFiles from './BasesFormFiles';
+import BasesFormSites from './BasesFormSites';
 import BaseSettingsForm from '../../../components/BaseSettingsForm';
 
 export default {
@@ -216,6 +226,7 @@ export default {
     Tests,
     PageContainer,
     BasesFormFiles,
+    BasesFormSites,
     BaseSettingsForm,
   },
   mixins: [RemoveBulmaMixin],
@@ -268,6 +279,12 @@ export default {
         next: null,
         data: [],
       },
+
+      sites: {
+        status: null,
+        next: null,
+        data: [],
+      },
     };
   },
   methods: {
@@ -316,6 +333,39 @@ export default {
 
       if (!data.next) {
         this.files.status = 'complete';
+      }
+    },
+
+    async loadSites() {
+      this.sites.status = 'loading';
+
+      try {
+        const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
+          {
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+            next: this.sites.next,
+          },
+        );
+
+        this.sites.data = this.sites.data.concat(
+          data
+            .map((site) => ({
+              ...site,
+              extension_file: 'site',
+              created_file_name: site.link,
+              status: site.status === 'success' ? 'uploaded' : 'processing',
+            }))
+            .filter(
+              ({ uuid }) =>
+                !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+            ),
+        );
+
+        this.sites.status = 'complete';
+      } finally {
+        if (this.sites.status !== 'complete') {
+          this.sites.status = null;
+        }
       }
     },
 
@@ -524,6 +574,11 @@ export default {
           icon: 'news',
         },
         {
+          name: 'sites',
+          text: this.$t('content_bases.tabs.sites'),
+          icon: 'globe',
+        },
+        {
           name: 'text',
           text: this.$t('content_bases.tabs.text'),
           icon: 'format_align_left',
@@ -571,6 +626,7 @@ export default {
     });
 
     this.loadFiles();
+    this.loadSites();
   },
 
   destroyed() {

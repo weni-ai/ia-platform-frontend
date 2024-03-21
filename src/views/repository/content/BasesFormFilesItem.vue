@@ -1,7 +1,7 @@
 <template>
   <div class="files-list__content__file">
     <div class="files-list__content__file__icon">
-      <unnnic-icon
+      <UnnnicIcon
         :icon="icon"
         class="files-list__content__file__icon__itself"
         size="avatar-nano"
@@ -21,7 +21,7 @@
     </div>
 
     <div class="files-list__content__file__actions">
-      <unnnic-icon
+      <UnnnicIcon
         v-if="downloading"
         icon="cached"
         size="sm"
@@ -29,15 +29,15 @@
         class="files-list__content__file__actions__loading"
       />
 
-      <unnnic-icon
-        v-else-if="file.status === 'uploaded'"
+      <UnnnicIcon
+        v-else-if="file.status === 'uploaded' && file.extension_file !== 'site'"
         icon="download"
         size="sm"
         class="files-list__content__file__actions__icon"
         @click.native="download"
       />
 
-      <unnnic-icon
+      <UnnnicIcon
         v-if="!file.uuid.startsWith('temp-')"
         icon="delete"
         size="sm"
@@ -48,7 +48,7 @@
 
     <div
       v-if="file.status === 'uploading'"
-      class="files-list__content__file__status-bar"
+      :class="['files-list__content__file__status-bar', file.extension_file]"
     >
       <div
         class="files-list__content__file__status-bar__filled"
@@ -78,12 +78,20 @@ export default {
     },
 
     fileName() {
+      if (this.file.extension_file === 'site') {
+        return this.file?.created_file_name;
+      }
+
       return `${this.file?.created_file_name || ''}.${
         this.file?.extension_file
       }`;
     },
 
     extension() {
+      if (this.file.extension_file === 'site') {
+        return this.file.extension_file;
+      }
+
       return this.fileName.lastIndexOf('.') === -1
         ? this.fileName
         : this.fileName.slice(this.fileName.lastIndexOf('.') + 1);
@@ -98,12 +106,17 @@ export default {
           xlsx: 'table',
           doc: 'draft',
           docx: 'draft',
+          site: 'globe',
         }[this.extension] || 'draft'
       );
     },
 
     name() {
       const n = this.fileName.slice(0, -this.extension.length - 1);
+
+      if (this.extension === 'site' && this.fileName.length > 23) {
+        return this.fileName.slice(0, 15) + '...' + this.fileName.slice(-8);
+      }
 
       return this.fileName.length > 15
         ? `${n.slice(0, 15)}....${this.extension}`
@@ -116,10 +129,11 @@ export default {
       try {
         this.downloading = true;
 
-        const { data } = await nexusaiAPI.intelligences.contentBases.files.download({
-          file_name: this.file.file_name,
-          fileUuid: this.file.uuid,
-        });
+        const { data } =
+          await nexusaiAPI.intelligences.contentBases.files.download({
+            file_name: this.file.file_name,
+            fileUuid: this.file.uuid,
+          });
 
         const a = document.createElement('a');
 
@@ -225,11 +239,33 @@ export default {
     border-radius: $unnnic-border-radius-pill;
 
     &__filled {
+      position: absolute;
       width: 0;
       height: $unnnic-border-width-thin;
       border-radius: $unnnic-border-radius-pill;
       background-color: $unnnic-color-weni-500;
       transition: width 100ms;
+    }
+
+    &.site &__filled {
+      animation: loading-site 1s infinite;
+    }
+
+    @keyframes loading-site {
+      0% {
+        width: 0;
+        left: 0;
+      }
+
+      50% {
+        width: 50%;
+        left: 25%;
+      }
+
+      100% {
+        width: 0;
+        left: 100%;
+      }
     }
   }
 }
