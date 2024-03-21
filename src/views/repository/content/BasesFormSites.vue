@@ -44,6 +44,7 @@
         :title="$t('content_bases.sites.uploaded_sites')"
         :addText="$t('content_bases.sites.add_site')"
         :items.sync="items"
+        @load-more="$emit('load-more')"
         @add="isAddSiteOpen = true"
         @remove="
           ($event) =>
@@ -149,6 +150,7 @@
 </template>
 
 <script>
+import nexusaiAPI from '../../../api/nexusaiAPI';
 import RightSidebar from '../../../components/RightSidebar.vue';
 import BasesFormGenericList from './BasesFormGenericList.vue';
 
@@ -180,18 +182,40 @@ export default {
 
   methods: {
     addSites() {
+      const sites = this.sites
+        .filter((site) => this.validURL(site.value))
+        .map((site) => ({
+          file: null,
+          file_name: null,
+          extension_file: 'site',
+          uuid: `temp-${Math.random() * 1000}`,
+          created_file_name: site.value,
+          status: 'uploading',
+        }));
+
       this.$emit('update:items', {
         ...this.items,
-        data: this.items.data.concat(
-          this.sites.map((site) => ({
-            file: null,
-            file_name: null,
-            extension_file: 'site',
-            uuid: 'site' + Math.random() * 1000,
-            created_file_name: site.value,
-            status: 'uploading',
-          })),
-        ),
+        data: this.items.data.concat(sites),
+      });
+
+      Promise.all(
+        sites.map(async (site) => {
+          const { data } =
+            await nexusaiAPI.intelligences.contentBases.sites.create({
+              contentBaseUuid: this.$route.params.contentBaseUuid,
+              link: site.created_file_name,
+            });
+
+          site.uuid = data.uuid;
+          site.status = 'uploaded';
+        }),
+      ).then(() => {
+        this.$store.state.alert = {
+          type: 'success',
+          text: this.$t(
+            'content_bases.sites.content_of_the_sites_has_been_added',
+          ),
+        };
       });
 
       this.sites = [{ value: '' }];
@@ -210,23 +234,22 @@ export default {
     remove() {
       this.modalDeleteSite.status = 'deleting';
 
-      setTimeout(() => {
-        this.$emit('update:items', {
-          ...this.items,
-          data: this.items.data.filter(
-            ({ uuid }) => uuid !== this.modalDeleteSite.uuid,
-          ),
+      nexusaiAPI.intelligences.contentBases.sites
+        .delete({
+          contentBaseUuid: this.$route.params.contentBaseUuid,
+          linkUuid: this.modalDeleteSite.uuid,
+        })
+        .then(() => {
+          this.$store.state.alert = {
+            type: 'default',
+            text: this.$t('content_bases.files.file_removed_from_base', {
+              name: this.modalDeleteSite.name,
+            }),
+          };
+        })
+        .finally(() => {
+          this.modalDeleteSite = null;
         });
-
-        this.$store.state.alert = {
-          type: 'default',
-          text: this.$t('content_bases.files.file_removed_from_base', {
-            name: this.modalDeleteSite.name,
-          }),
-        };
-
-        this.modalDeleteSite = null;
-      }, 3000);
     },
 
     validURL(url) {

@@ -73,7 +73,10 @@
         </template>
 
         <template v-if="tab === 'sites'">
-          <BasesFormSites :items.sync="sites" />
+          <BasesFormSites
+            :items.sync="sites"
+            @load-more="loadSites"
+          />
         </template>
 
         <template v-if="tab === 'text'">
@@ -278,26 +281,9 @@ export default {
       },
 
       sites: {
-        status: 'loading',
+        status: null,
         next: null,
-        data: [
-          {
-            file: null,
-            extension_file: 'site',
-            uuid: 'site1',
-            created_file_name: 'lhamas.com',
-            status: 'uploaded',
-            file_name: null,
-          },
-          {
-            file: null,
-            extension_file: 'site',
-            uuid: 'site2',
-            created_file_name: 'lhamasfofas.com',
-            status: 'uploading',
-            file_name: null,
-          },
-        ],
+        data: [],
       },
     };
   },
@@ -347,6 +333,39 @@ export default {
 
       if (!data.next) {
         this.files.status = 'complete';
+      }
+    },
+
+    async loadSites() {
+      this.sites.status = 'loading';
+
+      try {
+        const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
+          {
+            contentBaseUuid: this.$route.params.contentBaseUuid,
+            next: this.sites.next,
+          },
+        );
+
+        this.sites.data = this.sites.data.concat(
+          data
+            .map((site) => ({
+              ...site,
+              extension_file: 'site',
+              created_file_name: site.link,
+              status: site.status === 'success' ? 'uploaded' : 'processing',
+            }))
+            .filter(
+              ({ uuid }) =>
+                !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+            ),
+        );
+
+        this.sites.status = 'complete';
+      } finally {
+        if (this.sites.status !== 'complete') {
+          this.sites.status = null;
+        }
       }
     },
 
@@ -607,6 +626,7 @@ export default {
     });
 
     this.loadFiles();
+    this.loadSites();
   },
 
   destroyed() {

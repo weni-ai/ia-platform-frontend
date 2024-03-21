@@ -80,6 +80,7 @@
     },
     "sites": {
       "uploaded_sites": "Uploaded websites",
+      "content_of_the_sites_has_been_added": "The content of the websites has been added to the base",
       "sidebar_add": {
         "title": "Load website content",
         "description": "Add website content to the AI knowledge base.",
