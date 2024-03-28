@@ -246,6 +246,8 @@ export default {
               name: this.modalDeleteSite.name,
             }),
           };
+
+          this.$emit('removed', this.modalDeleteSite.uuid);
         })
         .finally(() => {
           this.modalDeleteSite = null;

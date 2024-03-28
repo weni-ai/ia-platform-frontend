@@ -76,6 +76,7 @@
           <BasesFormSites
             :items.sync="sites"
             @load-more="loadSites"
+            @removed="removedSite"
           />
         </template>
 
@@ -305,6 +306,10 @@ export default {
 
     removedFile(fileUuid) {
       this.files.data = this.files.data.filter(({ uuid }) => uuid !== fileUuid);
+    },
+
+    removedSite(siteUuid) {
+      this.sites.data = this.sites.data.filter(({ uuid }) => uuid !== siteUuid);
     },
 
     async loadFiles() {
