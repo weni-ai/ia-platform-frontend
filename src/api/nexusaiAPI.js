@@ -230,6 +230,7 @@ export default {
 
           form.append('file', file, fileName);
           form.append('extension_file', extension_file);
+          form.append('load_type', 'pdfminer');
 
           return request.$http.post(
             `api/${contentBaseUuid}/content-bases-file/`,
