@@ -11,11 +11,14 @@ exports[`GraphicsResult.vue renders re-renders after charts data changes 1`] = `
       some specific text
       <a href="https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#results" target="_blank">some specific text</a>.
     </p>
+    <unnnicbutton class="button-export-result">
+      some specific text
+    </unnnicbutton>
     <div class="graphics-results__info">
       <h3 class="graphics-results__title">
         some specific text
       </h3>
-      <p> some specific text </p>
+      <p>some specific text</p>
       <p>
         some specific text
         <a href="https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#precision_and_recall_reports" target="_blank">some specific text</a>.
@@ -48,7 +51,7 @@ exports[`GraphicsResult.vue renders re-renders after charts data changes 1`] = `
         <a href="https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#intent_confusion_matrix" target="_blank">some specific text</a>.
       </p>
     </div>
-    <div class="graphics-results__charts">
+    <div id="matrixChart" class="graphics-results__charts">
       <!----> <img src="https://s3.amazonaws.com/bothub-sample/confmat.png" alt="chart1">
     </div>
   </div>
@@ -58,11 +61,12 @@ exports[`GraphicsResult.vue renders re-renders after charts data changes 1`] = `
         some specific text
       </h3>
       <p>some specific text</p>
-      <p>some specific text
+      <p>
+        some specific text
         <a href="https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#intent_confidence_distribution" target="_blank">some specific text</a>.
       </p>
     </div>
-    <div class="graphics-results__charts">
+    <div id="confidenceChart" class="graphics-results__charts">
       <!----> <img src="https://s3.amazonaws.com/bothub-sample/hist.png" alt="chart2">
     </div>
   </div>
@@ -80,11 +84,14 @@ exports[`GraphicsResult.vue renders renders 1`] = `
       some specific text
       <a href="https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#results" target="_blank">some specific text</a>.
     </p>
+    <unnnicbutton class="button-export-result">
+      some specific text
+    </unnnicbutton>
     <div class="graphics-results__info">
       <h3 class="graphics-results__title">
         some specific text
       </h3>
-      <p> some specific text </p>
+      <p>some specific text</p>
       <p>
         some specific text
         <a href="https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#precision_and_recall_reports" target="_blank">some specific text</a>.
@@ -117,7 +124,7 @@ exports[`GraphicsResult.vue renders renders 1`] = `
         <a href="https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#intent_confusion_matrix" target="_blank">some specific text</a>.
       </p>
     </div>
-    <div class="graphics-results__charts">
+    <div id="matrixChart" class="graphics-results__charts">
       <!----> <img src="https://s3.amazonaws.com/bothub-sample/confmat.png" alt="chart1">
     </div>
   </div>
@@ -127,11 +134,12 @@ exports[`GraphicsResult.vue renders renders 1`] = `
         some specific text
       </h3>
       <p>some specific text</p>
-      <p>some specific text
+      <p>
+        some specific text
         <a href="https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#intent_confidence_distribution" target="_blank">some specific text</a>.
       </p>
     </div>
-    <div class="graphics-results__charts">
+    <div id="confidenceChart" class="graphics-results__charts">
       <!----> <img src="https://s3.amazonaws.com/bothub-sample/hist.png" alt="chart2">
     </div>
   </div>

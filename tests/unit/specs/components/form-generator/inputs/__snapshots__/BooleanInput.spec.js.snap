@@ -1,3 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`BooleanInput.vue renders correctly 1`] = `<b-switch-stub truevalue="true" rounded="true">some specific text</b-switch-stub>`;
+exports[`BooleanInput.vue renders correctly 1`] = `
+<div class="is-flex">
+  <unnnic-switch textright=""></unnnic-switch>
+  <unnnic-tool-tip side="top" text="" enabled="">
+    <unnnic-icon icon="information-circle-4" size="sm" scheme="neutral-soft" class="mt-1"></unnnic-icon>
+  </unnnic-tool-tip>
+</div>
+`;
