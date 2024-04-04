@@ -18,12 +18,16 @@ import External from './external';
 import Integration from './integration';
 import Suggestions from './suggestions';
 
-
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
     alert: null,
+
+    router: {
+      intelligenceUuid: null,
+      contentBaseUuid: null,
+    },
   },
 
   modules: {

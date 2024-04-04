@@ -198,6 +198,13 @@ export default {
   },
 
   computed: {
+    contentBaseUuid() {
+      return (
+        this.$route.params.contentBaseUuid ||
+        this.$store.state.router.contentBaseUuid
+      );
+    },
+
     counter() {
       return this.files.next ? '10+' : this.files.data.length;
     },
@@ -299,7 +306,7 @@ export default {
 
       nexusaiAPI.intelligences.contentBases.files
         .create({
-          contentBaseUuid: this.$route.params.contentBaseUuid,
+          contentBaseUuid: this.contentBaseUuid,
           file,
           extension_file: extension,
 
@@ -336,7 +343,7 @@ export default {
 
       nexusaiAPI.intelligences.contentBases.files
         .read({
-          contentBaseUuid: this.$route.params.contentBaseUuid,
+          contentBaseUuid: this.contentBaseUuid,
           fileUuid: fileItem.uuid,
         })
         .then(({ data }) => {
@@ -371,7 +378,7 @@ export default {
 
       nexusaiAPI.intelligences.contentBases.files
         .delete({
-          contentBaseUuid: this.$route.params.contentBaseUuid,
+          contentBaseUuid: this.contentBaseUuid,
           fileUuid: this.modalDeleteFile.uuid,
         })
         .then(() => {

@@ -61,6 +61,15 @@ export default {
     item: Object,
   },
 
+  computed: {
+    contentBaseUuid() {
+      return (
+        this.$route.params.contentBaseUuid ||
+        this.$store.state.router.contentBaseUuid
+      );
+    },
+  },
+
   methods: {
     async saveText() {
       try {
@@ -69,7 +78,7 @@ export default {
         if (this.item.uuid) {
           const { data: contentBaseTextData } =
             await nexusaiAPI.updateIntelligenceContentBaseText({
-              contentBaseUuid: this.$route.params.contentBaseUuid,
+              contentBaseUuid: this.contentBaseUuid,
               contentBaseTextUuid: this.item.uuid,
               text: this.item.value,
             });
@@ -78,7 +87,7 @@ export default {
         } else {
           const { data: contentBaseTextData } =
             await nexusaiAPI.createIntelligenceContentBaseText({
-              contentBaseUuid: this.$route.params.contentBaseUuid,
+              contentBaseUuid: this.contentBaseUuid,
               text: this.item.value,
             });
 

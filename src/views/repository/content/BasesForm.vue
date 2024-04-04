@@ -6,7 +6,7 @@
       $router.push({
         name: 'intelligence-home',
         params: {
-          intelligenceUuid: $route.params.intelligenceUuid,
+          intelligenceUuid: intelligenceUuid,
         },
       })
     "
@@ -157,7 +157,7 @@
         </div>
 
         <Tests
-          :contentBaseUuid="$route.params.contentBaseUuid"
+          :contentBaseUuid="contentBaseUuid"
           :contentBaseLanguage="contentBase.language"
         />
       </div>
@@ -199,8 +199,8 @@
 
     <BaseSettingsForm
       v-if="isEditContentBaseOpen"
-      :intelligenceUuid="$route.params.intelligenceUuid"
-      :contentBaseUuid="$route.params.contentBaseUuid"
+      :intelligenceUuid="intelligenceUuid"
+      :contentBaseUuid="contentBaseUuid"
       :preFilledValues="{
         title: contentBase.title,
         language: contentBase.language,
@@ -350,7 +350,7 @@ export default {
       this.files.status = 'loading';
 
       const { data } = await nexusaiAPI.intelligences.contentBases.files.list({
-        contentBaseUuid: this.$route.params.contentBaseUuid,
+        contentBaseUuid: this.contentBaseUuid,
         next: this.files.next,
       });
 
@@ -381,7 +381,7 @@ export default {
       try {
         const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
           {
-            contentBaseUuid: this.$route.params.contentBaseUuid,
+            contentBaseUuid: this.contentBaseUuid,
             next: this.sites.next,
           },
         );
@@ -511,8 +511,8 @@ export default {
 
         const { data: contentBaseData } =
           await nexusaiAPI.readIntelligenceContentBase({
-            intelligenceUuid: this.$route.params.intelligenceUuid,
-            contentBaseUuid: this.$route.params.contentBaseUuid,
+            intelligenceUuid: this.intelligenceUuid,
+            contentBaseUuid: this.contentBaseUuid,
           });
 
         this.loadingContentBase = false;
@@ -523,7 +523,7 @@ export default {
 
         const { data: contentBaseTextsData } =
           await nexusaiAPI.listIntelligenceContentBaseTexts({
-            contentBaseUuid: this.$route.params.contentBaseUuid,
+            contentBaseUuid: this.contentBaseUuid,
           });
 
         const text = get(contentBaseTextsData, 'results.0.text', '');
@@ -547,6 +547,20 @@ export default {
     },
   },
   computed: {
+    contentBaseUuid() {
+      return (
+        this.$route.params.contentBaseUuid ||
+        this.$store.state.router.contentBaseUuid
+      );
+    },
+
+    intelligenceUuid() {
+      return (
+        this.$route.params.intelligenceUuid ||
+        this.$store.state.router.intelligenceUuid
+      );
+    },
+
     isRouterView() {
       return (
         this.$route.name === 'router' || this.$route.name.startsWith('router-')

@@ -176,6 +176,13 @@ export default {
   },
 
   computed: {
+    contentBaseUuid() {
+      return (
+        this.$route.params.contentBaseUuid ||
+        this.$store.state.router.contentBaseUuid
+      );
+    },
+
     submitDisabled() {
       return !this.sites.filter(({ value }) => this.validURL(value)).length;
     },
@@ -203,7 +210,7 @@ export default {
         sites.map(async (site) => {
           const { data } =
             await nexusaiAPI.intelligences.contentBases.sites.create({
-              contentBaseUuid: this.$route.params.contentBaseUuid,
+              contentBaseUuid: this.contentBaseUuid,
               link: site.created_file_name,
             });
 
@@ -237,7 +244,7 @@ export default {
 
       nexusaiAPI.intelligences.contentBases.sites
         .delete({
-          contentBaseUuid: this.$route.params.contentBaseUuid,
+          contentBaseUuid: this.contentBaseUuid,
           linkUuid: this.modalDeleteSite.uuid,
         })
         .then(() => {

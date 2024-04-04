@@ -37,6 +37,7 @@ import DashboardExternalLayout from '@/layout/dashboard/DashboardExternalLayout'
 import PaymentOptions from '@/views/payment/PaymentOptions';
 import PaymentInfo from '@/views/payment/PaymentInfo';
 import store from '../store';
+import nexusaiAPI from '../api/nexusaiAPI';
 
 Vue.use(Router);
 
@@ -83,6 +84,12 @@ const router = new Router({
         store.dispatch('projectSelected', { project });
 
         store.state.Auth.connectOrgUuid = to.query?.org_uuid;
+        store.state.Auth.connectProjectUuid = to.query?.project_uuid;
+
+        sessionStorage.setItem(
+          'projectUuid',
+          store.state.Auth.connectProjectUuid,
+        );
 
         if (to.query.next) {
           next(to.query.next);
@@ -142,11 +149,21 @@ const router = new Router({
       ],
     },
     {
-      path: '/router/:intelligenceUuid/:contentBaseUuid',
+      path: '/router',
       name: 'router',
       component: RepositoryContentBasesForm,
       redirect: () => {
         return { name: 'router-personalization' };
+      },
+      async beforeEnter(_to, _from, next) {
+        const { data } = await nexusaiAPI.router.read({
+          projectUuid: store.state.Auth.connectProjectUuid,
+        });
+
+        store.state.router.contentBaseUuid = data.content_base_uuid;
+        store.state.router.intelligenceUuid = data.intelligence_uuid;
+
+        next();
       },
       children: [
         {
