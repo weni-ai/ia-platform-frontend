@@ -12,7 +12,7 @@
     "
   >
     <UnnnicButton
-      v-if="$route.name !== 'router'"
+      v-if="!isRouterView"
       class="settings-button"
       slot="actions"
       iconCenter="settings"
