@@ -1234,6 +1234,8 @@
       "btn_back": "Voltar",
       "btn_next": "Avançar",
       "btn_create": "Ativar Router",
+      "btn_cancel": "Cancelar",
+      "btn_complete": "Concluir",
       "flow": {
         "title": "Selecionar fluxo",
         "fill_name": "Selecionar fluxo",
@@ -1244,7 +1246,9 @@
         "title": "Adicionar descrição no fluxo",
         "fill_name": "Adicionar descrição ",
         "sub_title": "Para ativar o Router, adicione uma descrição para o fluxo",
-        "label": "Descrição"
+        "label": "Descrição",
+        "change_title": "Alterar descrição do fluxo",
+        "change_sub_title": "A descrição ajuda o router funcionar de forma mais adequada"
       }
     },
     "cant_access": {

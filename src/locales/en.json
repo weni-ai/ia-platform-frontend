@@ -1276,6 +1276,8 @@
       "btn_back": "Back",
       "btn_next": "Next",
       "btn_create": "Activate Router",
+      "btn_cancel": "Cancel",
+      "btn_complete": "Finish",
       "flow": {
         "title": "Select Flow",
         "fill_name": "Select Flow",
@@ -1286,7 +1288,9 @@
         "title": "Add description to flow",
         "fill_name": "Add description ",
         "sub_title": "To activate the Router, add a description to the flow",
-        "label": "Description"
+        "label": "Description",
+        "change_title": "Change flow description",
+        "change_sub_title": "The description helps the router work better"
       }
     },
     "cant_access": {

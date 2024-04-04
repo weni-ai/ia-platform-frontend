@@ -1255,6 +1255,8 @@
       "btn_back": "Atrás",
       "btn_next": "Siguiente",
       "btn_create": "Activar enrutador",
+      "btn_cancel": "Cancelar",
+      "btn_complete": "Finalizar",
       "flow": {
         "title": "Seleccionar flujo",
         "fill_name": "Seleccionar flujo",
@@ -1265,7 +1267,9 @@
         "title": "Añadir descripción al flujo",
         "fill_name": "Añadir descripción",
         "sub_title": "Para activar el router, añade una descripción para el flujo",
-        "label": "Descripción"
+        "label": "Descripción",
+        "change_title": "Cambiar la descripción del flujo",
+        "change_sub_title": "La descripción ayuda a que el enrutador funcione mejor"
       }
     },
     "cant_access": {
