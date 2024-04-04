@@ -1,5 +1,5 @@
 <template>
-    <modal-next class="flow-modal create-intelligence-modal" max-width="600px">
+    <modal-next class="flow-modal create-intelligence-modal" max-width="604px">
         <article class="flow-modal__container">
             <div class="flow-modal__header">
                 <div class="flow-modal__header__fill">
@@ -7,49 +7,55 @@
                         <div class="flow-modal__header__fill__bar flow-modal__header__fill__bar--green"></div>
                         <p :class="[
                             'flow-modal__header__fill__label',
-                            { 'flow-modal__header__fill__label--green': this.index === 0 }
-                        ]">Selecionar fluxo</p>
+                            { 'flow-modal__header__fill__label--green': index === 0 }
+                        ]">{{ $t('modals.actions.flow.fill_name') }}</p>
                     </div>
                     <div class="flow-modal__header__fill__container">
                         <div :class="[
                             'flow-modal__header__fill__bar',
-                            { 'flow-modal__header__fill__bar--green': this.index === 1 }
+                            { 'flow-modal__header__fill__bar--green': index === 1 }
                         ]" />
                         <p :class="[
                             'flow-modal__header__fill__label',
-                            { 'flow-modal__header__fill__label--green': this.index === 1 }
-                        ]">Adicionar descrição</p>
+                            { 'flow-modal__header__fill__label--green': index === 1 }
+                        ]">{{ $t('modals.actions.descriptions.fill_name') }}</p>
                     </div>
                 </div>
                 <div class="flow-modal__header__title__container">
-                    <h3>{{ this.index === 0 ? 'Selecionar fluxo' : 'Adicionar descrição no fluxo' }}</h3>
-                    <p>{{ this.index === 0 ? 'Selecione o fluxo que deseja adicionar o Router' : 'Para ativar o Router, adicione uma descrição para o fluxo'}}</p>
+                    <h3>{{ index === 0 ? $t('modals.actions.flow.title') : $t('modals.actions.descriptions.title')
+                        }}</h3>
+                    <p>{{ index === 0 ? $t('modals.actions.flow.sub_title') :
+                            $t('modals.actions.descriptions.sub_title') }}</p>
                 </div>
             </div>
             <div class="flow-modal__body">
-                <div class="flow-modal__body__flow" v-if="this.index === 0">
+                <div class="flow-modal__body__flow" v-if="index === 0">
                     <div>
-                        <unnnicInput size="sm" iconLeftClickable="true" iconLeft="search-1"
-                            placeholder="Pesquisar Fluxo" />
+                        <unnnicInput size="sm" :iconLeftClickable="true" iconLeft="search-1"
+                            :placeholder="$t('modals.actions.flow.placeholder')" />
                     </div>
                     <div class="flow-modal__body__flow__list">
-                        <div v-for="(item, index) in flows" :key="index" class="flow-modal__body__flow__list__item">
+                        <div v-for="(item, index) in flows" :key="index" :class="[
+                            'flow-modal__body__flow__list__item',
+                            { 'flow-modal__body__flow__list__item--selected': flowSelected && flowSelected.uuid === item.uuid }
+                        ]" @click="handleFlowSelected(item)">
                             <UnnnicIcon icon="account_tree" size="sm" scheme="neutral-cloudy" />
                             <p>{{ item.name }}</p>
                         </div>
                     </div>
                 </div>
-                <div class="flow-modal__body_description" v-if="this.index === 1">
-                    <UnnnicTextArea v-bind="$props" v-model="description" label="Descrição" />
+                <div class="flow-modal__body_description" v-if="index === 1">
+                    <UnnnicTextArea v-bind="$props" v-model="description"
+                        :label="$t('modals.actions.descriptions.label')" />
                 </div>
             </div>
             <div class="flow-modal__footer">
                 <UnnnicButton slot="options" class="create-repository__container__button" type="tertiary"
                     @click="handleBackBtn">
-                    Voltar
+                    {{ $t('modals.actions.btn_back') }}
                 </UnnnicButton>
                 <UnnnicButton slot="options" size='large' @click="handleNextBtn()">
-                    {{ this.index === 0 ? 'Avançar' : 'Ativar Router' }}
+                    {{ index === 0 ? $t('modals.actions.btn_next') : $t('modals.actions.btn_create') }}
                 </UnnnicButton>
 
             </div>
@@ -77,55 +83,55 @@ export default {
             flows: [
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '1'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '2'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '3'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '4'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '5'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '6'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '7'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '8'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '9'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '10'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
-                },                
-                {
-                    name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '11'
                 },
                 {
                     name: 'Nome do fluxo',
-                    uuid: 'sjdfhskjhf32423'
+                    uuid: '12'
+                },
+                {
+                    name: 'Nome do fluxo',
+                    uuid: '13'
                 }
             ]
         }
@@ -137,6 +143,13 @@ export default {
         },
         handleBackBtn() {
             this.index = 0
+        },
+        handleFlowSelected(value) {
+            const flow = {
+                name: value?.name || '',
+                uuid: value?.uuid || ''
+            }
+            this.flowSelected = flow
         }
     }
 
@@ -147,9 +160,9 @@ export default {
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .create-intelligence-modal {
-  ::v-deep .create-intelligence-modal__container {
-    padding: $unnnic-spacing-xl $unnnic-spacing-md $unnnic-spacing-md $unnnic-spacing-md;
-  }
+    ::v-deep .create-intelligence-modal__container {
+        padding: $unnnic-spacing-xl $unnnic-spacing-md $unnnic-spacing-md $unnnic-spacing-md;
+    }
 }
 
 .flow-modal {
@@ -254,7 +267,7 @@ export default {
                         background: rgba(0, 222, 210, 0.16);
                     }
 
-                    &__selected {
+                    &--selected {
                         border: 1px solid $unnnic-color-weni-500;
                         background: rgba(0, 222, 210, 0.16);
                     }
