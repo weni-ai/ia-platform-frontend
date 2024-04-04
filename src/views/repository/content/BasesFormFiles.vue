@@ -2,9 +2,9 @@
   <div
     :class="[
       'files-area__container',
+      `files-area__container--shape-${shape}`,
       {
-        'files-area__container--flat-bottom': flatBottom,
-        'files-area__container--active': files.data.length && isClientDragging
+        'files-area__container--active': files.data.length && isClientDragging,
       },
     ]"
     @dragover.prevent
@@ -18,78 +18,86 @@
       @change="drop"
     />
 
-    <div class="files-area__scrollable">
-      <div
-        v-if="!files.data.length"
-        :class="['paste-area', { 'paste-area--active': isClientDragging }]"
-      >
-        <section>
-          <unnnic-intelligence-text
-            tag="p"
-            family="secondary"
-            color="neutral-darkest"
-            size="body-lg"
-            weight="bold"
-            margin-bottom="ant"
-          >
-            {{ $t('content_bases.files.upload_content') }}
-          </unnnic-intelligence-text>
-
-          <unnnic-intelligence-text
-            tag="p"
-            family="secondary"
-            color="neutral-cloudy"
-            size="body-gt"
-          >
-            <span v-html="$t('content_bases.files.supported_files')"></span>
-          </unnnic-intelligence-text>
-        </section>
-
-        <unnnic-button
-          @click="$refs['browser-file-input'].click()"
-          size="small"
-          type="primary"
-          class="paste-area__button"
+    <div
+      v-if="!files.data.length && shape !== 'accordion'"
+      :class="['paste-area', { 'paste-area--active': isClientDragging }]"
+    >
+      <section>
+        <UnnnicIntelligenceText
+          tag="p"
+          family="secondary"
+          color="neutral-darkest"
+          size="body-lg"
+          weight="bold"
+          marginBottom="ant"
         >
-          {{ $t('content_bases.files.browse_file') }}
-        </unnnic-button>
-      </div>
+          {{ $t('content_bases.files.upload_content') }}
+        </UnnnicIntelligenceText>
 
-      <BasesFormGenericList
-        v-else
-        :title="$t('content_bases.files.uploaded_files')"
-        :addText="$t('content_bases.files.browse_file')"
-        :items.sync="files"
-        @add="$refs['browser-file-input'].click()"
-        @remove="
-          ($event) =>
-            openDeleteFileModal(
-              $event.uuid,
-              $event.created_file_name || '',
-              $event.extension_file || '',
-            )
-        "
-        @load-more="$emit('load-more')"
-      />
+        <UnnnicIntelligenceText
+          tag="p"
+          family="secondary"
+          color="neutral-cloudy"
+          size="body-gt"
+        >
+          <span v-html="$t('content_bases.files.supported_files')"></span>
+        </UnnnicIntelligenceText>
+      </section>
+
+      <UnnnicButton
+        @click="$refs['browser-file-input'].click()"
+        size="small"
+        type="primary"
+        class="paste-area__button"
+      >
+        {{ $t('content_bases.files.browse_file') }}
+      </UnnnicButton>
     </div>
 
-    <unnnic-alert
+    <BasesFormGenericList
+      v-else
+      :shape="shape"
+      :title="
+        shape === 'accordion'
+          ? $t('content_bases.tabs.files')
+          : $t('content_bases.files.uploaded_files')
+      "
+      :addText="$t('content_bases.files.browse_file')"
+      :items.sync="files"
+      @add="$refs['browser-file-input'].click()"
+      @remove="
+        ($event) =>
+          openDeleteFileModal(
+            $event.uuid,
+            $event.created_file_name || '',
+            $event.extension_file || '',
+          )
+      "
+      @load-more="$emit('load-more')"
+    />
+
+    <UnnnicAlert
       :style="{ zIndex: 1 }"
       v-if="alert"
       :key="alert.text"
       @close="alert = null"
       :type="alert.type"
       :text="alert.text"
-    ></unnnic-alert>
+    ></UnnnicAlert>
 
-    <unnnic-modal
+    <UnnnicModal
       v-if="modalDeleteFile"
       :text="$t('content_bases.files.delete_file.title')"
-      :close-icon="false"
+      :closeIcon="false"
       class="delete-file-modal"
       persistent
     >
-      <unnnic-icon slot="icon" icon="error" size="md" scheme="aux-red-500" />
+      <UnnnicIcon
+        slot="icon"
+        icon="error"
+        size="md"
+        scheme="aux-red-500"
+      />
 
       <div
         slot="message"
@@ -100,16 +108,16 @@
         "
       ></div>
 
-      <unnnic-button
+      <UnnnicButton
         slot="options"
         class="create-repository__container__button"
         type="tertiary"
         @click="modalDeleteFile = false"
       >
         {{ $t('content_bases.files.delete_file.cancel') }}
-      </unnnic-button>
+      </UnnnicButton>
 
-      <unnnic-button
+      <UnnnicButton
         slot="options"
         class="create-repository__container__button attention-button"
         type="warning"
@@ -117,8 +125,8 @@
         :loading="modalDeleteFile.status === 'deleting'"
       >
         {{ $t('content_bases.files.delete_file.delete') }}
-      </unnnic-button>
-    </unnnic-modal>
+      </UnnnicButton>
+    </UnnnicModal>
   </div>
 </template>
 
@@ -135,8 +143,8 @@ export default {
   },
 
   props: {
-    flatBottom: Boolean,
     files: Object,
+    shape: String,
   },
 
   data() {
@@ -240,7 +248,8 @@ export default {
 
   methods: {
     drop(event) {
-      const files = get(event, 'dataTransfer.files') || get(event, 'srcElement.files');
+      const files =
+        get(event, 'dataTransfer.files') || get(event, 'srcElement.files');
 
       if (!get(files, 'length', 0)) {
         return;
@@ -266,9 +275,10 @@ export default {
     },
 
     addFile(file) {
-      const extension = file.name.lastIndexOf('.') === -1
-        ? file.name
-        : file.name.slice(file.name.lastIndexOf('.') + 1);
+      const extension =
+        file.name.lastIndexOf('.') === -1
+          ? file.name
+          : file.name.slice(file.name.lastIndexOf('.') + 1);
 
       const fileItem = {
         uuid: `temp-${Math.floor(Math.random() * 1e9)}`,
@@ -319,9 +329,10 @@ export default {
         return;
       }
 
-      const fileItem = this.listOfFilesBeingProcessed[
-        this.filesBeingProcessedIndex % this.listOfFilesBeingProcessed.length
-      ];
+      const fileItem =
+        this.listOfFilesBeingProcessed[
+          this.filesBeingProcessedIndex % this.listOfFilesBeingProcessed.length
+        ];
 
       nexusaiAPI.intelligences.contentBases.files
         .read({
@@ -405,60 +416,28 @@ export default {
 
 .files-area {
   &__container {
-    outline-style: solid;
-    outline-color: $unnnic-color-neutral-cleanest;
-    outline-width: $unnnic-border-width-thinner;
-    outline-offset: -$unnnic-border-width-thinner;
-
-    border-radius: $unnnic-border-radius-sm;
-    padding: $unnnic-spacing-sm;
-
     flex: 1;
     display: flex;
     flex-direction: column;
-
-    &--flat-bottom {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
 
     &--active {
       outline-color: $unnnic-color-weni-500;
       background-color: $unnnic-color-weni-50;
     }
-  }
 
-  &__scrollable {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-    height: 100%;
-
-    overflow: overlay;
-
-    $scroll-size: $unnnic-inline-nano;
-
-    padding-right: $unnnic-inline-nano + $scroll-size;
-    margin-right: -($unnnic-inline-nano + $scroll-size);
-
-    &::-webkit-scrollbar {
-      width: $scroll-size;
+    &--shape-normal {
+      height: 100%;
     }
 
-    &::-webkit-scrollbar-thumb {
-      background: $unnnic-color-neutral-clean;
-      border-radius: $unnnic-border-radius-pill;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: $unnnic-color-neutral-soft;
-      border-radius: $unnnic-border-radius-pill;
+    &--shape-accordion {
+      flex: initial;
     }
   }
 }
 
 .paste-area {
+  height: 100%;
+
   justify-content: center;
   outline-style: dashed;
   outline-color: $unnnic-color-neutral-cleanest;

@@ -84,8 +84,8 @@ const router = new Router({
 
         store.state.Auth.connectOrgUuid = to.query?.org_uuid;
 
-        if (to.query.next){
-          next(to.query.next)
+        if (to.query.next) {
+          next(to.query.next);
         } else {
           next('/home');
         }
@@ -138,6 +138,32 @@ const router = new Router({
           path: ':ownerNickname/:slug/translate/:token',
           name: 'repository-translate-external',
           component: RepositoryTranslateExternal,
+        },
+      ],
+    },
+    {
+      path: '/router/:intelligenceUuid/:contentBaseUuid',
+      name: 'router',
+      component: RepositoryContentBasesForm,
+      redirect: () => {
+        return { name: 'router-personalization' };
+      },
+      children: [
+        {
+          path: 'personalization',
+          name: 'router-personalization',
+        },
+        {
+          path: 'content',
+          name: 'router-content',
+        },
+        {
+          path: 'actions',
+          name: 'router-actions',
+        },
+        {
+          path: 'tunings',
+          name: 'router-tunings',
         },
       ],
     },
@@ -265,31 +291,33 @@ const router = new Router({
       ],
     },
     ...(runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')
-      ? [{
-        path: '/payment-options',
-        name: 'payment-options',
-        component: PaymentOptions,
-        beforeEnter: async (to, from, next) => {
-          if (!store.getters.authenticated) {
-            next('/signin');
-          } else {
-            next();
-          }
-        },
-      },
-      {
-        path: '/payment-info',
-        name: 'payment-info',
-        component: PaymentInfo,
-        beforeEnter: async (to, from, next) => {
-          if (!store.getters.authenticated) {
-            next('/signin');
-          } else {
-            next();
-          }
-        },
-      },
-      ] : []),
+      ? [
+          {
+            path: '/payment-options',
+            name: 'payment-options',
+            component: PaymentOptions,
+            beforeEnter: async (to, from, next) => {
+              if (!store.getters.authenticated) {
+                next('/signin');
+              } else {
+                next();
+              }
+            },
+          },
+          {
+            path: '/payment-info',
+            name: 'payment-info',
+            component: PaymentInfo,
+            beforeEnter: async (to, from, next) => {
+              if (!store.getters.authenticated) {
+                next('/signin');
+              } else {
+                next();
+              }
+            },
+          },
+        ]
+      : []),
     {
       path: '/tutorial',
       name: 'Tutorial',
@@ -344,10 +372,13 @@ const router = new Router({
 });
 
 router.afterEach((to, from) => {
-  window.parent.postMessage({
-    event: 'changePathname',
-    pathname: window.location.pathname,
-  }, '*');
+  window.parent.postMessage(
+    {
+      event: 'changePathname',
+      pathname: window.location.pathname,
+    },
+    '*',
+  );
 });
 
 export default router;

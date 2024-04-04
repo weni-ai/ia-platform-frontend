@@ -1,8 +1,8 @@
 <!-- eslint-disable vue/no-duplicate-attributes -->
 <template>
-  <section class="sites__container">
+  <section :class="`sites__container sites__container--shape-${shape}`">
     <section
-      v-if="items.data.length === 0"
+      v-if="items.data.length === 0 && shape !== 'accordion'"
       class="sites__content--empty"
     >
       <UnnnicIntelligenceText
@@ -36,22 +36,22 @@
       </UnnnicButton>
     </section>
 
-    <div
+    <BasesFormGenericList
       v-else
-      class="sites__scrollable"
-    >
-      <BasesFormGenericList
-        :title="$t('content_bases.sites.uploaded_sites')"
-        :addText="$t('content_bases.sites.add_site')"
-        :items.sync="items"
-        @load-more="$emit('load-more')"
-        @add="isAddSiteOpen = true"
-        @remove="
-          ($event) =>
-            openDeleteSite($event.uuid, $event.created_file_name || '')
-        "
-      ></BasesFormGenericList>
-    </div>
+      :shape="shape"
+      :title="
+        shape === 'accordion'
+          ? $t('content_bases.tabs.sites')
+          : $t('content_bases.sites.uploaded_sites')
+      "
+      :addText="$t('content_bases.sites.add_site')"
+      :items.sync="items"
+      @load-more="$emit('load-more')"
+      @add="isAddSiteOpen = true"
+      @remove="
+        ($event) => openDeleteSite($event.uuid, $event.created_file_name || '')
+      "
+    />
 
     <RightSidebar
       v-if="isAddSiteOpen"
@@ -157,6 +157,7 @@ import BasesFormGenericList from './BasesFormGenericList.vue';
 export default {
   props: {
     items: Object,
+    shape: String,
   },
 
   components: {
@@ -289,17 +290,13 @@ export default {
 
 .sites {
   &__container {
-    outline-style: solid;
-    outline-color: $unnnic-color-neutral-cleanest;
-    outline-width: $unnnic-border-width-thinner;
-    outline-offset: -$unnnic-border-width-thinner;
-
-    border-radius: $unnnic-border-radius-sm;
-    padding: $unnnic-spacing-sm;
-
     flex: 1;
     display: flex;
     flex-direction: column;
+
+    &--shape-normal {
+      height: 100%;
+    }
   }
 
   &__content {
@@ -313,35 +310,6 @@ export default {
 
     &__button-add-site {
       width: 12.5 * $unnnic-font-size;
-    }
-  }
-
-  &__scrollable {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-    height: 100%;
-
-    overflow: overlay;
-
-    $scroll-size: $unnnic-inline-nano;
-
-    padding-right: $unnnic-inline-nano + $scroll-size;
-    margin-right: -($unnnic-inline-nano + $scroll-size);
-
-    &::-webkit-scrollbar {
-      width: $scroll-size;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: $unnnic-color-neutral-clean;
-      border-radius: $unnnic-border-radius-pill;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: $unnnic-color-neutral-soft;
-      border-radius: $unnnic-border-radius-pill;
     }
   }
 }

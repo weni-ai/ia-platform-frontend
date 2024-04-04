@@ -1,10 +1,15 @@
 <template>
-  <div class="files-list__content__file">
+  <div
+    :class="[
+      'files-list__content__file',
+      { 'files-list__content__file--compressed': compressed },
+    ]"
+  >
     <div class="files-list__content__file__icon">
       <UnnnicIcon
         :icon="icon"
         class="files-list__content__file__icon__itself"
-        size="avatar-nano"
+        :size="compressed ? 'sm' : 'avatar-nano'"
       />
     </div>
 
@@ -64,6 +69,7 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 export default {
   props: {
     file: Object,
+    compressed: Boolean,
   },
 
   data() {
@@ -167,6 +173,14 @@ export default {
   column-gap: $unnnic-spacing-ant;
   align-items: center;
   position: relative;
+
+  &--compressed {
+    column-gap: $unnnic-spacing-xs;
+
+    .files-list__content__file__icon {
+      padding: 0.4375 * $unnnic-font-size; // transformed 7px into Unnnic base size
+    }
+  }
 
   &__icon {
     display: flex;
