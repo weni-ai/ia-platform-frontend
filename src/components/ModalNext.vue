@@ -1,7 +1,7 @@
 <template>
   <div class="create-intelligence-modal__background">
     <div class="create-intelligence-modal__container" :style="{ maxWidth: maxWidth, }">
-      <h1 class="create-intelligence-modal__container__title">
+      <h1 class="create-intelligence-modal__container__title" v-if="title">
         {{ title }}
       </h1>
 
