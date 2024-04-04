@@ -54,7 +54,7 @@
                     @click="handleBackBtn">
                     {{ $t('modals.actions.btn_back') }}
                 </UnnnicButton>
-                <UnnnicButton slot="options" size='large' @click="handleNextBtn()">
+                <UnnnicButton slot="options" size='large' @click="handleNextBtn()" :disabled="isDisableNextBtn()">
                     {{ index === 0 ? $t('modals.actions.btn_next') : $t('modals.actions.btn_create') }}
                 </UnnnicButton>
 
@@ -71,6 +71,10 @@ export default {
         ModalNext
     },
     props: {
+        handleCloseModal: {
+            type: Function,
+            default: () => { }
+        }
     },
     data() {
         return {
@@ -141,7 +145,11 @@ export default {
         handleNextBtn() {
             if (this.index === 0) this.index = 1
         },
+        isDisableNextBtn() {
+            return this.flowSelected?.uuid ? false : true
+        },
         handleBackBtn() {
+            if (this.index === 0) this.handleCloseModal()
             this.index = 0
         },
         handleFlowSelected(value) {
