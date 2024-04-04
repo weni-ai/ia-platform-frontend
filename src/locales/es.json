@@ -1251,6 +1251,23 @@
     }
   },
   "modals": {
+    "actions": {
+      "btn_back": "Atrás",
+      "btn_next": "Siguiente",
+      "btn_create": "Activar enrutador",
+      "flow": {
+        "title": "Seleccionar flujo",
+        "fill_name": "Seleccionar flujo",
+        "sub_title": "Selecciona el flujo al que quieres añadir el Router",
+        "placeholder": "Buscar flujo"
+      },
+      "descriptions": {
+        "title": "Añadir descripción al flujo",
+        "fill_name": "Añadir descripción",
+        "sub_title": "Para activar el router, añade una descripción para el flujo",
+        "label": "Descripción"
+      }
+    },
     "cant_access": {
       "title": "Ops, aún no puede usar este módulo",
       "description": "Para integrar una inteligencia artificial en su proyecto, debe crear un flujo de conversación creado.<br />Regrese después de crear un flujo.",
