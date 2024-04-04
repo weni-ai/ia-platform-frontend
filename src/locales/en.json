@@ -1278,6 +1278,7 @@
       "btn_create": "Activate Router",
       "btn_cancel": "Cancel",
       "btn_complete": "Finish",
+      "btn_remove": "Remove",
       "flow": {
         "title": "Select Flow",
         "fill_name": "Select Flow",
@@ -1291,6 +1292,10 @@
         "label": "Description",
         "change_title": "Change flow description",
         "change_sub_title": "The description helps the router work better"
+      },
+      "remove": {
+        "title": "Remove router from flow",
+        "description": "Are you sure you want to remove the router from <strong>{name}</strong>? <br><br>This action cannot be reversed"
       }
     },
     "cant_access": {
