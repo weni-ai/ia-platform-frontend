@@ -121,8 +121,15 @@ export default {
     name() {
       const n = this.fileName.slice(0, -this.extension.length - 1);
 
-      if (this.extension === 'site' && this.fileName.length > 23) {
+      if (
+        ['site', 'action'].includes(this.extension) &&
+        this.fileName.length > 23
+      ) {
         return this.fileName.slice(0, 15) + '...' + this.fileName.slice(-8);
+      }
+
+      if (['site', 'action'].includes(this.extension)) {
+        return this.fileName;
       }
 
       return this.fileName.length > 15

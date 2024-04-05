@@ -17,7 +17,9 @@
 
     <ModalActions
       v-if="isAddActionOpen"
+      :saving="isAdding"
       @closeModal="isAddActionOpen = false"
+      @save="saveAction"
     />
   </section>
 </template>
@@ -46,6 +48,7 @@ export default {
   data() {
     return {
       isAddActionOpen: false,
+      isAdding: false,
 
       modalDeleteSite: null,
     };
@@ -58,6 +61,37 @@ export default {
         name: actionName,
         status: null,
       };
+    },
+
+    async saveAction({
+      flow: { uuid: flowUuid, name: flowName },
+      description,
+    }) {
+      try {
+        this.isAdding = true;
+
+        const { data } = await nexusaiAPI.router.actions.create({
+          projectUuid: this.$store.state.Auth.connectProjectUuid,
+          flowUuid,
+          name: flowName,
+          description,
+        });
+
+        this.$store.state.alert = {
+          type: 'success',
+          text: this.$t('router.actions.router_activated', { name: flowName }),
+        };
+
+        this.items.data.push({
+          uuid: data.uuid,
+          extension_file: 'action',
+          created_file_name: data.name,
+          description: data.prompt,
+        });
+      } finally {
+        this.isAddActionOpen = false;
+        this.isAdding = false;
+      }
     },
   },
 };

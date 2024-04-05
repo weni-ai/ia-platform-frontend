@@ -129,6 +129,7 @@
           size="large"
           @click="handleNextBtn()"
           :disabled="isDisableNextBtn()"
+          :loading="saving"
         >
           {{
             index === 0
@@ -150,6 +151,11 @@ export default {
   components: {
     ModalNext,
   },
+
+  props: {
+    saving: Boolean,
+  },
+
   data() {
     return {
       index: 0,
@@ -230,6 +236,12 @@ export default {
 
     handleNextBtn() {
       if (this.index === 0) this.index = 1;
+      else if (this.index === 1) {
+        this.$emit('save', {
+          flow: this.flowSelected,
+          description: this.description,
+        });
+      }
     },
     isDisableNextBtn() {
       return this.flowSelected?.uuid ? false : true;

@@ -200,6 +200,15 @@ export default {
     },
 
     actions: {
+      create({ projectUuid, flowUuid, name, description }) {
+        return request.$http.post(`api/${projectUuid}/flows/`, {
+          uuid: flowUuid,
+          name: name,
+          prompt: description,
+          fallback: false,
+        });
+      },
+
       list({ projectUuid }) {
         return request.$http.get(`api/${projectUuid}/flows/`);
       },

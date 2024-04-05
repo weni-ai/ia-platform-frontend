@@ -44,6 +44,11 @@
       }
     }
   },
+  "router": {
+    "actions": {
+      "router_activated": "Brain activated in {name}"
+    }
+  },
   "content_bases": {
     "quick_test": "Quick test",
     "sidebar_quick_test_title": "Quick test of the {name} base",
