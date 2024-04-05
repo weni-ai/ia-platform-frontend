@@ -1230,6 +1230,32 @@
     "importing": "Importando.."
   },
   "modals": {
+    "actions": {
+      "btn_back": "Voltar",
+      "btn_next": "Avançar",
+      "btn_create": "Ativar Router",
+      "btn_cancel": "Cancelar",
+      "btn_remove": "Remover",
+      "btn_complete": "Concluir",
+      "flow": {
+        "title": "Selecionar fluxo",
+        "fill_name": "Selecionar fluxo",
+        "sub_title": "Selecione o fluxo que deseja adicionar o Router",
+        "placeholder": "Pesquisar fluxo"
+      },
+      "descriptions": {
+        "title": "Adicionar descrição no fluxo",
+        "fill_name": "Adicionar descrição ",
+        "sub_title": "Para ativar o Router, adicione uma descrição para o fluxo",
+        "label": "Descrição",
+        "change_title": "Alterar descrição do fluxo",
+        "change_sub_title": "A descrição ajuda o router funcionar de forma mais adequada"
+      },
+      "remove": {
+        "title": "Remover router do fluxo",
+        "description": "Tem certeza que deseja remover o router de <strong>{name}</strong>? <br><br>Essa ação não poderá ser revertida"
+      }
+    },
     "cant_access": {
       "title": "Ops, você ainda não pode usar esse módulo",
       "description": "Para integrar uma inteligência artificial ao seu projeto, é necessário ter um fluxo de conversa criado.<br />Volte após criar um fluxo.",
