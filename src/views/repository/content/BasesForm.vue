@@ -138,6 +138,11 @@
                   </template>
                 </section>
               </section>
+
+              <RouterActions
+                v-else-if="$route.name === 'router-actions'"
+                :items="routerActions"
+              />
             </section>
           </section>
         </section>
@@ -227,6 +232,7 @@ import BasesFormSites from './BasesFormSites';
 import BasesFormText from './BasesFormText';
 import BaseSettingsForm from '../../../components/BaseSettingsForm';
 import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
+import RouterActions from './router/RouterActions.vue';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -238,6 +244,7 @@ export default {
     BasesFormText,
     BaseSettingsForm,
     BasesFormGenericListHeader,
+    RouterActions,
   },
   mixins: [RemoveBulmaMixin],
   data() {
@@ -319,6 +326,17 @@ export default {
         uuid: null,
         oldValue: null,
         value: null,
+      },
+
+      routerActions: {
+        status: null,
+        data: [
+          {
+            uuid: 'test-1',
+            extension_file: 'action',
+            created_file_name: 'Nome do fluxo',
+          },
+        ],
       },
     };
   },

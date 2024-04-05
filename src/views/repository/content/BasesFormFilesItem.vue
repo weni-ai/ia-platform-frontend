@@ -84,7 +84,7 @@ export default {
     },
 
     fileName() {
-      if (this.file.extension_file === 'site') {
+      if (['site', 'action'].includes(this.file.extension_file)) {
         return this.file?.created_file_name;
       }
 
@@ -94,7 +94,7 @@ export default {
     },
 
     extension() {
-      if (this.file.extension_file === 'site') {
+      if (['site', 'action'].includes(this.file.extension_file)) {
         return this.file.extension_file;
       }
 
@@ -113,6 +113,7 @@ export default {
           doc: 'draft',
           docx: 'draft',
           site: 'globe',
+          action: 'account_tree',
         }[this.extension] || 'draft'
       );
     },
