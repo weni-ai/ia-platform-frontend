@@ -330,13 +330,7 @@ export default {
 
       routerActions: {
         status: null,
-        data: [
-          {
-            uuid: 'test-1',
-            extension_file: 'action',
-            created_file_name: 'Nome do fluxo',
-          },
-        ],
+        data: [],
       },
     };
   },

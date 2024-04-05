@@ -245,7 +245,7 @@ export default {
 
           return request.$http.get(`api/${projectUuid}/search-flows/`, {
             params: {
-              name,
+              name: name ? name : undefined,
             },
           });
         },

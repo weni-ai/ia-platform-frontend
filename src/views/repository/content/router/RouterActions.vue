@@ -11,7 +11,8 @@
       @load-more="$emit('load-more')"
       @add="isAddActionOpen = true"
       @remove="
-        ($event) => openDeleteSite($event.uuid, $event.created_file_name || '')
+        ($event) =>
+          openDeleteAction($event.uuid, $event.created_file_name || '')
       "
     />
 
@@ -40,9 +41,24 @@ export default {
   },
 
   async created() {
-    const { data } = await nexusaiAPI.router.actions.list({
-      projectUuid: this.$store.state.Auth.connectProjectUuid,
-    });
+    try {
+      this.items.status = 'loading';
+
+      const { data } = await nexusaiAPI.router.actions.list({
+        projectUuid: this.$store.state.Auth.connectProjectUuid,
+      });
+
+      this.items.data = data.map((item) => ({
+        uuid: item.uuid,
+        extension_file: 'action',
+        created_file_name: item.name,
+        description: item.prompt,
+      }));
+
+      this.items.status = 'complete';
+    } catch (error) {
+      this.items.status = 'error';
+    }
   },
 
   data() {
