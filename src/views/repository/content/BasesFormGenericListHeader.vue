@@ -1,6 +1,9 @@
 <template>
   <header
-    :class="`header header--shape-${shape}`"
+    :class="[
+      `header header--shape-${shape}`,
+      { 'header--hide-toggle': hideToggle },
+    ]"
     @click="toggleAccordionOpen"
   >
     <UnnnicIntelligenceText
@@ -14,7 +17,7 @@
     </UnnnicIntelligenceText>
 
     <UnnnicIcon
-      v-if="shape === 'accordion'"
+      v-if="shape === 'accordion' && !hideToggle"
       scheme="neutral-dark"
       :icon="open ? 'expand_less' : 'expand_more'"
       size="ant"
@@ -22,7 +25,7 @@
     />
 
     <UnnnicButton
-      v-else
+      v-else-if="!hideToggle"
       @click="$emit('add')"
       size="small"
       type="primary"
@@ -41,11 +44,12 @@ export default {
     counter: String,
     addText: String,
     shape: String,
+    hideToggle: Boolean,
   },
 
   methods: {
     toggleAccordionOpen() {
-      if (this.shape !== 'accordion') {
+      if (this.shape !== 'accordion' || this.hideToggle) {
         return;
       }
 
@@ -68,6 +72,11 @@ export default {
     user-select: none;
     display: inline-flex;
     cursor: pointer;
+  }
+
+  &--hide-toggle {
+    user-select: initial;
+    cursor: initial;
   }
 
   &__button {

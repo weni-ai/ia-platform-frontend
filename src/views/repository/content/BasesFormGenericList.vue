@@ -4,8 +4,9 @@
       :shape="shape"
       :open.sync="open"
       :title="title"
-      :counter="counter"
+      :counter="hideCounter ? undefined : counter"
       :addText="addText"
+      :hideToggle="hideToggle"
     />
 
     <section v-show="open">
@@ -17,10 +18,12 @@
         marginTop="xs"
         tag="p"
       >
-        Lorem ipsum dolor sit amet
+        {{ description }}
       </UnnnicIntelligenceText>
 
-      <section class="files-list__content">
+      <section
+        :class="['files-list__content', `files-list__content--shape-${shape}`]"
+      >
         <BasesFormFilesItem
           v-for="file in items.data"
           :key="file.uuid"
@@ -63,8 +66,11 @@ import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
 export default {
   props: {
     title: String,
+    description: String,
     addText: String,
     items: Object,
+    hideCounter: Boolean,
+    hideToggle: Boolean,
 
     shape: {
       type: String,
@@ -148,6 +154,11 @@ export default {
       auto-fill,
       minmax(16 * $unnnic-font-size, 1fr)
     );
+
+    &--shape-accordion {
+      column-gap: $unnnic-spacing-ant;
+      row-gap: $unnnic-spacing-xs;
+    }
   }
 }
 </style>

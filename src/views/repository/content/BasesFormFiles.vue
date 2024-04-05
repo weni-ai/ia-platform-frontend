@@ -62,6 +62,7 @@
           ? $t('content_bases.tabs.files')
           : $t('content_bases.files.uploaded_files')
       "
+      :description="'Lorem ipsum dolor sit amet'"
       :addText="$t('content_bases.files.browse_file')"
       :items.sync="files"
       @add="$refs['browser-file-input'].click()"
