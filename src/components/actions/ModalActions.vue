@@ -64,11 +64,12 @@
               :iconLeftClickable="true"
               iconLeft="search-1"
               :placeholder="$t('modals.actions.flow.placeholder')"
+              v-model="filterName"
             />
           </div>
           <div class="flow-modal__body__flow__list">
             <div
-              v-for="(item, index) in flows"
+              v-for="(item, index) in items.data"
               :key="index"
               :class="[
                 'flow-modal__body__flow__list__item',
@@ -86,6 +87,21 @@
               />
               <p>{{ item.name }}</p>
             </div>
+
+            <template v-if="items.status === 'loading'">
+              <UnnnicSkeletonLoading
+                v-for="i in 3"
+                :key="i"
+                tag="div"
+                height="50px"
+                :style="{ display: 'flex', flexBasis: 'calc(50% - 6px)' }"
+              />
+            </template>
+
+            <div
+              v-show="!['loading', 'complete'].includes(items.status)"
+              ref="end-of-list-element"
+            ></div>
           </div>
         </div>
         <div
@@ -126,6 +142,8 @@
 </template>
 
 <script>
+import { debounce } from 'lodash';
+import nexusaiAPI from '../../api/nexusaiAPI';
 import ModalNext from '../ModalNext.vue';
 
 export default {
@@ -136,67 +154,80 @@ export default {
     return {
       index: 0,
       description: '',
+
+      filterName: '',
+
       flowSelected: {
         name: '',
         uuid: '',
       },
-      flows: [
-        {
-          name: 'Nome do fluxo',
-          uuid: '1',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '2',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '3',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '4',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '5',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '6',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '7',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '8',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '9',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '10',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '11',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '12',
-        },
-        {
-          name: 'Nome do fluxo',
-          uuid: '13',
-        },
-      ],
+
+      items: {
+        status: null,
+        next: null,
+        data: [],
+      },
+
+      isShowingEndOfList: false,
+      intersectionObserver: null,
     };
   },
+
+  watch: {
+    isShowingEndOfList() {
+      if (this.isShowingEndOfList && this.items.status === null) {
+        this.loadMoreFlows();
+      }
+    },
+
+    filterName: debounce(function () {
+      this.items.status = null;
+      this.items.next = null;
+      this.items.data = [];
+
+      this.loadMoreFlows();
+    }, 300),
+  },
+
+  mounted() {
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        this.isShowingEndOfList = entry.isIntersecting;
+      });
+    });
+
+    this.intersectionObserver.observe(this.$refs['end-of-list-element']);
+  },
+
+  beforeDestroy() {
+    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
+  },
+
   methods: {
+    async loadMoreFlows() {
+      try {
+        this.items.status = 'loading';
+
+        const { data } = await nexusaiAPI.router.actions.flows.list({
+          next: this.items.next,
+          projectUuid: this.$store.state.Auth.connectProjectUuid,
+          name: this.filterName,
+        });
+
+        this.items.data = this.items.data.concat(data.results);
+
+        this.items.next = data.next;
+
+        if (this.items.next) {
+          this.items.status = null;
+        } else {
+          this.items.status = 'complete';
+        }
+      } catch (error) {
+        this.items.status = 'error';
+      }
+    },
+
     handleNextBtn() {
       if (this.index === 0) this.index = 1;
     },

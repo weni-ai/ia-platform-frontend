@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as Sentry from '@sentry/browser';
 import store from '../store';
 import i18n from '../utils/plugins/i18n';
-import { get } from 'lodash';
+import { get, delay } from 'lodash';
 
 const request = {
   get $http() {
@@ -191,12 +191,56 @@ export default {
     read({ projectUuid }) {
       /* return {
         data: {
-          content_base_uuid: '150cf2c6-e8ff-4135-a95d-e0e32aece0ba',
-          intelligence_uuid: '1a40e439-c2c1-4386-ba99-b51df1b53eae',
+          uuid: '150cf2c6-e8ff-4135-a95d-e0e32aece0ba',
+          intelligence: '1a40e439-c2c1-4386-ba99-b51df1b53eae',
         },
       }; */
 
       return request.$http.get(`api/${projectUuid}/router/`);
+    },
+
+    actions: {
+      list({ projectUuid }) {
+        return request.$http.get(`api/${projectUuid}/flows/`);
+      },
+
+      flows: {
+        list({ next, projectUuid, name }) {
+          if (next) {
+            return request.$http.get(`api/${projectUuid}/search-flows/${next}`);
+          }
+
+          /* return new Promise((resolve) => {
+            delay(resolve, 1000, {
+              data: {
+                count: 3,
+                next: null,
+                previous: null,
+                results: [
+                  {
+                    uuid: '83b3b715-e4db-4740-81eb-feacd4dc9d88',
+                    name: 'M - Switch language',
+                  },
+                  {
+                    uuid: '9e3d5d1f-e5f7-422a-9fce-995ef80996d4',
+                    name: 'M - Direct response - Switch language',
+                  },
+                  {
+                    uuid: '36a8abe8-3c37-451f-9b5d-cc3aef54811d',
+                    name: 'M - Language Question',
+                  },
+                ],
+              },
+            });
+          }); */
+
+          return request.$http.get(`api/${projectUuid}/search-flows/`, {
+            params: {
+              name,
+            },
+          });
+        },
+      },
     },
   },
 

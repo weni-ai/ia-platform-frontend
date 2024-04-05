@@ -14,11 +14,18 @@
         ($event) => openDeleteSite($event.uuid, $event.created_file_name || '')
       "
     />
+
+    <ModalActions
+      v-if="isAddActionOpen"
+      @closeModal="isAddActionOpen = false"
+    />
   </section>
 </template>
 
 <script>
+import nexusaiAPI from '../../../../api/nexusaiAPI';
 import BasesFormGenericList from '../BasesFormGenericList.vue';
+import ModalActions from '../../../../components/actions/ModalActions.vue';
 
 export default {
   props: {
@@ -27,6 +34,13 @@ export default {
 
   components: {
     BasesFormGenericList,
+    ModalActions,
+  },
+
+  async created() {
+    const { data } = await nexusaiAPI.router.actions.list({
+      projectUuid: this.$store.state.Auth.connectProjectUuid,
+    });
   },
 
   data() {
