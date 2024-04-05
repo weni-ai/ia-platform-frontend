@@ -55,6 +55,13 @@
       "restore_default": "Restore default",
       "save_changes": "Save changes",
       "changes_saved": "Changes saved",
+      "default_restored": "Default settings restored",
+      "restore_default_modal": {
+        "title": "Restore default",
+        "description": "Are you sure you want to restore the default settings? This action cannot be reversed",
+        "cancel": "Cancel",
+        "restore": "Restore"
+      },
       "fields": {
         "model": "Select model",
         "version": "Version",

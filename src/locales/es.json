@@ -55,6 +55,13 @@
       "restore_default": "Restaurar por defecto",
       "save_changes": "Guardar los cambios",
       "changes_saved": "Cambios guardados",
+      "default_restored": "Ajustes por defecto restaurados",
+      "restore_default_modal": {
+        "title": "Restaurar valores predeterminados",
+        "description": "¿Está seguro de que desea restaurar la configuración predeterminada? Esta acción no se puede revertir",
+        "cancel": "Cancelar",
+        "restaurar": "Restaurar"
+      },
       "fields": {
         "model": "Seleccionar modelo",
         "version": "Versión",

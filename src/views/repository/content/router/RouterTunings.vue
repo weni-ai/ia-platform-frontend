@@ -99,7 +99,10 @@
     <UnnnicDivider ySpacing="md" />
 
     <footer class="tunings__actions">
-      <UnnnicButton type="secondary">
+      <UnnnicButton
+        type="secondary"
+        @click="isRestoreDefaultOpen = true"
+      >
         {{ $t('router.tunings.restore_default') }}
       </UnnnicButton>
 
@@ -111,15 +114,30 @@
         {{ $t('router.tunings.save_changes') }}
       </UnnnicButton>
     </footer>
+
+    <RouterTuningsModalRestoreDefault
+      :showModal="isRestoreDefaultOpen"
+      :restoring="restoring"
+      @close="isRestoreDefaultOpen = false"
+      @restore="restoreDefault"
+    />
   </section>
 </template>
 
 <script>
 import nexusaiAPI from '../../../../api/nexusaiAPI';
+import RouterTuningsModalRestoreDefault from './RouterTuningsModalRestoreDefault.vue';
 
 export default {
+  components: {
+    RouterTuningsModalRestoreDefault,
+  },
+
   data() {
     return {
+      isRestoreDefaultOpen: false,
+
+      restoring: false,
       saving: false,
 
       oldValues: {
@@ -229,6 +247,26 @@ export default {
         this.$set(this.oldValues, name, value);
         this.$set(this.values, name, value);
       });
+    },
+
+    async restoreDefault() {
+      try {
+        this.restoring = true;
+
+        const { data } = await nexusaiAPI.router.tunings.restoreDefault({
+          projectUuid: this.$store.state.Auth.connectProjectUuid,
+        });
+
+        this.setInitialValues(data);
+
+        this.$store.state.alert = {
+          type: 'success',
+          text: this.$t('router.tunings.default_restored'),
+        };
+      } finally {
+        this.restoring = false;
+        this.isRestoreDefaultOpen = false;
+      }
     },
 
     async save() {

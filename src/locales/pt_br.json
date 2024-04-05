@@ -55,6 +55,13 @@
       "restore_default": "Restaurar padrão",
       "save_changes": "Salvar alterações",
       "changes_saved": "Alterações salvas",
+      "default_restored": "Configurações padrões restauradas",
+      "restore_default_modal": {
+        "title": "Restaurar padrão",
+        "description": "Tem certeza que deseja restaurar as configurações padrões? Essa ação não poderá ser revertida",
+        "cancel": "Cancelar",
+        "restore": "Restaurar"
+      },
       "fields": {
         "model": "Selecione o modelo",
         "version": "Versão",
