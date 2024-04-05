@@ -22,6 +22,14 @@
       @closeModal="isAddActionOpen = false"
       @save="saveAction"
     />
+
+    <ModalRemoveAction
+      v-if="modalDeleteAction"
+      :name="modalDeleteAction.name"
+      :removing="modalDeleteAction.status === 'removing'"
+      @closeModal="modalDeleteAction = null"
+      @remove="removeAction"
+    />
   </section>
 </template>
 
@@ -29,6 +37,7 @@
 import nexusaiAPI from '../../../../api/nexusaiAPI';
 import BasesFormGenericList from '../BasesFormGenericList.vue';
 import ModalActions from '../../../../components/actions/ModalActions.vue';
+import ModalRemoveAction from '../../../../components/actions/ModalRemoveAction.vue';
 
 export default {
   props: {
@@ -38,6 +47,7 @@ export default {
   components: {
     BasesFormGenericList,
     ModalActions,
+    ModalRemoveAction,
   },
 
   created() {
@@ -49,7 +59,7 @@ export default {
       isAddActionOpen: false,
       isAdding: false,
 
-      modalDeleteSite: null,
+      modalDeleteAction: null,
     };
   },
 
@@ -80,11 +90,35 @@ export default {
     },
 
     openDeleteAction(actionUuid, actionName) {
-      this.modalDeleteSite = {
+      this.modalDeleteAction = {
         uuid: actionUuid,
         name: actionName,
         status: null,
       };
+    },
+
+    async removeAction() {
+      try {
+        this.modalDeleteAction.status = 'removing';
+
+        await nexusaiAPI.router.actions.delete({
+          projectUuid: this.$store.state.Auth.connectProjectUuid,
+          actionUuid: this.modalDeleteAction.uuid,
+        });
+
+        this.items.data = this.items.data.filter(
+          ({ uuid }) => uuid !== this.modalDeleteAction.uuid,
+        );
+
+        this.$store.state.alert = {
+          type: 'default',
+          text: this.$t('router.actions.router_removed', {
+            name: this.modalDeleteAction.name,
+          }),
+        };
+      } finally {
+        this.modalDeleteAction = null;
+      }
     },
 
     async saveAction({

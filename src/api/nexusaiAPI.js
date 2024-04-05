@@ -209,6 +209,10 @@ export default {
         });
       },
 
+      delete({ projectUuid, actionUuid }) {
+        return request.$http.delete(`api/${projectUuid}/flows/${actionUuid}/`);
+      },
+
       list({ projectUuid }) {
         return request.$http.get(`api/${projectUuid}/flows/`);
       },
