@@ -40,25 +40,8 @@ export default {
     ModalActions,
   },
 
-  async created() {
-    try {
-      this.items.status = 'loading';
-
-      const { data } = await nexusaiAPI.router.actions.list({
-        projectUuid: this.$store.state.Auth.connectProjectUuid,
-      });
-
-      this.items.data = data.map((item) => ({
-        uuid: item.uuid,
-        extension_file: 'action',
-        created_file_name: item.name,
-        description: item.prompt,
-      }));
-
-      this.items.status = 'complete';
-    } catch (error) {
-      this.items.status = 'error';
-    }
+  created() {
+    this.loadActions();
   },
 
   data() {
@@ -71,6 +54,31 @@ export default {
   },
 
   methods: {
+    async loadActions() {
+      if (this.items.status !== null) {
+        return;
+      }
+
+      try {
+        this.items.status = 'loading';
+
+        const { data } = await nexusaiAPI.router.actions.list({
+          projectUuid: this.$store.state.Auth.connectProjectUuid,
+        });
+
+        this.items.data = data.map((item) => ({
+          uuid: item.uuid,
+          extension_file: 'action',
+          created_file_name: item.name,
+          description: item.prompt,
+        }));
+
+        this.items.status = 'complete';
+      } catch (error) {
+        this.items.status = 'error';
+      }
+    },
+
     openDeleteAction(actionUuid, actionName) {
       this.modalDeleteSite = {
         uuid: actionUuid,
