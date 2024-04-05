@@ -270,6 +270,15 @@ export default {
       restoreDefault({ projectUuid }) {
         return request.$http.patch(`api/${projectUuid}/llm-default/`);
       },
+
+      edit({ projectUuid, values }) {
+        const { model, ...others } = values;
+
+        return request.$http.patch(`api/${projectUuid}/llm/`, {
+          model,
+          setup: others,
+        });
+      },
     },
   },
 

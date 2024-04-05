@@ -75,7 +75,7 @@
 
       <UnnnicSlider
         v-if="field.type === 'slider'"
-        :key="index"
+        :key="index + ':' + field.value"
         :minValue="field.min"
         :maxValue="field.max"
         :step="field.step"
@@ -103,7 +103,11 @@
         {{ $t('router.tunings.restore_default') }}
       </UnnnicButton>
 
-      <UnnnicButton :disabled="!hasChanged">
+      <UnnnicButton
+        :disabled="!hasChanged"
+        :loading="saving"
+        @click="save"
+      >
         {{ $t('router.tunings.save_changes') }}
       </UnnnicButton>
     </footer>
@@ -116,6 +120,8 @@ import nexusaiAPI from '../../../../api/nexusaiAPI';
 export default {
   data() {
     return {
+      saving: false,
+
       oldValues: {
         model: null,
         version: 'wenigpt-1',
@@ -207,17 +213,46 @@ export default {
       projectUuid: this.$store.state.Auth.connectProjectUuid,
     });
 
-    this.$set(this.oldValues, 'model', data.model);
-    this.$set(this.values, 'model', data.model);
+    this.setInitialValues(data);
+  },
 
-    Object.keys(data.setup).forEach((name) => {
-      const value = ['temperature', 'top_p', 'top_k'].includes(name)
-        ? Number(data.setup[name])
-        : data.setup[name];
+  methods: {
+    setInitialValues(data) {
+      this.$set(this.oldValues, 'model', data.model);
+      this.$set(this.values, 'model', data.model);
 
-      this.$set(this.oldValues, name, value);
-      this.$set(this.values, name, value);
-    });
+      Object.keys(data.setup).forEach((name) => {
+        const value = ['temperature', 'top_p', 'top_k'].includes(name)
+          ? Number(data.setup[name])
+          : data.setup[name];
+
+        this.$set(this.oldValues, name, value);
+        this.$set(this.values, name, value);
+      });
+    },
+
+    async save() {
+      try {
+        this.saving = true;
+
+        const { data } = await nexusaiAPI.router.tunings.edit({
+          projectUuid: this.$store.state.Auth.connectProjectUuid,
+          values: this.fields.reduce(
+            (values, field) => ({ ...values, [field.name]: field.value }),
+            {},
+          ),
+        });
+
+        this.setInitialValues(data);
+
+        this.$store.state.alert = {
+          type: 'success',
+          text: this.$t('router.tunings.changes_saved'),
+        };
+      } finally {
+        this.saving = false;
+      }
+    },
   },
 };
 </script>

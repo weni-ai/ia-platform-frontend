@@ -54,6 +54,7 @@
       "model": "Modelo",
       "restore_default": "Restaurar por defecto",
       "save_changes": "Guardar los cambios",
+      "changes_saved": "Cambios guardados",
       "fields": {
         "model": "Seleccionar modelo",
         "version": "Versión",
