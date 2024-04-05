@@ -49,6 +49,22 @@
       "router_activated": "Brain activated in {name}",
       "router_removed": "Brain removed from {name}",
       "router_edited": "Description of {name} updated"
+    },
+    "tunings": {
+      "model": "Model",
+      "restore_default": "Restore default",
+      "save_changes": "Save changes",
+      "fields": {
+        "model": "Select model",
+        "version": "Version",
+        "parameter": "Parameters",
+        "temperature": "Temperature",
+        "temperature_info": "Adjust the Temperature to control the diversity of the responses generated",
+        "top_p": "Top P",
+        "top_p_info": "When you set the \"top P\" of an artificial intelligence model, you are adjusting how the model selects the next words during text generation",
+        "top_k": "Top K",
+        "top_k_info": "By setting the \"top K\" of an artificial intelligence model, you are determining how many of the most likely words the model will consider when choosing the next word during text generation"
+      }
     }
   },
   "content_bases": {

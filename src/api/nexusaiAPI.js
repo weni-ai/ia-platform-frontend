@@ -261,6 +261,16 @@ export default {
         },
       },
     },
+
+    tunings: {
+      read({ projectUuid }) {
+        return request.$http.get(`api/${projectUuid}/llm/`);
+      },
+
+      restoreDefault({ projectUuid }) {
+        return request.$http.patch(`api/${projectUuid}/llm-default/`);
+      },
+    },
   },
 
   intelligences: {
