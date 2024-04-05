@@ -209,6 +209,12 @@ export default {
         });
       },
 
+      edit({ projectUuid, actionUuid, description }) {
+        return request.$http.patch(`api/${projectUuid}/flows/${actionUuid}/`, {
+          prompt: description,
+        });
+      },
+
       delete({ projectUuid, actionUuid }) {
         return request.$http.delete(`api/${projectUuid}/flows/${actionUuid}/`);
       },

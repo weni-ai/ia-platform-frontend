@@ -39,7 +39,7 @@
         icon="download"
         size="sm"
         class="files-list__content__file__actions__icon"
-        @click.native="download"
+        @click.native.stop="download"
       />
 
       <UnnnicIcon
@@ -47,7 +47,7 @@
         icon="delete"
         size="sm"
         class="files-list__content__file__actions__icon"
-        @click.native="$emit('remove')"
+        @click.native.stop="$emit('remove')"
       />
     </div>
 

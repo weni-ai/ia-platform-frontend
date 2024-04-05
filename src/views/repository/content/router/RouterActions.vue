@@ -8,8 +8,9 @@
       :description="'o que é o router? no que ele agrega se eu ativar no fluxo?'"
       :addText="'Adicionar fluxo'"
       :items.sync="items"
-      @load-more="$emit('load-more')"
+      canEditItem
       @add="isAddActionOpen = true"
+      @edit="openEditAction"
       @remove="
         ($event) =>
           openDeleteAction($event.uuid, $event.created_file_name || '')
@@ -21,6 +22,14 @@
       :saving="isAdding"
       @closeModal="isAddActionOpen = false"
       @save="saveAction"
+    />
+
+    <ModalChangeAction
+      v-if="modalEditAction"
+      :editing="modalEditAction.status === 'editing'"
+      :description.sync="modalEditAction.description"
+      @closeModal="modalEditAction = null"
+      @edit="editAction"
     />
 
     <ModalRemoveAction
@@ -37,6 +46,7 @@
 import nexusaiAPI from '../../../../api/nexusaiAPI';
 import BasesFormGenericList from '../BasesFormGenericList.vue';
 import ModalActions from '../../../../components/actions/ModalActions.vue';
+import ModalChangeAction from '../../../../components/actions/ModalChangeAction.vue';
 import ModalRemoveAction from '../../../../components/actions/ModalRemoveAction.vue';
 
 export default {
@@ -47,6 +57,7 @@ export default {
   components: {
     BasesFormGenericList,
     ModalActions,
+    ModalChangeAction,
     ModalRemoveAction,
   },
 
@@ -59,6 +70,7 @@ export default {
       isAddActionOpen: false,
       isAdding: false,
 
+      modalEditAction: null,
       modalDeleteAction: null,
     };
   },
@@ -86,6 +98,42 @@ export default {
         this.items.status = 'complete';
       } catch (error) {
         this.items.status = 'error';
+      }
+    },
+
+    openEditAction({ uuid, created_file_name, description }) {
+      this.modalEditAction = {
+        uuid,
+        name: created_file_name,
+        description,
+        status: null,
+      };
+    },
+
+    async editAction() {
+      try {
+        this.modalEditAction.status = 'editing';
+
+        const { data } = await nexusaiAPI.router.actions.edit({
+          projectUuid: this.$store.state.Auth.connectProjectUuid,
+          actionUuid: this.modalEditAction.uuid,
+          description: this.modalEditAction.description,
+        });
+
+        const item = this.items.data.find(
+          ({ uuid }) => uuid === this.modalEditAction.uuid,
+        );
+
+        item.description = data.prompt;
+
+        this.$store.state.alert = {
+          type: 'success',
+          text: this.$t('router.actions.router_edited', {
+            name: this.modalEditAction.name,
+          }),
+        };
+      } finally {
+        this.modalEditAction = null;
       }
     },
 

@@ -47,7 +47,8 @@
   "router": {
     "actions": {
       "router_activated": "Brain ativado em {name}",
-      "router_removed": "Brain removido de {name}"
+      "router_removed": "Brain removido de {name}",
+      "router_edited": "Descrição de {name} atualizada"
     }
   },
   "content_bases": {
