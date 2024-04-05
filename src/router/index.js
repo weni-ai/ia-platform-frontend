@@ -160,8 +160,8 @@ const router = new Router({
           projectUuid: store.state.Auth.connectProjectUuid,
         });
 
-        store.state.router.contentBaseUuid = data.content_base_uuid;
-        store.state.router.intelligenceUuid = data.intelligence_uuid;
+        store.state.router.contentBaseUuid = data.uuid;
+        store.state.router.intelligenceUuid = data.intelligence;
 
         next();
       },
