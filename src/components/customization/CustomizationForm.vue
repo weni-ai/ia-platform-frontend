@@ -1,47 +1,47 @@
 <template>
     <section class="customization__container">
         <div class="customization__container__persona">
-            <p>Persona do agente</p>
-            <p>Lorem ipsum dolor sit amet</p>
+            <p>{{ $t('customization.title') }}</p>
+            <p>{{ $t('customization.sub_title') }}</p>
             <div class="customization__form">
-                <unnnic-form-element :label="$t('bases.create.form.language.label')"
-                    class="customization__form-element">
-                    <unnnic-input v-model="title" :placeholder="$t('bases.create.form.name.placeholder')" />
+                <unnnic-form-element :label="$t('customization.fields.name')" class="customization__form-element">
+                    <unnnic-input v-model="title" :placeholder="$t('customization.placeholders.name')" />
                 </unnnic-form-element>
-                <unnnic-form-element :label="$t('bases.create.form.language.label')"
-                    class="customization__form-element">
-                    <unnnic-input v-model="title" :placeholder="$t('bases.create.form.name.placeholder')" />
+                <unnnic-form-element :label="$t('customization.fields.occupation')" class="customization__form-element">
+                    <unnnic-input v-model="title" :placeholder="$t('customization.placeholders.occupation')" />
                 </unnnic-form-element>
             </div>
             <div class="customization__container__persona">
                 <section>
-                    <unnnic-label v-bind="$props" label="Personalidade" class="customization__container__label" />
+                    <unnnic-label v-bind="$props" :label="$t('customization.fields.personality')"
+                        class="customization__container__label" />
                     <div class="customization__personality">
                         <section :class="[
-                    'customization__personality__item',
-                    { 'customization__personality-selected': !!personalities_selected.find(e => e?.value === item?.value) }
-                ]" v-for="(item, index) in personalities" :key="index" @click="handlePersonalitySelect(item)">
+                            'customization__personality__item',
+                            { 'customization__personality-selected': !!personalities_selected.find(e => e?.value === item?.value) }
+                        ]" v-for="(item, index) in personalities" :key="index" @click="handlePersonalitySelect(item)">
                             <p>{{ item.label }}</p>
                         </section>
                     </div>
                 </section>
             </div>
             <div class="customization__container__persona">
-                <unnnic-text-area v-bind="$props" v-model="goal" label="Objetivo" placeholder="Objetivo do agente" />
+                <unnnic-text-area v-bind="$props" v-model="goal" :label="$t('customization.fields.goal')"
+                    :placeholder="$t('customization.placeholders.goal')" />
             </div>
         </div>
         <div class="customization__container__instructions">
             <section>
-                <p>Instruções gerais</p>
-                <p>Lorem ipsum dolor sit amet</p>
+                <p>{{ $t('customization.instructions.title') }}</p>
+                <p>{{ $t('customization.instructions.sub_title') }}</p>
             </section>
 
             <section class="customization__instructions" v-for="(instruction, index) in instructions" :key="index">
-                <unnnic-form-element :label="$t('bases.create.form.language.label')"
+                <unnnic-form-element :label="$t('customization.fields.instruction')"
                     class="customization__instructions-element">
                     <section class="customization__instructions__form_group">
                         <unnnic-input v-model="instructions[index]"
-                            :placeholder="$t('bases.create.form.name.placeholder')" />
+                            :placeholder="$t('customization.placeholders.instruction')" />
                         <unnnic-button-icon v-bind="$props" icon="delete-1-1" class="btn-color"
                             @click="handleShowRemoveModal(index)" />
                     </section>
@@ -49,18 +49,21 @@
             </section>
 
 
-            <unnnic-button @click="addInstruction" size="large" text="Adicionar instrução" type="tertiary"
-                iconLeft="add-1" :disabled="false" />
+            <unnnic-button @click="addInstruction" size="large"
+                :text="$t('customization.instructions.add_instruction_btn')" type="tertiary" iconLeft="add-1"
+                :disabled="false" />
 
         </div>
         <div class="customization__footer">
-            <unnnic-button @click="saveChanges" size="large" text="Salvar alterações" type="primary" iconLeft="add-1"
-                :disabled="false" />
+            <unnnic-button @click="saveChanges" size="large" :text="$t('customization.save_btn')" type="primary"
+                iconLeft="add-1" :disabled="false" />
         </div>
-        <unnnic-modal-next type="alert" icon="error" scheme="feedback-red" title="Remover instrução"
-            description="Tem certeza que deseja remover a instrução?" actionPrimaryLabel="Remover"
-            actionSecondaryLabel="Cancelar" v-show="showRemoveModal" @close="showRemoveModal = false"
-            @click-action-primary="removeInstruction" />
+        <unnnic-modal-next type="alert" icon="error" scheme="feedback-red"
+            :title="$t('customization.instructions.modals.title')"
+            :description="$t('customization.instructions.modals.description')"
+            :actionPrimaryLabel="$t('customization.instructions.modals.remove_btn')"
+            :actionSecondaryLabel="$t('customization.instructions.modals.back_btn')" v-show="showRemoveModal"
+            @close="showRemoveModal = false" @click-action-primary="removeInstruction" />
     </section>
 </template>
 
@@ -75,43 +78,43 @@ export default {
             showRemoveModal: false,
             personalities_selected: [],
             personalities: [{
-                label: "Amigável",
+                label: this.$t('customization.fields.personalities.friendly'),
                 value: "Amigável"
             },
             {
-                label: "Cooperativo",
+                label: this.$t('customization.fields.personalities.cooperative'),
                 value: "Cooperativo"
             },
             {
-                label: "Extrovertido",
+                label: this.$t('customization.fields.personalities.extrovert'),
                 value: "Extrovertido"
             },
             {
-                label: "Generoso",
+                label: this.$t('customization.fields.personalities.generous'),
                 value: "Generoso"
             },
             {
-                label: "Relaxado",
+                label: this.$t('customization.fields.personalities.relaxed'),
                 value: "Relaxado"
             },
             {
-                label: "Organizado",
+                label: this.$t('customization.fields.personalities.organized'),
                 value: "Organizado"
             },
             {
-                label: "Sistemático",
+                label: this.$t('customization.fields.personalities.systematic'),
                 value: "Sistemático"
             },
             {
-                label: "Inovador",
+                label: this.$t('customization.fields.personalities.innovative'),
                 value: "Inovador"
             },
             {
-                label: "Criativo",
+                label: this.$t('customization.fields.personalities.creative'),
                 value: "Criativo"
             },
             {
-                label: "Intelectual",
+                label: this.$t('customization.fields.personalities.intellectual'),
                 value: "Intelectual"
             }
             ]
