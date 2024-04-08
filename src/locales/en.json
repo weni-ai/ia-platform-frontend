@@ -1346,5 +1346,46 @@
         "close_button": "Start"
       }
     }
+  },
+  "customization": {
+    "title": "Agent persona",
+    "sub_title": "Profile of your intelligent agent. This is where you'll enter its characteristics and behaviors.",
+    "save_btn": "Save Changes",
+    "fields": {
+      "name": "Name",
+      "occupation": "Occupation",
+      "personality": "Personality",
+      "goal": "Goal",
+      "instruction": "Instruction",
+      "personalities": {
+        "friendly": "Friendly",
+        "extrovert": "Extrovert",
+        "cooperative": "Cooperative",
+        "generous": "Generous",
+        "relaxed": "Relaxed",
+        "organized": "Organized",
+        "systematic": "Systematic",
+        "innovative": "Innovative",
+        "creative": "Creative",
+        "intellectual": "Intellectual"
+      }
+    },
+    "placeholders": {
+      "instruction": "Instruction",
+      "name": "Agent's name",
+      "occupation": "Agent's occupation", 
+      "goal": "Agent's goal"
+    },
+    "instructions": {
+      "title": "General instructions",
+      "sub_title": "How you want the agent to behave. Example: You're funny but you don't make jokes.",
+      "add_instruction_btn": "Add instruction",
+      "modals": {
+        "title": "Remove instruction",
+        "description": "Are you sure you want to remove the instruction?",
+        "back_btn": "Cancel",
+        "remove_btn": "Remove"
+      }
+    }
   }
 }

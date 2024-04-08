@@ -1325,5 +1325,46 @@
         "close_button": "Iniciar"
       }
     }
+  },
+  "customization": {
+    "title": "Persona del agente",
+    "sub_title": "Perfil de tu agente inteligente. Aquí es donde introducirás sus características y comportamientos",
+    "save_btn": "Guardar cambios",
+    "fields": {
+      "name": "Nombre",
+      "occupation": "Ocupación",
+      "personality": "Personalidad",
+      "goal": "Objetivo",
+      "instruction": "Instrucción",
+      "personalities": {
+        "friendly": "Amistoso",
+        "extrovert": "Extrovertido",
+        "cooperative": "Cooperativo",
+        "generous": "Generoso",
+        "relaxed": "relajado",
+        "organized": "Organizado",
+        "systematic": "Sistemático",
+        "innovative": "Innovador",
+        "creative": "Creativo",
+        "intellectual": "Intelectual"
+      }
+    },
+    "placeholders": {
+      "instruction": "Instrucción",
+      "name": "Nombre del agente",
+      "occupation": "Ocupación del agente", 
+      "goal": "Objetivo del agente"
+    },
+    "instructions": {
+      "title": "Instrucciones generales",
+      "sub_title": "Cómo quieres que se comporte el agente. Ejemplo: Eres gracioso pero no haces chistes",
+      "add_instruction_btn": "Añadir instrucción",
+      "modals": {
+        "title": "Quitar instrucción",
+        "description": "¿Estás seguro de que quieres eliminar la instrucción?",
+        "back_btn": "Cancelar",
+        "remove_btn": "Eliminar"
+      }
+    }
   }
 }
