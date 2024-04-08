@@ -1,8 +1,11 @@
 <template>
     <section class="customization__container">
         <div class="customization__container__persona">
-            <p>{{ $t('customization.title') }}</p>
-            <p>{{ $t('customization.sub_title') }}</p>
+            <section>
+                <p class="customization-title">{{ $t('customization.title') }}</p>
+                <p class="customization-sub_title">{{ $t('customization.sub_title') }}</p>
+            </section>
+
             <div class="customization__form">
                 <unnnic-form-element :label="$t('customization.fields.name')" class="customization__form-element">
                     <unnnic-input v-model="title" :placeholder="$t('customization.placeholders.name')" />
@@ -32,8 +35,9 @@
         </div>
         <div class="customization__container__instructions">
             <section>
-                <p>{{ $t('customization.instructions.title') }}</p>
-                <p>{{ $t('customization.instructions.sub_title') }}</p>
+                <p class="customization-title">{{ $t('customization.instructions.title') }}
+                </p>
+                <p class="customization-sub_title">{{ $t('customization.instructions.sub_title') }}</p>
             </section>
 
             <section class="customization__instructions" v-for="(instruction, index) in instructions" :key="index">
@@ -152,6 +156,24 @@ export default {
 @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
 
 .customization {
+    &-title {
+        color: $unnnic-color-neutral-dark;
+        font-family: $unnnic-font-family-secondary;
+        font-size: $unnnic-font-size-body-gt;
+        font-weight: $unnnic-font-weight-bold;
+        line-height: $unnnic-line-height-md;
+        padding-bottom: $unnnic-spacing-xs;
+    }
+
+    &-sub_title {
+        color: $unnnic-color-neutral-cloudy;
+        font-family: $unnnic-font-family-secondary;
+        ;
+        font-size: $unnnic-font-size-body-gt;
+        font-weight: $unnnic-font-weight-regular;
+        line-height: $unnnic-line-height-md;
+    }
+
     &__container {
         display: flex;
         flex-direction: column;
@@ -180,6 +202,8 @@ export default {
             button {
                 width: 100%;
             }
+
+
         }
 
     }
