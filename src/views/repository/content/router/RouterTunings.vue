@@ -191,7 +191,28 @@ export default {
         },
         {
           name: 'ChatGPT',
-          fields: [],
+          fields: [
+            {
+              type: 'naf-header',
+              name: 'parameter',
+            },
+            {
+              type: 'slider',
+              name: 'temperature',
+              default: 0.1,
+              step: 0.05,
+              min: 0,
+              max: 1,
+            },
+            {
+              type: 'slider',
+              name: 'top_p',
+              default: 0.95,
+              step: 0.05,
+              min: 0,
+              max: 1,
+            },
+          ],
         },
       ],
     };
