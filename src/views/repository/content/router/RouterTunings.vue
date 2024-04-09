@@ -96,6 +96,8 @@
       />
     </template>
 
+    <RouterTuningsAdvanced class="tunings__advanced" />
+
     <UnnnicDivider ySpacing="md" />
 
     <footer class="tunings__actions">
@@ -126,10 +128,12 @@
 
 <script>
 import nexusaiAPI from '../../../../api/nexusaiAPI';
+import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
 import RouterTuningsModalRestoreDefault from './RouterTuningsModalRestoreDefault.vue';
 
 export default {
   components: {
+    RouterTuningsAdvanced,
     RouterTuningsModalRestoreDefault,
   },
 
@@ -339,6 +343,10 @@ export default {
 
 .tunings__form-element__slider {
   max-width: 24 * $unnnic-font-size;
+}
+
+.tunings__advanced {
+  margin-top: $unnnic-spacing-md;
 }
 
 .tunings__actions {

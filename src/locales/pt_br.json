@@ -72,6 +72,11 @@
         "top_p_info": "Ao configurar o \"top P\" de um modelo de inteligência artificial, você está ajustando como o modelo seleciona as próximas palavras durante a geração de texto",
         "top_k": "Top K",
         "top_k_info": "Ao configurar o \"top K\" de um modelo de inteligência artificial, você está determinando quantas das palavras mais prováveis o modelo considerará ao escolher a próxima palavra durante a geração de texto."
+      },
+      "advanced": {
+        "title": "Opções avançadas",
+        "description": "Essa opção pode desativar ou ativar suas triggers.",
+        "brain": "Brain"
       }
     }
   },
