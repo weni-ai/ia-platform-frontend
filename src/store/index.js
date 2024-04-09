@@ -24,6 +24,8 @@ const store = new Vuex.Store({
   state: {
     alert: null,
 
+    modalWarn: null,
+
     router: {
       intelligenceUuid: null,
       contentBaseUuid: null,

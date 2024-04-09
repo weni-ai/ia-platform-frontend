@@ -76,7 +76,13 @@
       "advanced": {
         "title": "Opciones avanzadas",
         "description": "Esta opción puede desactivar o activar tus activadores.",
-        "brain": "Brain"
+        "brain": "Brain",
+        "active_brain_modal": {
+          "title": "Activar Brain",
+          "description": "¿Estás seguro de que quieres activar Brain? Esto hará que tus activadores sean reemplazados por Acciones y esto puede afectar directamente al funcionamiento de tu agente",
+          "cancel": "Cancelar",
+          "action": "Activar"
+        }
       }
     }
   },

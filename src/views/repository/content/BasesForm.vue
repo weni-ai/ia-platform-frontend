@@ -144,7 +144,10 @@
                 :items="routerActions"
               />
 
-              <RouterTunings v-else-if="$route.name === 'router-tunings'" />
+              <RouterTunings
+                v-else-if="$route.name === 'router-tunings'"
+                :data="routerTunings"
+              />
             </section>
           </section>
         </section>
@@ -335,6 +338,10 @@ export default {
       routerActions: {
         status: null,
         data: [],
+      },
+
+      routerTunings: {
+        brainOn: false,
       },
     };
   },

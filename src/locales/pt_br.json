@@ -76,7 +76,13 @@
       "advanced": {
         "title": "Opções avançadas",
         "description": "Essa opção pode desativar ou ativar suas triggers.",
-        "brain": "Brain"
+        "brain": "Brain",
+        "active_brain_modal": {
+          "title": "Ativar Brain",
+          "description": "Tem certeza que deseja ativar o Brain? Isso fará com que suas triggers sejam substituídas pelas Ações e isso pode afetar diretamente o funcionamento do seu agente.",
+          "cancel": "Cancelar",
+          "action": "Ativar"
+        }
       }
     }
   },

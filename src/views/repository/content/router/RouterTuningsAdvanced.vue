@@ -36,9 +36,10 @@
 
       <UnnnicFormElement class="advanced__content__brain-switch">
         <UnnnicSwitch
+          :key="brainOn"
           :textRight="$t('router.tunings.advanced.brain')"
-          :value="brain"
-          @input="brain = $event"
+          :value="brainOn"
+          @input="openActiveOrDeactivateBrain"
         />
       </UnnnicFormElement>
     </section>
@@ -46,19 +47,78 @@
 </template>
 
 <script>
+import nexusaiAPI from '../../../../api/nexusaiAPI';
+
 export default {
+  props: {
+    brainOn: Boolean,
+  },
+
+  components: {},
+
   data() {
     return {
       open: false,
 
       brain: true,
+
+      isActiveBrainOpen: false,
     };
   },
+
+  mounted() {},
 
   watch: {
     open() {
       if (this.open) {
         this.$el.scrollIntoView({ behavior: 'smooth' });
+      }
+    },
+  },
+
+  methods: {
+    openActiveOrDeactivateBrain($event) {
+      this.$emit('update:brainOn', $event);
+
+      this.$nextTick(() => {
+        this.$emit('update:brainOn', !$event);
+      });
+
+      if ($event) {
+        this.$store.state.modalWarn = {
+          title: this.$t('router.tunings.advanced.active_brain_modal.title'),
+          description: this.$t(
+            'router.tunings.advanced.active_brain_modal.description',
+          ),
+          closeText: this.$t(
+            'router.tunings.advanced.active_brain_modal.cancel',
+          ),
+          actionText: this.$t(
+            'router.tunings.advanced.active_brain_modal.action',
+          ),
+          loading: false,
+          action: this.changeBrainOn.bind(this, true),
+        };
+      }
+    },
+
+    async changeBrainOn(brain_on) {
+      try {
+        this.$store.state.modalWarn.loading = true;
+
+        const { data } = await nexusaiAPI.router.tunings.advanced.edit({
+          projectUuid: this.$store.state.Auth.connectProjectUuid,
+          brain_on,
+        });
+
+        this.$emit('update:brainOn', data.brain_on);
+
+        this.$store.state.alert = {
+          type: 'success',
+          text: this.$t('router.tunings.default_restored'),
+        };
+      } finally {
+        this.$store.state.modalWarn = null;
       }
     },
   },
