@@ -341,7 +341,7 @@ export default {
       },
 
       routerTunings: {
-        brainOn: false,
+        brainOn: true,
       },
     };
   },

@@ -82,6 +82,12 @@
           "description": "Tem certeza que deseja ativar o Brain? Isso fará com que suas triggers sejam substituídas pelas Ações e isso pode afetar diretamente o funcionamento do seu agente.",
           "cancel": "Cancelar",
           "action": "Ativar"
+        },
+        "deactivate_brain_modal": {
+          "title": "Desativar Brain",
+          "description": "Tem certeza que deseja desativar o Brain? Isso fará com que suas ações serão substituidas pelas triggers e isso pode afetar diretamente o funcionamento do seu bot.",
+          "cancel": "Cancelar",
+          "action": "Desativar"
         }
       }
     }

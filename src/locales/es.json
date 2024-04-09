@@ -82,6 +82,12 @@
           "description": "¿Estás seguro de que quieres activar Brain? Esto hará que tus activadores sean reemplazados por Acciones y esto puede afectar directamente al funcionamiento de tu agente",
           "cancel": "Cancelar",
           "action": "Activar"
+        },
+        "deactivate_brain_modal": {
+          "title": "Desactivar Brain",
+          "description": "¿Estás seguro de que quieres desactivar Brain? Esto hará que tus acciones sean reemplazadas por disparadores y esto puede afectar directamente al funcionamiento de tu bot.",
+          "cancel": "Cancelar",
+          "action": "Desactivar"
         }
       }
     }

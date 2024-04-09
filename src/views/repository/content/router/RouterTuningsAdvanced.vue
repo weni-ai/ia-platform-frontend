@@ -99,6 +99,23 @@ export default {
           loading: false,
           action: this.changeBrainOn.bind(this, true),
         };
+      } else {
+        this.$store.state.modalWarn = {
+          title: this.$t(
+            'router.tunings.advanced.deactivate_brain_modal.title',
+          ),
+          description: this.$t(
+            'router.tunings.advanced.deactivate_brain_modal.description',
+          ),
+          closeText: this.$t(
+            'router.tunings.advanced.deactivate_brain_modal.cancel',
+          ),
+          actionText: this.$t(
+            'router.tunings.advanced.deactivate_brain_modal.action',
+          ),
+          loading: false,
+          action: this.changeBrainOn.bind(this, false),
+        };
       }
     },
 
