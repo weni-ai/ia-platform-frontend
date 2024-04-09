@@ -268,7 +268,7 @@ export default {
       },
 
       restoreDefault({ projectUuid }) {
-        return request.$http.patch(`api/${projectUuid}/llm-default/`);
+        return request.$http.post(`api/${projectUuid}/llm-default/`);
       },
 
       edit({ projectUuid, values }) {
