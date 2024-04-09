@@ -96,14 +96,17 @@
       />
     </template>
 
-    <RouterTuningsAdvanced class="tunings__advanced" />
+    <RouterTuningsAdvanced
+      class="tunings__advanced"
+      :brainOn.sync="data.brainOn"
+    />
 
     <UnnnicDivider ySpacing="md" />
 
     <footer class="tunings__actions">
       <UnnnicButton
         type="secondary"
-        @click="isRestoreDefaultOpen = true"
+        @click="openRestoreDefaultModal"
       >
         {{ $t('router.tunings.restore_default') }}
       </UnnnicButton>
@@ -116,31 +119,24 @@
         {{ $t('router.tunings.save_changes') }}
       </UnnnicButton>
     </footer>
-
-    <RouterTuningsModalRestoreDefault
-      :showModal="isRestoreDefaultOpen"
-      :restoring="restoring"
-      @close="isRestoreDefaultOpen = false"
-      @restore="restoreDefault"
-    />
   </section>
 </template>
 
 <script>
 import nexusaiAPI from '../../../../api/nexusaiAPI';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
-import RouterTuningsModalRestoreDefault from './RouterTuningsModalRestoreDefault.vue';
 
 export default {
+  props: {
+    data: Object,
+  },
+
   components: {
     RouterTuningsAdvanced,
-    RouterTuningsModalRestoreDefault,
   },
 
   data() {
     return {
-      isRestoreDefaultOpen: false,
-
       restoring: false,
       saving: false,
 
@@ -260,6 +256,19 @@ export default {
   },
 
   methods: {
+    openRestoreDefaultModal() {
+      this.$store.state.modalWarn = {
+        title: this.$t('router.tunings.restore_default_modal.title'),
+        description: this.$t(
+          'router.tunings.restore_default_modal.description',
+        ),
+        closeText: this.$t('router.tunings.restore_default_modal.cancel'),
+        actionText: this.$t('router.tunings.restore_default_modal.restore'),
+        loading: false,
+        action: this.restoreDefault,
+      };
+    },
+
     setInitialValues(data) {
       this.$set(this.oldValues, 'model', data.model);
       this.$set(this.values, 'model', data.model);
@@ -276,7 +285,7 @@ export default {
 
     async restoreDefault() {
       try {
-        this.restoring = true;
+        this.$store.state.modalWarn.loading = true;
 
         const { data } = await nexusaiAPI.router.tunings.restoreDefault({
           projectUuid: this.$store.state.Auth.connectProjectUuid,
@@ -289,8 +298,7 @@ export default {
           text: this.$t('router.tunings.default_restored'),
         };
       } finally {
-        this.restoring = false;
-        this.isRestoreDefaultOpen = false;
+        this.$store.state.modalWarn = null;
       }
     },
 
