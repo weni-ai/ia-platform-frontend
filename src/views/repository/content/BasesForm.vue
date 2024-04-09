@@ -341,7 +341,7 @@ export default {
       },
 
       routerTunings: {
-        brainOn: true,
+        brainOn: false,
       },
     };
   },
@@ -429,6 +429,14 @@ export default {
           this.sites.status = null;
         }
       }
+    },
+
+    async loadRouterOptions() {
+      const { data } = await nexusaiAPI.router.tunings.advanced.read({
+        projectUuid: this.$store.state.Auth.connectProjectUuid,
+      });
+
+      this.routerTunings.brainOn = data.brain_on;
     },
 
     alertError(title) {
@@ -655,6 +663,10 @@ export default {
 
     this.loadFiles();
     this.loadSites();
+
+    if (this.isRouterView) {
+      this.loadRouterOptions();
+    }
   },
 
   destroyed() {
