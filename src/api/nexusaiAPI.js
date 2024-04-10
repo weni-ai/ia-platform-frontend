@@ -282,11 +282,11 @@ export default {
 
       advanced: {
         read({ projectUuid }) {
-          return request.$http.get(`api/${projectUuid}/project/`);
+          return request.$http.get(`api/${projectUuid}/project`);
         },
 
         edit({ projectUuid, brain_on }) {
-          return request.$http.patch(`api/${projectUuid}/project/`, {
+          return request.$http.patch(`api/${projectUuid}/project`, {
             brain_on,
           });
         },
