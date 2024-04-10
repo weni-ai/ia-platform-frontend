@@ -7,14 +7,11 @@
             </section>
             <div class="customization__form">
                 <unnnic-form-element :label="$t('customization.fields.name')" class="customization__form-element">
-                    <unnnic-input v-model="values.agent.name" :placeholder="$t('customization.placeholders.name')"
-                        :type="isValidAgent('name') ? 'normal' : 'error'"
-                        :message="isValidAgent('name') ? '' : $t('customization.invalid_field')" />
+                    <unnnic-input v-model="values.agent.name" :placeholder="$t('customization.placeholders.name')" />
                 </unnnic-form-element>
                 <unnnic-form-element :label="$t('customization.fields.occupation')" class="customization__form-element">
-                    <unnnic-input v-model="values.agent.role" :placeholder="$t('customization.placeholders.occupation')"
-                        :type="isValidAgent('role') ? 'normal' : 'error'"
-                        :message="isValidAgent('role') ? '' : $t('customization.invalid_field')" />
+                    <unnnic-input v-model="values.agent.role"
+                        :placeholder="$t('customization.placeholders.occupation')" />
                 </unnnic-form-element>
             </div>
             <div class="customization__container__persona">
@@ -33,8 +30,7 @@
             </div>
             <div class="customization__container__persona">
                 <unnnic-text-area v-bind="$props" v-model="values.agent.goal" :label="$t('customization.fields.goal')"
-                    :placeholder="$t('customization.placeholders.goal')"
-                    :type="isValidAgent('goal') ? 'normal' : 'error'" />
+                    :placeholder="$t('customization.placeholders.goal')" />
             </div>
         </div>
 
@@ -64,7 +60,7 @@
         </div>
         <div class="customization__footer">
             <unnnic-button @click="saveChanges" size="large" :text="$t('customization.save_btn')" type="primary"
-                iconLeft="add-1" :disabled="hasChanged || checkIfEmpty(values.agent)" :loading="saving" />
+                iconLeft="add-1" :disabled="hasChanged" :loading="saving" />
         </div>
         <unnnic-modal-next type="alert" icon="error" scheme="feedback-red"
             :title="$t('customization.instructions.modals.title')"
@@ -155,26 +151,28 @@ export default {
     },
     computed: {
         hasChanged() {
-            const changedProperties = Object.keys(this.values).reduce((acc, key) => {
+            const changedProperties = Object.keys(this.values).flatMap(key => {
                 if (key === 'agent') {
-                    const agentKeys = Object.keys(this.values.agent);
-                    const changedAgentProperties = agentKeys.filter(agentKey =>
+                    return Object.keys(this.values.agent).filter(agentKey =>
                         this.values.agent[agentKey] !== this.oldValues.agent[agentKey]);
-                    acc = acc.concat(changedAgentProperties);
                 } else if (key === 'instructions') {
-                    if (this.values.instructions.length !== this.oldValues.instructions.length) {
-                        acc.push(key);
+                    const isValidText = this.values.instructions.some(v => v.instruction.length > 0);
+                    if (this.values.instructions.length !== this.oldValues.instructions.length && isValidText) {
+                        return key;
                     } else {
                         for (let i = 0; i < this.values.instructions.length; i++) {
-                            if (this.values.instructions[i].instruction !== this.oldValues.instructions[i].instruction) {
-                                acc.push(key);
-                                break;
+                            const currentInstruction = this.values.instructions[i].instruction;
+                            const oldInstruction = this.oldValues.instructions[i]?.instruction || '';
+                            if (currentInstruction !== oldInstruction && isValidText) {
+                                return key;
                             }
                         }
                     }
                 }
-                return acc;
-            }, []);
+                return [];
+            });
+
+
 
             return changedProperties.length === 0;
         }
@@ -200,7 +198,7 @@ export default {
                 instruction: ''
             }]
         }
-        this.setInitialValues(currentData)
+        this.setInitialValues(data)
     },
     methods: {
         setInitialValues(data) {
@@ -208,7 +206,9 @@ export default {
             this.oldValues = JSON.parse(JSON.stringify(data));
         },
         addInstruction() {
-            this.values.instructions.push({});
+            this.values.instructions.push({
+                instruction: ''
+            });
         },
         handleShowRemoveModal(index) {
             this.showRemoveModal = true
@@ -247,9 +247,14 @@ export default {
             try {
                 this.saving = true;
 
+                const currentValue = {
+                    agent: this.values.agent,
+                    instructions: this.values.instructions.filter(e => e.instruction)
+                }
+
                 const { data } = await nexusaiAPI.router.customization.edit({
                     projectUuid: this.$store.state.Auth.connectProjectUuid,
-                    data: this.values
+                    data: currentValue
                 });
 
                 this.setInitialValues(data)
@@ -266,12 +271,6 @@ export default {
             if (this.values.agent.personality === personality.value) {
                 this.values.agent.personality = ''
             } else this.values.agent.personality = personality.value;
-        },
-        isValidAgent(value) {
-            return this.values.agent[value].length > 0
-        },
-        checkIfEmpty(obj) {
-            return Object.values(obj).some(value => value === '');
         }
     }
 
