@@ -4,8 +4,8 @@
     maxWidth="498px"
   >
     <article class="flow-modal__container">
-      <div class="flow-modal__header">
-        <div class="flow-modal__header__title__container">
+      <header class="flow-modal__header">
+        <section class="flow-modal__header__title__container">
           <UnnnicIcon
             icon="error"
             size="lg"
@@ -13,9 +13,9 @@
           />
           <h3>{{ $t('modals.actions.remove.title') }}</h3>
           <p v-html="$t('modals.actions.remove.description', { name: name })" />
-        </div>
-      </div>
-      <div class="flow-modal__footer">
+        </section>
+      </header>
+      <footer class="flow-modal__footer">
         <UnnnicButton
           slot="options"
           class="create-repository__container__button"
@@ -34,7 +34,7 @@
         >
           {{ $t('modals.actions.btn_complete') }}
         </UnnnicButton>
-      </div>
+      </footer>
     </article>
   </ModalNext>
 </template>
