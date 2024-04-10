@@ -63,7 +63,7 @@ export default {
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .create-intelligence-modal {
-  ::v-deep .create-intelligence-modal__container {
+  :deep(.create-intelligence-modal__container) {
     padding: $unnnic-spacing-xl $unnnic-spacing-md $unnnic-spacing-md
       $unnnic-spacing-md;
   }
