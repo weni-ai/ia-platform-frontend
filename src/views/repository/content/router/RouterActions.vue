@@ -4,9 +4,9 @@
       shape="accordion"
       hideCounter
       hideToggle
-      :title="'Fluxos'"
-      :description="'o que é o router? no que ele agrega se eu ativar no fluxo?'"
-      :addText="'Adicionar fluxo'"
+      :title="$t('router.actions.title')"
+      :description="$t('router.actions.description')"
+      :addText="$t('router.actions.add')"
       :items.sync="items"
       canEditItem
       @add="isAddActionOpen = true"

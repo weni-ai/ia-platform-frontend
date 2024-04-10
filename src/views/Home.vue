@@ -345,7 +345,7 @@ export default {
 
         this.intelligencesNexusAI.data = [
           ...this.intelligencesNexusAI.data,
-          ...data.results,
+          ...data.results.filter(({ is_router }) => !is_router),
         ];
 
         this.intelligencesNexusAI.next = data.next;
