@@ -4,23 +4,23 @@
     maxWidth="604px"
   >
     <article class="flow-modal__container">
-      <div class="flow-modal__header">
-        <div class="flow-modal__header__title__container">
+      <header class="flow-modal__header">
+        <section class="flow-modal__header__title__container">
           <h3>{{ $t('modals.actions.descriptions.change_title') }}</h3>
           <p>{{ $t('modals.actions.descriptions.change_sub_title') }}</p>
-        </div>
-      </div>
-      <div class="flow-modal__body">
-        <div class="flow-modal__body_description">
+        </section>
+      </header>
+      <main class="flow-modal__body">
+        <section class="flow-modal__body_description">
           <UnnnicTextArea
             v-bind="$props"
             :value="description"
             @input="$emit('update:description', $event)"
             :label="$t('modals.actions.descriptions.label')"
           />
-        </div>
-      </div>
-      <div class="flow-modal__footer">
+        </section>
+      </main>
+      <footer class="flow-modal__footer">
         <UnnnicButton
           slot="options"
           class="create-repository__container__button"
@@ -37,7 +37,7 @@
         >
           {{ $t('modals.actions.btn_complete') }}
         </UnnnicButton>
-      </div>
+      </footer>
     </article>
   </ModalNext>
 </template>
