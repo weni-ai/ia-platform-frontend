@@ -1368,6 +1368,7 @@
     "title": "Agent persona",
     "sub_title": "Profile of your intelligent agent. This is where you'll enter its characteristics and behaviors.",
     "save_btn": "Save Changes",
+    "invalid_field": "Required field",
     "fields": {
       "name": "Name",
       "occupation": "Occupation",
@@ -1400,6 +1401,8 @@
       "modals": {
         "title": "Remove instruction",
         "description": "Are you sure you want to remove the instruction?",
+        "success_message": "Instruction removed",
+        "error_message": "Error removing Instruction",
         "back_btn": "Cancel",
         "remove_btn": "Remove"
       }
