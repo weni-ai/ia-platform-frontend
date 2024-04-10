@@ -291,10 +291,9 @@ export default {
         return request.$http.put(`api/${projectUuid}/customization/`, data);
       },
 
-      delete({ projectUuid, instructions }) {
-        return request.$http.delete(`api/${projectUuid}/customization`, {
-          instructions
-        });
+      delete({ projectUuid, id }) {
+        console.log({id})
+        return request.$http.delete(`api/${projectUuid}/customization?id=${id}`);
       },
     }
   },
