@@ -2,17 +2,25 @@
   <div class="content-bases-page-container">
     <section class="repository-base-edit">
       <section class="repository-base-edit__header">
-        <unnnic-button
+        <UnnnicAvatarIcon
+          v-if="dontShowBack"
+          size="sm"
+          icon="hub"
+          scheme="aux-purple-500"
+        />
+
+        <UnnnicButton
+          v-else
           size="small"
           type="tertiary"
-          icon-center="arrow_left_alt"
+          iconCenter="arrow_left_alt"
           scheme="neutral-dark"
           @click="$emit('back')"
         />
 
         <div>
           <div class="repository-base-edit__header--content">
-            <unnnic-skeleton-loading
+            <UnnnicSkeletonLoading
               v-if="loadingTitle"
               tag="div"
               width="180px"
@@ -35,7 +43,10 @@
         <slot name="actions"></slot>
       </section>
 
-      <section v-if="description" class="repository-base-edit__description">
+      <section
+        v-if="description"
+        class="repository-base-edit__description"
+      >
         {{ description }}
       </section>
     </section>
@@ -51,6 +62,7 @@ export default {
     title: String,
     canEditTitle: Boolean,
     description: String,
+    dontShowBack: Boolean,
   },
 };
 </script>

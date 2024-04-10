@@ -2,6 +2,7 @@
   <PageContainer
     :loadingTitle="loadingContentBase"
     :title="contentBase.title"
+    :dontShowBack="isRouterView"
     @back="
       $router.push({
         name: 'intelligence-home',
