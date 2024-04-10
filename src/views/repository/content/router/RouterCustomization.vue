@@ -5,13 +5,16 @@
                 <p class="customization-title">{{ $t('customization.title') }}</p>
                 <p class="customization-sub_title">{{ $t('customization.sub_title') }}</p>
             </section>
-
             <div class="customization__form">
                 <unnnic-form-element :label="$t('customization.fields.name')" class="customization__form-element">
-                    <unnnic-input v-model="title" :placeholder="$t('customization.placeholders.name')" />
+                    <unnnic-input v-model="values.agent.name" :placeholder="$t('customization.placeholders.name')"
+                        :type="isValidAgent('name') ? 'normal' : 'error'"
+                        :message="isValidAgent('name') ? '' : $t('customization.invalid_field')" />
                 </unnnic-form-element>
                 <unnnic-form-element :label="$t('customization.fields.occupation')" class="customization__form-element">
-                    <unnnic-input v-model="title" :placeholder="$t('customization.placeholders.occupation')" />
+                    <unnnic-input v-model="values.agent.role" :placeholder="$t('customization.placeholders.occupation')"
+                        :type="isValidAgent('role') ? 'normal' : 'error'"
+                        :message="isValidAgent('role') ? '' : $t('customization.invalid_field')" />
                 </unnnic-form-element>
             </div>
             <div class="customization__container__persona">
@@ -21,7 +24,7 @@
                     <div class="customization__personality">
                         <section :class="[
                             'customization__personality__item',
-                            { 'customization__personality-selected': !!personalities_selected.find(e => e?.value === item?.value) }
+                            { 'customization__personality-selected': values.agent.personality === item?.value }
                         ]" v-for="(item, index) in personalities" :key="index" @click="handlePersonalitySelect(item)">
                             <p>{{ item.label }}</p>
                         </section>
@@ -29,29 +32,30 @@
                 </section>
             </div>
             <div class="customization__container__persona">
-                <unnnic-text-area v-bind="$props" v-model="goal" :label="$t('customization.fields.goal')"
-                    :placeholder="$t('customization.placeholders.goal')" />
+                <unnnic-text-area v-bind="$props" v-model="values.agent.goal" :label="$t('customization.fields.goal')"
+                    :placeholder="$t('customization.placeholders.goal')"
+                    :type="isValidAgent('goal') ? 'normal' : 'error'" />
             </div>
         </div>
+
         <div class="customization__container__instructions">
             <section>
                 <p class="customization-title">{{ $t('customization.instructions.title') }}
                 </p>
                 <p class="customization-sub_title">{{ $t('customization.instructions.sub_title') }}</p>
             </section>
-
-            <section class="customization__instructions" v-for="(instruction, index) in instructions" :key="index">
+            <section class="customization__instructions" v-for="(instruction, index) in values?.instructions"
+                :key="index">
                 <unnnic-form-element :label="$t('customization.fields.instruction')"
                     class="customization__instructions-element">
                     <section class="customization__instructions__form_group">
-                        <unnnic-input v-model="instructions[index]"
+                        <unnnic-input v-model="values.instructions[index].instruction"
                             :placeholder="$t('customization.placeholders.instruction')" />
-                        <unnnic-button-icon v-bind="$props" icon="delete-1-1" class="btn-color"
+                        <unnnic-button-icon v-bind="$props" icon="delete-1-1" class="btn-color" size="small"
                             @click="handleShowRemoveModal(index)" />
                     </section>
                 </unnnic-form-element>
             </section>
-
 
             <unnnic-button @click="addInstruction" size="large"
                 :text="$t('customization.instructions.add_instruction_btn')" type="tertiary" iconLeft="add-1"
@@ -60,27 +64,52 @@
         </div>
         <div class="customization__footer">
             <unnnic-button @click="saveChanges" size="large" :text="$t('customization.save_btn')" type="primary"
-                iconLeft="add-1" :disabled="false" />
+                iconLeft="add-1" :disabled="hasChanged || checkIfEmpty(values.agent)" :loading="saving" />
         </div>
         <unnnic-modal-next type="alert" icon="error" scheme="feedback-red"
             :title="$t('customization.instructions.modals.title')"
             :description="$t('customization.instructions.modals.description')"
             :actionPrimaryLabel="$t('customization.instructions.modals.remove_btn')"
             :actionSecondaryLabel="$t('customization.instructions.modals.back_btn')" v-show="showRemoveModal"
-            @close="showRemoveModal = false" @click-action-primary="removeInstruction" />
+            @close="showRemoveModal = false" @click-action-primary="removeInstruction"
+            :actionPrimaryLoading="removing" />
+
     </section>
 </template>
 
 <script>
+import nexusaiAPI from '../../../../api/nexusaiAPI';
+
 export default {
     data() {
         return {
-            title: '',
-            goal: '',
-            instructions: [''],
+            removeInstructions: [],
             currentInstruction: 0,
             showRemoveModal: false,
-            personalities_selected: [],
+            saving: false,
+            removing: false,
+            values: {
+                agent: {
+                    name: '',
+                    role: '',
+                    goal: '',
+                    personality: ''
+                },
+                instructions: [{
+                    instruction: ''
+                }]
+            },
+            oldValues: {
+                agent: {
+                    name: '',
+                    role: '',
+                    goal: '',
+                    personality: ''
+                },
+                instructions: [{
+                    instruction: ''
+                }]
+            },
             personalities: [{
                 label: this.$t('customization.fields.personalities.friendly'),
                 value: "Amigável"
@@ -124,28 +153,125 @@ export default {
             ]
         }
     },
+    computed: {
+        hasChanged() {
+            const changedProperties = Object.keys(this.values).reduce((acc, key) => {
+                if (key === 'agent') {
+                    const agentKeys = Object.keys(this.values.agent);
+                    const changedAgentProperties = agentKeys.filter(agentKey =>
+                        this.values.agent[agentKey] !== this.oldValues.agent[agentKey]);
+                    acc = acc.concat(changedAgentProperties);
+                } else if (key === 'instructions') {
+                    if (this.values.instructions.length !== this.oldValues.instructions.length) {
+                        acc.push(key);
+                    } else {
+                        for (let i = 0; i < this.values.instructions.length; i++) {
+                            if (this.values.instructions[i].instruction !== this.oldValues.instructions[i].instruction) {
+                                acc.push(key);
+                                break;
+                            }
+                        }
+                    }
+                }
+                return acc;
+            }, []);
+
+            return changedProperties.length === 0;
+        }
+    },
+
+    async created() {
+        const { data } = await nexusaiAPI.router.customization.read({
+            projectUuid: this.$store.state.Auth.connectProjectUuid,
+        });
+
+        let currentData = data;
+        if (data.agent === null) {
+            currentData.agent = {
+                name: '',
+                role: '',
+                goal: '',
+                personality: ''
+            }
+        }
+
+        if (data.instructions.length === 0) {
+            currentData.instructions = [{
+                instruction: ''
+            }]
+        }
+        this.setInitialValues(currentData)
+    },
     methods: {
+        setInitialValues(data) {
+            this.values = data
+            this.oldValues = JSON.parse(JSON.stringify(data));
+        },
         addInstruction() {
-            this.instructions.push('');
+            this.values.instructions.push({});
         },
         handleShowRemoveModal(index) {
             this.showRemoveModal = true
             this.currentInstruction = index
         },
-        removeInstruction() {
-            this.instructions.splice(this.currentInstruction, 1);
-            this.showRemoveModal = false;
-            this.currentInstruction = null;
+        async removeInstruction() {
+            try {
+                this.removing = true;
+                if (this.values.instructions[this.currentInstruction].id) {
+
+                    await nexusaiAPI.router.customization.delete({
+                        projectUuid: this.$store.state.Auth.connectProjectUuid,
+                        id: this.values.instructions[this.currentInstruction].id
+                    });
+                    this.removeInstructions.push(this.values.instructions[this.currentInstruction])
+                }
+                this.values.instructions.splice(this.currentInstruction, 1);
+
+                this.showRemoveModal = false;
+                this.currentInstruction = null;
+
+                this.$store.state.alert = {
+                    type: 'success',
+                    text: this.$t('customization.instructions.modals.success_message'),
+                };
+            } catch (e) {
+                this.$store.state.alert = {
+                    type: 'error',
+                    text: this.$t('customization.instructions.modals.error_message'),
+                };
+            } finally {
+                this.removing = false;
+            }
         },
-        saveChanges() {
-            console.log('Instruções salvas:', this.instructions);
+        async saveChanges() {
+            try {
+                this.saving = true;
+
+                const { data } = await nexusaiAPI.router.customization.edit({
+                    projectUuid: this.$store.state.Auth.connectProjectUuid,
+                    data: this.values
+                });
+
+                this.setInitialValues(data)
+
+                this.$store.state.alert = {
+                    type: 'success',
+                    text: this.$t('router.tunings.changes_saved'),
+                };
+            } finally {
+                this.saving = false;
+            }
         },
         handlePersonalitySelect(personality) {
-            const isPersonalityNotExist = !this.personalities_selected.find(e => e.value === personality.value)
-            console.log(!this.personalities_selected.find(e => e?.value === personality?.value), personality)
-            if (isPersonalityNotExist) this.personalities_selected.push(personality)
-            console.log(this.personalities_selected)
-
+            if (this.values.agent.personality === personality.value) {
+                this.values.agent.personality = ''
+            } else this.values.agent.personality = personality.value;
+        },
+        isValidAgent(value) {
+            return this.values.agent[value].length > 0
+        },
+        checkIfEmpty(obj) {
+            return Object.values(obj).some(value => value === '');
         }
     }
 

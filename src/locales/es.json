@@ -1361,6 +1361,7 @@
     "title": "Persona del agente",
     "sub_title": "Perfil de tu agente inteligente. Aquí es donde introducirás sus características y comportamientos",
     "save_btn": "Guardar cambios",
+    "invalid_field": "Campo obligatorio",
     "fields": {
       "name": "Nombre",
       "occupation": "Ocupación",
@@ -1393,6 +1394,8 @@
       "modals": {
         "title": "Quitar instrucción",
         "description": "¿Estás seguro de que quieres eliminar la instrucción?",
+        "success_message": "Instrucción eliminada",
+        "error_message": "Error al eliminar la instrucción",
         "back_btn": "Cancelar",
         "remove_btn": "Eliminar"
       }
