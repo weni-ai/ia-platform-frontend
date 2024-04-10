@@ -72,6 +72,23 @@
         "top_p_info": "When you set the \"top P\" of an artificial intelligence model, you are adjusting how the model selects the next words during text generation",
         "top_k": "Top K",
         "top_k_info": "By setting the \"top K\" of an artificial intelligence model, you are determining how many of the most likely words the model will consider when choosing the next word during text generation"
+      },
+      "advanced": {
+        "title": "Advanced options",
+        "description": "This option can disable or enable your triggers.",
+        "brain": "Brain",
+        "active_brain_modal": {
+          "title": "Activate Brain",
+          "description": "Are you sure you want to activate Brain? This will cause your triggers to be replaced by Actions and this can directly affect the operation of your agent.",
+          "cancel": "Cancel",
+          "action": "Activate"
+        },
+        "deactivate_brain_modal": {
+          "title": "Deactivate Brain",
+          "description": "Are you sure you want to deactivate Brain? This will cause your actions to be replaced by triggers and this can directly affect the functioning of your bot.",
+          "cancel": "Cancel",
+          "action": "Deactivate"
+        }
       }
     }
   },

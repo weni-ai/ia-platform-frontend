@@ -72,6 +72,23 @@
         "top_p_info": "Al ajustar el \"top P\" de un modelo de inteligencia artificial, está ajustando la forma en que el modelo selecciona las siguientes palabras durante la generación del texto",
         "top_k": "K superior",
         "top_k_info": "Al ajustar el \"top K\" de un modelo de inteligencia artificial, estás determinando cuántas de las palabras más probables considerará el modelo al elegir la siguiente palabra durante la generación del texto"
+      },
+      "advanced": {
+        "title": "Opciones avanzadas",
+        "description": "Esta opción puede desactivar o activar tus activadores.",
+        "brain": "Brain",
+        "active_brain_modal": {
+          "title": "Activar Brain",
+          "description": "¿Estás seguro de que quieres activar Brain? Esto hará que tus activadores sean reemplazados por Acciones y esto puede afectar directamente al funcionamiento de tu agente",
+          "cancel": "Cancelar",
+          "action": "Activar"
+        },
+        "deactivate_brain_modal": {
+          "title": "Desactivar Brain",
+          "description": "¿Estás seguro de que quieres desactivar Brain? Esto hará que tus acciones sean reemplazadas por disparadores y esto puede afectar directamente al funcionamiento de tu bot.",
+          "cancel": "Cancelar",
+          "action": "Desactivar"
+        }
       }
     }
   },

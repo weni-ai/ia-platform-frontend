@@ -143,9 +143,11 @@
                 v-else-if="$route.name === 'router-actions'"
                 :items="routerActions"
               />
-
-              <RouterTunings v-else-if="$route.name === 'router-tunings'" />
               <RouterCustomization v-else-if="$route.name === 'router-personalization'"/>
+              <RouterTunings
+                v-else-if="$route.name === 'router-tunings'"
+                :data="routerTunings"
+              />
             </section>
           </section>
         </section>
@@ -339,6 +341,10 @@ export default {
         status: null,
         data: [],
       },
+
+      routerTunings: {
+        brainOn: false,
+      },
     };
   },
   methods: {
@@ -426,6 +432,14 @@ export default {
           this.sites.status = null;
         }
       }
+    },
+
+    async loadRouterOptions() {
+      const { data } = await nexusaiAPI.router.tunings.advanced.read({
+        projectUuid: this.$store.state.Auth.connectProjectUuid,
+      });
+
+      this.routerTunings.brainOn = data.brain_on;
     },
 
     alertError(title) {
@@ -652,6 +666,10 @@ export default {
 
     this.loadFiles();
     this.loadSites();
+
+    if (this.isRouterView) {
+      this.loadRouterOptions();
+    }
   },
 
   destroyed() {

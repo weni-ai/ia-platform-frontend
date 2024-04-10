@@ -268,7 +268,7 @@ export default {
       },
 
       restoreDefault({ projectUuid }) {
-        return request.$http.patch(`api/${projectUuid}/llm-default/`);
+        return request.$http.post(`api/${projectUuid}/llm-default/`);
       },
 
       edit({ projectUuid, values }) {
@@ -278,6 +278,18 @@ export default {
           model,
           setup: others,
         });
+      },
+
+      advanced: {
+        read({ projectUuid }) {
+          return request.$http.get(`api/${projectUuid}/project/`);
+        },
+
+        edit({ projectUuid, brain_on }) {
+          return request.$http.patch(`api/${projectUuid}/project/`, {
+            brain_on,
+          });
+        },
       },
     },
 
