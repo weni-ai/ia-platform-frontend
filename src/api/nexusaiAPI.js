@@ -280,6 +280,23 @@ export default {
         });
       },
     },
+
+    customization: {
+      read({ projectUuid }) {
+        return request.$http.get(`api/${projectUuid}/customization/`);
+      },
+
+      edit({ projectUuid, data }) {
+        console.log(projectUuid, data)
+        return request.$http.put(`api/${projectUuid}/customization/`, data);
+      },
+
+      delete({ projectUuid, instructions }) {
+        return request.$http.delete(`api/${projectUuid}/customization`, {
+          instructions
+        });
+      },
+    }
   },
 
   intelligences: {
