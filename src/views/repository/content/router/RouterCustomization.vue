@@ -184,7 +184,8 @@ export default {
         });
 
         let currentData = data;
-        if (data.agent === null) {
+
+        if (currentData.agent === null) {
             currentData.agent = {
                 name: '',
                 role: '',
@@ -193,12 +194,12 @@ export default {
             }
         }
 
-        if (data.instructions.length === 0) {
+        if (currentData.instructions.length === 0) {
             currentData.instructions = [{
                 instruction: ''
             }]
         }
-        this.setInitialValues(data)
+        this.setInitialValues(currentData)
     },
     methods: {
         setInitialValues(data) {
