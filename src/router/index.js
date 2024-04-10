@@ -37,6 +37,7 @@ import DashboardExternalLayout from '@/layout/dashboard/DashboardExternalLayout'
 import PaymentOptions from '@/views/payment/PaymentOptions';
 import PaymentInfo from '@/views/payment/PaymentInfo';
 import store from '../store';
+import nexusaiAPI from '../api/nexusaiAPI';
 
 Vue.use(Router);
 
@@ -83,9 +84,15 @@ const router = new Router({
         store.dispatch('projectSelected', { project });
 
         store.state.Auth.connectOrgUuid = to.query?.org_uuid;
+        store.state.Auth.connectProjectUuid = to.query?.project_uuid;
 
-        if (to.query.next){
-          next(to.query.next)
+        sessionStorage.setItem(
+          'projectUuid',
+          store.state.Auth.connectProjectUuid,
+        );
+
+        if (to.query.next) {
+          next(to.query.next);
         } else {
           next('/home');
         }
@@ -138,6 +145,42 @@ const router = new Router({
           path: ':ownerNickname/:slug/translate/:token',
           name: 'repository-translate-external',
           component: RepositoryTranslateExternal,
+        },
+      ],
+    },
+    {
+      path: '/router',
+      name: 'router',
+      component: RepositoryContentBasesForm,
+      redirect: () => {
+        return { name: 'router-personalization' };
+      },
+      async beforeEnter(_to, _from, next) {
+        const { data } = await nexusaiAPI.router.read({
+          projectUuid: store.state.Auth.connectProjectUuid,
+        });
+
+        store.state.router.contentBaseUuid = data.uuid;
+        store.state.router.intelligenceUuid = data.intelligence;
+
+        next();
+      },
+      children: [
+        {
+          path: 'personalization',
+          name: 'router-personalization',
+        },
+        {
+          path: 'content',
+          name: 'router-content',
+        },
+        {
+          path: 'actions',
+          name: 'router-actions',
+        },
+        {
+          path: 'tunings',
+          name: 'router-tunings',
         },
       ],
     },
@@ -265,31 +308,33 @@ const router = new Router({
       ],
     },
     ...(runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')
-      ? [{
-        path: '/payment-options',
-        name: 'payment-options',
-        component: PaymentOptions,
-        beforeEnter: async (to, from, next) => {
-          if (!store.getters.authenticated) {
-            next('/signin');
-          } else {
-            next();
-          }
-        },
-      },
-      {
-        path: '/payment-info',
-        name: 'payment-info',
-        component: PaymentInfo,
-        beforeEnter: async (to, from, next) => {
-          if (!store.getters.authenticated) {
-            next('/signin');
-          } else {
-            next();
-          }
-        },
-      },
-      ] : []),
+      ? [
+          {
+            path: '/payment-options',
+            name: 'payment-options',
+            component: PaymentOptions,
+            beforeEnter: async (to, from, next) => {
+              if (!store.getters.authenticated) {
+                next('/signin');
+              } else {
+                next();
+              }
+            },
+          },
+          {
+            path: '/payment-info',
+            name: 'payment-info',
+            component: PaymentInfo,
+            beforeEnter: async (to, from, next) => {
+              if (!store.getters.authenticated) {
+                next('/signin');
+              } else {
+                next();
+              }
+            },
+          },
+        ]
+      : []),
     {
       path: '/tutorial',
       name: 'Tutorial',
@@ -344,10 +389,13 @@ const router = new Router({
 });
 
 router.afterEach((to, from) => {
-  window.parent.postMessage({
-    event: 'changePathname',
-    pathname: window.location.pathname,
-  }, '*');
+  window.parent.postMessage(
+    {
+      event: 'changePathname',
+      pathname: window.location.pathname,
+    },
+    '*',
+  );
 });
 
 export default router;

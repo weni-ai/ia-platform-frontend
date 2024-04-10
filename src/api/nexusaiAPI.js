@@ -187,6 +187,13 @@ export default {
     );
   },
 
+  router: {
+    read({ projectUuid }) {
+
+      return request.$http.get(`api/${projectUuid}/router/`);
+    },
+  },
+
   intelligences: {
     contentBases: {
       sites: {

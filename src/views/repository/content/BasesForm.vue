@@ -6,12 +6,13 @@
       $router.push({
         name: 'intelligence-home',
         params: {
-          intelligenceUuid: $route.params.intelligenceUuid,
+          intelligenceUuid: intelligenceUuid,
         },
       })
     "
   >
     <UnnnicButton
+      v-if="!isRouterView"
       class="settings-button"
       slot="actions"
       iconCenter="settings"
@@ -21,7 +22,10 @@
 
     <section class="repository-base-edit__wrapper">
       <div class="repository-base-edit__wrapper__left-side">
-        <section class="base-tabs">
+        <section
+          v-if="!isRouterView"
+          class="base-tabs"
+        >
           <div
             v-for="{ name, text, icon } in tabs"
             :key="name"
@@ -42,100 +46,101 @@
           </div>
         </section>
 
-        <template v-if="tab === 'files'">
-          <UnnnicSkeletonLoading
-            v-if="files.status === 'loading' && files.data.length === 0"
-            tag="div"
-            height="100%"
-            class="repository-base-edit__wrapper__card-content"
-          />
+        <BasesFormText
+          v-if="tab === 'text' && !isRouterView"
+          :item="text"
+        />
 
-          <template v-else>
-            <BasesFormFiles
-              :files.sync="files"
-              @load-more="loadFiles"
-              @removed="removedFile"
-            />
-
-            <div
-              v-if="!files.data.length && false"
-              class="repository-base-edit__wrapper__card-content__info"
-            >
-              <UnnnicIcon
-                icon="help"
-                size="sm"
-                scheme="neutral-cloudy"
-              />
-
-              <span v-html="$t('content_bases.write_content_help')"></span>
-            </div>
-          </template>
-        </template>
-
-        <template v-if="tab === 'sites'">
-          <BasesFormSites
-            :items.sync="sites"
-            @load-more="loadSites"
-            @removed="removedSite"
-          />
-        </template>
-
-        <template v-if="tab === 'text'">
-          <UnnnicSkeletonLoading
-            v-if="loadingContentBaseText"
-            tag="div"
-            height="100%"
-            class="repository-base-edit__wrapper__card-content"
-          />
-
-          <div
-            v-else
-            :class="[
-              'repository-base-edit__wrapper__card',
-              'repository-base-edit__wrapper__card-content',
-            ]"
-          >
-            <div class="repository-base-edit__wrapper__card-content__header">
-              {{ $t('content_bases.write_content') }}
-
-              <UnnnicButton
-                :loading="submitting"
-                @click="saveText"
-                size="small"
-                class="repository-base-edit__wrapper__card-content__header__save-button"
-                :disabled="
-                  !knowledgeBase.text.value.trim() ||
-                  knowledgeBase.text.value === knowledgeBase.text.oldValue
-                "
+        <section
+          v-else
+          :class="'content-base__container'"
+        >
+          <template v-if="isRouterView">
+            <ul class="router-tabs">
+              <RouterLink
+                v-for="(tab, index) in routerTabs"
+                :key="index"
+                :to="{ name: tab.page }"
               >
-                {{ $t('webapp.settings.save') }}
-              </UnnnicButton>
-            </div>
+                <li
+                  :class="[
+                    'router-tabs__tab',
+                    {
+                      'router-tabs__tab--selected': $route.name === tab.page,
+                    },
+                  ]"
+                >
+                  {{ tab.title }}
+                </li>
+              </RouterLink>
+            </ul>
 
-            <textarea
-              v-model="knowledgeBase.text.value"
-              name=""
-              id="textId"
-              cols="30"
-              rows="10"
-              class="repository-base-edit__textarea"
-              :placeholder="$t('content_bases.write_content_placeholder')"
-            ></textarea>
+            <UnnnicDivider ySpacing="sm"></UnnnicDivider>
+          </template>
 
-            <div
-              v-if="!knowledgeBase.text.value.trim() && false"
-              class="repository-base-edit__wrapper__card-content__info"
-            >
-              <UnnnicIcon
-                icon="help"
-                size="sm"
-                scheme="neutral-cloudy"
-              />
+          <section class="content-base__scrollable">
+            <section :style="isRouterView ? { height: 0 } : { flex: 1 }">
+              <section
+                v-if="$route.name === 'router-content'"
+                class="content-base__content-tab"
+              >
+                <template v-if="tab === 'files' || isRouterView">
+                  <UnnnicSkeletonLoading
+                    v-if="
+                      files.status === 'loading' &&
+                      files.data.length === 0 &&
+                      contentStyle !== 'accordion'
+                    "
+                    tag="div"
+                    height="100%"
+                    class="repository-base-edit__wrapper__card-content"
+                  />
 
-              <span v-html="$t('content_bases.write_content_help')"></span>
-            </div>
-          </div>
-        </template>
+                  <template v-else>
+                    <BasesFormFiles
+                      :files.sync="files"
+                      @load-more="loadFiles"
+                      @removed="removedFile"
+                      :shape="contentStyle"
+                    />
+                  </template>
+                </template>
+
+                <template v-if="tab === 'sites' || isRouterView">
+                  <BasesFormSites
+                    :items.sync="sites"
+                    @load-more="loadSites"
+                    @removed="removedSite"
+                    :shape="contentStyle"
+                  />
+                </template>
+
+                <section v-if="isRouterView">
+                  <BasesFormGenericListHeader
+                    :shape="contentStyle"
+                    :open.sync="text.open"
+                    :title="$t('content_bases.tabs.text')"
+                  />
+
+                  <template v-if="text.open">
+                    <UnnnicIntelligenceText
+                      color="neutral-cloudy"
+                      family="secondary"
+                      size="body-gt"
+                      marginTop="xs"
+                      marginBottom="sm"
+                      tag="p"
+                    >
+                      Lorem ipsum dolor sit amet
+                    </UnnnicIntelligenceText>
+
+                    <BasesFormText :item="text" />
+                  </template>
+                </section>
+              </section>
+            </section>
+          </section>
+        </section>
       </div>
 
       <div
@@ -152,7 +157,7 @@
         </div>
 
         <Tests
-          :contentBaseUuid="$route.params.contentBaseUuid"
+          :contentBaseUuid="contentBaseUuid"
           :contentBaseLanguage="contentBase.language"
         />
       </div>
@@ -194,8 +199,8 @@
 
     <BaseSettingsForm
       v-if="isEditContentBaseOpen"
-      :intelligenceUuid="$route.params.intelligenceUuid"
-      :contentBaseUuid="$route.params.contentBaseUuid"
+      :intelligenceUuid="intelligenceUuid"
+      :contentBaseUuid="contentBaseUuid"
       :preFilledValues="{
         title: contentBase.title,
         language: contentBase.language,
@@ -219,7 +224,9 @@ import PageContainer from '../../../components/PageContainer';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import BasesFormFiles from './BasesFormFiles';
 import BasesFormSites from './BasesFormSites';
+import BasesFormText from './BasesFormText';
 import BaseSettingsForm from '../../../components/BaseSettingsForm';
+import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -228,15 +235,35 @@ export default {
     PageContainer,
     BasesFormFiles,
     BasesFormSites,
+    BasesFormText,
     BaseSettingsForm,
+    BasesFormGenericListHeader,
   },
   mixins: [RemoveBulmaMixin],
   data() {
     return {
       tab: 'files',
 
+      routerTabs: [
+        {
+          title: 'Personalização',
+          page: 'router-personalization',
+        },
+        {
+          title: 'Conteúdo',
+          page: 'router-content',
+        },
+        {
+          title: 'Ações',
+          page: 'router-actions',
+        },
+        {
+          title: 'Ajustes',
+          page: 'router-tunings',
+        },
+      ],
+
       loadingContentBase: false,
-      loadingContentBaseText: false,
 
       contentBase: {
         title: '',
@@ -253,7 +280,6 @@ export default {
       openModal: false,
       localNext: null,
       bases: [],
-      submitting: false,
       selectedLanguage: '',
       knowledgeBase: {
         title: '',
@@ -286,6 +312,14 @@ export default {
         next: null,
         data: [],
       },
+
+      text: {
+        open: true,
+        status: null,
+        uuid: null,
+        oldValue: null,
+        value: null,
+      },
     };
   },
   methods: {
@@ -316,7 +350,7 @@ export default {
       this.files.status = 'loading';
 
       const { data } = await nexusaiAPI.intelligences.contentBases.files.list({
-        contentBaseUuid: this.$route.params.contentBaseUuid,
+        contentBaseUuid: this.contentBaseUuid,
         next: this.files.next,
       });
 
@@ -347,7 +381,7 @@ export default {
       try {
         const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
           {
-            contentBaseUuid: this.$route.params.contentBaseUuid,
+            contentBaseUuid: this.contentBaseUuid,
             next: this.sites.next,
           },
         );
@@ -376,7 +410,7 @@ export default {
 
     alertError(title) {
       unnnicCallAlert({
-        props: { title, scheme: 'feedback-red', icon: 'alert-circle-1' },
+        props: { text: title, scheme: 'feedback-red', icon: 'alert-circle-1' },
         seconds: 5,
       });
     },
@@ -391,68 +425,6 @@ export default {
         });
       }
     },
-    async saveText() {
-      if (this.$route.name === 'repository-content-bases-new') {
-        const response = await this.createQAKnowledgeBase({
-          repositoryUUID: this.repositoryUUID,
-          title: this.knowledgeBase.title,
-        });
-        this.knowledgeBase.oldTitle = response.data.title;
-
-        this.destroyVerifying();
-
-        this.$router.push({
-          name: 'repository-content-bases-edit',
-          params: {
-            id: response.data.id,
-          },
-        });
-
-        this.init();
-      }
-
-      const data = {
-        id: this.knowledgeBase.text.id,
-        repositoryUUID: this.repositoryUUID,
-        knowledgeBaseId: this.$route.params.id,
-        text: this.knowledgeBase.text.value,
-        language: this.knowledgeBase.text.language,
-      };
-
-      try {
-        this.submitting = true;
-
-        if (this.knowledgeBase.text.uuid) {
-          const { data: contentBaseTextData } =
-            await nexusaiAPI.updateIntelligenceContentBaseText({
-              contentBaseUuid: this.$route.params.contentBaseUuid,
-              contentBaseTextUuid: this.knowledgeBase.text.uuid,
-              text: this.knowledgeBase.text.value,
-            });
-
-          this.knowledgeBase.text.oldValue = contentBaseTextData.text;
-        } else {
-          const { data: contentBaseTextData } =
-            await nexusaiAPI.createIntelligenceContentBaseText({
-              contentBaseUuid: this.$route.params.contentBaseUuid,
-              text: this.knowledgeBase.text.value,
-            });
-
-          this.knowledgeBase.text.uuid = contentBaseTextData.uuid;
-          this.knowledgeBase.text.oldValue = contentBaseTextData.text;
-        }
-
-        this.isAlertOpen = true;
-      } catch (error) {
-        const errorMessage = get(error, 'response.data.text.0', '');
-
-        if (errorMessage) {
-          this.alertError(errorMessage);
-        }
-      } finally {
-        this.submitting = false;
-      }
-    },
     discardUpdate() {
       this.openModal = false;
 
@@ -461,7 +433,6 @@ export default {
       }
     },
     async saveClose() {
-      await this.saveText();
       this.openModal = false;
 
       if (this.localNext) {
@@ -536,12 +507,12 @@ export default {
 
       async handler() {
         this.loadingContentBase = true;
-        this.loadingContentBaseText = true;
+        this.text.status = 'loading';
 
         const { data: contentBaseData } =
           await nexusaiAPI.readIntelligenceContentBase({
-            intelligenceUuid: this.$route.params.intelligenceUuid,
-            contentBaseUuid: this.$route.params.contentBaseUuid,
+            intelligenceUuid: this.intelligenceUuid,
+            contentBaseUuid: this.contentBaseUuid,
           });
 
         this.loadingContentBase = false;
@@ -552,7 +523,7 @@ export default {
 
         const { data: contentBaseTextsData } =
           await nexusaiAPI.listIntelligenceContentBaseTexts({
-            contentBaseUuid: this.$route.params.contentBaseUuid,
+            contentBaseUuid: this.contentBaseUuid,
           });
 
         const text = get(contentBaseTextsData, 'results.0.text', '');
@@ -563,14 +534,43 @@ export default {
           '',
         );
 
+        this.text.uuid = this.knowledgeBase.text.uuid;
+
         this.knowledgeBase.text.value = text === '--empty--' ? '' : text;
         this.knowledgeBase.text.oldValue = this.knowledgeBase.text.value;
 
-        this.loadingContentBaseText = false;
+        this.text.value = this.knowledgeBase.text.value;
+        this.text.oldValue = this.knowledgeBase.text.oldValue;
+
+        this.text.status = null;
       },
     },
   },
   computed: {
+    contentBaseUuid() {
+      return (
+        this.$route.params.contentBaseUuid ||
+        this.$store.state.router.contentBaseUuid
+      );
+    },
+
+    intelligenceUuid() {
+      return (
+        this.$route.params.intelligenceUuid ||
+        this.$store.state.router.intelligenceUuid
+      );
+    },
+
+    isRouterView() {
+      return (
+        this.$route.name === 'router' || this.$route.name.startsWith('router-')
+      );
+    },
+
+    contentStyle() {
+      return this.isRouterView ? 'accordion' : 'normal';
+    },
+
     tabs() {
       return [
         {
@@ -642,6 +642,82 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.router-tabs {
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  column-gap: $unnnic-spacing-lg;
+
+  &__tab {
+    display: block;
+    padding-inline: $unnnic-spacing-sm;
+
+    color: $unnnic-color-neutral-clean;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-lg;
+    line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+    font-weight: $unnnic-font-weight-bold;
+
+    cursor: pointer;
+    user-select: none;
+
+    &--selected {
+      color: $unnnic-color-neutral-darkest;
+    }
+  }
+}
+
+.content-base {
+  &__container {
+    outline-style: solid;
+    outline-color: $unnnic-color-neutral-cleanest;
+    outline-width: $unnnic-border-width-thinner;
+    outline-offset: -$unnnic-border-width-thinner;
+
+    border-radius: $unnnic-border-radius-sm;
+    padding: $unnnic-spacing-sm;
+
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__scrollable {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    height: 100%;
+
+    overflow: overlay;
+
+    $scroll-size: $unnnic-inline-nano;
+
+    padding-right: $unnnic-inline-nano + $scroll-size;
+    margin-right: -($unnnic-inline-nano + $scroll-size);
+
+    &::-webkit-scrollbar {
+      width: $scroll-size;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $unnnic-color-neutral-clean;
+      border-radius: $unnnic-border-radius-pill;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $unnnic-color-neutral-soft;
+      border-radius: $unnnic-border-radius-pill;
+    }
+  }
+
+  &__content-tab {
+    display: flex;
+    flex-direction: column;
+    row-gap: $unnnic-spacing-md;
+  }
+}
 
 .settings-button {
   margin-left: auto;
@@ -871,53 +947,6 @@ export default {
           text-underline-offset: $unnnic-spacing-stack-nano;
         }
       }
-    }
-  }
-
-  &__textarea {
-    resize: none;
-    flex: 1;
-    padding: $unnnic-spacing-sm;
-    padding-top: 4.375 * $unnnic-font-size;
-    margin: 0;
-    font-family: $unnnic-font-family-primary;
-    font-weight: $unnnic-font-weight-regular;
-    font-size: $unnnic-font-size-body-lg;
-
-    color: $unnnic-color-neutral-dark;
-    font-family: $unnnic-font-family-secondary;
-    font-size: $unnnic-font-size-body-gt;
-    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-    font-weight: $unnnic-font-weight-regular;
-
-    &::placeholder {
-      color: $unnnic-color-neutral-cloudy;
-      font-family: $unnnic-font-family-secondary;
-      font-size: $unnnic-font-size-body-gt;
-      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-      font-weight: $unnnic-font-weight-regular;
-    }
-
-    color: $unnnic-color-neutral-dark;
-    border: none;
-
-    border-radius: $unnnic-border-radius-sm;
-
-    // &:not(:last-child) {
-    //   border-radius: $unnnic-border-radius-sm $unnnic-border-radius-sm 0 0;
-    // }
-
-    outline-style: solid;
-    outline-color: $unnnic-color-neutral-cleanest;
-    outline-width: $unnnic-border-width-thinner;
-    outline-offset: -$unnnic-border-width-thinner;
-
-    &:focus {
-      outline-color: $unnnic-color-neutral-clean;
-    }
-
-    &::-webkit-scrollbar {
-      margin-right: $unnnic-inset-sm;
     }
   }
 }
