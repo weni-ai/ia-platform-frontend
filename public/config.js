@@ -23,6 +23,7 @@ const runtimeVariables = (() => ({
   VUE_APP_QA_FLOW_CHANNEL: '4c46585b-8393-415b-856a-280c7d9ca9af',
   VUE_APP_LOGROCKET_ID: 'weni/develop',
   VUE_APP_LOGROCKET_PARENT_DOMAIN: 'https://dash-develop.weni.ai/',
+  VUE_APP_OPTIONS_WENIGPT: '{"boto-1": "ft:gpt-3.5-turbo-0125:weni:wenigpt:9CHQdiK8", "golfinho-1": "runpod"}',
   SENTRY_ENVIRONMENT: 'develop',
 
   get(name) {
