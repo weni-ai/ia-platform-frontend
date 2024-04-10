@@ -62,7 +62,7 @@
           ? $t('content_bases.tabs.files')
           : $t('content_bases.files.uploaded_files')
       "
-      :description="'Lorem ipsum dolor sit amet'"
+      :description="removeHTML($t('content_bases.files.supported_files'))"
       :addText="$t('content_bases.files.browse_file')"
       :items.sync="files"
       @add="$refs['browser-file-input'].click()"
@@ -255,6 +255,12 @@ export default {
   },
 
   methods: {
+    removeHTML(string) {
+      const span = document.createElement('span');
+      span.innerHTML = string;
+      return span.textContent;
+    },
+
     drop(event) {
       const files =
         get(event, 'dataTransfer.files') || get(event, 'srcElement.files');

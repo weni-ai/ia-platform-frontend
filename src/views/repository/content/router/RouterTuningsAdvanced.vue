@@ -117,6 +117,16 @@ export default {
           action: this.changeBrainOn.bind(this, false),
         };
       }
+
+      this.$nextTick(() => {
+        const actionButton = document.querySelector(
+          'button.unnnic-button--attention',
+        );
+
+        if (actionButton) {
+          actionButton.focus();
+        }
+      });
     },
 
     async changeBrainOn(brain_on) {

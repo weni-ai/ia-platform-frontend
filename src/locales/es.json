@@ -45,7 +45,16 @@
     }
   },
   "router": {
+    "tabs": {
+      "personalization": "Personalización",
+      "content": "Contenido",
+      "actions": "Acciones",
+      "tunings": "Ajustes"
+    },
     "actions": {
+      "title": "Acciones",
+      "description": "Configura cuándo debe iniciarse tu flujo.",
+      "add": "Añadir acción",
       "router_activated": "Brain activado en {name}",
       "router_removed": "Brain eliminado de {name}",
       "router_edited": "Descripción de {name} actualizada"
@@ -108,7 +117,7 @@
     "files": {
       "upload_content": "Cargar contenido a partir de archivos",
       "drag_and_drop_your_file_here": "Arrastre y suelte su archivo aquí para añadir el contenido a la base de conocimientos de IA.",
-      "supported_files": "Formatos admitidos: .pdf, .doc, docx, .txt, .xls y .xlsx.<br />Límite de 250 MB por archivo.",
+      "supported_files": "Formatos admitidos: .pdf, .doc, docx, .txt, .xls y .xlsx.<br /> Límite de 250 MB por archivo.",
       "browse_file": "Añadir archivo",
       "uploaded_files": "Archivos cargados",
       "status": {
@@ -1302,27 +1311,27 @@
     "actions": {
       "btn_back": "Atrás",
       "btn_next": "Siguiente",
-      "btn_create": "Activar enrutador",
+      "btn_create": "Añadir",
       "btn_cancel": "Cancelar",
       "btn_complete": "Finalizar",
       "btn_remove": "Eliminar",
       "flow": {
         "title": "Seleccionar flujo",
         "fill_name": "Seleccionar flujo",
-        "sub_title": "Selecciona el flujo al que quieres añadir el Router",
+        "sub_title": "Seleccione el flujo que desea añadir a la acción",
         "placeholder": "Buscar flujo"
       },
       "descriptions": {
-        "title": "Añadir descripción al flujo",
-        "fill_name": "Añadir descripción",
-        "sub_title": "Para activar el router, añade una descripción para el flujo",
-        "label": "Descripción",
-        "change_title": "Cambiar la descripción del flujo",
-        "change_sub_title": "La descripción ayuda a que el enrutador funcione mejor"
+        "title": "Añadir una acción al flujo",
+        "fill_name": "Añadir acción",
+        "sub_title": "Explique su flujo y cuándo debe entrar en él el usuario. Intente ser objetivo.",
+        "label": "Describa la acción",
+        "change_title": "Cambiar la descripción de la acción",
+        "change_sub_title": "La descripción ayuda al Brain a funcionar mejor"
       },
       "remove": {
-        "title": "Quitar el enrutador del flujo",
-        "description": "¿Está seguro de que desea eliminar el enrutador de <strong>{name}</strong>? <br><br>Esta acción no se puede revertir"
+        "title": "Eliminar acción",
+        "description": "¿Estás seguro de que quieres eliminar la acción <strong>{name}</strong>? <br><br>Esta acción no se puede revertir"
       }
     },
     "cant_access": {

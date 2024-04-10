@@ -70,7 +70,7 @@
                     },
                   ]"
                 >
-                  {{ tab.title }}
+                  {{ $t(`router.tabs.${tab.title}`) }}
                 </li>
               </RouterLink>
             </ul>
@@ -122,20 +122,11 @@
                     :title="$t('content_bases.tabs.text')"
                   />
 
-                  <template v-if="text.open">
-                    <UnnnicIntelligenceText
-                      color="neutral-cloudy"
-                      family="secondary"
-                      size="body-gt"
-                      marginTop="xs"
-                      marginBottom="sm"
-                      tag="p"
-                    >
-                      Lorem ipsum dolor sit amet
-                    </UnnnicIntelligenceText>
-
-                    <BasesFormText :item="text" />
-                  </template>
+                  <BasesFormText
+                    v-if="text.open"
+                    :item="text"
+                    class="content-base__content-tab__text"
+                  />
                 </section>
               </section>
 
@@ -260,19 +251,19 @@ export default {
 
       routerTabs: [
         {
-          title: 'Personalização',
+          title: 'personalization',
           page: 'router-personalization',
         },
         {
-          title: 'Conteúdo',
+          title: 'content',
           page: 'router-content',
         },
         {
-          title: 'Ações',
+          title: 'actions',
           page: 'router-actions',
         },
         {
-          title: 'Ajustes',
+          title: 'tunings',
           page: 'router-tunings',
         },
       ],
@@ -751,6 +742,10 @@ export default {
     display: flex;
     flex-direction: column;
     row-gap: $unnnic-spacing-md;
+
+    &__text {
+      margin-top: $unnnic-spacing-sm;
+    }
   }
 }
 
