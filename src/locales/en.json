@@ -44,6 +44,13 @@
       }
     }
   },
+  "router": {
+    "actions": {
+      "router_activated": "Brain activated in {name}",
+      "router_removed": "Brain removed from {name}",
+      "router_edited": "Description of {name} updated"
+    }
+  },
   "content_bases": {
     "quick_test": "Quick test",
     "sidebar_quick_test_title": "Quick test of the {name} base",
@@ -202,8 +209,8 @@
         "confirm_modal_message": "By making a copy of the intelligence, you can use it in your organization and also make the changes you want.",
         "copy": "Copy"
       },
-      "intelligence_force":"Force",
-      "intelligence_force_tooltip":"Intelligence force is a simple way to measure how well intelligence is designed. It is recommended that strength be above 80%",
+      "intelligence_force": "Force",
+      "intelligence_force_tooltip": "Intelligence force is a simple way to measure how well intelligence is designed. It is recommended that strength be above 80%",
       "integration_success_title": "Integrated intelligence",
       "integration_success_description": "The Intelligence was successfully integrated 😉",
       "integration_error_title": "Unable to integrate Intelligence",
@@ -213,22 +220,22 @@
     "create_repository": {
       "intelligence": "New intelligence",
       "definitions": "Intelligence attributes",
-      "first_indicator":"Intelligence",
-      "second_indicator":"Attributes",
-      "intelligence_name_label":"Name of the Intelligence",
-      "intelligence_name_placeholder":"Give a name to this intelligence",
-      "description_label":"Description",
-      "description_placeholder":"Describe briefly the purpose of this intelligence",
+      "first_indicator": "Intelligence",
+      "second_indicator": "Attributes",
+      "intelligence_name_label": "Name of the Intelligence",
+      "intelligence_name_placeholder": "Give a name to this intelligence",
+      "description_label": "Description",
+      "description_placeholder": "Describe briefly the purpose of this intelligence",
       "intelligence_type": "Type",
-      "intelligence_type_classification_title":"Classifier Intelligence (default)",
-      "intelligence_type_classification_description":"Train sample phrases, attributing them intents and the intelligence will identify such intentions in new received phrases.", 
-      "intelligence_type_content_title":"Content Intelligence (new!)",
-      "intelligence_type_content_description":"Upload informational texts and the intelligence will be able to answer questions made by users based on the texts.",
+      "intelligence_type_classification_title": "Classifier Intelligence (default)",
+      "intelligence_type_classification_description": "Train sample phrases, attributing them intents and the intelligence will identify such intentions in new received phrases.",
+      "intelligence_type_content_title": "Content Intelligence (new!)",
+      "intelligence_type_content_description": "Upload informational texts and the intelligence will be able to answer questions made by users based on the texts.",
       "cancel_create_intelligence_button": "Cancel",
       "navigate_to_next_button": "Next",
-      "language_label":"Main language",
-      "language_placeholder":"Select the language",
-      "language_placeholder_search":"Search for...",
+      "language_label": "Main language",
+      "language_placeholder": "Select the language",
+      "language_placeholder_search": "Search for...",
       "category_label": "Category",
       "privacy_label": "Privacy",
       "privacy_type_public_title": "Public",
@@ -528,7 +535,7 @@
         "edit-base_modal_delete_button_confirm": "Delete base",
         "edit-base_modal_delete_button_cancel": "Cancel",
         "see-all_bases": "See all bases",
-        "add_base":"+ Add base",
+        "add_base": "+ Add base",
         "edit-base_modal_alert_title": "Exit the content base",
         "edit-base_modal_alert_description": "Are you sure you want to leave the content base now? Content that is not saved will be discarded",
         "edit-base_modal_alert_save": "Exit",
@@ -693,14 +700,14 @@
       "failed": "Failed",
       "intention_or_sentence_already_exist": "Intention and Sentence already exists",
       "delete_title": "Delete sentences",
-      "delete_phrase_modal_title":"Delete sentence",
-      "delete_phrase_modal":"Do you really want to delete the selected sentences? Once the action is performed, it will not be possible to reverse it.",
+      "delete_phrase_modal_title": "Delete sentence",
+      "delete_phrase_modal": "Do you really want to delete the selected sentences? Once the action is performed, it will not be possible to reverse it.",
       "delete_button": "Delete",
       "cancel_button": "Cancel",
       "save_button": "Save",
       "train_progress": "Training in progress",
       "empty_text_error": "You need type a text to sentence",
-      "error_caracter_type": "The phrase must contain letters or numbers. Include them to proceed.", 
+      "error_caracter_type": "The phrase must contain letters or numbers. Include them to proceed.",
       "intent_error": "Intent is required",
       "default_error": "Something went wrong, try again later.",
       "more_than_200_words": "You reached the limit of 200 words per phrase. Adjust the text if necessary or break it into smaller phrases.",
@@ -939,7 +946,7 @@
     },
     "menu": {
       "hide": "Hide",
-      "expand":"Expand",
+      "expand": "Expand",
       "created_by": "Created by",
       "back_text": "Back",
       "summary": "Summary",
@@ -973,7 +980,7 @@
       "confirm-edit": "Confirm edit",
       "cancel-edit": "Cancel edit",
       "tooltip_alert": "The suggested words are generated through contexts taken from the internet, so there may be suggestions that are beyond the control of our team.",
-      "add_a_sentence":"Type the sentence you want to use",
+      "add_a_sentence": "Type the sentence you want to use",
       "submit": "Submit sentence",
       "select_words_title": "Select words",
       "select_method": "Select the method that will be used to generate the sentences.",
@@ -1259,7 +1266,7 @@
     }
   },
   "upload_area": {
-    "title":{
+    "title": {
       "text": "Drag your file here, or",
       "highlight": "search for it"
     },
@@ -1272,6 +1279,32 @@
     "importing": "Importing.."
   },
   "modals": {
+    "actions": {
+      "btn_back": "Back",
+      "btn_next": "Next",
+      "btn_create": "Activate Router",
+      "btn_cancel": "Cancel",
+      "btn_complete": "Finish",
+      "btn_remove": "Remove",
+      "flow": {
+        "title": "Select Flow",
+        "fill_name": "Select Flow",
+        "sub_title": "Select the flow you want to add the Router",
+        "placeholder": "Search Flow"
+      },
+      "descriptions": {
+        "title": "Add description to flow",
+        "fill_name": "Add description ",
+        "sub_title": "To activate the Router, add a description to the flow",
+        "label": "Description",
+        "change_title": "Change flow description",
+        "change_sub_title": "The description helps the router work better"
+      },
+      "remove": {
+        "title": "Remove router from flow",
+        "description": "Are you sure you want to remove the router from <strong>{name}</strong>? <br><br>This action cannot be reversed"
+      }
+    },
     "cant_access": {
       "title": "Ops, you can not use this module yet",
       "description": "To integrate an artificial intelligence into your project, you need to have a conversation flow created.<br />Come back after creating a flow.",

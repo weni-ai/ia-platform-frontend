@@ -39,7 +39,7 @@
         icon="download"
         size="sm"
         class="files-list__content__file__actions__icon"
-        @click.native="download"
+        @click.native.stop="download"
       />
 
       <UnnnicIcon
@@ -47,7 +47,7 @@
         icon="delete"
         size="sm"
         class="files-list__content__file__actions__icon"
-        @click.native="$emit('remove')"
+        @click.native.stop="$emit('remove')"
       />
     </div>
 
@@ -84,7 +84,7 @@ export default {
     },
 
     fileName() {
-      if (this.file.extension_file === 'site') {
+      if (['site', 'action'].includes(this.file.extension_file)) {
         return this.file?.created_file_name;
       }
 
@@ -94,7 +94,7 @@ export default {
     },
 
     extension() {
-      if (this.file.extension_file === 'site') {
+      if (['site', 'action'].includes(this.file.extension_file)) {
         return this.file.extension_file;
       }
 
@@ -113,6 +113,7 @@ export default {
           doc: 'draft',
           docx: 'draft',
           site: 'globe',
+          action: 'account_tree',
         }[this.extension] || 'draft'
       );
     },
@@ -120,8 +121,15 @@ export default {
     name() {
       const n = this.fileName.slice(0, -this.extension.length - 1);
 
-      if (this.extension === 'site' && this.fileName.length > 23) {
+      if (
+        ['site', 'action'].includes(this.extension) &&
+        this.fileName.length > 23
+      ) {
         return this.fileName.slice(0, 15) + '...' + this.fileName.slice(-8);
+      }
+
+      if (['site', 'action'].includes(this.extension)) {
+        return this.fileName;
       }
 
       return this.fileName.length > 15

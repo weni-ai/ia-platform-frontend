@@ -29,7 +29,9 @@
           :key="file.uuid"
           :file="file"
           :compressed="shape === 'accordion'"
+          :class="[{ 'files-list__item--can-edit': canEditItem }]"
           @remove="$emit('remove', file)"
+          @click.native="$emit('edit', file)"
         />
 
         <template v-if="items.status === 'loading'">
@@ -69,6 +71,7 @@ export default {
     description: String,
     addText: String,
     items: Object,
+    canEditItem: Boolean,
     hideCounter: Boolean,
     hideToggle: Boolean,
 
@@ -158,6 +161,12 @@ export default {
     &--shape-accordion {
       column-gap: $unnnic-spacing-ant;
       row-gap: $unnnic-spacing-xs;
+    }
+  }
+
+  &__item {
+    &--can-edit {
+      cursor: pointer;
     }
   }
 }
