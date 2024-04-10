@@ -65,6 +65,7 @@
       "fields": {
         "model": "Selecione o modelo",
         "version": "Versão",
+        "version-gpt": "Versão",
         "parameter": "Parâmetros",
         "temperature": "Temperatura",
         "temperature_info": "Ajuste a Temperatura para controlar a diversidade das respostas geradas",
