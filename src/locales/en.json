@@ -157,7 +157,7 @@
         "button_load_content": "Load content"
       },
       "add_site": "Add website",
-      "delete_file": {
+      "delete_site": {
         "title": "Delete website",
         "description": "Are you sure you want to delete the website <b>{name}</b>?<br />The contents of this website will be removed from the AI base",
         "cancel": "Cancel",

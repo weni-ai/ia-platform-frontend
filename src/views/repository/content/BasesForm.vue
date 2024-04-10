@@ -83,8 +83,15 @@
           <section class="content-base__scrollable">
             <section :style="isRouterView ? { height: 0 } : { flex: 1 }">
               <section
-                v-if="$route.name === 'router-content'"
-                class="content-base__content-tab"
+                v-if="
+                  ['router-content', 'intelligence-content-base-edit'].includes(
+                    $route.name,
+                  )
+                "
+                :class="[
+                  'content-base__content-tab',
+                  `content-base__content-tab--shape-${contentStyle}`,
+                ]"
               >
                 <template v-if="tab === 'files' || isRouterView">
                   <UnnnicSkeletonLoading
@@ -750,6 +757,10 @@ export default {
     display: flex;
     flex-direction: column;
     row-gap: $unnnic-spacing-md;
+
+    &--shape-normal {
+      height: 100%;
+    }
 
     &__text {
       margin-top: $unnnic-spacing-sm;
