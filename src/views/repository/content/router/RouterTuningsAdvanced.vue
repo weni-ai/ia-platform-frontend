@@ -156,11 +156,6 @@ export default {
         });
 
         this.$emit('update:brainOn', data.brain_on);
-
-        this.$store.state.alert = {
-          type: 'success',
-          text: this.$t('router.tunings.default_restored'),
-        };
       } finally {
         this.$store.state.modalWarn = null;
       }
