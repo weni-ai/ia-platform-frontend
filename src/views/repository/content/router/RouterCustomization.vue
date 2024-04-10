@@ -156,7 +156,6 @@ export default {
     computed: {
         hasChanged() {
             const changedProperties = Object.keys(this.values).reduce((acc, key) => {
-                console.log(acc, key)
                 if (key === 'agent') {
                     const agentKeys = Object.keys(this.values.agent);
                     const changedAgentProperties = agentKeys.filter(agentKey =>
@@ -185,7 +184,7 @@ export default {
         const { data } = await nexusaiAPI.router.customization.read({
             projectUuid: this.$store.state.Auth.connectProjectUuid,
         });
-        console.log('data', data)
+
         let currentData = data;
         if (data.agent === null) {
             currentData.agent = {
@@ -202,8 +201,6 @@ export default {
             }]
         }
         this.setInitialValues(currentData)
-
-        console.log('caiu aqui', currentData)
     },
     methods: {
         setInitialValues(data) {
@@ -221,12 +218,11 @@ export default {
             try {
                 this.removing = true;
                 if (this.values.instructions[this.currentInstruction].id) {
-                    console.log(this.values.instructions[this.currentInstruction])
+
                     await nexusaiAPI.router.customization.delete({
                         projectUuid: this.$store.state.Auth.connectProjectUuid,
-                        instructions: [{ id: this.values.instructions[this.currentInstruction].id }]
+                        id: this.values.instructions[this.currentInstruction].id
                     });
-
                     this.removeInstructions.push(this.values.instructions[this.currentInstruction])
                 }
                 this.values.instructions.splice(this.currentInstruction, 1);
@@ -262,14 +258,12 @@ export default {
                     type: 'success',
                     text: this.$t('router.tunings.changes_saved'),
                 };
-            } catch (e) {
-                console.log('error', e)
             } finally {
                 this.saving = false;
             }
         },
         handlePersonalitySelect(personality) {
-            if (this.values.agent.personality === personality.value){
+            if (this.values.agent.personality === personality.value) {
                 this.values.agent.personality = ''
             } else this.values.agent.personality = personality.value;
         },
