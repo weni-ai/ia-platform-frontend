@@ -189,12 +189,6 @@ export default {
 
   router: {
     read({ projectUuid }) {
-      /* return {
-        data: {
-          content_base_uuid: '150cf2c6-e8ff-4135-a95d-e0e32aece0ba',
-          intelligence_uuid: '1a40e439-c2c1-4386-ba99-b51df1b53eae',
-        },
-      }; */
 
       return request.$http.get(`api/${projectUuid}/router/`);
     },
