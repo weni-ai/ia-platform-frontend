@@ -74,6 +74,23 @@ export default {
         this.$el.scrollIntoView({ behavior: 'smooth' });
       }
     },
+
+    '$route.query.activate_brain': {
+      immediate: true,
+
+      handler(active) {
+        if (active) {
+          this.$router.push({ query: {} });
+
+          this.open = true;
+          this.openActiveOrDeactivateBrain(true);
+
+          this.$nextTick(() => {
+            this.$el.scrollIntoView({ behavior: 'smooth' });
+          });
+        }
+      },
+    },
   },
 
   methods: {

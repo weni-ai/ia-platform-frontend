@@ -45,6 +45,11 @@
     }
   },
   "router": {
+    "warn": {
+      "brain_is_deactivated": "Brain is deactivated. Activate Brain now,",
+      "click_here": "click here",
+      "activate_it": "to activate it."
+    },
     "tabs": {
       "personalization": "Customization",
       "content": "Content",

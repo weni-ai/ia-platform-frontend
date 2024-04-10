@@ -1,5 +1,27 @@
 <template>
   <div class="content-bases-page-container">
+    <section
+      v-if="brainIsDeactivated"
+      class="news-bar news-bar--warn"
+    >
+      <UnnnicIntelligenceText
+        color="neutral-white"
+        family="secondary"
+        weight="bold"
+        size="body-lg"
+      >
+        {{ $t('router.warn.brain_is_deactivated') }}
+
+        <RouterLink
+          :to="{ name: 'router-tunings', query: { activate_brain: true } }"
+        >
+          {{ $t('router.warn.click_here') }}
+        </RouterLink>
+
+        {{ $t('router.warn.activate_it') }}
+      </UnnnicIntelligenceText>
+    </section>
+
     <section class="repository-base-edit">
       <section class="repository-base-edit__header">
         <UnnnicAvatarIcon
@@ -63,12 +85,29 @@ export default {
     canEditTitle: Boolean,
     description: String,
     dontShowBack: Boolean,
+    brainIsDeactivated: Boolean,
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.news-bar {
+  margin: -$unnnic-spacing-lg;
+  margin-bottom: $unnnic-spacing-md;
+  padding: $unnnic-spacing-ant $unnnic-spacing-lg;
+
+  &--warn {
+    background-color: $unnnic-color-aux-yellow-500;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: $unnnic-spacing-nano;
+  }
+}
 
 .content-bases-page-container {
   background-color: $unnnic-color-background-snow;

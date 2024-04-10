@@ -3,6 +3,7 @@
     :loadingTitle="loadingContentBase"
     :title="contentBase.title"
     :dontShowBack="isRouterView"
+    :brainIsDeactivated="!routerTunings.brainOn"
     @back="
       $router.push({
         name: 'intelligence-home',
@@ -147,7 +148,10 @@
 
       <div
         v-if="
-          files.data.length || sites.data.length || knowledgeBase.text.oldValue
+          (files.data.length ||
+            sites.data.length ||
+            knowledgeBase.text.oldValue) &&
+          !isRouterView
         "
         :class="[
           'repository-base-edit__wrapper__card',
@@ -333,7 +337,7 @@ export default {
       },
 
       routerTunings: {
-        brainOn: false,
+        brainOn: true,
       },
     };
   },
