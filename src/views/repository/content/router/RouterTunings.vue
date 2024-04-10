@@ -1,121 +1,61 @@
 <template>
   <section class="tunings__container">
-    <UnnnicIntelligenceText
-      color="neutral-dark"
-      family="secondary"
-      weight="bold"
-      size="body-gt"
-      marginTop="xs"
-      tag="p"
-    >
+    <UnnnicIntelligenceText color="neutral-dark" family="secondary" weight="bold" size="body-gt" marginTop="xs" tag="p">
       {{ $t('router.tunings.model') }}
     </UnnnicIntelligenceText>
 
     <template v-for="(field, index) in fields">
-      <UnnnicIntelligenceText
-        :key="index"
-        v-if="field.type === 'naf-header'"
-        color="neutral-dark"
-        family="secondary"
-        weight="bold"
-        size="body-gt"
-        marginTop="md"
-        tag="p"
-      >
+      <UnnnicIntelligenceText :key="index" v-if="field.type === 'naf-header'" color="neutral-dark" family="secondary"
+        weight="bold" size="body-gt" marginTop="md" tag="p">
         {{ $t(`router.tunings.fields.${field.name}`) }}
       </UnnnicIntelligenceText>
 
-      <header
-        v-if="['radio', 'select', 'slider'].includes(field.type)"
-        :key="`label-${index}`"
-        class="tunings__form-element__label"
-      >
-        <UnnnicIntelligenceText
-          color="neutral-cloudy"
-          family="secondary"
-          size="body-gt"
-          tag="p"
-        >
+      <header v-if="['radio', 'select', 'slider'].includes(field.type)" :key="`label-${index}`"
+        class="tunings__form-element__label">
+        <UnnnicIntelligenceText color="neutral-cloudy" family="secondary" size="body-gt" tag="p">
           {{ $t(`router.tunings.fields.${field.name}`) }}
         </UnnnicIntelligenceText>
 
-        <UnnnicToolTip
-          v-if="['temperature', 'top_p', 'top_k'].includes(field.name)"
-          side="top"
-          :text="$t(`router.tunings.fields.${field.name}_info`)"
-          enabled
-          maxWidth="13rem"
-          class="tunings__form-element__label__tooltip"
-        >
-          <UnnnicIcon
-            icon="info"
-            size="sm"
-            scheme="neutral-cleanest"
-            filled
-          />
+        <UnnnicToolTip v-if="['temperature', 'top_p', 'top_k'].includes(field.name)" side="top"
+          :text="$t(`router.tunings.fields.${field.name}_info`)" enabled maxWidth="13rem"
+          class="tunings__form-element__label__tooltip">
+          <UnnnicIcon icon="info" size="sm" scheme="neutral-cleanest" filled />
         </UnnnicToolTip>
       </header>
 
-      <section
-        :key="index"
-        v-if="field.type === 'radio'"
-        class="tunings__form-element__radio"
-      >
-        <UnnnicRadio
-          v-for="option in field.options"
-          :key="option"
-          :value="option"
-          :globalValue="field.value"
-          size="md"
-          @change="$set(values, field.name, option)"
-        >
+      <section :key="index" v-if="field.type === 'radio'" class="tunings__form-element__radio">
+        <UnnnicRadio v-for="option in field.options" :key="option" :value="option" :globalValue="field.value" size="md"
+          @change="$set(values, field.name, option)">
           {{ option }}
         </UnnnicRadio>
       </section>
 
-      <UnnnicSlider
-        v-if="field.type === 'slider'"
-        :key="index + ':' + field.value"
-        :minValue="field.min"
-        :maxValue="field.max"
-        :step="field.step"
-        :initialValue="field.value"
-        @valueChange="$set(values, field.name, Number($event))"
-        class="tunings__form-element__slider"
-      />
+      <UnnnicSlider v-if="field.type === 'slider'" :key="index + ':' + field.value" :minValue="field.min"
+        :maxValue="field.max" :step="field.step" :initialValue="field.value"
+        @valueChange="$set(values, field.name, Number($event))" class="tunings__form-element__slider" />
 
-      <UnnnicSelectSmart
-        v-if="field.type === 'select'"
-        :key="index"
-        :value="[{ value: field.value, label: field.value }]"
-        @input="$set(values, field.name, $event[0].value)"
-        :options="
-          field.options.map((option) => ({ value: option, label: option }))
-        "
-        orderedByIndex
-      />
+      <section class="tunings__container_fields">
+        <UnnnicSelectSmart class="tunings__container_fields-element" v-if="field.type === 'select'" :key="index"
+          :value="[{ value: field.value, label: field.value }]" @input="$set(values, field.name, $event[0].value)"
+          :options="field.options.map((option) => ({ value: option, label: option }))
+            " orderedByIndex />
+        <unnnic-form-element class="tunings__container_fields-element" label="Token" v-if="field.type === 'text'"
+          :key="index">
+          <unnnic-input v-model="field.value" :placeholder="token" />
+        </unnnic-form-element>
+      </section>
     </template>
 
-    <RouterTuningsAdvanced
-      class="tunings__advanced"
-      :brainOn.sync="data.brainOn"
-    />
+    <RouterTuningsAdvanced class="tunings__advanced" :brainOn.sync="data.brainOn" />
 
     <UnnnicDivider ySpacing="md" />
 
     <footer class="tunings__actions">
-      <UnnnicButton
-        type="secondary"
-        @click="openRestoreDefaultModal"
-      >
+      <UnnnicButton type="secondary" @click="openRestoreDefaultModal">
         {{ $t('router.tunings.restore_default') }}
       </UnnnicButton>
 
-      <UnnnicButton
-        :disabled="!hasChanged"
-        :loading="saving"
-        @click="save"
-      >
+      <UnnnicButton :disabled="!hasChanged" :loading="saving" @click="save">
         {{ $t('router.tunings.save_changes') }}
       </UnnnicButton>
     </footer>
@@ -125,6 +65,7 @@
 <script>
 import nexusaiAPI from '../../../../api/nexusaiAPI';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
+import { WENIGPT_OPTIONS } from '@/utils';
 
 export default {
   props: {
@@ -142,7 +83,7 @@ export default {
 
       oldValues: {
         model: null,
-        version: 'wenigpt-1',
+        version: Object.keys(WENIGPT_OPTIONS)[0],
       },
 
       values: {
@@ -156,8 +97,8 @@ export default {
             {
               type: 'select',
               name: 'version',
-              default: 'wenigpt-1',
-              options: ['wenigpt-1'],
+              default: Object.keys(WENIGPT_OPTIONS)[0],
+              options: Object.keys(WENIGPT_OPTIONS),
             },
             {
               type: 'naf-header',
@@ -192,6 +133,16 @@ export default {
         {
           name: 'ChatGPT',
           fields: [
+            {
+              type: 'text',
+              name: 'token'
+            },
+            {
+              type: 'select',
+              name: 'version-gpt',
+              default: 'gpt-4-turbo',
+              options: ['gpt-3.5-turbo', 'gpt-4-turbo'],
+            },
             {
               type: 'naf-header',
               name: 'parameter',
@@ -251,7 +202,6 @@ export default {
     const { data } = await nexusaiAPI.router.tunings.read({
       projectUuid: this.$store.state.Auth.connectProjectUuid,
     });
-
     this.setInitialValues(data);
   },
 
@@ -268,18 +218,22 @@ export default {
         action: this.restoreDefault,
       };
     },
+    getValue(name, data) {
+      const specialValues = ['temperature', 'top_p', 'top_k', 'version'];
 
+      if (specialValues.includes(name)) {
+        return name === 'version' ? WENIGPT_OPTIONS[data.setup[name]] : Number(data.setup[name]);
+      }
+
+      return data.setup[name];
+    },
     setInitialValues(data) {
       this.$set(this.oldValues, 'model', data.model);
       this.$set(this.values, 'model', data.model);
 
       Object.keys(data.setup).forEach((name) => {
-        const value = ['temperature', 'top_p', 'top_k'].includes(name)
-          ? Number(data.setup[name])
-          : data.setup[name];
-
-        this.$set(this.oldValues, name, value);
-        this.$set(this.values, name, value);
+        this.$set(this.oldValues, name, this.getValue(name, data));
+        this.$set(this.values, name, this.getValue(name, data));
       });
     },
 
@@ -305,11 +259,12 @@ export default {
     async save() {
       try {
         this.saving = true;
-
+        const handleFieldName = (name) => name === 'version-gpt' ? 'version' : name
+        const handleFieldValue = (name, value) => name === 'version' ? WENIGPT_OPTIONS[value] : value
         const { data } = await nexusaiAPI.router.tunings.edit({
           projectUuid: this.$store.state.Auth.connectProjectUuid,
           values: this.fields.reduce(
-            (values, field) => ({ ...values, [field.name]: field.value }),
+            (values, field) => ({ ...values, [handleFieldName(field.name)]: handleFieldValue(field.name, field.value) }),
             {},
           ),
         });
@@ -361,8 +316,19 @@ export default {
   display: flex;
   column-gap: $unnnic-spacing-md;
 
-  > * {
+  >* {
     flex: 1;
+  }
+}
+
+.tunings__container_fields {
+  display: flex;
+  align-items: flex-start;
+  gap: $unnnic-spacing-sm;
+  align-self: stretch;
+
+  &-element {
+    width: 100%;
   }
 }
 </style>
