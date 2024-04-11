@@ -6,14 +6,14 @@
     class="repository-base-edit__wrapper__card-content"
   />
 
-  <div
+  <section
     v-else
     :class="[
       'repository-base-edit__wrapper__card',
       'repository-base-edit__wrapper__card-content',
     ]"
   >
-    <div class="repository-base-edit__wrapper__card-content__header">
+    <header class="repository-base-edit__wrapper__card-content__header">
       {{ $t('content_bases.write_content') }}
 
       <UnnnicButton
@@ -25,7 +25,7 @@
       >
         {{ $t('webapp.settings.save') }}
       </UnnnicButton>
-    </div>
+    </header>
 
     <textarea
       v-model="item.value"
@@ -37,7 +37,7 @@
       :placeholder="$t('content_bases.write_content_placeholder')"
     ></textarea>
 
-    <div
+    <section
       v-if="!item.value.trim() && false"
       class="repository-base-edit__wrapper__card-content__info"
     >
@@ -47,9 +47,9 @@
         scheme="neutral-cloudy"
       />
 
-      <span v-html="$t('content_bases.write_content_help')"></span>
-    </div>
-  </div>
+      <p v-html="$t('content_bases.write_content_help')"></p>
+    </section>
+  </section>
 </template>
 
 <script>

@@ -46,8 +46,7 @@ export default {
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .modal-warn
-  ::v-deep
-  .unnnic-modal-container-background-body-description-container {
+  :deep(.unnnic-modal-container-background-body-description-container) {
   padding-bottom: $unnnic-spacing-xs;
 }
 </style>
