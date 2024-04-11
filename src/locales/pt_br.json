@@ -45,7 +45,21 @@
     }
   },
   "router": {
+    "warn": {
+      "brain_is_deactivated": "O Brain está desativado. Ative o Brain agora,",
+      "click_here": "clique aqui",
+      "activate_it": "para ativá-lo."
+    },
+    "tabs": {
+      "personalization": "Personalização",
+      "content": "Conteúdo",
+      "actions": "Ações",
+      "tunings": "Ajustes"
+    },
     "actions": {
+      "title": "Ações",
+      "description": "Configure quando seu fluxo deve ser iniciado.",
+      "add": "Adicionar ação",
       "router_activated": "Brain ativado em {name}",
       "router_removed": "Brain removido de {name}",
       "router_edited": "Descrição de {name} atualizada"
@@ -108,7 +122,7 @@
     "files": {
       "upload_content": "Carregar conteúdo de arquivos",
       "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",
-      "supported_files": "Formatos suportados: .pdf, .doc, docx, .txt, .xls e .xlsx.<br />Limite de 250MB por arquivo.",
+      "supported_files": "Formatos suportados: .pdf, .doc, docx, .txt, .xls e .xlsx.<br /> Limite de 250MB por arquivo.",
       "browse_file": "Adicionar arquivo",
       "uploaded_files": "Arquivos carregados",
       "status": {
@@ -1281,27 +1295,27 @@
     "actions": {
       "btn_back": "Voltar",
       "btn_next": "Avançar",
-      "btn_create": "Ativar Router",
+      "btn_create": "Adicionar",
       "btn_cancel": "Cancelar",
       "btn_remove": "Remover",
       "btn_complete": "Concluir",
       "flow": {
         "title": "Selecionar fluxo",
         "fill_name": "Selecionar fluxo",
-        "sub_title": "Selecione o fluxo que deseja adicionar o Router",
+        "sub_title": "Selecione o fluxo que deseja adicionar à ação",
         "placeholder": "Pesquisar fluxo"
       },
       "descriptions": {
-        "title": "Adicionar descrição no fluxo",
-        "fill_name": "Adicionar descrição ",
-        "sub_title": "Para ativar o Router, adicione uma descrição para o fluxo",
-        "label": "Descrição",
-        "change_title": "Alterar descrição do fluxo",
-        "change_sub_title": "A descrição ajuda o router funcionar de forma mais adequada"
+        "title": "Adicionar ação no fluxo",
+        "fill_name": "Adicionar ação",
+        "sub_title": "Explique seu fluxo e quando o usuário deve entrar nele. Busque ser objetivo.",
+        "label": "Descreva a ação",
+        "change_title": "Alterar descrição da ação",
+        "change_sub_title": "A descrição ajuda o Brain funcionar de forma mais adequada"
       },
       "remove": {
-        "title": "Remover router do fluxo",
-        "description": "Tem certeza que deseja remover o router de <strong>{name}</strong>? <br><br>Essa ação não poderá ser revertida"
+        "title": "Remover ação",
+        "description": "Tem certeza que deseja remover a ação <strong>{name}</strong>? <br><br>Essa ação não poderá ser revertida"
       }
     },
     "cant_access": {

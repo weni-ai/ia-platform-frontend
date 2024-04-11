@@ -45,7 +45,21 @@
     }
   },
   "router": {
+    "warn": {
+      "brain_is_deactivated": "Brain is deactivated. Activate Brain now,",
+      "click_here": "click here",
+      "activate_it": "to activate it."
+    },
+    "tabs": {
+      "personalization": "Customization",
+      "content": "Content",
+      "actions": "Actions",
+      "tunings": "Tunings"
+    },
     "actions": {
+      "title": "Actions",
+      "description": "Configure when your flow should be started.",
+      "add": "Add action",
       "router_activated": "Brain activated in {name}",
       "router_removed": "Brain removed from {name}",
       "router_edited": "Description of {name} updated"
@@ -108,7 +122,7 @@
     "files": {
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
-      "supported_files": "Supported formats: .pdf, .doc, docx, .txt, .xls and .xlsx.<br />250MB limit per file.",
+      "supported_files": "Supported formats: .pdf, .doc, docx, .txt, .xls and .xlsx.<br /> 250MB limit per file.",
       "browse_file": "Add file",
       "uploaded_files": "Uploaded files",
       "status": {
@@ -142,7 +156,7 @@
         "button_load_content": "Load content"
       },
       "add_site": "Add website",
-      "delete_file": {
+      "delete_site": {
         "title": "Delete website",
         "description": "Are you sure you want to delete the website <b>{name}</b>?<br />The contents of this website will be removed from the AI base",
         "cancel": "Cancel",
@@ -1323,27 +1337,27 @@
     "actions": {
       "btn_back": "Back",
       "btn_next": "Next",
-      "btn_create": "Activate Router",
+      "btn_create": "Add",
       "btn_cancel": "Cancel",
       "btn_complete": "Finish",
       "btn_remove": "Remove",
       "flow": {
-        "title": "Select Flow",
-        "fill_name": "Select Flow",
-        "sub_title": "Select the flow you want to add the Router",
-        "placeholder": "Search Flow"
+        "title": "Select flow",
+        "fill_name": "Select flow",
+        "sub_title": "Select the flow you want to add to the action",
+        "placeholder": "Search flow"
       },
       "descriptions": {
-        "title": "Add description to flow",
-        "fill_name": "Add description ",
-        "sub_title": "To activate the Router, add a description to the flow",
-        "label": "Description",
-        "change_title": "Change flow description",
-        "change_sub_title": "The description helps the router work better"
+        "title": "Add action to the flow",
+        "fill_name": "Add action",
+        "sub_title": "Explain your flow and when the user should enter it. Try to be objective.",
+        "label": "Describe the action",
+        "change_title": "Change action description",
+        "change_sub_title": "The description helps the Brain work better"
       },
       "remove": {
-        "title": "Remove router from flow",
-        "description": "Are you sure you want to remove the router from <strong>{name}</strong>? <br><br>This action cannot be reversed"
+        "title": "Remove action",
+        "description": "Are you sure you want to remove the <strong>{name}</strong> action? <br><br>This action cannot be reversed"
       }
     },
     "cant_access": {

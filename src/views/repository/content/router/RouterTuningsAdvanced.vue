@@ -74,6 +74,23 @@ export default {
         this.$el.scrollIntoView({ behavior: 'smooth' });
       }
     },
+
+    '$route.query.activate_brain': {
+      immediate: true,
+
+      handler(active) {
+        if (active) {
+          this.$router.push({ query: {} });
+
+          this.open = true;
+          this.openActiveOrDeactivateBrain(true);
+
+          this.$nextTick(() => {
+            this.$el.scrollIntoView({ behavior: 'smooth' });
+          });
+        }
+      },
+    },
   },
 
   methods: {
@@ -117,6 +134,16 @@ export default {
           action: this.changeBrainOn.bind(this, false),
         };
       }
+
+      this.$nextTick(() => {
+        const actionButton = document.querySelector(
+          'button.unnnic-button--attention',
+        );
+
+        if (actionButton) {
+          actionButton.focus();
+        }
+      });
     },
 
     async changeBrainOn(brain_on) {
@@ -129,11 +156,6 @@ export default {
         });
 
         this.$emit('update:brainOn', data.brain_on);
-
-        this.$store.state.alert = {
-          type: 'success',
-          text: this.$t('router.tunings.default_restored'),
-        };
       } finally {
         this.$store.state.modalWarn = null;
       }

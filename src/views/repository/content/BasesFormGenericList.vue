@@ -7,6 +7,7 @@
       :counter="hideCounter ? undefined : counter"
       :addText="addText"
       :hideToggle="hideToggle"
+      @add="$emit('add')"
     />
 
     <section v-show="open">

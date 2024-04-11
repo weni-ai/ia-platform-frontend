@@ -44,7 +44,7 @@
           ? $t('content_bases.tabs.sites')
           : $t('content_bases.sites.uploaded_sites')
       "
-      :description="'Lorem ipsum dolor sit amet'"
+      :description="$t('content_bases.sites.sidebar_add.description')"
       :addText="$t('content_bases.sites.add_site')"
       :items.sync="items"
       @load-more="$emit('load-more')"
