@@ -143,7 +143,9 @@
                 v-else-if="$route.name === 'router-actions'"
                 :items="routerActions"
               />
-              <RouterCustomization v-else-if="$route.name === 'router-personalization'"/>
+              <RouterCustomization
+                v-else-if="$route.name === 'router-personalization'"
+              />
               <RouterTunings
                 v-else-if="$route.name === 'router-tunings'"
                 :data="routerTunings"
@@ -242,7 +244,7 @@ import BaseSettingsForm from '../../../components/BaseSettingsForm';
 import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
 import RouterActions from './router/RouterActions.vue';
 import RouterTunings from './router/RouterTunings.vue';
-import RouterCustomization from './router/RouterCustomization.vue'
+import RouterCustomization from './router/RouterCustomization.vue';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -256,7 +258,7 @@ export default {
     BasesFormGenericListHeader,
     RouterActions,
     RouterTunings,
-    RouterCustomization
+    RouterCustomization,
   },
   mixins: [RemoveBulmaMixin],
   data() {
@@ -375,7 +377,6 @@ export default {
     },
 
     async loadFiles() {
-      console.log(this.$store.state.Auth)
       this.files.status = 'loading';
 
       const { data } = await nexusaiAPI.intelligences.contentBases.files.list({
