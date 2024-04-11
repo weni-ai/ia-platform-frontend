@@ -254,6 +254,25 @@ export default {
         },
       },
     },
+
+    tunings: {
+      read({ projectUuid }) {
+        return request.$http.get(`api/${projectUuid}/llm/`);
+      },
+
+      restoreDefault({ projectUuid }) {
+        return request.$http.post(`api/${projectUuid}/llm-default/`);
+      },
+
+      edit({ projectUuid, values }) {
+        const { model, ...others } = values;
+
+        return request.$http.patch(`api/${projectUuid}/llm/`, {
+          model,
+          setup: others,
+        });
+      },
+    },
   },
 
   intelligences: {

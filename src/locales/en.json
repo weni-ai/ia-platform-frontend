@@ -49,6 +49,30 @@
       "router_activated": "Brain activated in {name}",
       "router_removed": "Brain removed from {name}",
       "router_edited": "Description of {name} updated"
+    },
+    "tunings": {
+      "model": "Model",
+      "restore_default": "Restore default",
+      "save_changes": "Save changes",
+      "changes_saved": "Changes saved",
+      "default_restored": "Default settings restored",
+      "restore_default_modal": {
+        "title": "Restore default",
+        "description": "Are you sure you want to restore the default settings? This action cannot be reversed",
+        "cancel": "Cancel",
+        "restore": "Restore"
+      },
+      "fields": {
+        "model": "Select model",
+        "version": "Version",
+        "parameter": "Parameters",
+        "temperature": "Temperature",
+        "temperature_info": "Adjust the Temperature to control the diversity of the responses generated",
+        "top_p": "Top P",
+        "top_p_info": "When you set the \"top P\" of an artificial intelligence model, you are adjusting how the model selects the next words during text generation",
+        "top_k": "Top K",
+        "top_k_info": "By setting the \"top K\" of an artificial intelligence model, you are determining how many of the most likely words the model will consider when choosing the next word during text generation"
+      }
     }
   },
   "content_bases": {
@@ -1320,6 +1344,47 @@
         "description": "5. Choose the flow of your choice and use the “Divide by Intent” card.<br />6. Select the intelligence you integrated before, and choose the intent criteria the chatbot should use.<br />7. Great! Now your chatbot can talk to people smarter and more effectively with the new intelligence.",
         "back_button": "Back",
         "close_button": "Start"
+      }
+    }
+  },
+  "customization": {
+    "title": "Agent persona",
+    "sub_title": "Profile of your intelligent agent. This is where you'll enter its characteristics and behaviors.",
+    "save_btn": "Save Changes",
+    "fields": {
+      "name": "Name",
+      "occupation": "Occupation",
+      "personality": "Personality",
+      "goal": "Goal",
+      "instruction": "Instruction",
+      "personalities": {
+        "friendly": "Friendly",
+        "extrovert": "Extrovert",
+        "cooperative": "Cooperative",
+        "generous": "Generous",
+        "relaxed": "Relaxed",
+        "organized": "Organized",
+        "systematic": "Systematic",
+        "innovative": "Innovative",
+        "creative": "Creative",
+        "intellectual": "Intellectual"
+      }
+    },
+    "placeholders": {
+      "instruction": "Instruction",
+      "name": "Agent's name",
+      "occupation": "Agent's occupation", 
+      "goal": "Agent's goal"
+    },
+    "instructions": {
+      "title": "General instructions",
+      "sub_title": "How you want the agent to behave. Example: You're funny but you don't make jokes.",
+      "add_instruction_btn": "Add instruction",
+      "modals": {
+        "title": "Remove instruction",
+        "description": "Are you sure you want to remove the instruction?",
+        "back_btn": "Cancel",
+        "remove_btn": "Remove"
       }
     }
   }

@@ -49,6 +49,30 @@
       "router_activated": "Brain ativado em {name}",
       "router_removed": "Brain removido de {name}",
       "router_edited": "Descrição de {name} atualizada"
+    },
+    "tunings": {
+      "model": "Modelo",
+      "restore_default": "Restaurar padrão",
+      "save_changes": "Salvar alterações",
+      "changes_saved": "Alterações salvas",
+      "default_restored": "Configurações padrões restauradas",
+      "restore_default_modal": {
+        "title": "Restaurar padrão",
+        "description": "Tem certeza que deseja restaurar as configurações padrões? Essa ação não poderá ser revertida",
+        "cancel": "Cancelar",
+        "restore": "Restaurar"
+      },
+      "fields": {
+        "model": "Selecione o modelo",
+        "version": "Versão",
+        "parameter": "Parâmetros",
+        "temperature": "Temperatura",
+        "temperature_info": "Ajuste a Temperatura para controlar a diversidade das respostas geradas",
+        "top_p": "Top P",
+        "top_p_info": "Ao configurar o \"top P\" de um modelo de inteligência artificial, você está ajustando como o modelo seleciona as próximas palavras durante a geração de texto",
+        "top_k": "Top K",
+        "top_k_info": "Ao configurar o \"top K\" de um modelo de inteligência artificial, você está determinando quantas das palavras mais prováveis o modelo considerará ao escolher a próxima palavra durante a geração de texto."
+      }
     }
   },
   "content_bases": {
@@ -1278,6 +1302,47 @@
         "description": "5. Escolha o fluxo de sua preferência e utilize o card “Dividir por Intenção”.<br />6. Selecione a inteligência que você integrou antes, e escolha os critérios de intenções que o chatbot deve usar.<br />7. Ótimo! Agora o seu chatbot pode conversar com as pessoas de forma mais inteligente e eficaz com a nova inteligência.",
         "back_button": "Voltar",
         "close_button": "Começar"
+      }
+    }
+  },
+  "customization": {
+    "title": "Persona do agente",
+    "sub_title": "Perfil do seu agente inteligente. Aqui é onde você irá inserir suas características e comportamentos.",
+    "save_btn": "Salvar Alterações",
+    "fields": {
+      "name": "Nome",
+      "occupation": "Ocupação",
+      "personality": "Personalidade",
+      "goal": "Objetivo",
+      "instruction": "Instrução",
+      "personalities": {
+        "friendly": "Amigável",
+        "extrovert": "Extrovertido",
+        "cooperative": "Cooperativo",
+        "generous": "Generoso",
+        "relaxed": "Relaxado",
+        "organized": "Organizado",
+        "systematic": "Sistemático",
+        "innovative": "Inovador",
+        "creative": "Criativo",
+        "intellectual": "Intelectual"
+      }
+    },
+    "placeholders": {
+      "instruction": "Instrução",
+      "name": "Nome do agente",
+      "occupation": "Ocupação do agente", 
+      "goal": "Objetivo do agente"
+    },
+    "instructions": {
+      "title": "Instruções gerais",
+      "sub_title": "Como você quer que o agente se comporte. Exemplo: Você é divertido mas não faz piadas.",
+      "add_instruction_btn": "Adicionar instrução",
+      "modals": {
+        "title": "Remover instrução",
+        "description": "Tem certeza que deseja remover a instrução?",
+        "back_btn": "Cancelar",
+        "remove_btn": "Remover"
       }
     }
   }
