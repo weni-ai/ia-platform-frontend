@@ -1,18 +1,30 @@
 <template>
   <div id="app">
     <!-- <news-modal /> -->
-    <router-view />
+    <RouterView />
     <!-- <tutorial-modal
       :open="activeMenu"/> -->
 
-    <modal-depending-on-flows-length />
+    <ModalDependingOnFlowsLength />
 
-    <unnnic-alert
+    <UnnnicAlert
       v-if="$store.state.alert"
       :key="$store.state.alert.text"
       v-bind="$store.state.alert"
       @close="$store.state.alert = null"
-    ></unnnic-alert>
+    ></UnnnicAlert>
+
+    <ModalWarn
+      v-if="$store.state.modalWarn"
+      :showModal="!!$store.state.modalWarn"
+      :title="$store.state.modalWarn.title"
+      :description="$store.state.modalWarn.description"
+      :closeText="$store.state.modalWarn.closeText"
+      :actionText="$store.state.modalWarn.actionText"
+      :loading="$store.state.modalWarn.loading"
+      @close="$store.state.modalWarn = null"
+      @action="$store.state.modalWarn.action"
+    />
   </div>
 </template>
 
@@ -23,12 +35,14 @@ import hotjar from '@/utils/plugins/hotjar';
 import I18n from '@/utils/plugins/i18n';
 import store from './store';
 import ModalDependingOnFlowsLength from './components/ModalDependingOnFlowsLength';
+import ModalWarn from './components/ModalWarn.vue';
 
 export default {
   components: {
     NewsModal,
     I18n,
     ModalDependingOnFlowsLength,
+    ModalWarn,
   },
 
   name: 'App',
@@ -44,11 +58,11 @@ export default {
       if (I18n.locale === 'pt-BR') {
         return 'Weni Inteligência Artificial';
       }
-      if (I18n.locale === 'en-US'){
+      if (I18n.locale === 'en-US') {
         return 'Weni Artificial Intelligence';
       }
-      return 'Weni Inteligencia Artificial'
-    }
+      return 'Weni Inteligencia Artificial';
+    },
   },
   created() {
     window.addEventListener('message', (event) => {
@@ -92,28 +106,28 @@ export default {
     ...mapActions(['getMyProfileInfo', 'setUserName']),
     async profileInfo() {
       const { data } = await this.getMyProfileInfo();
-      if (data){
+      if (data) {
         this.$set(this.$store.state.User, 'me', data);
 
-        this.setUserName(data.name)
+        this.setUserName(data.name);
         if (data.language.includes('-')) {
           const [first, second] = data.language.split('-');
           const secondUpperCase = second.toUpperCase();
           const languageResult = `${first}-${secondUpperCase}`;
           this.$i18n.locale = languageResult;
         } else {
-          this.$i18n.locale = data.language
+          this.$i18n.locale = data.language;
         }
       }
-      return true
+      return true;
     },
     safariDetected() {
       if (
-        navigator.userAgent.indexOf('Safari') !== -1
-        && navigator.userAgent.indexOf('Chrome') === -1
+        navigator.userAgent.indexOf('Safari') !== -1 &&
+        navigator.userAgent.indexOf('Chrome') === -1
       ) {
         this.$router.push({
-          name: 'safari-alert'
+          name: 'safari-alert',
         });
       }
     },
@@ -126,10 +140,13 @@ export default {
       const debug = url.host && url.host.includes('develop');
 
       document.querySelectorAll('a[href]').forEach((link) => {
-        const internalHref = link.getAttribute('internal-href') || link.getAttribute('href');
+        const internalHref =
+          link.getAttribute('internal-href') || link.getAttribute('href');
 
         if (
-          ['http://', 'https://'].some((initial) => internalHref.startsWith(initial),)
+          ['http://', 'https://'].some((initial) =>
+            internalHref.startsWith(initial),
+          )
         ) {
           return;
         }
@@ -173,17 +190,16 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@/assets/scss/utilities.scss";
-@import "~@/assets/scss/default.scss";
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '~@/assets/scss/utilities.scss';
+@import '~@/assets/scss/default.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@/assets/scss/variables.scss';
+@import '~@weni/unnnic-system/dist/unnnic.css';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 html:not(.not-bulma) {
-  @import "~bulma";
-  @import "~buefy/src/scss/buefy";
-
+  @import '~bulma';
+  @import '~buefy/src/scss/buefy';
 }
 
 body {
@@ -217,17 +233,17 @@ body {
 
 // based on https://flatuicolors.com/palette/nl
 $entities-colors: (
-  ("selected", $grey-lighter, black),
-  ("sunflower", #ffc312, black),
-  ("energos", #c4e538, black),
-  ("blue-martina", #12cbc4, black),
-  ("lavender-rose", #fda7df, black),
-  ("bara-red", #ed4c67, white),
-  ("radiant-yellow", #f79f1f, white),
-  ("android-green", #a3cb38, white),
-  ("mediterranean-sea", #1289a7, white),
-  ("lavender-tea", #d980fa, black),
-  ("very-berry", #b53471, white)
+  ('selected', $grey-lighter, black),
+  ('sunflower', #ffc312, black),
+  ('energos', #c4e538, black),
+  ('blue-martina', #12cbc4, black),
+  ('lavender-rose', #fda7df, black),
+  ('bara-red', #ed4c67, white),
+  ('radiant-yellow', #f79f1f, white),
+  ('android-green', #a3cb38, white),
+  ('mediterranean-sea', #1289a7, white),
+  ('lavender-tea', #d980fa, black),
+  ('very-berry', #b53471, white)
 );
 
 @each $entity-color in $entities-colors {

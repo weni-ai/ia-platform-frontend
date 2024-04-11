@@ -3,10 +3,10 @@
     :showModal="showModal"
     scheme="aux-yellow-500"
     modalIcon="warning"
-    :text="$t('router.tunings.restore_default_modal.title')"
-    :description="$t('router.tunings.restore_default_modal.description')"
+    :text="title"
+    :description="description"
     :closeIcon="false"
-    class="restore-default-modal"
+    class="modal-warn"
   >
     <UnnnicButton
       slot="options"
@@ -14,17 +14,17 @@
       type="tertiary"
       @click="$emit('close')"
     >
-      {{ $t('router.tunings.restore_default_modal.cancel') }}
+      {{ closeText }}
     </UnnnicButton>
 
     <UnnnicButton
       slot="options"
       class="create-repository__container__button attention-button"
       type="attention"
-      :loading="restoring"
-      @click="$emit('restore')"
+      :loading="loading"
+      @click="$emit('action')"
     >
-      {{ $t('router.tunings.restore_default_modal.restore') }}
+      {{ actionText }}
     </UnnnicButton>
   </UnnnicModal>
 </template>
@@ -33,7 +33,11 @@
 export default {
   props: {
     showModal: Boolean,
-    restoring: Boolean,
+    loading: Boolean,
+    title: String,
+    description: String,
+    closeText: String,
+    actionText: String,
   },
 };
 </script>
@@ -41,7 +45,7 @@ export default {
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-.restore-default-modal
+.modal-warn
   :deep(.unnnic-modal-container-background-body-description-container) {
   padding-bottom: $unnnic-spacing-xs;
 }
