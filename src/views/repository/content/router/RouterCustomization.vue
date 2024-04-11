@@ -47,7 +47,7 @@
               :key="index"
               @click="handlePersonalitySelect(item)"
             >
-              <p>{{ item.label }}</p>
+              <p>{{ $t(`customization.fields.personalities.${item.label}`) }}</p>
             </section>
           </div>
         </section>
@@ -171,43 +171,43 @@ export default {
       },
       personalities: [
         {
-          label: this.$t('customization.fields.personalities.friendly'),
+          label: 'friendly',
           value: 'Amigável',
         },
         {
-          label: this.$t('customization.fields.personalities.cooperative'),
+          label: 'cooperative',
           value: 'Cooperativo',
         },
         {
-          label: this.$t('customization.fields.personalities.extrovert'),
+          label: 'extrovert',
           value: 'Extrovertido',
         },
         {
-          label: this.$t('customization.fields.personalities.generous'),
+          label: 'generous',
           value: 'Generoso',
         },
         {
-          label: this.$t('customization.fields.personalities.relaxed'),
+          label: 'relaxed',
           value: 'Relaxado',
         },
         {
-          label: this.$t('customization.fields.personalities.organized'),
+          label: 'organized',
           value: 'Organizado',
         },
         {
-          label: this.$t('customization.fields.personalities.systematic'),
+          label: 'systematic',
           value: 'Sistemático',
         },
         {
-          label: this.$t('customization.fields.personalities.innovative'),
+          label: 'innovative',
           value: 'Inovador',
         },
         {
-          label: this.$t('customization.fields.personalities.creative'),
+          label: 'creative',
           value: 'Criativo',
         },
         {
-          label: this.$t('customization.fields.personalities.intellectual'),
+          label: 'intellectual',
           value: 'Intelectual',
         },
       ],
@@ -253,7 +253,12 @@ export default {
   async created() {
     const { data } = await nexusaiAPI.router.customization.read({
       projectUuid: this.$store.state.Auth.connectProjectUuid,
-    });
+    }).catch(() => {
+      this.$store.state.alert = {
+          type: 'error',
+          text: this.$t('customization.invalid_get_data'),
+      };
+    })
 
     let currentData = data;
 
