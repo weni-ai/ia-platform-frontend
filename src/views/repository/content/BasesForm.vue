@@ -143,7 +143,9 @@
                 v-else-if="$route.name === 'router-actions'"
                 :items="routerActions"
               />
-
+              <RouterCustomization
+                v-else-if="$route.name === 'router-personalization'"
+              />
               <RouterTunings
                 v-else-if="$route.name === 'router-tunings'"
                 :data="routerTunings"
@@ -242,6 +244,7 @@ import BaseSettingsForm from '../../../components/BaseSettingsForm';
 import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
 import RouterActions from './router/RouterActions.vue';
 import RouterTunings from './router/RouterTunings.vue';
+import RouterCustomization from './router/RouterCustomization.vue';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -255,6 +258,7 @@ export default {
     BasesFormGenericListHeader,
     RouterActions,
     RouterTunings,
+    RouterCustomization,
   },
   mixins: [RemoveBulmaMixin],
   data() {

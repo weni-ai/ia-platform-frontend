@@ -85,6 +85,7 @@
       />
 
       <UnnnicSelectSmart
+        class="tunings__container_fields-element"
         v-if="field.type === 'select'"
         :key="index"
         :value="[{ value: field.value, label: field.value }]"
@@ -94,6 +95,17 @@
         "
         orderedByIndex
       />
+      <UnnnicFormElement
+        class="tunings__container_fields-element"
+        label="Token"
+        v-if="field.type === 'text'"
+        :key="index"
+      >
+        <UnnnicInput
+          v-model="field.value"
+          :placeholder="token"
+        />
+      </UnnnicFormElement>
     </template>
 
     <RouterTuningsAdvanced
@@ -125,6 +137,7 @@
 <script>
 import nexusaiAPI from '../../../../api/nexusaiAPI';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
+import { WENIGPT_OPTIONS } from '@/utils';
 
 export default {
   props: {
@@ -142,7 +155,6 @@ export default {
 
       oldValues: {
         model: null,
-        version: 'wenigpt-1',
       },
 
       values: {
@@ -156,8 +168,8 @@ export default {
             {
               type: 'select',
               name: 'version',
-              default: 'wenigpt-1',
-              options: ['wenigpt-1'],
+              default: Object.keys(WENIGPT_OPTIONS)[0],
+              options: Object.keys(WENIGPT_OPTIONS),
             },
             {
               type: 'naf-header',
@@ -192,6 +204,16 @@ export default {
         {
           name: 'ChatGPT',
           fields: [
+            {
+              type: 'text',
+              name: 'token',
+            },
+            {
+              type: 'select',
+              name: 'version-gpt',
+              default: 'gpt-4-turbo',
+              options: ['gpt-3.5-turbo', 'gpt-4-turbo'],
+            },
             {
               type: 'naf-header',
               name: 'parameter',
@@ -251,7 +273,6 @@ export default {
     const { data } = await nexusaiAPI.router.tunings.read({
       projectUuid: this.$store.state.Auth.connectProjectUuid,
     });
-
     this.setInitialValues(data);
   },
 
@@ -273,13 +294,28 @@ export default {
       this.$set(this.oldValues, 'model', data.model);
       this.$set(this.values, 'model', data.model);
 
-      Object.keys(data.setup).forEach((name) => {
-        const value = ['temperature', 'top_p', 'top_k'].includes(name)
-          ? Number(data.setup[name])
-          : data.setup[name];
+      const handleName = (name) =>
+        name === 'version' && data.model === 'ChatGPT' ? 'version-gpt' : name;
+      const getValue = (name) => {
+        const specialValues = ['temperature', 'top_p', 'top_k'];
 
-        this.$set(this.oldValues, name, value);
-        this.$set(this.values, name, value);
+        if (specialValues.includes(name)) {
+          return Number(data.setup[name]);
+        }
+
+        if (name === 'version' && data.model === 'WeniGPT') {
+          const option = Object.entries(WENIGPT_OPTIONS).find(
+            ([_, value]) => value === data.setup[name],
+          );
+          return option ? option[0] : '';
+        }
+
+        return data.setup[name];
+      };
+
+      Object.keys(data.setup).forEach((name) => {
+        this.$set(this.oldValues, handleName(name), getValue(name));
+        this.$set(this.values, handleName(name), getValue(name));
       });
     },
 
@@ -305,11 +341,20 @@ export default {
     async save() {
       try {
         this.saving = true;
-
+        const handleFieldName = (name) =>
+          name === 'version-gpt' ? 'version' : name;
+        const handleFieldValue = (name, value) =>
+          name === 'version' ? WENIGPT_OPTIONS[value] : value;
         const { data } = await nexusaiAPI.router.tunings.edit({
           projectUuid: this.$store.state.Auth.connectProjectUuid,
           values: this.fields.reduce(
-            (values, field) => ({ ...values, [field.name]: field.value }),
+            (values, field) => ({
+              ...values,
+              [handleFieldName(field.name)]: handleFieldValue(
+                field.name,
+                field.value,
+              ),
+            }),
             {},
           ),
         });
@@ -363,6 +408,17 @@ export default {
 
   > * {
     flex: 1;
+  }
+}
+
+.tunings__container_fields {
+  display: flex;
+  align-items: flex-start;
+  gap: $unnnic-spacing-sm;
+  align-self: stretch;
+
+  &-element {
+    width: 100%;
   }
 }
 </style>
