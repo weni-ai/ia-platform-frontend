@@ -291,8 +291,8 @@ export default {
     },
 
     setInitialValues(data) {
-      this.$set(this.oldValues, 'model', data.model);
-      this.$set(this.values, 'model', data.model);
+      this.$set(this.oldValues, 'model', data.model || this.values.model);
+      this.$set(this.values, 'model', data.model || this.values.model);
 
       const handleName = (name) =>
         name === 'version' && data.model === 'ChatGPT' ? 'version-gpt' : name;
