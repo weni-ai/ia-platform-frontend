@@ -258,6 +258,7 @@ export default {
           type: 'error',
           text: this.$t('customization.invalid_get_data'),
       };
+      return { data: null };
     })
 
     let currentData = data;
