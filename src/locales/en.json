@@ -1346,7 +1346,8 @@
         "title": "Select flow",
         "fill_name": "Select flow",
         "sub_title": "Select the flow you want to add to the action",
-        "placeholder": "Search flow"
+        "placeholder": "Search flow",
+        "not_found_message": "Flow not found"
       },
       "descriptions": {
         "title": "Add action to the flow",

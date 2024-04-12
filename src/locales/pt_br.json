@@ -1304,7 +1304,8 @@
         "title": "Selecionar fluxo",
         "fill_name": "Selecionar fluxo",
         "sub_title": "Selecione o fluxo que deseja adicionar à ação",
-        "placeholder": "Pesquisar fluxo"
+        "placeholder": "Pesquisar fluxo",     
+        "not_found_message": "Fluxo não encontrado"
       },
       "descriptions": {
         "title": "Adicionar ação no fluxo",
