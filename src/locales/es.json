@@ -1325,7 +1325,8 @@
         "title": "Seleccionar flujo",
         "fill_name": "Seleccionar flujo",
         "sub_title": "Seleccione el flujo que desea añadir a la acción",
-        "placeholder": "Buscar flujo"
+        "placeholder": "Buscar flujo",
+        "not_found_message": "Flujo no encontrado"
       },
       "descriptions": {
         "title": "Añadir una acción al flujo",
