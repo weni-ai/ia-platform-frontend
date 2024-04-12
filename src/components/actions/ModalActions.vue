@@ -87,7 +87,6 @@
               />
               <p>{{ item.name }}</p>
             </div>
-
             <template v-if="items.status === 'loading'">
               <UnnnicSkeletonLoading
                 v-for="i in 3"
@@ -104,6 +103,17 @@
             ></div>
           </div>
         </div>
+        <section 
+          v-if="items.data.length === 0 && items.status === 'complete'" 
+          class="flow-modal__body__not_found_container"
+        >
+          <UnnnicIcon
+            icon="delete-1"
+            size="sm"
+            scheme="neutral-cloudy"
+          />
+          {{ $t('modals.actions.flow.not_found_message') }} 
+        </section>
         <div
           class="flow-modal__body_description"
           v-if="index === 1"
@@ -219,8 +229,7 @@ export default {
           projectUuid: this.$store.state.Auth.connectProjectUuid,
           name: this.filterName,
         });
-
-        this.items.data = this.items.data.concat(data.results);
+        this.items.data = this.items.data.concat(data.results).filter(e => e.name && e.uuid);
 
         this.items.next = data.next;
 
@@ -341,6 +350,9 @@ export default {
   }
 
   &__body {
+    &__not_found_container {
+      text-align: center;
+    }
     &__flow {
       display: flex;
       flex-direction: column;
