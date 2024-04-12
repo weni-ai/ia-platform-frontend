@@ -72,7 +72,7 @@
               v-for="(item, index) in items.data"
               :key="index"
               :class="[
-                'flow-modal__body__flow__list__item',
+                'flow-modal__body__flow__list__item text-truncate',
                 {
                   'flow-modal__body__flow__list__item--selected':
                     flowSelected && flowSelected.uuid === item.uuid,
@@ -80,12 +80,19 @@
               ]"
               @click="handleFlowSelected(item)"
             >
-              <UnnnicIcon
-                icon="account_tree"
-                size="sm"
-                scheme="neutral-cloudy"
-              />
-              <p>{{ item.name }}</p>
+              <UnnnicToolTip
+                side="top"
+                :text="item.name"
+                enabled
+                class="flow-modal__body__flow__list__item__tooltip text-truncate"
+              >
+                <UnnnicIcon
+                  icon="account_tree"
+                  size="sm"
+                  scheme="neutral-cloudy"
+                />
+                <p>{{ handleFlowName(item.name) }}</p>
+              </UnnnicToolTip>
             </div>
 
             <template v-if="items.status === 'loading'">
@@ -257,6 +264,9 @@ export default {
       };
       this.flowSelected = flow;
     },
+    handleFlowName(str) {
+      return str.length > 30 ? str.slice(0, 27) + '...' : str;
+    }
   },
 };
 </script>
@@ -269,6 +279,12 @@ export default {
     padding: $unnnic-spacing-xl $unnnic-spacing-md $unnnic-spacing-md
       $unnnic-spacing-md;
   }
+}
+
+.text-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .flow-modal {
@@ -356,10 +372,7 @@ export default {
         &__item {
           cursor: pointer;
           display: flex;
-          align-items: center;
-          align-self: stretch;
           flex-basis: calc(50% - 6px);
-          gap: $unnnic-spacing-ant;
           border-radius: $unnnic-border-radius-sm;
           padding: $unnnic-spacing-ant;
           border: 1px solid $unnnic-color-neutral-cleanest;
@@ -381,6 +394,13 @@ export default {
             font-weight: $unnnic-font-weight-regular;
             line-height: $unnnic-line-height-md;
             color: $unnnic-color-neutral-darkest;
+          }
+
+          &__tooltip {
+            display: flex;
+            align-items: center;
+            align-self: stretch;
+            gap: $unnnic-spacing-ant;
           }
         }
       }
