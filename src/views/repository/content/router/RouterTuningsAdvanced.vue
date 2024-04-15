@@ -39,6 +39,7 @@
           :key="brainOn"
           :textRight="$t('router.tunings.advanced.brain')"
           :value="brainOn"
+          class="custom-switch"
           @input="openActiveOrDeactivateBrain"
         />
       </UnnnicFormElement>
@@ -167,6 +168,12 @@ export default {
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
+.custom-switch ::v-deep {
+  span {
+    cursor: pointer;
+  }
+}
+
 .advanced {
   padding: $unnnic-spacing-sm;
 
@@ -186,7 +193,7 @@ export default {
 
   &__content {
     margin-top: $unnnic-spacing-sm;
-
+    
     &__brain-switch {
       margin-top: $unnnic-spacing-xs;
     }
