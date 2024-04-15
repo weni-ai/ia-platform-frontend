@@ -22,14 +22,13 @@
       :saving="isAdding"
       @closeModal="isAddActionOpen = false"
       @save="saveAction"
-      @flowSelected="handleSelectedFlow"
     />
 
     <ModalChangeAction
       v-if="modalEditAction"
       :editing="modalEditAction.status === 'editing'"
       :description.sync="modalEditAction.description"
-      :item="flowName"
+      :item="modalEditAction.name"
       @closeModal="modalEditAction = null"
       @edit="editAction"
     />
@@ -201,9 +200,6 @@ export default {
         this.isAddActionOpen = false;
         this.isAdding = false;
       }
-    },
-    handleSelectedFlow(flow) {
-      this.flowName = flow.name || ''
     }
   },
 };
