@@ -44,6 +44,7 @@
                 : $t('modals.actions.descriptions.title')
             }}
           </h3>
+          <h4 v-if="index === 1">{{ flowSelected.name }}</h4>
           <p>
             {{
               index === 0
@@ -272,6 +273,7 @@ export default {
         uuid: value?.uuid || '',
       };
       this.flowSelected = flow;
+      this.$emit('flowSelected', flow)
     },
     handleFlowName(str) {
       return str.length > 30 ? str.slice(0, 27) + '...' : str;
