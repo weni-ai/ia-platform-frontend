@@ -273,7 +273,6 @@ export default {
         uuid: value?.uuid || '',
       };
       this.flowSelected = flow;
-      this.$emit('flowSelected', flow)
     },
     handleFlowName(str) {
       return str.length > 30 ? str.slice(0, 27) + '...' : str;
