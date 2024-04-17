@@ -168,10 +168,8 @@ export default {
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-.custom-switch :deep() {
-  span {
-    cursor: pointer;
-  }
+.custom-switch :deep(span) {
+  cursor: pointer;
 }
 
 .advanced {
