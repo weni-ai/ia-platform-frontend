@@ -7,6 +7,7 @@
       <header class="flow-modal__header">
         <section class="flow-modal__header__title__container">
           <h3>{{ $t('modals.actions.descriptions.change_title') }}</h3>
+          <h4 v-if="item">{{ item }}</h4>
           <p>{{ $t('modals.actions.descriptions.change_sub_title') }}</p>
         </section>
       </header>
@@ -51,6 +52,7 @@ export default {
   },
   props: {
     description: String,
+    item: String,
     editing: Boolean,
   },
   data() {

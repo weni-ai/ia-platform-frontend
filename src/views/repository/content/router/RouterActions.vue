@@ -28,6 +28,7 @@
       v-if="modalEditAction"
       :editing="modalEditAction.status === 'editing'"
       :description.sync="modalEditAction.description"
+      :item="modalEditAction.name"
       @closeModal="modalEditAction = null"
       @edit="editAction"
     />
@@ -72,6 +73,7 @@ export default {
 
       modalEditAction: null,
       modalDeleteAction: null,
+      flowName: null,
     };
   },
 
@@ -198,7 +200,7 @@ export default {
         this.isAddActionOpen = false;
         this.isAdding = false;
       }
-    },
+    }
   },
 };
 </script>
