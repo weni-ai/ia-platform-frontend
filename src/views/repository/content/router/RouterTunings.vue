@@ -102,8 +102,11 @@
         :key="index"
       >
         <UnnnicInput
-          v-model="field.value"
+          :value="field.value"
           :placeholder="token"
+          @input="$set(values, field.name, $event)"
+          :type="hasValidate ? 'error' : 'normal'"
+          :message="hasValidate ? $t('customization.invalid_field') : ''"
         />
       </UnnnicFormElement>
     </template>
@@ -124,7 +127,7 @@
       </UnnnicButton>
 
       <UnnnicButton
-        :disabled="!hasChanged"
+        :disabled="!hasChanged || hasValidate"
         :loading="saving"
         @click="save"
       >
@@ -263,6 +266,11 @@ export default {
         return field.value !== this.oldValues[field.name];
       });
     },
+    hasValidate() {
+      return !!this.fields.find((field) => {
+        return field.type === 'text' && field.value === undefined
+      })
+    }
   },
 
   async created() {
