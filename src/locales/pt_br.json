@@ -64,6 +64,11 @@
       "router_removed": "Brain removido de {name}",
       "router_edited": "Descrição de {name} atualizada"
     },
+    "content": {
+      "fields": {
+        "search_placeholder": "Pesquisar Contéudo"
+      }
+    },
     "tunings": {
       "model": "Modelo",
       "restore_default": "Restaurar padrão",

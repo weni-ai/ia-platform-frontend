@@ -99,7 +99,7 @@
                       size="md"
                       :iconLeftClickable="true"
                       iconLeft="search-1"
-                      :placeholder="$t('modals.actions.flow.placeholder')"
+                      :placeholder="$t('router.content.fields.search_placeholder')"
                       v-model="filterName"
                     />
                   </section>
