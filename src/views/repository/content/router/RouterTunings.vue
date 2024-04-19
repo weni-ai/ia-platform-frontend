@@ -58,7 +58,7 @@
 
       <section
         :key="index"
-        v-if="field.type === 'radio'"
+        v-if="field.type === 'radio' && !loadingData"
         class="tunings__form-element__radio"
       >
         <UnnnicRadio
@@ -72,9 +72,15 @@
           {{ option }}
         </UnnnicRadio>
       </section>
+      <UnnnicSkeletonLoading
+        v-if="field.type === 'radio' && loadingData"
+        tag="div"
+        height="32px"
+        width="280px"
+        />
 
       <UnnnicSlider
-        v-if="field.type === 'slider'"
+        v-if="field.type === 'slider' && !loadingData"
         :key="index + ':' + field.value"
         :minValue="field.min"
         :maxValue="field.max"
@@ -83,10 +89,15 @@
         @valueChange="$set(values, field.name, Number($event))"
         class="tunings__form-element__slider"
       />
-
+      <UnnnicSkeletonLoading
+          v-if="field.type === 'slider' && loadingData"
+          tag="div"
+          height="36px"
+          width="384px"
+      />
       <UnnnicSelectSmart
         class="tunings__container_fields-element"
-        v-if="field.type === 'select'"
+        v-if="field.type === 'select' && !loadingData"
         :key="index"
         :value="[{ value: field.value, label: field.value }]"
         @input="$set(values, field.name, $event[0].value)"
@@ -94,6 +105,11 @@
           field.options.map((option) => ({ value: option, label: option }))
         "
         orderedByIndex
+      />
+      <UnnnicSkeletonLoading
+          v-if="field.type === 'select' && loadingData"
+          tag="div"
+          height="46px"
       />
       <UnnnicFormElement
         class="tunings__container_fields-element"
@@ -155,6 +171,7 @@ export default {
     return {
       restoring: false,
       saving: false,
+      loadingData: false,
 
       oldValues: {
         model: null,
@@ -274,14 +291,20 @@ export default {
   },
 
   async created() {
-    if (!this.values.model) {
-      this.values.model = this.models[0].name;
-    }
+    try {
+      this.loadingData = true;
+      if (!this.values.model) {
+        this.values.model = this.models[0].name;
+      }
 
-    const { data } = await nexusaiAPI.router.tunings.read({
-      projectUuid: this.$store.state.Auth.connectProjectUuid,
-    });
-    this.setInitialValues(data);
+      const { data } = await nexusaiAPI.router.tunings.read({
+        projectUuid: this.$store.state.Auth.connectProjectUuid,
+      });
+
+      this.setInitialValues(data);
+    } finally {
+      this.loadingData = false;
+    }
   },
 
   methods: {
