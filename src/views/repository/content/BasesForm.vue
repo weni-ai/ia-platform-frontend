@@ -93,6 +93,17 @@
                   `content-base__content-tab--shape-${contentStyle}`,
                 ]"
               >
+                <template v-if="$route.name === 'router-content'">
+                  <section>
+                    <UnnnicInput        
+                      size="md"
+                      :iconLeftClickable="true"
+                      iconLeft="search-1"
+                      :placeholder="$t('router.content.fields.search_placeholder')"
+                      v-model="filterName"
+                    />
+                  </section>
+                </template>
                 <template v-if="tab === 'files' || isRouterView">
                   <UnnnicSkeletonLoading
                     v-if="
@@ -107,7 +118,7 @@
 
                   <template v-else>
                     <BasesFormFiles
-                      :files.sync="files"
+                      :files.sync="filters.files"
                       @load-more="loadFiles"
                       @removed="removedFile"
                       :shape="contentStyle"
@@ -117,7 +128,7 @@
 
                 <template v-if="tab === 'sites' || isRouterView">
                   <BasesFormSites
-                    :items.sync="sites"
+                    :items.sync="filters.sites"
                     @load-more="loadSites"
                     @removed="removedSite"
                     :shape="contentStyle"
@@ -228,7 +239,7 @@
 </template>
 
 <script>
-import { get } from 'lodash';
+import { get, debounce } from 'lodash';
 import { mapActions } from 'vuex';
 import { LANGUAGES } from '@/utils/index';
 import router from '@/router/index';
@@ -321,11 +332,17 @@ export default {
       isAlertOpen: false,
 
       repositoryConfig: '',
+      filterName: '',
 
       files: {
         status: null,
         next: null,
         data: [],
+      },
+
+      filters: {
+        files: null,
+        sites: null
       },
 
       sites: {
@@ -384,7 +401,7 @@ export default {
         next: this.files.next,
       });
 
-      this.files.data = this.files.data.concat(
+      const filesData = this.files.data.concat(
         data.results
           .map((file) => ({
             ...file,
@@ -396,12 +413,18 @@ export default {
           ),
       );
 
-      this.files.next = data.next;
+      const formatResult = {
+        data: filesData,
+        next: data.next
+      }
 
-      this.files.status = null;
+      this.files = formatResult;
+      this.filters.files = formatResult;
 
       if (!data.next) {
-        this.files.status = 'complete';
+        const status = 'complete'
+        this.files.status = status;
+        this.filters.files.status = status;
       }
     },
 
@@ -416,7 +439,8 @@ export default {
           },
         );
 
-        this.sites.data = this.sites.data.concat(
+        const status = 'complete';
+        const sitesData = this.sites.data.concat(
           data
             .map((site) => ({
               ...site,
@@ -428,11 +452,18 @@ export default {
               ({ uuid }) =>
                 !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
             ),
-        );
+        );        
 
-        this.sites.status = 'complete';
+        this.sites.data = sitesData;
+        this.filters.sites = {
+          data: sitesData,
+          status
+        }
+
+        this.sites.status = status;
       } finally {
         if (this.sites.status !== 'complete') {
+          this.filters.sites.status = null;
           this.sites.status = null;
         }
       }
@@ -583,6 +614,20 @@ export default {
         this.text.status = null;
       },
     },
+    filterName: debounce(function () {
+      const filesData = this.files.data.filter(e => e.file_name?.toLowerCase().includes(this.filterName?.toLowerCase()))
+      const sitesData = this.sites.data.filter(e => e.created_file_name?.toLowerCase().includes(this.filterName?.toLowerCase()))
+
+      this.$set(this.filters, 'files', ({
+        ...this.files,
+        data: filesData
+      }))
+
+      this.$set(this.filters, 'sites', ({
+        ...this.sites,
+        data: sitesData
+      }))
+    }, 300)
   },
   computed: {
     contentBaseUuid() {
