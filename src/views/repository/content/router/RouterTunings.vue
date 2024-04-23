@@ -73,11 +73,12 @@
         </UnnnicRadio>
       </section>
       <UnnnicSkeletonLoading
+        :key="index"
         v-if="field.type === 'radio' && loadingData"
         tag="div"
         height="32px"
         width="280px"
-        />
+      />
 
       <UnnnicSlider
         v-if="field.type === 'slider' && !loadingData"
@@ -90,10 +91,11 @@
         class="tunings__form-element__slider"
       />
       <UnnnicSkeletonLoading
-          v-if="field.type === 'slider' && loadingData"
-          tag="div"
-          height="36px"
-          width="384px"
+        :key="index"
+        v-if="field.type === 'slider' && loadingData"
+        tag="div"
+        height="36px"
+        width="384px"
       />
       <UnnnicSelectSmart
         class="tunings__container_fields-element"
@@ -107,9 +109,10 @@
         orderedByIndex
       />
       <UnnnicSkeletonLoading
-          v-if="field.type === 'select' && loadingData"
-          tag="div"
-          height="46px"
+        :key="index"
+        v-if="field.type === 'select' && loadingData"
+        tag="div"
+        height="46px"
       />
       <UnnnicFormElement
         class="tunings__container_fields-element"
@@ -285,9 +288,9 @@ export default {
     },
     hasValidate() {
       return !!this.fields.find((field) => {
-        return field.type === 'text' && field.value === undefined
-      })
-    }
+        return field.type === 'text' && field.value === undefined;
+      });
+    },
   },
 
   async created() {
