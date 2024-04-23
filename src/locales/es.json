@@ -105,6 +105,11 @@
           "action": "Desactivar"
         }
       }
+    },
+    "preview": {
+      "title": "Vista previa del agente",
+      "active_to_see": "Activar Brain para ver la vista previa del agente",
+      "active_to_see_description": "Activar Brain se puede hacer dentro de las opciones avanzadas en la pestaña Configuración"
     }
   },
   "content_bases": {

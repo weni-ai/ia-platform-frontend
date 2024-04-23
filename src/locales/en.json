@@ -105,6 +105,11 @@
           "action": "Deactivate"
         }
       }
+    },
+    "preview": {
+      "title": "Agent preview",
+      "active_to_see": "Activate Brain to see the agent preview",
+      "active_to_see_description": "Brain can be activated from the advanced options in the Tunings tab"
     }
   },
   "content_bases": {

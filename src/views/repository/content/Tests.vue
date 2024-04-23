@@ -63,6 +63,8 @@ import VueMarkdown from 'vue-markdown';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
+import FlowPreview from '../../../utils/FlowPreview';
+import QrcodeVue from 'qrcode.vue';
 
 export default {
   name: 'RepositoryContentTests',
@@ -70,12 +72,16 @@ export default {
   props: {
     contentBaseUuid: String,
     contentBaseLanguage: String,
+    usePreview: Boolean,
   },
 
   components: {
     VueMarkdown,
     AnswerFeedback,
+    QrcodeVue,
   },
+
+  mixins: [FlowPreview],
 
   data() {
     return {
@@ -100,7 +106,85 @@ export default {
     },
   },
 
+  mounted() {
+    if (this.usePreview) {
+      this.previewInit();
+    }
+  },
+
+  watch: {
+    'preview.session.status'(value, previous) {
+      if (previous === 'waiting' && value === 'completed') {
+        this.messages.push({
+          type: 'flowsend',
+          name: '',
+          question_uuid: null,
+          feedback: {
+            value: null,
+            reason: null,
+          },
+        });
+      }
+    },
+  },
+
   methods: {
+    treatEvents(replace, events) {
+      this.messages.splice(
+        this.messages.indexOf(replace),
+        1,
+        ...events
+          .filter(({ type, text }) => type === 'msg_created')
+          .map(({ type, msg, text }) => {
+            if (type === 'msg_created') {
+              return {
+                type: 'answer',
+                text: msg.text,
+                status: 'loaded',
+                question_uuid: null,
+                feedback: {
+                  value: null,
+                  reason: null,
+                },
+              };
+            }
+          }),
+      );
+
+      if (this.preview.session?.status === 'completed') {
+        this.messages.push({
+          type: 'flowsend',
+          name: '',
+          question_uuid: null,
+          feedback: {
+            value: null,
+            reason: null,
+          },
+        });
+      }
+
+      this.scrollToLastMessage();
+    },
+
+    async flowResume(answer, { text }) {
+      const {
+        data: { events },
+      } = await this.previewResume(text);
+
+      this.treatEvents(answer, events);
+    },
+
+    async flowStart(answer, flow) {
+      const {
+        data: { events },
+      } = await this.previewStart({
+        flowName: flow.name,
+        flowUuid: flow.uuid,
+      });
+
+      this.treatEvents(answer, events);
+    },
+
     sendMessage() {
       const message = this.message.trim();
 
@@ -133,26 +217,64 @@ export default {
 
         this.scrollToLastMessage();
 
-        nexusaiAPI.question
-          .create({
-            contentBaseUuid: this.contentBaseUuid,
-            text: message,
-            language: (this.language || '').toLowerCase(),
-          })
-          .then(({ data }) => {
-            answer.status = 'loaded';
-            answer.question_uuid = get(data, 'question_uuid', null);
-            answer.text = get(
-              data,
-              'answers.0.text',
-              this.$t('quick_test.unable_to_find_an_answer', this.language),
-            );
+        if (this.usePreview) {
+          if (this.preview.session?.status === 'waiting') {
+            this.flowResume(answer, { text: message });
+            return;
+          }
 
-            this.scrollToLastMessage();
-          })
-          .catch(() => {
-            this.messages.splice(this.messages.indexOf(answer), 1);
-          });
+          nexusaiAPI.router.preview
+            .create({
+              projectUuid: '04bb7ff7-5acb-4d7e-a112-131765b3ca04',
+              text: message,
+              contact_urn: this.preview.contact.urns[0],
+            })
+            .then(({ data }) => {
+              if (data.type === 'broadcast') {
+                answer.status = 'loaded';
+                answer.text = get(
+                  data,
+                  'message',
+                  this.$t('quick_test.unable_to_find_an_answer', this.language),
+                );
+
+                this.scrollToLastMessage();
+              } else if (data.type === 'flowstart') {
+                this.messages.splice(this.messages.indexOf(answer), 0, {
+                  type: 'flowstart',
+                  name: data.name,
+                  question_uuid: null,
+                  feedback: {
+                    value: null,
+                    reason: null,
+                  },
+                });
+
+                this.flowStart(answer, { name: data.name, uuid: data.uuid });
+              }
+            });
+        } else {
+          nexusaiAPI.question
+            .create({
+              contentBaseUuid: this.contentBaseUuid,
+              text: message,
+              language: (this.language || '').toLowerCase(),
+            })
+            .then(({ data }) => {
+              answer.status = 'loaded';
+              answer.question_uuid = get(data, 'question_uuid', null);
+              answer.text = get(
+                data,
+                'answers.0.text',
+                this.$t('quick_test.unable_to_find_an_answer', this.language),
+              );
+
+              this.scrollToLastMessage();
+            })
+            .catch(() => {
+              this.messages.splice(this.messages.indexOf(answer), 1);
+            });
+        }
       }, 400);
     },
 

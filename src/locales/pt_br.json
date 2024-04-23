@@ -105,6 +105,11 @@
           "action": "Desativar"
         }
       }
+    },
+    "preview": {
+      "title": "Preview do agente",
+      "active_to_see": "Ative o Brain para ver o preview do agente",
+      "active_to_see_description": "A ativação do Brain pode ser feita dentro das opções avançadas na aba Ajustes"
     }
   },
   "content_bases": {

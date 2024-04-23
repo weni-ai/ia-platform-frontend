@@ -26,6 +26,7 @@ const runtimeVariables = (() => ({
   VUE_APP_OPTIONS_WENIGPT: ('${VUE_APP_OPTIONS_WENIGPT}' || ''),
   SENTRY_ENVIRONMENT: ('${SENTRY_ENVIRONMENT}' || ''),
   NEXUS_API_BASE_URL: '${NEXUS_API_BASE_URL}',
+  FLOWS_API_BASE_URL: '${FLOWS_API_BASE_URL}',
   
   get(name){
     return this[name];
