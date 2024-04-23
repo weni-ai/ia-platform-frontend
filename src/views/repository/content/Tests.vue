@@ -229,7 +229,7 @@ export default {
 
           nexusaiAPI.router.preview
             .create({
-              projectUuid: '04bb7ff7-5acb-4d7e-a112-131765b3ca04',
+              projectUuid: this.$store.state.Auth.connectProjectUuid,
               text: message,
               contact_urn: this.preview.contact.urns[0],
             })
