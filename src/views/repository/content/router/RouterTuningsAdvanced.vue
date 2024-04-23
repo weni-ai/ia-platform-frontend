@@ -105,7 +105,7 @@ export default {
       if ($event) {
         this.$store.state.modalWarn = {
           title: this.$t('router.tunings.advanced.active_brain_modal.title'),
-          description: this.$t(
+          message: this.$t(
             'router.tunings.advanced.active_brain_modal.description',
           ),
           closeText: this.$t(
@@ -122,7 +122,7 @@ export default {
           title: this.$t(
             'router.tunings.advanced.deactivate_brain_modal.title',
           ),
-          description: this.$t(
+          message: this.$t(
             'router.tunings.advanced.deactivate_brain_modal.description',
           ),
           closeText: this.$t(
@@ -191,7 +191,7 @@ export default {
 
   &__content {
     margin-top: $unnnic-spacing-sm;
-    
+
     &__brain-switch {
       margin-top: $unnnic-spacing-xs;
     }
