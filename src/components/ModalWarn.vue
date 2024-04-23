@@ -8,6 +8,9 @@
     :closeIcon="false"
     class="modal-warn"
   >
+    <template v-slot:message>
+      <div v-html="message" />
+    </template>
     <UnnnicButton
       slot="options"
       class="create-repository__container__button"
@@ -38,6 +41,7 @@ export default {
     description: String,
     closeText: String,
     actionText: String,
+    message: String,
   },
 };
 </script>

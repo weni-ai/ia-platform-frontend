@@ -22,6 +22,7 @@
       :closeText="$store.state.modalWarn.closeText"
       :actionText="$store.state.modalWarn.actionText"
       :loading="$store.state.modalWarn.loading"
+      :message="$store.state.modalWarn.message"
       @close="$store.state.modalWarn = null"
       @action="$store.state.modalWarn.action"
     />
