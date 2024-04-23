@@ -277,6 +277,15 @@ export default {
         );
       },
     },
+
+    preview: {
+      create({ projectUuid, text, contact_urn }) {
+        return request.$http.post(`api/${projectUuid}/preview/`, {
+          text,
+          contact_urn,
+        });
+      },
+    },
   },
 
   intelligences: {

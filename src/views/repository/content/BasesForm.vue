@@ -168,10 +168,10 @@
 
       <div
         v-if="
-          (files.data.length ||
-            sites.data.length ||
-            knowledgeBase.text.oldValue) &&
-          !isRouterView
+          files.data.length ||
+          sites.data.length ||
+          knowledgeBase.text.oldValue ||
+          isRouterView
         "
         :class="[
           'repository-base-edit__wrapper__card',
@@ -179,12 +179,50 @@
         ]"
       >
         <div class="repository-base-edit__wrapper__card-test-container__header">
-          {{ $t('content_bases.quick_test') }}
+          {{
+            isRouterView
+              ? $t('router.preview.title')
+              : $t('content_bases.quick_test')
+          }}
         </div>
 
+        <section
+          v-if="isRouterView && !routerTunings.brainOn"
+          class="brain-deactivated-preview"
+        >
+          <UnnnicIcon
+            size="lg"
+            icon="warning"
+            scheme="neutral-cloudy"
+          />
+
+          <UnnnicIntelligenceText
+            tag="h2"
+            family="secondary"
+            color="neutral-cloudy"
+            size="body-lg"
+            weight="bold"
+            marginTop="ant"
+            marginBottom="nano"
+          >
+            {{ $t('router.preview.active_to_see') }}
+          </UnnnicIntelligenceText>
+
+          <UnnnicIntelligenceText
+            tag="p"
+            family="secondary"
+            color="neutral-cloudy"
+            size="body-gt"
+          >
+            {{ $t('router.preview.active_to_see_description') }}
+          </UnnnicIntelligenceText>
+        </section>
+
         <Tests
+          v-else
           :contentBaseUuid="contentBaseUuid"
           :contentBaseLanguage="contentBase.language"
+          :usePreview="isRouterView"
         />
       </div>
     </section>
@@ -729,6 +767,18 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.brain-deactivated-preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(244, 246, 248, 0.4);
+  margin: -$unnnic-spacing-sm;
+  padding: $unnnic-spacing-lg;
+  text-align: center;
+}
 
 .router-tabs {
   margin: 0;
