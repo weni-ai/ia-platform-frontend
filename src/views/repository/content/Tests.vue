@@ -9,7 +9,11 @@
           v-if="!messages.length"
           class="messages__empty-text"
         >
-          {{ $t('quick_test.send_a_message') }}
+          {{
+            usePreview
+              ? $t('router.preview.placeholder')
+              : $t('quick_test.send_a_message')
+          }}
         </div>
 
         <div
