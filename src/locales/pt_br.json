@@ -46,7 +46,7 @@
   },
   "router": {
     "warn": {
-      "brain_is_deactivated": "O Brain está desativado. Ative o Brain agora,",
+      "brain_is_deactivated": "O Brain está desativado.",
       "click_here": "clique aqui",
       "activate_it": "para ativá-lo."
     },
@@ -99,13 +99,13 @@
         "brain": "Brain",
         "active_brain_modal": {
           "title": "Ativar Brain",
-          "description": "Tem certeza que deseja ativar o Brain? Isso fará com que suas triggers sejam substituídas pelas Ações e isso pode afetar diretamente o funcionamento do seu agente.",
+          "description": "Tem certeza que deseja ativar o Brain? <br /> Isso fará com que suas triggers sejam substituídas pelas Ações e isso pode afetar diretamente o funcionamento do seu agente.",
           "cancel": "Cancelar",
           "action": "Ativar"
         },
         "deactivate_brain_modal": {
           "title": "Desativar Brain",
-          "description": "Tem certeza que deseja desativar o Brain? Isso fará com que suas ações serão substituidas pelas triggers e isso pode afetar diretamente o funcionamento do seu bot.",
+          "description": "Tem certeza que deseja desativar o Brain? <br /> Isso fará com que suas ações sejam substituidas pelas triggers e isso pode afetar diretamente o funcionamento do seu bot.",
           "cancel": "Cancelar",
           "action": "Desativar"
         }
