@@ -5,7 +5,7 @@
   "author": "Weni <contato@weni.ai>",
   "private": true,
   "scripts": {
-    "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
+    "start": "concurrently \"node --watch mock/server.mjs\" \"vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint\"",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
@@ -56,6 +56,7 @@
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "@weni/eslint-config": "^1.0.1",
+    "concurrently": "^8.2.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^4.0.0",
