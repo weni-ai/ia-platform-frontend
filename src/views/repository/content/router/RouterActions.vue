@@ -200,7 +200,7 @@ export default {
         this.isAddActionOpen = false;
         this.isAdding = false;
       }
-    }
+    },
   },
 };
 </script>
