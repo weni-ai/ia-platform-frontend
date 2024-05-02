@@ -1,12 +1,16 @@
 <template>
-  <img :src="svg" svg-inline :class="{
+  <img
+    :src="svg"
+    svg-inline
+    :class="{
       'container-icon': true,
       [`container-icon--${size}`]: !!size,
       'container-icon--spin': spin,
       'set-fill': true,
       'set-fill-mobile': fillMobile,
-      'set-fill-primary': fillPrimary
-    }"/>
+      'set-fill-primary': fillPrimary,
+    }"
+  />
 </template>
 
 <script>
@@ -45,8 +49,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~@/assets/scss/variables.scss';
-
+@import '@/assets/scss/variables.scss';
 
 @keyframes IconSpin {
   from {
@@ -57,21 +60,21 @@ export default {
   }
 }
 
-.set-fill{
-   filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(196deg)
-   brightness(104%) contrast(101%);
+.set-fill {
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(196deg)
+    brightness(104%) contrast(101%);
 }
 
-.set-fill-primary{
+.set-fill-primary {
   filter: invert(49%) sepia(98%) saturate(318%) hue-rotate(123deg)
-  brightness(106%) contrast(90%);
+    brightness(106%) contrast(90%);
 }
 
-.set-fill-mobile{
-    @media screen and (max-width: $mobile-width) {
-      filter: invert(57%) sepia(12%) saturate(2114%) hue-rotate(123deg)
+.set-fill-mobile {
+  @media screen and (max-width: $mobile-width) {
+    filter: invert(57%) sepia(12%) saturate(2114%) hue-rotate(123deg)
       brightness(108%) contrast(91%);
-    }
+  }
 }
 
 .container {

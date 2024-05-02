@@ -1,34 +1,44 @@
 <template>
   <div class="create-repository__intelligence">
     <div class="create-repository__intelligence__wrapper">
-      <unnnic-form-element
+      <UnnnicFormElement
         :label="$t('webapp.create_repository.intelligence_name_label')"
         class="create-intelligence__form-element"
       >
-        <unnnic-input
-          :placeholder="$t('webapp.create_repository.intelligence_name_placeholder')"
+        <UnnnicInput
+          :placeholder="
+            $t('webapp.create_repository.intelligence_name_placeholder')
+          "
           :value="name"
           @input="$emit('update:name', $event)"
           maxlength="64"
         />
-      </unnnic-form-element>
+      </UnnnicFormElement>
 
-      <unnnic-form-element
+      <UnnnicFormElement
         :label="$t('webapp.create_repository.description_label')"
         class="create-intelligence__form-element"
       >
-        <unnnic-input
+        <UnnnicInput
           :placeholder="$t('webapp.create_repository.description_placeholder')"
           :value="description"
           @input="$emit('update:description', $event)"
         />
-      </unnnic-form-element>
+      </UnnnicFormElement>
 
       <section class="intelligence-types create-intelligence__form-element">
-        <unnnic-card
+        <UnnnicCard
           clickable
-          :title="$t('webapp.create_repository.intelligence_type_classification_title')"
-          :description="$t('webapp.create_repository.intelligence_type_classification_description')"
+          :title="
+            $t(
+              'webapp.create_repository.intelligence_type_classification_title',
+            )
+          "
+          :description="
+            $t(
+              'webapp.create_repository.intelligence_type_classification_description',
+            )
+          "
           type="content"
           icon="typing-1"
           class="intelligence-types__item"
@@ -36,10 +46,14 @@
           @click.native="$emit('update:repository_type', 'classifier')"
         />
 
-        <unnnic-card
+        <UnnnicCard
           clickable
-          :title="$t('webapp.create_repository.intelligence_type_content_title')"
-          :description="$t('webapp.create_repository.intelligence_type_content_description')"
+          :title="
+            $t('webapp.create_repository.intelligence_type_content_title')
+          "
+          :description="
+            $t('webapp.create_repository.intelligence_type_content_description')
+          "
           type="content"
           icon="paginate-filter-text-1"
           class="intelligence-types__item"
@@ -66,7 +80,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .create-intelligence__form-element + .create-intelligence__form-element {
   margin-top: $unnnic-spacing-sm;
@@ -120,7 +134,7 @@ export default {
     }
   }
 }
-.no-show{
+.no-show {
   display: none;
 }
 </style>

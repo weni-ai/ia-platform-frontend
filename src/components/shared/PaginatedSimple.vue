@@ -1,6 +1,6 @@
 <template>
   <div v-show="list.total !== 0">
-    <component
+    <Component
       v-for="(item, index) in list.items"
       v-show="shouldShow(index)"
       :key="itemKey && item[itemKey] ? item[itemKey] : index"
@@ -8,28 +8,31 @@
       v-bind="addAttrs(item)"
       @deleted="onItemDeleted(item)"
       @updateList="onSaveUpdate(index, $event)"
-      @dispatchEvent="onDispatchEvent($event)"/>
-    <loading
+      @dispatchEvent="onDispatchEvent($event)"
+    />
+    <Loading
       v-if="isLoading"
-      class="pagination__message" />
+      class="pagination__message"
+    />
     <div
       v-else-if="!loadAll"
-      class="pagination__bottom">
+      class="pagination__bottom"
+    >
       <div class="pagination__bottom__controls">
-        <div
-          class="pagination__bottom__controls__message">
+        <div class="pagination__bottom__controls__message">
           {{ $tc('webapp.layout.items_total', list.total) }}
         </div>
-        <b-pagination
+        <BPagination
           :total="list.total"
           :current.sync="page"
-          :per-page="perPage"
-          :range-before="4"
-          :range-after="4"
+          :perPage="perPage"
+          :rangeBefore="4"
+          :rangeAfter="4"
           aria-next-label="Next page"
           aria-previous-label="Previous page"
           aria-page-label="Page"
-          aria-current-label="Current page"/>
+          aria-current-label="Current page"
+        />
       </div>
     </div>
   </div>
@@ -68,8 +71,8 @@ export default {
     },
     loadAll: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -86,12 +89,15 @@ export default {
     },
     addAttrs(obj) {
       return {
-        data: this.data, ...this.addAttributes, ...obj, ...this.$attrs,
+        data: this.data,
+        ...this.addAttributes,
+        ...obj,
+        ...this.$attrs,
       };
     },
     onDispatchEvent(arg) {
-      const [event, value] = arg instanceof Object
-        ? [arg.event, arg.value] : [arg, null];
+      const [event, value] =
+        arg instanceof Object ? [arg.event, arg.value] : [arg, null];
 
       this.$emit(event, value);
     },
@@ -106,7 +112,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
 .pagination {
   &__bottom {
@@ -131,9 +137,7 @@ export default {
     }
   }
 
-  &
-
-  &__message {
+  & &__message {
     text-align: center;
     width: 100%;
   }
@@ -142,6 +146,5 @@ export default {
     text-align: center;
     width: 100%;
   }
-
 }
 </style>

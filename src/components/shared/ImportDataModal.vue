@@ -1,70 +1,77 @@
 <template>
   <div class="import-data-modal">
-    <b-modal
+    <BModal
       :active.sync="isModalVisible"
-      :destroy-on-hide="false"
-      :can-cancel="false"
-      has-modal-card
+      :destroyOnHide="false"
+      :canCancel="false"
+      hasModalCard
       aria-role="dialog"
       class="import-data-modal__card"
-      aria-modal>
-      <div
-        class="modal-card import-data-modal__modal-style">
+      aria-modal
+    >
+      <div class="modal-card import-data-modal__modal-style">
         <header class="modal-card-head import-data-modal__modal-style__header">
           <p>{{ $t('webapp.import_dataset.title') }}</p>
         </header>
         <section class="modal-card-body">
-          <b-field
-            class="import-data-modal__custom-file-upload">
+          <BField class="import-data-modal__custom-file-upload">
             <div class="import-data-modal__custom-file-upload__input">
-              <b-upload v-model="selectedFile">
-                <a class="button import-data-modal__custom-file-upload__input__button">
-                  <b-icon
+              <BUpload v-model="selectedFile">
+                <a
+                  class="button import-data-modal__custom-file-upload__input__button"
+                >
+                  <BIcon
                     icon="upload"
-                    type="is-white"/>
+                    type="is-white"
+                  />
                 </a>
-              </b-upload>
+              </BUpload>
               <div
                 v-if="selectedFile"
-                class="import-data-modal__custom-file-upload__input__file">
+                class="import-data-modal__custom-file-upload__input__file"
+              >
                 {{ selectedFile.name }}
                 <div
                   class="import-data-modal__custom-file-upload__input__icon"
-                  @click="removeSelectedFile">
-                  <b-icon
+                  @click="removeSelectedFile"
+                >
+                  <BIcon
                     icon="close-circle"
-                    custom-size="mdi-18px"
+                    customSize="mdi-18px"
                   />
                 </div>
               </div>
               <div
                 v-else
-                class="import-data-modal__custom-file-upload__input__file">
+                class="import-data-modal__custom-file-upload__input__file"
+              >
                 <span>{{ $t('webapp.import_dataset.empty_file') }}</span>
               </div>
             </div>
-          </b-field>
+          </BField>
         </section>
         <footer class="modal-card-foot">
           <div class="import-data-modal__modal-style__style-button">
-            <b-button
+            <BButton
               class="modal-button"
               type="is-white"
-              @click="dispatchCloseImportModal()">
+              @click="dispatchCloseImportModal()"
+            >
               {{ $t('webapp.import_dataset.cancel') }}
-            </b-button>
-            <b-button
+            </BButton>
+            <BButton
               :loading="isButtonLoading"
               :disabled="selectedFile === null"
               class="modal-button"
               type="is-primary"
-              @click="dispatchUploadFile()">
+              @click="dispatchUploadFile()"
+            >
               {{ $t('webapp.import_dataset.importar') }}
-            </b-button>
+            </BButton>
           </div>
         </footer>
       </div>
-    </b-modal>
+    </BModal>
   </div>
 </template>
 
@@ -86,14 +93,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'getCurrentRepository',
-    ]),
+    ...mapGetters(['getCurrentRepository']),
   },
   methods: {
-    ...mapActions([
-      'setUploadRasaDataset',
-    ]),
+    ...mapActions(['setUploadRasaDataset']),
     removeSelectedFile() {
       this.selectedFile = null;
     },
@@ -109,10 +112,16 @@ export default {
           repositoryUUID: this.getCurrentRepository.uuid,
           formData,
         });
-        this.$emit('dispatchImportNotification', { type: 'is-success', message: this.$t('webapp.import_dataset.import_success') });
+        this.$emit('dispatchImportNotification', {
+          type: 'is-success',
+          message: this.$t('webapp.import_dataset.import_success'),
+        });
         this.dispatchCloseImportModal();
       } catch (error) {
-        this.$emit('dispatchImportNotification', { type: 'is-danger', message: this.$t('webapp.import_dataset.import_error') });
+        this.$emit('dispatchImportNotification', {
+          type: 'is-danger',
+          message: this.$t('webapp.import_dataset.import_error'),
+        });
       } finally {
         this.isButtonLoading = false;
       }
@@ -126,24 +135,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .import-data-modal {
-
-  &__modal-style{
-      width: 26.5rem;
-      @media (max-width: $mobile-width) {
-        padding-left: 5rem
-      }
-    &__header{
-      p{
+  &__modal-style {
+    width: 26.5rem;
+    @media (max-width: $mobile-width) {
+      padding-left: 5rem;
+    }
+    &__header {
+      p {
         font-size: 1.5rem;
       }
     }
 
-    &__style-button{
-      width:100%;
+    &__style-button {
+      width: 100%;
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -156,52 +164,51 @@ export default {
         font-family: $font-family;
         box-shadow: none;
 
-        &:hover{
+        &:hover {
           border: 1px solid #c2c2c2;
         }
       }
     }
   }
-    &__custom-file-upload {
+  &__custom-file-upload {
     display: flex;
     flex-direction: column;
 
-    &__input{
-    display: flex;
-    width: 100%;
-
-    &__button{
-      background-color: #9E9E9E;
-      padding: 0 2rem;
-    }
-
-    &__file{
-      border: 1px solid #D5D5D5;
-      color: #BABABA;
-      font-size: $font-size;
-      font-family: $font-family;
+    &__input {
       display: flex;
       width: 100%;
-      justify-content:center;
-      align-items:center;
-      border-top-right-radius: 0.4rem;
-      border-bottom-right-radius: 0.4rem;
 
-      span{
-        font-size: 1rem;
+      &__button {
+        background-color: #9e9e9e;
+        padding: 0 2rem;
       }
-    }
-    &__icon{
-      cursor: pointer;
-      color:#D5D5D5;
-      display:flex;
-      align-items: center;
-      &:hover{
-        color: $color-grey-dark;
+
+      &__file {
+        border: 1px solid #d5d5d5;
+        color: #bababa;
+        font-size: $font-size;
+        font-family: $font-family;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        border-top-right-radius: 0.4rem;
+        border-bottom-right-radius: 0.4rem;
+
+        span {
+          font-size: 1rem;
+        }
       }
-    }
+      &__icon {
+        cursor: pointer;
+        color: #d5d5d5;
+        display: flex;
+        align-items: center;
+        &:hover {
+          color: $color-grey-dark;
+        }
+      }
     }
   }
 }
-
 </style>

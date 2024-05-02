@@ -1,37 +1,42 @@
 <template>
-  <sentence-accordion
+  <SentenceAccordion
     :open.sync="open"
     :type="success ? 'is-success' : 'is-danger'"
-    :class="{ example: true,
-              'fadeIn': true,
-    }"
-    thick-border
-    is-light>
+    :class="{ example: true, fadeIn: true }"
+    thickBorder
+    isLight
+  >
     <div slot="header">
-      <highlighted-text
+      <HighlightedText
         v-if="open"
         :text="text"
-        :entities="allEntities" />
+        :entities="allEntities"
+      />
       <p
         v-else
-        class="example-text"> {{ text }}</p>
+        class="example-text"
+      >
+        {{ text }}
+      </p>
     </div>
 
-    <b-icon
+    <BIcon
       slot="options"
       :class="['level-right', success ? 'success' : 'failed']"
-      :icon="success ? 'check-bold' : 'close-thick'" />
+      :icon="success ? 'check-bold' : 'close-thick'"
+    />
 
     <div
       slot="body"
-      class="example-infos">
+      class="example-infos"
+    >
       <p v-if="intentSuccess">
         <strong> {{ $t('webapp.result.intent') }}: </strong>
-        <span> {{ intent }}
-          ({{ intentPrediction.confidence.toFixed(2) }}
-          {{ $t('webapp.result.confidence') }}) </span>
-        <strong
-          class="success">[{{ $t('webapp.result.ok') }}]</strong>
+        <span>
+          {{ intent }} ({{ intentPrediction.confidence.toFixed(2) }}
+          {{ $t('webapp.result.confidence') }})
+        </span>
+        <strong class="success">[{{ $t('webapp.result.ok') }}]</strong>
       </p>
       <p v-else>
         <strong> {{ $t('webapp.result.expected_intent') }}: </strong>
@@ -43,23 +48,27 @@
         <strong v-else>{{ $t('webapp.result.no_intent_predicted') }}</strong>
         ({{ intentPrediction.confidence.toFixed(2) }}
         {{ $t('webapp.result.confidence') }})
-        <strong
-          class="failed">[{{ $t('webapp.result.failed') }}]</strong>
+        <strong class="failed">[{{ $t('webapp.result.failed') }}]</strong>
       </p>
 
       <div
         v-if="entities.length > 0"
-        class="example__entities">
+        class="example__entities"
+      >
         <strong> {{ $tc('webapp.result.entity', entities.length) }}: </strong>
         <div>
           <p
             v-for="(entity, i) in entities"
             :key="i"
-            class="entity__text">
-            <span> {{ entity.value }} {{ $t('webapp.result.is') }}
-              <b-tag
+            class="entity__text"
+          >
+            <span>
+              {{ entity.value }} {{ $t('webapp.result.is') }}
+              <BTag
                 :class="['entity', getEntityClass(entity)]"
-                rounded>{{ entity.entity }}</b-tag>
+                rounded
+                >{{ entity.entity }}</BTag
+              >
               <span v-if="entity.confidence">
                 ({{ entity.confidence.toFixed(2) }}
                 {{ $t('webapp.result.confidence') }})
@@ -67,66 +76,84 @@
             </span>
             <strong
               v-if="entity.status === 'success'"
-              class="success">[{{ $t('webapp.result.ok') }}]</strong>
+              class="success"
+              >[{{ $t('webapp.result.ok') }}]</strong
+            >
             <strong
               v-else
-              class="failed">[{{ $t('webapp.result.not_predicted') }}]</strong>
+              class="failed"
+              >[{{ $t('webapp.result.not_predicted') }}]</strong
+            >
           </p>
         </div>
       </div>
 
       <div
         v-if="addedEntities.length > 0"
-        class="example__entities">
-        <strong> {{ $tc('webapp.result.added_entity', addedEntities.length) }}: </strong>
+        class="example__entities"
+      >
+        <strong>
+          {{ $tc('webapp.result.added_entity', addedEntities.length) }}:
+        </strong>
         <div>
           <p
             v-for="(entity, i) in addedEntities"
             :key="i"
-            class="entity__text">
-            <span> {{ entity.value }} {{ $t('webapp.result.is') }}
-              <b-tag
+            class="entity__text"
+          >
+            <span>
+              {{ entity.value }} {{ $t('webapp.result.is') }}
+              <BTag
                 :class="['entity', getEntityClass(entity)]"
-                rounded>{{ entity.entity }}</b-tag>
+                rounded
+                >{{ entity.entity }}</BTag
+              >
               <span v-if="entity.confidence">
                 ({{ entity.confidence.toFixed(2) }}
                 {{ $t('webapp.result.confidence') }})
               </span>
             </span>
-            <strong
-              class="failed">[{{ $t('webapp.result.false_positive') }}]</strong>
+            <strong class="failed"
+              >[{{ $t('webapp.result.false_positive') }}]</strong
+            >
           </p>
         </div>
       </div>
 
       <div
         v-for="(entity, i) in swappedEntities"
-        :key="i">
+        :key="i"
+      >
         <p>
           <strong> {{ $t('webapp.result.expected_entity') }}: </strong>
-          <span> {{ entity.value }} {{ $t('webapp.result.is') }}
-            <b-tag
+          <span>
+            {{ entity.value }} {{ $t('webapp.result.is') }}
+            <BTag
               :class="['entity', getEntityClass(entity)]"
-              rounded>
-              {{ entity.entity }}
-          </b-tag>/ </span>
+              rounded
+            >
+              {{ entity.entity }} </BTag
+            >/
+          </span>
           <strong> {{ $t('webapp.result.predicted_entity') }}:</strong>
-          <span> {{ entity.value }} {{ $t('webapp.result.is') }}
-            <b-tag
+          <span>
+            {{ entity.value }} {{ $t('webapp.result.is') }}
+            <BTag
               :class="['entity', getEntityClass(toEntity(entity))]"
-              rounded>
+              rounded
+            >
               {{ entity.predicted_entity }}
-            </b-tag>
+            </BTag>
             <span v-if="entity.confidence">
               ({{ entity.confidence.toFixed(2) }}
               {{ $t('webapp.result.confidence') }})
-          </span> </span>
-          <strong
-            class="failed">[{{ $t('webapp.result.failed') }}]</strong>
+            </span>
+          </span>
+          <strong class="failed">[{{ $t('webapp.result.failed') }}]</strong>
         </p>
       </div>
     </div>
-  </sentence-accordion>
+  </SentenceAccordion>
 </template>
 
 <script>
@@ -155,15 +182,15 @@ export default {
     },
     entities: {
       type: Array,
-      default: /* istanbul ignore next */ () => ([]),
+      default: /* istanbul ignore next */ () => [],
     },
     swappedEntities: {
       type: Array,
-      default: /* istanbul ignore next */ () => ([]),
+      default: /* istanbul ignore next */ () => [],
     },
     addedEntities: {
       type: Array,
-      default: /* istanbul ignore next */ () => ([]),
+      default: /* istanbul ignore next */ () => [],
     },
     success: {
       type: Boolean,
@@ -188,22 +215,27 @@ export default {
       return this.repository.entities || this.repository.entities_list;
     },
     markEntities() {
-      return this.allEntities.filter(entity => !entity.ignore);
+      return this.allEntities.filter((entity) => !entity.ignore);
     },
     allEntities() {
-      const swappedEntities = this.swappedEntities.reduce((entities, entity) => {
-        // eslint-disable-next-line no-param-reassign
-        entities = [...entities,
-          {
-            entity: entity.entity || '',
-            start: 0,
-            end: 0,
-            value: entity.value,
-          },
-          this.toEntity(entity)];
-        return entities;
-      }, []);
-      const trueEntities = this.entities.map(entity => ({
+      const swappedEntities = this.swappedEntities.reduce(
+        (entities, entity) => {
+          // eslint-disable-next-line no-param-reassign
+          entities = [
+            ...entities,
+            {
+              entity: entity.entity || '',
+              start: 0,
+              end: 0,
+              value: entity.value,
+            },
+            this.toEntity(entity),
+          ];
+          return entities;
+        },
+        [],
+      );
+      const trueEntities = this.entities.map((entity) => ({
         entity: entity.entity,
         value: entity.value,
         status: entity.status,
@@ -213,15 +245,14 @@ export default {
       return [...trueEntities, ...swappedEntities, ...this.addedEntities];
     },
     ...mapState({
-      repository: state => state.Repository.selectedRepository,
+      repository: (state) => state.Repository.selectedRepository,
     }),
     entitiesList() {
-      return getEntitiesList(this.allEntities)
-        .map(entity => ({
-          value: entity,
-          class: this.getEntityClass(entity),
-          label: this.getEntityLabel(entity),
-        }));
+      return getEntitiesList(this.allEntities).map((entity) => ({
+        value: entity,
+        class: this.getEntityClass(entity),
+        label: this.getEntityLabel(entity),
+      }));
     },
   },
   methods: {
@@ -242,7 +273,9 @@ export default {
       return `entity-${color}`;
     },
     getEntityLabel(entityName) {
-      const entity = this.repositoryEntities.find(e => e.entity === entityName);
+      const entity = this.repositoryEntities.find(
+        (e) => e.entity === entityName,
+      );
       return entity.label || 'unlabeled';
     },
   },
@@ -251,7 +284,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../../../assets/scss/utilities.scss';
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
 .entity {
   color: black;
@@ -275,17 +308,16 @@ export default {
   border-radius: $radius;
 
   &--failed {
-    border: .120rem solid $color-danger;
+    border: 0.12rem solid $color-danger;
   }
 
   &--success {
     border: 2px solid $color-success;
   }
 
-    &:hover {
-
-      background-color: $white;
-      box-shadow: 0 2px 8px rgba(100, 100, 100, .5);
+  &:hover {
+    background-color: $white;
+    box-shadow: 0 2px 8px rgba(100, 100, 100, 0.5);
   }
 
   &__entities {
@@ -295,10 +327,10 @@ export default {
     > * {
       margin-right: 0.5rem;
     }
-  };
+  }
 
   &__icon {
-    margin: 0 .5rem;
+    margin: 0 0.5rem;
 
     &:hover {
       color: black;
@@ -307,7 +339,7 @@ export default {
   }
 
   &__align-no-predicted {
-    display: inline-block
+    display: inline-block;
   }
 
   &-text {
@@ -328,7 +360,7 @@ export default {
   color: $color-danger;
 }
 
-.fadeIn  {
+.fadeIn {
   -webkit-animation: fadein 0.6s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.6s; /* Firefox < 16 */
   -ms-animation: fadein 0.6s; /* Internet Explorer */
@@ -337,31 +369,51 @@ export default {
 }
 
 @keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Firefox < 16 */
 @-moz-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Internet Explorer */
 @-ms-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Opera < 12.1 */
 @-o-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>

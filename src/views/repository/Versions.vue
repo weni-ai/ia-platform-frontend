@@ -1,27 +1,30 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     :repository="repository"
-    :error-code="errorCode">
-    <settings-versions-loading slot="loader" />
+    :errorCode="errorCode"
+  >
+    <SettingsVersionsLoading slot="loader" />
 
-    <div
-      v-if="!authenticated">
-      <b-notification
+    <div v-if="!authenticated">
+      <BNotification
         :closable="false"
-        class="is-danger">
+        class="is-danger"
+      >
         {{ $t('webapp.versions.signin') }}
-      </b-notification>
-      <login-form hide-forgot-password />
+      </BNotification>
+      <LoginForm hideForgotPassword />
     </div>
 
     <div
       v-else-if="repository"
-      class="versions">
-      <repository-version-list
+      class="versions"
+    >
+      <RepositoryVersionList
         :repository="repository"
-        :can-edit="repository.authorization.can_contribute"/>
+        :canEdit="repository.authorization.can_contribute"
+      />
     </div>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -47,17 +50,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'authenticated',
-    ]),
+    ...mapGetters(['authenticated']),
   },
 };
 </script>
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
-.title{
+.title {
   font-size: 1.75rem;
   font-weight: $font-weight-medium;
   color: $color-fake-black;
@@ -66,7 +67,7 @@ export default {
 .description {
   margin-bottom: $between-subtitle-content;
 }
-/deep/ .rpstr-vw-bs__wrapper__content {
-  margin: 0
+:deep(.rpstr-vw-bs__wrapper__content) {
+  margin: 0;
 }
 </style>

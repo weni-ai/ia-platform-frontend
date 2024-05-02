@@ -1,12 +1,13 @@
 <template>
   <div class="badges-container">
-    <intent-tag
+    <IntentTag
       v-for="item in list"
       :key="item.value"
-      :entity-name="item.value"
-      :intent-count="false"
+      :entityName="item.value"
+      :intentCount="false"
       class="badges-container__badge"
-      @click.native="addIntents(item.value, item.id)"/>
+      @click.native="addIntents(item.value, item.id)"
+    />
   </div>
 </template>
 
@@ -26,7 +27,7 @@ export default {
     },
     list: {
       type: Array,
-      default: () => ([]),
+      default: () => [],
     },
   },
   data() {
@@ -35,11 +36,11 @@ export default {
     };
   },
   methods: {
-    ...mapActions([
-      'getIntentSuggestion',
-    ]),
+    ...mapActions(['getIntentSuggestion']),
     checkselectedIntent(intent) {
-      if (intent === this.selectedIntent) { return true; }
+      if (intent === this.selectedIntent) {
+        return true;
+      }
       return false;
     },
     async addIntents(intent, id) {
@@ -56,28 +57,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
 
-.badges-container{
-    padding-top: .75rem;
-    margin-bottom: 3rem;
+.badges-container {
+  padding-top: 0.75rem;
+  margin-bottom: 3rem;
 
-      &__badge {
-        height: 41px !important;
-        margin: .4rem .5rem 0 0;
-        padding: 0 1rem 0 1rem;
-        line-height: calc(1.5rem - 4px);
-        cursor: pointer;
+  &__badge {
+    height: 41px !important;
+    margin: 0.4rem 0.5rem 0 0;
+    padding: 0 1rem 0 1rem;
+    line-height: calc(1.5rem - 4px);
+    cursor: pointer;
 
-        span{
-          font-size: $font-small;
-          font-family: $font-family;
-          font-weight: $font-weight-normal;
-        }
+    span {
+      font-size: $font-small;
+      font-family: $font-family;
+      font-weight: $font-weight-normal;
     }
-
+  }
 }
-
-
 </style>

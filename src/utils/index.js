@@ -11,25 +11,30 @@ export const getWordIndex = (word, phrase) => {
   return { start, end };
 };
 
-export const getEntitiesList = (entities = [], extra = []) => entities
-  .concat(extra || [])
-  .map(e => (e instanceof Object ? e.entity : e));
+export const getEntitiesList = (entities = [], extra = []) =>
+  entities.concat(extra || []).map((e) => (e instanceof Object ? e.entity : e));
 
 export const LEVEL_NOTHING = 0;
 export const LEVEL_READER = 1;
 export const LEVEL_CONTRIBUTOR = 2;
 export const LEVEL_ADMIN = 3;
 
-export const languageListToDict = list => (list.reduce((current, lang) => {
-  Object.assign(current, { [lang]: VERBOSE_LANGUAGES[lang] || lang });
-  return current;
-}, {}));
+export const languageListToDict = (list) =>
+  list.reduce((current, lang) => {
+    Object.assign(current, { [lang]: VERBOSE_LANGUAGES[lang] || lang });
+    return current;
+  }, {});
 
+export const LANGUAGES = languageListToDict(
+  runtimeVariables
+    .get('VITE_SUPPORTED_LANGUAGES')
+    .split('|')
+    .map((v) => v.split(':')[0]),
+);
 
-export const LANGUAGES = languageListToDict((runtimeVariables.get('VUE_APP_SUPPORTED_LANGUAGES')).split('|')
-  .map(v => v.split(':')[0]));
-
-export const WENIGPT_OPTIONS = JSON.parse(runtimeVariables.get('VUE_APP_OPTIONS_WENIGPT'));
+export const WENIGPT_OPTIONS = JSON.parse(
+  runtimeVariables.get('VITE_OPTIONS_WENIGPT'),
+);
 
 export const ROLE_NOT_SETTED = 0;
 export const ROLE_USER = 1;
@@ -44,43 +49,42 @@ export const ROLES = {
   [ROLE_TRANSLATE]: 'Translator',
 };
 
-const strTrueIndexOf = (a, b) => (a
-  .toString()
-  .toLowerCase()
-  .indexOf(b.toLowerCase())
-);
+const strTrueIndexOf = (a, b) =>
+  a.toString().toLowerCase().indexOf(b.toLowerCase());
 
 export const formatDate = (text) => {
   const date = new Date(text);
   return date.toLocaleDateString('pt-BR');
 };
 
-export const filterAndOrderListByText = (list, text) => (
+export const filterAndOrderListByText = (list, text) =>
   text
     ? list
-      .filter(item => strTrueIndexOf(item, text) >= 0)
-      .sort((a, b) => strTrueIndexOf(a, text) - strTrueIndexOf(b, text))
-    : list
-);
+        .filter((item) => strTrueIndexOf(item, text) >= 0)
+        .sort((a, b) => strTrueIndexOf(a, text) - strTrueIndexOf(b, text))
+    : list;
 
 export const formatters = {
-  bothubItemKey: () => v => v
-    .toString()
-    .replace(/[\s]/g, '_')
-    .replace(/[,./\\;+=!?@#$%¨&*()[\]^"'~{}ç:<>`´|]/g, '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, ''),
+  bothubItemKey: () => (v) =>
+    v
+      .toString()
+      .replace(/[\s]/g, '_')
+      .replace(/[,./\\;+=!?@#$%¨&*()[\]^"'~{}ç:<>`´|]/g, '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, ''),
 
-  versionItemKey: () => v => v
-    .replace(/[,./\\;+=!?@#$%¨&*()[\]\-_^"'~{}ç:<>`´|]/g, '')
-    .replace(/[\s]/g, '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, ''),
+  versionItemKey: () => (v) =>
+    v
+      .replace(/[,./\\;+=!?@#$%¨&*()[\]\-_^"'~{}ç:<>`´|]/g, '')
+      .replace(/[\s]/g, '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, ''),
 
-  sentenceItemKey: () => v => v
-    .trimStart()
-    .replace('\n', '')
-    .replace(/\s{2,}/g, ' '),
+  sentenceItemKey: () => (v) =>
+    v
+      .trimStart()
+      .replace('\n', '')
+      .replace(/\s{2,}/g, ' '),
 };
 
 const exampleSearchRegex = /((intent|label|entity|language):([a-zA-Z0-9_-]+))/g;
@@ -89,7 +93,7 @@ const extractGroupsFromRegex = (regularExpression, value) => {
   let match;
   const regexGroups = [];
   /* eslint-disable no-cond-assign */
-  while (match = regularExpression.exec(value)) {
+  while ((match = regularExpression.exec(value))) {
     regexGroups.push(match);
   }
   /* eslint-enable */
@@ -97,8 +101,8 @@ const extractGroupsFromRegex = (regularExpression, value) => {
 };
 
 /* Receive a string and mount a dicty from groups of a regular expression matchs */
-export const exampleSearchToDicty = value => extractGroupsFromRegex(exampleSearchRegex, value)
-  .reduce(
+export const exampleSearchToDicty = (value) =>
+  extractGroupsFromRegex(exampleSearchRegex, value).reduce(
     (acc, { 2: key, 3: v }) => {
       Object.assign(acc, { [key]: v });
       return acc;
@@ -107,11 +111,10 @@ export const exampleSearchToDicty = value => extractGroupsFromRegex(exampleSearc
   );
 
 /* Receive a Object and return a String with each Key and value from Object */
-export const exampleSearchToString = value => Object.keys(value)
-  .map(key => (key === 'search'
-    ? value[key]
-    : `${key}:${value[key]}`))
-  .join(' ');
+export const exampleSearchToString = (value) =>
+  Object.keys(value)
+    .map((key) => (key === 'search' ? value[key] : `${key}:${value[key]}`))
+    .join(' ');
 
 export const normalize = (min, max, value) => {
   if (min === max) return min === 0 ? 0 : 1;
@@ -135,11 +138,14 @@ export const entityEquals = (entities1, entities2) => {
   if (entities1.length === 0) return true;
 
   return entities1.every((entity1) => {
-    const {
-      start, end, entity,
-    } = entity1;
-    return entities2.findIndex(entity2 => entity2.start === start
-      && entity2.end === end
-      && entity2.entity === entity) !== undefined;
+    const { start, end, entity } = entity1;
+    return (
+      entities2.findIndex(
+        (entity2) =>
+          entity2.start === start &&
+          entity2.end === end &&
+          entity2.entity === entity,
+      ) !== undefined
+    );
   });
 };

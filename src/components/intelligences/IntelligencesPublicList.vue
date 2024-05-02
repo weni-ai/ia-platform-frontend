@@ -1,6 +1,6 @@
 <template>
   <div>
-    <intelligences-filter
+    <IntelligencesFilter
       class="filters"
       :name.sync="filterIntelligenceName"
       :type.sync="fitlerIntelligenceType"
@@ -8,14 +8,16 @@
     />
 
     <div class="intelligences-list">
-      <intelligence-from-project-item
+      <IntelligenceFromProjectItem
         v-for="project in intelligences"
         :key="project.uuid"
         :project="project"
       />
 
-      <template v-if="$store.state.Repository.publicIntelligences.status === 'loading'">
-        <unnnic-skeleton-loading
+      <template
+        v-if="$store.state.Repository.publicIntelligences.status === 'loading'"
+      >
+        <UnnnicSkeletonLoading
           v-for="i in 3"
           :key="i"
           tag="div"
@@ -24,7 +26,9 @@
       </template>
 
       <div
-        v-show="$store.state.Repository.publicIntelligences.status !== 'loading'"
+        v-show="
+          $store.state.Repository.publicIntelligences.status !== 'loading'
+        "
         ref="end-of-list-element"
       ></div>
     </div>
@@ -63,10 +67,15 @@ export default {
   computed: {
     intelligences() {
       const data = this.$store.state.Repository.publicIntelligences.data
-        .filter(intelligence => intelligence.repository_type === ({
-          generative: 'content',
-          classification: 'classifier',
-        }[this.fitlerIntelligenceType])).filter(intelligence => {
+        .filter(
+          (intelligence) =>
+            intelligence.repository_type ===
+            {
+              generative: 'content',
+              classification: 'classifier',
+            }[this.fitlerIntelligenceType],
+        )
+        .filter((intelligence) => {
           if (this.filterIntelligenceName) {
             return String(intelligence.name)
               .toLocaleLowerCase()
@@ -74,7 +83,7 @@ export default {
           }
 
           return true;
-        })
+        });
 
       return data;
     },
@@ -99,8 +108,8 @@ export default {
   watch: {
     isShowingEndOfList() {
       if (
-        this.isShowingEndOfList
-        && this.$store.state.Repository.publicIntelligences.status !== 'complete'
+        this.isShowingEndOfList &&
+        this.$store.state.Repository.publicIntelligences.status !== 'complete'
       ) {
         this.loadIntelligences();
       }
@@ -131,7 +140,7 @@ export default {
 
           params: {
             categories: this.filterIntelligenceCategory[0]?.label,
-          }
+          },
         });
 
         this.$store.state.Repository.publicIntelligences.data = [
@@ -145,7 +154,9 @@ export default {
           this.$store.state.Repository.publicIntelligences.status = 'complete';
         }
       } finally {
-        if (this.$store.state.Repository.publicIntelligences.status === 'loading') {
+        if (
+          this.$store.state.Repository.publicIntelligences.status === 'loading'
+        ) {
           this.$store.state.Repository.publicIntelligences.status = null;
         }
       }
@@ -155,7 +166,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .filters {
   margin-bottom: $unnnic-spacing-md;
@@ -164,7 +175,10 @@ export default {
 .intelligences-list {
   display: grid;
   gap: $unnnic-spacing-sm;
-  grid-template-columns: repeat(auto-fill, minmax(20.625 * $unnnic-font-size, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(20.625 * $unnnic-font-size, 1fr)
+  );
 
   &--empty {
     padding-top: $unnnic-spacing-sm;
@@ -189,5 +203,4 @@ export default {
     margin-block: $unnnic-spacing-md;
   }
 }
-
 </style>

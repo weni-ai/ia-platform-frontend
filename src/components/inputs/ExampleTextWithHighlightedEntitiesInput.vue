@@ -4,25 +4,30 @@
       <div
         :class="{
           'example-txt-w-highlighted-entities__input-wrapper': true,
-          'example-txt-w-highlighted-entities__transparent': transparent}">
+          'example-txt-w-highlighted-entities__transparent': transparent,
+        }"
+      >
         <div class="field">
           <div class="control has-icons-right is-family-primary">
             <div
               v-for="(entity, i) in entitiesBlocks"
               :key="i"
-              :class="entityClassAttr">
+              :class="entityClassAttr"
+            >
               <span
-                :class="[
-                  'example-txt-w-highlighted-entities__entity__before',
-              ]">{{ entity.before }}</span><span
+                :class="['example-txt-w-highlighted-entities__entity__before']"
+                >{{ entity.before }}</span
+              ><span
                 :class="[
                   entity.colorClass,
-                  'example-txt-w-highlighted-entities__entity__text'
-              ]">{{ entity.text }}</span>
+                  'example-txt-w-highlighted-entities__entity__text',
+                ]"
+                >{{ entity.text }}</span
+              >
             </div>
-            <self-adjust-input
+            <SelfAdjustInput
               ref="input"
-              :small-icon="smallIcon"
+              :smallIcon="smallIcon"
               v-model="val"
               v-bind="$attrs"
               transparent
@@ -31,13 +36,15 @@
               @focus="$emit('focus')"
               @click.stop.prevent="emitTextSelected"
               @keyup.stop.prevent="emitTextSelected"
-              @keyup.enter="submit()">
+              @keyup.enter="submit()"
+            >
               <span
                 v-if="hasAppend"
-                slot="append">
+                slot="append"
+              >
                 <slot name="append" />
               </span>
-            </self-adjust-input>
+            </SelfAdjustInput>
           </div>
         </div>
       </div>
@@ -63,7 +70,7 @@ export default {
     },
     entities: {
       type: Array,
-      default: () => ([]),
+      default: () => [],
     },
     transparent: {
       type: Boolean,
@@ -89,11 +96,17 @@ export default {
       const classes = ['example-txt-w-highlighted-entities__entity'];
 
       if (this.size) {
-        classes.push(`example-txt-w-highlighted-entities__entity--${this.size}`);
+        classes.push(
+          `example-txt-w-highlighted-entities__entity--${this.size}`,
+        );
       }
 
       if (this.hasAppend) {
-        classes.push(`example-txt-w-highlighted-entities__entity__with-append${this.smallIcon ? '--small' : ''}`);
+        classes.push(
+          `example-txt-w-highlighted-entities__entity__with-append${
+            this.smallIcon ? '--small' : ''
+          }`,
+        );
       }
 
       return classes;
@@ -101,9 +114,7 @@ export default {
     entitiesBlocks() {
       return this.entities
         .map(({ start, end, entity }) => {
-          const color = getEntityColor(
-            entity,
-          );
+          const color = getEntityColor(entity);
           const colorClass = `entity-${color}`;
           const before = this.value.substring(0, start);
           const text = this.value.substring(start, end);
@@ -114,14 +125,17 @@ export default {
             before,
             text,
           };
-        }).concat([{
-          uuid: 'selected',
-          start: this.selectionStart,
-          end: this.selectionEnd,
-          colorClass: 'entity-selected',
-          before: this.value.substring(0, this.selectionStart),
-          text: this.value.substring(this.selectionStart, this.selectionEnd),
-        }]);
+        })
+        .concat([
+          {
+            uuid: 'selected',
+            start: this.selectionStart,
+            end: this.selectionEnd,
+            colorClass: 'entity-selected',
+            before: this.value.substring(0, this.selectionStart),
+            text: this.value.substring(this.selectionStart, this.selectionEnd),
+          },
+        ]);
     },
   },
   watch: {
@@ -141,7 +155,8 @@ export default {
       const selected = value.slice(selectionStart, selectionEnd);
 
       const startPadding = selected.search(/\S|$/);
-      const endPadding = selected.length - selected.trim().length - startPadding;
+      const endPadding =
+        selected.length - selected.trim().length - startPadding;
 
       this.selectionStart = selectionStart + startPadding;
       this.selectionEnd = selectionEnd - endPadding;
@@ -167,10 +182,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/variables.scss';
 
 .example-txt-w-highlighted-entities {
-
   &__append {
     pointer-events: all !important;
     width: $form-append-width !important;
@@ -222,7 +236,7 @@ export default {
 
     &__text {
       border-radius: 4px;
-      opacity: .5;
+      opacity: 0.5;
     }
   }
 }

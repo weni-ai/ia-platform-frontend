@@ -1,80 +1,84 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     :repository="repository"
-    :error-code="errorCode">
-    <settings-loading slot="loader" />
+    :errorCode="errorCode"
+  >
+    <SettingsLoading slot="loader" />
     <div class="settings">
       <div v-if="repository">
         <div v-if="authenticated">
-          <div
-            v-if="repository.authorization.can_write">
+          <div v-if="repository.authorization.can_write">
             <div class="settings__section">
-              <unnnic-card
-              type="title"
-              :title="$t('webapp.settings.title_edit_repository')"
-              :hasInformationIcon="false"
-              icon="cog-1"
-              scheme="brand-weni-soft"
+              <UnnnicCard
+                type="title"
+                :title="$t('webapp.settings.title_edit_repository')"
+                :hasInformationIcon="false"
+                icon="cog-1"
+                scheme="brand-weni-soft"
               />
               <p class="settings__section__subtitle">
-                {{ $t("webapp.settings.description") }}
+                {{ $t('webapp.settings.description') }}
               </p>
-              <unnnic-tab v-model="activeTab" :tabs="tabs">
+              <UnnnicTab
+                v-model="activeTab"
+                :tabs="tabs"
+              >
                 <template slot="tab-head-settings">
-                  {{ $t("webapp.settings.settings_tab") }}
+                  {{ $t('webapp.settings.settings_tab') }}
                 </template>
                 <template slot="tab-panel-settings">
-                  <edit-repository-form
-                    :owner-nickname="repository.owner.nickname"
+                  <EditRepositoryForm
+                    :ownerNickname="repository.owner.nickname"
                     :slug="repository.slug"
-                    :initial-data="getEditInitialData()"
+                    :initialData="getEditInitialData()"
                     @edited="onEdited($event)"
                   />
-                  <hr>
-                  <import-intelligence/>
+                  <hr />
+                  <ImportIntelligence />
                 </template>
                 <template slot="tab-head-versions">
-                  {{ $t("webapp.settings.versions_tab") }}
+                  {{ $t('webapp.settings.versions_tab') }}
                 </template>
                 <template slot="tab-panel-versions">
-                  <versions />
+                  <Versions />
                 </template>
-            </unnnic-tab>
+              </UnnnicTab>
             </div>
           </div>
-          <authorization-request-notification
+          <AuthorizationRequestNotification
             v-else
             :available="!repository.available_request_authorization"
-            :repository-uuid="repository.uuid"
-            @onAuthorizationRequested="updateRepository(false)" />
+            :repositoryUuid="repository.uuid"
+            @onAuthorizationRequested="updateRepository(false)"
+          />
         </div>
       </div>
 
-
-      <div
-        v-if="!authenticated">
+      <div v-if="!authenticated">
         <div class="settings__section">
-          <b-notification
+          <BNotification
             :closable="false"
-            type="is-info">
+            type="is-info"
+          >
             {{ $t('webapp.settings.login') }}
-          </b-notification>
-          <login-form hide-forgot-password />
+          </BNotification>
+          <LoginForm hideForgotPassword />
         </div>
       </div>
     </div>
-    <unnnic-modal
+    <UnnnicModal
       :showModal="openSuccessModal"
       :text="$t('webapp.settings.save_success_title')"
       scheme="feedback-green"
-      modal-icon="check-circle-1-1"
+      modalIcon="check-circle-1-1"
       @close="openSuccessModal = false"
     >
       <span
-      slot="message"
-      v-html="$t('webapp.settings.save_success_message')" />
-    </unnnic-modal>
-  </repository-view-base>
+        slot="message"
+        v-html="$t('webapp.settings.save_success_message')"
+      />
+    </UnnnicModal>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -96,13 +100,13 @@ export default {
     AuthorizationRequestNotification,
     ImportIntelligence,
     Versions,
-    SettingsLoading
+    SettingsLoading,
   },
   data() {
     return {
       activeTab: 'settings',
       tabs: ['settings', 'versions'],
-      openSuccessModal: false
+      openSuccessModal: false,
     };
   },
   extends: RepositoryBase,
@@ -112,7 +116,10 @@ export default {
       handler() {
         const requestedTab = this.$route.query.tab;
 
-        if (this.tabs.includes(requestedTab) && this.activeTab !== requestedTab) {
+        if (
+          this.tabs.includes(requestedTab) &&
+          this.activeTab !== requestedTab
+        ) {
           this.activeTab = requestedTab;
         }
       },
@@ -149,9 +156,10 @@ export default {
         name,
         slug,
         language,
-        categories: this.repository.categories_list.map(
-          ({ id, name: n }) => ({ value: id, display_name: n }),
-        ),
+        categories: this.repository.categories_list.map(({ id, name: n }) => ({
+          value: id,
+          display_name: n,
+        })),
         description,
         is_private: isPrivate,
         algorithm,
@@ -173,7 +181,7 @@ export default {
           },
         });
       }
-      this.openSuccessModal = true
+      this.openSuccessModal = true;
     },
     onRoleSetted() {
       this.$refs.authorizationsList.updateAuthorizations();
@@ -186,53 +194,53 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-  .settings {
-    font-family: $font-family;
+.settings {
+  font-family: $font-family;
 
-    &__section {
-      margin-bottom: 2rem;
+  &__section {
+    margin-bottom: 2rem;
 
-      h1 {
+    h1 {
       font-size: 1.75rem;
       font-weight: $font-weight-medium;
       color: $color-fake-black;
       margin-bottom: $between-title-subtitle;
-      }
-
-      &__subtitle {
-        font-size: $unnnic-font-size-body-gt;
-        font-family: $unnnic-font-family-secondary;
-        color: $unnnic-color-neutral-dark;
-        line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
-        margin-top: $unnnic-spacing-stack-sm;
-        margin-bottom: $unnnic-spacing-stack-lg;
-      }
     }
 
-    hr {
-      margin: 3rem 0;
+    &__subtitle {
+      font-size: $unnnic-font-size-body-gt;
+      font-family: $unnnic-font-family-secondary;
+      color: $unnnic-color-neutral-dark;
+      line-height: $unnnic-line-height-md + $unnnic-font-size-body-gt;
+      margin-top: $unnnic-spacing-stack-sm;
+      margin-bottom: $unnnic-spacing-stack-lg;
     }
   }
-  /deep/ .tab-header {
-    margin-bottom: 2rem;
-  }
 
-  /deep/ input:focus {
-    box-shadow: none;
-    border-color: #9caccc;
+  hr {
+    margin: 3rem 0;
   }
-  /deep/ .dropdown.active .dropdown-data {
-    z-index: 2;
-  }
-  /deep/ .unnnic-card-tag-carousel__container__slide__item {
-    margin-right: 1rem;
-  }
-  /deep/ .unnnic-tooltip-label {
-    max-width: unset;
+}
+:deep(.tab-header) {
+  margin-bottom: 2rem;
+}
+
+:deep(input:focus) {
+  box-shadow: none;
+  border-color: #9caccc;
+}
+:deep(.dropdown.active .dropdown-data) {
+  z-index: 2;
+}
+:deep(.unnnic-card-tag-carousel__container__slide__item) {
+  margin-right: 1rem;
+}
+:deep(.unnnic-tooltip-label) {
+  max-width: unset;
 }
 </style>

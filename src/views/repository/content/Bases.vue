@@ -4,22 +4,22 @@
       <div class="repository-base__header">
         <div class="repository-base__header__details">
           <div class="repository-base__header__title">
-            <unnnic-button
+            <UnnnicButton
               size="small"
               type="tertiary"
-              icon-center="arrow_left_alt"
+              iconCenter="arrow_left_alt"
               scheme="neutral-dark"
               @click="$router.push({ name: 'home' })"
             />
 
-            <unnnic-skeleton-loading
+            <UnnnicSkeletonLoading
               v-if="repository.uuid === null"
               tag="div"
               width="120px"
               height="28px"
             />
 
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               v-else
               family="secondary"
               color="neutral-darkest"
@@ -27,68 +27,82 @@
               size="title-sm"
             >
               {{ repository.name }}
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
           </div>
 
-          <unnnic-skeleton-loading
+          <UnnnicSkeletonLoading
             v-if="repository.uuid === null"
             tag="div"
             width="300px"
             height="22px"
           />
 
-          <p v-else class="repository-base__header__description">
+          <p
+            v-else
+            class="repository-base__header__description"
+          >
             {{ repository.description }}
           </p>
         </div>
 
         <div class="repository-base__header__actions">
-          <repository-content-navigation v-if="canContribute" />
+          <RepositoryContentNavigation v-if="canContribute" />
 
-          <unnnic-button
+          <UnnnicButton
             v-if="canContribute"
             @click="isAddContentBaseOpen = true"
             class="create-base-button"
             iconLeft="add-1"
           >
             {{ $t('webapp.home.bases.new_knowledge_base') }}
-          </unnnic-button>
+          </UnnnicButton>
         </div>
       </div>
 
-      <unnnic-divider y-spacing="lg" />
+      <UnnnicDivider ySpacing="lg" />
 
-      <div v-if="bases.data.length === 0 && bases.status === 'complete'" class="bases-list--empty">
-        <img src="../../../assets/imgs/doris-yawning.png" alt="Doris Yawning">
+      <div
+        v-if="bases.data.length === 0 && bases.status === 'complete'"
+        class="bases-list--empty"
+      >
+        <img
+          src="../../../assets/imgs/doris-yawning.png"
+          alt="Doris Yawning"
+        />
 
-          <h1 class="bases-list__title">
-            {{ $t('intelligences.no_content_base_added') }}
-          </h1>
+        <h1 class="bases-list__title">
+          {{ $t('intelligences.no_content_base_added') }}
+        </h1>
       </div>
 
       <template v-else>
         <div class="bases-list__header">
-          <unnnic-skeleton-loading
+          <UnnnicSkeletonLoading
             v-if="repository.uuid === null"
             tag="div"
             width="300px"
             height="28px"
           />
 
-          <unnnic-intelligence-text
+          <UnnnicIntelligenceText
             v-else
             color="neutral-dark"
             family="secondary"
             size="title-sm"
             weight="bold"
           >
-            {{ $tc('webapp.home.bases.knowledge_bases', repository.content_bases_count) }}
-          </unnnic-intelligence-text>
+            {{
+              $tc(
+                'webapp.home.bases.knowledge_bases',
+                repository.content_bases_count,
+              )
+            }}
+          </UnnnicIntelligenceText>
 
           <div class="bases-list__header__input">
-            <unnnic-input
+            <UnnnicInput
               v-model="searchBaseName"
-              icon-left="search-1"
+              iconLeft="search-1"
               :placeholder="$t('intelligences.search_content_base_placeholder')"
             />
           </div>
@@ -98,25 +112,28 @@
           v-if="basesFiltered.length === 0 && bases.status === 'complete'"
           class="bases-list--empty"
         >
-          <img src="../../../assets/imgs/doris-doubt-reaction.png" alt="Doris Doubt Reaction">
+          <img
+            src="../../../assets/imgs/doris-doubt-reaction.png"
+            alt="Doris Doubt Reaction"
+          />
 
-            <h1 class="bases-list__title">
-              {{ $t('intelligences.no_content_base_found') }}
-            </h1>
+          <h1 class="bases-list__title">
+            {{ $t('intelligences.no_content_base_found') }}
+          </h1>
         </div>
 
         <div class="bases-list">
-          <home-repository-card
+          <HomeRepositoryCard
             type="base"
             v-for="base in basesFiltered"
             :key="base.id"
-            :repository-detail="base"
-            :can-contribute="canContribute"
+            :repositoryDetail="base"
+            :canContribute="canContribute"
             @deleteBase="openDeleteModal"
           />
 
           <template v-if="bases.status === 'loading'">
-            <unnnic-skeleton-loading
+            <UnnnicSkeletonLoading
               v-for="i in 3"
               :key="i"
               tag="div"
@@ -132,50 +149,58 @@
       </template>
     </div>
 
-    <unnnic-modal
+    <UnnnicModal
       class="delete-base-modal"
       persistent
-      :close-icon="false"
+      :closeIcon="false"
       :text="$t('webapp.home.bases.edit-base_modal_delete_title')"
-      :description="$t(
-        'webapp.home.bases.edit-base_modal_delete_text',
-        { name: isDeleteModalOpen.name },
-      )"
+      :description="
+        $t('webapp.home.bases.edit-base_modal_delete_text', {
+          name: isDeleteModalOpen.name,
+        })
+      "
       v-if="isDeleteModalOpen"
       @close="isDeleteModalOpen = null"
     >
-      <unnnic-icon
+      <UnnnicIcon
         slot="icon"
         icon="error"
         scheme="aux-red-500"
         size="lg"
       />
 
-      <unnnic-button slot="options" type="tertiary" @click="isDeleteModalOpen = null">
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="isDeleteModalOpen = null"
+      >
         {{ $t('webapp.home.bases.edit-base_modal_delete_button_cancel') }}
-      </unnnic-button>
+      </UnnnicButton>
 
-      <unnnic-button
+      <UnnnicButton
         slot="options"
         type="warning"
         :loading="isDeleteModalOpen.loading"
         @click="deleteBase"
       >
         {{ $t('webapp.home.bases.edit-base_modal_delete_button_confirm') }}
-      </unnnic-button>
-    </unnnic-modal>
+      </UnnnicButton>
+    </UnnnicModal>
 
-    <base-settings-form
+    <BaseSettingsForm
       v-if="isAddContentBaseOpen"
-      :intelligence-uuid="$route.params.intelligenceUuid"
+      :intelligenceUuid="$route.params.intelligenceUuid"
       @close="isAddContentBaseOpen = false"
-      @success="$event => $router.push({
-        name: 'intelligence-content-base-edit',
-        params: {
-          contentBaseUuid: $event.uuid,
-        },
-      })"
-    ></base-settings-form>
+      @success="
+        ($event) =>
+          $router.push({
+            name: 'intelligence-content-base-edit',
+            params: {
+              contentBaseUuid: $event.uuid,
+            },
+          })
+      "
+    ></BaseSettingsForm>
   </div>
 </template>
 
@@ -241,12 +266,18 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getCurrentRepository', 'getProjectSelected', 'getOrgSelected']),
+    ...mapGetters([
+      'getCurrentRepository',
+      'getProjectSelected',
+      'getOrgSelected',
+    ]),
 
     basesFiltered() {
-      return this.bases.data
-        .filter(({ title }) => (this.searchBaseName
-          ? title.toLowerCase().includes(this.searchBaseName.toLowerCase()) : true));
+      return this.bases.data.filter(({ title }) =>
+        this.searchBaseName
+          ? title.toLowerCase().includes(this.searchBaseName.toLowerCase())
+          : true,
+      );
     },
 
     canContribute() {
@@ -258,16 +289,15 @@ export default {
         return [];
       }
 
-      const categories = this.repository.categories_list.map(category => category.name);
+      const categories = this.repository.categories_list.map(
+        (category) => category.name,
+      );
       return categories;
-    }
+    },
   },
   watch: {
     isShowingEndOfList() {
-      if (
-        this.isShowingEndOfList
-        && this.bases.status !== 'complete'
-      ) {
+      if (this.isShowingEndOfList && this.bases.status !== 'complete') {
         this.fetchBases();
       }
     },
@@ -323,7 +353,13 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['getQAKnowledgeBasesNext', 'deleteQAKnowledgeBase', 'createQAKnowledgeBase', 'editQAKnowledgeBase', 'createQAText']),
+    ...mapActions([
+      'getQAKnowledgeBasesNext',
+      'deleteQAKnowledgeBase',
+      'createQAKnowledgeBase',
+      'editQAKnowledgeBase',
+      'createQAText',
+    ]),
 
     reloadBases() {
       this.bases = {
@@ -343,11 +379,10 @@ export default {
       try {
         this.bases.status = 'loading';
 
-        const { data } = await nexusaiAPI
-          .listIntelligencesContentBases({
-            intelligenceUuid: this.$route.params.intelligenceUuid,
-            next: this.bases.next,
-          });
+        const { data } = await nexusaiAPI.listIntelligencesContentBases({
+          intelligenceUuid: this.$route.params.intelligenceUuid,
+          next: this.bases.next,
+        });
 
         this.bases.data = [...this.bases.data, ...data.results];
         this.bases.next = data.next;
@@ -368,28 +403,27 @@ export default {
         id: repository.id,
         contentBaseUuid: repository.uuid,
         loading: false,
-      }
+      };
     },
 
     async deleteBase() {
       this.isDeleteModalOpen.loading = true;
 
-      await nexusaiAPI
-        .deleteIntelligenceContentBase({
-          intelligenceUuid: this.$route.params.intelligenceUuid,
-          contentBaseUuid: this.isDeleteModalOpen.contentBaseUuid,
-        });
+      await nexusaiAPI.deleteIntelligenceContentBase({
+        intelligenceUuid: this.$route.params.intelligenceUuid,
+        contentBaseUuid: this.isDeleteModalOpen.contentBaseUuid,
+      });
 
       this.isDeleteModalOpen = null;
 
       this.reloadBases();
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .delete-base-modal ::v-deep {
   .unnnic-modal-container-background-body {
@@ -422,13 +456,14 @@ export default {
   min-width: 20.625 * $unnnic-font-size;
 }
 
-
 .bases-list__header {
   display: grid;
   align-items: center;
   gap: $unnnic-spacing-sm;
-  grid-template-columns:
-    repeat(auto-fill, minmax(20.625 * $unnnic-font-size, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(20.625 * $unnnic-font-size, 1fr)
+  );
 
   &__input {
     grid-column-end: -1;
@@ -440,7 +475,10 @@ export default {
   margin-top: $unnnic-spacing-md;
   display: grid;
   gap: $unnnic-spacing-sm;
-  grid-template-columns: repeat(auto-fill, minmax(20.625 * $unnnic-font-size, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(20.625 * $unnnic-font-size, 1fr)
+  );
 
   &--empty {
     margin-top: 7.5 * $unnnic-font-size;
@@ -518,7 +556,8 @@ export default {
       justify-content: space-between;
     }
 
-    &__text, i {
+    &__text,
+    i {
       margin-top: $unnnic-inset-nano;
       font-family: $unnnic-font-family-secondary;
       font-size: $unnnic-font-size-body-gt;
@@ -564,6 +603,4 @@ export default {
     padding-bottom: $unnnic-spacing-sm;
   }
 }
-
-
 </style>

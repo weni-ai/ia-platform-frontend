@@ -1,31 +1,37 @@
 <template>
   <footer>
-    <div class="background"/>
+    <div class="background" />
     <div class="wrapper">
       <div class="footer-content">
         <div class="footer-items">
           <div class="footer-item footer-brand">
             <img
               :src="weniDynamicLogo"
-              alt="Weni Inteligência Artificial">
+              alt="Weni Inteligência Artificial"
+            />
             <div>Webapp v{{ version }}</div>
           </div>
           <ul class="footer-item">
             <li>
-              <router-link to="/terms">{{ $t('webapp.layout.terms_conditions') }}
-              </router-link>
+              <RouterLink to="/terms"
+                >{{ $t('webapp.layout.terms_conditions') }}
+              </RouterLink>
             </li>
           </ul>
           <ul class="footer-item footer-sociallist">
             <li class="footer-sociallist-item">
               <a
                 href="https://www.facebook.com/bothub.it"
-                target="_blank"><b-icon icon="facebook" /></a>
+                target="_blank"
+                ><BIcon icon="facebook"
+              /></a>
             </li>
             <li class="footer-sociallist-item">
               <a
                 href="https://github.com/Ilhasoft/bothub/"
-                target="_blank"><b-icon icon="github" /></a>
+                target="_blank"
+                ><BIcon icon="github"
+              /></a>
             </li>
           </ul>
         </div>
@@ -42,7 +48,9 @@
         </div>
       </div>
       <div class="footer-license">
-        <p class="has-text-centered">{{ $t('webapp.layout.footer_license') }}</p>
+        <p class="has-text-centered">
+          {{ $t('webapp.layout.footer_license') }}
+        </p>
       </div>
     </div>
   </footer>
@@ -55,27 +63,27 @@ export default {
   name: 'SiteFooter',
   data() {
     return {
-      version: runtimeVariables.get('VUE_APP_VERSION'),
+      version: runtimeVariables.get('VITE_VERSION'),
     };
   },
   components: {
-    I18n
+    I18n,
   },
   computed: {
     weniDynamicLogo() {
       if (I18n.locale === 'pt-BR') {
-        return '/weni-logo-white.svg'
+        return '/weni-logo-white.svg';
       }
-      return '/weni-logo-white-en.svg'
+      return '/weni-logo-white-en.svg';
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/utilities.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/utilities.scss';
 
 footer {
   width: 100%;
@@ -85,7 +93,7 @@ footer {
     li {
       a {
         color: $color-white;
-        transition: color .2s ease;
+        transition: color 0.2s ease;
 
         &:hover {
           color: $color-grey-light;
@@ -95,10 +103,10 @@ footer {
   }
 
   .background {
-  background-image: url('~@/assets/imgs/mask-footer.svg');
-  background-repeat: no-repeat;
-  background-size: 100%;
-  height: 30vh;
+    background-image: url('@/assets/imgs/mask-footer.svg');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 30vh;
   }
 
   .wrapper {
@@ -106,9 +114,9 @@ footer {
     background-color: $color-primary;
     margin: 0;
     @media screen and (max-width: $mobile-width *1.2) {
-        margin-top: -16vh;
-        text-align: center;
-      }
+      margin-top: -16vh;
+      text-align: center;
+    }
   }
 
   .footer {
@@ -118,14 +126,14 @@ footer {
       width: 100%;
       margin-bottom: 1rem;
 
-       @media screen and (max-width: 50em) {
+      @media screen and (max-width: 50em) {
         flex-direction: column;
         justify-content: space-around;
         margin: 1rem;
       }
     }
 
-    &-items{
+    &-items {
       margin-top: 1rem;
     }
 
@@ -165,7 +173,7 @@ footer {
 
     &-sociallist {
       display: flex;
-       @media screen and (max-width: $mobile-width) {
+      @media screen and (max-width: $mobile-width) {
         justify-content: center;
       }
 
@@ -190,11 +198,11 @@ footer {
           color: $color-primary;
           background-color: $color-white;
           text-align: center;
-          transition: background-color .2s ease;
+          transition: background-color 0.2s ease;
 
           &:hover {
             color: $color-primary;
-            background-color: $color-white
+            background-color: $color-white;
           }
 
           .icon {

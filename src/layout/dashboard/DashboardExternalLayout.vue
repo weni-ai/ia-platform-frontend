@@ -1,39 +1,53 @@
 <template>
   <div class="external-dashboard-layout">
-    <weni-notification class="external-dashboard-layout__notification" />
+    <WeniNotification class="external-dashboard-layout__notification" />
     <div class="external-dashboard-layout__main-panel">
       <div class="external-dashboard-layout__main-panel__header">
-        <router-link :to="'/home'">
+        <RouterLink :to="'/home'">
           <img
             :src="weniDynamicLogo"
             class="external-dashboard-layout__main-panel__header__img clickable"
             @click="goToLandingPage"
           />
-        </router-link>
-        <router-link :to="`/dashboard/${ownerNickname}/${getExternalRepository.slug}`">
-          <div v-show="hasLoaded" class="external-dashboard-layout__main-panel__header__right">
-            <div class="external-dashboard-layout__main-panel__header__info__badge">
-              <custom-icon
+        </RouterLink>
+        <RouterLink
+          :to="`/dashboard/${ownerNickname}/${getExternalRepository.slug}`"
+        >
+          <div
+            v-show="hasLoaded"
+            class="external-dashboard-layout__main-panel__header__right"
+          >
+            <div
+              class="external-dashboard-layout__main-panel__header__info__badge"
+            >
+              <CustomIcon
                 value="botinho"
                 size="large"
                 class="external-dashboard-layout__main-panel__header__info__badge__icon"
               />
             </div>
-            <div class="external-dashboard-layout__main-panel__header__right__container">
-              <div class="external-dashboard-layout__main-panel__header__right__wrapper">
-                <p class="external-dashboard-layout__main-panel__header__right__wrapper__title">
+            <div
+              class="external-dashboard-layout__main-panel__header__right__container"
+            >
+              <div
+                class="external-dashboard-layout__main-panel__header__right__wrapper"
+              >
+                <p
+                  class="external-dashboard-layout__main-panel__header__right__wrapper__title"
+                >
                   {{ getExternalRepository.name }}
                 </p>
               </div>
-              <span class="external-dashboard-layout__main-panel__header__right__wrapper__subtitle"
-                >{{ $t("webapp.dashboard.created_by") }}
+              <span
+                class="external-dashboard-layout__main-panel__header__right__wrapper__subtitle"
+                >{{ $t('webapp.dashboard.created_by') }}
                 <b class="has-text-primary">{{ ownerNickname }}</b>
               </span>
             </div>
           </div>
-        </router-link>
+        </RouterLink>
       </div>
-      <router-view />
+      <RouterView />
     </div>
   </div>
 </template>
@@ -49,13 +63,13 @@ export default {
   components: {
     CustomIcon,
     WeniNotification,
-    I18n
+    I18n,
   },
   data() {
     return {
       isLoading: false,
       isFullPage: true,
-      beginnerTutorialModalOpen: false
+      beginnerTutorialModalOpen: false,
     };
   },
   computed: {
@@ -73,22 +87,22 @@ export default {
     hasLoaded() {
       if (this.getExternalRepository.name) return true;
       return false;
-    }
+    },
   },
   methods: {
     goToLandingPage() {
       this.$router.push({
-        name: 'landingPage'
+        name: 'landingPage',
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-@import "~@/assets/scss/utilities.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@/assets/scss/colors.scss";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/utilities.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .external-dashboard-layout {
   &__notification {
@@ -104,7 +118,7 @@ export default {
     background-color: $unnnic-color-background-snow;
 
     &__logo {
-      background: url(~@/assets/imgs/weni-logo-green.svg) no-repeat;
+      background: url(@/assets/imgs/weni-logo-green.svg) no-repeat;
       width: 10rem;
       height: 2.8rem;
     }

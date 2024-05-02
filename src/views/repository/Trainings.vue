@@ -1,19 +1,24 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     :repository="repository"
-    :error-code="errorCode">
+    :errorCode="errorCode"
+  >
     <div v-if="repository">
       <div class="trainings-repository__new-example">
         <div v-if="authenticated">
           <div v-if="repository.authorization.can_contribute">
-            <unnnic-intelligence-header
+            <UnnnicIntelligenceHeader
               :title="$t('webapp.trainings.train_title')"
               icon="graph-status-circle-1"
-              icon-scheme="aux-purple"
-              :description="$t('webapp.trainings.train_description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
+              iconScheme="aux-purple"
+              :description="
+                $t('webapp.trainings.train_description', {
+                  link: 'https://docs.weni.ai/l/pt/bothub/',
+                })
+              "
             />
 
-            <unnnic-divider y-spacing="lg" />
+            <UnnnicDivider ySpacing="lg" />
 
             <div class="trainings-repository__list-wrapper">
               <div>
@@ -25,7 +30,7 @@
                 </span> -->
               </div>
             </div>
-            <new-example-form
+            <NewExampleForm
               :repository="repository"
               @created="updateExampleList()"
               @eventStep="dispatchClick()"
@@ -35,24 +40,35 @@
               class="trainings-repository__new-example__train"
             >
               <div
-                :id="getRequirements.ready_for_train
-                || !noPhrasesYet ? 'tour-training-step-6' : ''"
+                :id="
+                  getRequirements.ready_for_train || !noPhrasesYet
+                    ? 'tour-training-step-6'
+                    : ''
+                "
                 :is-next-disabled="true"
                 :is-previous-disabled="true"
-                class="trainings-repository__list-wrapper__tutorialStep">
-                <train
+                class="trainings-repository__list-wrapper__tutorialStep"
+              >
+                <Train
                   :key="updateList"
-                  :show-button="getRequirements.ready_for_train || !noPhrasesYet"
+                  :showButton="getRequirements.ready_for_train || !noPhrasesYet"
                   :repository="repository"
                   :authenticated="authenticated"
                   :version="getSelectedVersion"
-                  :update-repository="async () => { updateRepository(false) }"
-                  :examples-list="examplesList"
+                  :updateRepository="
+                    async () => {
+                      updateRepository(false);
+                    }
+                  "
+                  :examplesList="examplesList"
                   @trainProgressUpdated="trainProgress = $event"
                   @statusUpdated="updateTrainingStatus($event)"
                   @finishedTutorial="dispatchFinish()"
                   @tutorialReset="dispatchReset()"
-                  @onTrain="sendEvent(); dispatchClick();"
+                  @onTrain="
+                    sendEvent();
+                    dispatchClick();
+                  "
                   @onTrainComplete="noPhrasesYet = true"
                   @onTrainReady="dispatchClick()"
                   @unauthorized="signIn()"
@@ -64,15 +80,15 @@
               v-if="examplesList && examplesList.count > 0"
               class="sentences-list"
             >
-              <unnnic-intelligence-text
+              <UnnnicIntelligenceText
                 family="secondary"
                 size="title-sm"
                 color="neutral-dark"
               >
                 {{ $t('webapp.trainings.sentences_to_train') }}
-              </unnnic-intelligence-text>
+              </UnnnicIntelligenceText>
 
-              <unnnic-button
+              <UnnnicButton
                 @click="openDeleteModal = true"
                 type="secondary"
                 size="large"
@@ -82,9 +98,9 @@
                 iconLeft="delete-1-1"
               />
             </div>
-            <examples-pending-training
+            <ExamplesPendingTraining
               :update="updateList"
-              :is-train="trainProgress"
+              :isTrain="trainProgress"
               class="trainings-repository__new-example__pending-example"
               @exampleDeleted="updateExampleList"
               @noPhrases="noPhrasesYet = false"
@@ -93,66 +109,75 @@
               @onEditSentence="updateExampleList"
             />
           </div>
-          <authorization-request-notification
+          <AuthorizationRequestNotification
             v-else
             :available="!repository.available_request_authorization"
-            :repository-uuid="repository.uuid"
-            @onAuthorizationRequested="updateRepository(false)" />
+            :repositoryUuid="repository.uuid"
+            @onAuthorizationRequested="updateRepository(false)"
+          />
         </div>
         <div v-else>
-          <b-notification
+          <BNotification
             :closable="false"
-            type="is-info">
+            type="is-info"
+          >
             {{ $t('webapp.trainings.login') }}
-          </b-notification>
-          <login-form hide-forgot-password />
+          </BNotification>
+          <LoginForm hideForgotPassword />
         </div>
       </div>
     </div>
-    <tour
+    <Tour
       v-if="activeTutorial === 'training'"
-      :step-count="8"
-      :next-event="eventClick"
-      :finish-event="eventClickFinish"
-      :reset-tutorial="eventReset"
-      name="training"/>
-      <unnnic-modal
+      :stepCount="8"
+      :nextEvent="eventClick"
+      :finishEvent="eventClickFinish"
+      :resetTutorial="eventReset"
+      name="training"
+    />
+    <UnnnicModal
       :showModal="openDeleteModal"
       :text="$t('webapp.trainings.delete_title')"
       scheme="feedback-red"
-      modal-icon="alert-circle-1"
+      modalIcon="alert-circle-1"
       @close="openDeleteModal = false"
     >
       <span
-      slot="message"
-      v-html="$t('webapp.trainings.delete_phrase_modal')" />
-      <unnnic-button slot="options" type="tertiary" @click="openDeleteModal = false">
-        {{ $t("webapp.home.cancel") }}
-      </unnnic-button>
-      <unnnic-button
+        slot="message"
+        v-html="$t('webapp.trainings.delete_phrase_modal')"
+      />
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="openDeleteModal = false"
+      >
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
         slot="options"
         type="primary"
         scheme="feedback-red"
         @click="deleteSelectedItems"
       >
-        {{ $t("webapp.trainings.delete_title") }}
-      </unnnic-button>
-    </unnnic-modal>
-    <unnnic-modal
+        {{ $t('webapp.trainings.delete_title') }}
+      </UnnnicButton>
+    </UnnnicModal>
+    <UnnnicModal
       :showModal="openSuccessModal"
       :text="$t('webapp.intent.delete_success_title')"
       scheme="feedback-green"
-      modal-icon="check-circle-1-1"
+      modalIcon="check-circle-1-1"
       @close="openSuccessModal = false"
     >
       <span
-      slot="message"
-      v-html="$t('webapp.intent.delete_success_subtitle')" />
-    </unnnic-modal>
+        slot="message"
+        v-html="$t('webapp.intent.delete_success_subtitle')"
+      />
+    </UnnnicModal>
     <template v-slot:loader>
-      <trainings-loader />
+      <TrainingsLoader />
     </template>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -183,7 +208,7 @@ export default {
     Loading,
     Train,
     Tour,
-    TrainingsLoader
+    TrainingsLoader,
   },
   extends: RepositoryBase,
   data() {
@@ -216,20 +241,20 @@ export default {
     ]),
     translationQuery() {
       const { language, ...query } = this.query;
-      return { ...query, ...(language ? { is_available_language: language } : {}) };
+      return {
+        ...query,
+        ...(language ? { is_available_language: language } : {}),
+      };
     },
     sentencesCounter() {
       if (this.selectedItems !== null) {
-        return this.selectedItems.length
+        return this.selectedItems.length;
       }
-      return 0
+      return 0;
     },
   },
   methods: {
-    ...mapActions([
-      'trainRepository',
-      'deleteExample'
-    ]),
+    ...mapActions(['trainRepository', 'deleteExample']),
     sendEvent() {
       Analytics.send({ category: 'Intelligence', event: 'on train event' });
     },
@@ -263,7 +288,8 @@ export default {
       this.eventClick = !this.eventClick;
     },
     dispatchFinish() {
-      if (this.activeTutorial === 'training') this.eventClickFinish = !this.eventClickFinish;
+      if (this.activeTutorial === 'training')
+        this.eventClickFinish = !this.eventClickFinish;
     },
     dispatchReset() {
       this.eventReset = !this.eventReset;
@@ -275,10 +301,10 @@ export default {
     },
     updatedExampleList() {
       this.update = !this.update;
-      this.updateRepository(false)
+      this.updateRepository(false);
     },
     updateSelected(params) {
-      this.selectedItems = params
+      this.selectedItems = params;
     },
     async deleteSelectedItems() {
       await this.selectedItems.forEach((item) => {
@@ -287,23 +313,23 @@ export default {
         this.openDeleteModal = false;
         this.openSuccessModal = true;
       });
-      await this.updateExampleList()
+      await this.updateExampleList();
     },
     updateCount(value) {
-      this.examplesList = value
+      this.examplesList = value;
     },
     updateExampleList() {
       this.updateList = !this.updateList;
       this.updateTrainingStatus();
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  @import '~@/assets/scss/colors.scss';
-  @import '~@/assets/scss/variables.scss';
-  @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .sentences-list {
   margin-top: $unnnic-spacing-xl;
@@ -317,7 +343,7 @@ export default {
     // justify-content: space-between;
     // margin-bottom: .5rem;
 
-    &__title{
+    &__title {
       margin: 0;
 
       color: $unnnic-color-neutral-dark;
@@ -326,20 +352,20 @@ export default {
       font-size: $unnnic-font-size-title-sm;
       line-height: $unnnic-font-size-title-sm + $unnnic-line-height-md;
     }
-     &__subtitle{
+    &__subtitle {
       font-size: $font-size;
     }
 
-    &__button{
+    &__button {
       color: $color-white;
       width: 14rem;
 
-      &:hover{
+      &:hover {
         color: $color-white;
       }
     }
 
-    &__tutorialStep{
+    &__tutorialStep {
       width: 100%;
       height: 100%;
     }
@@ -349,7 +375,7 @@ export default {
     margin-top: 1rem;
     background-color: $color-white;
 
-    &__pending-example{
+    &__pending-example {
       margin-top: 1.6rem;
       min-height: 5rem;
       margin-bottom: 3rem;
@@ -364,92 +390,97 @@ export default {
         height: 25px;
         width: 60%;
 
-        p{
+        p {
           font-size: 13px;
           font-weight: $font-weight-bolder;
         }
       }
 
       &__bar {
-      position: relative;
-      display: block;
-      width: 100%;
-      background-color: $color-grey-light;
-    }
+        position: relative;
+        display: block;
+        width: 100%;
+        background-color: $color-grey-light;
+      }
       &__bar span {
-      position: relative;
-      display: inline-block;
-      vertical-align: middle;
-      height: 25px;
-      background-color: $color-secondary;
-    }
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        height: 25px;
+        background-color: $color-secondary;
+      }
       &__bar span:after {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      content: "";
-      background-size: 100%;
-      background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.603) 25%,
-                                        rgba(0, 0, 0, 0) 25%,
-                                        rgba(0, 0, 0, 0) 50%,
-                                        rgba(255, 255, 255, 0.603) 50%,
-                                        rgba(255, 255, 255, 0.603) 75%,
-                                        rgba(0, 0, 0, 0) 75%,
-                                        rgba(0, 0, 0, 0));
-      background-size: 30px 30px;
-      opacity: 0.3;
-      animation: progress-animation 0.5s infinite linear;
-    }
-    @-webkit-keyframes progress-animation {
-      0% {
-        background-position: 0 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        content: '';
+        background-size: 100%;
+        background-image: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.603) 25%,
+          rgba(0, 0, 0, 0) 25%,
+          rgba(0, 0, 0, 0) 50%,
+          rgba(255, 255, 255, 0.603) 50%,
+          rgba(255, 255, 255, 0.603) 75%,
+          rgba(0, 0, 0, 0) 75%,
+          rgba(0, 0, 0, 0)
+        );
+        background-size: 30px 30px;
+        opacity: 0.3;
+        animation: progress-animation 0.5s infinite linear;
       }
-      100% {
-        background-position: 30px 100%;
+      @-webkit-keyframes progress-animation {
+        0% {
+          background-position: 0 100%;
+        }
+        100% {
+          background-position: 30px 100%;
+        }
       }
-    }
-    @keyframes progress-animation {
-      0% {
-        background-position: 0 100%;
-      }
-      100% {
-        background-position: 30px 100%;
-      }
-    }
-      }
-    }
-
-    &__description {
-      color: $unnnic-color-neutral-dark;
-      font-family: $unnnic-font-family-secondary;
-      font-weight: $unnnic-font-weight-regular;
-      font-size: $unnnic-font-size-body-gt;
-      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-
-      margin-block-start: $unnnic-spacing-sm;
-      margin-block-end: 0;
-
-      /deep/ a {
-        color: inherit;
-        text-decoration: underline;
-        text-underline-offset: $unnnic-spacing-nano;
-        font-weight: $unnnic-font-weight-bold;
-
-        &:hover {
-          color: $unnnic-color-neutral-darkest;
+      @keyframes progress-animation {
+        0% {
+          background-position: 0 100%;
+        }
+        100% {
+          background-position: 30px 100%;
         }
       }
     }
+  }
+
+  &__description {
+    color: $unnnic-color-neutral-dark;
+    font-family: $unnnic-font-family-secondary;
+    font-weight: $unnnic-font-weight-regular;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+
+    margin-block-start: $unnnic-spacing-sm;
+    margin-block-end: 0;
+
+    :deep(a) {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: $unnnic-spacing-nano;
+      font-weight: $unnnic-font-weight-bold;
+
+      &:hover {
+        color: $unnnic-color-neutral-darkest;
+      }
+    }
+  }
 }
 
-/deep/ input:focus, /deep/ textarea:focus {
+:deep(input:focus),
+:deep(textarea:focus) {
   box-shadow: none;
   border-color: #9caccc;
 }
 
-/deep/ input, /deep/ textarea {
+:deep(input),
+:deep(textarea) {
   height: auto;
 }
 </style>

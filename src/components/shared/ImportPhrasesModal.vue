@@ -1,28 +1,35 @@
 <template>
-  <unnnic-modal :text="$t('webapp.translate.import_title')" :showModal="open" @close="closeModal">
+  <UnnnicModal
+    :text="$t('webapp.translate.import_title')"
+    :showModal="open"
+    @close="closeModal"
+  >
     <div slot="message">
-      <unnnic-tab initialTab="first" :tabs="tabs">
+      <UnnnicTab
+        initialTab="first"
+        :tabs="tabs"
+      >
         <template slot="tab-head-first">
-          {{ $t("webapp.import_and_export_intelligence.import_rasa") }}
+          {{ $t('webapp.import_and_export_intelligence.import_rasa') }}
         </template>
         <template slot="tab-panel-first">
-          <import-rasa-modal
+          <ImportRasaModal
             @dispatchImportNotification="dispatchNotification"
             @dispatchCloseModal="closeModal"
           />
         </template>
         <template slot="tab-head-second">
-          {{ $t("webapp.import_and_export_intelligence.migrate_wit") }}
+          {{ $t('webapp.import_and_export_intelligence.migrate_wit') }}
         </template>
         <template slot="tab-panel-second">
-          <import-wit-modal
+          <ImportWitModal
             @dispatchCloseModal="closeModal"
             @dispatchMigrateNotification="dispatchNotification"
           />
         </template>
-      </unnnic-tab>
+      </UnnnicTab>
     </div>
-  </unnnic-modal>
+  </UnnnicModal>
 </template>
 
 <script>
@@ -33,7 +40,7 @@ export default {
   name: 'ImportPhrasesModal',
   components: {
     ImportRasaModal,
-    ImportWitModal
+    ImportWitModal,
   },
   props: {
     open: {
@@ -41,8 +48,8 @@ export default {
       default: false,
     },
     closeModal: {
-      type: Function
-    }
+      type: Function,
+    },
   },
   data() {
     return {
@@ -53,14 +60,12 @@ export default {
     dispatchNotification(value) {
       this.$emit('dispatchImportNotification', value);
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-
-/deep/ .unnnic-modal-container-background {
+:deep(.unnnic-modal-container-background) {
   min-height: 420px;
 }
-
 </style>

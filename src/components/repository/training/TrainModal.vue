@@ -1,16 +1,14 @@
 <template>
-  <unnnic-modal
+  <UnnnicModal
     :showModal="open"
     @close="closeModal"
     text="teste"
     description="teste"
     v-if="repositoryTrain"
   >
-    <template #message>
-
-    </template>
-  </unnnic-modal>
-  <unnnic-modal
+    <template #message> </template>
+  </UnnnicModal>
+  <UnnnicModal
     v-else
     :showModal="open"
     @close="closeModal"
@@ -20,10 +18,12 @@
     scheme="feedback-red"
   >
     <template #message>
-      <div v-if="
-        requirementsToTrainStatus ||
-        languagesWarningsStatus ||
-        languageAvailableToTrain.length === 0"
+      <div
+        v-if="
+          requirementsToTrainStatus ||
+          languagesWarningsStatus ||
+          languageAvailableToTrain.length === 0
+        "
         class="train-modal__wrapper__content"
       >
         <div v-if="requirementsToTrainStatus">
@@ -37,10 +37,18 @@
               :key="i"
               class="train-modal__wrapper__content__content-requirements__item"
             >
-              <unnnic-icon icon="alert-circle-1-1" scheme="feedback-red" size="sm" />
-              <div class="train-modal__wrapper__content__content-requirements__item__texts">
-                <div class="train-modal__wrapper__content__content-requirements__item__field">
-                  {{ `[${lang.toUpperCase().replace('_','-')}]` }}
+              <UnnnicIcon
+                icon="alert-circle-1-1"
+                scheme="feedback-red"
+                size="sm"
+              />
+              <div
+                class="train-modal__wrapper__content__content-requirements__item__texts"
+              >
+                <div
+                  class="train-modal__wrapper__content__content-requirements__item__field"
+                >
+                  {{ `[${lang.toUpperCase().replace('_', '-')}]` }}
                 </div>
                 <p>
                   <strong>{{ firstText(requirement) }}</strong>
@@ -57,12 +65,23 @@
             :key="lang"
             class="train-modal__wrapper__content__content-requirements__item"
           >
-            <unnnic-icon icon="alert-circle-1-1" scheme="feedback-red" size="sm" />
-            <div class="train-modal__wrapper__content__content-requirements__item__texts">
-              <div class="train-modal__wrapper__content__content-requirements__item__field">
-                {{ `[${lang.toUpperCase().replace('_','-')}]` }}
+            <UnnnicIcon
+              icon="alert-circle-1-1"
+              scheme="feedback-red"
+              size="sm"
+            />
+            <div
+              class="train-modal__wrapper__content__content-requirements__item__texts"
+            >
+              <div
+                class="train-modal__wrapper__content__content-requirements__item__field"
+              >
+                {{ `[${lang.toUpperCase().replace('_', '-')}]` }}
               </div>
-              <p v-for="(warning, index) in warnings" :key="index">
+              <p
+                v-for="(warning, index) in warnings"
+                :key="index"
+              >
                 <strong>{{ firstText(warning) }}</strong>
                 <br />
                 <span>{{ secondText(warning) }}</span>
@@ -71,18 +90,21 @@
           </div>
         </div>
       </div>
-      <div slot="options" class="train-modal__buttons">
-        <unnnic-button
+      <div
+        slot="options"
+        class="train-modal__buttons"
+      >
+        <UnnnicButton
           ref="trainBtn"
           type="tertiary"
           class="train-modal__buttons__style"
           @click="closeModal()"
         >
-          <span>{{ $t("webapp.train_modal.train") }}</span>
-        </unnnic-button>
+          <span>{{ $t('webapp.train_modal.train') }}</span>
+        </UnnnicButton>
       </div>
     </template>
-  </unnnic-modal>
+  </UnnnicModal>
 </template>
 
 <script>
@@ -92,38 +114,38 @@ import LanguageBadge from '@/components/shared/LanguageBadge';
 export default {
   name: 'TrainModal',
   components: {
-    LanguageBadge
+    LanguageBadge,
   },
   props: {
     open: {
       type: Boolean,
-      default: false
+      default: false,
     },
     requirementsToTrain: {
       type: Object,
-      required: true
+      required: true,
     },
     languagesWarnings: {
       type: Object,
-      required: true
+      required: true,
     },
     languageAvailableToTrain: {
       type: Array,
-      required: true
+      required: true,
     },
     training: {
       type: Boolean,
-      default: false
+      default: false,
     },
     repositoryTrain: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       blockedNextStepTutorial: false,
-      repositoryStatus: {}
+      repositoryStatus: {},
     };
   },
   computed: {
@@ -131,14 +153,14 @@ export default {
       'activeTutorial',
       'getCheckRepositoryTrain',
       'getSelectedVersionRepository',
-      'getSelectedVersion'
+      'getSelectedVersion',
     ]),
     requirementsToTrainStatus() {
       return Object.keys(this.requirementsToTrain).length !== 0;
     },
     languagesWarningsStatus() {
       return Object.keys(this.languagesWarnings).length !== 0;
-    }
+    },
   },
   methods: {
     ...mapActions(['setRepositoryTraining', 'getRepositoryStatus']),
@@ -159,16 +181,16 @@ export default {
     dispatchTrain() {
       this.$emit('proceedTrain');
       this.$emit('closeTrainModal');
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 ::-webkit-scrollbar {
   width: 0.25rem;
 }
@@ -261,9 +283,7 @@ export default {
               font-size: $unnnic-font-size-body-md;
               line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
             }
-
           }
-
         }
       }
     }
@@ -279,8 +299,7 @@ export default {
     }
   }
 }
-  /deep/ .unnnic-modal-container-background-body-description {
-    padding-bottom: 2rem;
-  }
-
+:deep(.unnnic-modal-container-background-body-description) {
+  padding-bottom: 2rem;
+}
 </style>

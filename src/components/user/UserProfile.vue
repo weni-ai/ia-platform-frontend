@@ -9,13 +9,14 @@
       <a
         :href="profileURL"
         class="text-color-grey-light"
-        target="_blank">{{ profileURL }}</a>
+        target="_blank"
+        >{{ profileURL }}</a
+      >
     </p>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'UserProfile',
   props: {
@@ -26,7 +27,7 @@ export default {
   },
   computed: {
     profileURL() {
-      return `${runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_BASE_URL')}
+      return `${runtimeVariables.get('VITE_BOTHUB_WEBAPP_BASE_URL')}
       ${this.profile.nickname}/`;
     },
   },

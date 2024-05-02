@@ -1,88 +1,101 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     :repository="repository"
-    :error-code="errorCode">
+    :errorCode="errorCode"
+  >
     <div
       v-if="authenticated"
-      class="entity-list">
+      class="entity-list"
+    >
       <div v-if="repository">
-        <entities-list
-          :entities-list="examplesList"
+        <EntitiesList
+          :entitiesList="examplesList"
           :repository="repository"
-          :entity-name.sync="entitySelected"
+          :entityName.sync="entitySelected"
           @saveEdition="onItemSave()"
-          :selected-items="selectedItems"
+          :selectedItems="selectedItems"
           @itemDeleted="onItemDeleted()"
-          />
+        />
         <div class="entity-list__divider" />
         <div class="entity-list__search">
-          <unnnic-input
+          <UnnnicInput
             :placeholder="$t('webapp.intent.search_sentence')"
             iconLeft="search-1"
             v-model="searchSentence"
           />
           <div class="is-flex is-align-items-center">
-            <span class="entity-list__results">{{ $t('webapp.intent.sentences_perpage') }}</span>
-            <unnnic-select
+            <span class="entity-list__results">{{
+              $t('webapp.intent.sentences_perpage')
+            }}</span>
+            <UnnnicSelect
               class="unnic--clickable"
               size="md"
               v-model="selectedOption"
             >
-              <option v-for="(option, index) in options" :key="index" size="sm">
+              <option
+                v-for="(option, index) in options"
+                :key="index"
+                size="sm"
+              >
                 {{ option.value }}
               </option>
-            </unnnic-select>
+            </UnnnicSelect>
           </div>
         </div>
-        <intent-pagination
+        <IntentPagination
           v-if="examplesList"
-          :item-component="sentencesEntities"
+          :itemComponent="sentencesEntities"
           :list="examplesList"
           :repository="repository"
-          :per-page="perPage"
-          :add-attributes="{ entitySelected }"
+          :perPage="perPage"
+          :addAttributes="{ entitySelected }"
           @itemDeleted="onItemDeleted()"
           @itemSave="onItemSave()"
-          :show-intents="true"
+          :showIntents="true"
           @onUpdateSelected="updateSelected"
         />
         <p
           v-if="examplesList && examplesList.empty"
-          class="no-examples">{{ $t('webapp.entity.no_sentences') }}</p>
+          class="no-examples"
+        >
+          {{ $t('webapp.entity.no_sentences') }}
+        </p>
       </div>
-      <b-notification
+      <BNotification
         v-else
         :closable="false"
         class="repository-log__notification"
-        type="is-warning">
+        type="is-warning"
+      >
         {{ $t('webapp.evaluate.you_can_not_edit') }}
-        <request-authorization-modal
+        <RequestAuthorizationModal
           v-if="repository"
           :open.sync="requestAuthorizationModalOpen"
           :available="!repository.available_request_authorization"
-          :repository-uuid="repository.uuid"
-          @requestDispatched="onAuthorizationRequested()" />
+          :repositoryUuid="repository.uuid"
+          @requestDispatched="onAuthorizationRequested()"
+        />
         <a
           class="requestAuthorization"
-          @click="openRequestAuthorizationModal">
+          @click="openRequestAuthorizationModal"
+        >
           {{ $t('webapp.layout.request_authorization') }}
         </a>
-      </b-notification>
+      </BNotification>
     </div>
-    <div
-      v-else>
-      <b-notification
+    <div v-else>
+      <BNotification
         :closable="false"
-        class="is-info">
+        class="is-info"
+      >
         {{ $t('webapp.inbox.signin_you_account') }}
-      </b-notification>
-      <login-form hide-forgot-password />
+      </BNotification>
+      <LoginForm hideForgotPassword />
     </div>
     <template v-slot:loader>
-      <intent-loader />
+      <IntentLoader />
     </template>
-  </repository-view-base>
-
+  </RepositoryViewBase>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
@@ -110,7 +123,7 @@ export default {
     Loading,
     SentencesIntentTable,
     IntentPagination,
-    IntentLoader
+    IntentLoader,
   },
   extends: RepositoryBase,
   props: {
@@ -137,14 +150,10 @@ export default {
       requestAuthorizationModalOpen: false,
       querySchema: {},
       selectedItems: [],
-      options: [
-        { value: 10 },
-        { value: 25 },
-        { value: 50 },
-      ],
+      options: [{ value: 10 }, { value: 25 }, { value: 50 }],
       selectedOption: `${this.perPage}`,
       searchSentence: '',
-      timeout: null
+      timeout: null,
     };
   },
   computed: {
@@ -167,24 +176,22 @@ export default {
       this.updateExamples(true);
     },
     selectedOption() {
-      this.perPage = +this.selectedOption
+      this.perPage = +this.selectedOption;
       this.filterBySentence();
     },
     searchSentence(newValue) {
-      this.query.search = newValue
+      this.query.search = newValue;
       if (this.timeout) clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         this.filterBySentence();
       }, 750);
-    }
+    },
   },
   mounted() {
     this.updateExamples();
   },
   methods: {
-    ...mapActions([
-      'searchExamples',
-    ]),
+    ...mapActions(['searchExamples']),
     async updateExamples(force = false) {
       if (this.repositoryList.uuid !== undefined) {
         if (!this.examplesList || force) {
@@ -215,7 +222,7 @@ export default {
       this.updateRepository(false);
     },
     updateSelected(params) {
-      this.selectedItems = params
+      this.selectedItems = params;
     },
     async filterBySentence() {
       this.examplesList = await this.searchExamples({
@@ -223,9 +230,9 @@ export default {
         version: this.repositoryVersion,
         query: {
           entity_id: this.entitySearch.entity_id,
-          search: this.query.search
+          search: this.query.search,
         },
-        limit: this.perPage
+        limit: this.perPage,
       });
     },
   },
@@ -233,44 +240,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
-  label {
-    vertical-align: middle;
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+label {
+  vertical-align: middle;
+}
+.requestAuthorization {
+  color: $color-fake-black;
+  font-weight: $font-weight-medium;
+  text-align: center;
+  float: right;
+}
+.entity-list {
+  margin: 0.4rem;
+
+  &__divider {
+    border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+    margin: 2rem 0;
   }
-  .requestAuthorization{
-      color: $color-fake-black;
-      font-weight: $font-weight-medium;
-      text-align: center;
-      float: right
-    }
-  .entity-list {
-    margin: 0.4rem;
 
-    &__divider {
-      border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-      margin: 2rem 0;
-    }
+  &__results {
+    font: 14px 'Lato';
+    margin-right: 1rem;
+    color: $unnnic-color-neutral-dark;
+  }
 
-    &__results {
-      font: 14px 'Lato';
-      margin-right: 1rem;
-      color: $unnnic-color-neutral-dark;
-    }
+  &__search {
+    display: flex;
+    justify-content: space-between;
 
-    &__search {
-      display: flex;
-      justify-content: space-between;
-
-      & /deep/ .unnnic-form {
-        width: 50%;
-      }
+    & :deep(.unnnic-form) {
+      width: 50%;
     }
   }
-/deep/ .input {
+}
+:deep(.input) {
   height: auto;
 }
-
 </style>

@@ -1,39 +1,49 @@
 <template>
   <div class="authorization-item columns is-vcentered">
     <div class="authorization-item__info column">
-      <user-avatar
+      <UserAvatar
         :profile="getProfile(user__nickname)"
         :clickable="false"
-        class="authorization-item__avatar" />
-      <p><strong>
-        {{ getProfile(user__nickname).name || user__nickname }} ({{ user__nickname }})
-      </strong></p>
-      <role-select
+        class="authorization-item__avatar"
+      />
+      <p>
+        <strong>
+          {{ getProfile(user__nickname).name || user__nickname }} ({{
+            user__nickname
+          }})
+        </strong>
+      </p>
+      <RoleSelect
         :editable="editable"
         v-model="newRole"
-        size="is-small" />
+        size="is-small"
+      />
     </div>
     <div class="column is-2 authorization-item__icon__container">
-      <b-icon
+      <BIcon
         v-show="!submitting"
         icon="delete"
         size="is-small"
         class="authorization-item__icon authorization-item__icon--button"
-        @click.native="remove()"/>
-      <b-icon
+        @click.native="remove()"
+      />
+      <BIcon
         v-show="!submitting"
         icon="pencil"
         size="is-small"
         class="authorization-item__icon authorization-item__icon--button"
-        @click.native="editable = !editable"/>
-      <b-icon
+        @click.native="editable = !editable"
+      />
+      <BIcon
         v-show="submitting"
         class="authorization-item__icon icon-spin"
-        icon="refresh" />
-      <b-icon
+        icon="refresh"
+      />
+      <BIcon
         v-show="submitted"
         class="text-color-primary"
-        icon="check" />
+        icon="check"
+      />
     </div>
   </div>
 </template>
@@ -43,7 +53,6 @@ import { mapGetters, mapActions } from 'vuex';
 
 import UserAvatar from '@/components/user/UserAvatar';
 import RoleSelect from '@/components/inputs/RoleSelect';
-
 
 export default {
   name: 'OrgAuthorizationItem',
@@ -99,9 +108,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'getProfile',
-    ]),
+    ...mapGetters(['getProfile']),
   },
   watch: {
     newRole() {
@@ -120,7 +127,9 @@ export default {
     async remove() {
       return new Promise((resolve, reject) => {
         this.removeDialog = this.$buefy.dialog.confirm({
-          message: this.$t('webapp.settings.remove_user_confirm', { user: this.user__nickname }),
+          message: this.$t('webapp.settings.remove_user_confirm', {
+            user: this.user__nickname,
+          }),
           confirmText: this.$t('webapp.settings.remove'),
           cancelText: this.$t('webapp.settings.cancel'),
           type: 'is-danger',
@@ -187,44 +196,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
 .authorization-item {
-    padding: 0 1rem;
-    background-color: $color-white;
-    border: 1px solid $color-border;
-    margin: 0.625rem 0;
-    border-radius: 5px;
+  padding: 0 1rem;
+  background-color: $color-white;
+  border: 1px solid $color-border;
+  margin: 0.625rem 0;
+  border-radius: 5px;
 
-    &__info {
+  &__info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    > * {
+      margin: 0.5rem 1rem 0.5rem 0;
+    }
+  }
+
+  &__avatar {
+    box-shadow: 0px 3px 6px #00000029;
+  }
+
+  &__icon {
+    color: $color-grey-dark;
+
+    &--button {
+      cursor: pointer;
+    }
+
+    &__container {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+      flex-direction: row-reverse;
+
       > * {
-        margin: 0.5rem 1rem 0.5rem 0;
+        margin: 0 0 0.5rem 1rem;
       }
     }
-
-    &__avatar {
-        box-shadow: 0px 3px 6px #00000029;
-    }
-
-    &__icon {
-      color: $color-grey-dark;
-
-      &--button {
-        cursor: pointer;
-      }
-
-      &__container {
-        display: flex;
-        flex-direction: row-reverse;
-
-        > * {
-            margin: 0 0 0.5rem 1rem;
-        }
-      }
-    }
+  }
 }
 </style>

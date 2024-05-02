@@ -42,48 +42,51 @@
       </footer>
     </div>
   </section> -->
-  <unnnic-modal
+  <UnnnicModal
     :showModal="true"
     :text="titleHeader"
     @close="closeModal()"
   >
     <div slot="message">
-      <edit-example-accordion
-          ref="accordion"
-          :pending-example="true"
-          :entities="getLogData.entities"
-          :intent-to-edit="info.intent.name"
-          :text-to-edit="getLogData.text"
-          :sentence-id="logData.id"
-          :language-edit="getLogData.language"
-          :get-all-entities="allEntities"
-          :custom="true"
-          :open="false"
-          align="top"
-          edit-example
-          @cancel="editing = false"
-          @saveList="onSaveList"
-          @textInput="inputValues.text = $event"
-          @entitiesInput="inputValues.entities = $event"
-          @intentInput="inputValues.intent = $event"
-        />
-      </div>
-      <unnnic-button slot="options" type="tertiary" @click.prevent.stop="closeModal()">
-        {{ $t("webapp.inbox.add_log.close") }}
-      </unnnic-button>
-      <unnnic-button
-        slot="options"
-        class="create-repository__container__button"
-        type="secondary"
-        @click.prevent.stop="addIntent"
-        :disabled="checkInputs"
-        :text="buttonLabel"
+      <EditExampleAccordion
+        ref="accordion"
+        :pendingExample="true"
+        :entities="getLogData.entities"
+        :intentToEdit="info.intent.name"
+        :textToEdit="getLogData.text"
+        :sentenceId="logData.id"
+        :languageEdit="getLogData.language"
+        :getAllEntities="allEntities"
+        :custom="true"
+        :open="false"
+        align="top"
+        editExample
+        @cancel="editing = false"
+        @saveList="onSaveList"
+        @textInput="inputValues.text = $event"
+        @entitiesInput="inputValues.entities = $event"
+        @intentInput="inputValues.intent = $event"
       />
-  </unnnic-modal>
+    </div>
+    <UnnnicButton
+      slot="options"
+      type="tertiary"
+      @click.prevent.stop="closeModal()"
+    >
+      {{ $t('webapp.inbox.add_log.close') }}
+    </UnnnicButton>
+    <UnnnicButton
+      slot="options"
+      class="create-repository__container__button"
+      type="secondary"
+      @click.prevent.stop="addIntent"
+      :disabled="checkInputs"
+      :text="buttonLabel"
+    />
+  </UnnnicModal>
 </template>
 
 <script>
-
 import EditExampleAccordion from '@/components/shared/accordion/EditExampleAccordion';
 
 export default {
@@ -129,16 +132,15 @@ export default {
   },
   computed: {
     allEntities() {
-      return this.repository.entities.map(
-        entityValue => entityValue.value,
-      );
+      return this.repository.entities.map((entityValue) => entityValue.value);
     },
     getLogData() {
       const { data } = this.logData;
       return data;
     },
     checkInputs() {
-      if (this.inputValues.text !== '' && this.inputValues.intent !== '') return false;
+      if (this.inputValues.text !== '' && this.inputValues.intent !== '')
+        return false;
       return true;
     },
   },
@@ -166,40 +168,39 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
- @import '~@/assets/scss/utilities.scss';
+@import '@/assets/scss/utilities.scss';
 
-.modalStyle{
+.modalStyle {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  &__content{
+  &__content {
     min-width: $size-large + 50rem;
     min-height: $size-large + 23rem;
 
-    &__container{
+    &__container {
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-      &__footer{
+    &__footer {
       display: flex;
       justify-content: flex-end;
       align-items: center;
-
-      }
+    }
   }
 }
 
-.button{
-    font-weight: bold;
+.button {
+  font-weight: bold;
 }
 p {
-    font-weight: 600;
+  font-weight: 600;
 }
 
-::v-deep  {
+::v-deep {
   .unnnic-modal-container-background-body-alert_icon,
   .unnnic-modal-container-background-body-close_icon {
     display: none;
@@ -208,7 +209,7 @@ p {
     padding-top: 3rem;
   }
   .unnnic-modal-container-background-button {
-    padding-top: 0
+    padding-top: 0;
   }
   .unnnic-modal-container-background-body-description {
     padding-bottom: 1.5rem;

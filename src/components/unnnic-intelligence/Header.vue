@@ -1,7 +1,7 @@
 <template>
   <div class="intelligence-header">
     <div>
-      <unnnic-card
+      <UnnnicCard
         type="title"
         :title="title"
         :hasInformationIcon="false"
@@ -27,11 +27,11 @@ export default {
     iconScheme: String,
     description: String,
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .description {
   max-width: 32 * $unnnic-font-size;
@@ -45,7 +45,7 @@ export default {
   margin-block-start: $unnnic-spacing-sm;
   margin-block-end: 0;
 
-  /deep/ a {
+  :deep(a) {
     color: inherit;
     text-decoration: underline;
     text-underline-offset: $unnnic-spacing-nano;

@@ -2,22 +2,32 @@
 
 <template>
   <div class="home-intelligences-from-project__wrapper">
-    <home-intelligence-container>
+    <HomeIntelligenceContainer>
       <div class="home-intelligences-from-project">
-        <section class="home-intelligences-from-project__content" v-if="checkProjectLength">
+        <section
+          class="home-intelligences-from-project__content"
+          v-if="checkProjectLength"
+        >
           <div class="home-intelligences-from-project__content__text">
             <p>
-              {{ $t("webapp.intelligences_lib.unused_projects") }}
+              {{ $t('webapp.intelligences_lib.unused_projects') }}
             </p>
           </div>
           <div class="home-intelligences-from-project__content__button">
-            <unnnic-button type="secondary" iconLeft="add-1" @click="createNewIntelligence()">
-              {{ $t("webapp.intelligences_lib.new_intelligence") }}
-            </unnnic-button>
+            <UnnnicButton
+              type="secondary"
+              iconLeft="add-1"
+              @click="createNewIntelligence()"
+            >
+              {{ $t('webapp.intelligences_lib.new_intelligence') }}
+            </UnnnicButton>
           </div>
         </section>
-        <div class="home-intelligences-from-project__cards" v-else>
-          <unnnic-card
+        <div
+          class="home-intelligences-from-project__cards"
+          v-else
+        >
+          <UnnnicCard
             clickable
             :text="$t('webapp.intelligences_lib.new_intelligence')"
             type="blank"
@@ -25,21 +35,21 @@
             class="home-intelligences-from-project__cards__new"
             @click.native="createNewIntelligence()"
           />
-          <home-repository-card
+          <HomeRepositoryCard
             v-for="list in projectList"
             :key="list.uuid"
-            :repository-detail="list"
+            :repositoryDetail="list"
             @dispatchShowModal="showModal($event)"
           />
         </div>
       </div>
-      <modal-container
-        :info-modal="modalInfo"
-        :show-modal="openModal"
+      <ModalContainer
+        :infoModal="modalInfo"
+        :showModal="openModal"
         @closeModal="openModal = false"
       >
-      </modal-container>
-    </home-intelligence-container>
+      </ModalContainer>
+    </HomeIntelligenceContainer>
   </div>
 </template>
 <script>
@@ -51,7 +61,12 @@ import Loading from '@/components/shared/Loading';
 
 export default {
   name: 'HomeIntelligenceFromProject',
-  components: { HomeRepositoryCard, HomeIntelligenceContainer, ModalContainer, Loading },
+  components: {
+    HomeRepositoryCard,
+    HomeIntelligenceContainer,
+    ModalContainer,
+    Loading,
+  },
   data() {
     return {
       projectList: [],
@@ -62,21 +77,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'getProjectSelected',
-      'getOrgSelected',
-    ]),
+    ...mapGetters(['getProjectSelected', 'getOrgSelected']),
     ...mapState({
-      projectListWasUpdated: state => state.Integration.updateProjects,
+      projectListWasUpdated: (state) => state.Integration.updateProjects,
     }),
-    checkProjectLength(){
-      return this.projectList.length === 0
+    checkProjectLength() {
+      return this.projectList.length === 0;
     },
   },
   watch: {
-    projectListWasUpdated(){
+    projectListWasUpdated() {
       this.getProjectList();
-    }
+    },
   },
   mounted() {
     this.getProjectList();
@@ -88,38 +100,43 @@ export default {
       this.modalInfo = { ...value };
     },
     async getProjectList() {
-      this.$emit('loading', true)
+      this.$emit('loading', true);
       try {
         const { data } = await this.searchProjectWithFlow({
-          projectUUID: this.getProjectSelected
+          projectUUID: this.getProjectSelected,
         });
         this.projectList = data;
 
-        localStorage.setItem('in_project', JSON.stringify(data.map(({ uuid, version_default }) => ({
-          repository_uuid: uuid,
-          repository_version: version_default.id,
-          project_uuid: this.getProjectSelected,
-          organization: this.getOrgSelected,
-        }))));
+        localStorage.setItem(
+          'in_project',
+          JSON.stringify(
+            data.map(({ uuid, version_default }) => ({
+              repository_uuid: uuid,
+              repository_version: version_default.id,
+              project_uuid: this.getProjectSelected,
+              organization: this.getOrgSelected,
+            })),
+          ),
+        );
       } catch (err) {
         this.error = err;
       } finally {
         // this.loading = false;
-        this.$emit('loading', false)
+        this.$emit('loading', false);
       }
     },
     createNewIntelligence() {
       this.$router.push({
-        name: 'new'
+        name: 'new',
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .loading {
   width: 100%;

@@ -1,13 +1,16 @@
 <template>
   <div class="entity-edit__entities-list">
     <div class="entity-edit__title entity-edit__entities-list__header">
-      <b-loading :is-full-page="false" :active="loading" />
+      <BLoading
+        :isFullPage="false"
+        :active="loading"
+      />
     </div>
-    <badges-card-drag-drop
+    <BadgesCardDragDrop
       :key="`${newGroup}-${needsUpdate}`"
       v-if="editing"
       :list="newGroup"
-      :examples-count="newGroup.length"
+      :examplesCount="newGroup.length"
       :edit="editing"
       :title="$tc('webapp.home.new_group_named', newGroup.length)"
       identifier="newGroup"
@@ -18,10 +21,10 @@
       @close="creating = false"
       @finished="createGroup"
     />
-    <badges-card-drag-drop
+    <BadgesCardDragDrop
       :key="needsUpdate"
       :list="ungrouped"
-      :examples-count="ungrouped.length"
+      :examplesCount="ungrouped.length"
       :edit="editing"
       :title="$tc('webapp.home.unlabeled', ungrouped.length)"
       identifier="ungrouped"
@@ -30,14 +33,18 @@
       @onEditGroups="editing = !editing"
     />
     <div>
-      <badges-card-drag-drop
+      <BadgesCardDragDrop
         v-for="group in groups"
         :identifier="group.group_id"
         :key="`${group.group_id}-${needsUpdate}`"
         :list="group.entities"
-        :title="$tc('webapp.home.labeled', group.entities.length, { label_value: group.value, })"
-        :examples-count="group.entities.length"
-        :example-name="group.value"
+        :title="
+          $tc('webapp.home.labeled', group.entities.length, {
+            label_value: group.value,
+          })
+        "
+        :examplesCount="group.entities.length"
+        :exampleName="group.value"
         @changedName="group.value = $event"
         :edit="editing"
         closable
@@ -46,27 +53,34 @@
         @onCloseTag="onRemoveEntity($event, group.group_id)"
       />
     </div>
-    <unnnic-modal
-        :showModal="openModal"
-        :text="modalTitle"
-        scheme="feedback-red"
-        modal-icon="alert-circle-1"
-        @close="openModal = false"
+    <UnnnicModal
+      :showModal="openModal"
+      :text="modalTitle"
+      scheme="feedback-red"
+      modalIcon="alert-circle-1"
+      @close="openModal = false"
+    >
+      <span
+        slot="message"
+        v-html="deleteMessage"
+      />
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="openModal = false"
       >
-        <span slot="message" v-html="deleteMessage" />
-        <unnnic-button slot="options" type="tertiary" @click="openModal = false">
-          {{ $t("webapp.home.cancel") }}
-        </unnnic-button>
-        <unnnic-button
-          slot="options"
-          class="create-repository__container__button"
-          type="primary"
-          scheme="feedback-red"
-          @click="onDelete"
-        >
-          {{ deleteButton }}
-        </unnnic-button>
-      </unnnic-modal>
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
+        slot="options"
+        class="create-repository__container__button"
+        type="primary"
+        scheme="feedback-red"
+        @click="onDelete"
+      >
+        {{ deleteButton }}
+      </UnnnicButton>
+    </UnnnicModal>
   </div>
 </template>
 
@@ -116,7 +130,7 @@ export default {
       group: {},
       groupId: null,
       entity: null,
-      isGroup: false
+      isGroup: false,
     };
   },
   computed: {
@@ -141,11 +155,13 @@ export default {
       let message = this.$t('webapp.home.default_error');
 
       if (
-        error.response
-        && error.response.data
-        && error.response.data.non_field_errors
-        && error.response.data.non_field_errors.length > 0
-      ) { message = error.response.data.non_field_errors.join(', '); }
+        error.response &&
+        error.response.data &&
+        error.response.data.non_field_errors &&
+        error.response.data.non_field_errors.length > 0
+      ) {
+        message = error.response.data.non_field_errors.join(', ');
+      }
 
       this.$buefy.toast.open({
         message,
@@ -201,7 +217,7 @@ export default {
       }
     },
     async removeEntity(entity, groupId) {
-      this.openModal = false
+      this.openModal = false;
       this.loading = true;
       try {
         await this.deleteEntity({
@@ -215,7 +231,7 @@ export default {
       }
     },
     async removeGroup(groupId) {
-      this.openModal = false
+      this.openModal = false;
       this.loading = true;
       try {
         await this.deleteGroup({
@@ -248,48 +264,48 @@ export default {
           this.loading = false;
         }
       } else {
-        this.updateGroups(from, to, targetList, sourceList)
+        this.updateGroups(from, to, targetList, sourceList);
       }
     },
     onRemoveEntity(entity, groupId) {
-      this.groupId = groupId
-      this.entity = entity
+      this.groupId = groupId;
+      this.entity = entity;
       this.openModal = true;
       this.modalTitle = this.$t('webapp.home.delete_entity');
       this.deleteMessage = this.$t('webapp.home.delete_entity_message', {
-        entity: entity.value
+        entity: entity.value,
       });
       this.deleteButton = this.$t('webapp.home.delete');
-      this.isGroup = false
+      this.isGroup = false;
     },
     onRemoveGroup(group) {
-      this.group = group
-      this.openModal = true
+      this.group = group;
+      this.openModal = true;
       this.modalTitle = this.$t('webapp.home.delete_group');
       this.deleteMessage = this.$t('webapp.home.delete_group_message', {
-        group: group.value
-      })
+        group: group.value,
+      });
       this.deleteButton = this.$t('webapp.home.delete_group');
-      this.isGroup = true
+      this.isGroup = true;
     },
     editGroups() {
-      this.editing = !this.editing
-      this.$emit('onEditGroups')
+      this.editing = !this.editing;
+      this.$emit('onEditGroups');
     },
     onDelete() {
       if (this.isGroup) {
-        this.removeGroup(this.group.group_id)
+        this.removeGroup(this.group.group_id);
       } else {
         this.removeEntity(this.entity, this.groupId);
       }
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
-@import "~@/assets/scss/colors.scss";
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
 
 .entity-edit {
   &__title {

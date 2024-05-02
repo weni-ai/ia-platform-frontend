@@ -1,7 +1,7 @@
 <template>
   <div class="intelligence-force">
     <div class="intelligence-force__title">
-      <unnnic-card
+      <UnnnicCard
         type="title"
         :title="$t('webapp.summary.intelligence_force')"
         :hasInformationIcon="true"
@@ -10,9 +10,12 @@
         infoPosition="left"
       />
     </div>
-      <div class="intelligence-force__chart-wrapper">
-        <unnnic-chart-rainbow :value="+intelligenceForce" :description="relevanceProgress" />
-      </div>
+    <div class="intelligence-force__chart-wrapper">
+      <UnnnicChartRainbow
+        :value="+intelligenceForce"
+        :description="relevanceProgress"
+      />
+    </div>
   </div>
 </template>
 
@@ -22,13 +25,14 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'IntelligenceForce',
   computed: {
-    ...mapGetters([
-      'getCurrentRepository',
-    ]),
+    ...mapGetters(['getCurrentRepository']),
     intelligenceForce() {
       const scoreObject = this.getCurrentRepository.repository_score;
-      const scoreResult = (scoreObject.evaluate_size_score
-      + scoreObject.intents_balance_score + scoreObject.intents_size_score) / 3;
+      const scoreResult =
+        (scoreObject.evaluate_size_score +
+          scoreObject.intents_balance_score +
+          scoreObject.intents_size_score) /
+        3;
       return scoreResult.toFixed(0);
     },
     relevanceProgress() {
@@ -49,31 +53,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
+.intelligence-force {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 
-.intelligence-force{
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-
-        &__title{
-            margin-bottom: $unnnic-spacing-md;
-        }
-  /deep/ .unnnic-tooltip-label {
+  &__title {
+    margin-bottom: $unnnic-spacing-md;
+  }
+  :deep(.unnnic-tooltip-label) {
     $large-tooltip-width: 26.875 * $unnnic-font-size;
 
     max-width: $large-tooltip-width;
   }
 
-    &__chart-wrapper{
-      display: flex;
-      justify-content: center;
-      margin-top: $unnnic-spacing-md;
-    }
+  &__chart-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: $unnnic-spacing-md;
+  }
 }
-
 </style>

@@ -1,47 +1,53 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     :repository="repository"
-    :error-code="errorCode">
+    :errorCode="errorCode"
+  >
     <div v-if="!authenticated">
-      <b-notification
+      <BNotification
         :closable="false"
-        type="is-info">
+        type="is-info"
+      >
         {{ $t('webapp.trainings.login') }}
-      </b-notification>
-      <login-form hide-forgot-password />
+      </BNotification>
+      <LoginForm hideForgotPassword />
     </div>
-    <authorization-request-notification
+    <AuthorizationRequestNotification
       v-else-if="repository && !repository.authorization.can_contribute"
       :available="!repository.available_request_authorization"
-      :repository-uuid="repository.uuid"
-      @onAuthorizationRequested="updateRepository(false)" />
-    <div v-else-if="repository" class="translations">
-      <unnnic-intelligence-header
+      :repositoryUuid="repository.uuid"
+      @onAuthorizationRequested="updateRepository(false)"
+    />
+    <div
+      v-else-if="repository"
+      class="translations"
+    >
+      <UnnnicIntelligenceHeader
         class="repository-analyze-text__header"
         :title="$t('webapp.translate.title_status_page')"
         icon="translate-1"
-        icon-scheme="feedback-blue"
+        iconScheme="feedback-blue"
         :description="$t('webapp.translate.description_status_page')"
       />
 
-      <unnnic-divider y-spacing="lg" />
+      <UnnnicDivider ySpacing="lg" />
 
-      <unnnic-intelligence-text
+      <UnnnicIntelligenceText
         tag="p"
         family="secondary"
         size="body-gt"
         color="neutral-dark"
-        margin-bottom="sm"
+        marginBottom="sm"
       >
         {{ $t('webapp.translate.title_language_card') }}
-      </unnnic-intelligence-text>
+      </UnnnicIntelligenceText>
 
-      <translations-status
+      <TranslationsStatus
         ref="translationsStatus"
         :repository="repository"
         :update="updateStatus"
         :query="statusQuery"
-        :repository-uuid="repository.uuid"
+        :repositoryUuid="repository.uuid"
         v-model="toLanguage"
         class="translations__status"
         @updated="statusUpdated"
@@ -99,9 +105,9 @@
       </unnnic-modal> -->
     </div>
     <template v-slot:loader>
-      <translations-loader />
+      <TranslationsLoader />
     </template>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -127,7 +133,7 @@ export default {
     AuthorizationRequestNotification,
     TranslationStatusSearch,
     LoginForm,
-    TranslationsLoader
+    TranslationsLoader,
   },
   extends: RepositoryBase,
   props: {
@@ -158,49 +164,47 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'authenticated',
-      'getSelectedVersion'
-    ]),
+    ...mapGetters(['authenticated', 'getSelectedVersion']),
     languageList() {
-      return Object.keys(LANGUAGES)
-        .map(lang => ([lang, LANGUAGES[lang]]));
+      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
     filteredLanguagesStatus() {
       if (!this.languagesStatus) {
         return [];
       }
       return Object.keys(this.languagesStatus)
-        .map(language => ({
+        .map((language) => ({
           language,
           status: this.languagesStatus[language],
           selected: this.selected === language,
         }))
-        .filter(languageStatus => (!languageStatus.status.is_base_language))
-        .sort((a, b) => (
-          a.status.base_translations.percentage
-          < b.status.base_translations.percentage));
+        .filter((languageStatus) => !languageStatus.status.is_base_language)
+        .sort(
+          (a, b) =>
+            a.status.base_translations.percentage <
+            b.status.base_translations.percentage,
+        );
     },
     computedLanguagesStatus() {
       if (!this.languagesStatus) {
         return [];
       }
       return Object.keys(this.languagesStatus)
-        .map(language => ({
+        .map((language) => ({
           language,
           status: this.languagesStatus[language],
           verbose: this.languages[language],
           selected: this.selected === language,
         }))
-        .filter(languageStatus => (languageStatus.status.is_base_language
-        || languageStatus.status.base_translations.percentage > 0));
+        .filter(
+          (languageStatus) =>
+            languageStatus.status.is_base_language ||
+            languageStatus.status.base_translations.percentage > 0,
+        );
     },
   },
   methods: {
-    ...mapActions([
-      'getRepository',
-      'getRepositoryLanguagesStatus',
-    ]),
+    ...mapActions(['getRepository', 'getRepositoryLanguagesStatus']),
     async updateTranslationsStatus() {
       this.loading = true;
       this.languagesStatus = null;
@@ -234,7 +238,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .translations {
   font-family: $unnnic-font-family-secondary;
@@ -250,7 +254,8 @@ export default {
     gap: $unnnic-spacing-stack-sm;
     flex-wrap: wrap;
 
-    &__status-card, &__new-status-card {
+    &__status-card,
+    &__new-status-card {
       width: 332px;
       height: 106px;
       padding: 24px;
@@ -269,12 +274,12 @@ export default {
         box-shadow: none;
         padding: 0px;
 
-        /deep/ .progress-bar-container .progress-container {
+        :deep(.progress-bar-container .progress-container) {
           min-width: 100px;
           height: 4px;
         }
 
-        /deep/ .title {
+        :deep(.title) {
           font-size: 12px;
         }
       }
@@ -294,15 +299,15 @@ export default {
   }
 
   .unnnic-select {
-    /deep/ .input {
+    :deep(.input) {
       height: 46px;
     }
-    /deep/ .dropdown {
+    :deep(.dropdown) {
       display: block;
     }
   }
-  /deep/ .unnnic-modal.type-alert .title{
-    padding-bottom: 0px
+  :deep(.unnnic-modal.type-alert .title) {
+    padding-bottom: 0px;
   }
 }
 </style>

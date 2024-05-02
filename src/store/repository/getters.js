@@ -1,4 +1,3 @@
-
 export default {
   relatedUuid(state) {
     return state.relatedUuid;
@@ -30,6 +29,6 @@ export default {
     return state.repositoryIsTraining;
   },
   versionEnabled() {
-    return runtimeVariables.get('VUE_APP_VERSION_ENABLED');
+    return runtimeVariables.get('VITE_VERSION_ENABLED');
   },
 };

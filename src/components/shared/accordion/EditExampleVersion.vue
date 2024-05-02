@@ -3,7 +3,7 @@
     <form>
       <div class="columns edit-sentence__wrapper">
         <div class="column is-6">
-          <unnnic-input-next
+          <UnnnicInputNext
             ref="textInput"
             :label="$t('webapp.example.version_name')"
             size="sm"
@@ -16,44 +16,46 @@
             <p
               slot="label"
               class="unnnic-form__label"
-              v-html="$t('webapp.example.principal_version_label')">
-            </p>
-            <unnnic-tool-tip
+              v-html="$t('webapp.example.principal_version_label')"
+            ></p>
+            <UnnnicToolTip
               side="top"
               :text="$t('webapp.example.principal_version_info')"
               enabled
             >
-              <unnnic-icon
+              <UnnnicIcon
                 class="info"
                 icon="information-circle-4"
                 size="sm"
                 scheme="neutral-soft"
               />
-            </unnnic-tool-tip>
+            </UnnnicToolTip>
           </div>
-          <unnnic-switch
+          <UnnnicSwitch
             :textRight="$t('webapp.example.principal_version_text')"
             v-model="isDefaultVersion"
-            :disabled="isDefault" />
+            :disabled="isDefault"
+          />
         </div>
       </div>
-      <div
-        class="edit-sentence__btn-wrapper">
+      <div class="edit-sentence__btn-wrapper">
         <div class="column p-0 is-flex is-justify-content-space-between">
-          <unnnic-button
+          <UnnnicButton
             class="mr-4 edit-sentence__btn-wrapper__button"
             type="tertiary"
             size="small"
-            @click.prevent.stop="$emit('cancel')">
+            @click.prevent.stop="$emit('cancel')"
+          >
             {{ $t('webapp.trainings.cancel_button') }}
-          </unnnic-button>
-          <unnnic-button
+          </UnnnicButton>
+          <UnnnicButton
             type="secondary"
             size="small"
             class="edit-sentence__btn-wrapper__button"
-            @click.prevent.stop="saveVersion">
+            @click.prevent.stop="saveVersion"
+          >
             {{ $t('webapp.trainings.save_button') }}
-          </unnnic-button>
+          </UnnnicButton>
         </div>
       </div>
     </form>
@@ -65,48 +67,48 @@ export default {
   name: 'EditExampleVersion',
   props: {
     textToEdit: {
-      type: String
+      type: String,
     },
     versionId: {
-      type: Number
+      type: Number,
     },
     isDefault: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   data() {
     return {
       versionName: '',
-      isDefaultVersion: false
-    }
+      isDefaultVersion: false,
+    };
   },
-  created(){
+  created() {
     this.versionName = this.textToEdit;
     this.isDefaultVersion = this.isDefault;
   },
   methods: {
     cancelEditVersion() {
-      this.$emit('cancel')
+      this.$emit('cancel');
     },
     async saveVersion() {
       this.$emit('save', {
         versionName: this.versionName,
         isDefaultVersion: this.isDefaultVersion,
-        isNewVersionName: this.versionName !== this.textToEdit
-      })
-    }
-  }
+        isNewVersionName: this.versionName !== this.textToEdit,
+      });
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .edit-sentence {
   background: transparent;
-  border-top: 1px solid #E2E6ED;
+  border-top: 1px solid #e2e6ed;
   border-radius: 4px;
   margin-top: 1rem;
 
@@ -118,31 +120,31 @@ export default {
   }
 
   &__input {
-     margin: 0 .5rem;
+    margin: 0 0.5rem;
 
-     &__wrapper {
-       display: flex;
-       flex-wrap: wrap;
-       padding: 0.25rem;
-       width: 70%;
-     }
+    &__wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0.25rem;
+      width: 70%;
+    }
 
-     &__label /deep/ {
-       font-weight: normal;
-     }
+    :deep(&__label) {
+      font-weight: normal;
+    }
   }
 
   &-input {
-    margin: .5rem 0;
+    margin: 0.5rem 0;
   }
 
-  &__btn-wrapper{
+  &__btn-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1rem .5rem;
+    margin: 1rem 0.5rem;
 
-    &__button{
+    &__button {
       width: 50%;
     }
 
@@ -150,8 +152,8 @@ export default {
       font-family: 'Lato';
       font-weight: 400;
       font-size: 12px;
-      color: #67738B;
-      text-decoration: underline
+      color: #67738b;
+      text-decoration: underline;
     }
   }
   &__label {
@@ -162,28 +164,28 @@ export default {
     }
   }
 }
-/deep/ .column.is-6 {
+:deep(.column.is-6) {
   flex: auto;
   max-width: 50%;
-  padding: .5rem;
+  padding: 0.5rem;
 }
-/deep/ .column.is-3 {
+:deep(.column.is-3) {
   flex: auto;
-  padding: .5rem;
+  padding: 0.5rem;
 }
-/deep/ .input {
+:deep(.input) {
   height: auto;
 }
-/deep/ .unnnic-form__label {
+:deep(.unnnic-form__label) {
   font-family: Lato;
 }
-/deep/ .unnnic-form__label strong {
-  color: #67738B;
+:deep(.unnnic-form__label strong) {
+  color: #67738b;
   font-weight: 400;
-  text-decoration: solid #67738B underline;
+  text-decoration: solid #67738b underline;
 }
 
-/deep/ .unnnic-tooltip {
+:deep(.unnnic-tooltip) {
   display: flex;
   align-items: center;
 }

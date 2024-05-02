@@ -3,20 +3,36 @@
 
 export default {
   addLighthouse() {
-    if (window.hdlh || !runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_KEY')) return;
+    if (
+      window.hdlh ||
+      !runtimeVariables.get('VITE_BOTHUB_WEBAPP_LIGHTHOUSE_KEY')
+    )
+      return;
     const img = require('../../assets/imgs/mascot.svg');
     window.hdlh = {
-      widget_key: runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_LIGHTHOUSE_KEY'),
+      widget_key: runtimeVariables.get('VITE_BOTHUB_WEBAPP_LIGHTHOUSE_KEY'),
       primary_color: '#2BBFAC',
       logo: img,
       brand: 'BotHub',
       disable_contact_button: true,
-      onLoad: () => { window.Lighthouse.hideButton(); },
-      onHide: () => { window.Lighthouse.hideButton(); },
-      onShow: () => { window.Lighthouse.showButton(); },
+      onLoad: () => {
+        window.Lighthouse.hideButton();
+      },
+      onHide: () => {
+        window.Lighthouse.hideButton();
+      },
+      onShow: () => {
+        window.Lighthouse.showButton();
+      },
       position: 'bottom left',
     };
-    (function (h, d) { const s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = `${h}?t=${new Date().getTime()}`; d.head.appendChild(s); }('https://lighthouse.helpdocs.io/load', document));
+    (function (h, d) {
+      const s = d.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = `${h}?t=${new Date().getTime()}`;
+      d.head.appendChild(s);
+    })('https://lighthouse.helpdocs.io/load', document);
   },
 
   setPanelHidden(hidden) {

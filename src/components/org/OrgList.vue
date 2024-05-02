@@ -1,10 +1,11 @@
 <template>
-  <paginated-list
+  <PaginatedList
     :list="list"
-    :item-component="item"
-    :per-page="perPage"
-    :empty-message="$t('webapp.orgs.no_orgs')"
-    class="org-list"/>
+    :itemComponent="item"
+    :perPage="perPage"
+    :emptyMessage="$t('webapp.orgs.no_orgs')"
+    class="org-list"
+  />
 </template>
 
 <script>
@@ -28,9 +29,7 @@ export default {
     this.loadOrgs();
   },
   methods: {
-    ...mapActions([
-      'getAllOrgs',
-    ]),
+    ...mapActions(['getAllOrgs']),
     async loadOrgs() {
       this.list = await this.getAllOrgs();
     },
@@ -39,17 +38,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
-    .org-list {
-        display: flex;
-        flex-wrap: wrap;
+@import '@/assets/scss/variables.scss';
+.org-list {
+  display: flex;
+  flex-wrap: wrap;
 
-        @media screen and (max-width: $mobile-width) {
-            margin: 0 1rem 0 1rem;
-        }
+  @media screen and (max-width: $mobile-width) {
+    margin: 0 1rem 0 1rem;
+  }
 
-        @media screen and (max-width: $small-mobile-width) {
-            margin: 0 1rem 0 1rem;
-        }
-    }
+  @media screen and (max-width: $small-mobile-width) {
+    margin: 0 1rem 0 1rem;
+  }
+}
 </style>

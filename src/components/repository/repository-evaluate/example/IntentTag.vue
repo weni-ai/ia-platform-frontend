@@ -9,7 +9,7 @@
     </div>
   </b-tag> -->
   <div class="intent-tag">
-    <unnnic-tag
+    <UnnnicTag
       @close="$emit('close')"
       type="indicator"
       :text="entityName"
@@ -26,31 +26,31 @@ export default {
   props: {
     entityName: {
       type: String,
-      default: ''
+      default: '',
     },
     count: {
       type: Number,
-      default: 0
+      default: 0,
     },
     closable: {
       type: Boolean,
-      default: false
+      default: false,
     },
     intentCount: {
       type: Boolean,
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
+@import '@/assets/scss/colors.scss';
 
 .intent-tag {
   display: inline-flex;
   padding: 0 !important;
-  margin-bottom: .5rem !important;
+  margin-bottom: 0.5rem !important;
   // border-radius: 0px !important;
   // font-weight: none !important;
   // height: 2.188rem;
@@ -85,7 +85,7 @@ export default {
   // }
 }
 
-/deep/ .unnnic-tag__icon {
-    margin-right: 0;
+:deep(.unnnic-tag__icon) {
+  margin-right: 0;
 }
 </style>

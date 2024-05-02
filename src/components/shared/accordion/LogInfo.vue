@@ -15,7 +15,7 @@
           @mouseenter.native.stop="$emit('update:highlighted', entity.entity)"
           @mouseleave.native.stop="$emit('update:highlighted', null)"/>
       </div> -->
-      <unnnic-intelligence-text
+      <UnnnicIntelligenceText
         family="secondary"
         size="body-md"
         color="neutral-cloudy"
@@ -23,24 +23,24 @@
         <strong>{{ $t('log.interaction_received_on') }}</strong>
 
         {{ formattedDate }}
-      </unnnic-intelligence-text>
+      </UnnnicIntelligenceText>
 
       <div class="level__actions">
-        <unnnic-button
+        <UnnnicButton
           :text="$t('webapp.inbox.add_to_train')"
           id="tour-inbox-step-2"
-          :is-previous-disabled="true"
+          :isPreviousDisabled="true"
           type="secondary"
           iconLeft="graph-status-circle-1"
           size="small"
           class="repository-log-info__button--wide"
           @click="sendToTraining()"
         />
-        <unnnic-button
+        <UnnnicButton
           :text="$t('webapp.inbox.add_to_sentence')"
           id="tour-inbox-step-3"
-          :is-previous-disabled="true"
-          :is-next-disabled="true"
+          :isPreviousDisabled="true"
+          :isNextDisabled="true"
           iconLeft="check-square-1"
           size="small"
           type="secondary"
@@ -50,38 +50,41 @@
       </div>
     </div>
 
-    <unnnic-divider y-spacing="sm" />
+    <UnnnicDivider ySpacing="sm" />
 
     <div class="level">
       <div class="level__actions">
-        <unnnic-intelligence-text
+        <UnnnicIntelligenceText
           family="secondary"
           size="body-md"
           color="neutral-cloudy"
         >
           <strong>{{ $t('log.more_details_of_the_interaction') }}</strong>
-        </unnnic-intelligence-text>
+        </UnnnicIntelligenceText>
 
-        <unnnic-button
+        <UnnnicButton
           class="repository-log-info__button mr-4"
           type="secondary"
           size="small"
           @click="debug()"
         >
-            {{ $t('webapp.inbox.debug') }}
-        </unnnic-button>
-        <unnnic-button
+          {{ $t('webapp.inbox.debug') }}
+        </UnnnicButton>
+        <UnnnicButton
           class="repository-log-info__button"
           type="secondary"
           size="small"
           @click="showRawInfo()"
         >
           {{ $t('webapp.inbox.raw') }}
-        </unnnic-button>
+        </UnnnicButton>
       </div>
 
-      <div v-if="intent" class="level__actions">
-        <unnnic-intelligence-text
+      <div
+        v-if="intent"
+        class="level__actions"
+      >
+        <UnnnicIntelligenceText
           family="secondary"
           size="body-md"
           color="neutral-cloudy"
@@ -89,36 +92,32 @@
           <strong>{{ $t('log.version') }}a</strong>
 
           {{ versionName }}
-        </unnnic-intelligence-text>
+        </UnnnicIntelligenceText>
       </div>
     </div>
 
-    <unnnic-modal
+    <UnnnicModal
       :showModal="openModalTraining"
       :text="$t('webapp.example.sent_to_training')"
       scheme="feedback-green"
-      modal-icon="check-circle-1-1"
+      modalIcon="check-circle-1-1"
       @close="openModalTraining = false"
     >
-      <span
-      slot="message"
-      >
+      <span slot="message">
         {{ $t('webapp.example.sent_to_training_info') }}
       </span>
-    </unnnic-modal>
-    <unnnic-modal
+    </UnnnicModal>
+    <UnnnicModal
       :showModal="openModalTest"
       :text="$t('webapp.example.sent_to_test')"
       scheme="feedback-green"
-      modal-icon="check-circle-1-1"
+      modalIcon="check-circle-1-1"
       @close="openModalTest = false"
     >
-      <span
-      slot="message"
-      >
+      <span slot="message">
         {{ $t('webapp.example.sent_to_test_info') }}
       </span>
-    </unnnic-modal>
+    </UnnnicModal>
   </div>
 </template>
 
@@ -133,7 +132,7 @@ export default {
   components: {
     EntityTag,
     IntentModal,
-    IntentModalEdition
+    IntentModalEdition,
   },
   props: {
     id: {
@@ -150,11 +149,11 @@ export default {
     },
     entitiesList: {
       type: Array,
-      default: () => ([]),
+      default: () => [],
     },
     entities: {
       type: Array,
-      default: () => ([]),
+      default: () => [],
     },
     intent: {
       type: String,
@@ -175,7 +174,7 @@ export default {
     versionName: {
       type: String,
       default: null,
-    }
+    },
   },
   data() {
     return {
@@ -192,18 +191,18 @@ export default {
       searchingLog: false,
       isCorrected: Boolean,
       openModalTraining: false,
-      openModalTest: false
+      openModalTest: false,
     };
   },
   computed: {
     ...mapGetters({
       repository: 'getCurrentRepository',
       version: 'getSelectedVersion',
-      activeTutorial: 'activeTutorial'
+      activeTutorial: 'activeTutorial',
     }),
     formattedDate() {
-      const date = new Date(this.createdAt)
-      return date.toLocaleString()
+      const date = new Date(this.createdAt);
+      return date.toLocaleString();
     },
     confidenceVerify() {
       if (this.logData.length > 1) {
@@ -223,7 +222,7 @@ export default {
         repository_version: this.nlp_log.repository_version,
         text: this.text,
         language: this.nlp_log.language,
-        entities: this.entities.map(entity => ({
+        entities: this.entities.map((entity) => ({
           entity: entity.entity,
           start: entity.start,
           end: entity.end,
@@ -234,12 +233,17 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['searchLogs', 'newEvaluateExample', 'newExample', 'deleteExample']),
+    ...mapActions([
+      'searchLogs',
+      'newEvaluateExample',
+      'newExample',
+      'deleteExample',
+    ]),
     addLogStructure(logValue) {
       this.logData.push(logValue);
     },
     removeLogStructure(logId) {
-      this.logData = this.logData.filter(log => log.id !== logId);
+      this.logData = this.logData.filter((log) => log.id !== logId);
     },
     showRawInfo() {
       this.$emit('onShowRawInfo');
@@ -263,7 +267,7 @@ export default {
       if (this.logData.length === 0) {
         this.$buefy.toast.open({
           message: this.$t('webapp.inbox.select_phrase'),
-          type: 'is-danger'
+          type: 'is-danger',
         });
         return;
       }
@@ -274,7 +278,7 @@ export default {
           titleHeader: typeModal,
           confidenceVerify: this.confidenceVerify,
           logData: this.logData[0],
-          buttonLabel: this.$t('webapp.inbox.add_to_train')
+          buttonLabel: this.$t('webapp.inbox.add_to_train'),
         },
         parent: this,
         component: IntentModalEdition,
@@ -291,15 +295,15 @@ export default {
             this.logData = [];
             // this.select = '';
             // this.$root.$emit('selectAll', false);
-          }
-        }
+          },
+        },
       });
     },
     showModalSentence(typeModal) {
       if (this.logData.length === 0) {
         this.$buefy.toast.open({
           message: this.$t('webapp.inbox.select_phrase'),
-          type: 'is-danger'
+          type: 'is-danger',
         });
         return;
       }
@@ -309,7 +313,7 @@ export default {
           repository: this.repository,
           titleHeader: typeModal,
           logData: this.logData[0],
-          buttonLabel: this.$t('webapp.inbox.add_to_sentence')
+          buttonLabel: this.$t('webapp.inbox.add_to_sentence'),
         },
         parent: this,
         component: this.logData.length === 1 ? IntentModalEdition : IntentModal,
@@ -317,7 +321,7 @@ export default {
         trapFocus: true,
         canCancel: false,
         events: {
-          addedIntent: value => {
+          addedIntent: (value) => {
             this.verifyIsCorrected(value);
             this.addToSentences(value);
             this.intent = value;
@@ -332,8 +336,8 @@ export default {
             if (this.activeTutorial === 'inbox') {
               this.$emit('dispatchSkip');
             }
-          }
-        }
+          },
+        },
       });
       this.$nextTick(() => {
         this.$emit('dispatchNext');
@@ -358,13 +362,13 @@ export default {
               language: data.language,
               text: data.text,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             // this.$buefy.toast.open({
             //   message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
             //   type: 'is-success'
             // });
-            this.openModalTraining = true
+            this.openModalTraining = true;
           } else {
             await this.newExample({
               ...data,
@@ -372,13 +376,13 @@ export default {
               text: values.text,
               entities: values.entities,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             // this.$buefy.toast.open({
             //   type: 'is-success',
             //  message: `${values.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
             // });
-            this.openModalTraining = true
+            this.openModalTraining = true;
           }
         } catch (error) {
           this.showError(error, data, 'training');
@@ -400,13 +404,13 @@ export default {
               language: data.language,
               text: data.text,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             // this.$buefy.toast.open({
             // message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_sentence')}`,
             //   type: 'is-success'
             // });
-            this.openModalTest = true
+            this.openModalTest = true;
           } else {
             await this.newEvaluateExample({
               ...data,
@@ -414,7 +418,7 @@ export default {
               text: values.text,
               entities: values.entities,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             // this.$buefy.toast.open({
             //   message: `${values.text.bold()}, ${this.$t(
@@ -422,7 +426,7 @@ export default {
             //   )}`,
             //   type: 'is-success'
             // });
-            this.openModalTest = true
+            this.openModalTest = true;
           }
         } catch (error) {
           this.showError(error, data, 'evaluate');
@@ -433,40 +437,43 @@ export default {
       });
     },
     showError(error, log, type) {
-      console.log(error.response.data)
+      console.log(error.response.data);
       let messages = '';
       if (type === 'evaluate') {
-        messages = Object.values(error.response.data.non_field_errors).length >= 1
-          ? this.$t('webapp.inbox.send_to_evaluate')
-          : '';
+        messages =
+          Object.values(error.response.data.non_field_errors).length >= 1
+            ? this.$t('webapp.inbox.send_to_evaluate')
+            : '';
       } else {
-        messages = Object.values(error.response.data).map(errors => (typeof errors === 'string' ? errors : Array.join(errors, ',')));
+        messages = Object.values(error.response.data).map((errors) =>
+          typeof errors === 'string' ? errors : Array.join(errors, ','),
+        );
       }
       const message = `${log.text.bold()}, ${messages}`;
       this.$buefy.toast.open({
         message,
-        type: 'is-danger'
+        type: 'is-danger',
       });
     },
     async updateLogs() {
       const languageObject = this.repository.repository_version_language.find(
-        lang => lang.language === this.query.language
+        (lang) => lang.language === this.query.language,
       );
       const { language, ...queryParams } = this.query;
       this.list = await this.searchLogs({
         repositoryVersionLanguage: languageObject.id,
         query: queryParams,
-        limit: this.perPage
+        limit: this.perPage,
       });
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '../../../assets/scss/utilities.scss';
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .level {
   display: flex;
@@ -500,9 +507,9 @@ export default {
 }
 
 .log {
-  $radius: .5rem;
+  $radius: 0.5rem;
 
-  margin: 1rem .5rem;
+  margin: 1rem 0.5rem;
   overflow: visible;
   background-color: $white-bis;
   border-radius: $radius;
@@ -513,7 +520,7 @@ export default {
     margin-bottom: 4px;
     background-color: $white-ter;
     border-radius: $radius;
-    transition: box-shadow .2s ease;
+    transition: box-shadow 0.2s ease;
 
     &__main {
       flex-grow: 1;
@@ -527,13 +534,12 @@ export default {
 
   &-entities,
   &-infos {
-    padding: .25rem .5rem .3rem 1rem;
+    padding: 0.25rem 0.5rem 0.3rem 1rem;
   }
 
   &-entities {
-
     &__wrapper {
-      padding: 1rem 0 .5rem;
+      padding: 1rem 0 0.5rem;
 
       strong {
         margin-right: 0.5rem;
@@ -541,7 +547,7 @@ export default {
     }
 
     > * {
-      margin: 0 .5rem 0 0;
+      margin: 0 0.5rem 0 0;
 
       &:last-child {
         margin: 0;

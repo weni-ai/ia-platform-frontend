@@ -1,15 +1,15 @@
 <template>
   <div>
-    <b-icon
+    <BIcon
       icon="alpha-s-box"
-      custom-size="mdi-24px"
+      customSize="mdi-24px"
       class="suggestion-icon"
-      @click.native.stop="openSuggestionModal()"/>
+      @click.native.stop="openSuggestionModal()"
+    />
   </div>
 </template>
 
 <script>
-
 import WordSuggestionModal from '@/components/repository/WordSuggestionModal';
 
 export default {
@@ -46,14 +46,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
 .suggestion-icon {
   color: $color-grey-dark;
   &:hover {
-   color: $color-fake-grey;
-   transition: 1s;
+    color: $color-fake-grey;
+    transition: 1s;
   }
 }
-
 </style>

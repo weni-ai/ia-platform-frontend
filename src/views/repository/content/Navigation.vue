@@ -1,11 +1,13 @@
 <template>
-  <unnnic-button
-    @click.native="$router.push({
-      name: 'intelligence-edit',
-      params: {
-        intelligenceUuid: $route.params.intelligenceUuid,
-      },
-    })"
+  <UnnnicButton
+    @click.native="
+      $router.push({
+        name: 'intelligence-edit',
+        params: {
+          intelligenceUuid: $route.params.intelligenceUuid,
+        },
+      })
+    "
     iconCenter="settings"
     type="secondary"
   />
@@ -15,16 +17,13 @@ export default {
   name: 'RepositoryContentNavigation',
   components: {},
   data() {
-    return {
-
-    };
+    return {};
   },
-  methods: {}
+  methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
-
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 </style>

@@ -4,28 +4,29 @@
       {{ $t('webapp.intelligences_lib.community_description') }}
     </h1>
     <div class="home-intelligences-from-community__wrapper">
-      <home-intelligence-filter @change="filterIntelligences" />
-      <home-intelligence-container>
-          <div class="home-intelligences-from-community">
-            <div class="home-intelligences-from-community__cards">
-              <home-repository-card
-                v-for="list in repositoryCommunityList"
-                :key="list.uuid"
-                :repository-detail="list"
-                @dispatchShowModal="showModal($event)"
-              />
-            </div>
-            <infinite-scroll
-              v-show="!isComplete"
-              @intersect="getCommunityRepositories()"
+      <HomeIntelligenceFilter @change="filterIntelligences" />
+      <HomeIntelligenceContainer>
+        <div class="home-intelligences-from-community">
+          <div class="home-intelligences-from-community__cards">
+            <HomeRepositoryCard
+              v-for="list in repositoryCommunityList"
+              :key="list.uuid"
+              :repositoryDetail="list"
+              @dispatchShowModal="showModal($event)"
             />
           </div>
-          <modal-container
-            :info-modal="modalInfo"
-            :show-modal="openModal"
-            @closeModal="openModal = false">
-          </modal-container>
-        </home-intelligence-container>
+          <InfiniteScroll
+            v-show="!isComplete"
+            @intersect="getCommunityRepositories()"
+          />
+        </div>
+        <ModalContainer
+          :infoModal="modalInfo"
+          :showModal="openModal"
+          @closeModal="openModal = false"
+        >
+        </ModalContainer>
+      </HomeIntelligenceContainer>
     </div>
   </div>
 </template>
@@ -44,7 +45,7 @@ export default {
     HomeIntelligenceContainer,
     infiniteScroll,
     ModalContainer,
-    HomeIntelligenceFilter
+    HomeIntelligenceFilter,
   },
   data() {
     return {
@@ -53,18 +54,17 @@ export default {
       isComplete: false,
       error: null,
       openModal: false,
-      modalInfo: {
-      },
+      modalInfo: {},
     };
   },
   methods: {
     ...mapActions(['searchRepositories', 'getCommunityRepository']),
-    showModal(value){
-      this.openModal = true
-      this.modalInfo = { ...value }
+    showModal(value) {
+      this.openModal = true;
+      this.modalInfo = { ...value };
     },
     async getCommunityRepositories() {
-      this.$emit('loading', true)
+      this.$emit('loading', true);
       try {
         const { data } = await this.searchRepositories({
           limit: 20,
@@ -79,32 +79,32 @@ export default {
       } catch (err) {
         this.error = err;
       } finally {
-        this.$emit('loading', false)
+        this.$emit('loading', false);
       }
     },
     async filterIntelligences(filter) {
-      this.$emit('loading', true)
+      this.$emit('loading', true);
       try {
         const { data } = await this.getCommunityRepository({
           limit: 20,
           offset: 0,
-          ...filter
+          ...filter,
         });
-        this.repositoryCommunityList = data.results
+        this.repositoryCommunityList = data.results;
         this.isComplete = data.next == null;
       } catch (err) {
         this.error = err;
       } finally {
-        this.$emit('loading', false)
+        this.$emit('loading', false);
       }
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .home-intelligences-from-community {
   &__cards {

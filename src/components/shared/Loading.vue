@@ -1,7 +1,7 @@
 <template>
   <div class="loading">
     <img
-      src="~@/assets/icons/logo-animated-circle-reduced-clearnest.svg"
+      src="@/assets/icons/logo-animated-circle-reduced-clearnest.svg"
       class="loading__icon"
     />
   </div>
@@ -14,8 +14,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/utilities.scss";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/utilities.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .loading {
   display: flex;

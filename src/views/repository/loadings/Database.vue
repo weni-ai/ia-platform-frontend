@@ -2,38 +2,95 @@
 <template>
   <div class="database-loading">
     <div class="database-loading__header">
-      <unnnic-skeleton-loading class="database-loading__title" tag="div" width="40px" height="40px" />
-      <unnnic-skeleton-loading tag="div" width="189px" height="40px" />
-      <unnnic-skeleton-loading class="database-loading__button" tag="div" width="261px" height="50px" />
+      <UnnnicSkeletonLoading
+        class="database-loading__title"
+        tag="div"
+        width="40px"
+        height="40px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="189px"
+        height="40px"
+      />
+      <UnnnicSkeletonLoading
+        class="database-loading__button"
+        tag="div"
+        width="261px"
+        height="50px"
+      />
     </div>
     <div class="database-loading__description">
       <div>
-        <unnnic-skeleton-loading tag="div" width="507px" height="17px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="507px"
+          height="17px"
+        />
       </div>
     </div>
 
-    <unnnic-divider />
+    <UnnnicDivider />
 
     <div class="database-loading__fields">
       <div>
-        <unnnic-skeleton-loading tag="div" width="384px" height="29px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="384px"
+          height="29px"
+        />
       </div>
       <div class="database-loading__fields__selects">
-        <unnnic-skeleton-loading tag="div" width="227px" height="29px" />
-        <unnnic-skeleton-loading tag="div" width="227px" height="29px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="227px"
+          height="29px"
+        />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="227px"
+          height="29px"
+        />
       </div>
     </div>
 
     <div class="database-loading__table">
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
     </div>
-
   </div>
 </template>
 
@@ -42,8 +99,8 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .database-loading {
   display: flex;
@@ -72,7 +129,6 @@ export default {};
     margin-left: auto;
     align-self: end;
   }
-
 
   &__fields {
     display: flex;

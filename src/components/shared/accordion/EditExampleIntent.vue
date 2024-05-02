@@ -2,27 +2,30 @@
   <div class="edit-sentence">
     <form>
       <div class="columns edit-sentence__wrapper">
-        <unnnic-form-element
+        <UnnnicFormElement
           size="sm"
           :label="$t('webapp.example.sentence')"
         >
-          <input-with-hightlights
+          <InputWithHightlights
             v-model="text"
             :entities="allEntities"
             :placeholder="$t('webapp.example.enter_sentence')"
             :selected.sync="textSelected"
             size="sm"
           />
-        </unnnic-form-element>
-        <unnnic-form-element
+        </UnnnicFormElement>
+        <UnnnicFormElement
           size="sm"
           :label="$t('webapp.example.intent')"
           :message="errors.non_field_errors"
         >
-          <unnnic-autocomplete
+          <UnnnicAutocomplete
             size="sm"
-            :type="errors.non_field_errors
-                    && errors.non_field_errors.length > 0 ? 'error' : 'normal'"
+            :type="
+              errors.non_field_errors && errors.non_field_errors.length > 0
+                ? 'error'
+                : 'normal'
+            "
             v-model="intent"
             :data="filterIntents"
             :placeholder="$t('webapp.example.intent')"
@@ -31,15 +34,15 @@
             @click.native="hideDropdown = false"
             :class="hideDropdown ? 'hidden' : ''"
           >
-          </unnnic-autocomplete>
-        </unnnic-form-element>
+          </UnnnicAutocomplete>
+        </UnnnicFormElement>
 
-        <unnnic-form-element
+        <UnnnicFormElement
           size="sm"
           :label="$t('webapp.inbox.language')"
           class="edit-sentence__language-select"
         >
-          <unnnic-select
+          <UnnnicSelect
             size="sm"
             :placeholder="$t('webapp.inbox.language')"
             v-model="language"
@@ -52,22 +55,26 @@
             >
               {{ label }}
             </option>
-          </unnnic-select>
-        </unnnic-form-element>
+          </UnnnicSelect>
+        </UnnnicFormElement>
       </div>
       <div class="add-entity">
-        <entity-accordion :open.sync="isOpen">
-          <div slot="header" class="level">
+        <EntityAccordion :open.sync="isOpen">
+          <div
+            slot="header"
+            class="level"
+          >
             <div class="badges-card__header">
-              <p
-                class="unnnic-form__label"
-              >
+              <p class="unnnic-form__label">
                 {{ $t('webapp.home.entities_list') }}
               </p>
             </div>
           </div>
-          <div slot="icon" class="level example-accordion__btns-wrapper">
-            <unnnic-icon-svg
+          <div
+            slot="icon"
+            class="level example-accordion__btns-wrapper"
+          >
+            <UnnnicIconSvg
               :icon="`${isOpen ? 'arrow-button-down-1' : 'arrow-right-1-1'}`"
               scheme="neutral-cleanest"
               size="xs"
@@ -78,18 +85,28 @@
               <div
                 v-for="(entity, index) in entitiesToEdit"
                 :key="`entity-${index}`"
-                class="column is-6 pl-0 pt-0 entity-input">
+                class="column is-6 pl-0 pt-0 entity-input"
+              >
                 <p
                   slot="label"
                   class="unnnic-form__label"
-                  v-html="$t('webapp.example.text_is', {text: highlightedText(entity) })" />
-                <unnnic-autocomplete
+                  v-html="
+                    $t('webapp.example.text_is', {
+                      text: highlightedText(entity),
+                    })
+                  "
+                />
+                <UnnnicAutocomplete
                   size="sm"
                   :data="filterEntities(index, false)"
                   v-model="entity.entity"
                   :placeholder="$t('webapp.example.entity')"
                   :openWithFocus="true"
-                  @input="entitiesToEdit[index].entity = intentFormatters(entity.entity)"
+                  @input="
+                    entitiesToEdit[index].entity = intentFormatters(
+                      entity.entity,
+                    )
+                  "
                   @icon-right-click="removeEntity(entity, index)"
                   @click.native="hideDropdown = false"
                   :class="hideDropdown ? 'hidden' : ''"
@@ -99,60 +116,83 @@
               <div
                 v-for="(entity, index) in pendingEntities"
                 :key="`pending-entity-${index}`"
-                class="column is-6 pl-0 pt-0 entity-input">
+                class="column is-6 pl-0 pt-0 entity-input"
+              >
                 <p
                   slot="label"
                   class="unnnic-form__label"
-                  v-html="$t('webapp.example.text_is', {text: highlightedText(entity) })" />
-                <unnnic-autocomplete
+                  v-html="
+                    $t('webapp.example.text_is', {
+                      text: highlightedText(entity),
+                    })
+                  "
+                />
+                <UnnnicAutocomplete
                   size="sm"
                   :data="filterEntities(index, true)"
-                  :custom-formatter="intentFormatters"
+                  :customFormatter="intentFormatters"
                   v-model="entity.entity"
                   :placeholder="$t('webapp.example.entity')"
                   :iconRight="entity ? 'delete-1-1' : ''"
                   class="edit-sentence-input"
-                  @input="pendingEntities[index].entity = intentFormatters(entity.entity)"
+                  @input="
+                    pendingEntities[index].entity = intentFormatters(
+                      entity.entity,
+                    )
+                  "
                   @icon-right-click="removePendingEntity(entity, index)"
                   @click.native="hideDropdown = false"
                   :class="hideDropdown ? 'hidden' : ''"
                 />
               </div>
-              <b-field
+              <BField
                 :message="errors.entities"
-                type="is-danger" />
+                type="is-danger"
+              />
             </div>
-            <unnnic-button
+            <UnnnicButton
               iconLeft="add-1"
               class="button--full mb-3"
               type="tertiary"
               size="small"
               @click.prevent.stop="addEntity"
             >
-              <span class="edit-sentence__add-entity-button-text">{{ entityButtonText }} </span>
-            </unnnic-button>
+              <span class="edit-sentence__add-entity-button-text"
+                >{{ entityButtonText }}
+              </span>
+            </UnnnicButton>
           </div>
-        </entity-accordion>
-        <unnnic-modal
+        </EntityAccordion>
+        <UnnnicModal
           :showModal="entityModal"
           :text="$t('webapp.trainings.add_entity_modal_title')"
           :closeIcon="false"
         >
-          <div slot="message" class="modal-header text-left">
-            <unnnic-autocomplete
-                :label="$t('webapp.trainings.add_entity_field_label')"
-                ref="entityInputField"
-                :data="getAllEntities"
-                v-model="entity"
-                :openWithFocus="true"
-                :iconRight="isEntityInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
-                @focus="onInputClick()"
-                @blur="onInputClick()"
+          <div
+            slot="message"
+            class="modal-header text-left"
+          >
+            <UnnnicAutocomplete
+              :label="$t('webapp.trainings.add_entity_field_label')"
+              ref="entityInputField"
+              :data="getAllEntities"
+              v-model="entity"
+              :openWithFocus="true"
+              :iconRight="
+                isEntityInputActive
+                  ? 'arrow-button-up-1'
+                  : 'arrow-button-down-1'
+              "
+              @focus="onInputClick()"
+              @blur="onInputClick()"
             />
             <div>
-              <unnnic-label class="mt-5" :label="$t('webapp.trainings.add_entity_checkbox_title')"/>
+              <UnnnicLabel
+                class="mt-5"
+                :label="$t('webapp.trainings.add_entity_checkbox_title')"
+              />
               <div class="words-wrapper">
-                <word-card
+                <WordCard
                   v-for="(word, index) in words"
                   :key="index"
                   class="word"
@@ -164,38 +204,43 @@
               </div>
             </div>
           </div>
-          <unnnic-button slot="options" type="tertiary" @click.prevent.stop="cancelEditEntity()">
-            {{ $t("webapp.home.cancel") }}
-          </unnnic-button>
-          <unnnic-button
+          <UnnnicButton
+            slot="options"
+            type="tertiary"
+            @click.prevent.stop="cancelEditEntity()"
+          >
+            {{ $t('webapp.home.cancel') }}
+          </UnnnicButton>
+          <UnnnicButton
             slot="options"
             class="create-repository__container__button"
             type="secondary"
             @click.prevent.stop="setEntity()"
           >
-            {{ $t("webapp.trainings.add_entity_finish_edit") }}
-          </unnnic-button>
-        </unnnic-modal>
+            {{ $t('webapp.trainings.add_entity_finish_edit') }}
+          </UnnnicButton>
+        </UnnnicModal>
       </div>
-      <div
-        class="edit-sentence__btn-wrapper">
-        <unnnic-button
+      <div class="edit-sentence__btn-wrapper">
+        <UnnnicButton
           class="edit-sentence__btn-wrapper__button"
           type="tertiary"
           size="small"
-          @click.prevent.stop="cancelEditSentence">
+          @click.prevent.stop="cancelEditSentence"
+        >
           {{ $t('webapp.trainings.cancel_button') }}
-        </unnnic-button>
-        <unnnic-button
+        </UnnnicButton>
+        <UnnnicButton
           type="secondary"
           size="small"
           class="edit-sentence__btn-wrapper__button"
           :disabled="!isValid || submitting"
-          :tooltip-hover="!isValid ? validationErrors : null"
+          :tooltipHover="!isValid ? validationErrors : null"
           :loading="submitting"
-          @click.prevent.stop="saveSentence">
+          @click.prevent.stop="saveSentence"
+        >
           <slot v-if="!submitting">{{ $t(saveButtonLabel) }}</slot>
-        </unnnic-button>
+        </UnnnicButton>
         <!-- <div>
           <a
             href="https://docs.weni.ai/l/pt/bothub/testando-seu-dataset#adicionando_entidades"
@@ -216,7 +261,6 @@ import EntityAccordion from '@/components/shared/accordion/EntityAccordion';
 import WordCard from '@/components/shared/accordion/WordCard';
 import InputWithHightlights from '../../InputWithHightlights';
 
-
 export default {
   name: 'EditExampleIntent',
   components: {
@@ -228,7 +272,7 @@ export default {
   props: {
     from: {
       type: String,
-      default: null
+      default: null,
     },
   },
   data() {
@@ -240,28 +284,25 @@ export default {
       selectedEntities: [],
       entity: '',
       textSelected: null,
-    }
+    };
   },
   extends: EditExampleBase,
   computed: {
     words() {
-      return this.text
-        .split(' ')
-        .map((word, index) => ({
-          text: word,
-          hasEntity: (this.pendingEntities.filter(e => this.text.substring(e.start, e.end) === word) || '').length > 0,
-          start: this.text.indexOf(word),
-          end: this.text.indexOf(word) + word.length
-        }))
+      return this.text.split(' ').map((word, index) => ({
+        text: word,
+        hasEntity:
+          (
+            this.pendingEntities.filter(
+              (e) => this.text.substring(e.start, e.end) === word,
+            ) || ''
+          ).length > 0,
+        start: this.text.indexOf(word),
+        end: this.text.indexOf(word) + word.length,
+      }));
     },
     sentence() {
-      const {
-        sentenceId,
-        text,
-        language,
-        intent,
-        allEntities,
-      } = this;
+      const { sentenceId, text, language, intent, allEntities } = this;
 
       return {
         id: sentenceId,
@@ -272,17 +313,19 @@ export default {
       };
     },
     saveButtonLabel() {
-      return this.$route.name === 'repository-database' ? 'webapp.trainings.database_save_button' : 'webapp.trainings.save_button'
-    }
+      return this.$route.name === 'repository-database'
+        ? 'webapp.trainings.database_save_button'
+        : 'webapp.trainings.save_button';
+    },
   },
   methods: {
     cancelEditSentence() {
-      this.$emit('cancel')
+      this.$emit('cancel');
     },
     async saveSentence() {
-      const from = this.$route.name
+      const from = this.$route.name;
       if (from === 'repository-suggestion') {
-        this.$emit('dispatchSave', this.sentence)
+        this.$emit('dispatchSave', this.sentence);
         this.cancelEditSentence();
       } else if (from === 'repository-database') {
         this.$emit('dispatchToTraining', this.sentence);
@@ -296,12 +339,12 @@ export default {
       if (this.textSelected) {
         this.addPendingEntity();
       } else {
-        this.entityModal = true
+        this.entityModal = true;
       }
     },
     onWordSelected(event) {
       const start = this.text.indexOf(event.text);
-      const end = start + event.text.length
+      const end = start + event.text.length;
 
       if (event.value) {
         this.selectedEntities.push({
@@ -310,37 +353,39 @@ export default {
           start,
         });
       } else {
-        this.selectedEntities = this.selectedEntities.filter(e => e.start !== start)
+        this.selectedEntities = this.selectedEntities.filter(
+          (e) => e.start !== start,
+        );
       }
     },
     cancelEditEntity() {
-      this.selectedEntities = []
-      this.entityModal = false
-      this.entity = ''
+      this.selectedEntities = [];
+      this.entityModal = false;
+      this.entity = '';
     },
     setEntity() {
-      this.pendingEntities.push(...this.selectedEntities)
-      this.pendingEntities = this.pendingEntities.map(entity => ({
+      this.pendingEntities.push(...this.selectedEntities);
+      this.pendingEntities = this.pendingEntities.map((entity) => ({
         ...entity,
-        class: ''
-      }))
+        class: '',
+      }));
 
       this.cancelEditEntity();
     },
     onInputClick() {
-      this.isEntityInputActive = !this.isEntityInputActive
-    }
-  }
+      this.isEntityInputActive = !this.isEntityInputActive;
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .edit-sentence {
   background: transparent;
-  border-top: 1px solid #E2E6ED;
+  border-top: 1px solid #e2e6ed;
   border-radius: 4px;
   margin-top: $unnnic-spacing-sm;
   padding-top: $unnnic-spacing-sm;
@@ -367,18 +412,18 @@ export default {
   }
 
   &__input {
-     margin: 0 .5rem;
+    margin: 0 0.5rem;
 
-     &__wrapper {
-       display: flex;
-       flex-wrap: wrap;
-       padding: 0.25rem;
-       width: 70%;
-     }
+    &__wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0.25rem;
+      width: 70%;
+    }
 
-     &__label /deep/ {
-       font-weight: normal;
-     }
+    :deep(&__label) {
+      font-weight: normal;
+    }
   }
 
   &__add-entity-button-text {
@@ -390,17 +435,17 @@ export default {
   }
 
   &-input {
-    margin: .5rem 0;
+    margin: 0.5rem 0;
   }
 
-  &__btn-wrapper{
+  &__btn-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: $unnnic-spacing-sm;
     gap: $unnnic-spacing-sm;
 
-    &__button{
+    &__button {
       width: 50%;
     }
 
@@ -408,8 +453,8 @@ export default {
       font-family: 'Lato';
       font-weight: 400;
       font-size: 12px;
-      color: #67738B;
-      text-decoration: underline
+      color: #67738b;
+      text-decoration: underline;
     }
   }
 }
@@ -417,13 +462,13 @@ export default {
   width: 100%;
 }
 .add-entity {
-  padding: .4rem 1rem;
+  padding: 0.4rem 1rem;
   margin-top: $unnnic-spacing-sm;
-  border: 1px solid #E2E6ED;
+  border: 1px solid #e2e6ed;
   border-radius: 8px;
 }
 .entity-input:nth-child(even) {
-  padding-left: .5rem !important;
+  padding-left: 0.5rem !important;
   padding-right: 0 !important;
 }
 
@@ -439,68 +484,69 @@ export default {
   margin: 0 !important;
 }
 
-/deep/ .column.is-6 {
+:deep(.column.is-6) {
   flex: auto;
   max-width: 50%;
-  padding: .5rem;
+  padding: 0.5rem;
 }
-/deep/ .column.is-3 {
+:deep(.column.is-3) {
   flex: auto;
-  padding: .5rem;
+  padding: 0.5rem;
 }
-/deep/ .textarea {
-    border: .0625rem solid #e2e6ed;
-    border-radius: .25rem;
-    color: #4e5666;
-    font-weight: 400;
-    font-size: .75rem;
-    box-sizing: border-box;
-    width: 100%;
-    padding: .5rem 1rem;
-    height: 38px !important;
+:deep(.textarea) {
+  border: 0.0625rem solid #e2e6ed;
+  border-radius: 0.25rem;
+  color: #4e5666;
+  font-weight: 400;
+  font-size: 0.75rem;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  height: 38px !important;
 }
 
-/deep/ .input {
+:deep(.input) {
   height: auto;
 }
-/deep/ .example-txt-w-highlighted-entities__entity {
-  font-size: .75rem;
+:deep(.example-txt-w-highlighted-entities__entity) {
+  font-size: 0.75rem;
   border: 2px solid transparent;
 }
-/deep/ .hidden .unnnic-autocomplete__container-list{
+:deep(.hidden .unnnic-autocomplete__container-list) {
   display: none;
 }
-/deep/ .unnnic-form__label {
+:deep(.unnnic-form__label) {
   font-family: Lato;
 }
-/deep/ .unnnic-form__label strong {
-  color: #67738B;
+:deep(.unnnic-form__label strong) {
+  color: #67738b;
   font-weight: 400;
-  text-decoration: solid #67738B underline;
+  text-decoration: solid #67738b underline;
 }
-/deep/ .unnnic-autocomplete__container-list {
+:deep(.unnnic-autocomplete__container-list) {
   z-index: 2;
 }
-/deep/ .example-txt-w-highlighted-entities__entity {
+:deep(.example-txt-w-highlighted-entities__entity) {
   padding: 0.5rem 0.9rem;
 }
-/deep/ .expander__body, /deep/ .expander__trigger {
+:deep(.expander__body),
+:deep(.expander__trigger) {
   padding: 0;
 }
-/deep/ .dropdown {
+:deep(.dropdown) {
   display: block;
 }
-/deep/ .unnnic-modal-container-background-body-alert_icon {
+:deep(.unnnic-modal-container-background-body-alert_icon) {
   display: none;
 }
 
-/deep/ .unnnic-modal-container-background-body {
+:deep(.unnnic-modal-container-background-body) {
   padding-top: 2rem;
 }
-/deep/ .expander__trigger__icon {
+:deep(.expander__trigger__icon) {
   margin-top: 2px;
 }
-/deep/ .unnnic-modal-container-background-body-description {
+:deep(.unnnic-modal-container-background-body-description) {
   padding-bottom: 0;
 }
 </style>

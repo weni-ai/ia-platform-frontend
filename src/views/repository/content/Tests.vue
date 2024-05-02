@@ -292,9 +292,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@use 'sass:math';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-.button-send-message /deep/ svg .primary {
+.button-send-message :deep(svg .primary) {
   fill: $unnnic-color-weni-600;
 }
 
@@ -311,7 +312,7 @@ export default {
   margin: 0 $dot-size * 1.75;
   margin-top: $unnnic-font-size-body-md + $unnnic-line-height-md - $dot-size;
   // margin-bottom: ($unnnic-font-size-body-md + $unnnic-line-height-md) * 0.25;
-  border-radius: $dot-size / 2;
+  border-radius: math.div($dot-size, 2);
   background-color: transparent;
   box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
     0 ($dot-min-height) $dot-color,
@@ -650,7 +651,7 @@ export default {
         display: none;
       }
       &:after {
-        background-image: url('~@/assets/imgs/send.svg');
+        background-image: url('@/assets/imgs/send.svg');
         background-repeat: no-repeat;
         background-position: center;
         padding: 0 $unnnic-spacing-xs;
@@ -667,7 +668,7 @@ export default {
   }
 }
 
-/deep/ .icon-right {
+:deep(.icon-right) {
   transform: translateY(100%);
 }
 
@@ -675,11 +676,11 @@ export default {
   font-family: $unnnic-font-family-secondary;
 }
 
-/deep/ .icon-right {
+:deep(.icon-right) {
   transform: translateY(100%);
 }
 
-/deep/ .rpstr-vw-bs__wrapper__content {
+:deep(.rpstr-vw-bs__wrapper__content) {
   margin: 0;
 }
 

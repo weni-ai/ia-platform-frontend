@@ -1,23 +1,24 @@
 <template>
   <div>
-    <intent-pagination
+    <IntentPagination
       v-if="translateList"
       :list="translateList"
-      :item-component="sentencesTable"
+      :itemComponent="sentencesTable"
       :showIntents="tab === 'not_translated'"
-      :per-page="perPage"
-      :translate-to="to"
-      :empty-message="$t('webapp.translate.no_examples', {language: to})"
-      :add-attributes="{repositoryUuid, editing, initialData: editCache}"
-      :external-token="externalToken"
-      item-key="id"
+      :perPage="perPage"
+      :translateTo="to"
+      :emptyMessage="$t('webapp.translate.no_examples', { language: to })"
+      :addAttributes="{ repositoryUuid, editing, initialData: editCache }"
+      :externalToken="externalToken"
+      itemKey="id"
       @onUpdateSelected="updateSelected"
       @onChange="updateCache($event)"
       @translated="onTranslated()"
       @eventStep="dispatchStep()"
       @dispatchStep="dispatchStep()"
       @pageChanged="selectAll = false"
-      @update:loading="onLoading($event)"/>
+      @update:loading="onLoading($event)"
+    />
   </div>
 </template>
 
@@ -76,7 +77,7 @@ export default {
       selectAll: false,
       editing: false,
       editCache: {},
-      sentencesTable: TranslateExampleTable
+      sentencesTable: TranslateExampleTable,
     };
   },
   computed: {
@@ -85,20 +86,27 @@ export default {
     }),
   },
   watch: {
-    async from() { await this.updateList(); },
-    async to() { await this.updateList(); },
-    query() { this.updateList(); },
-    update() { this.updateList(); },
-    selectAll() { this.$root.$emit('selectAll', this.selectAll); },
+    async from() {
+      await this.updateList();
+    },
+    async to() {
+      await this.updateList();
+    },
+    query() {
+      this.updateList();
+    },
+    update() {
+      this.updateList();
+    },
+    selectAll() {
+      this.$root.$emit('selectAll', this.selectAll);
+    },
   },
   async mounted() {
     await this.updateList();
   },
   methods: {
-    ...mapActions([
-      'searchExamples',
-      'searchExamplesExternal',
-    ]),
+    ...mapActions(['searchExamples', 'searchExamplesExternal']),
     updateCache({ id, data }) {
       if (!this.editCache[id] && !data) return;
       if (this.editCache[id] && !data) delete this.editCache[id];
@@ -162,45 +170,42 @@ export default {
       this.$emit('eventStep');
     },
     updateSelected(params) {
-      this.$emit('onUpdateSelected', params)
+      this.$emit('onUpdateSelected', params);
     },
   },
 };
 </script>
 <style lang="scss" scoped>
+.repository-translate {
+  @import '@/assets/scss/colors.scss';
+  @import '@/assets/scss/variables.scss';
 
-.repository-translate{
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-
-  &__list{
+  &__list {
     margin-left: 0.5rem;
 
-      &__options {
-        padding: 0 1rem 0 0.5rem;
-        margin-bottom: 2.1rem;
-        width: 100%;
+    &__options {
+      padding: 0 1rem 0 0.5rem;
+      margin-bottom: 2.1rem;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-family: $font-family;
+
+      &__buttons {
         display: flex;
-        justify-content: space-between;
-        font-family: $font-family;
-
-        &__buttons {
-          display: flex;
-          > * {
-            margin-left: 0.5rem;
-          }
+        > * {
+          margin-left: 0.5rem;
         }
+      }
 
-        &__check {
-          margin-left: 1rem;
-          display: flex;
-          align-items: center;
-          font-weight: bold;
-          color: $color-grey-dark;
-        }
+      &__check {
+        margin-left: 1rem;
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        color: $color-grey-dark;
+      }
     }
   }
 }
-
-
 </style>

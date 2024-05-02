@@ -1,39 +1,43 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     :repository="repository"
-    :error-code="errorCode">
+    :errorCode="errorCode"
+  >
     <div v-if="repository">
       <div v-if="authenticated">
         <div
           v-if="repository.authorization.can_write"
-          class="evaluate">
+          class="evaluate"
+        >
           <div class="evaluate__content-header">
-            <h2 class="evaluate__content-header__title">{{ $t('webapp.evaluate.results') }}</h2>
+            <h2 class="evaluate__content-header__title">
+              {{ $t('webapp.evaluate.results') }}
+            </h2>
           </div>
           <div class="evaluate__divider" />
           <div class="evaluate__content-wrapper">
-            <base-evaluate-versions
-              :repository="repository" />
+            <BaseEvaluateVersions :repository="repository" />
           </div>
         </div>
-        <authorization-request-notification
+        <AuthorizationRequestNotification
           v-else
           :available="!repository.available_request_authorization"
-          :repository-uuid="repository.uuid"
-          @onAuthorizationRequested="updateRepository(false)" />
+          :repositoryUuid="repository.uuid"
+          @onAuthorizationRequested="updateRepository(false)"
+        />
       </div>
-      <div
-        v-else>
-        <b-notification
+      <div v-else>
+        <BNotification
           :closable="false"
           class="is-info"
-          role="alert">
+          role="alert"
+        >
           {{ $t('webapp.evaluate.login') }}
-        </b-notification>
-        <login-form hide-forgot-password />
+        </BNotification>
+        <LoginForm hideForgotPassword />
       </div>
     </div>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -71,7 +75,7 @@ export default {
 
   computed: {
     ...mapState({
-      selectedRepository: state => state.Repository.selectedRepository,
+      selectedRepository: (state) => state.Repository.selectedRepository,
     }),
     ...mapGetters({
       repositoryVersion: 'getSelectedVersion',
@@ -88,8 +92,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 .evaluate {
   &__divider {
     height: 1px;
@@ -102,16 +106,16 @@ export default {
     margin-top: 2.5rem;
     overflow: hidden;
     border-bottom: 1px solid $color-grey;
-  &__requestAuthorization{
-    color: $color-fake-black;
-    font-weight: $font-weight-medium;
-    text-align: center;
-    float: right;
-    text-decoration: none !important;
-     &:hover{
-      color: $color-grey-darker !important;
+    &__requestAuthorization {
+      color: $color-fake-black;
+      font-weight: $font-weight-medium;
+      text-align: center;
+      float: right;
+      text-decoration: none !important;
+      &:hover {
+        color: $color-grey-darker !important;
+      }
     }
-  }
   }
   &__content-header {
     text-align: left;
@@ -131,7 +135,7 @@ export default {
       margin-top: 1rem;
       &__language-select {
         flex: 1;
-        margin-right: .5rem;
+        margin-right: 0.5rem;
         text-align: left;
       }
     }

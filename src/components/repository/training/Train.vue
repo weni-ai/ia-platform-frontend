@@ -1,44 +1,48 @@
 <template>
   <div class="train">
-    <sentences-resume
+    <SentencesResume
       :buttonDisabled="
-        loading ||
-            repository.examples__count === 0
-            || !isItOkToEnableButton
+        loading || repository.examples__count === 0 || !isItOkToEnableButton
       "
       :buttonLoading="loading || !isItOkToEnableButton"
       buttonClass="train__button"
       :buttonClick="verifyTrain"
-      :examples-list="examplesList"
-      :requirements-to-train="trainRequirements"
-      :languages-warnings="languagesWarnings"
-      :language-available-to-train="languageAvailableToTrain"
+      :examplesList="examplesList"
+      :requirementsToTrain="trainRequirements"
+      :languagesWarnings="languagesWarnings"
+      :languageAvailableToTrain="languageAvailableToTrain"
       @onImportSuccess="updateItems"
     />
-    <div v-if="trainProgress" class="train__progress">
-      <unnnic-modal :showModal="true" :closeIcon="false">
+    <div
+      v-if="trainProgress"
+      class="train__progress"
+    >
+      <UnnnicModal
+        :showModal="true"
+        :closeIcon="false"
+      >
         <div slot="message">
-          <unnnic-progress-bar
+          <UnnnicProgressBar
             :value="progress"
             :title="$t('webapp.trainings.train_progress')"
             inline
           />
         </div>
-      </unnnic-modal>
+      </UnnnicModal>
     </div>
-    <train-modal
+    <TrainModal
       v-if="repository"
       :training="training"
-      :requirements-to-train="trainRequirements"
+      :requirementsToTrain="trainRequirements"
       :open="trainModalOpen"
-      :languages-warnings="languagesWarnings"
-      :language-available-to-train="languageAvailableToTrain"
+      :languagesWarnings="languagesWarnings"
+      :languageAvailableToTrain="languageAvailableToTrain"
       @finishedTutorial="finishedTutorial()"
       @resetTutorial="resetTutorial()"
       @proceedTrain="train()"
       @closeTrainModal="closeTrainModal()"
     />
-    <train-response
+    <TrainResponse
       :open="trainResults"
       @dispatchCloseProgress="closeProgress()"
       @resetProgressValue="progress = 10"
@@ -59,37 +63,37 @@ export default {
     TrainModal,
     TrainResponse,
     ProgressBar,
-    SentencesResume
+    SentencesResume,
   },
   props: {
     load: {
       type: Boolean,
-      default: false
+      default: false,
     },
     repository: {
       type: Object,
-      required: true
+      required: true,
     },
     version: {
       type: Number,
-      required: true
+      required: true,
     },
     updateRepository: {
       type: Function,
-      default: async () => {}
+      default: async () => {},
     },
     authenticated: {
       type: Boolean,
-      default: false
+      default: false,
     },
     updateOnLoad: {
       type: Boolean,
-      default: true
+      default: true,
     },
     examplesList: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -103,7 +107,7 @@ export default {
       repositoryStatus: {},
       loadingStatus: false,
       languageAvailableToTrain: [],
-      isItOkToEnableButton: false
+      isItOkToEnableButton: false,
     };
   },
   computed: {
@@ -112,23 +116,32 @@ export default {
       return this.load || this.loadingStatus;
     },
     trainRequirements() {
-      if (!this.getRequirements || this.getRequirements.requirements_to_train === undefined) {
+      if (
+        !this.getRequirements ||
+        this.getRequirements.requirements_to_train === undefined
+      ) {
         return {};
       }
       return this.getRequirements.requirements_to_train;
     },
     languagesWarnings() {
-      if (!this.getRequirements || this.getRequirements.languages_warnings === undefined) {
+      if (
+        !this.getRequirements ||
+        this.getRequirements.languages_warnings === undefined
+      ) {
         return {};
       }
       return this.getRequirements.languages_warnings;
     },
     repositoryCanWrite() {
-      if (!this.repository || this.repository.authorization.can_write === 'null') {
+      if (
+        !this.repository ||
+        this.repository.authorization.can_write === 'null'
+      ) {
         return null;
       }
       return this.repository.authorization.can_write;
-    }
+    },
   },
   watch: {
     trainProgress() {
@@ -139,7 +152,7 @@ export default {
         this.getRepositoryStatus();
         this.resetTrainVariables();
       }
-    }
+    },
   },
   mounted() {
     if (this.updateOnLoad) this.updateTrainingStatus();
@@ -153,10 +166,10 @@ export default {
       'getRepositoryStatusTraining',
       'setRepositoryTraining',
       'getRepositoryRequirements',
-      'setRequirements'
+      'setRequirements',
     ]),
     sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
+      return new Promise((resolve) => setTimeout(resolve, ms));
     },
     finishedTutorial() {
       this.$emit('finishedTurorial');
@@ -170,43 +183,50 @@ export default {
     async repositoryRequirements() {
       try {
         const allRequirements = await Promise.all(
-          this.getCurrentRepository.available_languages.map(async language => {
-            const { data } = await this.getRepositoryRequirements({
-              repositoryUuid: this.repository.uuid,
-              version: this.repository.repository_version_id,
-              repositoryLanguage: language
-            });
-            const currentRequirements = {
-              ...data,
-              requirements_to_train:
-                data.requirements_to_train.length !== 0
-                  ? { [language]: data.requirements_to_train }
-                  : {},
-              languages_warnings:
-                data.languages_warnings.length !== 0 ? { [language]: data.languages_warnings } : {},
-              language
-            };
-            return currentRequirements;
-          })
+          this.getCurrentRepository.available_languages.map(
+            async (language) => {
+              const { data } = await this.getRepositoryRequirements({
+                repositoryUuid: this.repository.uuid,
+                version: this.repository.repository_version_id,
+                repositoryLanguage: language,
+              });
+              const currentRequirements = {
+                ...data,
+                requirements_to_train:
+                  data.requirements_to_train.length !== 0
+                    ? { [language]: data.requirements_to_train }
+                    : {},
+                languages_warnings:
+                  data.languages_warnings.length !== 0
+                    ? { [language]: data.languages_warnings }
+                    : {},
+                language,
+              };
+              return currentRequirements;
+            },
+          ),
         );
         this.languageAvailableToTrain = allRequirements.filter(
-          language => language.ready_for_train
-            && Object.keys(language.requirements_to_train).length === 0
-            && Object.keys(language.languages_warnings).length === 0
+          (language) =>
+            language.ready_for_train &&
+            Object.keys(language.requirements_to_train).length === 0 &&
+            Object.keys(language.languages_warnings).length === 0,
         );
-        const requirements = allRequirements.reduce((acumulator, requirement) => ({
-          repository_version_id: requirement.repository_version_id,
-          uuid: requirement.uuid,
-          ready_for_train: requirement.ready_for_train,
-          requirements_to_train: {
-            ...acumulator.requirements_to_train,
-            ...requirement.requirements_to_train
-          },
-          languages_warnings: {
-            ...acumulator.languages_warnings,
-            ...requirement.languages_warnings
-          }
-        }));
+        const requirements = allRequirements.reduce(
+          (acumulator, requirement) => ({
+            repository_version_id: requirement.repository_version_id,
+            uuid: requirement.uuid,
+            ready_for_train: requirement.ready_for_train,
+            requirements_to_train: {
+              ...acumulator.requirements_to_train,
+              ...requirement.requirements_to_train,
+            },
+            languages_warnings: {
+              ...acumulator.languages_warnings,
+              ...requirement.languages_warnings,
+            },
+          }),
+        );
         this.isItOkToEnableButton = true;
         this.setRequirements(requirements);
       } catch (error) {
@@ -218,7 +238,7 @@ export default {
       try {
         const trainStatus = await this.getTrainingStatus({
           repositoryUUID: this.repository.uuid,
-          version: this.repository.repository_version_id
+          version: this.repository.repository_version_id,
         });
         if (trainStatus) {
           this.$emit('statusUpdated', trainStatus);
@@ -245,9 +265,9 @@ export default {
     },
     async verifyTrain() {
       if (
-        Object.keys(this.getRequirements.languages_warnings).length
-        || Object.keys(this.getRequirements.requirements_to_train).length
-        || this.languageAvailableToTrain.length === 0
+        Object.keys(this.getRequirements.languages_warnings).length ||
+        Object.keys(this.getRequirements.requirements_to_train).length ||
+        this.languageAvailableToTrain.length === 0
       ) {
         this.trainModalOpen = true;
         return;
@@ -263,9 +283,9 @@ export default {
             await this.trainRepository({
               repositoryUuid: this.repository.uuid,
               repositoryVersion: this.version,
-              repositoryLanguage: language
+              repositoryLanguage: language,
             });
-          })
+          }),
         );
         await this.setRepositoryTraining(true);
         await this.updateRepository();
@@ -273,7 +293,7 @@ export default {
       } catch (e) {
         this.$buefy.toast.open({
           message: this.$t('webapp.trainings.default_error'),
-          type: 'is-danger'
+          type: 'is-danger',
         });
       }
       if (this.getRequirements.ready_for_train) {
@@ -286,7 +306,7 @@ export default {
       if (this.repository.uuid !== null && this.repositoryCanWrite) {
         const { data } = await this.getRepositoryStatusTraining({
           repositoryUUID: this.repository.uuid,
-          repositoryVersion: this.version
+          repositoryVersion: this.version,
         });
         this.repositoryStatus = data;
         if (this.repositoryStatus.results[0] !== undefined) {
@@ -298,7 +318,10 @@ export default {
             this.trainProgress = true;
             this.progress = 68;
           }
-          if (this.repositoryStatus.results[0].status === 2 && this.trainProgress) {
+          if (
+            this.repositoryStatus.results[0].status === 2 &&
+            this.trainProgress
+          ) {
             this.progress = 100;
             this.setRepositoryTraining(false);
             this.trainResults = true;
@@ -306,8 +329,8 @@ export default {
           }
           setTimeout(() => {
             if (
-              this.repositoryStatus.results[0].status === 0
-              || this.repositoryStatus.results[0].status === 1
+              this.repositoryStatus.results[0].status === 0 ||
+              this.repositoryStatus.results[0].status === 1
             ) {
               this.getRepositoryStatus();
             }
@@ -331,15 +354,15 @@ export default {
       this.updateTrainingStatus();
       this.getRepositoryStatus();
       this.repositoryRequirements();
-      this.$emit('updateItems')
-    }
-  }
+      this.$emit('updateItems');
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 .train {
   &__button {
     color: $color-white;
@@ -356,23 +379,23 @@ export default {
       font-size: 13px;
       font-weight: $font-weight-bolder;
     }
-    /deep/ .unnnic-modal-container-background {
+    :deep(.unnnic-modal-container-background) {
       height: 88px;
     }
-    /deep/ .unnnic-modal-container-background-body {
-      padding: 0
+    :deep(.unnnic-modal-container-background-body) {
+      padding: 0;
     }
-    /deep/ .unnnic-modal-container-background-body-title {
-      padding: 0
+    :deep(.unnnic-modal-container-background-body-title) {
+      padding: 0;
     }
-    /deep/ .unnnic-modal-container-background-body-spacing_header {
+    :deep(.unnnic-modal-container-background-body-spacing_header) {
       display: none;
     }
-    /deep/ .unnnic-progress-bar.primary {
+    :deep(.unnnic-progress-bar.primary) {
       padding: 2rem 1.5rem;
       white-space: nowrap;
     }
-    /deep/ .unnnic-modal {
+    :deep(.unnnic-modal) {
       z-index: 1;
     }
   }

@@ -1,48 +1,52 @@
 <template>
-  <boarding-layout>
+  <BoardingLayout>
     <div class="signup">
       <div class="signup__content">
         <div class="signup__content__field">
           <div class="signup__content__field__header">
             <p>{{ $t('webapp.register_form.already_have_account') }}</p>
-            <b-button
+            <BButton
               type="is-primary"
               class="signup__content__field__header__createButton"
-              @click="goToLoginPage">
-              {{ $t('webapp.register_form.signin') }}</b-button>
+              @click="goToLoginPage"
+            >
+              {{ $t('webapp.register_form.signin') }}</BButton
+            >
           </div>
           <div class="signup__content__field__forms">
             <h1>{{ $t('webapp.register_form.create_account_title') }}</h1>
             <form @submit.prevent="onSubmit">
-              <loading v-if="!formSchema" />
-              <form-generator
+              <Loading v-if="!formSchema" />
+              <FormGenerator
                 v-if="formSchema"
                 :schema="formSchema"
                 v-model="data"
                 :errors="errors"
-                :show-labels="false"
-                :available-max-lenght="false"
-                class="field"/>
-              <p
-                class="signup__content__field__forms__passwordError">
+                :showLabels="false"
+                :availableMaxLenght="false"
+                class="field"
+              />
+              <p class="signup__content__field__forms__passwordError">
                 {{ confirmError }}
               </p>
               <div class="field">
                 <div class="control has-text-centered">
-                  <b-button
+                  <BButton
                     :disabled="submitting"
                     expanded
                     class="signup__content__field__forms__button is-primary"
-                    native-type="submit"
-                  >{{ $t('webapp.register_form.get_free') }}</b-button>
+                    nativeType="submit"
+                    >{{ $t('webapp.register_form.get_free') }}</BButton
+                  >
                 </div>
                 <div class="signup__content__field__forms__agree-message">
                   <small>
-                    <router-link
+                    <RouterLink
                       to="/terms"
-                      class="signup__content__field__forms__terms">
+                      class="signup__content__field__forms__terms"
+                    >
                       {{ $t('webapp.register_form.policy_service') }}
-                    </router-link>
+                    </RouterLink>
                   </small>
                 </div>
               </div>
@@ -51,8 +55,8 @@
         </div>
       </div>
     </div>
-    <div class="footer"/>
-  </boarding-layout>
+    <div class="footer" />
+  </BoardingLayout>
 </template>
 
 <script>
@@ -80,14 +84,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'authenticated',
-    ]),
+    ...mapGetters(['authenticated']),
   },
   watch: {
     authenticated() {
       this.$router.push({
-        name: this.authenticated && runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED') ? 'payment-options' : 'home',
+        name:
+          this.authenticated &&
+          runtimeVariables.get('VITE_BOTHUB_WEBAPP_PAYMENT_ENABLED')
+            ? 'payment-options'
+            : 'home',
       });
     },
   },
@@ -95,11 +101,7 @@ export default {
     this.getAllRegisterSchema();
   },
   methods: {
-    ...mapActions([
-      'register',
-      'getRegisterSchema',
-      'login',
-    ]),
+    ...mapActions(['register', 'getRegisterSchema', 'login']),
     goToLoginPage() {
       this.$router.push({
         name: 'signIn',
@@ -112,7 +114,8 @@ export default {
       const registerSchema = await this.getRegisterSchema();
       const { password } = registerSchema;
       const confirmPassword = {
-        ...password, label: this.$t('webapp.register_form.confirm_password'),
+        ...password,
+        label: this.$t('webapp.register_form.confirm_password'),
       };
       this.formSchema = { ...registerSchema, confirmPassword };
     },
@@ -121,8 +124,11 @@ export default {
       this.errors = {};
       try {
         if (this.data.confirmPassword !== this.data.password) {
-          this.confirmError = this.$t(this.data.confirmPassword === ''
-            ? 'webapp.register_form.confirm_password_empty' : 'webapp.register_form.password_didnt_match');
+          this.confirmError = this.$t(
+            this.data.confirmPassword === ''
+              ? 'webapp.register_form.confirm_password_empty'
+              : 'webapp.register_form.password_didnt_match',
+          );
           this.submitting = false;
           return false;
         }
@@ -130,7 +136,9 @@ export default {
         this.confirmError = '';
 
         if (this.data.confirmPassword === '') {
-          this.confirmError = this.$t('webapp.register_form.confirm_password_empty');
+          this.confirmError = this.$t(
+            'webapp.register_form.confirm_password_empty',
+          );
           this.submitting = false;
         } else {
           this.confirmError = '';
@@ -173,43 +181,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/utilities.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/utilities.scss';
 
-.footer{
+.footer {
   background-color: $color-fake-white;
 }
 
-.signup{
+.signup {
   background-color: $color-fake-white;
 
-  &__content{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: $color-fake-white;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: $color-fake-white;
 
-    &__field{
+    &__field {
       width: 36rem;
       height: 35.125rem;
 
-      &__header{
-        display:flex;
+      &__header {
+        display: flex;
         justify-content: flex-end;
         margin-bottom: 1rem;
 
-        p{
+        p {
           font-family: $font-family;
           font-size: 1rem;
-          color:$color-fake-black;
+          color: $color-fake-black;
           margin-right: 1rem;
-          margin-top:1rem;
+          margin-top: 1rem;
         }
 
-        &__createButton{
+        &__createButton {
           width: 6.875rem;
           height: 2.188rem;
           margin-top: 0.15rem;
@@ -221,21 +229,21 @@ export default {
         }
       }
 
-      &__forms{
+      &__forms {
         height: 33rem;
         width: 576px;
         padding: 2rem 4rem;
         background-color: $color-white;
         box-shadow: 0px 3px 6px #00000029;
 
-        h1{
-          color:$color-primary;
+        h1 {
+          color: $color-primary;
           font-family: $font-family;
           font-size: 2.563rem;
           text-align: center;
         }
 
-        &__passwordError{
+        &__passwordError {
           color: #ff3860;
           font-size: 0.75rem;
           margin: -1.4rem 0px;
@@ -243,23 +251,23 @@ export default {
 
         &__agree-message {
           margin: auto;
-          margin-top:1rem;
+          margin-top: 1rem;
           width: 16rem;
           line-height: 0.8;
           color: #707070;
           text-align: center;
         }
-        &__terms{
+        &__terms {
           color: #707070;
           font-size: 12px;
           font-family: $font-family;
           text-align: center;
-          &:hover{
-            color:  $color-primary;
+          &:hover {
+            color: $color-primary;
           }
         }
-        &__button{
-          margin: 3rem auto 0.8rem ;
+        &__button {
+          margin: 3rem auto 0.8rem;
           width: 9.813rem;
           height: 2.188rem;
           border-radius: 6px;
@@ -269,15 +277,13 @@ export default {
           font-size: $font-size;
         }
         @media screen and (max-width: 40em) {
-           width: 30rem;
+          width: 30rem;
+        }
       }
-
-      }
-        @media screen and (max-width: 40em) {
-           width: 30rem;
+      @media screen and (max-width: 40em) {
+        width: 30rem;
       }
     }
   }
 }
-
 </style>

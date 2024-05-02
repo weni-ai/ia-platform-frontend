@@ -1,20 +1,31 @@
 <template>
-  <unnnic-modal
+  <UnnnicModal
     :showModal="true"
     :text="$t('webapp.raw.raw')"
     @close="closeModal()"
     @click.native="tryToClose"
   >
-    <div slot="message" class="raw-info">
+    <div
+      slot="message"
+      class="raw-info"
+    >
       <div class="raw-info__title">
         <p>{{ $t('webapp.raw.raw_subtitle') }}</p>
       </div>
       <div class="raw-info__json">
-        <highlighted-code :code="text" class="raw-info__input" code-class="json" />
-        <b-icon icon="content-copy" class="raw-info__copy clickable" @click.native="copyText()" />
+        <HighlightedCode
+          :code="text"
+          class="raw-info__input"
+          codeClass="json"
+        />
+        <BIcon
+          icon="content-copy"
+          class="raw-info__copy clickable"
+          @click.native="copyText()"
+        />
       </div>
     </div>
-  </unnnic-modal>
+  </UnnnicModal>
 </template>
 
 <script>
@@ -48,15 +59,15 @@ export default {
       });
     },
     closeModal() {
-      this.$emit('closeModal')
+      this.$emit('closeModal');
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .raw-info {
   display: flex;
@@ -69,7 +80,7 @@ export default {
     pre {
       background: white;
       text-align: left;
-      font-size: .875rem;
+      font-size: 0.875rem;
     }
   }
 
@@ -110,7 +121,7 @@ export default {
   }
 }
 
-/deep/ .unnnic-modal-container-background-body-alert_icon {
+:deep(.unnnic-modal-container-background-body-alert_icon) {
   display: none;
 }
 </style>

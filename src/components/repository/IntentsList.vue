@@ -2,16 +2,25 @@
   <div class="intent-list">
     <div class="intent-list__content">
       <div class="intent-list__content__descriptions">
-        <div @click="goToSummary" class="intent-list__content__back-button">
-          <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
+        <div
+          @click="goToSummary"
+          class="intent-list__content__back-button"
+        >
+          <UnnnicIconSvg
+            icon="keyboard-arrow-left-1"
+            size="md"
+          />
         </div>
         <h1>
-          {{ $t("webapp.intent.title") }}
+          {{ $t('webapp.intent.title') }}
           <span> "{{ intentSelected }}" </span>
         </h1>
       </div>
-      <div v-if="repository.authorization.can_contribute" class="intent-list__buttons-wrapper">
-        <unnnic-button
+      <div
+        v-if="repository.authorization.can_contribute"
+        class="intent-list__buttons-wrapper"
+      >
+        <UnnnicButton
           ref="editIntentEvent"
           @click="editOptionsIntent()"
           class="mr-2"
@@ -20,7 +29,7 @@
           :text="$t('webapp.intent.edit_button')"
           iconLeft="pencil-write-1"
         />
-        <unnnic-button
+        <UnnnicButton
           @click="openDeleteModal = true"
           type="secondary"
           size="large"
@@ -33,18 +42,26 @@
     <div class="intent-list__subtitle">
       <p v-html="$tc('webapp.intent.description', totalSentences)" />
     </div>
-    <unnnic-modal
+    <UnnnicModal
       :showModal="openModal"
       :text="$t('webapp.intent.edit_intent_modal_title')"
       scheme="feedback-yellow"
-      modal-icon="alert-circle-1"
+      modalIcon="alert-circle-1"
       @close="openModal = false"
     >
       <span
-      slot="message"
-      v-html="$t('webapp.intent.edit_intent_modal_subtitle', { intent: intentSelected })" />
-      <div slot="message" class="text-left">
-        <unnnic-input
+        slot="message"
+        v-html="
+          $t('webapp.intent.edit_intent_modal_subtitle', {
+            intent: intentSelected,
+          })
+        "
+      />
+      <div
+        slot="message"
+        class="text-left"
+      >
+        <UnnnicInput
           :placeholder="$t('webapp.intent.edit_intent_field_label')"
           v-model="newIntentName"
         >
@@ -52,54 +69,64 @@
             slot="label"
             v-html="$t('webapp.intent.edit_intent_field_title')"
           />
-        </unnnic-input>
+        </UnnnicInput>
       </div>
-      <unnnic-button slot="options" type="tertiary" @click="openModal = false">
-        {{ $t("webapp.home.cancel") }}
-      </unnnic-button>
-      <unnnic-button
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="openModal = false"
+      >
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
         slot="options"
         class="create-repository__container__button"
         type="primary"
         scheme="feedback-yellow"
         @click="saveEdition()"
       >
-        {{ $t("webapp.intent.edit_intent_button_label") }}
-      </unnnic-button>
-    </unnnic-modal>
-    <unnnic-modal
+        {{ $t('webapp.intent.edit_intent_button_label') }}
+      </UnnnicButton>
+    </UnnnicModal>
+    <UnnnicModal
       :showModal="openSuccessModal"
       :text="successModalTitle"
       scheme="feedback-green"
-      modal-icon="check-circle-1-1"
+      modalIcon="check-circle-1-1"
       @close="openSuccessModal = false"
     >
       <span
-      slot="message"
-      v-html="successModalSubtitle" />
-    </unnnic-modal>
-    <unnnic-modal
+        slot="message"
+        v-html="successModalSubtitle"
+      />
+    </UnnnicModal>
+    <UnnnicModal
       :showModal="openDeleteModal"
       :text="$t('webapp.trainings.delete_title')"
       scheme="feedback-red"
-      modal-icon="alert-circle-1"
+      modalIcon="alert-circle-1"
       @close="openDeleteModal = false"
     >
       <span
-      slot="message"
-      v-html="$t('webapp.trainings.delete_phrase_modal')" />
-      <unnnic-button slot="options" type="tertiary" @click="openDeleteModal = false">
-        {{ $t("webapp.home.cancel") }}
-      </unnnic-button>
-      <unnnic-button
+        slot="message"
+        v-html="$t('webapp.trainings.delete_phrase_modal')"
+      />
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="openDeleteModal = false"
+      >
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
         slot="options"
         type="primary"
         scheme="feedback-red"
         @click="deleteSelectedItems"
       >
-        {{ $t("webapp.trainings.delete_title") }}
-      </unnnic-button>
-    </unnnic-modal>
+        {{ $t('webapp.trainings.delete_title') }}
+      </UnnnicButton>
+    </UnnnicModal>
   </div>
 </template>
 
@@ -135,7 +162,7 @@ export default {
       openDeleteModal: false,
       newIntentName: '',
       successModalTitle: '',
-      successModalSubtitle: ''
+      successModalSubtitle: '',
     };
   },
   computed: {
@@ -151,10 +178,10 @@ export default {
     },
     sentencesCounter() {
       if (this.selectedItems !== null) {
-        return this.selectedItems.length
+        return this.selectedItems.length;
       }
-      return 0
-    }
+      return 0;
+    },
   },
   watch: {
     intentSelected() {
@@ -168,11 +195,11 @@ export default {
     ...mapActions(['editIntentName', 'setUpdateRepository', 'deleteExample']),
     editOptionsIntent() {
       // this.editSentences = !this.editSentences;
-      this.openModal = true
+      this.openModal = true;
     },
     async getSelectedIntent() {
       const intent = await this.repository.intents.find(
-        (intentValue) => intentValue.id === Number(this.intentId)
+        (intentValue) => intentValue.id === Number(this.intentId),
       );
       this.intentSelected = intent.value;
     },
@@ -184,11 +211,13 @@ export default {
           repositoryVersion: this.repositoryVersion,
         });
         this.$emit('saveEdition');
-        this.intentSelected = this.newIntentName
-        this.openModal = false
-        this.openSuccessModal = true
-        this.successModalTitle = this.$t('webapp.intent.success_modal_title')
-        this.successModalSubtitle = this.$t('webapp.intent.success_modal_subtitle')
+        this.intentSelected = this.newIntentName;
+        this.openModal = false;
+        this.openSuccessModal = true;
+        this.successModalTitle = this.$t('webapp.intent.success_modal_title');
+        this.successModalSubtitle = this.$t(
+          'webapp.intent.success_modal_subtitle',
+        );
       } catch (error) {
         this.$buefy.toast.open({
           message: this.$t('webapp.intent.error_intent'),
@@ -203,20 +232,24 @@ export default {
         this.$emit('itemDeleted');
         this.openDeleteModal = false;
         this.openSuccessModal = true;
-        this.successModalTitle = this.$t('webapp.intent.delete_success_title')
-        this.successModalSubtitle = this.$t('webapp.intent.delete_success_subtitle')
+        this.successModalTitle = this.$t('webapp.intent.delete_success_title');
+        this.successModalSubtitle = this.$t(
+          'webapp.intent.delete_success_subtitle',
+        );
       });
     },
     goToSummary() {
-      this.$router.push(`/dashboard/${this.$route.params.ownerNickname}/${this.$route.params.slug}/`)
-    }
+      this.$router.push(
+        `/dashboard/${this.$route.params.ownerNickname}/${this.$route.params.slug}/`,
+      );
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 .intent-list {
   margin: 0.4rem;
   margin-left: 2.8rem;
@@ -229,7 +262,7 @@ export default {
 
   &__subtitle {
     p {
-      font-family: "Lato";
+      font-family: 'Lato';
       font-size: 14px;
       color: #4e5666;
     }
@@ -275,7 +308,7 @@ export default {
     }
 
     h1 {
-      font-family: "Aleo";
+      font-family: 'Aleo';
       font-size: 20px;
       color: #272b33;
     }

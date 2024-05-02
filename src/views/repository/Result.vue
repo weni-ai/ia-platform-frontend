@@ -1,40 +1,44 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     :repository="repository"
-    :error-code="errorCode">
+    :errorCode="errorCode"
+  >
     <div v-if="repository">
       <div v-if="authenticated">
         <div
           v-if="repository.authorization.can_write"
-          class="evaluate">
+          class="evaluate"
+        >
           <div class="evaluate__content-header">
             <h2 class="evaluate__content-header__title">
               {{ $t('webapp.evaluate.detailed_results') }}
             </h2>
           </div>
           <div class="evaluate__content-wrapper">
-            <base-evaluate-results
-              :result-id="resultId"
-              :repository="repository" />
+            <BaseEvaluateResults
+              :resultId="resultId"
+              :repository="repository"
+            />
           </div>
         </div>
-        <authorization-request-notification
+        <AuthorizationRequestNotification
           v-else
           :available="!repository.available_request_authorization"
-          :repository-uuid="repository.uuid"
-          @onAuthorizationRequested="updateRepository(false)" />
+          :repositoryUuid="repository.uuid"
+          @onAuthorizationRequested="updateRepository(false)"
+        />
       </div>
-      <div
-        v-else>
-        <b-notification
+      <div v-else>
+        <BNotification
           :closable="false"
-          type="is-info">
+          type="is-info"
+        >
           {{ $t('webapp.evaluate.login') }}
-        </b-notification>
-        <login-form hide-forgot-password />
+        </BNotification>
+        <LoginForm hideForgotPassword />
       </div>
     </div>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -45,7 +49,6 @@ import { mapGetters } from 'vuex';
 
 import LoginForm from '@/components/auth/LoginForm';
 import RepositoryBase from './Base';
-
 
 export default {
   name: 'RepositoryResult',
@@ -83,9 +86,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .evaluate {
   &__divider {
@@ -117,22 +119,22 @@ export default {
           $size: 10rem;
 
           position: absolute;
-          content: "";
+          content: '';
           width: $size;
           height: $size;
           left: 50%;
-          bottom: -($size - .75rem);
+          bottom: -($size - 0.75rem);
           transform: translateX(-50%);
           background-color: $color-primary;
           border-radius: 50%;
-          animation: nav-bubble-animation .25s ease;
+          animation: nav-bubble-animation 0.25s ease;
 
           @keyframes nav-bubble-animation {
             from {
               bottom: -($size);
             }
             to {
-              bottom: -($size - .75rem);
+              bottom: -($size - 0.75rem);
             }
           }
         }

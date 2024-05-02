@@ -1,13 +1,15 @@
 <template>
   <form
     class="search"
-    @submit.prevent="submit()">
+    @submit.prevent="submit()"
+  >
     <input
       ref="input"
       v-model="data"
       type="text"
-      placeholder="the world of robots is here" >
-    <button type="submit"><b-icon icon="magnify" /></button>
+      placeholder="the world of robots is here"
+    />
+    <button type="submit"><BIcon icon="magnify" /></button>
   </form>
 </template>
 
@@ -33,10 +35,9 @@ export default {
   watch: {
     data() {
       this.clearTimeout();
-      this.setTimeoutId = setTimeout(
-        () => { this.submit(); },
-        this.debounceTime,
-      );
+      this.setTimeoutId = setTimeout(() => {
+        this.submit();
+      }, this.debounceTime);
     },
   },
   methods: {
@@ -55,8 +56,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/utilities.scss';
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/utilities.scss';
+@import '@/assets/scss/colors.scss';
 
 .search {
   position: relative;
@@ -65,7 +66,6 @@ export default {
   background-color: #fff;
   height: 50px;
   overflow: hidden;
-
 
   input {
     width: calc(100% - 56px);
@@ -92,7 +92,7 @@ export default {
     border: none;
     color: $grey;
     cursor: pointer;
-    transition: color .2s ease;
+    transition: color 0.2s ease;
     outline: none;
 
     &:hover {

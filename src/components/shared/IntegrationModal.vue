@@ -1,5 +1,5 @@
 <template>
-  <unnnic-modal
+  <UnnnicModal
     :showModal="openModal"
     :text="
       $t(
@@ -7,15 +7,14 @@
           ? 'webapp.home.remove_integrate_modal_title'
           : 'webapp.home.integrate_modal_title',
         {
-          intelligence: repository.name
-        }
+          intelligence: repository.name,
+        },
       )
     "
     :scheme="hasIntegration ? 'feedback-red' : 'feedback-yellow'"
-    modal-icon="alert-circle-1"
+    modalIcon="alert-circle-1"
     :closeIcon="false"
   >
-
     <div slot="message">
       <span
         v-html="
@@ -24,12 +23,17 @@
             : $t('webapp.home.integrate_modal_subtitle')
         "
       />
-      <div class="integration-modal__field" v-show="hasIntegration">
+      <div
+        class="integration-modal__field"
+        v-show="hasIntegration"
+      >
         <span
           class="integration-modal__field__label"
-          v-html="$t('webapp.home.confirm_with_username', { username: getUsername })"
+          v-html="
+            $t('webapp.home.confirm_with_username', { username: getUsername })
+          "
         />
-        <unnnic-input
+        <UnnnicInput
           v-model="username"
           class="integration-modal__field__input"
           :placeholder="$t('webapp.home.confirm_with_username_placeholder')"
@@ -37,25 +41,37 @@
       </div>
     </div>
 
-    <unnnic-button slot="options" type="tertiary" @click.prevent.stop="dispatchCloseModal()">
-      {{ $t("webapp.home.cancel") }}
-    </unnnic-button>
-    <unnnic-button
+    <UnnnicButton
+      slot="options"
+      type="tertiary"
+      @click.prevent.stop="dispatchCloseModal()"
+    >
+      {{ $t('webapp.home.cancel') }}
+    </UnnnicButton>
+    <UnnnicButton
       slot="options"
       class="integration-modal__button"
-      :class="{ 'integration-modal__button__opacity': checkInputConfirm && hasIntegration }"
+      :class="{
+        'integration-modal__button__opacity':
+          checkInputConfirm && hasIntegration,
+      }"
       type="secondary"
       :loading="loading"
       :disabled="hasIntegration && checkInputConfirm"
-      @click.prevent.stop="hasIntegration ?
-       dispatchRemoveIntegrateRepository() : dispatchIntegrateRepository()"
+      @click.prevent.stop="
+        hasIntegration
+          ? dispatchRemoveIntegrateRepository()
+          : dispatchIntegrateRepository()
+      "
     >
-      <span v-if="hasIntegration" class="integration-modal__button__txt">{{
-        $t("webapp.home.confirm_remove_integrate")
-      }}</span>
-      <span v-else>{{ $t("webapp.home.confirm_integrate") }}</span>
-    </unnnic-button>
-  </unnnic-modal>
+      <span
+        v-if="hasIntegration"
+        class="integration-modal__button__txt"
+        >{{ $t('webapp.home.confirm_remove_integrate') }}</span
+      >
+      <span v-else>{{ $t('webapp.home.confirm_integrate') }}</span>
+    </UnnnicButton>
+  </UnnnicModal>
 </template>
 
 <script>
@@ -66,41 +82,41 @@ export default {
   props: {
     openModal: {
       type: Boolean,
-      default: false
+      default: false,
     },
     repository: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     hasIntegration: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       loading: false,
       username: '',
-      integrationError: null
+      integrationError: null,
     };
   },
   computed: {
     ...mapGetters(['getProjectSelected', 'getOrgSelected', 'myProfile']),
     ...mapState({
-      usernameProfile: state => state.User.username,
+      usernameProfile: (state) => state.User.username,
     }),
-    getUsername(){
-      return this.usernameProfile || this.myProfile.name
+    getUsername() {
+      return this.usernameProfile || this.myProfile.name;
     },
     checkInputConfirm() {
       return this.username === '' || this.username !== this.usernameProfile;
-    }
+    },
   },
   methods: {
     ...mapActions([
       'setIntegrationRepository',
       'removeIntegrationRepository',
-      'setUpdateRepository'
+      'setUpdateRepository',
     ]),
     dispatchCloseModal() {
       this.$emit('closeIntegratationModal');
@@ -112,7 +128,7 @@ export default {
           repository_version: this.repository.repository_version_id,
           repository_uuid: this.repository.uuid,
           project_uuid: this.getProjectSelected,
-          organization: this.getOrgSelected
+          organization: this.getOrgSelected,
         });
         this.username = '';
         this.$emit('dispatchUpdateIntegration', false);
@@ -132,7 +148,7 @@ export default {
           repository_uuid: this.repository.uuid,
           name: this.repository.name,
           project_uuid: this.getProjectSelected,
-          organization: this.getOrgSelected
+          organization: this.getOrgSelected,
         });
         this.$emit('dispatchUpdateIntegration', true);
         this.$emit('dispatchIntegrationNotification', 'success');
@@ -145,15 +161,15 @@ export default {
         this.loading = false;
         this.dispatchCloseModal();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .integration-modal {
   &__container {
@@ -189,7 +205,7 @@ export default {
     }
   }
 }
-/deep/ .unnnic-modal-container-background-body-description {
+:deep(.unnnic-modal-container-background-body-description) {
   padding-bottom: $unnnic-spacing-stack-xs;
 }
 </style>

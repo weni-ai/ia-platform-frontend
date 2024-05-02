@@ -2,16 +2,18 @@
   <div class="notification">
     <div class="notification__field">
       <span class="notification__field__title">
-        {{ $t("webapp.weni_notification.title") }}
+        {{ $t('webapp.weni_notification.title') }}
       </span>
       <span class="notification__field__division" />
       <span class="notification__field__subtitle">
-        {{ $t("webapp.weni_notification.subtitle") }}
+        {{ $t('webapp.weni_notification.subtitle') }}
       </span>
       <a href="https://weni.ai/blog/modularizacao-plataformas/">
-        <b-button rounded class="notification__field__button">{{
-          $t("webapp.weni_notification.button")
-        }}</b-button>
+        <BButton
+          rounded
+          class="notification__field__button"
+          >{{ $t('webapp.weni_notification.button') }}</BButton
+        >
       </a>
     </div>
   </div>
@@ -19,15 +21,15 @@
 
 <script>
 export default {
-  name: 'WeniNotication'
+  name: 'WeniNotication',
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .notification {
   width: 100%;

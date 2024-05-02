@@ -1,24 +1,28 @@
 <template>
   <div class="dashboard-layout">
     <div
-      :class="[collapse
-        ? 'dashboard-layout__main-panel'
-        : 'dashboard-layout__main-panel--collapsed',
+      :class="[
+        collapse
+          ? 'dashboard-layout__main-panel'
+          : 'dashboard-layout__main-panel--collapsed',
         basesNewOrBasesEdit ? 'none' : null,
-        `page--${$route.name}`]"
-        >
-          <side-bar v-if="!basesNewOrBasesEdit" @collapse="collapseHandle()" />
-      <router-view />
-    </div>
-    <tour
-      v-if="getFinalModal && getFinalMessage !== 'true'"
-      :step-count="1"
-      name="tutorial_button"
+        `page--${$route.name}`,
+      ]"
+    >
+      <SideBar
+        v-if="!basesNewOrBasesEdit"
+        @collapse="collapseHandle()"
       />
+      <RouterView />
+    </div>
+    <Tour
+      v-if="getFinalModal && getFinalMessage !== 'true'"
+      :stepCount="1"
+      name="tutorial_button"
+    />
   </div>
 </template>
 <script>
-
 import SideBar from '@/components/repository/sidebar/SideBar';
 import UserAvatar from '@/components/user/UserAvatar';
 import CustomIcon from '@/components/shared/CustomIcon';
@@ -62,28 +66,37 @@ export default {
       return false;
     },
     warningsCount() {
-      if (!this.getCurrentRepository
-        || !this.getCurrentRepository.selectedRepositoryselectedRepository) return 0;
+      if (
+        !this.getCurrentRepository ||
+        !this.getCurrentRepository.selectedRepositoryselectedRepository
+      )
+        return 0;
       return Object.keys(this.getRequirements.languages_warnings).length;
     },
     tutorialEnabled() {
-      return runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED');
+      return runtimeVariables.get('VITE_BOTHUB_WEBAPP_TUTORIAL_ENABLED');
     },
     categoryIcon() {
-      if (!this.getCurrentRepository
-      || !this.getCurrentRepository.categories_list
-      || this.getCurrentRepository.categories_list.length < 1) return 'botinho';
+      if (
+        !this.getCurrentRepository ||
+        !this.getCurrentRepository.categories_list ||
+        this.getCurrentRepository.categories_list.length < 1
+      )
+        return 'botinho';
       return this.getCurrentRepository.categories_list[0].icon || 'botinho';
     },
 
     basesNewOrBasesEdit() {
-      return (this.$route.name === 'repository-content-bases-new'
-        || this.$route.name === 'repository-content-bases-edit') || this.$route.name.includes('content')
+      return (
+        this.$route.name === 'repository-content-bases-new' ||
+        this.$route.name === 'repository-content-bases-edit' ||
+        this.$route.name.includes('content')
+      );
     },
   },
-  destroyed(){
-    this.setRepository({})
-    this.resetRepositoryVersion()
+  destroyed() {
+    this.setRepository({});
+    this.resetRepositoryVersion();
   },
   methods: {
     ...mapActions([
@@ -91,10 +104,10 @@ export default {
       'getFirstFiveVersions',
       'setTutorialMenuActive',
       'setRepository',
-      'resetRepositoryVersion'
+      'resetRepositoryVersion',
     ]),
     openBeginnerTutorialModal() {
-      if (runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
+      if (runtimeVariables.get('VITE_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
         this.setTutorialMenuActive();
         Analytics.send({ category: 'Tutorial', event: 'tutorial open event' });
       }
@@ -130,24 +143,23 @@ export default {
 // @import "~buefy/src/scss/buefy";
 </style>
 <style lang="scss">
-@import '~@/assets/scss/utilities.scss';
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/utilities.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-html{
-  overflow-y:auto
+html {
+  overflow-y: auto;
 }
 .dashboard-layout {
-
-  &__notification{
+  &__notification {
     top: 0;
     position: fixed;
     z-index: 9;
   }
 
   &__main-panel {
-    width: calc( 100% - #{$menu-expanded-size - 30});
+    width: calc(100% - #{$menu-expanded-size - 30});
     position: relative;
     float: right;
     padding: 0 1rem;
@@ -158,9 +170,9 @@ html{
     }
 
     &--collapsed {
-       position: relative;
-       float: right;
-       width: calc( 100% - #{$menu-collapsed-size - 30});
+      position: relative;
+      float: right;
+      width: calc(100% - #{$menu-collapsed-size - 30});
     }
   }
 }

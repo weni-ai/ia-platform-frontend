@@ -4,41 +4,81 @@
     <div class="api-loading__container">
       <div class="api-loading__container__header">
         <div class="api-loading__container__header__title">
-          <unnnic-skeleton-loading tag="div" width="115px" height="20px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="115px"
+            height="20px"
+          />
         </div>
         <div class="api-loading__container__header__description">
-          <unnnic-skeleton-loading tag="div" width="360px" height="20px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="360px"
+            height="20px"
+          />
         </div>
       </div>
 
       <div class="api-loading__container__field">
-        <unnnic-skeleton-loading tag="div" width="157px" height="20px" />
-        <unnnic-skeleton-loading tag="div" width="1026px" height="46px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="157px"
+          height="20px"
+        />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="1026px"
+          height="46px"
+        />
       </div>
 
       <div class="api-loading__container__field">
-        <unnnic-skeleton-loading tag="div" width="157px" height="20px" />
-        <unnnic-skeleton-loading tag="div" width="1026px" height="104px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="157px"
+          height="20px"
+        />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="1026px"
+          height="104px"
+        />
       </div>
 
       <div class="api-loading__container__tabs">
-        <unnnic-skeleton-loading tag="div" width="95px" height="20px" />
-        <unnnic-skeleton-loading tag="div" width="95px" height="20px" />
-        <unnnic-skeleton-loading tag="div" width="95px" height="20px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="95px"
+          height="20px"
+        />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="95px"
+          height="20px"
+        />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="95px"
+          height="20px"
+        />
       </div>
 
-      <unnnic-divider />
+      <UnnnicDivider />
 
       <div class="api-loading__container__code">
-        <unnnic-skeleton-loading tag="div" width="1029px" height="234px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="1029px"
+          height="234px"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .api-loading {
   display: flex;

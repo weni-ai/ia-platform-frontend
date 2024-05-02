@@ -1,28 +1,35 @@
 <template>
-  <div
-    class="user-report-item level is-mobile">
+  <div class="user-report-item level is-mobile">
     <div class="level-left user-report-item__info">
       <div
         v-if="categories && categories.length > 0"
-        class="user-report-item__category__container">
-        <custom-icon
+        class="user-report-item__category__container"
+      >
+        <CustomIcon
           :value="repository.categories[0].icon"
           class="user-report-item__category"
-          size="large"/>
+          size="large"
+        />
       </div>
       <div>
-        <p class="user-report-item__name"> {{ name || '' }} </p>
+        <p class="user-report-item__name">{{ name || '' }}</p>
         <p
           v-if="owner"
-          class="user-report-item__user"> {{ $t('webapp.my_profile.reports.created_by') }}
-        <a> {{ owner.nickname || '' }} </a> </p>
+          class="user-report-item__user"
+        >
+          {{ $t('webapp.my_profile.reports.created_by') }}
+          <a> {{ owner.nickname || '' }} </a>
+        </p>
         <p
           v-if="time"
-          class="user-report-item__user"> {{ time }} </p>
+          class="user-report-item__user"
+        >
+          {{ time }}
+        </p>
       </div>
     </div>
     <div class="level-right">
-      <loading v-if="total_count == null" />
+      <Loading v-if="total_count == null" />
       <strong v-else>
         {{ $tc('webapp.my_profile.reports.predictions', total_count) }}
       </strong>
@@ -63,7 +70,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
 .user-report-item {
   background-color: $color-white;
@@ -77,35 +84,33 @@ export default {
     margin: 0 1rem 0 0;
   }
 
-    &__category {
-
-        &__container {
-          background-color: $color-primary;
-          color: $color-white;
-          border-radius: 50%;
-          padding: 1rem;
-          margin-right: 1.125rem;
-          max-width: 4rem;
-          max-height: 4rem;
-        }
+  &__category {
+    &__container {
+      background-color: $color-primary;
+      color: $color-white;
+      border-radius: 50%;
+      padding: 1rem;
+      margin-right: 1.125rem;
+      max-width: 4rem;
+      max-height: 4rem;
     }
+  }
 
-    &__name {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin: 0;
-    }
+  &__name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 0;
+  }
 
-    &__user {
-      font-size: 0.875rem;
-      margin: 0;
-    }
+  &__user {
+    font-size: 0.875rem;
+    margin: 0;
+  }
 
-    &__button {
-      margin: 0.5rem 0 0 0;
-      padding: 0 1.8rem;
-      border-radius: 50px;
-    }
+  &__button {
+    margin: 0.5rem 0 0 0;
+    padding: 0 1.8rem;
+    border-radius: 50px;
+  }
 }
-
 </style>

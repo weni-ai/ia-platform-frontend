@@ -2,58 +2,125 @@
 <template>
   <div class="translate-loading">
     <div class="translate-loading__header">
-      <unnnic-skeleton-loading tag="div" width="189px" height="40px" />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="189px"
+        height="40px"
+      />
     </div>
     <div class="translate-loading__description">
       <div>
-        <unnnic-skeleton-loading tag="div" width="507px" height="17px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="507px"
+          height="17px"
+        />
       </div>
     </div>
 
     <div class="translate-loading__fields__tabs">
-      <unnnic-skeleton-loading tag="div" width="150px" height="20px" />
-      <unnnic-skeleton-loading tag="div" width="150px" height="20px" />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="150px"
+        height="20px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="150px"
+        height="20px"
+      />
     </div>
 
-    <unnnic-divider />
+    <UnnnicDivider />
 
     <div class="translate-loading__counter">
-      <unnnic-skeleton-loading tag="div" width="100%" height="100px" />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="100px"
+      />
     </div>
 
     <div class="translate-loading__fields">
       <div>
-        <unnnic-skeleton-loading tag="div" width="384px" height="45px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="384px"
+          height="45px"
+        />
       </div>
       <div class="translate-loading__fields__selects">
-        <unnnic-skeleton-loading tag="div" width="227px" height="45px" />
-        <unnnic-skeleton-loading tag="div" width="227px" height="45px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="227px"
+          height="45px"
+        />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="227px"
+          height="45px"
+        />
       </div>
     </div>
 
     <div class="translate-loading__table">
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
     </div>
 
-    <unnnic-divider />
+    <UnnnicDivider />
 
     <div class="translate-loading__fields">
       <div>
-        <unnnic-skeleton-loading tag="div" width="126px" height="36px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="126px"
+          height="36px"
+        />
       </div>
       <div class="translate-loading__fields__selects">
-        <unnnic-skeleton-loading tag="div" width="300px" height="36px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="300px"
+          height="36px"
+        />
       </div>
     </div>
 
-    <unnnic-divider />
-
+    <UnnnicDivider />
   </div>
 </template>
 
@@ -62,8 +129,8 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .translate-loading {
   display: flex;
@@ -93,7 +160,6 @@ export default {};
     align-self: end;
   }
 
-
   &__fields {
     // margin-top: $unnnic-spacing-stack-lg;
     display: flex;
@@ -118,7 +184,5 @@ export default {};
   &__counter {
     margin-bottom: $unnnic-spacing-stack-lg;
   }
-
-
 }
 </style>

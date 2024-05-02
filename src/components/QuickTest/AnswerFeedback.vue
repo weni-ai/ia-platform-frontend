@@ -213,7 +213,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .feedback {
   &__thumbs {
@@ -240,7 +240,7 @@ export default {
 
     overflow: hidden;
 
-    /deep/ .label {
+    :deep(.label) {
       color: $unnnic-color-neutral-dark;
     }
 

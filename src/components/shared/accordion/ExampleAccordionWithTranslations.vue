@@ -1,88 +1,109 @@
 <template>
-  <component
+  <Component
     ref="accordion"
     :is="editing ? 'edit-example-accordion' : 'sentence-accordion'"
     :open.sync="open"
     :entities="entities"
-    :intent-to-edit="intent"
-    :text-to-edit="text"
-    :sentence-id="id"
-    :language-edit="language"
-    :get-all-entities="allEntities"
+    :intentToEdit="intent"
+    :textToEdit="text"
+    :sentenceId="id"
+    :languageEdit="language"
+    :getAllEntities="allEntities"
     align="top"
-    edit-example
+    editExample
     @cancel="onCancelEdit"
     @saveList="onSaveList"
   >
     <div slot="check">
-      <language-badge
+      <LanguageBadge
         :language="language"
-        :main="language === repository.language" />
+        :main="language === repository.language"
+      />
     </div>
     <div
       v-if="!editing"
       slot="header"
-      class="example-item__header">
-      <highlighted-text
+      class="example-item__header"
+    >
+      <HighlightedText
         :text="text"
         :entities="entities"
-        :highlighted="highlighted" />
+        :highlighted="highlighted"
+      />
       <div class="example-item__entities">
-        <entity-tag
+        <EntityTag
           v-for="entity in entities"
-          :entity-name="entity.entity"
+          :entityName="entity.entity"
           :key="entity.entity"
           :highlighted="highlighted === entity.entity"
           :group="entity.group"
           @mouseenter.native.stop="highlighted = entity.entity"
-          @mouseleave.native.stop="highlighted = null" />
+          @mouseleave.native.stop="highlighted = null"
+        />
       </div>
     </div>
     <div
       v-show="!editing"
       slot="options"
-      class="example-item__intent example-item__faded">
-      <strong class="example-item__faded"> {{ $t('webapp.evaluate.intent') }}: </strong>
+      class="example-item__intent example-item__faded"
+    >
+      <strong class="example-item__faded">
+        {{ $t('webapp.evaluate.intent') }}:
+      </strong>
       &nbsp; {{ intent }}
     </div>
     <div
       slot="options"
-      class="example-item__faded example-item__options">
-      <word-suggestion-button
+      class="example-item__faded example-item__options"
+    >
+      <WordSuggestionButton
         v-show="!editing && isSuggestion"
-        :get-sentence="sentenceDetail"/>
-      <b-icon
+        :getSentence="sentenceDetail"
+      />
+      <BIcon
         v-show="!editing"
         :icon="editing ? 'check' : 'pencil'"
-        :class="{ clickable: true,
-                  'icon-disabled': editingTranslation,
-                  'example-item__options__icon': !editing}"
+        :class="{
+          clickable: true,
+          'icon-disabled': editingTranslation,
+          'example-item__options__icon': !editing,
+        }"
         size="is-small"
-        @click.native.stop="handleEdit" />
-      <b-icon
+        @click.native.stop="handleEdit"
+      />
+      <BIcon
         class="clickable example-item__options__icon"
         size="is-small"
         icon="delete"
-        @click.native.stop="deleteThisExample" />
+        @click.native.stop="deleteThisExample"
+      />
     </div>
 
     <div slot="body">
-      <loading v-show="loadingTranslations" />
+      <Loading v-show="loadingTranslations" />
       <p
         v-if="translationLoadError"
-        class="has-text-centered">
+        class="has-text-centered"
+      >
         {{ $t('webapp.translate.error_load_translation') }}
         <a @click="loadTranslations"> {{ $t('webapp.translate.retry') }} </a>
       </p>
       <p
         v-else-if="translations && translations.length === 0"
-        class="has-text-centered"> {{ $t('webapp.translate.no_translation') }} </p>
+        class="has-text-centered"
+      >
+        {{ $t('webapp.translate.no_translation') }}
+      </p>
       <div
-        v-for="(translation, index) in (translations || [])"
-        :key="translation.id" >
-        <example-translation
-          :all-entities="availableEntities"
-          :disable-edit="editing || editingTranslation && translation.id !== editingTranslation"
+        v-for="(translation, index) in translations || []"
+        :key="translation.id"
+      >
+        <ExampleTranslation
+          :allEntities="availableEntities"
+          :disableEdit="
+            editing ||
+            (editingTranslation && translation.id !== editingTranslation)
+          "
           v-bind="translation"
           @edit="onEditTranslationChange"
           @edited="onEdited"
@@ -90,10 +111,11 @@
         />
         <div
           v-if="index < (translations || []).length - 1"
-          class="example-item__separator" />
+          class="example-item__separator"
+        />
       </div>
     </div>
-  </component>
+  </Component>
 </template>
 
 <script>
@@ -133,7 +155,7 @@ export default {
     },
     entities: {
       type: Array,
-      default: () => ([]),
+      default: () => [],
     },
     intent: {
       type: String,
@@ -173,10 +195,10 @@ export default {
     }),
     allEntities() {
       if (!this.repository || !this.repository.entities) return [];
-      return this.repository.entities.map(entity => entity.value);
+      return this.repository.entities.map((entity) => entity.value);
     },
     availableEntities() {
-      return this.entities.map(entity => entity.entity);
+      return this.entities.map((entity) => entity.entity);
     },
     sentenceDetail() {
       const detail = {
@@ -199,12 +221,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'deleteExample',
-      'getTranslations',
-    ]),
+    ...mapActions(['deleteExample', 'getTranslations']),
     async onEdited(edited) {
-      const index = this.translations.findIndex(translation => translation.id === edited.id);
+      const index = this.translations.findIndex(
+        (translation) => translation.id === edited.id,
+      );
       if (index < 0) return;
       Vue.set(this.translations, index, edited);
     },
@@ -215,7 +236,9 @@ export default {
       this.$emit('updateList');
     },
     translationDeleted(id) {
-      this.translations = this.translations.filter(translation => translation.id !== id);
+      this.translations = this.translations.filter(
+        (translation) => translation.id !== id,
+      );
     },
     handleEdit() {
       this.editing = !this.editing;
@@ -267,60 +290,59 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
-    .example-item {
-        &__header {
-            > * :not(:last-child) {
-                margin-bottom: 0.5rem;
-            }
-        }
-
-        &__separator {
-            background-color: $color-grey;
-            width: 100%;
-            height: 2px;
-        }
-
-        &__entities {
-            > * {
-                margin-right: 0.3rem;
-            }
-        }
-
-        &__faded {
-            color: $color-grey-dark;
-            font-family: $font-family;
-
-            strong {
-              margin-right: 0.5rem;
-            }
-        }
-
-        &__intent {
-            display: flex;
-            margin-right: 1rem;
-            text-align: right;
-            white-space: nowrap;
-        }
-
-        &__options {
-          display: flex;
-          align-items: center;
-          > * {
-            margin-left: 0.40rem;
-          }
-            &__icon:hover{
-              color: $color-fake-grey;
-              transition: 1s;
-            }
-        }
+.example-item {
+  &__header {
+    > * :not(:last-child) {
+      margin-bottom: 0.5rem;
     }
-    /deep/ .unnnic-tag {
+  }
 
-      strong {
-        margin: 0 .4rem !important;
-      }
+  &__separator {
+    background-color: $color-grey;
+    width: 100%;
+    height: 2px;
+  }
+
+  &__entities {
+    > * {
+      margin-right: 0.3rem;
     }
+  }
+
+  &__faded {
+    color: $color-grey-dark;
+    font-family: $font-family;
+
+    strong {
+      margin-right: 0.5rem;
+    }
+  }
+
+  &__intent {
+    display: flex;
+    margin-right: 1rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &__options {
+    display: flex;
+    align-items: center;
+    > * {
+      margin-left: 0.4rem;
+    }
+    &__icon:hover {
+      color: $color-fake-grey;
+      transition: 1s;
+    }
+  }
+}
+:deep(.unnnic-tag) {
+  strong {
+    margin: 0 0.4rem !important;
+  }
+}
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <unnnic-form-element
+    <UnnnicFormElement
       :label="$t('webapp.analyze_text.language')"
       class="form-element"
     >
-      <unnnic-select
+      <UnnnicSelect
         :placeholder="$t('webapp.analyze_text.language')"
         v-model="language"
       >
@@ -16,48 +16,45 @@
         >
           {{ label }}
         </option>
-      </unnnic-select>
-    </unnnic-form-element>
+      </UnnnicSelect>
+    </UnnnicFormElement>
 
-    <unnnic-form-element
+    <UnnnicFormElement
       :label="$t('webapp.analyze_text.message')"
       class="form-element"
     >
-      <unnnic-text-area
+      <UnnnicTextArea
         :placeholder="$t('webapp.analyze_text.message_placeholder')"
         v-model="text"
       />
-    </unnnic-form-element>
+    </UnnnicFormElement>
 
-    <unnnic-tab initialTab="first" :tabs="tabs">
-      <template slot="tab-head-first">
-        cURL
-      </template>
+    <UnnnicTab
+      initialTab="first"
+      :tabs="tabs"
+    >
+      <template slot="tab-head-first"> cURL </template>
       <template slot="tab-panel-first">
-        <highlighted-code
+        <HighlightedCode
           :code="codes.curl"
-          code-class="bash"
+          codeClass="bash"
         />
       </template>
-      <template slot="tab-head-second">
-        Python
-      </template>
+      <template slot="tab-head-second"> Python </template>
       <template slot="tab-panel-second">
-        <highlighted-code
+        <HighlightedCode
           :code="codes.python"
-          code-class="python"
+          codeClass="python"
         />
       </template>
-      <template slot="tab-head-third">
-        Javascript
-      </template>
+      <template slot="tab-head-third"> Javascript </template>
       <template slot="tab-panel-third">
-        <highlighted-code
+        <HighlightedCode
           :code="codes.javascript"
-          code-class="javascript"
+          codeClass="javascript"
         />
       </template>
-    </unnnic-tab>
+    </UnnnicTab>
   </div>
 </template>
 
@@ -92,26 +89,21 @@ export default {
   },
   computed: {
     languageList() {
-      return Object.keys(LANGUAGES)
-        .map(lang => ([lang, LANGUAGES[lang]]));
+      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
     text_escaped() {
       return {
-        curl: this.text
-          .replace(/\\/g, '\\\\')
-          .replace(/"/g, '\\"'),
-        python: this.text
-          .replace(/\\/g, '\\\\')
-          .replace(/'/g, '\\\''),
-        javascript: this.text
-          .replace(/\\/g, '\\\\')
-          .replace(/'/g, '\\\''),
+        curl: this.text.replace(/\\/g, '\\\\').replace(/"/g, '\\"'),
+        python: this.text.replace(/\\/g, '\\\\').replace(/'/g, "\\'"),
+        javascript: this.text.replace(/\\/g, '\\\\').replace(/'/g, "\\'"),
       };
     },
     codes() {
       return {
         curl: [
-          `  curl --location '${runtimeVariables.get('VUE_APP_BOTHUB_NLP_BASE_URL')}v2/parse/' \\`,
+          `  curl --location '${runtimeVariables.get(
+            'VITE_BOTHUB_NLP_BASE_URL',
+          )}v2/parse/' \\`,
           `  --header 'Authorization: ${this.authorizationUuid}' \\`,
           '  --header Content-Type: application/json \\',
           '  --data { ',
@@ -128,7 +120,9 @@ export default {
           '}',
           '',
           `headers = { 'Authorization': '${this.authorizationUuid}' }`,
-          `r = requests.post('${runtimeVariables.get('VUE_APP_BOTHUB_NLP_BASE_URL')}v2/parse/', headers=headers, data=data)`,
+          `r = requests.post('${runtimeVariables.get(
+            'VITE_BOTHUB_NLP_BASE_URL',
+          )}v2/parse/', headers=headers, data=data)`,
           'print(r.json())',
         ].join('\n'),
         javascript: [
@@ -141,7 +135,9 @@ export default {
           '  console.log(JSON.parse(request.response));',
           '};',
           '',
-          `request.open('POST', '${runtimeVariables.get('VUE_APP_BOTHUB_NLP_BASE_URL')}v2/parse/');`,
+          `request.open('POST', '${runtimeVariables.get(
+            'VITE_BOTHUB_NLP_BASE_URL',
+          )}v2/parse/');`,
           `request.setRequestHeader('Authorization', '${this.authorizationUuid}');`,
           'request.send(data);',
         ].join('\n'),
@@ -152,19 +148,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .form-element + .form-element {
   margin-top: $unnnic-spacing-sm;
 }
 
 .unnnic-select {
-
-  /deep/ .input {
+  :deep(.input) {
     height: 46px;
   }
-  /deep/ .dropdown {
+  :deep(.dropdown) {
     display: block;
   }
 }

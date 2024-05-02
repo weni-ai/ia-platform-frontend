@@ -1,15 +1,16 @@
 <template>
   <div
-    :class="{'category-item': true,
-             'category-item__selected': selected}"
-    class="category-item">
-    <p> {{ title }} </p>
+    :class="{ 'category-item': true, 'category-item__selected': selected }"
+    class="category-item"
+  >
+    <p>{{ title }}</p>
     <div class="category-item__separator" />
-    <custom-icon
+    <CustomIcon
       :value="icon"
       class="category-item__icon"
       size="large"
-      :fillPrimary="true"/>
+      :fillPrimary="true"
+    />
   </div>
 </template>
 
@@ -41,28 +42,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
-    .category-item {
-      text-align: center;
-        border-radius: 10px;
-        font-size: 0.875rem;
-        background-color: white;
-        padding: 0.5rem 0.5rem 1rem 0.5rem;
-        width: 7rem;
+.category-item {
+  text-align: center;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  background-color: white;
+  padding: 0.5rem 0.5rem 1rem 0.5rem;
+  width: 7rem;
 
-        &__icon {
-          color: $color-primary;
-        }
+  &__icon {
+    color: $color-primary;
+  }
 
-        &__separator {
-          height: 1px;
-          margin: 0.5rem 1rem;
-          background-color: $color-grey;
-        }
+  &__separator {
+    height: 1px;
+    margin: 0.5rem 1rem;
+    background-color: $color-grey;
+  }
 
-        &__selected {
-          box-shadow:0px 0px 0px 2px $color-primary inset;
-        }
-    }
+  &__selected {
+    box-shadow: 0px 0px 0px 2px $color-primary inset;
+  }
+}
 </style>

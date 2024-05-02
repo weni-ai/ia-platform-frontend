@@ -6,55 +6,59 @@
     <div
       ref="expandQuickTest"
       class="quick-test__collapse-button"
-      @click="toggle()">
+      @click="toggle()"
+    >
       <div
         id="tour-quick_test-step-0"
         :is-next-disabled="true"
         :is-step-blocked="!blockedNextStepTutorial"
-        class="quick-test__collapse-button__content">
-        <b-icon
-          :icon="expanded ? 'chevron-right' : 'chevron-left'"/>
+        class="quick-test__collapse-button__content"
+      >
+        <BIcon :icon="expanded ? 'chevron-right' : 'chevron-left'" />
         <p class="quick-test__collapse-button__text">
           {{ $t('webapp.quick_test.quick_test') }}
         </p>
       </div>
-
     </div>
     <div
-      :class="['quick-test__container', expanded ? 'expanded' : 'collapsed']">
+      :class="['quick-test__container', expanded ? 'expanded' : 'collapsed']"
+    >
       <div class="quick-test__inner-container">
         <div
           v-if="!authenticated"
-          class="quick-test__login">
+          class="quick-test__login"
+        >
           {{ $t('webapp.quick_test.login_text') }}
-          <b-field
-
-            class="quick-test__login__buttons">
-            <b-button
+          <BField class="quick-test__login__buttons">
+            <BButton
               type="is-primary"
-              @click="signIn()">
+              @click="signIn()"
+            >
               {{ $t('webapp.register_form.signin') }}
-            </b-button>
-            <b-button
+            </BButton>
+            <BButton
               type="is-primary"
               outlined
-              @click="signUp()">
+              @click="signUp()"
+            >
               {{ $t('webapp.landing_page.signup') }}
-            </b-button>
-          </b-field>
+            </BButton>
+          </BField>
         </div>
         <div
           v-if="authenticated"
           id="tour-quick_test-step-2"
           :is-previous-disabled="true"
-          class="quick-test__text-area">
-          <quick-test-text
+          class="quick-test__text-area"
+        >
+          <QuickTestText
             v-for="sentence in sentences"
             :key="sentence.id"
             :text="sentence.text"
             :language="sentence.language"
             :version="sentence.version"
-            :repository-uuid="sentence.repositoryUUID" />
+            :repositoryUuid="sentence.repositoryUUID"
+          />
         </div>
         <div
           v-if="authenticated"
@@ -62,37 +66,44 @@
           :is-previous-disabled="true"
           :is-next-disabled="true"
           :is-step-blocked="sentences.length === 0"
-          class="quick-test__input">
-
-          <unnnic-input
+          class="quick-test__input"
+        >
+          <UnnnicInput
             class="sentence-input"
             :placeholder="$t('webapp.quick_test.add_a_sentence')"
             v-model="sentenceInput"
             @keyup.enter="sendMessage"
           />
 
-          <unnnic-select-smart
-            :value="[{
-              value: selectedLanguage,
-              label: verboseLanguage(selectedLanguage),
-            }]"
-            :options="languages.map((language) => ({
-              value: language,
-              label: verboseLanguage(language),
-            }))"
+          <UnnnicSelectSmart
+            :value="[
+              {
+                value: selectedLanguage,
+                label: verboseLanguage(selectedLanguage),
+              },
+            ]"
+            :options="
+              languages.map((language) => ({
+                value: language,
+                label: verboseLanguage(language),
+              }))
+            "
             @input="selectedLanguage = $event[0].value"
-            ordered-by-index
+            orderedByIndex
           />
         </div>
       </div>
     </div>
-    <tour
-      v-if="activeTutorial === 'quick_test'
-      && this.$router.currentRoute.name === 'repository-summary'"
-      :step-count="3"
-      :next-event="eventClick"
-      :finish-event="eventClickFinish"
-      name="quick_test" />
+    <Tour
+      v-if="
+        activeTutorial === 'quick_test' &&
+        this.$router.currentRoute.name === 'repository-summary'
+      "
+      :stepCount="3"
+      :nextEvent="eventClick"
+      :finishEvent="eventClickFinish"
+      name="quick_test"
+    />
   </div>
 </template>
 
@@ -148,7 +159,7 @@ export default {
     repositoryUUID() {
       if (!this.repository) return null;
       return this.repository.uuid;
-    }
+    },
   },
   watch: {
     defaultLanguage() {
@@ -216,14 +227,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@/assets/scss/colors.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .sentence-input {
   margin-bottom: $unnnic-spacing-xs;
 }
 
- ::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 4px;
 }
 
@@ -240,108 +251,107 @@ export default {
   pointer-events: visible;
 }
 
-  .is-text {
-    text-decoration: none;
-  }
+.is-text {
+  text-decoration: none;
+}
 
-  .expanded {
-    transition: margin-right .3s ease-out;
-    margin: 0 1rem 0 0;
-  }
+.expanded {
+  transition: margin-right 0.3s ease-out;
+  margin: 0 1rem 0 0;
+}
 
-  .collapsed {
-    transition: margin-right .3s ease-out;
-    margin: 0 -16rem 0 0;
-  }
+.collapsed {
+  transition: margin-right 0.3s ease-out;
+  margin: 0 -16rem 0 0;
+}
 
-    .quick-test {
-        display: flex;
-        justify-content: flex-end;
-        position: fixed;
-        bottom: 10%;
-        right: 0;
-        z-index: 9;
-        pointer-events: none;
+.quick-test {
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  bottom: 10%;
+  right: 0;
+  z-index: 9;
+  pointer-events: none;
 
-        &__collapse-button {
-          cursor: pointer;
-          background-color: #009E96;
-          border-radius: 1rem 0 0 1rem;
-          height: 3rem;
-          width: 5rem;
-          padding: 0.75rem;
-          font-weight: bold;
-          font-size: 0.6rem;
-          color: white;
-          text-align: center;
-          display: flex;
-          margin-top: 3rem;
-          box-shadow: 0 0 3px 0 rgba(0,0,0,.2);
+  &__collapse-button {
+    cursor: pointer;
+    background-color: #009e96;
+    border-radius: 1rem 0 0 1rem;
+    height: 3rem;
+    width: 5rem;
+    padding: 0.75rem;
+    font-weight: bold;
+    font-size: 0.6rem;
+    color: white;
+    text-align: center;
+    display: flex;
+    margin-top: 3rem;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 
-
-          &__content{
-            display:flex;
-          }
-          &__text {
-            margin: 0 auto;;
-          }
-        }
-
-        &__login {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          margin: 50% 15%;
-          flex-direction: column;
-
-          &__buttons {
-            margin: 1rem 0;
-
-            > * {
-              margin: 0 0.5rem 0 0;
-            }
-
-            :last-child {
-              margin: 0;
-            }
-          }
-        }
-
-        &__input {
-          margin: 0.5rem;
-
-          &__placeholder {
-            font-size: 0.7rem;
-          }
-        }
-
-        &__container {
-          height: 75vh;
-          min-height: 400px;
-          display: flex;
-          align-items: stretch;
-          min-width: 16rem;
-          max-width: 16rem;
-          border: 7px solid #2F343D;
-          border-radius: 10px;
-          box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
-          background-color: #2F343D;
-        }
-        &__inner-container {
-          width: 100%;
-          height: 100%;
-          border-radius: 10px;
-          word-wrap: break-word;
-          background-color: white;
-          display: flex;
-          flex-direction: column;
-        }
-
-        &__text-area {
-            margin: 1.25rem 0.6rem 0.6rem 1.125rem;
-            overflow-y: auto;
-            height: 90%;
-        }
+    &__content {
+      display: flex;
     }
+    &__text {
+      margin: 0 auto;
+    }
+  }
+
+  &__login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 50% 15%;
+    flex-direction: column;
+
+    &__buttons {
+      margin: 1rem 0;
+
+      > * {
+        margin: 0 0.5rem 0 0;
+      }
+
+      :last-child {
+        margin: 0;
+      }
+    }
+  }
+
+  &__input {
+    margin: 0.5rem;
+
+    &__placeholder {
+      font-size: 0.7rem;
+    }
+  }
+
+  &__container {
+    height: 75vh;
+    min-height: 400px;
+    display: flex;
+    align-items: stretch;
+    min-width: 16rem;
+    max-width: 16rem;
+    border: 7px solid #2f343d;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    background-color: #2f343d;
+  }
+  &__inner-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    word-wrap: break-word;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__text-area {
+    margin: 1.25rem 0.6rem 0.6rem 1.125rem;
+    overflow-y: auto;
+    height: 90%;
+  }
+}
 </style>

@@ -1,47 +1,50 @@
 <template>
-  <sentence-accordion
+  <SentenceAccordion
     :open.sync="isOpen"
     slim
-    pending-example >
-
+    pendingExample
+  >
     <div
       slot="check"
-      class="example-accordion__check">
-      <b-checkbox
+      class="example-accordion__check"
+    >
+      <BCheckbox
         v-show="selectable"
-        v-model="isSelected" />
+        v-model="isSelected"
+      />
     </div>
 
     <div slot="options">
-      <b-icon
+      <BIcon
         :icon="`chevron-${isOpen ? 'up' : 'down'}`"
         class="example-accordion__icon"
-        @click.native="isOpen = !isOpen"/>
+        @click.native="isOpen = !isOpen"
+      />
     </div>
 
     <div
       slot="header"
-      class="level">
-
-      <div
-        class="level-right example-accordion__text">
-        <highlighted-text
+      class="level"
+    >
+      <div class="level-right example-accordion__text">
+        <HighlightedText
           :text="text"
           :entities="entities"
-          :highlighted="highlighted" />
+          :highlighted="highlighted"
+        />
       </div>
     </div>
 
     <div slot="body">
-      <example-info
+      <ExampleInfo
         v-if="!editing"
-        :entities-list="entitiesList"
+        :entitiesList="entitiesList"
         :highlighted.sync="highlighted"
         :intent="intent"
-        class="example-accordion__info" />
-
+        class="example-accordion__info"
+      />
     </div>
-  </sentence-accordion>
+  </SentenceAccordion>
 </template>
 
 <script>
@@ -81,7 +84,7 @@ export default {
     },
     entities: {
       type: Array,
-      default: /* istanbul ignore next */ () => ([]),
+      default: /* istanbul ignore next */ () => [],
     },
     intent: {
       type: String,
@@ -119,14 +122,13 @@ export default {
   },
   computed: {
     ...mapState({
-      repository: state => state.Repository.selectedRepository,
+      repository: (state) => state.Repository.selectedRepository,
     }),
     entitiesList() {
-      return this.entities
-        .map(entity => ({
-          class: this.getEntityClass(entity.entity),
-          ...entity,
-        }));
+      return this.entities.map((entity) => ({
+        class: this.getEntityClass(entity.entity),
+        ...entity,
+      }));
     },
   },
   watch: {
@@ -144,14 +146,9 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'deleteEvaluateExample',
-      'deleteExample',
-    ]),
+    ...mapActions(['deleteEvaluateExample', 'deleteExample']),
     getEntityClass(entity) {
-      const color = getEntityColor(
-        entity,
-      );
+      const color = getEntityColor(entity);
       return `entity-${color}`;
     },
     updateList() {
@@ -162,40 +159,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
-  .example-accordion {
-
-    &__icon {
-      color: $color-grey-dark;
-    }
-
-    &__text {
-      max-width: 100%;
-    }
-
-    &__tag {
-      margin-right: 0.5rem;
-    }
-
-    &__btns-wrapper {
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    &__info {
-      min-height: 4rem;
-    }
-
-    &__check {
-      min-width: 1.8rem;
-      min-height: 1.3rem;
-    }
-
+.example-accordion {
+  &__icon {
+    color: $color-grey-dark;
   }
 
-  .pendingExample{
-    background-color: $color-fake-white;
+  &__text {
+    max-width: 100%;
   }
 
+  &__tag {
+    margin-right: 0.5rem;
+  }
+
+  &__btns-wrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__info {
+    min-height: 4rem;
+  }
+
+  &__check {
+    min-width: 1.8rem;
+    min-height: 1.3rem;
+  }
+}
+
+.pendingExample {
+  background-color: $color-fake-white;
+}
 </style>

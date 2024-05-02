@@ -95,11 +95,13 @@
               >
                 <template v-if="$route.name === 'router-content'">
                   <section>
-                    <UnnnicInput        
+                    <UnnnicInput
                       size="md"
                       :iconLeftClickable="true"
                       iconLeft="search-1"
-                      :placeholder="$t('router.content.fields.search_placeholder')"
+                      :placeholder="
+                        $t('router.content.fields.search_placeholder')
+                      "
                       v-model="filterName"
                     />
                   </section>
@@ -380,7 +382,7 @@ export default {
 
       filters: {
         files: null,
-        sites: null
+        sites: null,
       },
 
       sites: {
@@ -453,14 +455,14 @@ export default {
 
       const formatResult = {
         data: filesData,
-        next: data.next
-      }
+        next: data.next,
+      };
 
       this.files = formatResult;
       this.filters.files = formatResult;
 
       if (!data.next) {
-        const status = 'complete'
+        const status = 'complete';
         this.files.status = status;
         this.filters.files.status = status;
       }
@@ -490,13 +492,13 @@ export default {
               ({ uuid }) =>
                 !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
             ),
-        );        
+        );
 
         this.sites.data = sitesData;
         this.filters.sites = {
           data: sitesData,
-          status
-        }
+          status,
+        };
 
         this.sites.status = status;
       } finally {
@@ -653,19 +655,25 @@ export default {
       },
     },
     filterName: debounce(function () {
-      const filesData = this.files.data.filter(e => e.file_name?.toLowerCase().includes(this.filterName?.toLowerCase()))
-      const sitesData = this.sites.data.filter(e => e.created_file_name?.toLowerCase().includes(this.filterName?.toLowerCase()))
+      const filesData = this.files.data.filter((e) =>
+        e.file_name?.toLowerCase().includes(this.filterName?.toLowerCase()),
+      );
+      const sitesData = this.sites.data.filter((e) =>
+        e.created_file_name
+          ?.toLowerCase()
+          .includes(this.filterName?.toLowerCase()),
+      );
 
-      this.$set(this.filters, 'files', ({
+      this.$set(this.filters, 'files', {
         ...this.files,
-        data: filesData
-      }))
+        data: filesData,
+      });
 
-      this.$set(this.filters, 'sites', ({
+      this.$set(this.filters, 'sites', {
         ...this.sites,
-        data: sitesData
-      }))
-    }, 300)
+        data: sitesData,
+      });
+    }, 300),
   },
   computed: {
     contentBaseUuid() {
@@ -766,7 +774,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .brain-deactivated-preview {
   flex: 1;
@@ -976,7 +984,7 @@ export default {
   .input.size-md {
     height: 46px;
   }
-  /deep/.input.size-md {
+  :deep(.input.size-md) {
     height: 46px;
   }
 

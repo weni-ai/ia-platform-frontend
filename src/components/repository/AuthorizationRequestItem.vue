@@ -1,14 +1,16 @@
 <template>
   <div class="authorization">
     <div class="authorization__left">
-      <user-avatar :profile="getProfile(user__nickname)" />
+      <UserAvatar :profile="getProfile(user__nickname)" />
       <div class="authorization__name">
-        <strong>{{ getProfile(user__nickname).nickname || user__nickname }}</strong>
+        <strong>{{
+          getProfile(user__nickname).nickname || user__nickname
+        }}</strong>
         <small>{{ text }}</small>
       </div>
     </div>
     <div class="authorization__icons">
-      <b-icon
+      <BIcon
         ref="approveBtn"
         class="clickable"
         type="is-primary"
@@ -16,7 +18,7 @@
         size="is-small"
         @click.native="approve()"
       />
-      <b-icon
+      <BIcon
         ref="rejectBtn"
         class="clickable"
         type="is-danger"
@@ -33,7 +35,7 @@ import { mapGetters, mapActions } from 'vuex';
 import UserAvatar from '@/components/user/UserAvatar';
 
 const components = {
-  UserAvatar
+  UserAvatar,
 };
 export default {
   name: 'AuthorizationRequestItem',
@@ -41,24 +43,24 @@ export default {
   props: {
     id: {
       type: Number,
-      required: true
+      required: true,
     },
     user__nickname: {
       type: String,
-      required: true
+      required: true,
     },
     text: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      rejectDialog: null
+      rejectDialog: null,
     };
   },
   computed: {
-    ...mapGetters(['getProfile'])
+    ...mapGetters(['getProfile']),
   },
   mounted() {
     this.updateUserProfile();
@@ -68,7 +70,7 @@ export default {
       'updateProfile',
       'repositoryUpdateAuthorizationRole',
       'approveRequestAuthorization',
-      'removeAuthorization'
+      'removeAuthorization',
     ]),
     async updateUserProfile() {
       try {
@@ -81,7 +83,7 @@ export default {
       try {
         await this.approveRequestAuthorization({
           id: this.id,
-          repositoryUuid: this.$store.state.Repository.selectedRepository.uuid
+          repositoryUuid: this.$store.state.Repository.selectedRepository.uuid,
         });
         this.$emit('deleted');
       } catch (e) {
@@ -98,7 +100,8 @@ export default {
             try {
               await this.removeAuthorization({
                 id: this.id,
-                repositoryUuid: this.$store.state.Repository.selectedRepository.uuid
+                repositoryUuid:
+                  this.$store.state.Repository.selectedRepository.uuid,
               });
               this.$emit('deleted');
             } catch (e) {
@@ -108,7 +111,7 @@ export default {
           },
           onCancel: () => {
             reject();
-          }
+          },
         });
       });
     },
@@ -120,18 +123,18 @@ export default {
       const { data } = response;
       this.$buefy.toast.open({
         message: data.detail || 'Something wrong happened...',
-        type: 'is-danger'
+        type: 'is-danger',
       });
       if (!data.detail) {
         throw error;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
+@import '@/assets/scss/colors.scss';
 .authorization {
   border-bottom: 1px solid $color-grey;
   display: flex;

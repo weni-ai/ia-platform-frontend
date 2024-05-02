@@ -1,32 +1,31 @@
 <template>
   <div class="intent-suggestion-accordion">
     <div class="intent-suggestion-accordion__content">
-      <div
-        class="intent-suggestion-accordion__content__check-field">
-        <unnnic-checkbox
+      <div class="intent-suggestion-accordion__content__check-field">
+        <UnnnicCheckbox
           @change="setSuggestion"
           v-model="active"
           :disabled="!checkable"
-          :native-value="toExample"/>
+          :nativeValue="toExample"
+        />
       </div>
 
-      <div
-        class="intent-suggestion-accordion__content__phrase">
+      <div class="intent-suggestion-accordion__content__phrase">
         <p :class="active && 'label-active'">{{ text }}</p>
       </div>
     </div>
 
     <div class="intent-suggestion-accordion__icons">
-        <!-- <unnnic-icon-svg
+      <!-- <unnnic-icon-svg
           icon="arrow-right-1-1"
           size="sm"
           @click.native="selectSentence"
         /> -->
-        <entity-tag
-          v-for="entity in entities"
-          :entity-name="entity.entity"
-          :key="entity.localId"
-        />
+      <EntityTag
+        v-for="entity in entities"
+        :entityName="entity.entity"
+        :key="entity.localId"
+      />
     </div>
   </div>
 </template>
@@ -48,15 +47,15 @@ export default {
     },
     entities: {
       type: [Array, String],
-      default: () => []
+      default: () => [],
     },
     checked: {
       type: Boolean,
-      default: true
+      default: true,
     },
     checkable: {
       type: Boolean,
-      default: true
+      default: true,
     },
   },
   data() {
@@ -64,7 +63,7 @@ export default {
       open: false,
       phraseSuggestion: '',
       editing: false,
-      active: this.checked
+      active: this.checked,
     };
   },
   computed: {
@@ -84,7 +83,7 @@ export default {
     },
   },
   created() {
-    this.$root.$on('selectAll', value => this.selectAll(value));
+    this.$root.$on('selectAll', (value) => this.selectAll(value));
     this.$root.$on('confirmEdit', () => this.saveEdit());
     this.$root.$on('cancelEdit', () => this.updateText());
   },
@@ -110,7 +109,10 @@ export default {
       this.setEditingStatus(this.editing);
     },
     saveEdit() {
-      this.changeSelectedSuggestion({ id: this.id, text: this.phraseSuggestion });
+      this.changeSelectedSuggestion({
+        id: this.id,
+        text: this.phraseSuggestion,
+      });
       this.editing = false;
       this.setEditingStatus(false);
     },
@@ -124,95 +126,95 @@ export default {
       });
     },
     setSuggestion() {
-      this.$emit('onChange', { text: this.phraseSuggestion, value: this.active })
-    }
+      this.$emit('onChange', {
+        text: this.phraseSuggestion,
+        value: this.active,
+      });
+    },
   },
-  components: { EntityTag }
+  components: { EntityTag },
 };
 </script>
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-.b-checkbox.checkbox:not(.button){
+.b-checkbox.checkbox:not(.button) {
   margin-right: 0;
 }
 
-.intent-suggestion-accordion{
-    width: 49%;
-    background: #FFFFFF;
-    border: 1px solid #E2E6ED;
-    border-radius: 8px;
-    padding: $unnnic-spacing-stack-sm;
+.intent-suggestion-accordion {
+  width: 49%;
+  background: #ffffff;
+  border: 1px solid #e2e6ed;
+  border-radius: 8px;
+  padding: $unnnic-spacing-stack-sm;
 
-    display:flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__content {
+    width: 60%;
+    display: flex;
+    justify-content: flex-start;
     align-items: center;
+    font-size: $unnnic-font-size-body-gt;
 
+    &__check-field {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
 
-    &__content{
-     width: 60%;
-     display:flex;
-     justify-content: flex-start;
-     align-items: center;
-     font-size: $unnnic-font-size-body-gt;
+    &__field {
+      margin-left: 1rem;
+      width: 50%;
+      height: 100px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
 
-      &__check-field{
+      &__input {
+        width: 100%;
         display: flex;
-        justify-content: flex-end;
+        justify-content: center;
         align-items: center;
       }
-
-      &__field{
-          margin-left: 1rem;
-          width: 50%;
-          height: 100px;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-
-          &__input{
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-      }
-
-      &__phrase{
-        margin-left: 1rem;
-        width: 100%;
-          p {
-          font-size: $unnnic-font-size-body-lg;
-          white-space: nowrap;
-          // width: 32rem;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          margin-right: 2rem;
-        }
-      }
-
-      &__tag {
-        // margin-right: 0.5rem;
-        font-weight: 900;
-        // font-size: 14px;
-        color: #d0d3d9;
-      }
-
     }
 
-
-    &__icons{
-        margin-right: 1rem;
-        cursor: pointer;
-        display: flex;
-        align-self: center;
+    &__phrase {
+      margin-left: 1rem;
+      width: 100%;
+      p {
+        font-size: $unnnic-font-size-body-lg;
+        white-space: nowrap;
+        // width: 32rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 2rem;
+      }
     }
 
-    .label-active {
-      font-weight: $unnnic-font-weight-bold;
+    &__tag {
+      // margin-right: 0.5rem;
+      font-weight: 900;
+      // font-size: 14px;
+      color: #d0d3d9;
     }
+  }
+
+  &__icons {
+    margin-right: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-self: center;
+  }
+
+  .label-active {
+    font-weight: $unnnic-font-weight-bold;
+  }
 }
 </style>

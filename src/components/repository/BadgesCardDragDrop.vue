@@ -1,15 +1,21 @@
 <template>
   <div :class="['badges-card', dark ? 'badges-card__dark' : '']">
-    <entity-accordion :open.sync="isOpen">
-      <div slot="header" class="level">
+    <EntityAccordion :open.sync="isOpen">
+      <div
+        slot="header"
+        class="level"
+      >
         <div class="badges-card__header">
           <div v-show="!edit || !fieldInput">
             <span v-html="title"></span>
           </div>
         </div>
       </div>
-      <div slot="icon" class="level example-accordion__btns-wrapper">
-        <unnnic-icon-svg
+      <div
+        slot="icon"
+        class="level example-accordion__btns-wrapper"
+      >
+        <UnnnicIconSvg
           :icon="`${isOpen ? 'arrow-button-down-1' : 'arrow-right-1-1'}`"
           size="xs"
         />
@@ -20,7 +26,7 @@
           class="badges-card__link"
           @click.stop="finished()"
         >
-          {{ $t("webapp.home.save_changes") }}
+          {{ $t('webapp.home.save_changes') }}
         </a>
         <!-- <a
           v-if="edit && identifier === 'newGroup'"
@@ -34,25 +40,25 @@
           class="badges-card__link"
           @click.stop="editGroups()"
         >
-          {{ !edit ? $t("webapp.home.edit_groups") : "" }}
+          {{ !edit ? $t('webapp.home.edit_groups') : '' }}
         </a>
         <a
           v-if="edit && identifier !== 'ungrouped' && identifier !== 'newGroup'"
           class="badges-card__link"
           @click.stop="changeEditingInput()"
         >
-          {{ $t("webapp.home.edit_group_name") }}
+          {{ $t('webapp.home.edit_group_name') }}
         </a>
         <a
           v-if="closable && edit"
           class="badges-card__link"
           @click.stop="onRemoveCard"
         >
-          {{ $t("webapp.home.delete_group") }}
+          {{ $t('webapp.home.delete_group') }}
         </a>
       </div>
       <div slot="body">
-        <create-badges-card
+        <CreateBadgesCard
           v-if="identifier === 'newGroup'"
           :identifier="identifier"
           :disabled="!edit"
@@ -63,7 +69,7 @@
           @onFinished="createGroup"
         />
         <div v-else>
-          <draggable
+          <Draggable
             :disabled="!edit"
             v-model="localList"
             :sort="false"
@@ -71,47 +77,56 @@
             :move="onMove"
             group="entities"
             class="badges-card__wrapper"
-            chosen-class="dragging"
-            drag-class="dragging"
-            ghost-class="dragging"
+            chosenClass="dragging"
+            dragClass="dragging"
+            ghostClass="dragging"
             @change="onChange"
           >
-            <entity-tag
+            <EntityTag
               v-for="(item, i) in localList"
               :key="i"
               :class="[
                 'badges-card__wrapper__badge',
                 `badges-card__wrapper__badge--${edit ? 'moving' : 'locked'}`,
               ]"
-              :entity-name="item.value"
+              :entityName="item.value"
               :closable="edit"
               @close="close(item)"
               @click.native="goToEntity(item)"
             />
-          </draggable>
+          </Draggable>
         </div>
       </div>
-    </entity-accordion>
-    <unnnic-modal
-        :showModal="openModal"
-        :text="$t('webapp.home.edit_group_modal_title')"
-        scheme="feedback-yellow"
-        modal-icon="alert-circle-1"
-        @close="openModal = false"
+    </EntityAccordion>
+    <UnnnicModal
+      :showModal="openModal"
+      :text="$t('webapp.home.edit_group_modal_title')"
+      scheme="feedback-yellow"
+      modalIcon="alert-circle-1"
+      @close="openModal = false"
+    >
+      <span
+        slot="message"
+        v-html="editMessage"
+      />
+      <div
+        slot="message"
+        class="badges-card__header__edit"
       >
-        <span slot="message" v-html="editMessage" />
-        <div slot="message" class="badges-card__header__edit">
-            <!-- <p v-html="$tc('webapp.home.labeled', examplesCount)"></p> -->
-            <unnnic-input
-              :placeholder="$t('webapp.home.edit_group_field_label')"
-              v-model="newGroupName"
-            >
-              <span slot="label" v-html="$t('webapp.home.edit_group_field_title')" />
-            </unnnic-input>
-            <!-- <b-field class="badges-card__header__edit__field">
+        <!-- <p v-html="$tc('webapp.home.labeled', examplesCount)"></p> -->
+        <UnnnicInput
+          :placeholder="$t('webapp.home.edit_group_field_label')"
+          v-model="newGroupName"
+        >
+          <span
+            slot="label"
+            v-html="$t('webapp.home.edit_group_field_title')"
+          />
+        </UnnnicInput>
+        <!-- <b-field class="badges-card__header__edit__field">
               <b-input v-model="groupName" size="is-small" />
             </b-field> -->
-            <!-- <div class="badges-card__header__edit__icon">
+        <!-- <div class="badges-card__header__edit__icon">
               <b-icon
                 v-if="edit"
                 icon="check-bold"
@@ -119,20 +134,24 @@
                 @click.native="saveChange()"
               />
             </div> -->
-        </div>
-        <unnnic-button slot="options" type="tertiary" @click="openModal = false">
-          {{ $t("webapp.home.cancel") }}
-        </unnnic-button>
-        <unnnic-button
-          slot="options"
-          class="create-repository__container__button"
-          type="primary"
-          scheme="feedback-yellow"
-          @click="saveChange()"
-        >
-          {{ $t("webapp.home.edit_group_button_label") }}
-        </unnnic-button>
-      </unnnic-modal>
+      </div>
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="openModal = false"
+      >
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
+        slot="options"
+        class="create-repository__container__button"
+        type="primary"
+        scheme="feedback-yellow"
+        @click="saveChange()"
+      >
+        {{ $t('webapp.home.edit_group_button_label') }}
+      </UnnnicButton>
+    </UnnnicModal>
   </div>
 </template>
 
@@ -238,7 +257,7 @@ export default {
     changeEditingInput() {
       this.openModal = true;
       this.editMessage = this.$t('webapp.home.edit_group_modal_subtitle', {
-        group: this.groupName
+        group: this.groupName,
       });
       // this.fieldInput = !this.fieldInput;
     },
@@ -252,8 +271,10 @@ export default {
           repositoryId: this.repositoryUuid,
           version: this.version,
         });
-        this.newGroupName = formatters.bothubItemKey()(this.newGroupName.toLowerCase());
-        this.$emit('changedName', this.newGroupName)
+        this.newGroupName = formatters.bothubItemKey()(
+          this.newGroupName.toLowerCase(),
+        );
+        this.$emit('changedName', this.newGroupName);
       } catch (err) {
         this.$buefy.toast.open({
           message: this.$t('webapp.settings.default_error'),
@@ -301,20 +322,21 @@ export default {
       this.$emit('onEditGroups');
     },
     createGroup(text) {
-      this.$emit('finished', text)
-    }
+      this.$emit('finished', text);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@use 'sass:string';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 @function borderDashed($color) {
-  @return url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23#{str-slice(quote($color), 2)}' stroke-width='4' stroke-dasharray='4%2c 12' stroke-dashoffset='9' stroke-linecap='square'/%3e%3c/svg%3e");
+  @return url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23#{string.slice(#{$color}, 2)}' stroke-width='4' stroke-dasharray='4%2c 12' stroke-dashoffset='9' stroke-linecap='square'/%3e%3c/svg%3e");
 }
 .drag-area {
   &__dropzone {

@@ -111,8 +111,8 @@
             ></div>
           </div>
         </div>
-        <section 
-          v-if="items.data.length === 0 && items.status === 'complete'" 
+        <section
+          v-if="items.data.length === 0 && items.status === 'complete'"
           class="flow-modal__body__not_found_container"
         >
           <UnnnicIcon
@@ -120,7 +120,7 @@
             size="sm"
             scheme="neutral-cloudy"
           />
-          {{ $t('modals.actions.flow.not_found_message') }} 
+          {{ $t('modals.actions.flow.not_found_message') }}
         </section>
         <div
           class="flow-modal__body_description"
@@ -237,7 +237,9 @@ export default {
           projectUuid: this.$store.state.Auth.connectProjectUuid,
           name: this.filterName,
         });
-        this.items.data = this.items.data.concat(data.results).filter(e => e.name && e.uuid);
+        this.items.data = this.items.data
+          .concat(data.results)
+          .filter((e) => e.name && e.uuid);
 
         this.items.next = data.next;
 
@@ -276,13 +278,13 @@ export default {
     },
     handleFlowName(str) {
       return str.length > 30 ? str.slice(0, 27) + '...' : str;
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .create-intelligence-modal {
   ::v-deep .create-intelligence-modal__container {

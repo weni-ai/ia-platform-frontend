@@ -1,19 +1,29 @@
 <template>
   <div v-if="list && !list.empty">
-    <component
+    <Component
       v-show="!isLoading"
       :is="itemComponent"
       :list="list"
-      :show-intents="showIntents"
-      :show-untrained="showUntrained"
+      :showIntents="showIntents"
+      :showUntrained="showUntrained"
       @deleted="onItemDeleted(item.id)"
       @updateList="onSaveUpdate"
-      @dispatchEvent="onDispatchEvent($event)" />
-      <slot v-if="isLoading" name="loader" >
-        <loading class="pagination__message" />
-      </slot>
-    <div v-if="!loadAll" class="pagination__bottom">
-      <p v-show="!isLoading" class="text-center">
+      @dispatchEvent="onDispatchEvent($event)"
+    />
+    <slot
+      v-if="isLoading"
+      name="loader"
+    >
+      <Loading class="pagination__message" />
+    </slot>
+    <div
+      v-if="!loadAll"
+      class="pagination__bottom"
+    >
+      <p
+        v-show="!isLoading"
+        class="text-center"
+      >
         {{ listStatusErrorCode | statusCodeVerbose }}
       </p>
       <div class="pagination__bottom__divider" />
@@ -22,10 +32,19 @@
           v-if="list && list.total > 0"
           class="pagination__bottom__controls__message"
         >
-          {{ $t('webapp.layout.items_total',
-            { initialItem: initialItem, lastItem: lastItem, total: list.total }) }}
+          {{
+            $t('webapp.layout.items_total', {
+              initialItem: initialItem,
+              lastItem: lastItem,
+              total: list.total,
+            })
+          }}
         </div>
-        <unnnic-pagination v-model="page" :max="maxPages" :show="5" />
+        <UnnnicPagination
+          v-model="page"
+          :max="maxPages"
+          :show="5"
+        />
       </div>
     </div>
   </div>
@@ -104,21 +123,27 @@ export default {
     },
     initialItem() {
       if (this.lastItem === this.list.total) {
-        return ((this.page * this.perPage) - this.perPage) + 1
+        return this.page * this.perPage - this.perPage + 1;
       }
-      return (this.lastItem - this.perPage) + 1
+      return this.lastItem - this.perPage + 1;
     },
     lastItem() {
-      if ((this.list.total / (this.list.total / this.perPage)) * this.page > this.list.total) {
-        return this.list.total
+      if (
+        (this.list.total / (this.list.total / this.perPage)) * this.page >
+        this.list.total
+      ) {
+        return this.list.total;
       }
-      return (this.list.total / (this.list.total / this.perPage)).toFixed(0) * this.page
+      return (
+        (this.list.total / (this.list.total / this.perPage)).toFixed(0) *
+        this.page
+      );
     },
     maxPages() {
       if (Number.isInteger(this.list.total / this.perPage)) {
-        return this.list.total / this.perPage
+        return this.list.total / this.perPage;
       }
-      return (this.list.total / this.perPage) + 1
+      return this.list.total / this.perPage + 1;
     },
   },
   watch: {
@@ -170,7 +195,8 @@ export default {
       return index >= offset && index < offset + this.perPage;
     },
     onDispatchEvent(arg) {
-      const [event, value] = arg instanceof Object ? [arg.event, arg.value] : [arg, null];
+      const [event, value] =
+        arg instanceof Object ? [arg.event, arg.value] : [arg, null];
 
       this.$emit(event, value);
     },
@@ -193,9 +219,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 .pagination {
   &__bottom {
     min-width: 100%;
@@ -222,7 +248,8 @@ export default {
     }
 
     &__divider {
-      border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+      border-bottom: $unnnic-border-width-thinner solid
+        $unnnic-color-neutral-soft;
       margin: 1rem 0;
     }
   }

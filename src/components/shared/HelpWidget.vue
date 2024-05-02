@@ -1,8 +1,9 @@
 <template>
-  <b-icon
+  <BIcon
     class="help-widget-icon"
     icon="help-circle"
-    @click.native="open()" />
+    @click.native="open()"
+  />
 </template>
 
 <script>
@@ -32,9 +33,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 .help-widget-icon {
-    color: $color-grey-dark;
-    cursor: pointer;
+  color: $color-grey-dark;
+  cursor: pointer;
 }
 </style>

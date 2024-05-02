@@ -2,45 +2,46 @@
   <div class="safari-alert">
     <div class="safari-alert__content">
       <article class="safari-alert__content__article">
-      <h3 class="safari-alert__content__title">
-        {{ $t('webapp.safari_alert.title') }}
-      </h3>
-      <p class="safari-alert__content__text">
-        {{ $t('webapp.safari_alert.text') }}
-      </p>
+        <h3 class="safari-alert__content__title">
+          {{ $t('webapp.safari_alert.title') }}
+        </h3>
+        <p class="safari-alert__content__text">
+          {{ $t('webapp.safari_alert.text') }}
+        </p>
       </article>
       <div class="safari-alert__content__grid">
-        <a
-          href="https://www.mozilla.org/pt-BR/firefox/new/">
+        <a href="https://www.mozilla.org/pt-BR/firefox/new/">
           <img
             src="@/assets/imgs/mozila.svg"
             alt="mozila"
-            class="safari-alert__content__browser-icon">
-            <p>Firefox</p>
+            class="safari-alert__content__browser-icon"
+          />
+          <p>Firefox</p>
         </a>
-         <a
-          href="https://www.google.com/intl/pt-BR_ALL/chrome/">
+        <a href="https://www.google.com/intl/pt-BR_ALL/chrome/">
           <img
             src="@/assets/imgs/chrome.svg"
             alt="chrome"
-            class="safari-alert__content__browser-icon">
-            <p>Chrome</p>
+            class="safari-alert__content__browser-icon"
+          />
+          <p>Chrome</p>
         </a>
-        <a
-          href="https://www.opera.com/pt-br/download">
+        <a href="https://www.opera.com/pt-br/download">
           <img
             src="@/assets/imgs/opera.svg"
             alt="opera"
-            class="safari-alert__content__browser-icon">
-            <p>Opera</p>
+            class="safari-alert__content__browser-icon"
+          />
+          <p>Opera</p>
         </a>
       </div>
-      <b-button
+      <BButton
         class="safari-alert__content__button"
         size="normal"
-        @click="goToLandingPage()">
+        @click="goToLandingPage()"
+      >
         {{ $t('webapp.safari_alert.button') }}
-      </b-button>
+      </BButton>
     </div>
   </div>
 </template>
@@ -69,16 +70,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/utilities.scss";
-@import "~@/assets/scss/default.scss";
-@import "~bulma";
-@import "~buefy/src/scss/buefy";
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/utilities.scss';
+@import '@/assets/scss/default.scss';
+@import 'bulma/bulma.sass';
+@import 'buefy/src/scss/buefy';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-.safari-alert{
+.safari-alert {
   background-color: $color-white;
 
   &__content {
@@ -102,13 +103,13 @@ export default {
       font-size: 2rem;
     }
 
-    &__text{
+    &__text {
       font-family: 'Lato', sans-serif;
       margin: 1rem 1rem 3.3rem;
       text-align: center;
       line-height: 24px;
 
-      @media (min-width: 992px){
+      @media (min-width: 992px) {
         margin: 1rem 14rem 3rem;
       }
     }
@@ -117,7 +118,7 @@ export default {
       flex-direction: column;
       color: $dark;
 
-      p{
+      p {
         font-family: 'Lato', sans-serif;
         margin-top: 5px;
       }
@@ -126,7 +127,7 @@ export default {
       height: 2.5rem;
       margin: 0 auto;
       cursor: pointer;
-      transition: all .3s ease-in-out;
+      transition: all 0.3s ease-in-out;
 
       &:hover {
         transform: scale(1.1);
@@ -138,7 +139,7 @@ export default {
       border: none;
       text-decoration: underline;
 
-      &:hover{
+      &:hover {
         font-weight: 700;
       }
     }

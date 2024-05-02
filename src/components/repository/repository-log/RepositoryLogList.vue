@@ -1,9 +1,12 @@
 <template>
   <div class="repository-log-list">
     <div class="repository-log-list__section">
-      <b-notification v-if="loadingLogs" :closable="false">
-        <b-loading :active.sync="loadingLogs" />
-      </b-notification>
+      <BNotification
+        v-if="loadingLogs"
+        :closable="false"
+      >
+        <BLoading :active.sync="loadingLogs" />
+      </BNotification>
       <!-- <div>
         <b-checkbox v-model="select" :native-value="selectAll">
           {{ $t("webapp.inbox.select_all") }}
@@ -31,31 +34,34 @@
         </b-tooltip>
       </div> -->
     </div>
-    <intent-pagination
-      :per-page="perPage"
-      :item-component="logTable"
+    <IntentPagination
+      :perPage="perPage"
+      :itemComponent="logTable"
       :list="list"
       :loading.sync="loading"
-      :is-accordion-open="pageWasChanged"
+      :isAccordionOpen="pageWasChanged"
       :editable="editable"
-      :is-searching="searchingLog"
+      :isSearching="searchingLog"
       @event_nlp="nlp = $event"
       @event_addLog="addLogStructure($event)"
       @event_removeLog="removeLogStructure($event)"
       @pageChanged="pageChanged()"
       @onUpdateSelected="updateSelected"
     >
-      <intent-data-loading slot="loader" />
-    </intent-pagination>
+      <IntentDataLoading slot="loader" />
+    </IntentPagination>
 
-    <div v-if="list && list.empty && !loading" class="repository-log-list__empty-message">
-      <unnnic-intelligence-text
+    <div
+      v-if="list && list.empty && !loading"
+      class="repository-log-list__empty-message"
+    >
+      <UnnnicIntelligenceText
         family="secondary"
         size="body-gt"
         color="neutral-dark"
       >
-        {{ $t("webapp.inbox.list_empty") }}
-      </unnnic-intelligence-text>
+        {{ $t('webapp.inbox.list_empty') }}
+      </UnnnicIntelligenceText>
     </div>
   </div>
 </template>
@@ -69,7 +75,6 @@ import IntentModalEdition from '@/components/repository/IntentModalWithEdition';
 import LogTable from '@/components/repository/LogTable';
 import IntentDataLoading from '@/views/repository/loadings/IntentData';
 
-
 export default {
   name: 'RepositoryLogList',
   components: {
@@ -77,21 +82,21 @@ export default {
     LogAccordion,
     IntentModal,
     IntentModalEdition,
-    IntentDataLoading
+    IntentDataLoading,
   },
   props: {
     query: {
       type: Object,
-      default: null
+      default: null,
     },
     perPage: {
       type: Number,
-      default: 20
+      default: 20,
     },
     editable: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -107,14 +112,14 @@ export default {
       loadingLogs: false,
       pageWasChanged: false,
       searchingLog: false,
-      logTable: LogTable
+      logTable: LogTable,
     };
   },
   computed: {
     ...mapGetters({
       repository: 'getCurrentRepository',
       version: 'getSelectedVersion',
-      activeTutorial: 'activeTutorial'
+      activeTutorial: 'activeTutorial',
     }),
     confidenceVerify() {
       if (this.logData.length > 1) {
@@ -127,7 +132,7 @@ export default {
         return null;
       }
       return this.repository;
-    }
+    },
   },
   watch: {
     loading() {
@@ -154,15 +159,20 @@ export default {
         return;
       }
       this.updateLogs();
-    }
+    },
   },
   methods: {
-    ...mapActions(['searchLogs', 'newEvaluateExample', 'newExample', 'deleteExample']),
+    ...mapActions([
+      'searchLogs',
+      'newEvaluateExample',
+      'newExample',
+      'deleteExample',
+    ]),
     addLogStructure(logValue) {
       this.logData.push(logValue);
     },
     removeLogStructure(logId) {
-      this.logData = this.logData.filter(log => log.id !== logId);
+      this.logData = this.logData.filter((log) => log.id !== logId);
     },
     pageChanged() {
       this.pageWasChanged = !this.pageWasChanged;
@@ -173,7 +183,7 @@ export default {
       if (this.logData.length === 0) {
         this.$buefy.toast.open({
           message: this.$t('webapp.inbox.select_phrase'),
-          type: 'is-danger'
+          type: 'is-danger',
         });
         return;
       }
@@ -184,7 +194,7 @@ export default {
           titleHeader: typeModal,
           confidenceVerify: this.confidenceVerify,
           logData: this.logData[0],
-          buttonLabel: this.$t('webapp.inbox.add_to_train')
+          buttonLabel: this.$t('webapp.inbox.add_to_train'),
         },
         parent: this,
         component: this.logData.length === 1 ? IntentModalEdition : IntentModal,
@@ -192,7 +202,7 @@ export default {
         trapFocus: true,
         canCancel: false,
         events: {
-          addedIntent: value => {
+          addedIntent: (value) => {
             this.verifyIsCorrected(value);
             this.addToTraining(value);
             this.intent = value;
@@ -201,15 +211,15 @@ export default {
             this.logData = [];
             this.select = '';
             this.$root.$emit('selectAll', false);
-          }
-        }
+          },
+        },
       });
     },
     showModalSentence(typeModal) {
       if (this.logData.length === 0) {
         this.$buefy.toast.open({
           message: this.$t('webapp.inbox.select_phrase'),
-          type: 'is-danger'
+          type: 'is-danger',
         });
         return;
       }
@@ -219,7 +229,7 @@ export default {
           repository: this.repository,
           titleHeader: typeModal,
           logData: this.logData[0],
-          buttonLabel: this.$t('webapp.inbox.add_to_sentence')
+          buttonLabel: this.$t('webapp.inbox.add_to_sentence'),
         },
         parent: this,
         component: this.logData.length === 1 ? IntentModalEdition : IntentModal,
@@ -227,7 +237,7 @@ export default {
         trapFocus: true,
         canCancel: false,
         events: {
-          addedIntent: value => {
+          addedIntent: (value) => {
             this.verifyIsCorrected(value);
             this.addToSentences(value);
             this.intent = value;
@@ -242,8 +252,8 @@ export default {
             if (this.activeTutorial === 'inbox') {
               this.$emit('dispatchSkip');
             }
-          }
-        }
+          },
+        },
       });
       this.$nextTick(() => {
         this.$emit('dispatchNext');
@@ -268,11 +278,13 @@ export default {
               language: data.language,
               text: data.text,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             this.$buefy.toast.open({
-              message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
-              type: 'is-success'
+              message: `${data.text.bold()}, ${this.$t(
+                'webapp.inbox.entry_has_add_to_train',
+              )}`,
+              type: 'is-success',
             });
           } else {
             await this.newExample({
@@ -281,11 +293,13 @@ export default {
               text: values.text,
               entities: values.entities,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             this.$buefy.toast.open({
-              message: `${values.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
-              type: 'is-success'
+              message: `${values.text.bold()}, ${this.$t(
+                'webapp.inbox.entry_has_add_to_train',
+              )}`,
+              type: 'is-success',
             });
           }
         } catch (error) {
@@ -308,11 +322,13 @@ export default {
               language: data.language,
               text: data.text,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             this.$buefy.toast.open({
-              message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_sentence')}`,
-              type: 'is-success'
+              message: `${data.text.bold()}, ${this.$t(
+                'webapp.inbox.entry_has_add_to_sentence',
+              )}`,
+              type: 'is-success',
             });
           } else {
             await this.newEvaluateExample({
@@ -321,13 +337,13 @@ export default {
               text: values.text,
               entities: values.entities,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             this.$buefy.toast.open({
               message: `${values.text.bold()}, ${this.$t(
-                'webapp.inbox.entry_has_add_to_sentence'
+                'webapp.inbox.entry_has_add_to_sentence',
               )}`,
-              type: 'is-success'
+              type: 'is-success',
             });
           }
         } catch (error) {
@@ -341,39 +357,42 @@ export default {
     showError(error, log, type) {
       let messages = '';
       if (type === 'evaluate') {
-        messages = Object.values(error.response.data.non_field_errors).length >= 1
-          ? this.$t('webapp.inbox.send_to_evaluate')
-          : '';
+        messages =
+          Object.values(error.response.data.non_field_errors).length >= 1
+            ? this.$t('webapp.inbox.send_to_evaluate')
+            : '';
       } else {
-        messages = Object.values(error.response.data).map(errors => (typeof errors === 'string' ? errors : Array.join(errors, ',')));
+        messages = Object.values(error.response.data).map((errors) =>
+          typeof errors === 'string' ? errors : Array.join(errors, ','),
+        );
       }
       const message = `${log.text.bold()}, ${messages}`;
       this.$buefy.toast.open({
         message,
-        type: 'is-danger'
+        type: 'is-danger',
       });
     },
     async updateLogs() {
       const languageObject = this.repository.repository_version_language.find(
-        lang => lang.language === this.query.language
+        (lang) => lang.language === this.query.language,
       );
       const { language, ...queryParams } = this.query;
       this.list = await this.searchLogs({
         repositoryVersionLanguage: languageObject.id,
         query: queryParams,
-        limit: this.perPage
+        limit: this.perPage,
       });
     },
     updateSelected(params) {
-      this.$emit('onUpdateSelected', params)
+      this.$emit('onUpdateSelected', params);
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 .repository-log-list {
   &__pagination {
     margin-top: 1.25rem;

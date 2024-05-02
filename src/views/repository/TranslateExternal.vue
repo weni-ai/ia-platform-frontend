@@ -1,49 +1,54 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     v-if="repository"
     :repository="repository"
-    :quick-test="false"
-    :error-code="errorCode">
-    <div
-      class="translate-description">
+    :quickTest="false"
+    :errorCode="errorCode"
+  >
+    <div class="translate-description">
       <h1>{{ $t('webapp.translate.title_translate') }}</h1>
       <p>{{ $t('webapp.translate.subtitle_translate') }}</p>
     </div>
     <div class="repository-translate__list">
       <div class="repository-translate__list__search">
-        <auto-translate
-          :external-token="token"
-          :repository-uuid="repository.uuid"
-          :translate-to="repository.target_language"
+        <AutoTranslate
+          :externalToken="token"
+          :repositoryUuid="repository.uuid"
+          :translateTo="repository.target_language"
           :version="repository.repository_version_id"
           @onTranslate="translating = true"
-          @onTranslateComplete="translating = false"/>
-        <translation-sentence-status
+          @onTranslateComplete="translating = false"
+        />
+        <TranslationSentenceStatus
           :key="`${translateUpdate}-${translating}`"
-          :external-token="token"
-          :to-language="repository.target_language"
-          :initial-data="sentenceFilter.key"
+          :externalToken="token"
+          :toLanguage="repository.target_language"
+          :initialData="sentenceFilter.key"
           class="repository-translate__list__search__status"
-          @search="onFilter"/>
-        <filter-examples
+          @search="onFilter"
+        />
+        <FilterExamples
           :intents="repository.intents_list"
           :entities="repository.entities"
-          @querystringformatted="onSearch($event)"/>
+          @querystringformatted="onSearch($event)"
+        />
       </div>
       <div
         v-if="translating"
-        class="has-text-centered">
-        <loading />
+        class="has-text-centered"
+      >
+        <Loading />
         <span> {{ $t('webapp.translate.auto_translate_progress') }} </span>
       </div>
-      <translate-list
+      <TranslateList
         v-else
-        :external-token="token"
+        :externalToken="token"
         :query="query"
         @translated="examplesTranslated()"
-        @isLoadingContent="loadingList = $event"/>
+        @isLoadingContent="loadingList = $event"
+      />
     </div>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -106,7 +111,9 @@ export default {
     }
 
     this.repository = new ExternalRepository({
-      token, owner: { nickname: ownerNickname }, slug,
+      token,
+      owner: { nickname: ownerNickname },
+      slug,
     });
 
     this.repository.on('fetch', this.onReady);
@@ -127,7 +134,9 @@ export default {
     },
     onReady({ error }) {
       if (error) {
-        const { response: { response } } = error;
+        const {
+          response: { response },
+        } = error;
         if (response) {
           const { status } = response;
           this.errorCode = status;
@@ -151,23 +160,22 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .repository-translate {
   background-color: $color-white;
-  display:flex;
-   flex-direction: column;
+  display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
 
-
-  &__list{
-  &__search {
-    &__status {
-      margin: 3rem 0 4.4rem 0;
+  &__list {
+    &__search {
+      &__status {
+        margin: 3rem 0 4.4rem 0;
+      }
     }
-  }
   }
 }
 
@@ -187,5 +195,4 @@ export default {
 //     font-size: $font-size
 //   }
 // }
-
 </style>

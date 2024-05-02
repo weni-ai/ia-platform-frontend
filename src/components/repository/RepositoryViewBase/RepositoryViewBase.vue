@@ -1,42 +1,52 @@
 <template>
   <div
     id="rpstr-vw-bs"
-    class="rpstr-vw-bs">
+    class="rpstr-vw-bs"
+  >
     <div
       shadow="strong"
-      class="rpstr-vw-bs__wrapper">
-      <quick-test
+      class="rpstr-vw-bs__wrapper"
+    >
+      <QuickTest
         v-if="quickTest && repository"
-        :repository="repository" />
+        :repository="repository"
+      />
       <div
         v-if="repository && !repository.fatal && repository.name"
-        :class="['rpstr-vw-bs__wrapper__content', `page--${$route.name}`]">
+        :class="['rpstr-vw-bs__wrapper__content', `page--${$route.name}`]"
+      >
         <slot />
       </div>
     </div>
     <div
       v-if="repository && repository.fatal && errorCode"
-      class="rpstr-vw-bs__error">
-      <h1>{{ errorCode|errorVerbose }}</h1>
+      class="rpstr-vw-bs__error"
+    >
+      <h1>{{ errorCode | errorVerbose }}</h1>
     </div>
     <div
       v-else-if="repository && repository.fatal"
-      class="rpstr-vw-bs__error">
+      class="rpstr-vw-bs__error"
+    >
       <h1>{{ $t('webapp.layout.error_to_retrieve_bot') }}</h1>
     </div>
     <div
-      v-else-if="!repository || (repository && !repository.name && repository.loading)"
-      :class="['rpstr-vw-bs__wrapper__content']">
+      v-else-if="
+        !repository || (repository && !repository.name && repository.loading)
+      "
+      :class="['rpstr-vw-bs__wrapper__content']"
+    >
       <slot name="loader">
-        <loading/>
+        <Loading />
       </slot>
     </div>
-    <request-authorization-modal
+    <RequestAuthorizationModal
       v-if="repository"
       :open.sync="requestAuthorizationModalOpen"
       :available="!repository.available_request_authorization"
-      :repository-uuid="repository.uuid"
-      @requestDispatched="onAuthorizationRequested()" />
+      :repositoryUuid="repository.uuid"
+      @requestDispatched="onAuthorizationRequested()"
+    />
   </div>
 </template>
 
@@ -65,7 +75,7 @@ export default {
     Loading,
   },
   filters: {
-    errorVerbose: code => (ERROR_VERBOSE_LOOKUP[code] || code),
+    errorVerbose: (code) => ERROR_VERBOSE_LOOKUP[code] || code,
   },
   props: {
     repository: {
@@ -91,11 +101,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'authenticated',
-      'myProfile',
-      'getRequirements',
-    ]),
+    ...mapGetters(['authenticated', 'myProfile', 'getRequirements']),
     currentTitle() {
       if (this.title) {
         return this.title;
@@ -113,31 +119,26 @@ export default {
     },
     requirementsCount() {
       if (!this.getRequirements.requirements_to_train) return 0;
-      return Object
-        .keys(this.getRequirements.requirements_to_train)
-        .reduce(
-          (previous, lang) => this.getRequirements.requirements_to_train[lang].length + previous,
-          0,
-        );
+      return Object.keys(this.getRequirements.requirements_to_train).reduce(
+        (previous, lang) =>
+          this.getRequirements.requirements_to_train[lang].length + previous,
+        0,
+      );
     },
     warningsCount() {
       if (!this.getRequirements.languages_warnings) return 0;
-      return Object
-        .keys(this.getRequirements.languages_warnings)
-        .reduce(
-          (previous, lang) => this.getRequirements.languages_warnings[lang].length + previous,
-          0,
-        );
+      return Object.keys(this.getRequirements.languages_warnings).reduce(
+        (previous, lang) =>
+          this.getRequirements.languages_warnings[lang].length + previous,
+        0,
+      );
     },
   },
   mounted() {
     this.updateMyProfile('user');
   },
   methods: {
-    ...mapActions([
-      'logout',
-      'updateMyProfile',
-    ]),
+    ...mapActions(['logout', 'updateMyProfile']),
     openMyProfile() {
       this.$router.push({ name: 'myProfile' });
     },
@@ -156,157 +157,155 @@ export default {
 };
 </script>
 
-
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
-  @import '~@/assets/scss/colors.scss';
-  @import '~@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
+.rpstr-vw-bs {
+  margin-top: 1.5rem;
+  $navigation-height: 4rem;
+  $medium-screen: 1035px;
+  $header-height: (16rem + $navigation-height);
+  $wrapper-width: 100%;
+  height: 100%;
 
-  .rpstr-vw-bs {
-    margin-top: 1.5rem;
-    $navigation-height: 4rem;
-    $medium-screen: 1035px;
-    $header-height: (16rem + $navigation-height);
-    $wrapper-width: 100%;
-    height: 100%;
+  &__status-bar {
+    background-color: $color-fake-white;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 0;
 
-    &__status-bar {
-      background-color: $color-fake-white;
-      justify-content: space-between;
-      flex-direction: row;
-      padding: 0;
+    :nth-child(3n) {
+      margin-right: 8px;
+    }
 
-      :nth-child(3n) {
-        margin-right: 8px;
-      }
+    @media screen and (max-width: $medium-screen) {
+      justify-content: space-around;
+    }
 
-      @media screen and (max-width: $medium-screen) {
-        justify-content: space-around;
-      }
+    &__icons-align {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 0;
 
-      &__icons-align {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-grow: 0;
-
-        &--size {
-          @media screen and (max-width: $medium-screen) {
-            height: 1.5rem;
-            width: 1.5rem;
-          }
+      &--size {
+        @media screen and (max-width: $medium-screen) {
+          height: 1.5rem;
+          width: 1.5rem;
         }
       }
     }
+  }
 
-    &__wrapper {
-      &__header {
-        position: relative;
-        display: grid;
-        grid-template-columns: 10% 1fr 10%;
-        padding: 1rem 1.5rem;
-        border-bottom: .120rem solid whitesmoke;
+  &__wrapper {
+    &__header {
+      position: relative;
+      display: grid;
+      grid-template-columns: 10% 1fr 10%;
+      padding: 1rem 1.5rem;
+      border-bottom: 0.12rem solid whitesmoke;
 
-        @media screen and (max-width: $medium-screen) {
-          display: none;
-        }
+      @media screen and (max-width: $medium-screen) {
+        display: none;
+      }
 
-        &__logo {
-          align-self: center;
-        }
+      &__logo {
+        align-self: center;
+      }
 
-        &__options {
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
+      &__options {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
 
-          &__avatar {
-            text-align: right;
-            cursor: auto;
-            border: .120rem solid $color-primary;
-            border-radius: 50%;
-
-            @media screen and (max-width: $medium-screen) {
-              display: none;
-            }
-          }
-
-          &__dropdown {
-            cursor: pointer;
-          }
-        }
-
-        &__navigation {
-          position: absolute;
-          bottom: 0rem;
-          left: 0;
-          width: 100%;
+        &__avatar {
+          text-align: right;
+          cursor: auto;
+          border: 0.12rem solid $color-primary;
+          border-radius: 50%;
 
           @media screen and (max-width: $medium-screen) {
             display: none;
           }
         }
 
-        &__mobile-navigation {
-          display: none;
-
-          @media screen and (max-width: $mobile-width) {
-            display: block;
-          }
+        &__dropdown {
+          cursor: pointer;
         }
+      }
+
+      &__navigation {
+        position: absolute;
+        bottom: 0rem;
+        left: 0;
+        width: 100%;
+
+        @media screen and (max-width: $medium-screen) {
+          display: none;
+        }
+      }
+
+      &__mobile-navigation {
+        display: none;
 
         @media screen and (max-width: $mobile-width) {
-          min-height: auto;
-          margin: 1rem;
+          display: block;
         }
       }
 
-      &__content {
-        margin: 0.1rem 3rem;
-
-        &.page--repository-content-bases {
-          margin: 0;
-          padding: $unnnic-spacing-md $unnnic-font-size * 8;
-          padding-top: 0;
-        }
-      }
-
-      @media screen and (max-width: $wrapper-width) {
-        border-radius: 0;
+      @media screen and (max-width: $mobile-width) {
+        min-height: auto;
+        margin: 1rem;
       }
     }
 
-    &__error,
-    &__loading {
-      margin-top: 2rem;
-      text-align: center;
-    }
+    &__content {
+      margin: 0.1rem 3rem;
 
-    &__error {
-      padding: .5rem;
-
-      h1 {
-        font-size: 3rem;
-        line-height: 4rem;
-        font-weight: $font-weight-bolder;
-        color: black;
-        opacity: .5;
+      &.page--repository-content-bases {
+        margin: 0;
+        padding: $unnnic-spacing-md $unnnic-font-size * 8;
+        padding-top: 0;
       }
     }
 
     @media screen and (max-width: $wrapper-width) {
-      margin: 1rem 0;
-    }
-
-    &__footer {
-      margin-top: 60vh;
+      border-radius: 0;
     }
   }
 
-  .hide-mobile {
-    @media screen and (max-width: 1035px) {
-      display: none;
+  &__error,
+  &__loading {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  &__error {
+    padding: 0.5rem;
+
+    h1 {
+      font-size: 3rem;
+      line-height: 4rem;
+      font-weight: $font-weight-bolder;
+      color: black;
+      opacity: 0.5;
     }
   }
+
+  @media screen and (max-width: $wrapper-width) {
+    margin: 1rem 0;
+  }
+
+  &__footer {
+    margin-top: 60vh;
+  }
+}
+
+.hide-mobile {
+  @media screen and (max-width: 1035px) {
+    display: none;
+  }
+}
 </style>

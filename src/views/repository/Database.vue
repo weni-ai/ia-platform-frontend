@@ -1,37 +1,37 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     :repository="repository"
-    :error-code="errorCode">
+    :errorCode="errorCode"
+  >
     <div v-if="repository">
       <div class="trainings-repository__new-example">
         <div v-if="authenticated">
-          <div v-if="repository.authorization.can_contribute">
-          </div>
-          <authorization-request-notification
+          <div v-if="repository.authorization.can_contribute"></div>
+          <AuthorizationRequestNotification
             v-else
             :available="!repository.available_request_authorization"
-            :repository-uuid="repository.uuid"
-            @onAuthorizationRequested="updateRepository(false)" />
+            :repositoryUuid="repository.uuid"
+            @onAuthorizationRequested="updateRepository(false)"
+          />
         </div>
         <div v-else>
-          <b-notification
+          <BNotification
             :closable="false"
-            type="is-info">
+            type="is-info"
+          >
             {{ $t('webapp.trainings.login') }}
-          </b-notification>
-          <login-form hide-forgot-password />
+          </BNotification>
+          <LoginForm hideForgotPassword />
         </div>
       </div>
-      <div
-        v-if="authenticated && repository.authorization.can_contribute"
-      >
-        <unnnic-intelligence-header
+      <div v-if="authenticated && repository.authorization.can_contribute">
+        <UnnnicIntelligenceHeader
           :title="$t('webapp.trainings.database')"
           icon="folder-1"
-          icon-scheme="aux-pink"
+          iconScheme="aux-pink"
           :description="$t('webapp.trainings.database_description')"
         >
-          <unnnic-button
+          <UnnnicButton
             @click="openDeleteModal = true"
             type="secondary"
             size="large"
@@ -40,65 +40,72 @@
             class="trainings-repository__button"
             iconLeft="delete-1-1"
           />
-        </unnnic-intelligence-header>
+        </UnnnicIntelligenceHeader>
 
-        <unnnic-divider y-spacing="lg" />
+        <UnnnicDivider ySpacing="lg" />
 
-        <sentence-filters
+        <SentenceFilters
           v-if="showFilters"
           :intents="repository.intents_list"
           :entities="repository.entities"
-          :language-filter="false"
+          :languageFilter="false"
           @querystringformatted="onSearch($event)"
-          @textData="changedText($event)"/>
-        <examples-list
+          @textData="changedText($event)"
+        />
+        <ExamplesList
           :query="translationQuery"
           :update="update"
-          :text-data="textExample"
-          translation-data
+          :textData="textExample"
+          translationData
           @exampleDeleted="onExampleDeleted"
           @onUpdateSelected="updateSelected"
           @updateCount="onUpdateCount"
         />
       </div>
     </div>
-    <unnnic-modal
+    <UnnnicModal
       :showModal="openDeleteModal"
       :text="$t('webapp.trainings.delete_title')"
       scheme="feedback-red"
-      modal-icon="alert-circle-1"
+      modalIcon="alert-circle-1"
       @close="openDeleteModal = false"
     >
       <span
-      slot="message"
-      v-html="$t('webapp.trainings.delete_phrase_modal')" />
-      <unnnic-button slot="options" type="tertiary" @click="openDeleteModal = false">
-        {{ $t("webapp.home.cancel") }}
-      </unnnic-button>
-      <unnnic-button
+        slot="message"
+        v-html="$t('webapp.trainings.delete_phrase_modal')"
+      />
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="openDeleteModal = false"
+      >
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
         slot="options"
         type="primary"
         scheme="feedback-red"
         @click="deleteSelectedItems"
       >
-        {{ $t("webapp.trainings.delete_title") }}
-      </unnnic-button>
-    </unnnic-modal>
-    <unnnic-modal
+        {{ $t('webapp.trainings.delete_title') }}
+      </UnnnicButton>
+    </UnnnicModal>
+    <UnnnicModal
       :showModal="openSuccessModal"
       :text="$t('webapp.intent.delete_success_title')"
       scheme="feedback-green"
-      modal-icon="check-circle-1-1"
+      modalIcon="check-circle-1-1"
       @close="openSuccessModal = false"
     >
       <span
-      slot="message"
-      v-html="$t('webapp.intent.delete_success_subtitle')" />
-    </unnnic-modal>
+        slot="message"
+        v-html="$t('webapp.intent.delete_success_subtitle')"
+      />
+    </UnnnicModal>
     <template v-slot:loader>
-      <database-loader />
+      <DatabaseLoader />
     </template>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -115,7 +122,6 @@ import Loading from '@/components/shared/Loading';
 import RepositoryBase from './Base';
 import DatabaseLoader from '@/views/repository/loadings/Database';
 
-
 export default {
   name: 'RepositoryDatabase',
   components: {
@@ -127,7 +133,7 @@ export default {
     AuthorizationRequestNotification,
     RequestAuthorizationModal,
     Loading,
-    DatabaseLoader
+    DatabaseLoader,
   },
   extends: RepositoryBase,
   data() {
@@ -144,24 +150,23 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'authenticated',
-    ]),
+    ...mapGetters(['authenticated']),
     translationQuery() {
       const { language, ...query } = this.query;
-      return { ...query, ...(language ? { is_available_language: language } : {}) };
+      return {
+        ...query,
+        ...(language ? { is_available_language: language } : {}),
+      };
     },
     sentencesCounter() {
       if (this.selectedItems !== null) {
-        return this.selectedItems.length
+        return this.selectedItems.length;
       }
-      return 0
-    }
+      return 0;
+    },
   },
   methods: {
-    ...mapActions([
-      'deleteExample'
-    ]),
+    ...mapActions(['deleteExample']),
     onSearch(value) {
       Object.assign(this.querySchema, value);
 
@@ -191,7 +196,7 @@ export default {
       this.updatedExampleList();
     },
     updateSelected(params) {
-      this.selectedItems = params
+      this.selectedItems = params;
     },
     async deleteSelectedItems() {
       await this.selectedItems.forEach((item) => {
@@ -200,47 +205,46 @@ export default {
         this.openDeleteModal = false;
         this.openSuccessModal = true;
       });
-      await this.onExampleDeleted()
+      await this.onExampleDeleted();
     },
     async onUpdateCount(params) {
       await this.$nextTick();
-      if (params) this.showFilters = true
-    }
+      if (params) this.showFilters = true;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  @import '~@/assets/scss/colors.scss';
-  @import '~@/assets/scss/variables.scss';
-
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .trainings-repository {
   &__list-wrapper {
     display: flex;
     justify-content: space-between;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
 
-    &__title{
+    &__title {
       font-size: 1.75rem;
       font-weight: $font-weight-medium;
       color: $color-fake-black;
       margin-bottom: $between-title-subtitle;
     }
-     &__subtitle{
+    &__subtitle {
       font-size: $font-size;
     }
 
-    &__button{
+    &__button {
       color: $color-white;
       width: 14rem;
 
-      &:hover{
+      &:hover {
         color: $color-white;
       }
     }
 
-    &__tutorialStep{
+    &__tutorialStep {
       width: 100%;
       height: 2.2rem;
     }
@@ -250,7 +254,7 @@ export default {
     margin-top: 1.5rem;
     background-color: $color-white;
 
-    &__pending-example{
+    &__pending-example {
       margin-top: 1.6rem;
       min-height: 5rem;
     }
@@ -264,78 +268,79 @@ export default {
         height: 25px;
         width: 60%;
 
-        p{
+        p {
           font-size: 13px;
           font-weight: $font-weight-bolder;
         }
       }
 
       &__bar {
-      position: relative;
-      display: block;
-      width: 100%;
-      background-color: $color-grey-light;
-    }
+        position: relative;
+        display: block;
+        width: 100%;
+        background-color: $color-grey-light;
+      }
       &__bar span {
-      position: relative;
-      display: inline-block;
-      vertical-align: middle;
-      height: 25px;
-      background-color: $color-secondary;
-    }
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        height: 25px;
+        background-color: $color-secondary;
+      }
       &__bar span:after {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      content: "";
-      background-size: 100%;
-      background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.603) 25%,
-                                        rgba(0, 0, 0, 0) 25%,
-                                        rgba(0, 0, 0, 0) 50%,
-                                        rgba(255, 255, 255, 0.603) 50%,
-                                        rgba(255, 255, 255, 0.603) 75%,
-                                        rgba(0, 0, 0, 0) 75%,
-                                        rgba(0, 0, 0, 0));
-      background-size: 30px 30px;
-      opacity: 0.3;
-      animation: progress-animation 0.5s infinite linear;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        content: '';
+        background-size: 100%;
+        background-image: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.603) 25%,
+          rgba(0, 0, 0, 0) 25%,
+          rgba(0, 0, 0, 0) 50%,
+          rgba(255, 255, 255, 0.603) 50%,
+          rgba(255, 255, 255, 0.603) 75%,
+          rgba(0, 0, 0, 0) 75%,
+          rgba(0, 0, 0, 0)
+        );
+        background-size: 30px 30px;
+        opacity: 0.3;
+        animation: progress-animation 0.5s infinite linear;
+      }
+      @-webkit-keyframes progress-animation {
+        0% {
+          background-position: 0 100%;
+        }
+        100% {
+          background-position: 30px 100%;
+        }
+      }
+      @keyframes progress-animation {
+        0% {
+          background-position: 0 100%;
+        }
+        100% {
+          background-position: 30px 100%;
+        }
+      }
     }
-    @-webkit-keyframes progress-animation {
-      0% {
-        background-position: 0 100%;
-      }
-      100% {
-        background-position: 30px 100%;
-      }
-    }
-    @keyframes progress-animation {
-      0% {
-        background-position: 0 100%;
-      }
-      100% {
-        background-position: 30px 100%;
-      }
-    }
-      }
-    }
+  }
 
-    &__button {
-      width: 240px;
-    }
-
+  &__button {
+    width: 240px;
+  }
 }
 .divider {
-  background: #E2E6ED;
+  background: #e2e6ed;
   height: 1px;
   margin: 2rem 0;
 }
 
-/deep/ input:focus, /deep/ textarea:focus {
+:deep(input:focus),
+:deep(textarea:focus) {
   box-shadow: none;
   border-color: #9caccc;
 }
-
-
 </style>

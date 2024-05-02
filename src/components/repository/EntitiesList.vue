@@ -2,16 +2,25 @@
   <div class="entity-list">
     <div class="entity-list__content">
       <div class="entity-list__content__descriptions">
-        <div @click="goToSummary" class="entity-list__content__back-button">
-          <unnnic-icon-svg icon="keyboard-arrow-left-1" size="md" />
+        <div
+          @click="goToSummary"
+          class="entity-list__content__back-button"
+        >
+          <UnnnicIconSvg
+            icon="keyboard-arrow-left-1"
+            size="md"
+          />
         </div>
         <h1>
-          {{ $t("webapp.entity.title") }}
+          {{ $t('webapp.entity.title') }}
           <span> "{{ entitySelected }}" </span>
         </h1>
       </div>
-      <div v-if="repository.authorization.can_contribute" class="entity-list__buttons-wrapper">
-        <unnnic-button
+      <div
+        v-if="repository.authorization.can_contribute"
+        class="entity-list__buttons-wrapper"
+      >
+        <UnnnicButton
           ref="editEntityEvent"
           @click="editOptionsEntity()"
           class="mr-2"
@@ -20,7 +29,7 @@
           :text="$t('webapp.entity.edit_button')"
           iconLeft="pencil-write-1"
         />
-        <unnnic-button
+        <UnnnicButton
           @click="openDeleteModal = true"
           type="secondary"
           size="large"
@@ -33,11 +42,11 @@
     <div class="entity-list__subtitle">
       <p v-html="$tc('webapp.entity.description', totalSentences)" />
     </div>
-    <unnnic-modal
+    <UnnnicModal
       :showModal="openModal"
       :text="$t('webapp.entity.edit_entity_modal_title')"
       scheme="feedback-yellow"
-      modal-icon="alert-circle-1"
+      modalIcon="alert-circle-1"
       @close="openModal = false"
     >
       <span
@@ -48,8 +57,11 @@
           })
         "
       />
-      <div slot="message" class="text-left">
-        <unnnic-input
+      <div
+        slot="message"
+        class="text-left"
+      >
+        <UnnnicInput
           :placeholder="$t('webapp.entity.edit_entity_field_label')"
           v-model="newEntityName"
         >
@@ -57,54 +69,64 @@
             slot="label"
             v-html="$t('webapp.entity.edit_entity_field_title')"
           />
-        </unnnic-input>
+        </UnnnicInput>
       </div>
-      <unnnic-button slot="options" type="tertiary" @click="openModal = false">
-        {{ $t("webapp.home.cancel") }}
-      </unnnic-button>
-      <unnnic-button
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="openModal = false"
+      >
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
         slot="options"
         class="create-repository__container__button"
         type="primary"
         scheme="feedback-yellow"
         @click="saveEdition()"
       >
-        {{ $t("webapp.entity.edit_entity_button_label") }}
-      </unnnic-button>
-    </unnnic-modal>
-    <unnnic-modal
+        {{ $t('webapp.entity.edit_entity_button_label') }}
+      </UnnnicButton>
+    </UnnnicModal>
+    <UnnnicModal
       :showModal="openSuccessModal"
       :text="successModalTitle"
       scheme="feedback-green"
-      modal-icon="check-circle-1-1"
+      modalIcon="check-circle-1-1"
       @close="openSuccessModal = false"
     >
       <span
-      slot="message"
-      v-html="successModalSubtitle" />
-    </unnnic-modal>
-    <unnnic-modal
+        slot="message"
+        v-html="successModalSubtitle"
+      />
+    </UnnnicModal>
+    <UnnnicModal
       :showModal="openDeleteModal"
       :text="$t('webapp.trainings.delete_title')"
       scheme="feedback-red"
-      modal-icon="alert-circle-1"
+      modalIcon="alert-circle-1"
       @close="openDeleteModal = false"
     >
       <span
-      slot="message"
-      v-html="$t('webapp.trainings.delete_phrase_modal')" />
-      <unnnic-button slot="options" type="tertiary" @click="openDeleteModal = false">
-        {{ $t("webapp.home.cancel") }}
-      </unnnic-button>
-      <unnnic-button
+        slot="message"
+        v-html="$t('webapp.trainings.delete_phrase_modal')"
+      />
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="openDeleteModal = false"
+      >
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
         slot="options"
         type="primary"
         scheme="feedback-red"
         @click="deleteSelectedItems"
       >
-        {{ $t("webapp.trainings.delete_title") }}
-      </unnnic-button>
-    </unnnic-modal>
+        {{ $t('webapp.trainings.delete_title') }}
+      </UnnnicButton>
+    </UnnnicModal>
   </div>
 </template>
 
@@ -146,7 +168,7 @@ export default {
       openDeleteModal: false,
       newEntityName: '',
       successModalTitle: '',
-      successModalSubtitle: ''
+      successModalSubtitle: '',
     };
   },
   computed: {
@@ -162,10 +184,10 @@ export default {
     },
     sentencesCounter() {
       if (this.selectedItems !== null) {
-        return this.selectedItems.length
+        return this.selectedItems.length;
       }
-      return 0
-    }
+      return 0;
+    },
   },
   watch: {
     entitySelected() {
@@ -185,13 +207,13 @@ export default {
     },
     async getEntitiesName() {
       const allEntitiesName = await this.repository.entities.map(
-        (entityValue) => entityValue.value
+        (entityValue) => entityValue.value,
       );
       this.allEntities = allEntitiesName;
     },
     async getSelectedEntity() {
       const entity = await this.repositoryList.entities.find(
-        (entityValue) => entityValue.id === Number(this.entityId)
+        (entityValue) => entityValue.id === Number(this.entityId),
       );
       this.entitySelected = entity.value;
     },
@@ -212,9 +234,11 @@ export default {
         this.$emit('saveEdition');
         this.entitySelected = this.newEntityName;
         this.openModal = false;
-        this.openSuccessModal = true
-        this.successModalTitle = this.$t('webapp.entity.success_modal_title')
-        this.successModalSubtitle = this.$t('webapp.entity.success_modal_subtitle')
+        this.openSuccessModal = true;
+        this.successModalTitle = this.$t('webapp.entity.success_modal_title');
+        this.successModalSubtitle = this.$t(
+          'webapp.entity.success_modal_subtitle',
+        );
       } catch (error) {
         if (error.response.data.non_field_errors !== undefined) {
           this.$buefy.toast.open({
@@ -236,13 +260,15 @@ export default {
         this.$emit('itemDeleted');
         this.openDeleteModal = false;
         this.openSuccessModal = true;
-        this.successModalTitle = this.$t('webapp.intent.delete_success_title')
-        this.successModalSubtitle = this.$t('webapp.intent.delete_success_subtitle')
+        this.successModalTitle = this.$t('webapp.intent.delete_success_title');
+        this.successModalSubtitle = this.$t(
+          'webapp.intent.delete_success_subtitle',
+        );
       });
     },
     goToSummary() {
       this.$router.push(
-        `/dashboard/${this.$route.params.ownerNickname}/${this.$route.params.slug}/`
+        `/dashboard/${this.$route.params.ownerNickname}/${this.$route.params.slug}/`,
       );
     },
   },
@@ -250,8 +276,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 .entity-list {
   margin: 0.4rem;
   margin-left: 2.8rem !important;
@@ -260,12 +286,11 @@ export default {
     p {
       font-size: $font-size;
     }
-
   }
 
   &__subtitle {
     p {
-      font-family: "Lato";
+      font-family: 'Lato';
       font-size: 14px;
       color: #4e5666;
     }
@@ -313,8 +338,8 @@ export default {
       color: #ffffff;
     }
 
-     h1 {
-      font-family: "Aleo";
+    h1 {
+      font-family: 'Aleo';
       font-size: 20px;
       color: #272b33;
     }

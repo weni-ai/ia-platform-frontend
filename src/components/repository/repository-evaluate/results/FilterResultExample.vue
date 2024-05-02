@@ -1,46 +1,46 @@
 <template>
   <div class="filter-result-example">
     <div class="filter-result-example__filters">
-      <b-field
-        class="filter-result-example__filters__input-text">
-        <b-input
+      <BField class="filter-result-example__filters__input-text">
+        <BInput
           v-model="text"
           :debounce="debounceTime"
           placeholder="Search sentence"
-          icon-right="magnify"
+          iconRight="magnify"
         />
-      </b-field>
+      </BField>
       <div class="filter-result-example__filters__wrapper">
         <div class="filter-result-example__filters__wrapper__filter">
           <div class="filter-result-example__filters__wrapper__filter__text">
             {{ $t('webapp.dashboard.filter_by') }}:
           </div>
-          <b-field>
-            <b-select
+          <BField>
+            <BSelect
               class="filter-result-example__filters__wrapper__filter__select"
               expanded
-              placeholder="All test type">
+              placeholder="All test type"
+            >
               <option value="flint">Flint</option>
               <option value="silver">Silver</option>
-            </b-select>
-          </b-field>
+            </BSelect>
+          </BField>
         </div>
         <div>
-          <b-button
+          <BButton
             :disabled="true"
             class="filter-result-example__filters__wrapper__button"
-            type="is-secondary">Compare results</b-button>
+            type="is-secondary"
+            >Compare results</BButton
+          >
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-
 import { mapState } from 'vuex';
 import { formatters } from '@/utils/index';
 import _ from 'lodash';
-
 
 export default {
   name: 'FilterResultExample',
@@ -64,40 +64,44 @@ export default {
   },
   computed: {
     ...mapState({
-      selectedRepository: state => state.Repository.selectedRepository,
+      selectedRepository: (state) => state.Repository.selectedRepository,
     }),
     filterIntents() {
       if (this.intents !== null) {
-        return this.intents.filter(intent => intent
-          .toString()
-          .toLowerCase()
-          .indexOf(this.intent.toLowerCase()) >= 0);
+        return this.intents.filter(
+          (intent) =>
+            intent
+              .toString()
+              .toLowerCase()
+              .indexOf(this.intent.toLowerCase()) >= 0,
+        );
       }
       return [];
     },
     optionsIntents() {
-      return this.filterIntents.map(intent => intent);
+      return this.filterIntents.map((intent) => intent);
     },
     filterEntities() {
       if (this.entities !== null) {
-        return this.entities.filter(entity => entity.value
-          .toString()
-          .toLowerCase()
-          .indexOf(this.entity.toLowerCase()) >= 0);
+        return this.entities.filter(
+          (entity) =>
+            entity.value
+              .toString()
+              .toLowerCase()
+              .indexOf(this.entity.toLowerCase()) >= 0,
+        );
       }
       return [];
     },
     optionsEntities() {
-      return this.filterEntities.map(entity => entity);
+      return this.filterEntities.map((entity) => entity);
     },
     optionsVersions() {
       if (!this.versions) return null;
-      return this.versions.map(version => version.name);
+      return this.versions.map((version) => version.name);
     },
     inputFormatters() {
-      const formattersList = [
-        formatters.bothubItemKey(),
-      ];
+      const formattersList = [formatters.bothubItemKey()];
       formattersList.toString = () => 'inputFormatters';
       return formattersList;
     },
@@ -150,13 +154,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
 
 .filter-result-example {
   width: 100%;
-  margin: 0 auto .5rem;
+  margin: 0 auto 0.5rem;
 
   &__filters {
     margin: 1.5rem 0;
@@ -164,7 +167,7 @@ export default {
     justify-content: space-between;
 
     @media (max-width: $mobile-width) {
-        grid-template-columns: 1fr;
+      grid-template-columns: 1fr;
     }
 
     &__input-text {
@@ -177,25 +180,25 @@ export default {
       width: 50%;
 
       &__filter {
-          display: flex;
+        display: flex;
 
         &__text {
           white-space: nowrap;
           align-self: center;
           height: 100%;
-          padding: .5rem;
+          padding: 0.5rem;
         }
-         &__select {
+        &__select {
           width: 179px;
         }
       }
 
-        &__button {
-          width: 179px;
-          height: 36px;
-          font-family: $font-family;
-          font-size: $font-size;
-          color: $color-white;
+      &__button {
+        width: 179px;
+        height: 36px;
+        font-family: $font-family;
+        font-size: $font-size;
+        color: $color-white;
       }
     }
   }

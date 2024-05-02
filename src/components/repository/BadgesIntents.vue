@@ -3,17 +3,19 @@
     <div v-html="title" />
     <div class="badges-card__wrapper">
       <div>
-        <intent-tag
+        <IntentTag
           v-for="item in list"
           :key="item.value"
-          :entity-name="item.value"
+          :entityName="item.value"
           :count="item.examples__count"
           class="badges-card__wrapper__badge"
-          @click.native="goToIntentList(item.id)"/>
+          @click.native="goToIntentList(item.id)"
+        />
       </div>
     </div>
     <div v-if="examplesCount">
-      <strong>{{ examplesCount }}</strong> {{ $t('webapp.dashboard.sentences') }}
+      <strong>{{ examplesCount }}</strong>
+      {{ $t('webapp.dashboard.sentences') }}
     </div>
   </div>
 </template>
@@ -37,7 +39,7 @@ export default {
     },
     list: {
       type: Array,
-      default: () => ([]),
+      default: () => [],
     },
     examplesCount: {
       type: Number,
@@ -58,39 +60,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
 
-.badges-without-styles{
-    // padding-top: .75rem;
-    margin: .75rem -0.4rem;
-    margin-bottom: 3rem;
+.badges-without-styles {
+  // padding-top: .75rem;
+  margin: 0.75rem -0.4rem;
+  margin-bottom: 3rem;
 }
-  .badges-card {
-    padding: .75rem;
-    margin: .75rem 0;
-    border: 1px solid $color-border;
-    border-radius: 6px;
-    font-weight: bold;
+.badges-card {
+  padding: 0.75rem;
+  margin: 0.75rem 0;
+  border: 1px solid $color-border;
+  border-radius: 6px;
+  font-weight: bold;
 
-    &__wrapper {
-      margin: .75rem .5rem;
+  &__wrapper {
+    margin: 0.75rem 0.5rem;
 
-      &__badge {
-        height: 2.188rem;
-        margin: 1rem 1rem 0 0;
-        padding: 0 1rem 0 1rem;
-        line-height: calc(1.5rem - 4px);
-        border-width: 1px;
-        border-radius: 1rem;
-        cursor: pointer;
+    &__badge {
+      height: 2.188rem;
+      margin: 1rem 1rem 0 0;
+      padding: 0 1rem 0 1rem;
+      line-height: calc(1.5rem - 4px);
+      border-width: 1px;
+      border-radius: 1rem;
+      cursor: pointer;
 
-        span{
-          font-size: $font-small;
-          font-family: $font-family;
-          font-weight: $font-weight-normal;
-        }
+      span {
+        font-size: $font-small;
+        font-family: $font-family;
+        font-weight: $font-weight-normal;
       }
+    }
   }
 }
 </style>

@@ -1,7 +1,7 @@
 
 export default {
   addStripe: (onFinish) => {
-    if (!runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED') || document.getElementById('stripe-script')) {
+    if (!runtimeVariables.get('VITE_BOTHUB_WEBAPP_PAYMENT_ENABLED') || document.getElementById('stripe-script')) {
       onFinish();
       return;
     }

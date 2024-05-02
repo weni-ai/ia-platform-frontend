@@ -1,46 +1,55 @@
 <template>
   <div class="authorization-item columns is-vcentered">
     <div class="column authorization-item__info">
-      <user-avatar
+      <UserAvatar
         :profile="getProfile(user__nickname)"
         :clickable="false"
-        :is-organization="user__is_organization"
-        class="authorization-item__avatar" />
-      <p><strong>
-        {{ getProfile(user__nickname).name || user__nickname }} ({{ user__nickname }})
-      </strong></p>
-      <role-select
+        :isOrganization="user__is_organization"
+        class="authorization-item__avatar"
+      />
+      <p>
+        <strong>
+          {{ getProfile(user__nickname).name || user__nickname }} ({{
+            user__nickname
+          }})
+        </strong>
+      </p>
+      <RoleSelect
         :editable="editable"
         v-model="newRole"
-        size="is-small" />
+        size="is-small"
+      />
     </div>
     <div class="column is-2 authorization-item__icon__container">
-      <b-icon
+      <BIcon
         v-show="!submitting"
         icon="delete"
         size="is-small"
         class="authorization-item__icon authorization-item__icon--button"
-        @click.native="remove()"/>
-      <b-icon
+        @click.native="remove()"
+      />
+      <BIcon
         v-show="!submitting"
         icon="pencil"
         size="is-small"
         class="authorization-item__icon authorization-item__icon--button"
-        @click.native="editable = !editable"/>
-      <b-icon
+        @click.native="editable = !editable"
+      />
+      <BIcon
         v-show="submitting"
         size="is-small"
         class="authorization-item__icon icon-spin"
-        icon="refresh" />
-      <b-icon
+        icon="refresh"
+      />
+      <BIcon
         v-show="submitted"
         size="is-small"
         class="text-color-primary"
-        icon="check" />
+        icon="check"
+      />
     </div>
   </div>
 </template>
-
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
@@ -104,15 +113,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'getProfile',
-    ]),
+    ...mapGetters(['getProfile']),
     roleLabel() {
       if (this.newRole === null) {
         return null;
       }
 
-      return this.$t(`webapp.roles.${this.roles[Number(this.newRole)].toLowerCase()}`);
+      return this.$t(
+        `webapp.roles.${this.roles[Number(this.newRole)].toLowerCase()}`,
+      );
     },
   },
   watch: {
@@ -133,8 +142,10 @@ export default {
     async remove() {
       return new Promise((resolve, reject) => {
         this.removeDialog = this.$buefy.dialog.confirm({
-          message: this.$t('webapp.settings.remove_user_confirm',
-            { user: this.user__nickname, role: this.roleLabel }),
+          message: this.$t('webapp.settings.remove_user_confirm', {
+            user: this.user__nickname,
+            role: this.roleLabel,
+          }),
           confirmText: this.$t('webapp.settings.remove'),
           cancelText: this.$t('webapp.settings.cancel'),
           type: 'is-danger',
@@ -143,7 +154,8 @@ export default {
             try {
               await this.removeAuthorization({
                 id: this.id_request_authorizations,
-                repositoryUuid: this.$store.state.Repository.selectedRepository.uuid,
+                repositoryUuid:
+                  this.$store.state.Repository.selectedRepository.uuid,
               });
               this.$emit('deleted');
             } catch (error) {
@@ -159,7 +171,10 @@ export default {
       });
     },
     updateUserProfile() {
-      this.updateProfile({ nickname: this.user__nickname, isOrg: this.user__is_organization });
+      this.updateProfile({
+        nickname: this.user__nickname,
+        isOrg: this.user__is_organization,
+      });
     },
     async updateRole() {
       this.submitting = true;
@@ -201,44 +216,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
 .authorization-item {
-    padding: 0 1rem;
-    background-color: $color-white;
-    border: 1px solid $color-border;
-    margin: 0.625rem 0;
-    border-radius: 5px;
+  padding: 0 1rem;
+  background-color: $color-white;
+  border: 1px solid $color-border;
+  margin: 0.625rem 0;
+  border-radius: 5px;
 
-    &__info {
+  &__info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    > * {
+      margin: 0.5rem 1rem 0.5rem 0;
+    }
+  }
+
+  &__avatar {
+    box-shadow: 0px 3px 6px #00000029;
+  }
+
+  &__icon {
+    color: $color-grey-dark;
+
+    &--button {
+      cursor: pointer;
+    }
+
+    &__container {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+      flex-direction: row-reverse;
+
       > * {
-        margin: 0.5rem 1rem 0.5rem 0;
+        margin: 0 0 0.5rem 1rem;
       }
     }
-
-    &__avatar {
-        box-shadow: 0px 3px 6px #00000029;
-    }
-
-    &__icon {
-      color: $color-grey-dark;
-
-      &--button {
-        cursor: pointer;
-      }
-
-      &__container {
-        display: flex;
-        flex-direction: row-reverse;
-
-        > * {
-            margin: 0 0 0.5rem 1rem;
-        }
-      }
-    }
+  }
 }
 </style>

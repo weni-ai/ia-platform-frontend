@@ -47,7 +47,9 @@
               :key="index"
               @click="handlePersonalitySelect(item)"
             >
-              <p>{{ $t(`customization.fields.personalities.${item.label}`) }}</p>
+              <p>
+                {{ $t(`customization.fields.personalities.${item.label}`) }}
+              </p>
             </section>
           </div>
         </section>
@@ -251,15 +253,17 @@ export default {
   },
 
   async created() {
-    const { data } = await nexusaiAPI.router.customization.read({
-      projectUuid: this.$store.state.Auth.connectProjectUuid,
-    }).catch(() => {
-      this.$store.state.alert = {
+    const { data } = await nexusaiAPI.router.customization
+      .read({
+        projectUuid: this.$store.state.Auth.connectProjectUuid,
+      })
+      .catch(() => {
+        this.$store.state.alert = {
           type: 'error',
           text: this.$t('customization.invalid_get_data'),
-      };
-      return { data: null };
-    })
+        };
+        return { data: null };
+      });
 
     let currentData = data;
 
@@ -359,7 +363,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .customization {
   &-title {

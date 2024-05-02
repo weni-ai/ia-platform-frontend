@@ -1,28 +1,30 @@
 <template>
-  <boarding-layout>
+  <BoardingLayout>
     <div class="login">
       <div class="login__content">
         <div class="login__content__field">
           <div class="login__content__field__header">
             <p>{{ $t('webapp.login_form.dont_have_account') }}</p>
-            <b-button
+            <BButton
               type="is-primary"
               class="login__content__field__header__createButton"
-              @click="goToCreate">
+              @click="goToCreate"
+            >
               {{ $t('webapp.login_form.get_free') }}
-            </b-button>
+            </BButton>
           </div>
 
           <div class="login__content__field__forms">
             <h1>{{ $t('webapp.login_form.login') }}</h1>
-            <login-form
+            <LoginForm
               @authenticated="onAuthenticated"
-              @forgotPasswordClick="showForgotPasswordTab" />
+              @forgotPasswordClick="showForgotPasswordTab"
+            />
           </div>
         </div>
       </div>
     </div>
-  </boarding-layout>
+  </BoardingLayout>
 </template>
 
 <script>
@@ -55,40 +57,38 @@ export default {
     },
   },
 };
-
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
-.login{
+.login {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 5.5rem);
+    background-color: $color-fake-white;
 
-  &__content{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 5.5rem);
-  background-color: $color-fake-white;
-
-    &__field{
+    &__field {
       width: 36rem;
       height: 25.25rem;
 
-      &__header{
-        display:flex;
+      &__header {
+        display: flex;
         justify-content: flex-end;
         margin-bottom: 1.5rem;
 
-        p{
+        p {
           font-family: $font-family;
           font-size: 1rem;
-          color:$color-fake-black;
+          color: $color-fake-black;
           margin-right: 1rem;
-          margin-top:1rem;
+          margin-top: 1rem;
         }
-        &__createButton{
+        &__createButton {
           width: 6.875rem;
           height: 2.188rem;
           margin-top: 0.15rem;
@@ -97,31 +97,29 @@ export default {
           font-weight: $font-weight-bolder;
           font-family: $font-family;
           font-size: $font-size;
-    }
+        }
       }
 
-      &__forms{
+      &__forms {
         max-height: 27rem;
         padding: 2rem 4.5rem;
         background-color: $color-white;
         box-shadow: 0px 3px 6px #00000029;
 
-        h1{
-          color:$color-primary;
+        h1 {
+          color: $color-primary;
           font-family: $font-family;
           font-size: 2.563rem;
           text-align: center;
-            @media screen and (max-width: 40em) {
+          @media screen and (max-width: 40em) {
             font-size: 2rem;
-            }
+          }
         }
-
       }
-        @media screen and (max-width: 40em) {
-           width: 30rem;
+      @media screen and (max-width: 40em) {
+        width: 30rem;
       }
     }
   }
 }
-
 </style>

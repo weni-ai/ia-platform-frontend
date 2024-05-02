@@ -2,92 +2,97 @@
   <div class="new-sentence">
     <div>
       <h2 class="new-sentence__title">
-       {{ $t('webapp.evaluate-manual.add_new_test_sentence') }}
+        {{ $t('webapp.evaluate-manual.add_new_test_sentence') }}
       </h2>
       <span>
         {{ $t('webapp.evaluate-manual.create_a_bench_of_test') }}
       </span>
     </div>
     <div class="new-sentence__form">
-      <form
-        @submit.prevent="submitSentence()">
+      <form @submit.prevent="submitSentence()">
         <div class="new-sentence__form__wrapper">
           <div>
-            <b-field
-              :message="errors.entities || errors.language"
-            >
-              <example-text-with-highlighted-entities-input
+            <BField :message="errors.entities || errors.language">
+              <ExampleTextWithHighlightedEntitiesInput
                 id="tour-evaluate-step-2"
                 ref="textInput"
-                :is-previous-disabled="true"
+                :isPreviousDisabled="true"
                 v-model="text"
-                :is-step-blocked="text.length === 0"
+                :isStepBlocked="text.length === 0"
                 :entities="entities"
-                :placeholder="$t('webapp.evaluate-manual.enter_your_sentence_here')"
+                :placeholder="
+                  $t('webapp.evaluate-manual.enter_your_sentence_here')
+                "
                 @submit="onEnter()"
                 @textSelected="setTextSelected($event)"
               />
-            </b-field>
+            </BField>
           </div>
           <div>
-            <b-field
+            <BField
               id="tour-evaluate-step-3"
-              :is-previous-disabled="true"
+              :isPreviousDisabled="true"
               :message="errors.non_field_errors"
-              :is-step-blocked="(intent || '').length === 0">
-              <b-autocomplete
+              :isStepBlocked="(intent || '').length === 0"
+            >
+              <BAutocomplete
                 v-model="intent"
                 :data="filterIntents"
                 :placeholder="$t('webapp.evaluate.intent')"
-                open-on-focus
-                dropdown-position="bottom" />
-            </b-field>
+                openOnFocus
+                dropdownPosition="bottom"
+              />
+            </BField>
           </div>
           <div class="new-sentence__form__wrapper__submit-btn">
-            <b-tooltip
+            <BTooltip
               :label="validationErrors.join(', ')"
               :active="!isValid && validationErrors.length > 0"
               multilined
-              type="is-dark">
-              <b-button
+              type="is-dark"
+            >
+              <BButton
                 id="tour-evaluate-step-4"
                 ref="saveSentenceButton"
-                :is-next-disabled="true"
-                :is-previous-disabled="true"
+                :isNextDisabled="true"
+                :isPreviousDisabled="true"
                 :disabled="!shouldSubmit"
                 :loading="submitting"
-                :is-step-blocked="!blockedNextStepTutorial"
+                :isStepBlocked="!blockedNextStepTutorial"
                 type="is-primary"
                 class="new-sentence__form__wrapper__submit-btn__button"
-                @click="submitSentence()">
-                <slot v-if="!submitting">{{ $t('webapp.evaluate-manual.submit') }}</slot>
-              </b-button>
-            </b-tooltip>
+                @click="submitSentence()"
+              >
+                <slot v-if="!submitting">{{
+                  $t('webapp.evaluate-manual.submit')
+                }}</slot>
+              </BButton>
+            </BTooltip>
           </div>
         </div>
-        <b-field
+        <BField
           :errors="errors.entities"
           class="new-sentence__form__entities"
         >
           <div class="columns">
             <div class="column is-one-third">
-              <entities-input
+              <EntitiesInput
                 ref="entitiesInput"
                 v-model="entities"
-                :available-add-label="false"
+                :availableAddLabel="false"
                 :repository="repository"
                 :text="text"
-                :text-selected="textSelected"
-                :available-entities="entitiesList"
-                :available-labels="availableLabels"
-                :entities-for-edit="[]"
+                :textSelected="textSelected"
+                :availableEntities="entitiesList"
+                :availableLabels="availableLabels"
+                :entitiesForEdit="[]"
                 :testing="testing"
                 @entityAdded="onEntityAdded()"
                 @entityEdited="onEditEntity($event)"
               />
             </div>
           </div>
-        </b-field>
+        </BField>
       </form>
     </div>
   </div>
@@ -98,7 +103,6 @@ import ExampleTextWithHighlightedEntitiesInput from '@/components/inputs/Example
 import EntitiesInput from '@/components/inputs/EntitiesInput';
 import { mapActions, mapGetters } from 'vuex';
 import { formatters } from '@/utils';
-
 
 export default {
   name: 'NewEvaluateExample',
@@ -139,8 +143,9 @@ export default {
       return this.isValid && !this.submitting;
     },
     filterIntents() {
-      return (this.intents || []).filter(intent => intent
-        .startsWith(this.intent.toLowerCase()));
+      return (this.intents || []).filter((intent) =>
+        intent.startsWith(this.intent.toLowerCase()),
+      );
     },
     validationErrors() {
       const errors = [];
@@ -160,26 +165,21 @@ export default {
     },
     availableEntities() {
       const repositoryEntities = this.repository.entities_list || [];
-      const entitiesFlat = this.entities.map(e => e.entity);
+      const entitiesFlat = this.entities.map((e) => e.entity);
       return repositoryEntities
         .concat(entitiesFlat)
-        .filter((entity, index, current) => (current.indexOf(entity) === index));
+        .filter((entity, index, current) => current.indexOf(entity) === index);
     },
     availableLabels() {
       const repositoryLabels = this.repository.labels_list || [];
-      const labelsFlat = this.entities.map(e => e.label);
+      const labelsFlat = this.entities.map((e) => e.label);
       return repositoryLabels
         .concat(labelsFlat)
-        .filter(label => !!label)
-        .filter((label, index, current) => (current.indexOf(label) === index));
+        .filter((label) => !!label)
+        .filter((label, index, current) => current.indexOf(label) === index);
     },
     data() {
-      const {
-        text,
-        language,
-        intent,
-        entities,
-      } = this;
+      const { text, language, intent, entities } = this;
 
       return {
         text,
@@ -199,9 +199,7 @@ export default {
     this.entitiesList = this.availableEntities;
   },
   methods: {
-    ...mapActions([
-      'newEvaluateExample',
-    ]),
+    ...mapActions(['newEvaluateExample']),
     onEnter() {
       if (this.shouldSubmit) this.submitSentence();
     },
@@ -268,18 +266,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .new-sentence {
   width: 100%;
   margin: 2rem auto 0;
 
   &__title {
-      font-size: 1.75rem;
-      font-weight: $font-weight-medium;
-      color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+    font-size: 1.75rem;
+    font-weight: $font-weight-medium;
+    color: $color-fake-black;
+    margin-bottom: $between-title-subtitle;
   }
 
   span {
@@ -287,10 +285,9 @@ export default {
   }
 
   &__form {
-
     &__wrapper {
       display: grid;
-      grid-template-columns: 1.5fr 1fr .1fr;
+      grid-template-columns: 1.5fr 1fr 0.1fr;
       align-items: center;
       grid-gap: 1rem;
       padding: 1rem 0;
@@ -305,7 +302,6 @@ export default {
 
         &__button {
           min-width: 100px;
-
         }
       }
     }
