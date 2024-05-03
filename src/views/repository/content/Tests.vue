@@ -39,12 +39,7 @@
             />
 
             <section
-              v-if="
-                usePreview &&
-                message.type === 'answer' &&
-                isTheLastMessage(message) &&
-                preview.quickReplies.length
-              "
+              v-if="shouldShowQuickReplies(message)"
               class="quick-replies"
             >
               <UnnnicButton
@@ -154,6 +149,15 @@ export default {
   },
 
   methods: {
+    shouldShowQuickReplies(message) {
+      return (
+        this.usePreview &&
+        message.type === 'answer' &&
+        this.isTheLastMessage(message) &&
+        this.preview.quickReplies?.length
+      );
+    },
+
     isTheLastMessage(message) {
       return (
         this.messages.filter(({ type }) => ['answer', 'question']).at(-1) ===
