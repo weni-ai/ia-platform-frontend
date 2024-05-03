@@ -113,6 +113,10 @@
     },
     "preview": {
       "title": "Agent preview",
+      "options": {
+        "refresh": "Clear conversations",
+        "qr_code": "View from mobile"
+      },
       "active_to_see": "Activate Brain to see the agent preview",
       "active_to_see_description": "Brain can be activated from the advanced options in the Tunings tab",
       "placeholder": "Send a message to test your intelligent agent"
