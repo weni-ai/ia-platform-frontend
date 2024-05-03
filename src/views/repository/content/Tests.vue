@@ -37,6 +37,27 @@
               :contentBaseUuid="contentBaseUuid"
               :questionUuid="message.question_uuid"
             />
+
+            <section
+              v-if="
+                usePreview &&
+                message.type === 'answer' &&
+                isTheLastMessage(message) &&
+                preview.quickReplies.length
+              "
+              class="quick-replies"
+            >
+              <UnnnicButton
+                v-for="(reply, index) in preview.quickReplies"
+                :key="`reply-${index}`"
+                type="secondary"
+                size="small"
+                class="quick-replies__button"
+                @click="sendReply(reply)"
+              >
+                {{ reply }}
+              </UnnnicButton>
+            </section>
           </template>
         </div>
       </div>
@@ -133,6 +154,13 @@ export default {
   },
 
   methods: {
+    isTheLastMessage(message) {
+      return (
+        this.messages.filter(({ type }) => ['answer', 'question']).at(-1) ===
+        message
+      );
+    },
+
     treatEvents(replace, events) {
       this.messages.splice(
         this.messages.indexOf(replace),
@@ -187,6 +215,12 @@ export default {
       });
 
       this.treatEvents(answer, events);
+    },
+
+    sendReply(message) {
+      this.message = message;
+
+      this.sendMessage();
     },
 
     sendMessage() {
@@ -293,6 +327,17 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.quick-replies {
+  margin-top: $unnnic-spacing-sm;
+  display: flex;
+  flex-direction: column;
+  row-gap: $unnnic-spacing-nano;
+
+  &__button {
+    color: $unnnic-color-weni-600;
+  }
+}
 
 .button-send-message /deep/ svg .primary {
   fill: $unnnic-color-weni-600;
