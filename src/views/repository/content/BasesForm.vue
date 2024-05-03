@@ -95,11 +95,13 @@
               >
                 <template v-if="$route.name === 'router-content'">
                   <section>
-                    <UnnnicInput        
+                    <UnnnicInput
                       size="md"
                       :iconLeftClickable="true"
                       iconLeft="search-1"
-                      :placeholder="$t('router.content.fields.search_placeholder')"
+                      :placeholder="
+                        $t('router.content.fields.search_placeholder')
+                      "
                       v-model="filterName"
                     />
                   </section>
@@ -184,6 +186,49 @@
               ? $t('router.preview.title')
               : $t('content_bases.quick_test')
           }}
+
+          <article>
+            <UnnnicDropdown
+              position="bottom-left"
+              :open.sync="dropdownOpen"
+            >
+              <section slot="trigger">
+                <UnnnicIconSvg
+                  icon="navigation-menu-vertical-1"
+                  class="unnnic-card-intelligence__header__buttons__icon"
+                  :scheme="dropdownOpen ? 'neutral-dark' : 'neutral-clean'"
+                  size="sm"
+                  slot="trigger"
+                  clickable
+                />
+              </section>
+
+              <UnnnicDropdownItem>
+                <section
+                  class="unnnic-card-intelligence__header__buttons__dropdown"
+                  @click="refreshPreview"
+                >
+                  <UnnnicIconSvg
+                    size="sm"
+                    icon="refresh"
+                  />
+                  <div>{{ $t('router.preview.options.refresh') }}</div>
+                </section>
+              </UnnnicDropdownItem>
+
+              <UnnnicDropdownItem>
+                <section
+                  class="unnnic-card-intelligence__header__buttons__dropdown"
+                >
+                  <UnnnicIconSvg
+                    size="sm"
+                    icon="smartphone"
+                  />
+                  <div>{{ $t('router.preview.options.qr_code') }}</div>
+                </section>
+              </UnnnicDropdownItem>
+            </UnnnicDropdown>
+          </article>
         </div>
 
         <section
@@ -220,6 +265,7 @@
 
         <Tests
           v-else
+          :key="refreshPreviewValue"
           :contentBaseUuid="contentBaseUuid"
           :contentBaseLanguage="contentBase.language"
           :usePreview="isRouterView"
@@ -342,6 +388,8 @@ export default {
       },
 
       isEditContentBaseOpen: false,
+      dropdownOpen: false,
+      refreshPreviewValue: 0,
 
       loadingTitle: false,
       loadingText: false,
@@ -380,7 +428,7 @@ export default {
 
       filters: {
         files: null,
-        sites: null
+        sites: null,
       },
 
       sites: {
@@ -453,14 +501,14 @@ export default {
 
       const formatResult = {
         data: filesData,
-        next: data.next
-      }
+        next: data.next,
+      };
 
       this.files = formatResult;
       this.filters.files = formatResult;
 
       if (!data.next) {
-        const status = 'complete'
+        const status = 'complete';
         this.files.status = status;
         this.filters.files.status = status;
       }
@@ -490,13 +538,13 @@ export default {
               ({ uuid }) =>
                 !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
             ),
-        );        
+        );
 
         this.sites.data = sitesData;
         this.filters.sites = {
           data: sitesData,
-          status
-        }
+          status,
+        };
 
         this.sites.status = status;
       } finally {
@@ -607,6 +655,9 @@ export default {
         name: 'repository-content-tests',
       });
     },
+    refreshPreview() {
+      this.refreshPreviewValue += 1;
+    },
   },
   watch: {
     '$route.params.intelligenceUuid': {
@@ -653,19 +704,25 @@ export default {
       },
     },
     filterName: debounce(function () {
-      const filesData = this.files.data.filter(e => e.file_name?.toLowerCase().includes(this.filterName?.toLowerCase()))
-      const sitesData = this.sites.data.filter(e => e.created_file_name?.toLowerCase().includes(this.filterName?.toLowerCase()))
+      const filesData = this.files.data.filter((e) =>
+        e.file_name?.toLowerCase().includes(this.filterName?.toLowerCase()),
+      );
+      const sitesData = this.sites.data.filter((e) =>
+        e.created_file_name
+          ?.toLowerCase()
+          .includes(this.filterName?.toLowerCase()),
+      );
 
-      this.$set(this.filters, 'files', ({
+      this.$set(this.filters, 'files', {
         ...this.files,
-        data: filesData
-      }))
+        data: filesData,
+      });
 
-      this.$set(this.filters, 'sites', ({
+      this.$set(this.filters, 'sites', {
         ...this.sites,
-        data: sitesData
-      }))
-    }, 300)
+        data: sitesData,
+      });
+    }, 300),
   },
   computed: {
     contentBaseUuid() {
@@ -1004,6 +1061,8 @@ export default {
       flex-direction: column;
 
       &__header {
+        display: flex;
+        justify-content: space-between;
         color: $unnnic-color-neutral-darkest;
         font-family: $unnnic-font-family-secondary;
         font-size: $unnnic-font-size-body-lg;
