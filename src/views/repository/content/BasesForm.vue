@@ -187,7 +187,7 @@
               : $t('content_bases.quick_test')
           }}
 
-          <article>
+          <article v-if="isRouterView">
             <UnnnicDropdown
               position="bottom-left"
               :open.sync="dropdownOpen"
@@ -219,6 +219,7 @@
               <UnnnicDropdownItem>
                 <section
                   class="unnnic-card-intelligence__header__buttons__dropdown"
+                  @click="isMobilePreviewModalOpen = true"
                 >
                   <UnnnicIconSvg
                     size="sm"
@@ -299,6 +300,12 @@
         {{ $t('webapp.home.bases.edit-base_modal_alert_save') }}
       </UnnnicButton>
     </UnnnicModal>
+
+    <ModalPreviewQRCode
+      v-if="isMobilePreviewModalOpen"
+      @close="isMobilePreviewModalOpen = false"
+    />
+
     <UnnnicAlert
       v-if="isAlertOpen"
       :text="$t('content_bases.changes_saved')"
@@ -340,6 +347,7 @@ import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
 import RouterActions from './router/RouterActions.vue';
 import RouterTunings from './router/RouterTunings.vue';
 import RouterCustomization from './router/RouterCustomization.vue';
+import ModalPreviewQRCode from './router/ModalPreviewQRCode.vue';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -354,6 +362,7 @@ export default {
     RouterActions,
     RouterTunings,
     RouterCustomization,
+    ModalPreviewQRCode,
   },
   mixins: [RemoveBulmaMixin],
   data() {
@@ -395,6 +404,9 @@ export default {
       loadingText: false,
       repositoryUUID: null,
       isSavedModalOpen: false,
+
+      isMobilePreviewModalOpen: false,
+
       openModal: false,
       localNext: null,
       bases: [],

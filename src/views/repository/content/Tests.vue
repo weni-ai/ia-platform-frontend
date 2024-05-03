@@ -68,7 +68,6 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
 import FlowPreview from '../../../utils/FlowPreview';
-import QrcodeVue from 'qrcode.vue';
 
 export default {
   name: 'RepositoryContentTests',
@@ -82,7 +81,6 @@ export default {
   components: {
     VueMarkdown,
     AnswerFeedback,
-    QrcodeVue,
   },
 
   mixins: [FlowPreview],

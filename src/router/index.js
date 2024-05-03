@@ -36,6 +36,7 @@ import DashboardLayout from '@/layout/dashboard/DashboardLayout';
 import DashboardExternalLayout from '@/layout/dashboard/DashboardExternalLayout';
 import PaymentOptions from '@/views/payment/PaymentOptions';
 import PaymentInfo from '@/views/payment/PaymentInfo';
+import RouterPreviewFullPage from '@/views/repository/content/router/RouterPreviewFullPage';
 import store from '../store';
 import nexusaiAPI from '../api/nexusaiAPI';
 
@@ -147,6 +148,24 @@ const router = new Router({
           component: RepositoryTranslateExternal,
         },
       ],
+    },
+    {
+      path: '/brain/preview',
+      name: 'brain-preview-full-page',
+      component: RouterPreviewFullPage,
+      beforeEnter: async (to, from, next) => {
+        store.dispatch('externalLogin', { token: `Bearer ${to.query?.token}` });
+        store.dispatch('projectSelected', { project: to.query?.project_uuid });
+
+        store.state.Auth.connectProjectUuid = to.query?.project_uuid;
+
+        sessionStorage.setItem(
+          'projectUuid',
+          store.state.Auth.connectProjectUuid,
+        );
+
+        next();
+      },
     },
     {
       path: '/router',

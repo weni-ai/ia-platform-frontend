@@ -117,6 +117,10 @@
         "refresh": "Clear conversations",
         "qr_code": "View from mobile"
       },
+      "modal_qr_code": {
+        "title": "View preview on mobile",
+        "description": "Scan the QR Code to access the agent preview on your cell phone"
+      },
       "active_to_see": "Activate Brain to see the agent preview",
       "active_to_see_description": "Brain can be activated from the advanced options in the Tunings tab",
       "placeholder": "Send a message to test your intelligent agent"
