@@ -122,7 +122,6 @@
       >
         <UnnnicInput
           :value="field.value"
-          :placeholder="token"
           @input="$set(values, field.name, $event)"
           :type="hasValidate ? 'error' : 'normal'"
           :message="hasValidate ? $t('customization.invalid_field') : ''"
