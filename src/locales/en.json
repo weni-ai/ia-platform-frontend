@@ -83,6 +83,7 @@
       },
       "fields": {
         "model": "Select model",
+        "token": "Token",
         "version": "Version",
         "version-gpt": "Version",
         "parameter": "Parameters",
@@ -119,7 +120,8 @@
       },
       "active_to_see": "Activate Brain to see the agent preview",
       "active_to_see_description": "Brain can be activated from the advanced options in the Tunings tab",
-      "placeholder": "Send a message to test your intelligent agent"
+      "placeholder": "Send a message to test your intelligent agent",
+      "field_changed_to_value": "{field} changed to {value}"
     }
   },
   "content_bases": {

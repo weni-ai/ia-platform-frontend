@@ -83,6 +83,7 @@
       },
       "fields": {
         "model": "Seleccionar modelo",
+        "token": "Token",
         "version": "Versión",
         "version-gpt": "Versión",
         "parameter": "Parámetros",
@@ -119,7 +120,8 @@
       },
       "active_to_see": "Activar Brain para ver la vista previa del agente",
       "active_to_see_description": "Activar Brain se puede hacer dentro de las opciones avanzadas en la pestaña Configuración",
-      "placeholder": "Envíe un mensaje para probar su agente inteligente"
+      "placeholder": "Envíe un mensaje para probar su agente inteligente",
+      "field_changed_to_value": "{field} cambiada a {value}"
     }
   },
   "content_bases": {

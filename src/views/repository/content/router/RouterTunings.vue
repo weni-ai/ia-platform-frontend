@@ -116,8 +116,8 @@
       />
       <UnnnicFormElement
         class="tunings__container_fields-element"
-        label="Token"
-        v-if="field.type === 'text'"
+        :label="$t(`router.tunings.fields.${field.name}`)"
+        v-if="field.type === 'password'"
         :key="index"
       >
         <UnnnicInput
@@ -126,7 +126,7 @@
           @input="$set(values, field.name, $event)"
           :type="hasValidate ? 'error' : 'normal'"
           :message="hasValidate ? $t('customization.invalid_field') : ''"
-          nativeType="password"
+          :nativeType="field.type"
         />
       </UnnnicFormElement>
     </template>
@@ -161,6 +161,7 @@
 import nexusaiAPI from '../../../../api/nexusaiAPI';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
 import { WENIGPT_OPTIONS } from '@/utils';
+import { pick } from 'lodash';
 
 export default {
   props: {
@@ -229,7 +230,7 @@ export default {
           name: 'ChatGPT',
           fields: [
             {
-              type: 'text',
+              type: 'password',
               name: 'token',
             },
             {
@@ -282,11 +283,18 @@ export default {
       ];
     },
 
-    hasChanged() {
-      return this.fields.some((field) => {
-        return field.value !== this.oldValues[field.name];
-      });
+    fieldsChangeds() {
+      return this.fields
+        .filter((field) => {
+          return field.value !== this.oldValues[field.name];
+        })
+        .map((field) => ({ ...field, oldValue: this.oldValues[field.name] }));
     },
+
+    hasChanged() {
+      return !!this.fieldsChangeds.length;
+    },
+
     hasValidate() {
       return !!this.fields.find((field) => {
         return field.type === 'text' && field.value === undefined;
@@ -394,12 +402,34 @@ export default {
           ),
         });
 
+        const fieldsChangeds = this.fieldsChangeds.map((field) =>
+          pick(field, ['name', 'value', 'type']),
+        );
+
         this.setInitialValues(data);
 
         this.$store.state.alert = {
           type: 'success',
           text: this.$t('router.tunings.changes_saved'),
         };
+
+        if (window.brainPreviewAddMessage) {
+          fieldsChangeds.forEach((field) => {
+            const name =
+              {
+                model: 'router.tunings.model',
+              }[field.name] || `router.tunings.fields.${field.name}`;
+
+            window.brainPreviewAddMessage({
+              type: 'change',
+              name,
+              value:
+                field.type === 'password'
+                  ? field.value.replace(/./g, '•')
+                  : field.value,
+            });
+          });
+        }
       } finally {
         this.saving = false;
       }
