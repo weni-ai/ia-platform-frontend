@@ -16,7 +16,7 @@
           }}
         </div>
 
-        <div
+        <section
           v-for="(message, index) in messages"
           :key="index"
           :class="`messages__${message.type}`"
@@ -25,6 +25,21 @@
             v-if="message.status === 'loading'"
             class="dot-typing"
           ></div>
+
+          <UnnnicIntelligenceText
+            v-else-if="message.type === 'change'"
+            color="neutral-cloudy"
+            family="secondary"
+            weight="regular"
+            size="body-md"
+          >
+            {{
+              $t('router.preview.field_changed_to_value', {
+                field: $t(message.name),
+                value: message.value,
+              })
+            }}
+          </UnnnicIntelligenceText>
 
           <template v-else>
             <VueMarkdown :class="`messages__${message.type}__content`">
@@ -54,7 +69,7 @@
               </UnnnicButton>
             </section>
           </template>
-        </div>
+        </section>
       </div>
     </div>
 
@@ -127,6 +142,10 @@ export default {
   mounted() {
     if (this.usePreview) {
       this.previewInit();
+
+      window.brainPreviewAddMessage = (message) => {
+        this.messages.push(message);
+      };
     }
   },
 
@@ -478,6 +497,14 @@ export default {
       background-color: $unnnic-color-neutral-light;
       border-bottom-left-radius: $unnnic-border-radius-sm;
       margin-right: 1.875 * $unnnic-font-size;
+    }
+
+    &__change {
+      text-align: center;
+
+      + .messages__change {
+        margin-top: -$unnnic-spacing-nano;
+      }
     }
   }
 
