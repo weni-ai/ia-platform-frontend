@@ -34,7 +34,7 @@
             size="body-md"
           >
             {{
-              $t('router.preview.field_changed_to_value', {
+              $t(getTranslationChangeField(message.name), {
                 field: $t(message.name),
                 value: message.value,
               })
@@ -173,6 +173,19 @@ export default {
         this.isTheLastMessage(message) &&
         this.preview.quickReplies?.length
       );
+    },
+
+    getTranslationChangeField(name) {
+      const isNeedChange = [
+        'router.tunings.fields.temperature',
+        'router.tunings.fields.version',
+      ].includes(name);
+
+      const translation = isNeedChange
+        ? 'router.preview.field_changed_to_value_f'
+        : 'router.preview.field_changed_to_value';
+
+      return translation;
     },
 
     isTheLastMessage(message) {
