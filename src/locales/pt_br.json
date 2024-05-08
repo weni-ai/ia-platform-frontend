@@ -125,7 +125,7 @@
       "active_to_see": "Ative o Brain para ver o preview do agente",
       "active_to_see_description": "A ativação do Brain pode ser feita dentro das opções avançadas na aba Ajustes",
       "placeholder": "Envie uma mensagem para testar seu agente inteligente",
-      "field_changed_to_value": "{field} alterado para {value}"
+      "field_changed_to_value": "Parâmetro {field} alterado para {value}"
     }
   },
   "content_bases": {

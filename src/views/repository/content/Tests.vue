@@ -35,7 +35,7 @@
           >
             {{
               $t('router.preview.field_changed_to_value', {
-                field: $t(message.name),
+                field: handleLetter($t(message.name)),
                 value: message.value,
               })
             }}
@@ -99,6 +99,7 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
 import FlowPreview from '../../../utils/FlowPreview';
+import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 
 export default {
   name: 'RepositoryContentTests',
@@ -173,6 +174,10 @@ export default {
         this.isTheLastMessage(message) &&
         this.preview.quickReplies?.length
       );
+    },
+
+    handleLetter(message) {
+      return lowerFirstCapitalLetter(message);
     },
 
     isTheLastMessage(message) {
