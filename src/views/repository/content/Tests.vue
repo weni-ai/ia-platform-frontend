@@ -99,7 +99,7 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
 import FlowPreview from '../../../utils/FlowPreview';
-import { lowerDirstCapitalLetter } from '../../../utils/handleLetters';
+import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 
 export default {
   name: 'RepositoryContentTests',
@@ -177,20 +177,7 @@ export default {
     },
 
     handleLetter(message) {
-      return lowerDirstCapitalLetter(message);
-    },
-
-    getTranslationChangeField(name) {
-      const isNeedChange = [
-        'router.tunings.fields.temperature',
-        'router.tunings.fields.version',
-      ].includes(name);
-
-      const translation = isNeedChange
-        ? 'router.preview.field_changed_to_value_f'
-        : 'router.preview.field_changed_to_value';
-
-      return translation;
+      return lowerFirstCapitalLetter(message);
     },
 
     isTheLastMessage(message) {
