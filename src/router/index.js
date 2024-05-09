@@ -36,9 +36,9 @@ import DashboardLayout from '@/layout/dashboard/DashboardLayout';
 import DashboardExternalLayout from '@/layout/dashboard/DashboardExternalLayout';
 import PaymentOptions from '@/views/payment/PaymentOptions';
 import PaymentInfo from '@/views/payment/PaymentInfo';
+import RouterPreviewFullPage from '@/views/repository/content/router/RouterPreviewFullPage';
 import store from '../store';
 import nexusaiAPI from '../api/nexusaiAPI';
-import RouterPreviewFullPage from '@/views/repository/content/router/RouterPreviewFullPage';
 
 Vue.use(Router);
 
@@ -154,7 +154,7 @@ const router = new Router({
     },
     {
       path: '/brain/preview',
-      name: 'brain-preview',
+      name: 'brain-preview-full-page',
       component: RouterPreviewFullPage,
       beforeEnter: async (to, from, next) => {
         store.dispatch('externalLogin', { token: `Bearer ${to.query?.token}` });

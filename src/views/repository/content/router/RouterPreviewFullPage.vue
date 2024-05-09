@@ -30,29 +30,22 @@ export default {
     this.height = window.visualViewport.height;
 
     window.addEventListener('resize', () => {
-      // For the rare legacy browsers that don't support it
       if (!window.visualViewport) {
         return;
       }
 
       this.height = window.visualViewport.height;
-
-      console.log(window.visualViewport.height);
     });
   },
 };
 </script>
-
-<!-- <style>
-html { overscroll-behavior: none; }
-</style> -->
 
 <style lang="scss" scoped>
 @import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .preview {
   display: flex;
-  max-width: 100vw;
+  height: 100%;
   overflow: hidden;
   padding: $unnnic-spacing-sm;
 }

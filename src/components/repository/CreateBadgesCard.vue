@@ -173,8 +173,6 @@ export default {
 @import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 @function borderDashed($color) {
-  @debug 'here 1 2';
-  @debug string.slice(#{$color}, 2);
   @return url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23#{string.slice(#{$color}, 2)}' stroke-width='4' stroke-dasharray='4%2c 12' stroke-dashoffset='9' stroke-linecap='square'/%3e%3c/svg%3e");
 }
 .drag-area {

@@ -83,6 +83,7 @@
       },
       "fields": {
         "model": "Selecione o modelo",
+        "token": "Token",
         "version": "Versão",
         "version-gpt": "Versão",
         "parameter": "Parâmetros",
@@ -113,9 +114,18 @@
     },
     "preview": {
       "title": "Preview do agente",
+      "options": {
+        "refresh": "Limpar conversas",
+        "qr_code": "Visualizar pelo celular"
+      },
+      "modal_qr_code": {
+        "title": "Visualizar preview pelo celular",
+        "description": "Faça a leitura do QR Code para acessar o preview do agente pelo celular"
+      },
       "active_to_see": "Ative o Brain para ver o preview do agente",
       "active_to_see_description": "A ativação do Brain pode ser feita dentro das opções avançadas na aba Ajustes",
-      "placeholder": "Envie uma mensagem para testar seu agente inteligente"
+      "placeholder": "Envie uma mensagem para testar seu agente inteligente",
+      "field_changed_to_value": "Parâmetro {field} alterado para {value}"
     }
   },
   "content_bases": {

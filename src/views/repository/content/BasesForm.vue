@@ -186,6 +186,50 @@
               ? $t('router.preview.title')
               : $t('content_bases.quick_test')
           }}
+
+          <article v-if="isRouterView">
+            <UnnnicDropdown
+              position="bottom-left"
+              :open.sync="dropdownOpen"
+            >
+              <section slot="trigger">
+                <UnnnicIconSvg
+                  icon="navigation-menu-vertical-1"
+                  class="unnnic-card-intelligence__header__buttons__icon"
+                  :scheme="dropdownOpen ? 'neutral-dark' : 'neutral-clean'"
+                  size="sm"
+                  slot="trigger"
+                  clickable
+                />
+              </section>
+
+              <UnnnicDropdownItem>
+                <section
+                  class="unnnic-card-intelligence__header__buttons__dropdown"
+                  @click="refreshPreview"
+                >
+                  <UnnnicIconSvg
+                    size="sm"
+                    icon="refresh"
+                  />
+                  <div>{{ $t('router.preview.options.refresh') }}</div>
+                </section>
+              </UnnnicDropdownItem>
+
+              <UnnnicDropdownItem>
+                <section
+                  class="unnnic-card-intelligence__header__buttons__dropdown"
+                  @click="isMobilePreviewModalOpen = true"
+                >
+                  <UnnnicIconSvg
+                    size="sm"
+                    icon="smartphone"
+                  />
+                  <div>{{ $t('router.preview.options.qr_code') }}</div>
+                </section>
+              </UnnnicDropdownItem>
+            </UnnnicDropdown>
+          </article>
         </div>
 
         <section
@@ -222,6 +266,7 @@
 
         <Tests
           v-else
+          :key="refreshPreviewValue"
           :contentBaseUuid="contentBaseUuid"
           :contentBaseLanguage="contentBase.language"
           :usePreview="isRouterView"
@@ -255,6 +300,12 @@
         {{ $t('webapp.home.bases.edit-base_modal_alert_save') }}
       </UnnnicButton>
     </UnnnicModal>
+
+    <ModalPreviewQRCode
+      v-if="isMobilePreviewModalOpen"
+      @close="isMobilePreviewModalOpen = false"
+    />
+
     <UnnnicAlert
       v-if="isAlertOpen"
       :text="$t('content_bases.changes_saved')"
@@ -296,6 +347,7 @@ import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
 import RouterActions from './router/RouterActions.vue';
 import RouterTunings from './router/RouterTunings.vue';
 import RouterCustomization from './router/RouterCustomization.vue';
+import ModalPreviewQRCode from './router/ModalPreviewQRCode.vue';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -310,6 +362,7 @@ export default {
     RouterActions,
     RouterTunings,
     RouterCustomization,
+    ModalPreviewQRCode,
   },
   mixins: [RemoveBulmaMixin],
   data() {
@@ -344,11 +397,16 @@ export default {
       },
 
       isEditContentBaseOpen: false,
+      dropdownOpen: false,
+      refreshPreviewValue: 0,
 
       loadingTitle: false,
       loadingText: false,
       repositoryUUID: null,
       isSavedModalOpen: false,
+
+      isMobilePreviewModalOpen: false,
+
       openModal: false,
       localNext: null,
       bases: [],
@@ -608,6 +666,9 @@ export default {
       this.$router.push({
         name: 'repository-content-tests',
       });
+    },
+    refreshPreview() {
+      this.refreshPreviewValue += 1;
     },
   },
   watch: {
@@ -1012,6 +1073,8 @@ export default {
       flex-direction: column;
 
       &__header {
+        display: flex;
+        justify-content: space-between;
         color: $unnnic-color-neutral-darkest;
         font-family: $unnnic-font-family-secondary;
         font-size: $unnnic-font-size-body-lg;

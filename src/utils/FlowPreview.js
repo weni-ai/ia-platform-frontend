@@ -169,14 +169,13 @@ export default {
               // save off any quick replies we might have
               if (event.msg.quick_replies) {
                 quickReplies = event.msg.quick_replies;
+                this.preview.quickReplies = quickReplies;
               }
             }
           }
 
           this.preview.events.push(event);
         }
-
-        this.preview.quickReplies = quickReplies;
 
         if (events.length === 0) {
           callback();

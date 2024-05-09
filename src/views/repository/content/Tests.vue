@@ -16,7 +16,7 @@
           }}
         </div>
 
-        <div
+        <section
           v-for="(message, index) in messages"
           :key="index"
           :class="`messages__${message.type}`"
@@ -25,6 +25,21 @@
             v-if="message.status === 'loading'"
             class="dot-typing"
           ></div>
+
+          <UnnnicIntelligenceText
+            v-else-if="message.type === 'change'"
+            color="neutral-cloudy"
+            family="secondary"
+            weight="regular"
+            size="body-md"
+          >
+            {{
+              $t('router.preview.field_changed_to_value', {
+                field: handleLetter($t(message.name)),
+                value: message.value,
+              })
+            }}
+          </UnnnicIntelligenceText>
 
           <template v-else>
             <VueMarkdown :class="`messages__${message.type}__content`">
@@ -37,8 +52,24 @@
               :contentBaseUuid="contentBaseUuid"
               :questionUuid="message.question_uuid"
             />
+
+            <section
+              v-if="shouldShowQuickReplies(message)"
+              class="quick-replies"
+            >
+              <UnnnicButton
+                v-for="(reply, index) in preview.quickReplies"
+                :key="`reply-${index}`"
+                type="secondary"
+                size="small"
+                class="quick-replies__button"
+                @click="sendReply(reply)"
+              >
+                {{ reply }}
+              </UnnnicButton>
+            </section>
           </template>
-        </div>
+        </section>
       </div>
     </div>
 
@@ -68,7 +99,7 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
 import FlowPreview from '../../../utils/FlowPreview';
-import QrcodeVue from 'qrcode.vue';
+import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 
 export default {
   name: 'RepositoryContentTests',
@@ -82,7 +113,6 @@ export default {
   components: {
     VueMarkdown,
     AnswerFeedback,
-    QrcodeVue,
   },
 
   mixins: [FlowPreview],
@@ -113,6 +143,10 @@ export default {
   mounted() {
     if (this.usePreview) {
       this.previewInit();
+
+      window.brainPreviewAddMessage = (message) => {
+        this.messages.push(message);
+      };
     }
   },
 
@@ -133,6 +167,26 @@ export default {
   },
 
   methods: {
+    shouldShowQuickReplies(message) {
+      return (
+        this.usePreview &&
+        message.type === 'answer' &&
+        this.isTheLastMessage(message) &&
+        this.preview.quickReplies?.length
+      );
+    },
+
+    handleLetter(message) {
+      return lowerFirstCapitalLetter(message);
+    },
+
+    isTheLastMessage(message) {
+      return (
+        this.messages.filter(({ type }) => ['answer', 'question']).at(-1) ===
+        message
+      );
+    },
+
     treatEvents(replace, events) {
       this.messages.splice(
         this.messages.indexOf(replace),
@@ -187,6 +241,12 @@ export default {
       });
 
       this.treatEvents(answer, events);
+    },
+
+    sendReply(message) {
+      this.message = message;
+
+      this.sendMessage();
     },
 
     sendMessage() {
@@ -294,6 +354,17 @@ export default {
 <style lang="scss" scoped>
 @use 'sass:math';
 @import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+.quick-replies {
+  margin-top: $unnnic-spacing-sm;
+  display: flex;
+  flex-direction: column;
+  row-gap: $unnnic-spacing-nano;
+
+  &__button {
+    color: $unnnic-color-weni-600;
+  }
+}
 
 .button-send-message :deep(svg .primary) {
   fill: $unnnic-color-weni-600;
@@ -432,6 +503,14 @@ export default {
       background-color: $unnnic-color-neutral-light;
       border-bottom-left-radius: $unnnic-border-radius-sm;
       margin-right: 1.875 * $unnnic-font-size;
+    }
+
+    &__change {
+      text-align: center;
+
+      + .messages__change {
+        margin-top: -$unnnic-spacing-nano;
+      }
     }
   }
 

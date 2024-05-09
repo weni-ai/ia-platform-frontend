@@ -98,7 +98,7 @@
             <template v-if="items.status === 'loading'">
               <UnnnicSkeletonLoading
                 v-for="i in 3"
-                :key="i"
+                :key="`loading-${i}`"
                 tag="div"
                 height="50px"
                 :style="{ display: 'flex', flexBasis: 'calc(50% - 6px)' }"
@@ -198,6 +198,12 @@ export default {
   },
 
   watch: {
+    'items.status'(status) {
+      if (this.isShowingEndOfList && status === null) {
+        this.loadMoreFlows();
+      }
+    },
+
     isShowingEndOfList() {
       if (this.isShowingEndOfList && this.items.status === null) {
         this.loadMoreFlows();
