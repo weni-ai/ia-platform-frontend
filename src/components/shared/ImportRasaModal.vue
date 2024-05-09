@@ -1,16 +1,16 @@
 <template>
-    <unnnic-modal-upload
-      v-model="selectedFile"
-      :textCancel="$t('webapp.import_dataset.cancel')"
-      :acceptMultiple="false"
-      textTitle=""
-      :textAction="$t('webapp.import_dataset.importar')"
-      :isUploading="isUploading"
-      supportedFormats=".txt,.json"
-      canImport
-      @action="dispatchUploadFile()"
-      @cancel="removeFile()"
-    />
+  <UnnnicModalUpload
+    v-model="selectedFile"
+    :textCancel="$t('webapp.import_dataset.cancel')"
+    :acceptMultiple="false"
+    textTitle=""
+    :textAction="$t('webapp.import_dataset.importar')"
+    :isUploading="isUploading"
+    supportedFormats=".txt,.json"
+    canImport
+    @action="dispatchUploadFile()"
+    @cancel="removeFile()"
+  />
 </template>
 
 <script>
@@ -27,18 +27,14 @@ export default {
   data() {
     return {
       selectedFile: [],
-      isUploading: false
+      isUploading: false,
     };
   },
   computed: {
-    ...mapGetters([
-      'getCurrentRepository',
-    ]),
+    ...mapGetters(['getCurrentRepository']),
   },
   methods: {
-    ...mapActions([
-      'setUploadRasaDataset',
-    ]),
+    ...mapActions(['setUploadRasaDataset']),
     async dispatchUploadFile() {
       try {
         this.isUploading = true;
@@ -53,15 +49,21 @@ export default {
         });
         this.$emit('dispatchImportNotification', {
           type: 'success',
-          title: this.$t('webapp.import_dataset.import_sentences_success_title'),
-          message: this.$t('webapp.import_dataset.import_sentences_success_message')
+          title: this.$t(
+            'webapp.import_dataset.import_sentences_success_title',
+          ),
+          message: this.$t(
+            'webapp.import_dataset.import_sentences_success_message',
+          ),
         });
         this.dispatchCloseImportModal();
       } catch (error) {
         this.$emit('dispatchImportNotification', {
           type: 'error',
           title: this.$t('webapp.import_dataset.import_sentences_error_title'),
-          message: this.$t('webapp.import_dataset.import_sentences_error_message')
+          message: this.$t(
+            'webapp.import_dataset.import_sentences_error_message',
+          ),
         });
       } finally {
         this.isUploading = false;
@@ -72,15 +74,15 @@ export default {
       this.$emit('dispatchCloseModal');
     },
     removeFile() {
-      this.selectedFile = []
-    }
+      this.selectedFile = [];
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .modal-card-foot {
   background: #f9f9f9;
@@ -89,14 +91,14 @@ export default {
   padding: 0;
   background: transparent;
   box-shadow: none;
-  /deep/ .close-button-container {
+  :deep(.close-button-container) {
     display: none;
   }
-  /deep/ .footer {
+  :deep(.footer) {
     padding: 1.5rem 0 2.5rem;
     margin-top: 0;
   }
-  /deep/ .unnnic-import-card__data {
+  :deep(.unnnic-import-card__data) {
     text-align: left;
   }
 }

@@ -1,14 +1,13 @@
 <template>
-  <div
-    class="translate-form">
-    <example-text-with-highlighted-entities-input
+  <div class="translate-form">
+    <ExampleTextWithHighlightedEntitiesInput
       ref="textInput"
       v-model="text"
       :entities="allEntities"
       :readonly="!editing"
       :placeholder="''"
       :transparent="!editing && !translation"
-      small-icon
+      smallIcon
       class="translate-form__input"
       size="normal"
       @textSelected="setTextSelected($event)"
@@ -16,32 +15,37 @@
     >
       <div
         slot="append"
-        class="translate-form__icon">
-        <b-tooltip
+        class="translate-form__icon"
+      >
+        <BTooltip
           v-if="invalid"
           :label="$t('webapp.translate.invalid_entities')"
           class="translate-form__icon"
           multilined
-          type="is-warning">
-          <b-icon
+          type="is-warning"
+        >
+          <BIcon
             size="is-small"
             class="is-warning"
-            icon="alert" />
-        </b-tooltip>
+            icon="alert"
+          />
+        </BTooltip>
       </div>
-    </example-text-with-highlighted-entities-input>
+    </ExampleTextWithHighlightedEntitiesInput>
     <div
       v-show="open && editing"
-      class="translate-form__entities">
-      <example-entity-small-input
+      class="translate-form__entities"
+    >
+      <ExampleEntitySmallInput
         v-if="entities"
         v-model="allEntities"
         :text="text"
-        :available-entities="entityOptions"
+        :availableEntities="entityOptions"
         :entities="entities"
-        :text-selected="textSelected"
-        constrict-entities
-        @addedEntity="onEntityAdded" />
+        :textSelected="textSelected"
+        constrictEntities
+        @addedEntity="onEntityAdded"
+      />
     </div>
   </div>
 </template>
@@ -88,7 +92,7 @@ export default {
   },
   computed: {
     entityOptions() {
-      return this.availableEntities.map(entity => entity.entity);
+      return this.availableEntities.map((entity) => entity.entity);
     },
     invalid() {
       return this.translation && !this.translation.has_valid_entities;
@@ -109,7 +113,9 @@ export default {
     },
     translation() {
       if (this.initialData) return;
-      const { text, entities } = this.initialData ? this.initialData : this.translation || {};
+      const { text, entities } = this.initialData
+        ? this.initialData
+        : this.translation || {};
       this.text = text || '';
       this.entities = [...(entities || [])];
     },
@@ -120,7 +126,8 @@ export default {
     },
   },
   mounted() {
-    const { text, entities } = (this.initialData ? this.initialData : this.translation) || {};
+    const { text, entities } =
+      (this.initialData ? this.initialData : this.translation) || {};
     this.text = text || '';
     this.entities = [...(entities || [])];
   },
@@ -152,30 +159,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
-  .is-warning {
-    color: $color-warning !important;
+.is-warning {
+  color: $color-warning !important;
+}
+
+.translate-form {
+  margin-top: 0.5rem;
+  &__entities {
+    margin-top: -0.8rem;
+    padding: 1rem;
+    background-color: $color-grey-light;
+    border-radius: 4px;
+    min-height: 5rem;
   }
 
-    .translate-form {
-        margin-top: 0.5rem;
-        &__entities {
-            margin-top: -0.8rem;
-            padding: 1rem;
-            background-color: $color-grey-light;
-            border-radius: 4px;
-            min-height: 5rem;
-        }
+  &__input {
+    background-color: $color-fake-white;
+    border-radius: 4px;
+  }
 
-        &__input {
-          background-color: $color-fake-white;
-          border-radius: 4px;
-        }
-
-        &__icon {
-          width: 1rem;
-          position: static;
-        }
-    }
+  &__icon {
+    width: 1rem;
+    position: static;
+  }
+}
 </style>

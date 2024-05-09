@@ -1,5 +1,5 @@
 <template>
-  <component
+  <Component
     :is="tagComputed"
     :class="[
       'unnnic-text',
@@ -14,7 +14,7 @@
     v-bind="$attrs"
   >
     <slot></slot>
-  </component>
+  </Component>
 </template>
 
 <script>
@@ -77,13 +77,19 @@ export default {
       return this.tag || defaults[this.size] || 'span';
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 0;
 }
 
@@ -108,7 +114,7 @@ $font-weights: (
   }
 }
 
-.unnnic-text /deep/ strong {
+.unnnic-text :deep(strong) {
   font-weight: $unnnic-font-weight-bold;
 }
 
@@ -172,5 +178,4 @@ $spacings: (
     margin-bottom: $spacing;
   }
 }
-
 </style>

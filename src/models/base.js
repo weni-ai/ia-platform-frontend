@@ -3,27 +3,23 @@ import store from '../store';
 
 class ModelBase extends Model {
   getRequest(config) {
-    return super.getRequest(
-      {
-        ...config,
-        baseURL: runtimeVariables.get('VUE_APP_API_BASE_URL'),
-        headers: store.getters.authenticated
-          ? { Authorization: `${store.getters.authToken}` }
-          : {},
-      },
-    );
+    return super.getRequest({
+      ...config,
+      baseURL: runtimeVariables.get('VITE_API_BASE_URL'),
+      headers: store.getters.authenticated
+        ? { Authorization: `${store.getters.authToken}` }
+        : {},
+    });
   }
 
   getRequestExternal(config, token) {
-    return super.getRequest(
-      {
-        ...config,
-        baseURL: runtimeVariables.get('VUE_APP_API_BASE_URL'),
-        headers: store.getters.authenticated
-          ? { Authorization: `Translator ${token}` }
-          : {},
-      },
-    );
+    return super.getRequest({
+      ...config,
+      baseURL: runtimeVariables.get('VITE_API_BASE_URL'),
+      headers: store.getters.authenticated
+        ? { Authorization: `Translator ${token}` }
+        : {},
+    });
   }
 
   onFetchNoCache() {
@@ -35,7 +31,8 @@ class ModelBase extends Model {
   }
 
   onFetch() {
-    const cache = store.getters.cachedFetch[`${this.$class}/${this.identifier()}`];
+    const cache =
+      store.getters.cachedFetch[`${this.$class}/${this.identifier()}`];
 
     if (cache) {
       this.assign(cache);
@@ -47,14 +44,11 @@ class ModelBase extends Model {
 
   onFetchSuccess(response) {
     super.onFetchSuccess(response);
-    store.dispatch(
-      'cacheFetch',
-      {
-        className: this.$class,
-        identifier: this.identifier(),
-        attributes: this.attributes,
-      },
-    );
+    store.dispatch('cacheFetch', {
+      className: this.$class,
+      identifier: this.identifier(),
+      attributes: this.attributes,
+    });
   }
 }
 

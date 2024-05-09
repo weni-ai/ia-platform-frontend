@@ -352,42 +352,42 @@ export default {
 .info {
   margin-bottom: 1px;
 }
-/deep/ .unnnic-modal-container-background-body-alert_icon {
+:deep(.unnnic-modal-container-background-body-alert_icon) {
   display: none;
 }
 
-/deep/ .unnnic-modal-container-background-body {
+:deep(.unnnic-modal-container-background-body) {
   padding-top: 2rem;
 }
 
-/deep/ .expander__trigger__icon {
+:deep(.expander__trigger__icon) {
   margin-top: 3px;
 }
-/deep/ .expander__trigger {
+:deep(.expander__trigger) {
   padding: .4rem 0;
 }
 
-/deep/ .expander__body {
+:deep(.expander__body) {
   padding-inline: 0;
 }
 
-/deep/ .column:nth-child(odd) {
+:deep(.column:nth-child(odd)) {
   padding-left: .8rem;
 }
 
-/deep/ .column:nth-child(even) {
+:deep(.column:nth-child(even)) {
   padding-right: .8rem;
 }
 
-/deep/ .column:not(:first-child) {
+:deep(.column:not(:first-child)) {
   margin-bottom: 1rem;
 }
 
-/deep/ .column:last-child {
+:deep(.column:last-child) {
   margin-bottom: 1rem;
 }
 
-/deep/ .unnnic-modal-container-background-body-description {
+:deep(.unnnic-modal-container-background-body-description) {
   padding-bottom: 0;
 }
 </style>

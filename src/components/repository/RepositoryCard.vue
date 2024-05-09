@@ -1,43 +1,55 @@
 <template>
-  <div
-    :class="[ single ? 'repository-card__single' : 'repository-card']">
+  <div :class="[single ? 'repository-card__single' : 'repository-card']">
     <div
       id="tour-create_intelligence-step-0"
-      class="repository-card__align-items">
-      <div
-        class="repository-card__big-badge-wrapper">
-        <component
+      class="repository-card__align-items"
+    >
+      <div class="repository-card__big-badge-wrapper">
+        <Component
           :is="clickable ? 'router-link' : 'span'"
-          :to="repositoryDetailsRouterParams">
+          :to="repositoryDetailsRouterParams"
+        >
           <div class="repository-card__big-badge">
-            <custom-icon
+            <CustomIcon
               :value="repositoryIcon"
-              :class="{'repository-card__big-badge__icon': true, clickable }"
-              size="extra-large" />
+              :class="{ 'repository-card__big-badge__icon': true, clickable }"
+              size="extra-large"
+            />
           </div>
-        </component>
+        </Component>
       </div>
       <div class="repository-card__details">
         <div class="repository-card__title">
           <span class="repository-card__title__bagde">
-            <component
+            <Component
               :is="clickable ? 'router-link' : 'span'"
-              :to="repositoryDetailsRouterParams">
-              <custom-icon
+              :to="repositoryDetailsRouterParams"
+            >
+              <CustomIcon
                 :fillMobile="true"
                 :value="repositoryIcon"
-                :class="{'repository-card__title__bagde__icon': true, clickable}" /></component>
+                :class="{
+                  'repository-card__title__bagde__icon': true,
+                  clickable,
+                }"
+            /></Component>
           </span>
-          <component
+          <Component
             :is="clickable ? 'router-link' : 'span'"
-            :to="repositoryDetailsRouterParams">
-          <span class="repository-card__title__repository">{{ $attrs.name }}</span></component>
+            :to="repositoryDetailsRouterParams"
+          >
+            <span class="repository-card__title__repository">{{
+              $attrs.name
+            }}</span></Component
+          >
         </div>
 
         <div class="repository-card__info-item">
           <span>{{ $t('webapp.layout.created_by') }}</span>
           <strong class="repository-card__info-item__created-by">
-            {{ getProfile($attrs.owner__nickname).name || $attrs.owner__nickname }}
+            {{
+              getProfile($attrs.owner__nickname).name || $attrs.owner__nickname
+            }}
           </strong>
         </div>
         <div class="repository-card__flags">
@@ -47,27 +59,32 @@
             :class="{
               'repository-card__flags__flag': true,
               'repository-card__flags__flag--main': language == $attrs.language,
-          }">
-            <language-badge
+            }"
+          >
+            <LanguageBadge
               :language="language"
-              :main="language == $attrs.language" />
+              :main="language == $attrs.language"
+            />
           </span>
         </div>
         <div class="repository-card__categories">
-          <component
+          <Component
             v-for="category in repositoryCategoryRouterParams"
             :is="clickable ? 'router-link' : 'span'"
             :key="category.id"
             :to="{
               path: '/home',
               query: { category: category.id },
-          }">
-            <b-tag
+            }"
+          >
+            <BTag
               color="grey-light"
               rounded
               size="is-small"
-              class="repository-card__categories__category">{{ category.name }}</b-tag>
-          </component>
+              class="repository-card__categories__category"
+              >{{ category.name }}</BTag
+            >
+          </Component>
         </div>
       </div>
     </div>
@@ -96,9 +113,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      'getProfile',
-    ]),
+    ...mapGetters(['getProfile']),
     repositoryDetailsRouterParams() {
       return {
         name: 'repository-summary',
@@ -118,33 +133,36 @@ export default {
       return [];
     },
     repositoryIcon() {
-      return ((this.$attrs.categories[0] && this.$attrs.categories[0].icon)
-      || (this.$attrs.categories_list[0] && this.$attrs.categories_list[0].icon))
-      || 'botinho';
+      return (
+        (this.$attrs.categories[0] && this.$attrs.categories[0].icon) ||
+        (this.$attrs.categories_list[0] &&
+          this.$attrs.categories_list[0].icon) ||
+        'botinho'
+      );
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/colors.scss';
-
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
 
 .repository-card {
-  $repository-card-margin: .5rem;
+  $repository-card-margin: 0.5rem;
 
-  margin: $repository-card-margin 0 $repository-card-margin 2*$repository-card-margin;
+  margin: $repository-card-margin 0 $repository-card-margin 2 *
+    $repository-card-margin;
   padding: 1rem 0;
-  width: calc(100% * 1/3 - 1rem);
+  width: calc(100% * 1 / 3 - 1rem);
   word-break: break-all;
   background-color: white;
   border: 1px solid transparent;
   border-radius: 0.5rem;
-  box-shadow:0rem 0rem 0.5rem 0.2rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0rem 0rem 0.5rem 0.2rem rgba(0, 0, 0, 0.1);
 
   @media screen and (max-width: $mobile-width) {
-    width: calc(100% * 1/2 - 1rem);
+    width: calc(100% * 1 / 2 - 1rem);
   }
 
   @media screen and (max-width: $small-mobile-width) {
@@ -160,7 +178,7 @@ export default {
     background-color: white;
     border: 1px solid transparent;
     border-radius: 0.5rem;
-    box-shadow:0rem 0rem 0.5rem 0.2rem rgba(0, 0, 0, 0.1);
+    box-shadow: 0rem 0rem 0.5rem 0.2rem rgba(0, 0, 0, 0.1);
   }
 
   &__align-items {
@@ -209,12 +227,12 @@ export default {
   &__title {
     font-size: 1.25rem;
     font-weight: $font-weight-bolder;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
 
     &__bagde {
       display: none;
       vertical-align: middle;
-      margin-right: .5rem;
+      margin-right: 0.5rem;
 
       &__icon {
         font-size: 1.5em;
@@ -225,7 +243,7 @@ export default {
       }
     }
 
-    &__repository{
+    &__repository {
       color: $color-fake-black;
       font-family: $font-family;
       font-weight: $font-weight-bolder;
@@ -235,7 +253,7 @@ export default {
   &__info-item {
     color: $color-grey-dark;
 
-    &__created-by{
+    &__created-by {
       color: $color-primary;
       font-weight: $font-weight-normal;
     }
@@ -244,12 +262,12 @@ export default {
   &__flags {
     display: flex;
     flex-wrap: wrap;
-    margin: .5rem -.25rem;
+    margin: 0.5rem -0.25rem;
     justify-content: center;
     align-items: center;
 
     &__flag {
-      margin: .25rem;
+      margin: 0.25rem;
       order: 0;
 
       &--main {
@@ -259,10 +277,10 @@ export default {
   }
 
   &__categories {
-    margin: .5rem -.25rem;
+    margin: 0.5rem -0.25rem;
 
     &__category {
-      margin: .25rem;
+      margin: 0.25rem;
       padding: 0 1rem;
     }
   }

@@ -3,16 +3,21 @@
     <div v-html="title" />
     <div class="badges-card__wrapper">
       <div>
-        <entity-tag
+        <EntityTag
           v-for="item in list"
           :key="item"
-          :entity-name="item.value || item"
-          :class="['badges-card__wrapper__badge', clickable ? 'badges-card__clickable' : '']"
-          @click.native="entityList(item.entity_id)"/>
+          :entityName="item.value || item"
+          :class="[
+            'badges-card__wrapper__badge',
+            clickable ? 'badges-card__clickable' : '',
+          ]"
+          @click.native="entityList(item.entity_id)"
+        />
       </div>
     </div>
     <div v-if="examplesCount">
-      <strong>{{ examplesCount }}</strong> {{ $t('webapp.dashboard.sentences') }}
+      <strong>{{ examplesCount }}</strong>
+      {{ $t('webapp.dashboard.sentences') }}
     </div>
   </div>
 </template>
@@ -45,7 +50,7 @@ export default {
     },
     list: {
       type: Array,
-      default: () => ([]),
+      default: () => [],
     },
     examplesCount: {
       type: Number,
@@ -54,7 +59,7 @@ export default {
   },
   computed: {
     nameList() {
-      return this.list.map(item => item.value || item);
+      return this.list.map((item) => item.value || item);
     },
   },
   methods: {
@@ -63,10 +68,7 @@ export default {
       this.$router.push({ name: 'repository-entitylist', params: { entity } });
     },
     getEntityClass(entity) {
-      const color = getEntityColor(
-        entity,
-        this.nameList,
-      );
+      const color = getEntityColor(entity, this.nameList);
       return `entity-${color}`;
     },
   },
@@ -74,37 +76,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
 
-  .badges-card {
-    padding: .75rem;
-    margin: .75rem 0;
-    border: 1px solid $color-border;
-    border-radius: 6px;
+.badges-card {
+  padding: 0.75rem;
+  margin: 0.75rem 0;
+  border: 1px solid $color-border;
+  border-radius: 6px;
 
-    &__clickable{
-      cursor: pointer;
-    }
+  &__clickable {
+    cursor: pointer;
+  }
 
-    &__wrapper {
-      margin: .75rem .5rem;
+  &__wrapper {
+    margin: 0.75rem 0.5rem;
 
-      &__badge {
-        height: 1.5rem;
-        margin: .4rem .5rem 0 0;
-        padding: 0 1rem 0 1rem;
-        font-weight: bold;
-        line-height: calc(1.5rem - 4px);
-        border-width: 1px;
-        border-radius: 1rem;
+    &__badge {
+      height: 1.5rem;
+      margin: 0.4rem 0.5rem 0 0;
+      padding: 0 1rem 0 1rem;
+      font-weight: bold;
+      line-height: calc(1.5rem - 4px);
+      border-width: 1px;
+      border-radius: 1rem;
 
-        span{
-          font-size: $font-small;
-          font-family: $font-family;
-          font-weight: $font-weight-normal;
-        }
+      span {
+        font-size: $font-small;
+        font-family: $font-family;
+        font-weight: $font-weight-normal;
       }
+    }
   }
 }
 </style>

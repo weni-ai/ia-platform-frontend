@@ -1,35 +1,49 @@
 <template>
   <div class="filter-evaluate-example">
     <div class="filter-evaluate-example__filters">
-      <b-field :errors="errors.intent" class="filter-evaluate-example__filters__input-text">
-        <b-input v-model="text" :debounce="debounceTime" icon-right="magnify" />
-      </b-field>
+      <BField
+        :errors="errors.intent"
+        class="filter-evaluate-example__filters__input-text"
+      >
+        <BInput
+          v-model="text"
+          :debounce="debounceTime"
+          iconRight="magnify"
+        />
+      </BField>
       <div :class="wrapperClasses">
         <div class="filter-evaluate-example__filters__wrapper__text">
-          {{ $t("webapp.dashboard.filter_by") }}:
+          {{ $t('webapp.dashboard.filter_by') }}:
         </div>
-        <b-field :message="errors.intent">
-          <b-autocomplete
+        <BField :message="errors.intent">
+          <BAutocomplete
             v-model="intent"
             :data="optionsIntents"
             :formatters="inputFormatters"
             :placeholder="$t('webapp.evaluate.all_intents')"
-            open-on-focus
-            dropdown-position="bottom"
+            openOnFocus
+            dropdownPosition="bottom"
           />
-        </b-field>
-        <b-field v-if="entities" :message="errors.entity">
-          <b-autocomplete
+        </BField>
+        <BField
+          v-if="entities"
+          :message="errors.entity"
+        >
+          <BAutocomplete
             v-model="entity"
             :data="optionsEntities"
             :formatters="inputFormatters"
             :placeholder="$t('webapp.evaluate.all_entities')"
-            open-on-focus
-            dropdown-position="bottom"
+            openOnFocus
+            dropdownPosition="bottom"
           />
-        </b-field>
-        <b-field v-if="languageFilter && languages">
-          <b-select v-model="language" :placeholder="$t('webapp.evaluate.all_languages')" expanded>
+        </BField>
+        <BField v-if="languageFilter && languages">
+          <BSelect
+            v-model="language"
+            :placeholder="$t('webapp.evaluate.all_languages')"
+            expanded
+          >
             <option
               v-for="language in languages"
               :key="language.id"
@@ -39,21 +53,24 @@
               {{ language.title }}
             </option>
             <option :value="null">
-              {{ $t("webapp.home.all_languages") }}
+              {{ $t('webapp.home.all_languages') }}
             </option>
-          </b-select>
-        </b-field>
-        <b-field :message="errors.repository_version_name" v-show="hasVersion">
-          <b-autocomplete
+          </BSelect>
+        </BField>
+        <BField
+          :message="errors.repository_version_name"
+          v-show="hasVersion"
+        >
+          <BAutocomplete
             v-if="versions"
             v-model="versionName"
             :loading="false && versionsList.loading"
             :data="optionsVersions"
             :placeholder="$t('webapp.inbox.all_versions')"
-            open-on-focus
-            dropdown-position="bottom"
+            openOnFocus
+            dropdownPosition="bottom"
           />
-        </b-field>
+        </BField>
       </div>
     </div>
   </div>
@@ -68,28 +85,28 @@ export default {
   props: {
     debounceTime: {
       type: Number,
-      default: 750
+      default: 750,
     },
     intents: {
       type: Array,
-      default: null
+      default: null,
     },
     entities: {
       type: Array,
-      default: null
+      default: null,
     },
     versions: {
       type: Array,
-      default: null
+      default: null,
     },
     languageFilter: {
       type: Boolean,
-      default: null
+      default: null,
     },
     hasVersion: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
@@ -100,69 +117,73 @@ export default {
       versionName: '',
       language: null,
       setTimeoutId: null,
-      errors: {}
+      errors: {},
     };
   },
   computed: {
     ...mapGetters({
-      repository: 'getCurrentRepository'
+      repository: 'getCurrentRepository',
     }),
     wrapperClasses() {
       const fieldCount = [
         this.languageFilter,
         this.entities,
-        this.hasVersion ? this.versions : ''
+        this.hasVersion ? this.versions : '',
       ].reduce((counter, condition) => (condition ? counter + 1 : counter), 1);
 
       return [
         'filter-evaluate-example__filters__wrapper',
-        `filter-evaluate-example__filters__wrapper__has-${fieldCount}-fields`
+        `filter-evaluate-example__filters__wrapper__has-${fieldCount}-fields`,
       ];
     },
     languages() {
-      return Object.keys(this.repository.evaluate_languages_count).map((lang, index) => ({
-        id: index + 1,
-        value: lang,
-        title: `${LANGUAGES[lang]}`
-      }));
+      return Object.keys(this.repository.evaluate_languages_count).map(
+        (lang, index) => ({
+          id: index + 1,
+          value: lang,
+          title: `${LANGUAGES[lang]}`,
+        }),
+      );
     },
     filterIntents() {
       if (this.intents !== null) {
         return this.intents.filter(
-          intent => intent
-            .toString()
-            .toLowerCase()
-            .indexOf(this.intent.toLowerCase()) >= 0
+          (intent) =>
+            intent
+              .toString()
+              .toLowerCase()
+              .indexOf(this.intent.toLowerCase()) >= 0,
         );
       }
       return [];
     },
     optionsIntents() {
-      return this.filterIntents.map(intent => intent);
+      return this.filterIntents.map((intent) => intent);
     },
     filterEntities() {
       if (this.entities !== null) {
         return this.entities.filter(
-          entity => entity.value
-            .toString()
-            .toLowerCase()
-            .indexOf(this.entity.toLowerCase()) >= 0
+          (entity) =>
+            entity.value
+              .toString()
+              .toLowerCase()
+              .indexOf(this.entity.toLowerCase()) >= 0,
         );
       }
       return [];
     },
     optionsEntities() {
-      return this.filterEntities.map(entity => entity);
+      return this.filterEntities.map((entity) => entity);
     },
     optionsVersions() {
       if (!this.versions) return null;
-      return this.versions.map(version => version.name);
+      return this.versions.map((version) => version.name);
     },
     inputFormatters() {
       const formattersList = [formatters.bothubItemKey()];
       formattersList.toString = () => 'inputFormatters';
       return formattersList;
-    }
+    },
   },
   watch: {
     text(value) {
@@ -192,7 +213,7 @@ export default {
         this.versionName = versionName;
       });
       this.emitVersion(versionName);
-    }
+    },
   },
   mounted() {
     this.setDefaultLanguage();
@@ -215,13 +236,13 @@ export default {
       if (!this.hasVersion) {
         this.language = this.repository.language;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import '@/assets/scss/variables.scss';
 
 .filter-evaluate-example {
   width: 100%;

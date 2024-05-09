@@ -1,8 +1,11 @@
 <template>
-  <repository-view-base :repository="repository" :error-code="errorCode">
+  <RepositoryViewBase
+    :repository="repository"
+    :errorCode="errorCode"
+  >
     <section class="repository-api">
       <section class="repository-api__header">
-        <unnnic-card
+        <UnnnicCard
           type="title"
           :title="$t('webapp.home.bases.api')"
           enabled
@@ -20,11 +23,16 @@
       </section>
       <section class="repository-api__select">
         <p class="repository-api__select__text">
-          {{ $t("webapp.home.bases.api_select") }}
+          {{ $t('webapp.home.bases.api_select') }}
         </p>
         <div class="repository-api__select__inputs">
           <div class="repository-api__select__input">
-            <unnnicSelect v-if="bases.length" size="sm" placeholder="" v-model="baseIdLang">
+            <UnnnicSelect
+              v-if="bases.length"
+              size="sm"
+              placeholder=""
+              v-model="baseIdLang"
+            >
               <option
                 v-for="base in bases"
                 :value="[base.knowledge_base, base.language]"
@@ -33,19 +41,22 @@
               >
                 {{ base.title }}
               </option>
-            </unnnicSelect>
+            </UnnnicSelect>
           </div>
         </div>
       </section>
       <section class="repository-api__tabs">
-        <unnnic-tab initialTab="integrate" :tabs="['integrate']">
+        <UnnnicTab
+          initialTab="integrate"
+          :tabs="['integrate']"
+        >
           <template slot="tab-head-integrate">
-            {{ $t("webapp.home.bases.api_tabs") }}
+            {{ $t('webapp.home.bases.api_tabs') }}
           </template>
 
           <template slot="tab-panel-integrate">
             <p class="description">
-              {{ $t("webapp.home.bases.api_tabs_subtitle") }}
+              {{ $t('webapp.home.bases.api_tabs_subtitle') }}
             </p>
             <div class="repository-api__box">
               <div class="repository-api__box__one">
@@ -56,94 +67,103 @@
                       class="repository-api__info__text"
                       ref="copyTextURL"
                       contenteditable="true"
-                    >{{`${repository.nlp_server}v2/question-answering/`}}
+                    >
+                      {{ `${repository.nlp_server}v2/question-answering/` }}
                     </div>
-                    <unnnic-tool-tip
+                    <UnnnicToolTip
                       @mouseout.native="copyLabel = 'Copiar'"
                       :text="copyLabel"
                       enabled
                       side="top"
                       maxWidth="15rem"
                     >
-                      <unnnic-button
+                      <UnnnicButton
                         size="large"
                         type="secondary"
                         iconLeft="copy-paste-1"
                         @click.native="copyURL('copyTextURL')"
                       />
-                    </unnnic-tool-tip>
+                    </UnnnicToolTip>
                   </div>
-                  <div class="repository-api__box__text">
-                    Access Token
-                  </div>
+                  <div class="repository-api__box__text">Access Token</div>
                   <div class="repository-api__info">
-                    <p class="repository-api__info__text" ref="copyTextAuth" contenteditable="true">
+                    <p
+                      class="repository-api__info__text"
+                      ref="copyTextAuth"
+                      contenteditable="true"
+                    >
                       Bearer {{ authorization }}
                     </p>
-                    <unnnic-tool-tip
+                    <UnnnicToolTip
                       @mouseout.native="copyLabel = 'Copiar'"
                       :text="copyLabel"
                       enabled
                       side="top"
                       maxWidth="15rem"
                     >
-                      <unnnic-button
+                      <UnnnicButton
                         size="large"
                         type="secondary"
                         iconLeft="copy-paste-1"
                         @click.native="copyURL('copyTextAuth')"
                       />
-                    </unnnic-tool-tip>
+                    </UnnnicToolTip>
                   </div>
                   <p class="repository-api__box__text">
-                    {{ $t("webapp.home.bases.api_tabs_intelligence_id") }}
+                    {{ $t('webapp.home.bases.api_tabs_intelligence_id') }}
                   </p>
                   <p class="description">
-                    {{ $t("webapp.home.bases.api_guide") }}
+                    {{ $t('webapp.home.bases.api_guide') }}
                   </p>
                 </div>
                 <div class="repository-api__box__content">
                   <p class="repository-api__box__text">
-                    POST {{ $t("webapp.home.bases.api_body") }}
+                    POST {{ $t('webapp.home.bases.api_body') }}
                   </p>
                   <div class="repository-api__info__json">
-                    <pre ref="copyTextPost" contenteditable="true">{{
-                      JSON.stringify(
-                        {
-                          language: idLang[1],
-                          question: $t("webapp.home.bases.api_tabs_post_text"),
-                          knowledge_base_id: idLang[0]
-                        },
-                        null,
-                        "\t"
-                      )
-                    }}</pre>
-                    <unnnic-tool-tip
+                    <pre
+                      ref="copyTextPost"
+                      contenteditable="true"
+                      >{{
+                        JSON.stringify(
+                          {
+                            language: idLang[1],
+                            question: $t(
+                              'webapp.home.bases.api_tabs_post_text',
+                            ),
+                            knowledge_base_id: idLang[0],
+                          },
+                          null,
+                          '\t',
+                        )
+                      }}</pre
+                    >
+                    <UnnnicToolTip
                       @mouseout.native="copyLabel = 'Copiar'"
                       :text="copyLabel"
                       enabled
                       side="top"
                       maxWidth="15rem"
                     >
-                      <unnnic-button
+                      <UnnnicButton
                         size="large"
                         text=""
                         type="secondary"
                         iconLeft="copy-paste-1"
                         @click.native="copyURL('copyTextPost')"
                       />
-                    </unnnic-tool-tip>
+                    </UnnnicToolTip>
                   </div>
                 </div>
               </div>
               <div class="repository-api__box__two">
                 <div class="repository-api__box__content">
                   <p class="description--darkest">
-                    {{ $t("webapp.home.bases.api_integrate") }}
+                    {{ $t('webapp.home.bases.api_integrate') }}
                   </p>
                   <section class="repository-api__form">
                     <div class="repository-api__form__buttons">
-                      <unnnic-button
+                      <UnnnicButton
                         @click.prevent="prev()"
                         size="large"
                         text=""
@@ -151,8 +171,8 @@
                         iconLeft="arrow-left-1-1"
                         :disabled="disabledPrevious"
                       >
-                      </unnnic-button>
-                      <unnnic-button
+                      </UnnnicButton>
+                      <UnnnicButton
                         @click.prevent="next()"
                         size="large"
                         text=""
@@ -160,81 +180,150 @@
                         iconLeft="arrow-right-1-1"
                         :disabled="disabledNext"
                       >
-                      </unnnic-button>
+                      </UnnnicButton>
                     </div>
                     <form v-if="myProfile.language === 'pt-br'">
-                      <div v-if="step === 1" class="repository-api__form__step">
+                      <div
+                        v-if="step === 1"
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_one") }}
+                            {{ $t('webapp.home.bases.api_integrate_step_one') }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_one_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_one_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <img src="@/assets/imgs/step-one.png" alt="" />
+                        <img
+                          src="@/assets/imgs/step-one.png"
+                          alt=""
+                        />
                       </div>
                       <!--passo 1 -->
-                      <div v-else-if="step === 2" class="repository-api__form__step">
+                      <div
+                        v-else-if="step === 2"
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_two") }}
+                            {{ $t('webapp.home.bases.api_integrate_step_two') }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_two_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_two_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <img src="@/assets/imgs/step-two.png" alt="" />
+                        <img
+                          src="@/assets/imgs/step-two.png"
+                          alt=""
+                        />
                       </div>
                       <!--passo 2 -->
-                      <div v-else-if="step === 3" class="repository-api__form__step">
+                      <div
+                        v-else-if="step === 3"
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_three") }}
+                            {{
+                              $t('webapp.home.bases.api_integrate_step_three')
+                            }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_three_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_three_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <img src="@/assets/imgs/step-three.png" alt="" />
+                        <img
+                          src="@/assets/imgs/step-three.png"
+                          alt=""
+                        />
                       </div>
                       <!--passo 3 -->
-                      <div v-else-if="step === 4" class="repository-api__form__step">
+                      <div
+                        v-else-if="step === 4"
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_four") }}
+                            {{
+                              $t('webapp.home.bases.api_integrate_step_four')
+                            }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_four_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_four_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <img src="@/assets/imgs/step-four.png" alt="" />
+                        <img
+                          src="@/assets/imgs/step-four.png"
+                          alt=""
+                        />
                       </div>
                       <!--passo 4 -->
-                      <div v-else-if="step === 5" class="repository-api__form__step">
+                      <div
+                        v-else-if="step === 5"
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_five") }}
+                            {{
+                              $t('webapp.home.bases.api_integrate_step_five')
+                            }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_five_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_five_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <img src="@/assets/imgs/step-five.png" alt="" />
+                        <img
+                          src="@/assets/imgs/step-five.png"
+                          alt=""
+                        />
                       </div>
                       <!--passo 5 -->
-                      <div v-else class="repository-api__form__step">
+                      <div
+                        v-else
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_final") }}
+                            {{
+                              $t('webapp.home.bases.api_integrate_step_final')
+                            }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_final_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_final_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <unnnicButton
+                        <UnnnicButton
                           size="large"
-                          :text="$t('webapp.home.bases.api_integrate_step_final_text_button')"
+                          :text="
+                            $t(
+                              'webapp.home.bases.api_integrate_step_final_text_button',
+                            )
+                          "
                           type="secondary"
                           iconLeft="paginate-filter-text-1"
                           :disabled="false"
@@ -243,78 +332,147 @@
                       <!--passo 6 -->
                     </form>
                     <form v-else>
-                      <div v-if="step === 1" class="repository-api__form__step">
+                      <div
+                        v-if="step === 1"
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_one") }}
+                            {{ $t('webapp.home.bases.api_integrate_step_one') }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_one_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_one_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <img src="@/assets/imgs/step-one-en.png" alt="" />
+                        <img
+                          src="@/assets/imgs/step-one-en.png"
+                          alt=""
+                        />
                       </div>
                       <!--passo 1 -->
-                      <div v-else-if="step === 2" class="repository-api__form__step">
+                      <div
+                        v-else-if="step === 2"
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_two") }}
+                            {{ $t('webapp.home.bases.api_integrate_step_two') }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_two_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_two_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <img src="@/assets/imgs/step-two-en.png" alt="" />
+                        <img
+                          src="@/assets/imgs/step-two-en.png"
+                          alt=""
+                        />
                       </div>
                       <!--passo 2 -->
-                      <div v-else-if="step === 3" class="repository-api__form__step">
+                      <div
+                        v-else-if="step === 3"
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_three") }}
+                            {{
+                              $t('webapp.home.bases.api_integrate_step_three')
+                            }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_three_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_three_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <img src="@/assets/imgs/step-three-en.png" alt="" />
+                        <img
+                          src="@/assets/imgs/step-three-en.png"
+                          alt=""
+                        />
                       </div>
                       <!--passo 3 -->
-                      <div v-else-if="step === 4" class="repository-api__form__step">
+                      <div
+                        v-else-if="step === 4"
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_four") }}
+                            {{
+                              $t('webapp.home.bases.api_integrate_step_four')
+                            }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_four_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_four_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <img src="@/assets/imgs/step-four-en.png" alt="" />
+                        <img
+                          src="@/assets/imgs/step-four-en.png"
+                          alt=""
+                        />
                       </div>
                       <!--passo 4 -->
-                      <div v-else-if="step === 5" class="repository-api__form__step">
+                      <div
+                        v-else-if="step === 5"
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_five") }}
+                            {{
+                              $t('webapp.home.bases.api_integrate_step_five')
+                            }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_five_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_five_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <img src="@/assets/imgs/step-five-en.png" alt="" />
+                        <img
+                          src="@/assets/imgs/step-five-en.png"
+                          alt=""
+                        />
                       </div>
                       <!--passo 5 -->
-                      <div v-else class="repository-api__form__step">
+                      <div
+                        v-else
+                        class="repository-api__form__step"
+                      >
                         <div>
                           <p class="repository-api__form__step__title">
-                            {{ $t("webapp.home.bases.api_integrate_step_final") }}
+                            {{
+                              $t('webapp.home.bases.api_integrate_step_final')
+                            }}
                           </p>
                           <p class="repository-api__form__step__text">
-                            {{ $t("webapp.home.bases.api_integrate_step_final_text") }}
+                            {{
+                              $t(
+                                'webapp.home.bases.api_integrate_step_final_text',
+                              )
+                            }}
                           </p>
                         </div>
-                        <unnnicButton
+                        <UnnnicButton
                           size="large"
-                          :text="$t('webapp.home.bases.api_integrate_step_final_text_button')"
+                          :text="
+                            $t(
+                              'webapp.home.bases.api_integrate_step_final_text_button',
+                            )
+                          "
                           type="secondary"
                           iconLeft="paginate-filter-text-1"
                           :disabled="false"
@@ -327,19 +485,19 @@
                 </div>
                 <div class="repository-api__box__content">
                   <p class="repository-api__box__text">
-                    {{ $t("webapp.home.bases.api_response") }}
+                    {{ $t('webapp.home.bases.api_response') }}
                   </p>
                   <div class="repository-api__info__json lg">
-                    <pre>{{ JSON.stringify(json, null, "\t") }}</pre>
+                    <pre>{{ JSON.stringify(json, null, '\t') }}</pre>
                   </div>
                 </div>
               </div>
             </div>
           </template>
-        </unnnic-tab>
+        </UnnnicTab>
       </section>
     </section>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 <script>
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
@@ -349,7 +507,7 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'RepositoryContentAPI',
   components: {
-    RepositoryViewBase
+    RepositoryViewBase,
   },
   extends: RepositoryBase,
   data() {
@@ -362,21 +520,21 @@ export default {
         answers: [
           {
             text: 'kind',
-            confidence: '0.47146460'
+            confidence: '0.47146460',
           },
           {
             text: 'not pompous',
-            confidence: '0.27500286'
+            confidence: '0.27500286',
           },
           {
             text: 'kind. It is not jealous, love is not pompous',
-            confidence: '0.22532927'
-          }
+            confidence: '0.22532927',
+          },
         ],
-        id: '0'
+        id: '0',
       },
       copyLabel: 'Copiar',
-      baseIdLang: ''
+      baseIdLang: '',
     };
   },
   watch: {
@@ -393,21 +551,21 @@ export default {
       const response = await this.getQATexts({
         repositoryUUID: this.repositoryUUID,
         knowledgeBaseId: this.$route.params.id,
-        page: 0
+        page: 0,
       });
 
-      this.baseIdLang = `${String(response.data.results?.[0]?.knowledge_base)},${String(
-        response.data.results?.[0]?.language
-      )}`;
+      this.baseIdLang = `${String(
+        response.data.results?.[0]?.knowledge_base,
+      )},${String(response.data.results?.[0]?.language)}`;
 
       response.data.results.forEach(({ knowledge_base, title, language }) => {
         this.bases.push({
           knowledge_base,
           title,
-          language
+          language,
         });
       });
-    }
+    },
   },
   computed: {
     ...mapGetters(['myProfile', 'authToken']),
@@ -426,7 +584,7 @@ export default {
     idLang() {
       const infos = this.baseIdLang;
       return infos.split(',');
-    }
+    },
   },
   methods: {
     ...mapActions(['getQATexts']),
@@ -448,18 +606,18 @@ export default {
     goToDocs() {
       window.open(
         'https://docs.ilhasoft.mobi/l/pt/inteligencia-conteudo/integrando-uma-intelig-ncia-de-conte-do',
-        '_blank'
+        '_blank',
       );
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .repository-api {
   &__header {

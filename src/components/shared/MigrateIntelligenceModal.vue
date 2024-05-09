@@ -1,60 +1,68 @@
 <template>
   <div class="migrate-intelligence-modal">
-    <b-modal
+    <BModal
       :active.sync="isModalVisible"
-      :destroy-on-hide="false"
-      :can-cancel="false"
-      has-modal-card
+      :destroyOnHide="false"
+      :canCancel="false"
+      hasModalCard
       aria-role="dialog"
       class="migrate-intelligence-modal__card"
-      aria-modal>
-      <div
-        class="modal-card migrate-intelligence-modal__modal-style">
-        <header class="modal-card-head migrate-intelligence-modal__modal-style__header">
+      aria-modal
+    >
+      <div class="modal-card migrate-intelligence-modal__modal-style">
+        <header
+          class="modal-card-head migrate-intelligence-modal__modal-style__header"
+        >
           <p>{{ $t('webapp.migrate_intelligence.title') }}</p>
         </header>
         <section class="modal-card-body">
-          <div
-            class="migrate-intelligence-modal__fields">
-            <b-field class="migrate-intelligence-modal__fields__inputs">
-              <b-input
+          <div class="migrate-intelligence-modal__fields">
+            <BField class="migrate-intelligence-modal__fields__inputs">
+              <BInput
                 v-model="authToken"
                 :placeholder="$t('webapp.migrate_intelligence.token_input')"
-                expanded/>
-            </b-field>
-            <b-field class="migrate-intelligence-modal__fields__inputs">
-              <b-select
+                expanded
+              />
+            </BField>
+            <BField class="migrate-intelligence-modal__fields__inputs">
+              <BSelect
                 v-model="languageSelect"
                 :placeholder="$t('webapp.migrate_intelligence.language')"
-                expanded>
+                expanded
+              >
                 <option
                   v-for="[language, label] in languages"
                   :value="language"
-                  :key="language">{{ label }}</option>
-              </b-select>
-            </b-field>
+                  :key="language"
+                >
+                  {{ label }}
+                </option>
+              </BSelect>
+            </BField>
           </div>
         </section>
         <footer class="modal-card-foot">
           <div class="migrate-intelligence-modal__modal-style__style-button">
-            <b-button
+            <BButton
               class="modal-button"
               type="is-white"
-              @click="dispatchCloseMigrateModal()">
+              @click="dispatchCloseMigrateModal()"
+            >
               {{ $t('webapp.migrate_intelligence.cancel') }}
-            </b-button>
-            <b-button
+            </BButton>
+            <BButton
               :loading="isButtonLoading"
               :disabled="checkInputs"
               class="modal-button"
               type="is-primary"
-              @click="dispatchMigrate()">
+              @click="dispatchMigrate()"
+            >
               {{ $t('webapp.migrate_intelligence.migrate') }}
-            </b-button>
+            </BButton>
           </div>
         </footer>
       </div>
-    </b-modal>
+    </BModal>
   </div>
 </template>
 
@@ -78,24 +86,20 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'authenticated',
-      'getSelectedVersion',
-    ]),
+    ...mapGetters(['authenticated', 'getSelectedVersion']),
     checkInputs() {
-      if (this.authToken === '' || this.languageSelect === null) { return true; }
+      if (this.authToken === '' || this.languageSelect === null) {
+        return true;
+      }
 
       return false;
     },
     languages() {
-      return Object.keys(LANGUAGES)
-        .map(lang => ([lang, LANGUAGES[lang]]));
+      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
   },
   methods: {
-    ...mapActions([
-      'setMigrateIntelligence',
-    ]),
+    ...mapActions(['setMigrateIntelligence']),
     async dispatchMigrate() {
       try {
         this.isButtonLoading = true;
@@ -105,12 +109,20 @@ export default {
           Language: this.languageSelect,
           Classifier: 'wit',
         });
-        this.$emit('dispatchMigrateNotification', { type: 'is-success', message: this.$t('webapp.migrate_intelligence.migrate_success') });
+        this.$emit('dispatchMigrateNotification', {
+          type: 'is-success',
+          message: this.$t('webapp.migrate_intelligence.migrate_success'),
+        });
         this.dispatchCloseMigrateModal();
       } catch (error) {
         const errorMessage = error.response && error.response.data;
-        const filterMessage = `${Object.keys(errorMessage)} - ${Object.values(errorMessage)}`;
-        this.$emit('dispatchMigrateNotification', { type: 'is-danger', message: filterMessage });
+        const filterMessage = `${Object.keys(errorMessage)} - ${Object.values(
+          errorMessage,
+        )}`;
+        this.$emit('dispatchMigrateNotification', {
+          type: 'is-danger',
+          message: filterMessage,
+        });
       } finally {
         this.isButtonLoading = false;
       }
@@ -125,24 +137,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .migrate-intelligence-modal {
-
-  &__modal-style{
-      width: 26.5rem;
-      @media (max-width: $mobile-width) {
-        padding-left: 5rem
-      }
-    &__header{
-      p{
+  &__modal-style {
+    width: 26.5rem;
+    @media (max-width: $mobile-width) {
+      padding-left: 5rem;
+    }
+    &__header {
+      p {
         font-size: 1.5rem;
       }
     }
 
-    &__style-button{
-      width:100%;
+    &__style-button {
+      width: 100%;
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -155,23 +166,22 @@ export default {
         font-family: $font-family;
         box-shadow: none;
 
-        &:hover{
+        &:hover {
           border: 1px solid #c2c2c2;
         }
       }
     }
   }
-    &__fields {
+  &__fields {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
-    &__inputs{
+    &__inputs {
       width: 90%;
       margin-top: 1rem;
     }
   }
 }
-
 </style>

@@ -1,21 +1,24 @@
 <template>
   <div>
-    <unnnic-table :items="list.items">
+    <UnnnicTable :items="list.items">
       <template v-slot:header>
-        <unnnic-table-row :headers="table.headers">
-        </unnnic-table-row>
+        <UnnnicTableRow :headers="table.headers"> </UnnnicTableRow>
       </template>
       <template v-slot:item="{ item }">
-        <unnnic-table-row :headers="table.headers">
+        <UnnnicTableRow :headers="table.headers">
           <template v-slot:version>
-            <a href="#" @click.prevent="handleVersion(item.name)">
+            <a
+              href="#"
+              @click.prevent="handleVersion(item.name)"
+            >
               {{ item.name }}
             </a>
 
-            <unnnic-button
-              :class="item.is_default ? 'button-green' : 'button-disabled'">
+            <UnnnicButton
+              :class="item.is_default ? 'button-green' : 'button-disabled'"
+            >
               {{ $t('webapp.versions.main') }}
-            </unnnic-button>
+            </UnnnicButton>
           </template>
           <template v-slot:date>
             {{ item.created_at | moment('from') }}
@@ -26,9 +29,12 @@
           <template v-slot:created>
             {{ item.created_by }}
           </template>
-          <template v-if="repository.authorization.can_contribute" v-slot:edit>
+          <template
+            v-if="repository.authorization.can_contribute"
+            v-slot:edit
+          >
             <div :style="{ textAlign: 'center' }">
-              <unnnic-button
+              <UnnnicButton
                 size="small"
                 type="secondary"
                 iconCenter="pencil-write-1"
@@ -36,9 +42,12 @@
               />
             </div>
           </template>
-          <template v-if="repository.authorization.can_contribute" v-slot:duplicate>
+          <template
+            v-if="repository.authorization.can_contribute"
+            v-slot:duplicate
+          >
             <div :style="{ textAlign: 'center' }">
-              <unnnic-button
+              <UnnnicButton
                 size="small"
                 type="secondary"
                 iconCenter="copy-paste-1"
@@ -46,29 +55,34 @@
               />
             </div>
           </template>
-          <template v-if="repository.authorization.can_contribute" v-slot:delete>
+          <template
+            v-if="repository.authorization.can_contribute"
+            v-slot:delete
+          >
             <div :style="{ textAlign: 'center' }">
-              <unnnic-button
+              <UnnnicButton
                 size="small"
                 type="secondary"
                 iconCenter="delete-1-1"
-                @click.prevent.stop="deleteThisVersion(item.id, item.name, item.is_default)"
+                @click.prevent.stop="
+                  deleteThisVersion(item.id, item.name, item.is_default)
+                "
               />
             </div>
           </template>
-        </unnnic-table-row>
-        <edit-example-version
+        </UnnnicTableRow>
+        <EditExampleVersion
           v-if="item.id === selectedItem"
-          :edit-example="true"
-          :text-to-edit="item.name"
-          :version-id="item.id"
-          :is-default="item.is_default"
+          :editExample="true"
+          :textToEdit="item.name"
+          :versionId="item.id"
+          :isDefault="item.is_default"
           @save="saveVersion"
-          @cancel="selectedItem=null"
+          @cancel="selectedItem = null"
         />
       </template>
-    </unnnic-table>
-    <unnnic-modal-next
+    </UnnnicTable>
+    <UnnnicModalNext
       type="alert"
       icon="alert-circle-1"
       scheme="feedback-yellow"
@@ -81,14 +95,14 @@
       <template slot="description">
         {{ $t('webapp.versions.edit_phrase_modal') }}
       </template>
-    </unnnic-modal-next>
-    <unnnic-modal-next
+    </UnnnicModalNext>
+    <UnnnicModalNext
       v-if="openDeleteModal"
       type="alert"
       icon="alert-circle-1"
       :title="$t('webapp.versions.delete_title_modal')"
       scheme="feedback-red"
-      modal-icon="alert-circle-1"
+      modalIcon="alert-circle-1"
       @close="openDeleteModal = false"
       :actionPrimaryLabel="$t('webapp.versions.delete_title_modal')"
       :actionSecondaryLabel="$t('webapp.home.cancel')"
@@ -97,11 +111,14 @@
       actionPrimaryButtonType="secondary"
     >
       <span
-      slot="description"
-      v-html="$t('webapp.versions.delete_phrase_modal', { name: versionName })"></span>
-    </unnnic-modal-next>
+        slot="description"
+        v-html="
+          $t('webapp.versions.delete_phrase_modal', { name: versionName })
+        "
+      ></span>
+    </UnnnicModalNext>
 
-    <unnnic-modal-next
+    <UnnnicModalNext
       type="alert"
       icon="alert-circle-1"
       scheme="feedback-yellow"
@@ -111,32 +128,35 @@
       @click-action-secondary="openDuplicateModal = false"
       @click-action-primary="confirmDuplicate"
       actionPrimaryButtonType="secondary"
-      :title="$t('webapp.versions.duplicate_title_modal', { name: versionName })"
+      :title="
+        $t('webapp.versions.duplicate_title_modal', { name: versionName })
+      "
     >
       <template slot="description">
         {{ $t('webapp.versions.duplicate_phrase_modal') }}
-        <unnnic-input-next
+        <UnnnicInputNext
           :label="$t('webapp.versions.duplicate_input_label')"
           :placeholder="$t('webapp.versions.duplicate_input_placeholder')"
           class="input-duplicate-version"
           v-model="newVersion"
         >
-        </unnnic-input-next>
+        </UnnnicInputNext>
       </template>
-    </unnnic-modal-next>
-    <unnnic-modal
+    </UnnnicModalNext>
+    <UnnnicModal
       :showModal="openSuccessModal"
       :text="$t(successModalTitle)"
       scheme="feedback-green"
-      modal-icon="check-circle-1-1"
+      modalIcon="check-circle-1-1"
       @close="openSuccessModal = false"
     >
       <span
-      slot="message"
-      v-html="$t(successModalMessage)"></span>
-    </unnnic-modal>
+        slot="message"
+        v-html="$t(successModalMessage)"
+      ></span>
+    </UnnnicModal>
   </div>
-  </template>
+</template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
@@ -146,7 +166,7 @@ import { unnnicCallAlert } from '@weni/unnnic-system';
 export default {
   name: 'RepositoryVersionTable',
   components: {
-    EditExampleVersion
+    EditExampleVersion,
   },
   props: {
     list: {
@@ -154,8 +174,8 @@ export default {
       default: () => {},
     },
     textToEdit: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -198,7 +218,7 @@ export default {
       successModalMessage: '',
     };
   },
-  created(){
+  created() {
     this.newVersion = this.textToEdit;
   },
   computed: {
@@ -206,28 +226,33 @@ export default {
       repository: (state) => state.Repository.selectedRepository,
     }),
     repositoryUUID() {
-      if (!this.repository || this.repository.uuid === 'null') { return null; }
+      if (!this.repository || this.repository.uuid === 'null') {
+        return null;
+      }
       return this.repository.uuid;
     },
     selectedItems() {
-      return this.list.items.filter((item) => item.selected === true)
+      return this.list.items.filter((item) => item.selected === true);
     },
   },
   watch: {
     selectedItems() {
-      this.$emit('dispatchEvent', { event: 'onUpdateSelected', value: this.selectedItems });
+      this.$emit('dispatchEvent', {
+        event: 'onUpdateSelected',
+        value: this.selectedItems,
+      });
     },
     version(value) {
       if (value) {
-        const { id } = value
-        this.$refs[id].active = this.isVersionActive
+        const { id } = value;
+        this.$refs[id].active = this.isVersionActive;
       }
-    }
+    },
   },
   mounted() {
     if (this.repository.authorization.can_contribute) {
-      this.table.headers
-        .push({
+      this.table.headers.push(
+        {
           id: 'edit',
           text: this.$t('webapp.versions.table_edit'),
           width: '58px',
@@ -241,7 +266,8 @@ export default {
           id: 'delete',
           text: this.$t('webapp.versions.table_delete'),
           width: '58px',
-        })
+        },
+      );
     }
   },
   methods: {
@@ -253,16 +279,19 @@ export default {
       'setRepositoryVersion',
     ]),
     handleVersion(value) {
-      const versionResult = this.list.items.find(option => option.name === value);
+      const versionResult = this.list.items.find(
+        (option) => option.name === value,
+      );
       const version = {
         id: versionResult.id,
-        name: versionResult.name
+        name: versionResult.name,
       };
 
       let defaultVersions;
 
       try {
-        defaultVersions = JSON.parse(localStorage.getItem('default-versions')) || {};
+        defaultVersions =
+          JSON.parse(localStorage.getItem('default-versions')) || {};
       } catch {
         defaultVersions = {};
       }
@@ -272,7 +301,7 @@ export default {
 
       this.setRepositoryVersion({
         version,
-        repositoryUUID: this.repositoryUUID
+        repositoryUUID: this.repositoryUUID,
       });
     },
     deleteThisVersion(id, versionName, isDefaultVersion) {
@@ -296,11 +325,15 @@ export default {
     async confirmDelete() {
       try {
         await this.deleteVersion(this.versionId);
-        this.$emit('dispatchEvent', { event: 'deletedVersion', value: this.selectedItems });
+        this.$emit('dispatchEvent', {
+          event: 'deletedVersion',
+          value: this.selectedItems,
+        });
         this.openDeleteModal = false;
         this.openSuccessModal = true;
         this.successModalTitle = 'webapp.versions.delete_success_title_modal';
-        this.successModalMessage = 'webapp.versions.delete_success_phrase_modal';
+        this.successModalMessage =
+          'webapp.versions.delete_success_phrase_modal';
       } catch {
         this.$emit('dispatchEvent', { event: 'error' });
       }
@@ -318,10 +351,15 @@ export default {
       })
         .then(() => {
           this.openDuplicateModal = false;
-          this.$emit('dispatchEvent', { event: 'addedVersion', value: this.selectedItems });
+          this.$emit('dispatchEvent', {
+            event: 'addedVersion',
+            value: this.selectedItems,
+          });
           this.openSuccessModal = true;
-          this.successModalTitle = 'webapp.versions.duplicate_success_title_modal';
-          this.successModalMessage = 'webapp.versions.duplicate_success_phrase_modal';
+          this.successModalTitle =
+            'webapp.versions.duplicate_success_title_modal';
+          this.successModalMessage =
+            'webapp.versions.duplicate_success_phrase_modal';
         })
         .catch((error) => {
           this.$emit('error', error);
@@ -337,7 +375,8 @@ export default {
           .then(() => {
             this.openSuccessModal = true;
             this.successModalTitle = 'webapp.versions.edit_success_title_modal';
-            this.successModalMessage = 'webapp.versions.edit_success_phrase_modal';
+            this.successModalMessage =
+              'webapp.versions.edit_success_phrase_modal';
             this.$emit('dispatchEvent', { event: 'itemSave' });
           })
           .catch((error) => {
@@ -353,23 +392,24 @@ export default {
           .then(() => {
             this.openSuccessModal = true;
             this.successModalTitle = 'webapp.versions.edit_success_title_modal';
-            this.successModalMessage = 'webapp.versions.edit_success_phrase_modal';
+            this.successModalMessage =
+              'webapp.versions.edit_success_phrase_modal';
             this.$emit('dispatchEvent', { event: 'itemSave' });
           })
           .catch((error) => {
             this.$emit('error', error);
           });
       }
-      this.selectedItem = null
+      this.selectedItem = null;
     },
     cancelEditVersion() {
       this.open = !this.open;
       this.editing = false;
-      this.$refs[this.selectedItem].active = false
+      this.$refs[this.selectedItem].active = false;
       this.selectedItem = null;
     },
     editVersionAccordion(item) {
-      this.selectedItem = item.id
+      this.selectedItem = item.id;
       this.open = true;
       this.editing = true;
     },
@@ -378,10 +418,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 a {
   color: inherit;
@@ -403,17 +443,17 @@ a {
 
 .input-duplicate-version {
   text-align: left;
-  margin-top: $unnnic-spacing-stack-lg,
+  margin-top: $unnnic-spacing-stack-lg;
 }
 
 .unnnic-modal {
-  /deep/ .icon {
+  :deep(.icon) {
     width: 100%;
     margin-top: 10px;
   }
 }
 
-/deep/ .unnnic-modal.type-alert .title{
-  padding-bottom: 0px
+:deep(.unnnic-modal.type-alert .title) {
+  padding-bottom: 0px;
 }
 </style>

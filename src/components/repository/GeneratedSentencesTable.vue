@@ -1,112 +1,120 @@
 <template>
-<div>
-  <unnnic-table :items="list">
-    <template v-slot:header>
-      <unnnic-table-row :headers="table.headers">
-        <template v-slot:checkarea>
-          <unnnic-checkbox
-            :value="generalValue"
-            @change="changeGeneralCheckbox"
-            :style="{ margin: '4px' }"
-          />
-        </template>
-      </unnnic-table-row>
-    </template>
-
-    <template v-slot:item="{ item }">
-      <unnnic-table-row :headers="table.headers">
-
-        <template v-slot:sentence>
-          <div
-            @mouseenter="activeSentence(item)"
-            @mouseleave="inactiveSentence(item)"
-            :title="item.sentence"
-            class="break-text example-accordion__sentence"
-          >
-            <span class="example-accordion__tag">[{{ item.language }}]</span>
-            <highlighted-entity
-              :ref="item.id"
-              :id="item.id"
-              :text="item.text"
-              :highlighted="item.highlighted"
-              :entities="item.entities"
-              :color-only="item.entitySelected"
-              :state="isSentenceActive"
+  <div>
+    <UnnnicTable :items="list">
+      <template v-slot:header>
+        <UnnnicTableRow :headers="table.headers">
+          <template v-slot:checkarea>
+            <UnnnicCheckbox
+              :value="generalValue"
+              @change="changeGeneralCheckbox"
+              :style="{ margin: '4px' }"
             />
-          </div>
-        </template>
+          </template>
+        </UnnnicTableRow>
+      </template>
 
-        <template v-if="repository.authorization.can_contribute" v-slot:edit>
+      <template v-slot:item="{ item }">
+        <UnnnicTableRow :headers="table.headers">
+          <template v-slot:sentence>
+            <div
+              @mouseenter="activeSentence(item)"
+              @mouseleave="inactiveSentence(item)"
+              :title="item.sentence"
+              class="break-text example-accordion__sentence"
+            >
+              <span class="example-accordion__tag">[{{ item.language }}]</span>
+              <HighlightedEntity
+                :ref="item.id"
+                :id="item.id"
+                :text="item.text"
+                :highlighted="item.highlighted"
+                :entities="item.entities"
+                :colorOnly="item.entitySelected"
+                :state="isSentenceActive"
+              />
+            </div>
+          </template>
+
+          <template
+            v-if="repository.authorization.can_contribute"
+            v-slot:edit
+          >
             <div :style="{ textAlign: 'center' }">
-              <unnnic-button
+              <UnnnicButton
                 size="small"
                 type="secondary"
                 iconCenter="pencil-write-1"
                 @click.prevent.stop="editSentence(item.id)"
               />
             </div>
-        </template>
+          </template>
 
-        <template v-slot:delete>
-          <div :style="{ textAlign: 'center' }">
-            <unnnic-button
-              size="small"
-              type="secondary"
-              iconCenter="delete-1-1"
-              @click.prevent.stop="deleteSentence(item)"
-            />
-          </div>
-        </template>
-      </unnnic-table-row>
-      <edit-example-intent
-        v-if="item.id === selectedItem"
-        :entities="item.entities"
-        :intent-to-edit="item.intent"
-        :edit-example="true"
-        :text-to-edit="item.text"
-        :sentence-id="item.id"
-        :language-edit="item.language"
-        :get-all-entities="getEntitiesName"
-        @saveList="updateList"
-        @cancel="cancelEditSentence"
-        @dispatchSave="saveSentence"
-      />
-    </template>
-  </unnnic-table>
-  <unnnic-modal
-    :showModal="openModal"
-    :text="$t('webapp.trainings.delete_title')"
-    scheme="feedback-red"
-    modal-icon="alert-circle-1"
-    @close="openModal = false"
-  >
-    <span
-    slot="message"
-    v-html="$t('webapp.trainings.delete_phrase_modal')" />
-    <unnnic-button slot="options" type="tertiary" @click="openModal = false">
-      {{ $t("webapp.home.cancel") }}
-    </unnnic-button>
-    <unnnic-button
-      slot="options"
-      type="primary"
+          <template v-slot:delete>
+            <div :style="{ textAlign: 'center' }">
+              <UnnnicButton
+                size="small"
+                type="secondary"
+                iconCenter="delete-1-1"
+                @click.prevent.stop="deleteSentence(item)"
+              />
+            </div>
+          </template>
+        </UnnnicTableRow>
+        <EditExampleIntent
+          v-if="item.id === selectedItem"
+          :entities="item.entities"
+          :intentToEdit="item.intent"
+          :editExample="true"
+          :textToEdit="item.text"
+          :sentenceId="item.id"
+          :languageEdit="item.language"
+          :getAllEntities="getEntitiesName"
+          @saveList="updateList"
+          @cancel="cancelEditSentence"
+          @dispatchSave="saveSentence"
+        />
+      </template>
+    </UnnnicTable>
+    <UnnnicModal
+      :showModal="openModal"
+      :text="$t('webapp.trainings.delete_title')"
       scheme="feedback-red"
-      @click="confirmDelete()"
+      modalIcon="alert-circle-1"
+      @close="openModal = false"
     >
-      {{ $t("webapp.trainings.delete_title") }}
-    </unnnic-button>
-  </unnnic-modal>
-  <unnnic-modal
-    :showModal="openSuccessModal"
-    :text="$t('webapp.intent.delete_success_title')"
-    scheme="feedback-green"
-    modal-icon="check-circle-1-1"
-    @close="openSuccessModal = false"
-  >
-    <span
-    slot="message"
-    v-html="$t('webapp.intent.delete_success_subtitle')" />
-  </unnnic-modal>
-</div>
+      <span
+        slot="message"
+        v-html="$t('webapp.trainings.delete_phrase_modal')"
+      />
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="openModal = false"
+      >
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
+        slot="options"
+        type="primary"
+        scheme="feedback-red"
+        @click="confirmDelete()"
+      >
+        {{ $t('webapp.trainings.delete_title') }}
+      </UnnnicButton>
+    </UnnnicModal>
+    <UnnnicModal
+      :showModal="openSuccessModal"
+      :text="$t('webapp.intent.delete_success_title')"
+      scheme="feedback-green"
+      modalIcon="check-circle-1-1"
+      @close="openSuccessModal = false"
+    >
+      <span
+        slot="message"
+        v-html="$t('webapp.intent.delete_success_subtitle')"
+      />
+    </UnnnicModal>
+  </div>
 </template>
 
 <script>
@@ -193,7 +201,7 @@ export default {
     },
     getEntitiesName() {
       const allEntitiesName = this.repository.entities.map(
-        (entityValue) => entityValue.value
+        (entityValue) => entityValue.value,
       );
       return allEntitiesName;
     },
@@ -201,16 +209,16 @@ export default {
   watch: {
     sentence(value) {
       if (value) {
-        const { id } = value
+        const { id } = value;
         // eslint-disable-next-line no-underscore-dangle
-        this.$refs[id]._data.active = this.isSentenceActive
+        this.$refs[id]._data.active = this.isSentenceActive;
       }
-    }
+    },
   },
   methods: {
     getEntityClass(entity) {
       const allEntitiesName = this.repository.entities.map(
-        (entityValue) => entityValue.value
+        (entityValue) => entityValue.value,
       );
       const color = getEntityColor(entity, allEntitiesName);
       return `entity-${color}`;
@@ -220,46 +228,46 @@ export default {
       this.sentence = item;
     },
     confirmDelete() {
-      this.$emit('onDeleteSentence', this.sentence)
-      this.openModal = false
+      this.$emit('onDeleteSentence', this.sentence);
+      this.openModal = false;
     },
     activeSentence(item) {
-      const { id } = item
+      const { id } = item;
       // eslint-disable-next-line no-underscore-dangle
-      this.$refs[id]._data.active = true
+      this.$refs[id]._data.active = true;
     },
     inactiveSentence(item) {
-      const { id } = item
+      const { id } = item;
       // eslint-disable-next-line no-underscore-dangle
-      this.$refs[id]._data.active = false
+      this.$refs[id]._data.active = false;
     },
     cancelEditSentence() {
       this.open = !this.open;
       this.editing = false;
-      this.$refs[this.selectedItem].active = false
+      this.$refs[this.selectedItem].active = false;
       this.selectedItem = null;
     },
     editSentence(id) {
-      this.selectedItem = id
+      this.selectedItem = id;
       this.open = true;
       this.editing = true;
-      this.$refs[id].active = true
+      this.$refs[id].active = true;
     },
     updateList() {
       this.$emit('updateList');
     },
     saveSentence(event) {
-      this.$emit('onSaveSentence', event)
-    }
+      this.$emit('onSaveSentence', event);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .example-accordion {
   &__text {
@@ -292,21 +300,21 @@ export default {
 .intent-label {
   font-family: 'Lato';
   font-size: 12px;
-  color: #67738B;
+  color: #67738b;
   padding-top: 1px;
 }
 
-/deep/ .scroll {
+:deep(.scroll) {
   padding-right: 0;
 }
 
-/deep/ .header .break-text {
+:deep(.header .break-text) {
   overflow: initial;
 }
-/deep/ .unnnic-table .header {
+:deep(.unnnic-table .header) {
   padding: 0.75rem 1.5rem;
 }
-/deep/ .unnnic-table .item {
+:deep(.unnnic-table .item) {
   padding: 0.75rem 1.5rem;
   border: 1px solid white;
 
@@ -314,8 +322,7 @@ export default {
     margin-bottom: 0;
   }
 }
-/deep/ .unnnic-table .item:hover {
+:deep(.unnnic-table .item:hover) {
   border: 1px solid $unnnic-color-neutral-soft;
 }
-
 </style>

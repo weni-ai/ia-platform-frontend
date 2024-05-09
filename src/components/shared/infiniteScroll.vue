@@ -1,7 +1,6 @@
-
 <template>
   <div class="observer">
-    <loading/>
+    <Loading />
   </div>
 </template>
 
@@ -33,8 +32,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/dist/unnnic.css';
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .observer {
   width: 100%;
@@ -43,5 +42,4 @@ export default {
   justify-content: center;
   color: $unnnic-color-neutral-cloudy;
 }
-
 </style>

@@ -1,21 +1,28 @@
 <template>
   <div class="field">
-    <div :class="{control: true, 'has-icons-right': hasAppend}">
+    <div :class="{ control: true, 'has-icons-right': hasAppend }">
       <textarea
         ref="input"
-        :class="{textarea: true,
-                 'self-adjust': true,
-                 'self-adjust__appended': hasAppend,
-                 'self-adjust__appended--small': hasAppend && smallIcon,
-                 'self-adjust--transparent': transparent,
-                 'self-adjust__contained': contained,
-                 [`self-adjust--${size}`]: true}"
+        :class="{
+          textarea: true,
+          'self-adjust': true,
+          'self-adjust__appended': hasAppend,
+          'self-adjust__appended--small': hasAppend && smallIcon,
+          'self-adjust--transparent': transparent,
+          'self-adjust__contained': contained,
+          [`self-adjust--${size}`]: true,
+        }"
         v-bind="$attrs"
         v-model="val"
-        v-on="inputListeners"/>
+        v-on="inputListeners"
+      />
       <span
         v-if="hasAppend"
-        :class="['icon is-right', `event-clickable${smallIcon ? '--small' : ''}`]">
+        :class="[
+          'icon is-right',
+          `event-clickable${smallIcon ? '--small' : ''}`,
+        ]"
+      >
         <slot name="append" />
       </span>
     </div>
@@ -100,7 +107,7 @@ export default {
     async updateTextareaHeight() {
       await this.$nextTick();
       const { input } = this.$refs;
-      const offset = (input.offsetHeight - input.clientHeight);
+      const offset = input.offsetHeight - input.clientHeight;
       const computedStyle = window.getComputedStyle(input);
       input.style.minHeight = `${Math.max(36, offset + this.fontSize)}px`;
       input.style.height = computedStyle.getPropertyValue('min-height');
@@ -111,49 +118,50 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
+@use 'sass:math';
+@import '@/assets/scss/variables.scss';
 
-    .self-adjust {
-        resize: none;
-        min-height: 36px;
-        padding: 0.3rem 1rem;
-        max-height: 900vh;
+.self-adjust {
+  resize: none;
+  min-height: 36px;
+  padding: 0.3rem 1rem;
+  max-height: 900vh;
 
-        &__contained {
-          max-height: 50vh;
-        }
+  &__contained {
+    max-height: 50vh;
+  }
 
-        &__appended {
-            padding: 0.3rem $form-append-width 0.3rem 1rem;
+  &__appended {
+    padding: 0.3rem $form-append-width 0.3rem 1rem;
 
-            &--small {
-              padding-right: 1rem;
-            }
-        }
-
-        &--transparent {
-            background-color: transparent;
-        }
-
-        &--small {
-            font-size: 12px;
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
+    &--small {
+      padding-right: 1rem;
     }
+  }
 
-    .event-clickable {
-        display: flex;
-        justify-content: flex-end;
-        margin-right: $form-append-width/4;
-        pointer-events: all !important;
-        min-width: $form-append-width !important;
-        > * {
-          pointer-events: all !important;
-        }
+  &--transparent {
+    background-color: transparent;
+  }
 
-        &--small {
-          margin-right: $form-append-width/8;
-        }
-    }
+  &--small {
+    font-size: 12px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+.event-clickable {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: math.div($form-append-width, 4);
+  pointer-events: all !important;
+  min-width: $form-append-width !important;
+  > * {
+    pointer-events: all !important;
+  }
+
+  &--small {
+    margin-right: math.div($form-append-width, 8);
+  }
+}
 </style>

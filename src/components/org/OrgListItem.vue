@@ -1,7 +1,8 @@
 <template>
   <div
     class="org-card"
-    @click="goToOrg">
+    @click="goToOrg"
+  >
     <div class="org-card__append">
       <div class="org-card__align-items">
         <div class="org-card__details">
@@ -13,14 +14,22 @@
             <strong class="medium text-color-primary">{{ owner.nickname }}</strong>
           </div> -->
           <div class="org-card__attrs">
-            <p class="org-card__attrs__line"> <b-icon
-              size="is-medium"
-              class="org-card__icon"
-              icon="head-snowflake"/> {{ $tc('webapp.orgs.repositories', count_repositories) }} </p>
-            <p class="org-card__attrs__line"> <b-icon
-              size="is-medium"
-              class="org-card__icon"
-              icon="account-multiple"/> {{ $tc('webapp.orgs.members', count_members) }} </p>
+            <p class="org-card__attrs__line">
+              <BIcon
+                size="is-medium"
+                class="org-card__icon"
+                icon="head-snowflake"
+              />
+              {{ $tc('webapp.orgs.repositories', count_repositories) }}
+            </p>
+            <p class="org-card__attrs__line">
+              <BIcon
+                size="is-medium"
+                class="org-card__icon"
+                icon="account-multiple"
+              />
+              {{ $tc('webapp.orgs.members', count_members) }}
+            </p>
           </div>
           <!-- <div class="org-card__time">
             <p> {{ $t('webapp.orgs.created') }} {{ created_at | moment('from') }} </p>
@@ -32,7 +41,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'OrgListItem',
   props: {
@@ -73,18 +81,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/colors.scss';
-
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
 
 .org-card {
   $org-card-margin: 1rem;
   cursor: pointer;
   font-family: $font-family;
 
-  margin: $org-card-margin 0 $org-card-margin 2*$org-card-margin;
+  margin: $org-card-margin 0 $org-card-margin 2 * $org-card-margin;
   padding: 1rem 0;
-  width: calc(100% * 1/3 - 2rem);
+  width: calc(100% * 1 / 3 - 2rem);
   word-break: break-all;
 
   display: flex;
@@ -94,12 +101,12 @@ export default {
   border: 1px solid $color-grey;
   border-radius: $radius-normal;
   border: 1px solid transparent;
-  box-shadow: 0rem 0rem .5rem .2rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0rem 0rem 0.5rem 0.2rem rgba(0, 0, 0, 0.1);
   flex-grow: 0;
 
   @media screen and (max-width: $mobile-width) {
-    width: calc(100% * 1/2 - 1rem);
-    margin: $org-card-margin 0 $org-card-margin 0.5*$org-card-margin;
+    width: calc(100% * 1 / 2 - 1rem);
+    margin: $org-card-margin 0 $org-card-margin 0.5 * $org-card-margin;
   }
 
   @media screen and (max-width: $small-mobile-width) {
@@ -126,7 +133,7 @@ export default {
   &__title {
     font-size: 1.5rem;
     font-weight: $font-weight-bolder;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 
   &__info-item {
@@ -159,12 +166,12 @@ export default {
   &__flags {
     display: flex;
     flex-wrap: wrap;
-    margin: .5rem -.25rem;
+    margin: 0.5rem -0.25rem;
     justify-content: center;
     align-items: center;
 
     &__flag {
-      margin: .25rem;
+      margin: 0.25rem;
       order: 0;
 
       &--main {

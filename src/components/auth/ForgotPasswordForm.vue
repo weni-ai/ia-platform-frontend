@@ -1,26 +1,29 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <messages :msgs="success_msgs" />
-    <loading v-if="!formSchema" />
-    <form-generator
+    <Messages :msgs="success_msgs" />
+    <Loading v-if="!formSchema" />
+    <FormGenerator
       v-if="formSchema"
       :schema="formSchema"
       v-model="data"
       :errors="errors"
-      :show-labels="false"
-      class="field"/>
+      :showLabels="false"
+      class="field"
+    />
     <div class="field">
       <div class="control">
         <button
           type="button"
           class="button is-primary"
-          @click="goToLoginPage">
+          @click="goToLoginPage"
+        >
           {{ $t('webapp.recover_form.cancel_button') }}
         </button>
         <button
           :disabled="submitting"
           type="submit"
-          class="button is-primary">
+          class="button is-primary"
+        >
           {{ $t('webapp.landing_page.reset_password') }}
         </button>
       </div>
@@ -33,7 +36,6 @@ import { mapActions } from 'vuex';
 import FormGenerator from '@/components/form-generator/FormGenerator';
 import Messages from '@/components/shared/Messages';
 import Loading from '@/components/shared/Loading';
-
 
 const components = {
   FormGenerator,
@@ -57,10 +59,7 @@ export default {
     this.formSchema = await this.getForgotPasswordSchema();
   },
   methods: {
-    ...mapActions([
-      'getForgotPasswordSchema',
-      'forgotPassword',
-    ]),
+    ...mapActions(['getForgotPasswordSchema', 'forgotPassword']),
     goToLoginPage() {
       this.$router.push({
         name: 'signIn',
@@ -93,16 +92,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
-.control{
+.control {
   margin-top: 1.5rem;
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
-.button{
+.button {
   width: 157px;
   height: 35px;
   margin: 0 0.6rem;

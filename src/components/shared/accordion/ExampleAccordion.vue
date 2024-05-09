@@ -1,90 +1,97 @@
 <template>
-  <sentence-accordion
+  <SentenceAccordion
     :open.sync="isOpen"
-    :pending-example="pendingExample"
-    :class="pendingExample ? 'pendingExample' : ''">
-
+    :pendingExample="pendingExample"
+    :class="pendingExample ? 'pendingExample' : ''"
+  >
     <div
       slot="header"
-      class="level">
-
+      class="level"
+    >
       <div class="example-accordion__tag level-left">
-        <language-badge
-          :language="language" />
+        <LanguageBadge :language="language" />
       </div>
 
       <div
         v-show="!isOpen"
-        class="level-right example-accordion__text">{{ text }}</div>
+        class="level-right example-accordion__text"
+      >
+        {{ text }}
+      </div>
 
       <div
         v-show="isOpen && !editing"
-        class="level-right example-accordion__text">
-        <highlighted-text
+        class="level-right example-accordion__text"
+      >
+        <HighlightedText
           :text="text"
           :entities="entities"
-          :highlighted="highlighted" />
+          :highlighted="highlighted"
+        />
       </div>
     </div>
     <div
-    v-if="repository.authorization && repository.authorization.can_contribute"
+      v-if="repository.authorization && repository.authorization.can_contribute"
       slot="options"
-      class="level example-accordion__btns-wrapper">
-      <div
-        class="level-right">
+      class="level example-accordion__btns-wrapper"
+    >
+      <div class="level-right">
         <div class="level-item">
-          <word-suggestion-button
+          <WordSuggestionButton
             v-show="!editing && suggestion"
-            :get-sentence="sentenceDetail"
-            class="example-accordion__suggestion"/>
+            :getSentence="sentenceDetail"
+            class="example-accordion__suggestion"
+          />
         </div>
       </div>
-      <div
-        class="level-right">
+      <div class="level-right">
         <div class="level-item">
           <a
             v-show="!editing"
-            @click.prevent.stop="editSentence()">
-            <b-icon
+            @click.prevent.stop="editSentence()"
+          >
+            <BIcon
               icon="pencil"
               size="is-small"
-              class="example__icon" />
+              class="example__icon"
+            />
           </a>
         </div>
       </div>
-      <div
-        class="level-right">
+      <div class="level-right">
         <div class="level-item">
-          <a
-            @click.prevent.stop="deleteThisExample()">
-            <b-icon
+          <a @click.prevent.stop="deleteThisExample()">
+            <BIcon
               icon="delete"
               size="is-small"
-              class="example__icon" />
+              class="example__icon"
+            />
           </a>
         </div>
       </div>
     </div>
     <div slot="body">
-      <example-info
+      <ExampleInfo
         v-if="!editing"
-        :entities-list="entities"
+        :entitiesList="entities"
         :highlighted.sync="highlighted"
-        :intent="intent" />
+        :intent="intent"
+      />
 
-      <edit-example
+      <EditExample
         v-else
         :entities="entitiesList"
-        :intent-to-edit="intent"
-        :edit-example="availableToExample"
-        :text-to-edit="text"
-        :sentence-id="id"
-        :language-edit="language"
-        :get-all-entities="allEntities"
+        :intentToEdit="intent"
+        :editExample="availableToExample"
+        :textToEdit="text"
+        :sentenceId="id"
+        :languageEdit="language"
+        :getAllEntities="allEntities"
         @cancel="cancelEditSentence"
-        @saveList="updateList"/>
+        @saveList="updateList"
+      />
     </div>
-  </sentence-accordion>
+  </SentenceAccordion>
 </template>
 
 <script>
@@ -126,7 +133,7 @@ export default {
     },
     entities: {
       type: Array,
-      default: /* istanbul ignore next */ () => ([]),
+      default: /* istanbul ignore next */ () => [],
     },
     intent: {
       type: String,
@@ -163,14 +170,13 @@ export default {
   },
   computed: {
     ...mapState({
-      repository: state => state.Repository.selectedRepository,
+      repository: (state) => state.Repository.selectedRepository,
     }),
     entitiesList() {
-      return this.entities
-        .map(entity => ({
-          class: this.getEntityClass(entity.entity),
-          ...entity,
-        }));
+      return this.entities.map((entity) => ({
+        class: this.getEntityClass(entity.entity),
+        ...entity,
+      }));
     },
     sentenceDetail() {
       const detail = {
@@ -194,18 +200,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'deleteEvaluateExample',
-      'deleteExample',
-    ]),
+    ...mapActions(['deleteEvaluateExample', 'deleteExample']),
     getEntityClass(entity) {
       const allEntitiesName = this.repository.entities.map(
-        entityValue => entityValue.value,
+        (entityValue) => entityValue.value,
       );
-      const color = getEntityColor(
-        entity,
-        allEntitiesName,
-      );
+      const color = getEntityColor(entity, allEntitiesName);
       return `entity-${color}`;
     },
     deleteThisExample() {
@@ -222,7 +222,8 @@ export default {
           } else {
             await this.deleteEvaluateExample({
               id: this.id,
-              repositoryUuid: this.$store.state.Repository.selectedRepository.uuid,
+              repositoryUuid:
+                this.$store.state.Repository.selectedRepository.uuid,
             });
             this.$emit('deleted');
           }
@@ -244,31 +245,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .example__icon {
   color: $color-grey-dark;
 }
-  .example-accordion {
-
-    &__text {
-      max-width: 100%;
-    }
-
-    &__tag {
-      margin-right: 0.5rem;
-    }
-
-    &__btns-wrapper {
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    &__suggestion{
-      margin-top: 2px;
-      margin-right: 6px;
-    }
+.example-accordion {
+  &__text {
+    max-width: 100%;
   }
 
+  &__tag {
+    margin-right: 0.5rem;
+  }
+
+  &__btns-wrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__suggestion {
+    margin-top: 2px;
+    margin-right: 6px;
+  }
+}
 </style>

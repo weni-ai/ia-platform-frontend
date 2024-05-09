@@ -2,254 +2,546 @@
 <template>
   <div class="settings-loading">
     <div class="settings-loading__table-header">
-      <unnnic-skeleton-loading tag="div" width="1029px" height="54px" />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="1029px"
+        height="54px"
+      />
     </div>
 
     <div class="settings-loading__container">
       <div class="settings-loading__container__row">
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
       </div>
       <div class="settings-loading__container__row">
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
       </div>
       <div class="settings-loading__container__row">
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
       </div>
       <div class="settings-loading__container__row">
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
       </div>
       <div class="settings-loading__container__row">
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
       </div>
       <div class="settings-loading__container__row">
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
       </div>
       <div class="settings-loading__container__row">
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
       </div>
       <div class="settings-loading__container__row">
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
       </div>
       <div class="settings-loading__container__row">
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
       </div>
       <div class="settings-loading__container__row">
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__column">
-          <unnnic-skeleton-loading tag="div" width="188px" height="22px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="188px"
+            height="22px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
         <div class="settings-loading__container__button">
-          <unnnic-skeleton-loading tag="div" width="36px" height="36px" />
+          <UnnnicSkeletonLoading
+            tag="div"
+            width="36px"
+            height="36px"
+          />
         </div>
       </div>
 
-      <unnnic-divider />
+      <UnnnicDivider />
 
       <div class="settings-loading__container__table-buttons">
-        <unnnic-skeleton-loading tag="div" width="70px" height="22px" />
-        <unnnic-skeleton-loading tag="div" width="300px" height="36px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="70px"
+          height="22px"
+        />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="300px"
+          height="36px"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 .settings-loading {
   display: flex;
   flex-direction: column;

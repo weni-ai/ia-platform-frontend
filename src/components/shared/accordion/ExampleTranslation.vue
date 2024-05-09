@@ -1,44 +1,47 @@
 <template>
-  <edit-example-translation
+  <EditExampleTranslation
     v-if="editing"
     :id="id"
     :entities="entities"
-    :text-to-edit="text"
-    :sentence-id="original_example"
-    :language-edit="language"
-    :get-all-entities="allEntities"
+    :textToEdit="text"
+    :sentenceId="original_example"
+    :languageEdit="language"
+    :getAllEntities="allEntities"
     @edited="onEdit"
-    @cancel="editing = false" />
+    @cancel="editing = false"
+  />
   <div
     v-else
-    class="translation" >
+    class="translation"
+  >
     <div class="columns">
       <div class="translation__language">
-        <language-badge
-          :language="language"/>
+        <LanguageBadge :language="language" />
       </div>
       <div class="column translation__text__container">
-        <highlighted-text
+        <HighlightedText
           :text="text"
           :entities="entities"
           :highlighted="highlighted"
-          class="translation__text" />
-        <div
-          class="translation__entities">
-          <b-tooltip
+          class="translation__text"
+        />
+        <div class="translation__entities">
+          <BTooltip
             v-if="!has_valid_entities"
             :label="$t('webapp.translate.invalid_entities')"
             multilined
-            type="is-warning">
-            <b-icon
+            type="is-warning"
+          >
+            <BIcon
               size="is-small"
               class="is-warining"
-              icon="alert" />
-          </b-tooltip>
-          <entity-tag
+              icon="alert"
+            />
+          </BTooltip>
+          <EntityTag
             v-for="(entity, i) in entitiesList"
             :key="i"
-            :entity-name="entity"
+            :entityName="entity"
             :highlighted="highlighted === entity"
             @mouseenter.native.stop="highlighted = entity"
             @mouseleave.native.stop="highlighted = null"
@@ -46,16 +49,18 @@
         </div>
       </div>
       <div class="translation__icons">
-          <b-icon
-            :class="{clickable: true, 'icon-disabled': disableEdit}"
-            size="is-small"
-            icon="pencil"
-            @click.native.stop="editing = true" />
-          <b-icon
-            class="clickable"
-            size="is-small"
-            icon="delete"
-            @click.native="deleteThisTranslation()" />
+        <BIcon
+          :class="{ clickable: true, 'icon-disabled': disableEdit }"
+          size="is-small"
+          icon="pencil"
+          @click.native.stop="editing = true"
+        />
+        <BIcon
+          class="clickable"
+          size="is-small"
+          icon="delete"
+          @click.native="deleteThisTranslation()"
+        />
       </div>
     </div>
   </div>
@@ -92,7 +97,7 @@ export default {
     },
     entities: {
       type: Array,
-      default: /* istanbul ignore next */ () => ([]),
+      default: /* istanbul ignore next */ () => [],
     },
     from_language: {
       type: String,
@@ -141,17 +146,16 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'getExample',
-      'deleteTranslation',
-    ]),
+    ...mapActions(['getExample', 'deleteTranslation']),
     onEdit(edited) {
       this.$emit('edited', edited);
       this.editing = false;
     },
     deleteThisTranslation() {
       this.deleteDialog = this.$buefy.dialog.confirm({
-        message: this.$t('webapp.translate.translation_delete_confirm', { language: this.language }),
+        message: this.$t('webapp.translate.translation_delete_confirm', {
+          language: this.language,
+        }),
         confirmText: this.$t('webapp.home.delete'),
         cancelText: this.$t('webapp.home.cancel'),
         type: 'is-danger',
@@ -166,7 +170,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
 .is-warning {
   color: $color-warning;
@@ -189,12 +193,12 @@ export default {
   }
 
   &__icons {
-      width: 2.8rem;
-      display: flex;
-      margin-right: 0.5rem;
-      align-items: center;
-      justify-content: space-around;
-      color: $color-grey-dark;
+    width: 2.8rem;
+    display: flex;
+    margin-right: 0.5rem;
+    align-items: center;
+    justify-content: space-around;
+    color: $color-grey-dark;
   }
 
   &__entities {

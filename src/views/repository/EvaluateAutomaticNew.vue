@@ -1,40 +1,48 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     :repository="repository"
-    :error-code="errorCode">
+    :errorCode="errorCode"
+  >
     <div v-if="repository">
       <div v-if="authenticated">
         <div
           v-if="repository.authorization.can_write"
-          class="evaluate">
+          class="evaluate"
+        >
           <div class="evaluate__content-header">
-            <unnnic-card
+            <UnnnicCard
               :title="$t('webapp.evaluate-automatic-new.header_title')"
               icon="check-square-1"
               type="title"
-              :has-information-icon="false"
-              scheme="aux-orange" />
-              <p
-                v-html="$t('webapp.evaluate-automatic-new.header_title_p')"
-                class="column is-7"></p>
+              :hasInformationIcon="false"
+              scheme="aux-orange"
+            />
+            <p
+              v-html="$t('webapp.evaluate-automatic-new.header_title_p')"
+              class="column is-7"
+            ></p>
           </div>
 
           <div class="evaluate__divider"></div>
 
           <div class="evaluate__quality">
-            <h2>{{ $t("webapp.evaluate-automatic-new.quality_title") }}</h2>
+            <h2>{{ $t('webapp.evaluate-automatic-new.quality_title') }}</h2>
             <p>{{ result.quality }}%</p>
           </div>
 
           <div class="evaluate__summary">
             <div class="evaluate__summary__infos column is-4 p-0">
-              <unnnic-card-number
-                :description="$t('webapp.evaluate-automatic-new.summary_title1')"
+              <UnnnicCardNumber
+                :description="
+                  $t('webapp.evaluate-automatic-new.summary_title1')
+                "
                 :number="result.count_logs"
               />
 
-              <unnnic-card-number
-                :description="$t('webapp.evaluate-automatic-new.summary_title2')"
+              <UnnnicCardNumber
+                :description="
+                  $t('webapp.evaluate-automatic-new.summary_title2')
+                "
                 :number="result.created"
               />
             </div>
@@ -47,84 +55,96 @@
               />
             </div> -->
 
-          <div class="unnnic-card-account evaluate__tips unnnic-card-component ">
-            <div class="icon">
-              <unnnic-avatar-icon
-                size="xs"
-                scheme="brand-weni-soft"
-                icon="study-light-idea-1"
-              />
-            </div>
+            <div
+              class="unnnic-card-account evaluate__tips unnnic-card-component"
+            >
+              <div class="icon">
+                <UnnnicAvatarIcon
+                  size="xs"
+                  scheme="brand-weni-soft"
+                  icon="study-light-idea-1"
+                />
+              </div>
 
-            <div class="content">
-              <div class="title">{{ $t('webapp.evaluate-automatic-new.tips_title') }}</div>
+              <div class="content">
+                <div class="title">
+                  {{ $t('webapp.evaluate-automatic-new.tips_title') }}
+                </div>
 
-              <div
-                v-for="recommendation in recommendations"
-                :key="recommendation"
-                class="description">
+                <div
+                  v-for="recommendation in recommendations"
+                  :key="recommendation"
+                  class="description"
+                >
                   Adicione mais frases para a intenção
                   <span class="intent">{{ recommendation }}</span>
+                </div>
               </div>
             </div>
           </div>
-
-          </div>
           <div class="evaluate__results">
             <div class="evaluate__results__title">
-              <h2>{{ $t("webapp.evaluate-automatic-new.results_title") }}</h2>
+              <h2>{{ $t('webapp.evaluate-automatic-new.results_title') }}</h2>
             </div>
 
-            <unnnic-tab class="pb-6" initialTab="first" :tabs="tabs">
+            <UnnnicTab
+              class="pb-6"
+              initialTab="first"
+              :tabs="tabs"
+            >
               <template slot="tab-head-first">
-                {{ $t("webapp.evaluate-automatic-new.results_tab_title") }}
+                {{ $t('webapp.evaluate-automatic-new.results_tab_title') }}
               </template>
               <template slot="tab-panel-first">
-                <evaluate-result-example-list
+                <EvaluateResultExampleList
                   :id="evaluateResult ? evaluateResult.id : ''"
                   :query="query"
                 />
               </template>
               <template slot="tab-head-second">
-                {{ $t("webapp.evaluate-automatic-new.results_tab_title2") }}
+                {{ $t('webapp.evaluate-automatic-new.results_tab_title2') }}
               </template>
               <template slot="tab-panel-second">
-                <h2 class="evaluate__chart__title">Relatório de Precisão das Intenções</h2>
+                <h2 class="evaluate__chart__title">
+                  Relatório de Precisão das Intenções
+                </h2>
                 <p class="evaluate__chart__subtitle">
-                  Uma pontuação de precisão perfeita de 1.0 significa
-                  que todos os resultados dos testes foram positivos.
+                  Uma pontuação de precisão perfeita de 1.0 significa que todos
+                  os resultados dos testes foram positivos.
                 </p>
-                <unnnic-chart-bar
+                <UnnnicChartBar
                   condensed
                   :groups="intentChart"
                   :fixedMaxValue="1"
                 />
-                <h2 class="evaluate__chart__title">Relatório de Precisão das Entidades</h2>
+                <h2 class="evaluate__chart__title">
+                  Relatório de Precisão das Entidades
+                </h2>
                 <p class="evaluate__chart__subtitle">
-                  Uma pontuação de precisão perfeita de 1.0 significa
-                  que todos os resultados dos testes foram positivos.
+                  Uma pontuação de precisão perfeita de 1.0 significa que todos
+                  os resultados dos testes foram positivos.
                 </p>
-                <unnnic-chart-bar
+                <UnnnicChartBar
                   condensed
                   :groups="entityChart"
                   :fixedMaxValue="1"
                 />
               </template>
-            </unnnic-tab>
+            </UnnnicTab>
           </div>
         </div>
       </div>
-      <div
-        v-else>
-        <b-notification
+      <div v-else>
+        <BNotification
           :closable="false"
-          type="is-info">
+          type="is-info"
+        >
           {{ $t('webapp.evaluate-automatic.login') }}
-        </b-notification>
-        <login-form hide-forgot-password />
+        </BNotification>
+        <LoginForm hideForgotPassword />
       </div>
     </div>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -137,7 +157,6 @@ import RepositoryBase from './Base';
 import ProgressStages from '@/components/shared/ProgressStages';
 import EvaluateResultExampleList from '@/components/repository/repository-evaluate/results/EvaluateResultExampleList';
 
-
 export default {
   name: 'RepositoryEvaluateAutomaticNew',
   components: {
@@ -145,7 +164,7 @@ export default {
     LoginForm,
     AuthorizationRequestNotification,
     ProgressStages,
-    EvaluateResultExampleList
+    EvaluateResultExampleList,
   },
   extends: RepositoryBase,
   data() {
@@ -158,28 +177,33 @@ export default {
       eventReset: false,
       eventSkip: false,
       tabs: ['first', 'second'],
-      evaluateResult: {}
+      evaluateResult: {},
     };
   },
   mounted() {
-    this.getResult()
+    this.getResult();
   },
   computed: {
     ...mapState({
-      selectedRepository: state => state.Repository.selectedRepository,
+      selectedRepository: (state) => state.Repository.selectedRepository,
     }),
     ...mapGetters({
       repositoryVersion: 'getSelectedVersion',
       activeTutorial: 'activeTutorial',
     }),
     languages() {
-      if (!this.selectedRepository || !this.selectedRepository.evaluate_languages_count) return [];
-      return Object.keys(this.selectedRepository.evaluate_languages_count)
-        .map((lang, index) => ({
+      if (
+        !this.selectedRepository ||
+        !this.selectedRepository.evaluate_languages_count
+      )
+        return [];
+      return Object.keys(this.selectedRepository.evaluate_languages_count).map(
+        (lang, index) => ({
           id: index + 1,
           value: lang,
           title: `${LANGUAGES[lang]}`,
-        }));
+        }),
+      );
     },
     result() {
       const {
@@ -191,8 +215,9 @@ export default {
         intents_list,
         entities_list,
         recommendations,
-        created = new Date(this.evaluateResult?.created_at).toLocaleString() || '',
-        count_logs
+        created = new Date(this.evaluateResult?.created_at).toLocaleString() ||
+          '',
+        count_logs,
       } = this.evaluateResult;
       return {
         accuracy,
@@ -204,33 +229,33 @@ export default {
         entities_list,
         recommendations,
         created,
-        count_logs
-      }
+        count_logs,
+      };
     },
     intentChart() {
       if (this.result.intents_list) {
-        return this.result.intents_list
-          .map(intent => ({ values: { intent: intent.score.precision },
-            title: intent.intent
-          }))
+        return this.result.intents_list.map((intent) => ({
+          values: { intent: intent.score.precision },
+          title: intent.intent,
+        }));
       }
-      return []
+      return [];
     },
     entityChart() {
       if (this.result.entities_list) {
-        return this.result.entities_list
-          .map(entity => ({ values: { entity: entity.score.precision },
-            title: entity.entity
-          }))
+        return this.result.entities_list.map((entity) => ({
+          values: { entity: entity.score.precision },
+          title: entity.entity,
+        }));
       }
-      return []
+      return [];
     },
     recommendations() {
       if (this.result.recommendations) {
-        return this.result.recommendations.add_phares_to
+        return this.result.recommendations.add_phares_to;
       }
-      return []
-    }
+      return [];
+    },
   },
   watch: {
     selectedRepository() {
@@ -240,10 +265,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'getResultsByType',
-      'getAllResultsLog'
-    ]),
+    ...mapActions(['getResultsByType', 'getAllResultsLog']),
     async getResult() {
       const resultList = await this.getResultsByType({
         repositoryUuid: this.repository.uuid,
@@ -251,7 +273,7 @@ export default {
           repository_version: this.repositoryVersion,
           limit: 20,
           offset: 0,
-          type: 1
+          type: 1,
         },
       });
       const { data } = await this.getAllResultsLog({
@@ -259,21 +281,24 @@ export default {
         resultId: resultList.data.results[0].id,
         page: 1,
       });
-      this.evaluateResult = data
+      this.evaluateResult = data;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import '~@weni/unnnic-system/dist/unnnic.css';
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .evaluate {
-
-  h1, h2, h3, h4, p {
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
     font-family: $unnnic-font-family-secondary;
   }
 
@@ -297,7 +322,8 @@ export default {
       color: $unnnic-color-neutral-dark;
     }
 
-    h2, p {
+    h2,
+    p {
       font-size: $unnnic-font-size-title-sm;
       font-family: $unnnic-font-family-secondary;
     }
@@ -305,7 +331,7 @@ export default {
     p {
       font-weight: 900;
       padding-left: $unnnic-spacing-stack-xs;
-      color: #009E96;
+      color: #009e96;
     }
   }
 
@@ -328,20 +354,20 @@ export default {
       background-color: #fff;
       max-width: 100%;
       height: 96px;
-      border: 1px solid #E2E6ED;
+      border: 1px solid #e2e6ed;
       margin-top: $unnnic-spacing-stack-sm;
 
-      /deep/ h4 {
+      :deep(h4) {
         font-family: $unnnic-font-family-secondary;
         color: $unnnic-color-neutral-dark;
         font-size: $font-size;
       }
 
-      /deep/ span {
+      :deep(span) {
         font-family: $unnnic-font-family-secondary;
         color: $unnnic-color-neutral-dark;
         font-size: $unnnic-font-size-title-sm;
-/*         line-height: 0px; */
+        /*         line-height: 0px; */
       }
     }
 
@@ -360,7 +386,7 @@ export default {
     margin-top: $unnnic-spacing-stack-sm;
 
     .title {
-      font-family: Aleo,serif;
+      font-family: Aleo, serif;
       font-size: 1rem;
       font-weight: 400;
       color: #3b414d;
@@ -369,11 +395,11 @@ export default {
 
     .description {
       font-family: Lato;
-      font-size: .875rem;
+      font-size: 0.875rem;
       font-weight: 400;
       color: #67738b;
       line-height: 1.375rem;
-      margin-top: .25rem;
+      margin-top: 0.25rem;
     }
   }
 
@@ -382,16 +408,16 @@ export default {
     border: 1px solid $unnnic-color-neutral-soft;
     border-radius: 8px;
     display: flex;
-    padding: .75rem 1rem;
+    padding: 0.75rem 1rem;
     width: 100%;
 
-    /deep/ .icon {
+    :deep(.icon) {
       background: rgba(0, 158, 150, 0.08);
       border-radius: 4px;
-      margin-right: .5rem;
+      margin-right: 0.5rem;
     }
 
-    /deep/ .content .title {
+    :deep(.content .title) {
       font-family: $unnnic-font-family-secondary;
       color: $unnnic-color-neutral-dark;
       font-size: $unnnic-font-size-body-lg;
@@ -413,11 +439,11 @@ export default {
     }
 
     .unnnic-chart-bar {
-      /deep/ .main .groups .group .bars .bar {
+      :deep(.main .groups .group .bars .bar) {
         background-color: $unnnic-color-aux-blue;
       }
-      /deep/ .main .groups .group .bars .bar:hover {
-        outline-color: rgba(0,222,211,.32);
+      :deep(.main .groups .group .bars .bar:hover) {
+        outline-color: rgba(0, 222, 211, 0.32);
       }
     }
   }
@@ -429,11 +455,11 @@ export default {
     overflow: hidden;
     border-bottom: 1px solid $color-grey;
 
-    &__requestAuthorization{
-       color: $color-fake-black;
+    &__requestAuthorization {
+      color: $color-fake-black;
       font-weight: $font-weight-medium;
       text-align: center;
-      float: right
+      float: right;
     }
     a {
       position: relative;
@@ -451,22 +477,22 @@ export default {
           $size: 10rem;
 
           position: absolute;
-          content: "";
+          content: '';
           width: $size;
           height: $size;
           left: 50%;
-          bottom: -($size - .75rem);
+          bottom: -($size - 0.75rem);
           transform: translateX(-50%);
           background-color: $color-primary;
           border-radius: 50%;
-          animation: nav-bubble-animation .25s ease;
+          animation: nav-bubble-animation 0.25s ease;
 
           @keyframes nav-bubble-animation {
             from {
               bottom: -($size);
             }
             to {
-              bottom: -($size - .75rem);
+              bottom: -($size - 0.75rem);
             }
           }
         }
@@ -477,19 +503,19 @@ export default {
     &__title {
       font-size: 20px;
       font-family: 'Lato';
-      color: #4E5666;
+      color: #4e5666;
       margin: 2rem 0 1rem;
     }
     &__subtitle {
       font-size: 14px;
       font-family: 'Lato';
-      color: #67738B;
+      color: #67738b;
       margin-bottom: 1rem;
     }
   }
   .intent {
-      color: $unnnic-color-neutral-cloudy;
-      font-weight: 600;
-    }
+    color: $unnnic-color-neutral-cloudy;
+    font-weight: 600;
+  }
 }
 </style>

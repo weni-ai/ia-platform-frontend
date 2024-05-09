@@ -1,18 +1,18 @@
 <template>
   <div>
-    <intent-pagination
+    <IntentPagination
       :showUntrained="true"
-      :item-component="sentencesTable"
+      :itemComponent="sentencesTable"
       :list="translationsList"
       :repository="repository"
       @itemSave="updateTranslations()"
       @itemDeleted="examplesDeleted()"
     />
-      <div v-if="translationsList.total === 0">
-        <p
-        class="no-examples">{{ $t('webapp.translate.no_translation', {language: toLanguage}) }}
-        </p>
-      </div>
+    <div v-if="translationsList.total === 0">
+      <p class="no-examples">
+        {{ $t('webapp.translate.no_translation', { language: toLanguage }) }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -23,10 +23,9 @@ import TranslationItem from './TranslationItem';
 import IntentPagination from '@/components//shared/IntentPagination';
 import TranslateExampleTable from './TranslateExampleTable';
 
-
 const components = {
   PaginatedList,
-  IntentPagination
+  IntentPagination,
 };
 
 export default {
@@ -50,7 +49,7 @@ export default {
     return {
       translationsList: null,
       translationItemElem: TranslationItem,
-      sentencesTable: TranslateExampleTable
+      sentencesTable: TranslateExampleTable,
     };
   },
   computed: {
@@ -59,16 +58,18 @@ export default {
     }),
   },
   watch: {
-    toLanguage() { this.updateTranslations(); },
-    query() { this.updateTranslations(); },
+    toLanguage() {
+      this.updateTranslations();
+    },
+    query() {
+      this.updateTranslations();
+    },
   },
   async mounted() {
     await this.updateTranslations();
   },
   methods: {
-    ...mapActions([
-      'getTranslations',
-    ]),
+    ...mapActions(['getTranslations']),
     async updateTranslations() {
       this.translationsList = await this.getTranslations({
         ...this.query,
@@ -92,8 +93,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 .no-examples {
   font-family: $unnnic-font-family-secondary;
   font-size: $unnnic-font-size-body-gt;

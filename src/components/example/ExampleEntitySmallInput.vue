@@ -1,69 +1,79 @@
 <template>
-  <div
-    class="entity-input__entities">
-    <b-field
+  <div class="entity-input__entities">
+    <BField
       grouped
-      group-multiline>
+      groupMultiline
+    >
       <div
         v-for="(entity, index) in entitiesToEdit"
         :key="`entity-${index}`"
-        class="entity-input__input entity-input__icon-container">
-        <b-field>
+        class="entity-input__input entity-input__icon-container"
+      >
+        <BField>
           <span
             slot="label"
             class="entity-input__input__label"
-            v-html="$t('webapp.example.text_is', {text: highlightedText(entity) })" />
-          <b-select
+            v-html="
+              $t('webapp.example.text_is', { text: highlightedText(entity) })
+            "
+          />
+          <BSelect
             v-if="constrictEntities"
             v-model="entity.entity"
             expanded
             size="is-small"
-            @input="entitiesToEdit[index].entity = intentFormatters(entity.entity)">
+            @input="
+              entitiesToEdit[index].entity = intentFormatters(entity.entity)
+            "
+          >
             <option
-              v-for="(entity, index) in (availableEntities || [])"
-              :key="index">
+              v-for="(entity, index) in availableEntities || []"
+              :key="index"
+            >
               {{ entity }}
             </option>
-          </b-select>
-          <b-autocomplete
+          </BSelect>
+          <BAutocomplete
             v-else
             :data="filteredData(index)"
             v-model="entity.entity"
             :placeholder="$t('webapp.example.entity')"
-            dropdown-position="bottom"
-            icon-right="close"
-            icon-right-clickable
-            open-on-focus
+            dropdownPosition="bottom"
+            iconRight="close"
+            iconRightClickable
+            openOnFocus
             size="is-small"
             class="edit-sentence-input"
-            @input="entitiesToEdit[index].entity = intentFormatters(entity.entity)"
+            @input="
+              entitiesToEdit[index].entity = intentFormatters(entity.entity)
+            "
             @icon-right-click="removeEntity(entity, index)"
           />
-        </b-field>
+        </BField>
         <div class="entity-input__icon-container">
-          <b-icon
+          <BIcon
             v-if="constrictEntities"
             class="clickable"
             size="is-small"
             icon="close"
-            @click.native.stop="removeEntity(entity, index)"/>
+            @click.native.stop="removeEntity(entity, index)"
+          />
         </div>
       </div>
       <div class="entity-input__icon-container">
-        <b-tooltip
+        <BTooltip
           :label="addEntityHelpText"
-          multilined>
-          <b-icon
+          multilined
+        >
+          <BIcon
             :disabled="textSelected === null"
-            :class="{clickable: true,
-                     'icon-disabled': !addEntityEnabled
-            }"
+            :class="{ clickable: true, 'icon-disabled': !addEntityEnabled }"
             icon="card-plus"
             @click.native.stop="addEntity"
           />
-        </b-tooltip>
+        </BTooltip>
       </div>
-    </b-field>
+    </BField>
   </div>
 </template>
 
@@ -102,15 +112,18 @@ export default {
   },
   computed: {
     addEntityEnabled() {
-      if (this.constrictEntities && (this.availableEntities || []).length === 0) return false;
+      if (this.constrictEntities && (this.availableEntities || []).length === 0)
+        return false;
       return this.textSelected != null;
     },
     intentFormatters() {
       return formatters.bothubItemKey();
     },
     addEntityHelpText() {
-      if (!(this.availableEntities && this.availableEntities.length > 0)) return this.$t('webapp.translate.no_entities');
-      if (this.textSelected === null) return this.$t('webapp.trainings.select_text');
+      if (!(this.availableEntities && this.availableEntities.length > 0))
+        return this.$t('webapp.translate.no_entities');
+      if (this.textSelected === null)
+        return this.$t('webapp.trainings.select_text');
       return this.entityButtonText;
     },
     entityButtonText() {
@@ -118,7 +131,10 @@ export default {
         return this.$t('webapp.trainings.add_entity');
       }
 
-      const selected = this.text.slice(this.textSelected.start, this.textSelected.end);
+      const selected = this.text.slice(
+        this.textSelected.start,
+        this.textSelected.end,
+      );
 
       return `${this.$t('webapp.trainings.add_entity_for')} "${selected}"`;
     },
@@ -141,8 +157,9 @@ export default {
   },
   methods: {
     filteredData(index) {
-      return (this.availableEntities || []).filter(entity => entity
-        .startsWith(this.entitiesToEdit[index].entity.toLowerCase()));
+      return (this.availableEntities || []).filter((entity) =>
+        entity.startsWith(this.entitiesToEdit[index].entity.toLowerCase()),
+      );
     },
     addEntity() {
       if (!this.addEntityEnabled) return;
@@ -181,9 +198,7 @@ export default {
           if (lastMatch === undefined) {
             if (oldEntityText.length === 0 || text.length === 0) return -1;
             const index = text.indexOf(oldEntityText);
-            return index === -1
-              ? index
-              : findClosestStart(index);
+            return index === -1 ? index : findClosestStart(index);
           }
 
           const from = lastMatch + oldEntityText.length;
@@ -196,9 +211,7 @@ export default {
           const prevDiff = Math.abs(entity.start - lastMatch);
           const nextDiff = Math.abs(entity.start - index);
 
-          return prevDiff < nextDiff
-            ? lastMatch
-            : findClosestStart(index);
+          return prevDiff < nextDiff ? lastMatch : findClosestStart(index);
         };
 
         const start = findClosestStart();
@@ -211,42 +224,42 @@ export default {
         this.entitiesToEdit[i].end = start + oldEntityText.length;
         return true;
       });
-      this.entitiesToEdit = this.entitiesToEdit.filter(value => !!value);
+      this.entitiesToEdit = this.entitiesToEdit.filter((value) => !!value);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
+.icon {
+  color: $color-grey-dark;
+}
+.entity-input {
+  &__input {
+    margin-right: 0.5rem;
+    &__label {
+      font-size: 12px;
+    }
+  }
+
+  &__icon-container {
+    display: flex;
+    align-items: center;
     .icon {
-        color: $color-grey-dark
+      margin-top: 1rem;
     }
-    .entity-input {
-      &__input {
-        margin-right: 0.5rem;
-        &__label {
-          font-size: 12px;
-        }
-      }
+  }
 
-      &__icon-container {
-        display: flex;
-        align-items: center;
-        .icon {
-          margin-top: 1rem;
-        }
-      }
+  &__entities {
+    > * {
+      margin: 0 8px 0 0;
 
-      &__entities {
-        > * {
-          margin: 0 8px 0 0;
-
-          &:last-child {
-            margin: 0;
-          }
-        }
+      &:last-child {
+        margin: 0;
       }
     }
+  }
+}
 </style>

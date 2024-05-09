@@ -13,7 +13,7 @@
     v-on:drop="drop"
   >
     <div v-if="localList.length === 0">
-      <unnnic-icon-svg
+      <UnnnicIconSvg
         class="drag-area__dropzone__icon"
         icon="study-light-idea-1"
         :scheme="hasError ? 'feedback-red' : 'neutral-cloudy'"
@@ -26,7 +26,7 @@
         </span>
       </div>
     </div>
-    <draggable
+    <Draggable
       v-model="localList"
       :sort="false"
       :data-id-attr="identifier"
@@ -35,19 +35,19 @@
       class="badges-card__wrapper"
       @change="onChange"
     >
-      <entity-tag
+      <EntityTag
         v-for="(item, i) in localList"
         :key="i"
         :class="[
           'badges-card__wrapper__badge',
           `badges-card__wrapper__badge--moving`,
         ]"
-        :entity-name="item.value"
+        :entityName="item.value"
         :closable="edit"
         @close="close(item)"
         @click.native="goToEntity(item)"
       />
-    </draggable>
+    </Draggable>
   </div>
 </template>
 
@@ -126,8 +126,8 @@ export default {
       this.text = formatters.bothubItemKey()(this.text.toLowerCase());
     },
     list() {
-      this.$emit('onUpdateList')
-    }
+      this.$emit('onUpdateList');
+    },
   },
   methods: {
     close() {
@@ -166,13 +166,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@use 'sass:string';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 @function borderDashed($color) {
-  @return url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23#{str-slice(quote($color), 2)}' stroke-width='4' stroke-dasharray='4%2c 12' stroke-dashoffset='9' stroke-linecap='square'/%3e%3c/svg%3e");
+  @return url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23#{string.slice(#{$color}, 2)}' stroke-width='4' stroke-dasharray='4%2c 12' stroke-dashoffset='9' stroke-linecap='square'/%3e%3c/svg%3e");
 }
 .drag-area {
   &__dropzone {

@@ -1,18 +1,19 @@
 <template>
-  <boarding-layout>
+  <BoardingLayout>
     <div class="payment-options">
       <div class="payment-info-card__wrapper">
         <div class="payment-info-card">
-          <h1> {{ $t('webapp.payment.info.title') }} </h1>
-          <p> {{ $t('webapp.payment.info.subtitle') }} </p>
-          <payment-form
+          <h1>{{ $t('webapp.payment.info.title') }}</h1>
+          <p>{{ $t('webapp.payment.info.subtitle') }}</p>
+          <PaymentForm
             class="payment-info-card__form"
-            show-back-button
-            @back="onBack" />
+            showBackButton
+            @back="onBack"
+          />
         </div>
       </div>
     </div>
-  </boarding-layout>
+  </BoardingLayout>
 </template>
 
 <script>
@@ -36,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 .payment-options {
   margin: 4rem 0 0 0;
   text-align: center;
@@ -51,19 +52,19 @@ export default {
 }
 
 .payment-info-card {
-    padding: 2rem 4.7rem 3.5rem 4.7rem;
-    background-color: $color-white;
-    margin: 0 1rem;
-    box-shadow: 0px 3px 6px #00000029;
-    max-width: 31rem;
+  padding: 2rem 4.7rem 3.5rem 4.7rem;
+  background-color: $color-white;
+  margin: 0 1rem;
+  box-shadow: 0px 3px 6px #00000029;
+  max-width: 31rem;
 
-    &__wrapper {
-      display: flex;
-      align-items: center;
-    }
-
-    &__form {
-      margin-top: 2.313rem;
-    }
+  &__wrapper {
+    display: flex;
+    align-items: center;
   }
+
+  &__form {
+    margin-top: 2.313rem;
+  }
+}
 </style>

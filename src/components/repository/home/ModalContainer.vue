@@ -1,10 +1,13 @@
 <template>
-  <transition name="modal-transition" v-if="showModal">
+  <Transition
+    name="modal-transition"
+    v-if="showModal"
+  >
     <div class="modal-container">
       <div class="modal-container__content">
         <div class="modal-container__content__background">
           <section class="modal-container__content__background__header">
-            <unnnic-icon-svg
+            <UnnnicIconSvg
               size="lg"
               icon="keyboard-arrow-down-1"
               @click="closeModal()"
@@ -30,8 +33,11 @@
             v-if="infoModal.type === 0"
           >
             <div class="modal-container__content__background__content__tags">
-              <span :key="tag.id" v-for="tag in infoModal.intents">
-                <unnnic-tag
+              <span
+                :key="tag.id"
+                v-for="tag in infoModal.intents"
+              >
+                <UnnnicTag
                   @click.native="goToIntentList(tag.id)"
                   :text="tag.value"
                   type="indicator"
@@ -45,7 +51,10 @@
             </div>
           </section>
 
-          <section class="modal-container__content__background__content" v-else>
+          <section
+            class="modal-container__content__background__content"
+            v-else
+          >
             <div class="modal-container__content__background__content__list">
               <span
                 :key="language"
@@ -58,7 +67,7 @@
         </div>
       </div>
     </div>
-  </transition>
+  </Transition>
 </template>
 
 <script>
@@ -93,8 +102,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .modal-transition-leave-to {
   animation: transition 0.2s reverse;

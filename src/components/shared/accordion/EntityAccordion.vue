@@ -3,16 +3,16 @@
     <div
       ref="expander"
       :class="{
-        'expander__trigger': true,
+        expander__trigger: true,
         'expander__trigger--slim': slim,
         [`align-${align}`]: true,
-        'active': isOpen,
+        active: isOpen,
         'before-border': !isOpen && customAccordion,
         'is-light': isLight,
         'cursor-pointer': true,
       }"
-      @click="toggleAccordion()">
-
+      @click="toggleAccordion()"
+    >
       <!-- <div
         ref="check"
         class="expander__trigger__check"
@@ -20,36 +20,30 @@
         <slot name="check" />
       </div> -->
 
-      <div
-        class="expander__trigger__header"
-      >
+      <div class="expander__trigger__header">
         <slot name="header" />
       </div>
 
-      <div
-        class="expander__trigger__icon"
-      >
+      <div class="expander__trigger__icon">
         <slot name="icon" />
       </div>
 
-      <div
-        class="expander__trigger__options"
-      >
+      <div class="expander__trigger__options">
         <slot name="options" />
       </div>
     </div>
-    <transition name="fade">
+    <Transition name="fade">
       <div
         v-show="open && customAccordion"
-        :class="'expander__body'">
-        <slot name="body"/>
+        :class="'expander__body'"
+      >
+        <slot name="body" />
       </div>
-    </transition>
+    </Transition>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'EntityAccordion',
   props: {
@@ -104,63 +98,62 @@ export default {
 };
 </script>
 
-
 <style lang="scss" scoped>
-  @import '~@/assets/scss/utilities';
-  @import '~@/assets/scss/colors.scss';
-  @import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/utilities';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
-  .align {
-    &-center {
-      align-items: center;
-    }
-
-    &-top {
-      align-items: flex-start;
-    }
+.align {
+  &-center {
+    align-items: center;
   }
 
-  .before-border {
-    position: relative;
+  &-top {
+    align-items: flex-start;
+  }
+}
 
-    &:before {
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 100%;
-      content: '';
-      transition: opacity .1s linear, transform .5s ease-in-out;
-    }
+.before-border {
+  position: relative;
 
-    &:not(:hover)::before {
-      opacity: 0;
-      transform: scaleX(0);
-    }
+  &:before {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    content: '';
+    transition: opacity 0.1s linear, transform 0.5s ease-in-out;
   }
 
-  .accordion {
-    overflow: hidden;
-    background: $color-white;
-    box-shadow: 0 1px 12px 1PX rgba(0,0,0,0.25);
+  &:not(:hover)::before {
+    opacity: 0;
+    transform: scaleX(0);
   }
+}
 
-  .expander {
-    &__trigger {
-      display: flex;
-      padding: .7rem 0;
-      padding-bottom: 0;
+.accordion {
+  overflow: hidden;
+  background: $color-white;
+  box-shadow: 0 1px 12px 1px rgba(0, 0, 0, 0.25);
+}
 
-      &--slim {
-        padding: .35rem;
-      }
+.expander {
+  &__trigger {
+    display: flex;
+    padding: 0.7rem 0;
+    padding-bottom: 0;
 
-      @media screen and (max-width: $mobile-width) {
-        flex-wrap: wrap;
-      }
+    &--slim {
+      padding: 0.35rem;
+    }
 
-      &--pending {
-        background-color: $color-fake-white;
-      }
+    @media screen and (max-width: $mobile-width) {
+      flex-wrap: wrap;
+    }
+
+    &--pending {
+      background-color: $color-fake-white;
+    }
 
     &__check {
       margin: 0 1rem;
@@ -194,42 +187,43 @@ export default {
         margin: 0.3rem 0;
       }
     }
-    }
-
-    &__body {
-      padding: .5rem;
-      padding-top: 0;
-
-      &--pending{
-        padding: .5rem 0;
-        background: #EAEAEA;
-        border-radius: 4px;
-      }
-    }
-  }
-  .cursor-pointer{
-    cursor: pointer;
   }
 
-  .is-light {
-    background-color: white;
-  }
+  &__body {
+    padding: 0.5rem;
+    padding-top: 0;
 
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .2s;
-  }
-
-  .example {
-    &__icon {
-      margin: 0 .5rem;
-
-      &:hover {
-        color: black;
-        transition: 1s;
-      }
+    &--pending {
+      padding: 0.5rem 0;
+      background: #eaeaea;
+      border-radius: 4px;
     }
   }
-  /deep/ .unnnic-tooltip-label {
-    max-width: 350px;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.is-light {
+  background-color: white;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+
+.example {
+  &__icon {
+    margin: 0 0.5rem;
+
+    &:hover {
+      color: black;
+      transition: 1s;
+    }
   }
+}
+:deep(.unnnic-tooltip-label) {
+  max-width: 350px;
+}
 </style>

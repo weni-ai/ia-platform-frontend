@@ -1,41 +1,49 @@
 <template>
-  <repository-view-base :repository="repository" :error-code="errorCode">
-      <div v-if="repository && repository.authorization.can_contribute" class="repository-log">
-        <unnnic-intelligence-header
-          :title="$t('webapp.menu.inbox')"
-          icon="messages-bubble-1"
-          icon-scheme="aux-blue"
-          :description="$t('webapp.inbox.description')"
-        >
-          <div class="repository-log__header__buttons">
-            <unnnic-button
-              :text="$tc('webapp.inbox.add_to_train_button', sentencesCounter)"
-              id="tour-inbox-step-2"
-              :is-previous-disabled="true"
-              type="secondary"
-              iconLeft="graph-status-circle-1"
-              :disabled="sentencesCounter === 0"
-              @click.prevent.stop="showModalTraining($t('webapp.inbox.training'))"
-              class="header-button"
-            />
+  <RepositoryViewBase
+    :repository="repository"
+    :errorCode="errorCode"
+  >
+    <div
+      v-if="repository && repository.authorization.can_contribute"
+      class="repository-log"
+    >
+      <UnnnicIntelligenceHeader
+        :title="$t('webapp.menu.inbox')"
+        icon="messages-bubble-1"
+        iconScheme="aux-blue"
+        :description="$t('webapp.inbox.description')"
+      >
+        <div class="repository-log__header__buttons">
+          <UnnnicButton
+            :text="$tc('webapp.inbox.add_to_train_button', sentencesCounter)"
+            id="tour-inbox-step-2"
+            :isPreviousDisabled="true"
+            type="secondary"
+            iconLeft="graph-status-circle-1"
+            :disabled="sentencesCounter === 0"
+            @click.prevent.stop="showModalTraining($t('webapp.inbox.training'))"
+            class="header-button"
+          />
 
-            <unnnic-button
-              :text="$tc('webapp.inbox.add_to_sentence_button', sentencesCounter)"
-              id="tour-inbox-step-3"
-              :is-previous-disabled="true"
-              :is-next-disabled="true"
-              iconLeft="check-square-1"
-              type="secondary"
-              :disabled="sentencesCounter === 0"
-              @click.prevent.stop="showModalSentence($t('webapp.inbox.test_sentences'))"
-              class="header-button"
-            />
-          </div>
-        </unnnic-intelligence-header>
+          <UnnnicButton
+            :text="$tc('webapp.inbox.add_to_sentence_button', sentencesCounter)"
+            id="tour-inbox-step-3"
+            :isPreviousDisabled="true"
+            :isNextDisabled="true"
+            iconLeft="check-square-1"
+            type="secondary"
+            :disabled="sentencesCounter === 0"
+            @click.prevent.stop="
+              showModalSentence($t('webapp.inbox.test_sentences'))
+            "
+            class="header-button"
+          />
+        </div>
+      </UnnnicIntelligenceHeader>
 
-        <unnnic-divider y-spacing="lg" />
+      <UnnnicDivider ySpacing="lg" />
 
-        <!-- <filter-evaluate-example
+      <!-- <filter-evaluate-example
           v-if="repository"
           :intents="repository.intents_list"
           :versions="versions"
@@ -44,64 +52,60 @@
           @querystringformatted="onSearch($event)"
         /> -->
 
-        <sentence-filters
-          :intents="repository.intents_list"
-          :versions="versions"
-          language-filter
-          :hasVersion="false"
-          :searchFilterLabel="$t('webapp.inbox.search_label')"
-          @querystringformatted="onSearch($event)"
-          @textData="changedText($event)"/>
-        <repository-log-list
-          :per-page="perPage"
-          :query="query"
-          :editable="repository.authorization.can_contribute"
-          @dispatchNext="dispatchClick()"
-          @dispatchSkip="dispatchClickSkip()"
-          @finishedTutorial="dispatchClickFinish()"
-          @onUpdateSelected="updateSelected"
-        />
-      </div>
-      <unnnic-modal
-        :showModal="openModalTraining"
-        :text="$t('webapp.example.sent_to_training')"
-        scheme="feedback-green"
-        modal-icon="check-circle-1-1"
-        @close="openModalTraining = false"
-      >
-        <span
-        slot="message"
-        >
-          {{ $t('webapp.example.sent_to_training_info') }}
-        </span>
-      </unnnic-modal>
-      <unnnic-modal
-        :showModal="openModalTest"
-        :text="$t('webapp.example.sent_to_test')"
-        scheme="feedback-green"
-        modal-icon="check-circle-1-1"
-        @close="openModalTest = false"
-      >
-        <span
-        slot="message"
-        >
-          {{ $t('webapp.example.sent_to_test_info') }}
-        </span>
-      </unnnic-modal>
+      <SentenceFilters
+        :intents="repository.intents_list"
+        :versions="versions"
+        languageFilter
+        :hasVersion="false"
+        :searchFilterLabel="$t('webapp.inbox.search_label')"
+        @querystringformatted="onSearch($event)"
+        @textData="changedText($event)"
+      />
+      <RepositoryLogList
+        :perPage="perPage"
+        :query="query"
+        :editable="repository.authorization.can_contribute"
+        @dispatchNext="dispatchClick()"
+        @dispatchSkip="dispatchClickSkip()"
+        @finishedTutorial="dispatchClickFinish()"
+        @onUpdateSelected="updateSelected"
+      />
+    </div>
+    <UnnnicModal
+      :showModal="openModalTraining"
+      :text="$t('webapp.example.sent_to_training')"
+      scheme="feedback-green"
+      modalIcon="check-circle-1-1"
+      @close="openModalTraining = false"
+    >
+      <span slot="message">
+        {{ $t('webapp.example.sent_to_training_info') }}
+      </span>
+    </UnnnicModal>
+    <UnnnicModal
+      :showModal="openModalTest"
+      :text="$t('webapp.example.sent_to_test')"
+      scheme="feedback-green"
+      modalIcon="check-circle-1-1"
+      @close="openModalTest = false"
+    >
+      <span slot="message">
+        {{ $t('webapp.example.sent_to_test_info') }}
+      </span>
+    </UnnnicModal>
 
-
-    <tour
+    <Tour
       v-if="activeTutorial === 'inbox'"
-      :step-count="5"
-      :next-event="eventClick"
-      :skip-event="eventSkip"
-      :finish-event="eventClickFinish"
+      :stepCount="5"
+      :nextEvent="eventClick"
+      :skipEvent="eventSkip"
+      :finishEvent="eventClickFinish"
       name="inbox"
     />
     <template v-slot:loader>
-      <log-loader />
+      <LogLoader />
     </template>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -119,7 +123,6 @@ import IntentModal from '@/components/repository/IntentModal';
 import RepositoryBase from './Base';
 import LogLoader from '@/views/repository/loadings/Log';
 
-
 export default {
   name: 'RepositoryLog',
   components: {
@@ -132,7 +135,7 @@ export default {
     IntentModal,
     SentenceFilters,
     IntentModalEdition,
-    LogLoader
+    LogLoader,
   },
   extends: RepositoryBase,
   data() {
@@ -149,7 +152,7 @@ export default {
       logData: [],
       intent: '',
       openModalTraining: false,
-      openModalTest: false
+      openModalTest: false,
     };
   },
   computed: {
@@ -159,10 +162,12 @@ export default {
       version: 'getSelectedVersion',
     }),
     languages() {
-      return Object.keys(this.repository.evaluate_languages_count).map(lang => ({
-        value: lang,
-        title: LANGUAGES[lang]
-      }));
+      return Object.keys(this.repository.evaluate_languages_count).map(
+        (lang) => ({
+          value: lang,
+          title: LANGUAGES[lang],
+        }),
+      );
     },
     repositoryUUID() {
       if (!this.repository || this.repository.uuid === 'null') {
@@ -176,9 +181,9 @@ export default {
     },
     sentencesCounter() {
       if (this.selectedItems !== null) {
-        return this.selectedItems.length
+        return this.selectedItems.length;
       }
-      return 0
+      return 0;
     },
     confidenceVerify() {
       if (this.logData.length > 1) {
@@ -194,39 +199,48 @@ export default {
       }
       this.versionsList = await this.getVersions({
         limit: this.perPage,
-        query: { repository: this.repositoryUUID }
+        query: { repository: this.repositoryUUID },
       });
       this.versionsList.getAllItems();
     },
     selectedItems() {
-      this.logData = this.selectedItems.map(e => ({
+      this.logData = this.selectedItems.map((e) => ({
         data: {
           repository: this.repositoryUUID,
           repository_version: e.nlp_log.repository_version,
           text: e.nlp_log.text,
           language: e.nlp_log.language,
-          entities: (Object.keys(e.nlp_log.entities)
-            .map(key => e.nlp_log.entities[key]
-              .map(
-                (entity) => {
-                  // if (entity.start && entity.end) return entity;
-                  const { start, end } = getWordIndex(entity.value, e.nlp_log.text);
-                  return {
-                    entity: entity.entity,
-                    start,
-                    end,
-                  };
-                },
-              )).flat()),
+          entities: Object.keys(e.nlp_log.entities)
+            .map((key) =>
+              e.nlp_log.entities[key].map((entity) => {
+                // if (entity.start && entity.end) return entity;
+                const { start, end } = getWordIndex(
+                  entity.value,
+                  e.nlp_log.text,
+                );
+                return {
+                  entity: entity.entity,
+                  start,
+                  end,
+                };
+              }),
+            )
+            .flat(),
           intent: e.nlp_log.intent.name,
           is_corrected: true,
         },
-        id: e.id
-      }))
-    }
+        id: e.id,
+      }));
+    },
   },
   methods: {
-    ...mapActions(['getVersions', 'searchLogs', 'newEvaluateExample', 'newExample', 'deleteExample']),
+    ...mapActions([
+      'getVersions',
+      'searchLogs',
+      'newEvaluateExample',
+      'newExample',
+      'deleteExample',
+    ]),
     onSearch(query) {
       const filteredQuery = {};
       Object.entries({ ...this.query, ...query }).forEach(([key, value]) => {
@@ -244,7 +258,7 @@ export default {
       this.eventClick = !this.eventClick;
     },
     updateSelected(params) {
-      this.selectedItems = params
+      this.selectedItems = params;
     },
     showModalTraining(typeModal) {
       if (this.activeTutorial === 'inbox') return;
@@ -252,7 +266,7 @@ export default {
       if (this.logData.length === 0) {
         this.$buefy.toast.open({
           message: this.$t('webapp.inbox.select_phrase'),
-          type: 'is-danger'
+          type: 'is-danger',
         });
         return;
       }
@@ -263,7 +277,7 @@ export default {
           titleHeader: typeModal,
           confidenceVerify: this.confidenceVerify,
           logData: this.logData[0],
-          buttonLabel: this.$t('webapp.inbox.add_to_train')
+          buttonLabel: this.$t('webapp.inbox.add_to_train'),
         },
         parent: this,
         component: IntentModalEdition,
@@ -271,7 +285,7 @@ export default {
         trapFocus: true,
         canCancel: false,
         events: {
-          addedIntent: value => {
+          addedIntent: (value) => {
             this.verifyIsCorrected(value);
             this.addToTraining(value);
             this.intent = value;
@@ -280,15 +294,15 @@ export default {
             // this.logData = [];
             // this.select = '';
             // this.$root.$emit('selectAll', false);
-          }
-        }
+          },
+        },
       });
     },
     showModalSentence(typeModal) {
       if (this.logData.length === 0) {
         this.$buefy.toast.open({
           message: this.$t('webapp.inbox.select_phrase'),
-          type: 'is-danger'
+          type: 'is-danger',
         });
         return;
       }
@@ -298,7 +312,7 @@ export default {
           repository: this.repository,
           titleHeader: typeModal,
           logData: this.logData[0],
-          buttonLabel: this.$t('webapp.inbox.add_to_sentence')
+          buttonLabel: this.$t('webapp.inbox.add_to_sentence'),
         },
         parent: this,
         component: IntentModalEdition,
@@ -306,7 +320,7 @@ export default {
         trapFocus: true,
         canCancel: false,
         events: {
-          addedIntent: value => {
+          addedIntent: (value) => {
             this.verifyIsCorrected(value);
             this.addToSentences(value);
             this.intent = value;
@@ -321,8 +335,8 @@ export default {
             if (this.activeTutorial === 'inbox') {
               this.$emit('dispatchSkip');
             }
-          }
-        }
+          },
+        },
       });
       this.$nextTick(() => {
         this.$emit('dispatchNext');
@@ -347,13 +361,13 @@ export default {
               language: data.language,
               text: data.text,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             // this.$buefy.toast.open({
             //   message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
             //   type: 'is-success'
             // });
-            this.openModalTraining = true
+            this.openModalTraining = true;
           } else {
             await this.newExample({
               ...data,
@@ -361,13 +375,13 @@ export default {
               text: values.text,
               entities: values.entities,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             // this.$buefy.toast.open({
             //   type: 'is-success',
             //  message: `${values.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_train')}`,
             // });
-            this.openModalTraining = true
+            this.openModalTraining = true;
           }
         } catch (error) {
           this.showError(error, data, 'training');
@@ -390,13 +404,13 @@ export default {
               language: data.language,
               text: data.text,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             // this.$buefy.toast.open({
             // message: `${data.text.bold()}, ${this.$t('webapp.inbox.entry_has_add_to_sentence')}`,
             //   type: 'is-success'
             // });
-            this.openModalTest = true
+            this.openModalTest = true;
           } else {
             await this.newEvaluateExample({
               ...data,
@@ -404,7 +418,7 @@ export default {
               text: values.text,
               entities: values.entities,
               isCorrected: this.isCorrected,
-              repositoryVersion: this.version
+              repositoryVersion: this.version,
             });
             // this.$buefy.toast.open({
             //   message: `${values.text.bold()}, ${this.$t(
@@ -412,7 +426,7 @@ export default {
             //   )}`,
             //   type: 'is-success'
             // });
-            this.openModalTest = true
+            this.openModalTest = true;
           }
         } catch (error) {
           this.showError(error, data, 'evaluate');
@@ -423,30 +437,33 @@ export default {
       });
     },
     showError(error, log, type) {
-      console.log(error.response.data)
+      console.log(error.response.data);
       let messages = '';
       if (type === 'evaluate') {
-        messages = Object.values(error.response.data.non_field_errors).length >= 1
-          ? this.$t('webapp.inbox.send_to_evaluate')
-          : '';
+        messages =
+          Object.values(error.response.data.non_field_errors).length >= 1
+            ? this.$t('webapp.inbox.send_to_evaluate')
+            : '';
       } else {
-        messages = Object.values(error.response.data).map(errors => (typeof errors === 'string' ? errors : Array.join(errors, ',')));
+        messages = Object.values(error.response.data).map((errors) =>
+          typeof errors === 'string' ? errors : Array.join(errors, ','),
+        );
       }
       const message = `${log.text.bold()}, ${messages}`;
       this.$buefy.toast.open({
         message,
-        type: 'is-danger'
+        type: 'is-danger',
       });
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 label {
   vertical-align: middle;
@@ -488,7 +505,7 @@ label {
   height: 1px;
 }
 
-/deep/ .filter-evaluate-example {
+:deep(.filter-evaluate-example) {
   margin: 0 auto 1.3rem;
 }
 </style>

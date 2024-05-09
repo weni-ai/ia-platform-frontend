@@ -1,6 +1,6 @@
 <template>
   <div v-if="list && !list.empty">
-    <component
+    <Component
       v-for="(item, index) in list.items"
       v-show="!isLoading && shouldShow(index)"
       :key="itemKey && item[itemKey] ? item[itemKey] : index"
@@ -8,39 +8,46 @@
       v-bind="addAttrs(item)"
       @deleted="onItemDeleted(item.id)"
       @updateList="onSaveUpdate"
-      @dispatchEvent="onDispatchEvent($event)" />
-    <loading
+      @dispatchEvent="onDispatchEvent($event)"
+    />
+    <Loading
       v-show="isLoading"
-      class="pagination__message" />
+      class="pagination__message"
+    />
     <div class="pagination__bottom">
       <p
         v-show="!isLoading"
-        class="text-center">
+        class="text-center"
+      >
         {{ listStatusErrorCode | statusCodeVerbose }}
       </p>
-      <div v-if="!loadAll" class="pagination__bottom__controls">
+      <div
+        v-if="!loadAll"
+        class="pagination__bottom__controls"
+      >
         <div
           v-if="list && list.total > 0"
-          class="pagination__bottom__controls__message">
+          class="pagination__bottom__controls__message"
+        >
           {{ $tc('webapp.layout.items_total', list.total) }}
         </div>
-        <b-pagination
+        <BPagination
           v-show="list.total > perPage"
           :total="list.total"
           :current.sync="page"
-          :per-page="perPage"
-          :range-before="4"
-          :range-after="4"
+          :perPage="perPage"
+          :rangeBefore="4"
+          :rangeAfter="4"
           aria-next-label="Next page"
           aria-previous-label="Previous page"
           aria-page-label="Page"
-          aria-current-label="Current page"/>
+          aria-current-label="Current page"
+        />
       </div>
     </div>
   </div>
   <div v-else-if="list && list.empty">
-    <p
-      class="pagination__message"> {{ emptyMessage }} </p>
+    <p class="pagination__message">{{ emptyMessage }}</p>
   </div>
 </template>
 
@@ -141,9 +148,7 @@ export default {
         return true;
       } catch (e) {
         this.error = e;
-        this.listStatusErrorCode = e.request
-          ? e.request.status
-          : '';
+        this.listStatusErrorCode = e.request ? e.request.status : '';
         this.$emit('error', this.error);
       }
       return false;
@@ -156,14 +161,17 @@ export default {
       return index >= offset && index < offset + this.perPage;
     },
     onDispatchEvent(arg) {
-      const [event, value] = arg instanceof Object
-        ? [arg.event, arg.value] : [arg, null];
+      const [event, value] =
+        arg instanceof Object ? [arg.event, arg.value] : [arg, null];
 
       this.$emit(event, value);
     },
     addAttrs(obj) {
       return {
-        data: this.data, ...this.addAttributes, ...obj, ...this.$attrs,
+        data: this.data,
+        ...this.addAttributes,
+        ...obj,
+        ...this.$attrs,
       };
     },
     onItemDeleted(id) {
@@ -177,7 +185,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
 .pagination {
   &__bottom {
@@ -202,9 +210,7 @@ export default {
     }
   }
 
-  &
-
-  &__message {
+  & &__message {
     text-align: center;
     width: 100%;
   }
@@ -213,6 +219,5 @@ export default {
     text-align: center;
     width: 100%;
   }
-
 }
 </style>

@@ -1,22 +1,22 @@
 <template>
   <div class="sentences-resume">
-    <unnnic-intelligence-text
+    <UnnnicIntelligenceText
       family="secondary"
       size="title-sm"
       color="neutral-dark"
-      margin-bottom="xs"
+      marginBottom="xs"
     >
-      {{$t('webapp.resumeSentences.title')}}
-    </unnnic-intelligence-text>
+      {{ $t('webapp.resumeSentences.title') }}
+    </UnnnicIntelligenceText>
 
-    <unnnic-intelligence-text
+    <UnnnicIntelligenceText
       tag="p"
       family="secondary"
       size="body-gt"
       color="neutral-dark"
     >
-      {{$t('webapp.resumeSentences.description')}}
-    </unnnic-intelligence-text>
+      {{ $t('webapp.resumeSentences.description') }}
+    </UnnnicIntelligenceText>
 
     <div class="sentences-resume__wrapper">
       <div class="sentences-resume__wrapper-cards">
@@ -39,70 +39,90 @@
       </div>
 
       <div class="sentences-resume__wrapper-buttons">
-        <unnnic-button
+        <UnnnicButton
           type="secondary"
           size="large"
           :disabled="buttonDisabled"
           :loading="buttonLoading"
           @click="train()"
         >
-          {{ $t("webapp.trainings.run_training") }}
-        </unnnic-button>
-        <unnnic-button
+          {{ $t('webapp.trainings.run_training') }}
+        </UnnnicButton>
+        <UnnnicButton
           type="tertiary"
           size="large"
           @click.native="setVisibleImportModal()"
         >
-          {{ $t("webapp.translate.import_title") }}
-        </unnnic-button>
+          {{ $t('webapp.translate.import_title') }}
+        </UnnnicButton>
       </div>
     </div>
 
     <div
       v-if="requirementsToTrainStatus || languagesWarningsStatus"
       class="train-modal__wrapper__content"
-      >
-        <div v-if="requirementsToTrainStatus">
+    >
+      <div v-if="requirementsToTrainStatus">
+        <div
+          v-for="(requirements, lang) in requirementsToTrain"
+          :key="lang"
+          class="train-modal__wrapper__content__content-requirements"
+        >
           <div
-            v-for="(requirements, lang) in requirementsToTrain"
-            :key="lang"
-            class="train-modal__wrapper__content__content-requirements"
-          >
-            <div
-              v-for="(requirement, i) in requirements"
-              :key="i"
-              class="train-modal__wrapper__content__content-requirements__item"
-            >
-              <unnnic-icon icon="alert-circle-1-1" scheme="feedback-red" size="sm" />
-              <div class="train-modal__wrapper__content__content-requirements__item__texts">
-                <p class="is-flex">
-                  <strong class="train-modal__wrapper__content__content-requirements__item__field">
-                    {{ `[${lang.toUpperCase().replace('_','-')}]` }}
-                  </strong>
-                  <span>{{ firstText(requirement) }}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="train-modal__wrapper__content__content-requirements">
-          <div
-            v-for="(warnings, lang) in languagesWarnings"
-            :key="lang"
+            v-for="(requirement, i) in requirements"
+            :key="i"
             class="train-modal__wrapper__content__content-requirements__item"
           >
-            <unnnic-icon icon="alert-circle-1-1" scheme="feedback-red" size="sm" />
-            <div class="train-modal__wrapper__content__content-requirements__item__texts">
-              <p class="is-flex" v-for="(warning, index) in warnings" :key="index">
-                <strong class="train-modal__wrapper__content__content-requirements__item__field">
-                  {{ `[${lang.toUpperCase().replace('_','-')}]` }}
+            <UnnnicIcon
+              icon="alert-circle-1-1"
+              scheme="feedback-red"
+              size="sm"
+            />
+            <div
+              class="train-modal__wrapper__content__content-requirements__item__texts"
+            >
+              <p class="is-flex">
+                <strong
+                  class="train-modal__wrapper__content__content-requirements__item__field"
+                >
+                  {{ `[${lang.toUpperCase().replace('_', '-')}]` }}
                 </strong>
-                <span>{{ firstText(warning) }}</span>
+                <span>{{ firstText(requirement) }}</span>
               </p>
             </div>
           </div>
         </div>
       </div>
+      <div class="train-modal__wrapper__content__content-requirements">
+        <div
+          v-for="(warnings, lang) in languagesWarnings"
+          :key="lang"
+          class="train-modal__wrapper__content__content-requirements__item"
+        >
+          <UnnnicIcon
+            icon="alert-circle-1-1"
+            scheme="feedback-red"
+            size="sm"
+          />
+          <div
+            class="train-modal__wrapper__content__content-requirements__item__texts"
+          >
+            <p
+              class="is-flex"
+              v-for="(warning, index) in warnings"
+              :key="index"
+            >
+              <strong
+                class="train-modal__wrapper__content__content-requirements__item__field"
+              >
+                {{ `[${lang.toUpperCase().replace('_', '-')}]` }}
+              </strong>
+              <span>{{ firstText(warning) }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <ImportPhrasesModal
       class="import-modal"
@@ -112,17 +132,24 @@
       @dispatchMigrateNotification="dispatchNotification"
     />
 
-    <unnnic-modal
+    <UnnnicModal
       :showModal="openNotificationModal"
       :text="notificationModalTitle"
-      :scheme="notificationModalType === 'success' ? 'feedback-green' : 'feedback-red'"
-      :modal-icon="notificationModalType === 'success' ? 'check-circle-1-1' : 'alert-circle-1'"
+      :scheme="
+        notificationModalType === 'success' ? 'feedback-green' : 'feedback-red'
+      "
+      :modalIcon="
+        notificationModalType === 'success'
+          ? 'check-circle-1-1'
+          : 'alert-circle-1'
+      "
       @close="onCloseNotification"
     >
       <span
-      slot="message"
-      v-html="notificationModalMessage" />
-    </unnnic-modal>
+        slot="message"
+        v-html="notificationModalMessage"
+      />
+    </UnnnicModal>
   </div>
 </template>
 
@@ -152,21 +179,21 @@ export default {
           intents: this.filterIntents(),
           entities: this.filterEntities(),
           languages: this.filterLanguages(),
-        }
+        };
       }
       return {
         count: 0,
         intents: 0,
         entities: 0,
-        languages: 0
-      }
+        languages: 0,
+      };
     },
     requirementsToTrainStatus() {
       return Object.keys(this.requirementsToTrain).length !== 0;
     },
     languagesWarningsStatus() {
       return Object.keys(this.languagesWarnings).length !== 0;
-    }
+    },
   },
   props: {
     buttonDisabled: {
@@ -186,15 +213,15 @@ export default {
     },
     requirementsToTrain: {
       type: Object,
-      required: true
+      required: true,
     },
     languagesWarnings: {
       type: Object,
-      required: true
+      required: true,
     },
     languageAvailableToTrain: {
       type: Array,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -209,7 +236,7 @@ export default {
     };
   },
   methods: {
-    async train(){
+    async train() {
       await this.buttonClick();
     },
     importSelectedFile() {
@@ -228,46 +255,48 @@ export default {
       });
     },
     dispatchNotification(value) {
-      this.openNotificationModal = true
-      this.notificationModalType = value.type
-      this.notificationModalTitle = value.title
-      this.notificationModalMessage = value.message
+      this.openNotificationModal = true;
+      this.notificationModalType = value.type;
+      this.notificationModalTitle = value.title;
+      this.notificationModalMessage = value.message;
     },
     onCloseNotification() {
-      this.openNotificationModal = false
-      if (this.notificationModalType === 'success') this.$emit('onImportSuccess')
+      this.openNotificationModal = false;
+      if (this.notificationModalType === 'success')
+        this.$emit('onImportSuccess');
     },
     filterIntents() {
-      const intents = this.examplesList.results.map(el => el.intent)
+      const intents = this.examplesList.results.map((el) => el.intent);
       const result = intents.sort().reduce((init, current) => {
         if (init.length === 0 || init[init.length - 1] !== current) {
           init.push(current);
         }
         return init;
       }, []);
-      return result.length
+      return result.length;
     },
     filterEntities() {
       const entities = this.examplesList.results
         .reduce((prev, curr) => [...prev, ...curr.entities], [])
-        .map(el => el.entity)
-        .sort().reduce((init, current) => {
+        .map((el) => el.entity)
+        .sort()
+        .reduce((init, current) => {
           if (init.length === 0 || init[init.length - 1] !== current) {
             init.push(current);
           }
           return init;
         }, []);
-      return entities.length
+      return entities.length;
     },
     filterLanguages() {
-      const languages = this.examplesList.results.map(el => el.language)
+      const languages = this.examplesList.results.map((el) => el.language);
       const result = languages.sort().reduce((init, current) => {
         if (init.length === 0 || init[init.length - 1] !== current) {
           init.push(current);
         }
         return init;
       }, []);
-      return result.length
+      return result.length;
     },
     firstText(requirement) {
       const initalText = requirement.split('\n');
@@ -282,10 +311,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .sentences-resume {
   width: 100%;
@@ -410,7 +439,6 @@ export default {
               font-size: $unnnic-font-size-body-md;
               line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
             }
-
           }
 
           &__field {
@@ -435,10 +463,10 @@ export default {
 }
 
 .import-modal {
-  /deep/ .unnnic-modal-container-background-body-alert_icon {
+  :deep(.unnnic-modal-container-background-body-alert_icon) {
     display: none;
   }
-  /deep/ .unnnic-modal-container-background-body-description {
+  :deep(.unnnic-modal-container-background-body-description) {
     padding-bottom: 0;
   }
 }

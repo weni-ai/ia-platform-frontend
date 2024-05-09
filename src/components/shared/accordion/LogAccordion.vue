@@ -1,11 +1,11 @@
 <template>
-  <div class="log-accordion" >
-    <log-info
-      :entities-list="entitiesList"
+  <div class="log-accordion">
+    <LogInfo
+      :entitiesList="entitiesList"
       :intent="nlp_log.intent.name"
       :confidence="nlp_log.intent.confidence"
-      :created-at="created_at"
-      :version-name="version_name"
+      :createdAt="created_at"
+      :versionName="version_name"
       :highlighted.sync="highlighted"
       :repositoryUUID="repository.uuid"
       :version="nlp_log.repository_version"
@@ -18,7 +18,7 @@
       @onShowRawInfo="showRawInfo()"
       @debug="debug()"
     />
-    <repository-debug
+    <RepositoryDebug
       v-if="showDebug"
       :repositoryUUID="repository.uuid"
       :version="nlp_log.repository_version"
@@ -26,7 +26,11 @@
       :text="text"
       @closeModal="showDebug = false"
     />
-    <raw-info v-if="showRaw" :info="nlp_log" @closeModal="showRaw = false" />
+    <RawInfo
+      v-if="showRaw"
+      :info="nlp_log"
+      @closeModal="showRaw = false"
+    />
   </div>
 </template>
 
@@ -42,7 +46,6 @@ import RawInfo from '@/components/shared/RawInfo';
 import RepositoryDebug from '@/components/repository/debug/Debug';
 import IntentModal from '@/components/repository/IntentModal';
 
-
 export default {
   name: 'LogAccordion',
   components: {
@@ -52,7 +55,7 @@ export default {
     HighlightedText,
     RawInfo,
     IntentModal,
-    RepositoryDebug
+    RepositoryDebug,
   },
   props: {
     id: {
@@ -95,33 +98,34 @@ export default {
       checked: false,
       highlighted: null,
       showRaw: false,
-      showDebug: false
+      showDebug: false,
     };
   },
   computed: {
     ...mapState({
-      repository: state => state.Repository.selectedRepository,
+      repository: (state) => state.Repository.selectedRepository,
     }),
     entities() {
-      return Object.keys(this.nlp_log.entities).map(key => this.nlp_log.entities[key].map(
-        (entity) => {
-          if (entity.start && entity.end) return entity;
-          const { start, end } = getWordIndex(entity.value, this.text);
-          return {
-            start,
-            end,
-            ...entity,
-          };
-        },
-      )).flat();
+      return Object.keys(this.nlp_log.entities)
+        .map((key) =>
+          this.nlp_log.entities[key].map((entity) => {
+            if (entity.start && entity.end) return entity;
+            const { start, end } = getWordIndex(entity.value, this.text);
+            return {
+              start,
+              end,
+              ...entity,
+            };
+          }),
+        )
+        .flat();
     },
     entitiesList() {
-      return this.entities
-        .map((entity, index) => ({
-          value: this.entities[index],
-          class: this.getEntityClass(this.entities[index]),
-          ...entity,
-        }));
+      return this.entities.map((entity, index) => ({
+        value: this.entities[index],
+        class: this.getEntityClass(this.entities[index]),
+        ...entity,
+      }));
     },
     toExample() {
       return {
@@ -129,7 +133,7 @@ export default {
         repository_version: this.nlp_log.repository_version,
         text: this.text,
         language: this.nlp_log.language,
-        entities: this.entities.map(entity => ({
+        entities: this.entities.map((entity) => ({
           entity: entity.entity,
           start: entity.start,
           end: entity.end,
@@ -142,10 +146,19 @@ export default {
   watch: {
     checked() {
       if (this.checked) {
-        this.$emit('dispatchEvent', { event: 'event_nlp', value: this.nlp_log });
-        this.$emit('dispatchEvent', { event: 'event_addLog', value: { id: this.id, data: this.toExample } });
+        this.$emit('dispatchEvent', {
+          event: 'event_nlp',
+          value: this.nlp_log,
+        });
+        this.$emit('dispatchEvent', {
+          event: 'event_addLog',
+          value: { id: this.id, data: this.toExample },
+        });
       } else {
-        this.$emit('dispatchEvent', { event: 'event_removeLog', value: this.id });
+        this.$emit('dispatchEvent', {
+          event: 'event_removeLog',
+          value: this.id,
+        });
       }
     },
     isAccordionOpen() {
@@ -153,7 +166,7 @@ export default {
     },
   },
   created() {
-    this.$root.$on('selectAll', value => this.selectAll(value));
+    this.$root.$on('selectAll', (value) => this.selectAll(value));
   },
   methods: {
     selectAll(value) {
@@ -170,7 +183,7 @@ export default {
       //   hasModalCard: false,
       //   trapFocus: true,
       // });
-      this.showRaw = true
+      this.showRaw = true;
     },
     debug() {
       // this.$buefy.modal.open({
@@ -185,16 +198,16 @@ export default {
       //   hasModalCard: false,
       //   trapFocus: true,
       // });
-      this.showDebug = true
+      this.showDebug = true;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  @import '~@/assets/scss/colors.scss';
-  @import "~@weni/unnnic-system/dist/unnnic.css";
-  @import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 .log-accordion {
   &__menu-title {
     margin: 1rem;

@@ -2,7 +2,7 @@
   <div class="highlighted-pre">
     <pre v-highlightjs="finalCode"><code :class="codeClass"></code></pre>
 
-    <unnnic-tool-tip
+    <UnnnicToolTip
       @mouseout.native="copyLabel = 'Copiar'"
       :text="$t('webapp.integration.copy_label')"
       enabled
@@ -10,12 +10,12 @@
       maxWidth="15rem"
       class="copy-button"
     >
-      <unnnic-button-icon
+      <UnnnicButtonIcon
         size="small"
         icon="copy-paste-1"
         @click.native="copyURL()"
       />
-    </unnnic-tool-tip>
+    </UnnnicToolTip>
   </div>
 </template>
 
@@ -40,10 +40,11 @@ export default {
   },
   computed: {
     finalCode() {
-      return this.code || (
-        this.$slots.default
-        && this.$slots.default[0]
-        && this.$slots.default[0].text
+      return (
+        this.code ||
+        (this.$slots.default &&
+          this.$slots.default[0] &&
+          this.$slots.default[0].text)
       );
     },
   },
@@ -56,7 +57,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 @import '../../assets/scss/hightlight.min.css';
 
 .highlighted-pre {
@@ -72,8 +73,8 @@ export default {
 
   border-radius: $unnnic-border-radius-sm;
   box-sizing: content-box;
-  min-height: $unnnic-font-size-body-gt + $unnnic-line-height-md
-      + (0.875 * $unnnic-font-size);
+  min-height: $unnnic-font-size-body-gt + $unnnic-line-height-md +
+    (0.875 * $unnnic-font-size);
   display: flex;
   align-items: center;
 

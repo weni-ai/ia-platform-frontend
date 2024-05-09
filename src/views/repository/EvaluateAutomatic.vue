@@ -1,12 +1,14 @@
 <template>
-  <repository-view-base
+  <RepositoryViewBase
     :repository="repository"
-    :error-code="errorCode">
+    :errorCode="errorCode"
+  >
     <div v-if="repository">
       <div v-if="authenticated">
         <div
           v-if="repository.authorization.can_write"
-          class="evaluate">
+          class="evaluate"
+        >
           <div class="evaluate__content-header">
             <h2 class="evaluate__content-header__title">
               {{ $t('webapp.evaluate-automatic.header_title') }}
@@ -14,66 +16,72 @@
             <p>{{ $t('webapp.evaluate-automatic.header_title_p') }}</p>
             <p>{{ $t('webapp.evaluate-automatic.header_title_p2') }}</p>
             <div class="evaluate__content-header__wrapper">
-              <div
-                class="evaluate__content-header__wrapper__language-select">
-                <p class="evaluate__content-header__wrapper__language-select__text">
+              <div class="evaluate__content-header__wrapper__language-select">
+                <p
+                  class="evaluate__content-header__wrapper__language-select__text"
+                >
                   <strong>
                     {{ $t('webapp.evaluate-automatic.header_title_lang') }}
                   </strong>
                 </p>
                 <div
                   id="tour-evaluate-step-1"
-                  :is-previous-disabled="true">
-                  <b-select
+                  :is-previous-disabled="true"
+                >
+                  <BSelect
                     v-model="currentLanguage"
-                    expanded>
+                    expanded
+                  >
                     <option
                       v-for="language in languages"
                       :key="language.id"
                       :selected="language.value === currentLanguage"
-                      :value="language.value">
+                      :value="language.value"
+                    >
                       {{ language.title }}
                     </option>
-                  </b-select>
+                  </BSelect>
                 </div>
               </div>
-              <b-button
+              <BButton
                 ref="runNewTestAutomaticButton"
-                :is-finish-disabled="true"
-                :is-previous-disabled="true"
-                :is-next-disabled="true"
+                :isFinishDisabled="true"
+                :isPreviousDisabled="true"
+                :isNextDisabled="true"
                 :loading="evaluating"
                 :disabled="evaluating"
                 type="is-secondary"
                 class="evaluate__content-header__wrapper__button"
-                @click="newEvaluate()">
+                @click="newEvaluate()"
+              >
                 {{ $t('webapp.evaluate-automatic.run_test') }}
-              </b-button>
+              </BButton>
             </div>
-            <progress-stages/>
+            <ProgressStages />
           </div>
         </div>
         <div class="evaluate__container">
           <div class="evaluate__item">
-            <authorization-request-notification
+            <AuthorizationRequestNotification
               v-if="repository && !repository.authorization.can_write"
               :available="!repository.available_request_authorization"
-              :repository-uuid="repository.uuid"
-              @onAuthorizationRequested="updateRepository(false)" />
+              :repositoryUuid="repository.uuid"
+              @onAuthorizationRequested="updateRepository(false)"
+            />
           </div>
         </div>
       </div>
-      <div
-        v-else>
-        <b-notification
+      <div v-else>
+        <BNotification
           :closable="false"
-          type="is-info">
+          type="is-info"
+        >
           {{ $t('webapp.evaluate-automatic.login') }}
-        </b-notification>
-        <login-form hide-forgot-password />
+        </BNotification>
+        <LoginForm hideForgotPassword />
       </div>
     </div>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -107,20 +115,25 @@ export default {
   },
   computed: {
     ...mapState({
-      selectedRepository: state => state.Repository.selectedRepository,
+      selectedRepository: (state) => state.Repository.selectedRepository,
     }),
     ...mapGetters({
       repositoryVersion: 'getSelectedVersion',
       activeTutorial: 'activeTutorial',
     }),
     languages() {
-      if (!this.selectedRepository || !this.selectedRepository.evaluate_languages_count) return [];
-      return Object.keys(this.selectedRepository.evaluate_languages_count)
-        .map((lang, index) => ({
+      if (
+        !this.selectedRepository ||
+        !this.selectedRepository.evaluate_languages_count
+      )
+        return [];
+      return Object.keys(this.selectedRepository.evaluate_languages_count).map(
+        (lang, index) => ({
           id: index + 1,
           value: lang,
           title: `${LANGUAGES[lang]}`,
-        }));
+        }),
+      );
     },
   },
   watch: {
@@ -131,10 +144,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'runNewEvaluate',
-      'getTrainingStatus',
-    ]),
+    ...mapActions(['runNewEvaluate', 'getTrainingStatus']),
     dispatchClick() {
       this.eventClick = !this.eventClick;
     },
@@ -188,7 +198,10 @@ export default {
         this.error = error.response.data;
         this.evaluating = false;
         this.$buefy.toast.open({
-          message: `${this.error.detail || this.$t('webapp.evaluate-automatic.default_error')} `,
+          message: `${
+            this.error.detail ||
+            this.$t('webapp.evaluate-automatic.default_error')
+          } `,
           type: 'is-danger',
           duration: 5000,
         });
@@ -200,12 +213,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .evaluate {
-
   &__divider {
     height: 1px;
     background-color: #d5d5d5;
@@ -219,11 +230,11 @@ export default {
     overflow: hidden;
     border-bottom: 1px solid $color-grey;
 
-    &__requestAuthorization{
-       color: $color-fake-black;
+    &__requestAuthorization {
+      color: $color-fake-black;
       font-weight: $font-weight-medium;
       text-align: center;
-      float: right
+      float: right;
     }
     a {
       position: relative;
@@ -241,22 +252,22 @@ export default {
           $size: 10rem;
 
           position: absolute;
-          content: "";
+          content: '';
           width: $size;
           height: $size;
           left: 50%;
-          bottom: -($size - .75rem);
+          bottom: -($size - 0.75rem);
           transform: translateX(-50%);
           background-color: $color-primary;
           border-radius: 50%;
-          animation: nav-bubble-animation .25s ease;
+          animation: nav-bubble-animation 0.25s ease;
 
           @keyframes nav-bubble-animation {
             from {
               bottom: -($size);
             }
             to {
-              bottom: -($size - .75rem);
+              bottom: -($size - 0.75rem);
             }
           }
         }
@@ -286,10 +297,10 @@ export default {
 
       &__language-select {
         flex: 1;
-        margin-right: .5rem;
+        margin-right: 0.5rem;
         text-align: left;
 
-        &__text{
+        &__text {
           margin-bottom: 1rem;
         }
       }

@@ -1,5 +1,5 @@
 <template>
-  <page-container
+  <PageContainer
     :title="$t('webapp.home.bases.adjustments')"
     :description="$t('webapp.home.bases.adjustments_subtitle')"
     @back="goToSummary"
@@ -7,7 +7,7 @@
     <hr class="divider" />
 
     <section class="repository-adjustments">
-      <unnnic-skeleton-loading
+      <UnnnicSkeletonLoading
         v-if="loadingIntelligence"
         class="unnnic-form"
         tag="div"
@@ -15,13 +15,13 @@
         height="76px"
       />
 
-      <unnnic-input
+      <UnnnicInput
         v-else
         :label="$t('webapp.create_repository.intelligence_name_label')"
         v-model="name"
       />
 
-      <unnnic-skeleton-loading
+      <UnnnicSkeletonLoading
         v-if="loadingIntelligence"
         class="unnnic-form"
         tag="div"
@@ -29,7 +29,7 @@
         height="76px"
       />
 
-      <unnnic-input
+      <UnnnicInput
         v-else
         :label="$t('webapp.create_repository.description_label')"
         :placeholder="$t('')"
@@ -37,15 +37,15 @@
       />
 
       <section class="repository-adjustments__wrapper__buttons">
-        <unnnic-button
+        <UnnnicButton
           type="tertiary"
           size="large"
           :text="$t('webapp.home.bases.adjustments_button_back')"
           class="repository-adjustments__buttons"
           @click="goToSummary"
         >
-        </unnnic-button>
-        <unnnic-button
+        </UnnnicButton>
+        <UnnnicButton
           size="large"
           :text="$t('webapp.home.bases.adjustments_button')"
           @click="onSubmit()"
@@ -53,32 +53,32 @@
           :disabled="!hasUpdates"
           class="repository-adjustments__buttons"
         >
-        </unnnic-button>
+        </UnnnicButton>
       </section>
     </section>
-    <unnnic-alert
+    <UnnnicAlert
       v-if="isAlertOpen"
       :text="$t('webapp.home.bases.adjustments_modal_description')"
       scheme="feedback-green"
       @close="isAlertOpen = false"
     />
-    <unnnic-modal
-      :show-modal="isDiscardModalOpen"
+    <UnnnicModal
+      :showModal="isDiscardModalOpen"
       scheme="feedback-yellow"
-      modal-icon="alert-circle-1"
+      modalIcon="alert-circle-1"
       :text="$t('webapp.home.bases.adjustuments_modal_alert_title')"
       :description="$t('webapp.home.bases.adjustments_modal_alert_description')"
       @close="isDiscardModalOpen = false"
     >
-      <unnnic-button
+      <UnnnicButton
         slot="options"
         class="create-repository__container__button"
         type="tertiary"
         @click="discardUpdate()"
       >
-        {{ $t("webapp.home.bases.adjustments_modal_alert_discard") }}
-      </unnnic-button>
-      <unnnic-button
+        {{ $t('webapp.home.bases.adjustments_modal_alert_discard') }}
+      </UnnnicButton>
+      <UnnnicButton
         slot="options"
         class="create-repository__container__button"
         type="primary"
@@ -86,10 +86,10 @@
         @click="saveClose()"
         :loading="submitting"
       >
-        {{ $t("webapp.home.bases.adjustments_modal_alert_save") }}
-      </unnnic-button>
-    </unnnic-modal>
-  </page-container>
+        {{ $t('webapp.home.bases.adjustments_modal_alert_save') }}
+      </UnnnicButton>
+    </UnnnicModal>
+  </PageContainer>
 </template>
 
 <script>
@@ -131,14 +131,14 @@ export default {
     hasUpdates() {
       if (
         ['name', 'description'].some(
-          key => this.intelligence[key] !== this[key]
+          (key) => this.intelligence[key] !== this[key],
         )
       ) {
         return true;
       }
 
       return false;
-    }
+    },
   },
   components: {
     RepositoryViewBase,
@@ -199,13 +199,13 @@ export default {
     isEqualsArrays(arrayA, arrayB) {
       const exclusiveItems = [];
 
-      arrayA.forEach(item => {
+      arrayA.forEach((item) => {
         if (!arrayB.includes(item)) {
           exclusiveItems.push(item);
         }
       });
 
-      arrayB.forEach(item => {
+      arrayB.forEach((item) => {
         if (!arrayA.includes(item)) {
           exclusiveItems.push(item);
         }
@@ -233,13 +233,12 @@ export default {
       try {
         this.submitting = true;
 
-        const { data } = await nexusaiAPI
-          .updateIntelligence({
-            orgUuid: this.$store.state.Auth.connectOrgUuid,
-            intelligenceUuid: this.$route.params.intelligenceUuid,
-            name: this.name,
-            description: this.description,
-          });
+        const { data } = await nexusaiAPI.updateIntelligence({
+          orgUuid: this.$store.state.Auth.connectOrgUuid,
+          intelligenceUuid: this.$route.params.intelligenceUuid,
+          name: this.name,
+          description: this.description,
+        });
 
         this.$store.state.Repository.current = data;
 
@@ -286,13 +285,13 @@ export default {
           intelligenceUuid: this.$route.params.intelligenceUuid,
         },
       });
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .categories-list {
   display: flex;
@@ -304,7 +303,8 @@ hr.divider {
   border-width: 0;
   border-bottom: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
   margin: $unnnic-spacing-stack-lg 0;
-  margin-top: $unnnic-spacing-stack-lg - $unnnic-border-width-thinner - $unnnic-spacing-md;
+  margin-top: $unnnic-spacing-stack-lg - $unnnic-border-width-thinner -
+    $unnnic-spacing-md;
 }
 
 .repository-adjustments {
@@ -338,14 +338,14 @@ hr.divider {
 
     &__subtitle {
       p {
-        font-family: "Lato";
+        font-family: 'Lato';
         font-size: 14px;
         color: #4e5666;
       }
     }
 
     h1 {
-      font-family: "Aleo";
+      font-family: 'Aleo';
       font-size: 20px;
       color: #272b33;
     }

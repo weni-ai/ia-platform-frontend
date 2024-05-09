@@ -4,7 +4,8 @@
       <img
         :src="weniDynamicLogo"
         class="boarding__header__image"
-        @click="goToLandingPage">
+        @click="goToLandingPage"
+      />
     </div>
     <div class="boarding__content">
       <slot />
@@ -18,14 +19,14 @@ import I18n from '@/utils/plugins/i18n';
 export default {
   name: 'BoardingLayout',
   components: {
-    I18n
+    I18n,
   },
   computed: {
     weniDynamicLogo() {
       if (I18n.locale === 'pt-BR') {
-        return '/weni-logo-green.svg'
+        return '/weni-logo-green.svg';
       }
-      return '/weni-logo-green-en.svg'
+      return '/weni-logo-green-en.svg';
     },
   },
   methods: {
@@ -39,19 +40,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
 
 .boarding {
-
   &__content {
     background-color: $color-fake-white;
     min-height: 100vh;
     padding: 5.5rem 0 0 0;
   }
 
-  &__header{
+  &__header {
     height: 5.5rem;
     width: 100%;
     background-color: $color-white;
@@ -63,12 +63,11 @@ export default {
     z-index: 999;
     top: 0;
 
-    &__image{
+    &__image {
       width: 12rem;
       height: 3.25rem;
       cursor: pointer;
     }
   }
 }
-
 </style>

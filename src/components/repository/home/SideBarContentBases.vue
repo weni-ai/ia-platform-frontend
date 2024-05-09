@@ -1,16 +1,19 @@
 <template>
-  <div class="side-bar__container" @click.self="$emit('close')">
+  <div
+    class="side-bar__container"
+    @click.self="$emit('close')"
+  >
     <div class="side-bar__content">
       <div class="side-bar__content__scrollable">
         <div class="side-bar__header">
           <div class="side-bar__header__title">
             {{ $t('intelligences.sidebar_view_content_bases_title', { name }) }}
 
-            <unnnic-button
+            <UnnnicButton
               class="side-bar__header__title__close-button"
               size="small"
               type="tertiary"
-              icon-center="close"
+              iconCenter="close"
               scheme="neutral-dark"
               @click="$emit('close')"
             />
@@ -22,7 +25,7 @@
         </div>
 
         <div class="content-bases-list">
-          <unnnic-card
+          <UnnnicCard
             v-for="contentBase in contentBases.data"
             :key="contentBase.id"
             type="default"
@@ -31,7 +34,7 @@
           />
 
           <template v-if="contentBases.status === 'loading'">
-            <unnnic-skeleton-loading
+            <UnnnicSkeletonLoading
               v-for="i in 3"
               :key="i"
               tag="div"
@@ -106,11 +109,10 @@ export default {
       try {
         this.contentBases.status = 'loading';
 
-        const { data } = await nexusaiAPI
-          .listIntelligencesContentBases({
-            intelligenceUuid: this.intelligenceUuid,
-            next: this.contentBases.next,
-          });
+        const { data } = await nexusaiAPI.listIntelligencesContentBases({
+          intelligenceUuid: this.intelligenceUuid,
+          next: this.contentBases.next,
+        });
 
         this.contentBases.data = [...this.contentBases.data, ...data.results];
         this.contentBases.next = data.next;
@@ -129,7 +131,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .content-bases-list {
   display: flex;

@@ -2,57 +2,57 @@
   <div class="intelligence-filter">
     <section class="intelligence-filter__container">
       <div class="intelligence-filter__container__title">
-        <h2>{{ $t("webapp.home.intelligence_filter.title") }}</h2>
+        <h2>{{ $t('webapp.home.intelligence_filter.title') }}</h2>
       </div>
       <div class="intelligence-filter__container__recommended">
         <div class="intelligence-filter__container__item">
-          <unnnic-checkbox
+          <UnnnicCheckbox
             size="md"
             v-model="recommended"
           />
-          <p>{{ $t("webapp.home.intelligence_filter.recommended") }}</p>
+          <p>{{ $t('webapp.home.intelligence_filter.recommended') }}</p>
         </div>
 
         <div class="intelligence-filter__container__item">
-          <unnnic-checkbox
+          <UnnnicCheckbox
             size="md"
             v-model="mostUsed"
           />
-          <p>{{ $t("webapp.home.intelligence_filter.most_used") }}</p>
+          <p>{{ $t('webapp.home.intelligence_filter.most_used') }}</p>
         </div>
       </div>
       <div class="intelligence-filter__container__categories">
-        <h3>{{ $t("webapp.home.intelligence_filter.category") }}</h3>
+        <h3>{{ $t('webapp.home.intelligence_filter.category') }}</h3>
         <div class="intelligence-filter__container__categories__items">
-            <div
-              v-for="(category, index) in categories"
-              :key="index"
-              class="intelligence-filter__container__item"
-              >
-              <unnnic-checkbox
-                v-model="category.value"
-                size="md"
-              />
-              <p v-html="category.name" />
-            </div>
+          <div
+            v-for="(category, index) in categories"
+            :key="index"
+            class="intelligence-filter__container__item"
+          >
+            <UnnnicCheckbox
+              v-model="category.value"
+              size="md"
+            />
+            <p v-html="category.name" />
+          </div>
         </div>
       </div>
       <div class="intelligence-filter__container__languages">
-        <h3>{{ $t("webapp.home.intelligence_filter.languages") }}</h3>
-        <unnnic-select
-            :placeholder="$t('webapp.translate.languages_select')"
-            v-model="language"
-            size="sm"
+        <h3>{{ $t('webapp.home.intelligence_filter.languages') }}</h3>
+        <UnnnicSelect
+          :placeholder="$t('webapp.translate.languages_select')"
+          v-model="language"
+          size="sm"
+        >
+          <option
+            v-for="[option, label] in languageList"
+            :key="option"
+            :value="option"
+            @select="language = option"
           >
-            <option
-              v-for="[option, label] in languageList"
-              :key="option"
-              :value="option"
-              @select="language = option"
-            >
-              {{ label }}
-            </option>
-          </unnnic-select>
+            {{ label }}
+          </option>
+        </UnnnicSelect>
       </div>
     </section>
   </div>
@@ -64,36 +64,38 @@ import { LANGUAGES } from '@/utils';
 
 export default {
   name: 'HomeIntelligenceFilter',
-  data(){
+  data() {
     return {
       recommended: false,
       mostUsed: false,
       categories: [],
-      language: null
-    }
+      language: null,
+    };
   },
   watch: {
     filter() {
-      this.$emit('change', this.filter)
-    }
+      this.$emit('change', this.filter);
+    },
   },
   computed: {
     filter() {
       const params = {
         categories: this.categories
-          .filter(category => category.value === true)
-          .map(item => item.name)
+          .filter((category) => category.value === true)
+          .map((item) => item.name)
           .join(),
         most_used: this.mostUsed ? 'True' : '',
         recommended: this.recommended ? 'True' : '',
-        language: this.language
-      }
+        language: this.language,
+      };
       // eslint-disable-next-line no-return-assign
-      return Object.entries(params).reduce((a, [k, v]) => (v ? (a[k] = v, a) : a), {})
+      return Object.entries(params).reduce(
+        (a, [k, v]) => (v ? ((a[k] = v), a) : a),
+        {},
+      );
     },
     languageList() {
-      return Object.keys(LANGUAGES)
-        .map(lang => ([lang, LANGUAGES[lang]]));
+      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
   },
   mounted() {
@@ -105,29 +107,29 @@ export default {
       try {
         const { data } = await this.getAllCategories();
         const sortedData = data.sort((previous, next) => previous.id - next.id);
-        this.categories = sortedData.map(category => ({
+        this.categories = sortedData.map((category) => ({
           value: false,
-          ...category
+          ...category,
         }));
       } catch (error) {
         this.$buefy.toast.open({
           message: error,
-          type: 'is-danger'
+          type: 'is-danger',
         });
       }
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/dist/unnnic.css';
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .intelligence-filter {
   width: 100%;
   height: max-content;
-  border: 1px solid #E2E6ED;
+  border: 1px solid #e2e6ed;
   border-radius: 8px;
 
   &__container {
@@ -154,7 +156,9 @@ export default {
       color: $unnnic-color-neutral-darkest;
     }
 
-    &__recommended, &__categories, &__languages {
+    &__recommended,
+    &__categories,
+    &__languages {
       margin-top: $unnnic-spacing-stack-sm;
     }
 
@@ -180,15 +184,14 @@ export default {
       .unnnic-select {
         margin-top: $unnnic-spacing-stack-xs;
 
-        /deep/ .input {
+        :deep(.input) {
           height: 36px;
         }
-        /deep/ .dropdown {
+        :deep(.dropdown) {
           display: block;
         }
       }
     }
   }
 }
-
 </style>

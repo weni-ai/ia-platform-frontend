@@ -3,11 +3,12 @@
     <div class="translation-text">
       <div class="columns is-mobile translation-text__field">
         <div class="column">
-          <highlighted-text
+          <HighlightedText
             :text="currentText"
             :entities="currentEntities"
             :highlighted="highlighted"
-            size="large" />
+            size="large"
+          />
         </div>
         <div class="column is-narrow">
           <button
@@ -20,7 +21,8 @@
               'is-info': showingOriginal,
               'is-loading': loadingOriginal,
             }"
-            @click="toggleOriginal()">
+            @click="toggleOriginal()"
+          >
             <span v-if="showingOriginal">
               {{ $t('webapp.translate.show_translated') }}
             </span>
@@ -31,11 +33,12 @@
     </div>
     <div
       v-if="entitiesList.length > 0"
-      class="translation-entities">
-      <entity-tag
+      class="translation-entities"
+    >
+      <EntityTag
         v-for="(entity, i) in entitiesList"
         :key="i"
-        :entity-name="entity"
+        :entityName="entity"
         :highlighted="highlighted === entity"
         @mouseenter.native.stop="highlighted = entity"
         @mouseleave.native.stop="highlighted = null"
@@ -46,26 +49,32 @@
         <div class="level-item translation-infos__container__text">
           <strong>{{ $t('webapp.translate.translated_from') }}&nbsp;</strong>
           <span>{{ from_language | languageVerbose }}&nbsp;</span>
-          <flag :language="from_language" />
+          <Flag :language="from_language" />
           <strong>&nbsp;</strong>
           <strong>{{ $t('webapp.translate.to') }}&nbsp;</strong>
           <span>{{ language | languageVerbose }}&nbsp;</span>
-          <flag :language="language" />
+          <Flag :language="language" />
         </div>
         <div class="level-item has-text-grey-light">
           {{ created_at | moment('from') }}
         </div>
       </div>
       <div
-        v-if="repository.authorization && repository.authorization.can_contribute"
-        class="level-right">
+        v-if="
+          repository.authorization && repository.authorization.can_contribute
+        "
+        class="level-right"
+      >
         <div class="level-item">
           <a
             :href="`#delete-translation-${id}`"
             class="delete-icon"
-            @click.prevent="deleteThisTranslation()">
-            <b-icon icon="delete"
-              class="level-left translation-infos__container__icon"/>
+            @click.prevent="deleteThisTranslation()"
+          >
+            <BIcon
+              icon="delete"
+              class="level-left translation-infos__container__icon"
+            />
           </a>
         </div>
       </div>
@@ -99,7 +108,7 @@ export default {
     },
     entities: {
       type: Array,
-      default: /* istanbul ignore next */ () => ([]),
+      default: /* istanbul ignore next */ () => [],
     },
     from_language: {
       type: String,
@@ -133,24 +142,17 @@ export default {
   },
   computed: {
     currentText() {
-      return this.showingOriginal
-        ? this.original.text
-        : this.text;
+      return this.showingOriginal ? this.original.text : this.text;
     },
     currentEntities() {
-      return this.showingOriginal
-        ? this.original.entities
-        : this.entities;
+      return this.showingOriginal ? this.original.entities : this.entities;
     },
     entitiesList() {
       return getEntitiesList(this.currentEntities);
     },
   },
   methods: {
-    ...mapActions([
-      'getExample',
-      'deleteTranslation',
-    ]),
+    ...mapActions(['getExample', 'deleteTranslation']),
     getEntityClass(entity) {
       const color = getEntityColor(
         entity,
@@ -161,7 +163,9 @@ export default {
     },
     deleteThisTranslation() {
       this.deleteDialog = this.$buefy.dialog.confirm({
-        message: this.$t('webapp.translate.translation_delete_confirm', { language: this.language }),
+        message: this.$t('webapp.translate.translation_delete_confirm', {
+          language: this.language,
+        }),
         confirmText: this.$t('webapp.home.delete'),
         cancelText: this.$t('webapp.home.cancel'),
         type: 'is-danger',
@@ -187,9 +191,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/utilities.scss';
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/utilities.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
 
 .translation {
   $radius: 8px;
@@ -202,7 +206,7 @@ export default {
   &:hover {
     .translation-text {
       background-color: $white;
-      box-shadow: 0 2px 8px rgba(100, 100, 100, .5);
+      box-shadow: 0 2px 8px rgba(100, 100, 100, 0.5);
     }
   }
 
@@ -210,7 +214,7 @@ export default {
     font-size: 1.25rem;
     background-color: $white-ter;
     border-radius: $radius;
-    transition: box-shadow .2s ease;
+    transition: box-shadow 0.2s ease;
     padding: 8px 16px;
     margin-bottom: 4px;
 
@@ -225,30 +229,30 @@ export default {
   &-entities,
   &-infos {
     padding: 4px 8px 4px 16px;
-  &__container{
-    width: 35rem;
-    @media (max-width: $mobile-width) {
-      width: 90%;
-      display: flex;
-      flex-direction: column;
-      font-size: 13px;
-    }
-    &__text{
-      display: flex;
-      justify-content: space-between;
+    &__container {
+      width: 35rem;
       @media (max-width: $mobile-width) {
         width: 90%;
-      }
-      @media (max-width: $mobile-width - 150px) {
-        text-align: center;
+        display: flex;
         flex-direction: column;
+        font-size: 13px;
+      }
+      &__text {
+        display: flex;
+        justify-content: space-between;
+        @media (max-width: $mobile-width) {
+          width: 90%;
+        }
+        @media (max-width: $mobile-width - 150px) {
+          text-align: center;
+          flex-direction: column;
+        }
+      }
+      &__icon {
+        color: $color-grey-dark;
+        margin-right: 0.3rem;
       }
     }
-    &__icon {
-      color: $color-grey-dark;
-      margin-right: 0.3rem;
-    }
-  }
   }
 
   &-entities {

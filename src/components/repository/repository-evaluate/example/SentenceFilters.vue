@@ -1,7 +1,7 @@
 <template>
   <div class="filter-evaluate-example">
     <div class="filter-evaluate-example__filters">
-      <unnnic-input
+      <UnnnicInput
         :message="errors.intent"
         :placeholder="$t(searchFilterLabel)"
         iconLeft="search-1"
@@ -9,39 +9,46 @@
         :debounce="debounceTime"
       />
       <div :class="wrapperClasses">
-        <div v-if="entities" class="filter-evaluate-example__filters__wrapper__text">
-          {{ $t("webapp.dashboard.filter_by") }}:
+        <div
+          v-if="entities"
+          class="filter-evaluate-example__filters__wrapper__text"
+        >
+          {{ $t('webapp.dashboard.filter_by') }}:
         </div>
         <div>
-          <unnnic-autocomplete
-             :message="errors.intent"
-             :openWithFocus="true"
-             @input="inputFormatters"
-             @focus="onInputClick('intent')"
-             @blur="onInputClick('intent')"
-             v-model="intent"
-             :data="optionsIntents"
-             :formatters="inputFormatters"
-             :placeholder="$t('webapp.evaluate.all_intents')"
-             :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
-           />
+          <UnnnicAutocomplete
+            :message="errors.intent"
+            :openWithFocus="true"
+            @input="inputFormatters"
+            @focus="onInputClick('intent')"
+            @blur="onInputClick('intent')"
+            v-model="intent"
+            :data="optionsIntents"
+            :formatters="inputFormatters"
+            :placeholder="$t('webapp.evaluate.all_intents')"
+            :iconRight="
+              isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'
+            "
+          />
         </div>
         <div v-if="entities">
-          <unnnic-autocomplete
-             :message="errors.entity"
-             :openWithFocus="true"
-             @input="inputFormatters"
-             @focus="onInputClick('entity')"
-             @blur="onInputClick('entity')"
-             v-model="entity"
-             :data="optionsEntities"
-             :formatters="inputFormatters"
-             :placeholder="$t('webapp.evaluate.all_entities')"
-             :iconRight="isEntityInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
-           />
+          <UnnnicAutocomplete
+            :message="errors.entity"
+            :openWithFocus="true"
+            @input="inputFormatters"
+            @focus="onInputClick('entity')"
+            @blur="onInputClick('entity')"
+            v-model="entity"
+            :data="optionsEntities"
+            :formatters="inputFormatters"
+            :placeholder="$t('webapp.evaluate.all_entities')"
+            :iconRight="
+              isEntityInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'
+            "
+          />
         </div>
         <div v-if="languageFilter && languages">
-          <unnnic-select
+          <UnnnicSelect
             :placeholder="$t('webapp.evaluate.all_languages')"
             v-model="language"
           >
@@ -54,22 +61,25 @@
               {{ language.title }}
             </option>
             <option :value="null">
-              {{ $t("webapp.home.all_languages") }}
+              {{ $t('webapp.home.all_languages') }}
             </option>
-          </unnnic-select>
+          </UnnnicSelect>
         </div>
 
-        <b-field :message="errors.repository_version_name" v-if="hasVersion && versions">
-          <b-autocomplete
+        <BField
+          :message="errors.repository_version_name"
+          v-if="hasVersion && versions"
+        >
+          <BAutocomplete
             v-if="versions"
             v-model="versionName"
             :loading="false && versionsList.loading"
             :data="optionsVersions"
             :placeholder="$t('webapp.inbox.all_versions')"
-            open-on-focus
-            dropdown-position="bottom"
+            openOnFocus
+            dropdownPosition="bottom"
           />
-        </b-field>
+        </BField>
       </div>
     </div>
   </div>
@@ -79,37 +89,36 @@ import { formatters, LANGUAGES } from '@/utils/index';
 import { mapGetters } from 'vuex';
 import _ from 'lodash';
 
-
 export default {
   name: 'SentenceFilters',
   props: {
     debounceTime: {
       type: Number,
-      default: 750
+      default: 750,
     },
     intents: {
       type: Array,
-      default: null
+      default: null,
     },
     entities: {
       type: Array,
-      default: null
+      default: null,
     },
     versions: {
       type: Array,
-      default: null
+      default: null,
     },
     languageFilter: {
       type: Boolean,
-      default: null
+      default: null,
     },
     hasVersion: {
       type: Boolean,
-      default: true
+      default: true,
     },
     searchFilterLabel: {
       type: String,
-      default: 'webapp.intent.search_sentence'
+      default: 'webapp.intent.search_sentence',
     },
   },
   data() {
@@ -123,69 +132,73 @@ export default {
       setTimeoutId: null,
       errors: {},
       isIntentInputActive: false,
-      isEntityInputActive: false
+      isEntityInputActive: false,
     };
   },
   computed: {
     ...mapGetters({
-      repository: 'getCurrentRepository'
+      repository: 'getCurrentRepository',
     }),
     wrapperClasses() {
       const fieldCount = [
         this.languageFilter,
         this.entities,
-        this.hasVersion ? this.versions : ''
+        this.hasVersion ? this.versions : '',
       ].reduce((counter, condition) => (condition ? counter + 1 : counter), 1);
 
       return [
         'filter-evaluate-example__filters__wrapper',
-        `filter-evaluate-example__filters__wrapper__has-${fieldCount}-fields`
+        `filter-evaluate-example__filters__wrapper__has-${fieldCount}-fields`,
       ];
     },
     languages() {
-      return Object.keys(this.repository.evaluate_languages_count).map((lang, index) => ({
-        id: index + 1,
-        value: lang,
-        title: `${LANGUAGES[lang]}`
-      }));
+      return Object.keys(this.repository.evaluate_languages_count).map(
+        (lang, index) => ({
+          id: index + 1,
+          value: lang,
+          title: `${LANGUAGES[lang]}`,
+        }),
+      );
     },
     filterIntents() {
       if (this.intents !== null) {
         return this.intents.filter(
-          intent => intent
-            .toString()
-            .toLowerCase()
-            .indexOf(this.intent.toLowerCase()) >= 0
+          (intent) =>
+            intent
+              .toString()
+              .toLowerCase()
+              .indexOf(this.intent.toLowerCase()) >= 0,
         );
       }
       return [];
     },
     optionsIntents() {
-      return this.filterIntents.map(intent => intent);
+      return this.filterIntents.map((intent) => intent);
     },
     filterEntities() {
       if (this.entities !== null) {
         return this.entities.filter(
-          entity => entity.value
-            .toString()
-            .toLowerCase()
-            .indexOf(this.entity.toLowerCase()) >= 0
+          (entity) =>
+            entity.value
+              .toString()
+              .toLowerCase()
+              .indexOf(this.entity.toLowerCase()) >= 0,
         );
       }
       return [];
     },
     optionsEntities() {
-      return this.filterEntities.map(entity => entity.value);
+      return this.filterEntities.map((entity) => entity.value);
     },
     optionsVersions() {
       if (!this.versions) return null;
-      return this.versions.map(version => version.name);
+      return this.versions.map((version) => version.name);
     },
     inputFormatters() {
       const formattersList = [formatters.bothubItemKey()];
       formattersList.toString = () => 'inputFormatters';
       return formattersList;
-    }
+    },
   },
   watch: {
     text(value) {
@@ -215,7 +228,7 @@ export default {
         this.versionName = versionName;
       });
       this.emitVersion(versionName);
-    }
+    },
   },
   mounted() {
     this.setDefaultLanguage();
@@ -240,16 +253,18 @@ export default {
       }
     },
     onInputClick(target) {
-      if (target === 'intent') this.isIntentInputActive = !this.isIntentInputActive
-      if (target === 'entity') this.isEntityInputActive = !this.isEntityInputActive
-    }
-  }
+      if (target === 'intent')
+        this.isIntentInputActive = !this.isIntentInputActive;
+      if (target === 'entity')
+        this.isEntityInputActive = !this.isEntityInputActive;
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .filter-evaluate-example {
   width: 100%;
@@ -266,7 +281,7 @@ export default {
       grid-template-columns: 1fr;
     }
 
-    /deep/ input {
+    :deep(input) {
       height: auto;
     }
 
@@ -310,7 +325,6 @@ export default {
         font-family: 'Lato';
         font-size: 14px;
       }
-
     }
   }
 
@@ -318,11 +332,11 @@ export default {
     margin-top: 0.5rem;
   }
 
-  /deep/ .dropdown {
+  :deep(.dropdown) {
     display: block;
   }
 
-  /deep/ input:focus {
+  :deep(input:focus) {
     box-shadow: none;
     border-color: #9caccc;
   }

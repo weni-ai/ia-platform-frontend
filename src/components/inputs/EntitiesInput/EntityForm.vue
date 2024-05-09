@@ -124,10 +124,10 @@ export default {
   .entity {
     text-decoration: 1px solid #67738B underline;
   }
-  /deep/ .icon.is-right {
+  :deep(.icon.is-right) {
     transform: translateY(-5%);
   }
-  /deep/ .hidden .unnnic-autocomplete__container-list {
+  :deep(.hidden .unnnic-autocomplete__container-list) {
   display: none;
 }
 </style>

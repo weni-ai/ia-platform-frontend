@@ -2,17 +2,17 @@
   <div class="create-repository">
     <div class="create-repository__container">
       <section class="create-repository__container__steps">
-        <intelligence-tab
+        <IntelligenceTab
           :name.sync="data.name"
           :description.sync="data.description"
           :repository_type.sync="data.repository_type"
         />
       </section>
       <section class="create-repository__container__steps">
-        <definitions-tab
+        <DefinitionsTab
           @createRepository="createRepository($event)"
           @backModal="onChangeModalState(true)"
-          :disabled-submit="disabledSubmit"
+          :disabledSubmit="disabledSubmit"
           :repository_type="data.repository_type"
           :language.sync="data.language"
           :is_private.sync="data.is_private"
@@ -20,33 +20,36 @@
         />
       </section>
 
-      <unnnic-modal
+      <UnnnicModal
         :showModal="openModal"
         :text="$t('webapp.create_repository.modal_title')"
         scheme="aux-yellow-500"
-        modal-icon="warning"
+        modalIcon="warning"
         @close="onChangeModalState(false)"
-        :close-icon="false"
+        :closeIcon="false"
       >
-        <span slot="message" v-html="$t('webapp.create_repository.modal_description')" />
-        <unnnic-button
+        <span
+          slot="message"
+          v-html="$t('webapp.create_repository.modal_description')"
+        />
+        <UnnnicButton
           slot="options"
           type="tertiary"
           @click="onChangeModalState(false)"
         >
-          {{ $t("webapp.create_repository.modal_continue_button") }}
-        </unnnic-button>
-        <unnnic-button
+          {{ $t('webapp.create_repository.modal_continue_button') }}
+        </UnnnicButton>
+        <UnnnicButton
           slot="options"
           @click="navigateToHomepage()"
           class="attention-button"
         >
-          {{ $t("webapp.create_repository.modal_exit_button") }}
-        </unnnic-button>
-      </unnnic-modal>
+          {{ $t('webapp.create_repository.modal_exit_button') }}
+        </UnnnicButton>
+      </UnnnicModal>
     </div>
 
-    <unnnic-alert
+    <UnnnicAlert
       v-if="errorDetail"
       :text="errorDetail"
       scheme="feedback-red"
@@ -73,7 +76,7 @@ export default {
   components: {
     IntelligenceTab,
     DefinitionsTab,
-    Emoji
+    Emoji,
   },
   data() {
     return {
@@ -102,37 +105,48 @@ export default {
 
     disabledSubmit() {
       if (this.data.repository_type === 'content') {
-        return !this.data.name
-            || !this.data.description;
+        return !this.data.name || !this.data.description;
       }
 
-      return !this.data.name
-            || !this.data.description
-            || !this.data.repository_type
-            || !this.data.language
-            || !this.data.is_private
-            || !this.data.categories.length;
+      return (
+        !this.data.name ||
+        !this.data.description ||
+        !this.data.repository_type ||
+        !this.data.language ||
+        !this.data.is_private ||
+        !this.data.categories.length
+      );
     },
 
     computedSchema() {
-      const computed = Object.entries(this.formSchema).reduce((schema, entry) => {
-        const [key, value] = entry;
-        if (!(value.style && typeof value.style.show === 'boolean' && !value.style.show) || key === 'repository_type') {
-          schema[key] = value;
-        }
-        return schema;
-      }, {});
+      const computed = Object.entries(this.formSchema).reduce(
+        (schema, entry) => {
+          const [key, value] = entry;
+          if (
+            !(
+              value.style &&
+              typeof value.style.show === 'boolean' &&
+              !value.style.show
+            ) ||
+            key === 'repository_type'
+          ) {
+            schema[key] = value;
+          }
+          return schema;
+        },
+        {},
+      );
       const { is_private, ...schema } = computed;
       const organization = {
         label: this.$t('webapp.orgs.owner'),
         fetch: this.getOrgs,
-        type: 'choice'
+        type: 'choice',
       };
       if (is_private) {
         return { ...schema, organization, is_private };
       }
       return computed;
-    }
+    },
   },
   async mounted() {
     this.formSchema = await this.getNewRepositorySchema();
@@ -145,12 +159,15 @@ export default {
       this.current = current;
     },
     sendEvent() {
-      Analytics.send({ category: 'Intelligence', event: 'create intelligence event' });
+      Analytics.send({
+        category: 'Intelligence',
+        event: 'create intelligence event',
+      });
     },
     constructModels() {
       const Model = getModel(this.computedSchema, RepositoryModel);
       this.drfRepositoryModel = new Model({}, null, {
-        validateOnChange: true
+        validateOnChange: true,
       });
     },
     repositoryDetailsRouterParams() {
@@ -167,8 +184,8 @@ export default {
         name,
         params: {
           ownerNickname: owner__nickname,
-          slug
-        }
+          slug,
+        },
       };
     },
     createRepository(value) {
@@ -179,7 +196,7 @@ export default {
     },
     navigateToHomepage() {
       this.openModal = false;
-      this.$emit('cancelCreation')
+      this.$emit('cancelCreation');
     },
     onSubmit() {
       this.submit(this.drfRepositoryModel);
@@ -201,23 +218,25 @@ export default {
             params: {
               intelligenceUuid: data.uuid,
             },
-          })
+          });
         } else {
-          const response = await repositoryV2
-            .create({
-              organization: this.getOrgSelected,
-              name: this.data.name,
-              description: this.data.description,
-              language: this.data.language,
-              repository_type: this.data.repository_type,
-              categories: this.data.categories,
-              is_private: this.data.repository_type === 'classifier' ? this.data.is_private : true,
-            });
+          const response = await repositoryV2.create({
+            organization: this.getOrgSelected,
+            name: this.data.name,
+            description: this.data.description,
+            language: this.data.language,
+            repository_type: this.data.repository_type,
+            categories: this.data.categories,
+            is_private:
+              this.data.repository_type === 'classifier'
+                ? this.data.is_private
+                : true,
+          });
 
           const { owner__nickname, slug } = response.data;
           this.createdRepository = response.data;
           this.resultParams = { ownerNickname: owner__nickname, slug };
-          this.$router.push(this.repositoryDetailsRouterParams())
+          this.$router.push(this.repositoryDetailsRouterParams());
         }
       } catch (error) {
         const detail = get(error, 'response.data.detail', '');
@@ -228,13 +247,13 @@ export default {
       } finally {
         this.submitting = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .attention-button {
   background-color: $unnnic-color-aux-yellow-500;
@@ -296,11 +315,11 @@ export default {
       background-color: $unnnic-color-feedback-yellow;
     }
   }
-
 }
 ::v-deep {
-    .text-input.size--sm .icon-right, .text-input.size--sm .icon-left {
-      top: 15px;
-    }
+  .text-input.size--sm .icon-right,
+  .text-input.size--sm .icon-left {
+    top: 15px;
+  }
 }
 </style>

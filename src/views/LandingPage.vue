@@ -1,28 +1,42 @@
 <template>
   <div>
-    <weni-notification />
+    <WeniNotification />
     <nav class="landing-page__nav">
-      <router-link class="landing-page__nav__logo" to="/">
-        <img :src="weniDynamicLogo" alt="Weni Inteligência Artificial" />
-      </router-link>
+      <RouterLink
+        class="landing-page__nav__logo"
+        to="/"
+      >
+        <img
+          :src="weniDynamicLogo"
+          alt="Weni Inteligência Artificial"
+        />
+      </RouterLink>
       <div class="landing-page__nav__login">
-        <strong class="landing-page__nav__button clickable" @click="signIn()">{{
-          $t("webapp.landing_page.signin")
-        }}</strong>
-        <span>{{ $t("webapp.landing_page.or") }}</span>
-        <strong class="landing-page__nav__button clickable" @click="signUp()">{{
-          $t("webapp.landing_page.signup")
-        }}</strong>
+        <strong
+          class="landing-page__nav__button clickable"
+          @click="signIn()"
+          >{{ $t('webapp.landing_page.signin') }}</strong
+        >
+        <span>{{ $t('webapp.landing_page.or') }}</span>
+        <strong
+          class="landing-page__nav__button clickable"
+          @click="signUp()"
+          >{{ $t('webapp.landing_page.signup') }}</strong
+        >
       </div>
     </nav>
     <header class="landing-page__header">
       <div class="landing-page__header__content">
         <div class="landing-page__header__content__text">
-          <h1>{{ $t("webapp.landing_page.header_content1") }}</h1>
-          <p>{{ $t("webapp.landing_page.header_content2") }}</p>
-          <b-button type="is-primary" rounded @click="signUp()">
-            {{ $t("webapp.landing_page.join_for_free") }}
-          </b-button>
+          <h1>{{ $t('webapp.landing_page.header_content1') }}</h1>
+          <p>{{ $t('webapp.landing_page.header_content2') }}</p>
+          <BButton
+            type="is-primary"
+            rounded
+            @click="signUp()"
+          >
+            {{ $t('webapp.landing_page.join_for_free') }}
+          </BButton>
         </div>
         <div class="landing-page__header__content__animation hide-mobile" />
       </div>
@@ -31,50 +45,53 @@
       <div class="landing-page__intro__background-svg" />
       <div class="landing-page__intro__background">
         <div class="landing-page__intro__item">
-          <img src="~@/assets/imgs/hand.svg" />
-          <h2>{{ $t("webapp.landing_page.grid_text1") }}</h2>
-          <span>{{ $t("webapp.landing_page.grid_text2") }}</span>
+          <img src="@/assets/imgs/hand.svg" />
+          <h2>{{ $t('webapp.landing_page.grid_text1') }}</h2>
+          <span>{{ $t('webapp.landing_page.grid_text2') }}</span>
         </div>
         <div class="landing-page__intro__item">
-          <img src="~@/assets/imgs/cloud.svg" />
-          <h2>{{ $t("webapp.landing_page.grid_text3") }}</h2>
-          <span>{{ $t("webapp.landing_page.grid_text4") }}</span>
+          <img src="@/assets/imgs/cloud.svg" />
+          <h2>{{ $t('webapp.landing_page.grid_text3') }}</h2>
+          <span>{{ $t('webapp.landing_page.grid_text4') }}</span>
         </div>
         <div class="landing-page__intro__item">
-          <img src="~@/assets/imgs/talk-balloon.svg" />
-          <h2>{{ $t("webapp.landing_page.grid_text5") }}</h2>
-          <span>{{ $t("webapp.landing_page.grid_text6") }}</span>
+          <img src="@/assets/imgs/talk-balloon.svg" />
+          <h2>{{ $t('webapp.landing_page.grid_text5') }}</h2>
+          <span>{{ $t('webapp.landing_page.grid_text6') }}</span>
         </div>
       </div>
     </section>
     <section class="landing-page__bots">
       <div class="landing-page__bots__content text-center">
         <h1 class="landing-page__bots__content__title">
-          {{ $t("webapp.landing_page.best_bots") }}
+          {{ $t('webapp.landing_page.best_bots') }}
         </h1>
-        <repository-card-list :show-more-button="false" limit="6" />
-        <b-button
+        <RepositoryCardList
+          :showMoreButton="false"
+          limit="6"
+        />
+        <BButton
           class="landing-page__bots__content__button"
           type="is-primary"
           @click="showAllBots()"
         >
-          {{ $t("webapp.landing_page.all_bots") }}
-        </b-button>
+          {{ $t('webapp.landing_page.all_bots') }}
+        </BButton>
       </div>
     </section>
     <section class="landing-page__signup">
       <div class="landing-page__signup__container">
         <div class="landing-page__signup__container__items">
           <h1>
-            {{ $t("webapp.landing_page.signup_grid") }}
+            {{ $t('webapp.landing_page.signup_grid') }}
           </h1>
-          <b-button
+          <BButton
             class="landing-page__signup__button"
             rounded
             @click="signUp()"
           >
-            {{ $t("webapp.landing_page.signup_forfree") }}
-          </b-button>
+            {{ $t('webapp.landing_page.signup_forfree') }}
+          </BButton>
         </div>
         <div class="landing-page__signup__animation">
           <div class="landing-page__signup__animation__girl" />
@@ -82,7 +99,7 @@
         </div>
       </div>
     </section>
-    <site-footer />
+    <SiteFooter />
   </div>
 </template>
 
@@ -99,15 +116,15 @@ export default {
     RepositoryCardList,
     WeniNotification,
     I18n,
-    SiteFooter
+    SiteFooter,
   },
   computed: {
     ...mapGetters(['authenticated', 'myProfile']),
     weniDynamicLogo() {
       if (I18n.locale === 'pt-BR') {
-        return '/weni-logo-green.svg'
+        return '/weni-logo-green.svg';
       }
-      return '/weni-logo-green-en.svg'
+      return '/weni-logo-green-en.svg';
     },
   },
   watch: {
@@ -143,9 +160,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@/assets/scss/utilities.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/utilities.scss';
 
 .landing-page {
   $max-width: 1200px;
@@ -226,7 +243,7 @@ export default {
 
       &__animation {
         position: relative;
-        background-image: url("~@/assets/imgs/network.svg");
+        background-image: url('@/assets/imgs/network.svg');
         background-repeat: no-repeat;
         width: calc(100% * 1 / 2 - 1rem);
         height: 400px;
@@ -238,11 +255,11 @@ export default {
 
         &:before {
           position: absolute;
-          content: "";
+          content: '';
           height: 400px;
           width: 100%;
           left: 3rem;
-          background: url("~@/assets/imgs/floating-girl.svg") no-repeat;
+          background: url('@/assets/imgs/floating-girl.svg') no-repeat;
           animation-name: floating;
           animation-duration: 3s;
           animation-iteration-count: infinite;
@@ -271,7 +288,7 @@ export default {
 
     &:after {
       position: absolute;
-      content: "";
+      content: '';
       width: 100%;
       height: 50%;
       bottom: 0;
@@ -280,7 +297,7 @@ export default {
 
     &__background-svg {
       height: 120vh;
-      background: url("~@/assets/imgs/bg-intro.svg") no-repeat;
+      background: url('@/assets/imgs/bg-intro.svg') no-repeat;
       background-size: 100%;
       position: relative;
       width: 100%;
@@ -421,7 +438,7 @@ export default {
       &__girl {
         z-index: 1;
         position: relative;
-        background-image: url("~@/assets/imgs/girl-with-helmet.svg");
+        background-image: url('@/assets/imgs/girl-with-helmet.svg');
         background-repeat: no-repeat;
         width: 300px;
         height: 300px;
@@ -450,12 +467,12 @@ export default {
 
       &__shadow {
         position: relative;
-        content: "";
+        content: '';
         top: -5rem;
         height: 200px;
         width: 100px;
         left: 2rem;
-        background: url("~@/assets/imgs/girl-shadow.svg") no-repeat;
+        background: url('@/assets/imgs/girl-shadow.svg') no-repeat;
         animation-name: floating-shadow;
         animation-duration: 3s;
         animation-iteration-count: infinite;

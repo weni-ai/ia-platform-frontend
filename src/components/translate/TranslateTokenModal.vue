@@ -1,34 +1,39 @@
 <template>
-  <unnnic-modal
-      :text="$t('webapp.translate.share_title')"
-      :showModal="open"
-      :closeIcon="false"
-    >
-    <span slot="message" v-html="$t('webapp.translate.share_subtitle')" />
+  <UnnnicModal
+    :text="$t('webapp.translate.share_title')"
+    :showModal="open"
+    :closeIcon="false"
+  >
+    <span
+      slot="message"
+      v-html="$t('webapp.translate.share_subtitle')"
+    />
     <div slot="message">
       <div class="token-modal">
         <div class="token-modal__content">
-          <paginated-list
-            :url-generator="urlGenerator"
-            :item-component="itemComponent"
+          <PaginatedList
+            :urlGenerator="urlGenerator"
+            :itemComponent="itemComponent"
             :list="list"
-            :per-page="4"
+            :perPage="4"
             class="token-modal__content__pagination"
             @deleted="onDelete"
           />
           <div class="token-modal__create">
-            <p @click="createToken()">{{ $t("webapp.translate.create_new_token") }}</p>
+            <p @click="createToken()">
+              {{ $t('webapp.translate.create_new_token') }}
+            </p>
           </div>
         </div>
-          <unnnic-button
-            :text="$t('webapp.translate.ok')"
-            class="token-modal__footer__button"
-            type="secondary"
-            @click="onClose()"
-          />
+        <UnnnicButton
+          :text="$t('webapp.translate.ok')"
+          class="token-modal__footer__button"
+          type="secondary"
+          @click="onClose()"
+        />
       </div>
     </div>
-  </unnnic-modal>
+  </UnnnicModal>
 </template>
 
 <script>
@@ -39,43 +44,47 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'TokenModal',
   components: {
-    PaginatedList
+    PaginatedList,
   },
   props: {
     open: {
       type: Boolean,
-      default: false
+      default: false,
     },
     repositoryUuid: {
       type: String,
-      required: true
+      required: true,
     },
     urlGenerator: {
       type: Function,
-      default: token => token
+      default: (token) => token,
     },
     language: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
       list: null,
       itemComponent: TranslateTokenListItem,
-      loading: false
+      loading: false,
     };
   },
   computed: {
-    ...mapGetters(['getSelectedVersion'])
+    ...mapGetters(['getSelectedVersion']),
   },
   watch: {
     open() {
       if (!this.list && this.open) this.loadTokens();
-    }
+    },
   },
   methods: {
-    ...mapActions(['getExternalTokens', 'createExternalToken', 'deleteExternalToken']),
+    ...mapActions([
+      'getExternalTokens',
+      'createExternalToken',
+      'deleteExternalToken',
+    ]),
     onClose() {
       this.$emit('update:open', false);
     },
@@ -86,7 +95,7 @@ export default {
     async loadTokens() {
       this.list = await this.getExternalTokens({
         repositoryUuid: this.repositoryUuid,
-        limit: 4
+        limit: 4,
       });
     },
     async createToken() {
@@ -94,25 +103,25 @@ export default {
       try {
         await this.createExternalToken({
           repositoryVersion: this.getSelectedVersion,
-          language: this.language
+          language: this.language,
         });
         this.loadTokens();
       } catch (e) {
         this.$buefy.toast.open({
           message: this.$t('webapp.trainings.default_error'),
-          type: 'is-danger'
+          type: 'is-danger',
         });
       } finally {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .token-modal {
   // overflow: hidden;

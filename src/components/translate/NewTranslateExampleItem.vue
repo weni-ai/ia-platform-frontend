@@ -1,31 +1,34 @@
 <template>
   <div class="translate-item">
-    <translate-example-before
+    <TranslateExampleBefore
       v-bind="$props"
       :open.sync="open"
       :selectable="!editing"
       :selected.sync="selected"
-      pending-example/>
-    <loading v-show="loadingTranslations" />
+      pendingExample
+    />
+    <Loading v-show="loadingTranslations" />
     <span
       v-show="!loadingTranslations && translationLoadError"
-      class="translate-item__error">
+      class="translate-item__error"
+    >
       {{ $t('webapp.translate.error_load_translation') }}
 
       <a @click="loadTranslation()">
         {{ $t('webapp.translate.retry') }}
       </a>
     </span>
-    <translate-example-form
+    <TranslateExampleForm
       v-if="!translationLoadError && !loadingTranslations"
       ref="form"
       v-model="translationData"
-      :class="{'translate-item--dark': !translation}"
+      :class="{ 'translate-item--dark': !translation }"
       :editing="editing"
-      :available-entities="entities"
-      :initial-data="initialData[id]"
+      :availableEntities="entities"
+      :initialData="initialData[id]"
       :translation="translation"
-      :open.sync="open"/>
+      :open.sync="open"
+    />
   </div>
 </template>
 
@@ -64,7 +67,7 @@ export default {
     },
     entities: {
       type: Array,
-      default: /* istanbul ignore next */ () => ([]),
+      default: /* istanbul ignore next */ () => [],
     },
     created_at: {
       type: String,
@@ -112,52 +115,63 @@ export default {
       return getEntitiesList(this.entities);
     },
     isEmpty() {
-      return !(this.translationData && this.translationData.text.trim().length > 0);
+      return !(
+        this.translationData && this.translationData.text.trim().length > 0
+      );
     },
     actions() {
       return {
         create: this.externalToken
-          ? () => this.newTranslationExternal({
-            token: this.externalToken,
-            exampleId: this.id,
-            ...this.saveTranslationData(this.translationData),
-          })
-          : () => this.newTranslation({
-            exampleId: this.id,
-            ...this.saveTranslationData(this.translationData),
-            language: this.translateTo,
-          }),
+          ? () =>
+              this.newTranslationExternal({
+                token: this.externalToken,
+                exampleId: this.id,
+                ...this.saveTranslationData(this.translationData),
+              })
+          : () =>
+              this.newTranslation({
+                exampleId: this.id,
+                ...this.saveTranslationData(this.translationData),
+                language: this.translateTo,
+              }),
         update: this.externalToken
-          ? () => this.editTranslationExternal({
-            token: this.externalToken,
-            translationId: this.translation.id,
-            ...this.saveTranslationData(this.translationData),
-            originalExample: this.id,
-          })
-          : () => this.editTranslation({
-            translationId: this.translation.id,
-            ...this.saveTranslationData(this.translationData),
-            language: this.translateTo,
-            originalExample: this.id,
-          }),
+          ? () =>
+              this.editTranslationExternal({
+                token: this.externalToken,
+                translationId: this.translation.id,
+                ...this.saveTranslationData(this.translationData),
+                originalExample: this.id,
+              })
+          : () =>
+              this.editTranslation({
+                translationId: this.translation.id,
+                ...this.saveTranslationData(this.translationData),
+                language: this.translateTo,
+                originalExample: this.id,
+              }),
         delete: this.externalToken
-          ? () => this.deleteTranslationExternal(
-            { token: this.externalToken, translationId: this.translation.id },
-          )
-          : () => this.deleteTranslation({ translationId: this.translation.id }),
+          ? () =>
+              this.deleteTranslationExternal({
+                token: this.externalToken,
+                translationId: this.translation.id,
+              })
+          : () =>
+              this.deleteTranslation({ translationId: this.translation.id }),
         getTranslation: this.externalToken
-          ? () => this.getTranslationFromSentenceExternal({
-            token: this.externalToken,
-            originalId: this.id,
-            limit: 1,
-          })
-          : () => this.getTranslationFromSentence({
-            repositoryUuid: this.repositoryUuid,
-            repositoryVersion: this.repositoryVersion,
-            toLanguage: this.translateTo,
-            originalId: this.id,
-            limit: 1,
-          }),
+          ? () =>
+              this.getTranslationFromSentenceExternal({
+                token: this.externalToken,
+                originalId: this.id,
+                limit: 1,
+              })
+          : () =>
+              this.getTranslationFromSentence({
+                repositoryUuid: this.repositoryUuid,
+                repositoryVersion: this.repositoryVersion,
+                toLanguage: this.translateTo,
+                originalId: this.id,
+                limit: 1,
+              }),
       };
     },
   },
@@ -177,7 +191,9 @@ export default {
     },
   },
   created() {
-    this.$root.$on('selectAll', (value) => { this.onSelectAll(value); });
+    this.$root.$on('selectAll', (value) => {
+      this.onSelectAll(value);
+    });
     this.$root.$on('saveAll', () => {
       this.open = false;
       if (!this.translationLoadError) this.save();
@@ -207,8 +223,13 @@ export default {
     unchanged() {
       if (!this.translation) return false;
       if (!this.translationData) return true;
-      return this.translationData.text === this.translation.text
-            && entityEquals(this.translationData.entities || [], this.translation.entities || []);
+      return (
+        this.translationData.text === this.translation.text &&
+        entityEquals(
+          this.translationData.entities || [],
+          this.translation.entities || [],
+        )
+      );
     },
     onSelectAll(value) {
       this.selected = value;
@@ -218,11 +239,12 @@ export default {
       return {
         text: data.text,
         entities: (data.entities || []).map((entityObject) => {
-          const {
-            start, end, entity, value,
-          } = entityObject;
+          const { start, end, entity, value } = entityObject;
           return {
-            start, end, entity, value,
+            start,
+            end,
+            entity,
+            value,
           };
         }),
       };
@@ -287,23 +309,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '~@/assets/scss/colors.scss';
-    .translate-item {
-        display: flex;
-        > * {
-            width: 50%;
-            height: 100%;
+@import '@/assets/scss/colors.scss';
+.translate-item {
+  display: flex;
+  > * {
+    width: 50%;
+    height: 100%;
 
-            &:not(:last-child) {
-              margin-right: 1rem;
-            }
-        }
-      &__error {
-        border: 1px solid $color-border;
-        border-radius: 4px;
-        text-align: center;
-        padding: .45rem 0;
-        margin-top: .5rem;
-      }
+    &:not(:last-child) {
+      margin-right: 1rem;
     }
+  }
+  &__error {
+    border: 1px solid $color-border;
+    border-radius: 4px;
+    text-align: center;
+    padding: 0.45rem 0;
+    margin-top: 0.5rem;
+  }
+}
 </style>

@@ -7,56 +7,58 @@
     >
       <div class="fields__container">
         <div class="fields__header">
-          <unnnic-form-element
+          <UnnnicFormElement
             :label="$t('webapp.trainings.add_a_sentence')"
             :error="errors.text || errors.language"
           >
-            <input-with-hightlights
+            <InputWithHightlights
               v-model="text"
               :entities="entities"
               :placeholder="$t('webapp.example.sentence')"
               :selected.sync="textSelected"
             />
-          </unnnic-form-element>
+          </UnnnicFormElement>
 
           <div>
             <div class="fields__label">
               {{ $t('webapp.trainings.intent') }}
 
-              <unnnic-tool-tip
+              <UnnnicToolTip
                 side="top"
                 :text="$t('webapp.trainings.intent_info')"
                 enabled
               >
-                <unnnic-icon
+                <UnnnicIcon
                   class="info"
                   icon="information-circle-4"
                   size="sm"
                   scheme="neutral-soft"
                 />
-              </unnnic-tool-tip>
+              </UnnnicToolTip>
             </div>
 
-            <unnnic-form-element
-              :message="errors.intent"
-            >
-              <unnnic-autocomplete
+            <UnnnicFormElement :message="errors.intent">
+              <UnnnicAutocomplete
                 v-model="intent"
                 :data="filteredData"
                 :placeholder="$t('webapp.example.intent')"
                 :openWithFocus="true"
                 @focus="onIntentInputClick"
                 @blur="onIntentInputClick"
-                :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
+                :iconRight="
+                  isIntentInputActive
+                    ? 'arrow-button-up-1'
+                    : 'arrow-button-down-1'
+                "
               />
-            </unnnic-form-element>
+            </UnnnicFormElement>
           </div>
 
-          <unnnic-form-element
+          <UnnnicFormElement
             :label="$t('webapp.create_repository.language_placeholder')"
             :message="errors.intent"
           >
-            <unnnic-select
+            <UnnnicSelect
               :placeholder="$t('webapp.translate.languages_select')"
               v-model="language"
             >
@@ -68,45 +70,43 @@
               >
                 {{ label }}
               </option>
-            </unnnic-select>
-          </unnnic-form-element>
+            </UnnnicSelect>
+          </UnnnicFormElement>
         </div>
 
-        <unnnic-form-element
-          :message="errors.entities"
-        >
+        <UnnnicFormElement :message="errors.entities">
           <div class="entities-wrapper">
-            <new-entities-input
+            <NewEntitiesInput
               ref="entitiesInput"
               v-model="entities"
               :repository="repository"
               :text="text"
-              :text-selected="textSelected"
-              :available-entities="entitiesList"
-              :available-labels="availableLabels"
+              :textSelected="textSelected"
+              :availableEntities="entitiesList"
+              :availableLabels="availableLabels"
               @entityAdded="onEntityAdded()"
             />
           </div>
-        </unnnic-form-element>
+        </UnnnicFormElement>
       </div>
 
-      <unnnic-button
+      <UnnnicButton
         id="tour-training-step-5"
-        :is-previous-disabled="true"
-        :is-next-disabled="true"
+        :isPreviousDisabled="true"
+        :isNextDisabled="true"
         :disabled="!shouldSubmit"
         :loading="submitting"
-        :is-step-blocked="!blockedNextStepTutorial"
-        native-type="submit"
+        :isStepBlocked="!blockedNextStepTutorial"
+        nativeType="submit"
         class="button--full"
         type="secondary"
         size="large"
       >
         {{ $t('webapp.trainings.submit') }}
-      </unnnic-button>
+      </UnnnicButton>
     </form>
 
-    <unnnic-alert
+    <UnnnicAlert
       v-if="alertSuccess"
       title=""
       :text="$t('webapp.trainings.sentence_added')"
@@ -125,7 +125,6 @@ import NewEntitiesInput from '@/components/inputs/EntitiesInput/NewEntitiesInput
 import { mapActions, mapGetters } from 'vuex';
 import { formatters, LANGUAGES } from '@/utils';
 import InputWithHightlights from '../InputWithHightlights';
-
 
 export default {
   name: 'NewExampleForm',
@@ -155,7 +154,7 @@ export default {
       isIntentInputActive: false,
       isLanguageInputActive: false,
       alertSuccess: false,
-      addEntity: false
+      addEntity: false,
     };
   },
   computed: {
@@ -166,8 +165,9 @@ export default {
       return this.isValid && !this.submitting;
     },
     filteredData() {
-      return (this.repository.intents_list || []).filter(intent => intent
-        .startsWith(this.intent.toLowerCase()));
+      return (this.repository.intents_list || []).filter((intent) =>
+        intent.startsWith(this.intent.toLowerCase()),
+      );
     },
     validationErrors() {
       const errors = [];
@@ -187,25 +187,20 @@ export default {
     },
     availableEntities() {
       const repositoryEntities = this.repository.entities_list || [];
-      const entitiesFlat = this.entities.map(e => e.entity);
+      const entitiesFlat = this.entities.map((e) => e.entity);
       return repositoryEntities
         .concat(entitiesFlat)
-        .filter((entity, index, current) => (current.indexOf(entity) === index));
+        .filter((entity, index, current) => current.indexOf(entity) === index);
     },
     availableLabels() {
       const repositoryLabels = this.repository.labels_list || [];
 
       return repositoryLabels
-        .filter(label => !!label)
-        .filter((label, index, current) => (current.indexOf(label) === index));
+        .filter((label) => !!label)
+        .filter((label, index, current) => current.indexOf(label) === index);
     },
     data() {
-      const {
-        text,
-        language,
-        intent,
-        entities,
-      } = this;
+      const { text, language, intent, entities } = this;
 
       return {
         text,
@@ -215,8 +210,7 @@ export default {
       };
     },
     languageList() {
-      return Object.keys(LANGUAGES)
-        .map(lang => ([lang, LANGUAGES[lang]]));
+      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
   },
   watch: {
@@ -234,9 +228,7 @@ export default {
     this.entitiesList = this.availableEntities;
   },
   methods: {
-    ...mapActions([
-      'newExample',
-    ]),
+    ...mapActions(['newExample']),
     onEnter() {
       if (this.shouldSubmit) this.onSubmit();
     },
@@ -266,7 +258,7 @@ export default {
         this.entities = [];
         this.submitting = false;
 
-        this.alertSuccess = true
+        this.alertSuccess = true;
         this.$emit('created');
         this.$emit('eventStep');
         return true;
@@ -276,17 +268,24 @@ export default {
         const errorResponse = error.response;
         const errorText = error.response.data;
         /* istanbul ignore next */
-        if (errorText.detail[0] === 'Enter a valid value that has letters in it') {
+        if (
+          errorText.detail[0] === 'Enter a valid value that has letters in it'
+        ) {
           this.$buefy.toast.open({
             message: this.$t('webapp.trainings.error_caracter_type'),
-            type: 'is-danger'
+            type: 'is-danger',
           });
         }
-        if (errorResponse && errorText.detail[0] !== 'Enter a valid value that has letters in it') {
+        if (
+          errorResponse &&
+          errorText.detail[0] !== 'Enter a valid value that has letters in it'
+        ) {
           /* istanbul ignore next */
           this.$buefy.toast.open({
-            message: this.$t('webapp.trainings.intention_or_sentence_already_exist'),
-            type: 'is-danger'
+            message: this.$t(
+              'webapp.trainings.intention_or_sentence_already_exist',
+            ),
+            type: 'is-danger',
           });
           this.errors = errorResponse;
         }
@@ -296,14 +295,14 @@ export default {
       return false;
     },
     onIntentInputClick() {
-      this.isIntentInputActive = !this.isIntentInputActive
+      this.isIntentInputActive = !this.isIntentInputActive;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 .fields {
   &__container {
     margin-block: $unnnic-spacing-md;
@@ -343,7 +342,7 @@ export default {
   }
 }
 
-/deep/ .unnnic-form__label {
+:deep(.unnnic-form__label) {
   font-family: 'Lato';
 }
 
@@ -352,34 +351,33 @@ export default {
 }
 .entities-wrapper {
   padding: 0 1rem;
-  border: 1px solid #E2E6ED;
+  border: 1px solid #e2e6ed;
   border-radius: 8px;
 }
-/deep/ .example-txt-w-highlighted-entities__entity__before {
-  font-size: .875rem;
+:deep(.example-txt-w-highlighted-entities__entity__before) {
+  font-size: 0.875rem;
   border: 1px solid transparent;
 }
-/deep/ .example-txt-w-highlighted-entities__entity__text {
-  font-size: .875rem;
+:deep(.example-txt-w-highlighted-entities__entity__text) {
+  font-size: 0.875rem;
 }
-/deep/ .hidden .unnnic-autocomplete__container-list{
+:deep(.hidden .unnnic-autocomplete__container-list) {
   display: none;
 }
-/deep/ .column {
-  padding: .5rem;
+:deep(.column) {
+  padding: 0.5rem;
 }
-/deep/ .dropdown {
+:deep(.dropdown) {
   display: block;
 }
-/deep/ .example-txt-w-highlighted-entities__entity {
+:deep(.example-txt-w-highlighted-entities__entity) {
   padding: 0.6rem 0.9rem;
 }
-/deep/ .alert {
+:deep(.alert) {
   word-spacing: 0;
 }
 
-/deep/ .unnnic-tooltip-label {
+:deep(.unnnic-tooltip-label) {
   max-width: 350px;
 }
-
 </style>

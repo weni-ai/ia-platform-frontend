@@ -5,15 +5,17 @@
         v-if="repository_type === 'classifier'"
         class="create-repository__definitions__wrapper__fields"
       >
-        <unnnic-label :label="$t('webapp.create_repository.language_label')"/>
-        <unnnic-select
+        <UnnnicLabel :label="$t('webapp.create_repository.language_label')" />
+        <UnnnicSelect
           class="unnic--clickable"
           size="sm"
           :placeholder="$t('webapp.create_repository.language_placeholder')"
           :value="language"
           @input="$emit('update:language', $event)"
           search
-          :search-placeholder="$t('webapp.create_repository.language_placeholder_search')"
+          :searchPlaceholder="
+            $t('webapp.create_repository.language_placeholder_search')
+          "
         >
           <option
             v-for="language in languages"
@@ -23,14 +25,19 @@
           >
             {{ language.title }}
           </option>
-        </unnnic-select>
+        </UnnnicSelect>
       </section>
 
-      <div v-if="repository_type === 'classifier'" class="intelligence-private-or-public">
-        <unnnic-card
+      <div
+        v-if="repository_type === 'classifier'"
+        class="intelligence-private-or-public"
+      >
+        <UnnnicCard
           clickable
           :title="$t('webapp.create_repository.privacy_type_public_title')"
-          :description="$t('webapp.create_repository.privacy_type_public_description')"
+          :description="
+            $t('webapp.create_repository.privacy_type_public_description')
+          "
           type="content"
           icon="lock-unlock-1-1"
           class="intelligence-private-or-public__item"
@@ -38,10 +45,12 @@
           @click.native="$emit('update:is_private', false)"
         />
 
-        <unnnic-card
+        <UnnnicCard
           clickable
           :title="$t('webapp.create_repository.privacy_type_private_title')"
-          :description="$t('webapp.create_repository.privacy_type_private_description')"
+          :description="
+            $t('webapp.create_repository.privacy_type_private_description')
+          "
           type="content"
           icon="lock-2-1"
           class="intelligence-private-or-public__item"
@@ -50,31 +59,33 @@
         />
       </div>
 
-      <section
-        v-if="repository_type === 'classifier'"
-      >
-        <unnnic-label :label="$t('webapp.create_repository.category_label')" />
+      <section v-if="repository_type === 'classifier'">
+        <UnnnicLabel :label="$t('webapp.create_repository.category_label')" />
 
         <div class="categories-list">
           <template v-if="categoryListLoading">
-            <unnnic-skeleton-loading
+            <UnnnicSkeletonLoading
               v-for="i in 10"
-              :key="i" tag="div"
+              :key="i"
+              tag="div"
               :width="80 + Math.floor(Math.random() * 40) + 'px'"
               height="32px"
             />
           </template>
 
-          <unnnic-tag
+          <UnnnicTag
             v-else
             v-for="category in categoryList"
             :key="category.id"
             :text="category.name"
             :disabled="categories.includes(category.id)"
             @click.native="
-              $emit('update:categories', categories.includes(category.id)
-                ? categories.filter((id) => id !== category.id)
-                : [...categories, category.id])
+              $emit(
+                'update:categories',
+                categories.includes(category.id)
+                  ? categories.filter((id) => id !== category.id)
+                  : [...categories, category.id],
+              )
             "
             clickable
             type="brand"
@@ -82,23 +93,22 @@
         </div>
       </section>
 
-
       <section class="create-repository__definitions__buttons">
-        <unnnic-button
+        <UnnnicButton
           type="tertiary"
           class="create-repository__definitions__buttons__btn"
           @click.native="dispatchBackModal()"
         >
-          {{$t('webapp.create_repository.cancel_create_intelligence_button')}}
-        </unnnic-button>
+          {{ $t('webapp.create_repository.cancel_create_intelligence_button') }}
+        </UnnnicButton>
 
-        <unnnic-button
+        <UnnnicButton
           class="create-repository__definitions__buttons__btn"
           @click.native="dispatchCreateRepository()"
           :disabled="disabledSubmit"
         >
-          {{$t('webapp.create_repository.create_intelligence_button')}}
-        </unnnic-button>
+          {{ $t('webapp.create_repository.create_intelligence_button') }}
+        </UnnnicButton>
       </section>
 
       <!-- <unnnic-card
@@ -128,12 +138,12 @@ export default {
     categories: Array,
   },
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
       categoryListLoading: false,
-      categoryList: []
+      categoryList: [],
     };
   },
 
@@ -145,9 +155,9 @@ export default {
       return Object.keys(LANGUAGES).map((lang, index) => ({
         id: index + 1,
         title: LANGUAGES[lang],
-        value: lang
+        value: lang,
       }));
-    }
+    },
   },
   methods: {
     ...mapActions(['getAllCategories']),
@@ -160,7 +170,7 @@ export default {
       } catch (error) {
         this.$buefy.toast.open({
           message: error,
-          type: 'is-danger'
+          type: 'is-danger',
         });
       } finally {
         this.categoryListLoading = false;
@@ -172,12 +182,12 @@ export default {
     dispatchBackModal() {
       this.$emit('backModal');
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .intelligence-private-or-public {
   display: flex;

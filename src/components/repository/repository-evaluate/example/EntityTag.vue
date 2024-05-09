@@ -1,14 +1,17 @@
 <template>
-   <unnnic-tag
-      class="entity-tag"
-      :hasCloseIcon="closable"
-      @close="$emit('close')"
-      type="default"
-      v-html="group ? $t('webapp.evaluate.entity_is_group',
-        { entity: entityName, group }) : entityName"
-      clickable
-      :style="{backgroundColor: randomColor()}"
-    />
+  <UnnnicTag
+    class="entity-tag"
+    :hasCloseIcon="closable"
+    @close="$emit('close')"
+    type="default"
+    v-html="
+      group
+        ? $t('webapp.evaluate.entity_is_group', { entity: entityName, group })
+        : entityName
+    "
+    clickable
+    :style="{ backgroundColor: randomColor() }"
+  />
 </template>
 
 <script>
@@ -48,40 +51,40 @@ export default {
       return this.colorClass || `${getEntityColor(this.entityName)}`;
     },
     document() {
-      return document
-    }
+      return document;
+    },
   },
   methods: {
     randomColor() {
-      return getRandomColor()
-    }
+      return getRandomColor();
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/variables.scss';
 
-  /deep/ strong {
-      color: inherit;
-    }
+:deep(strong) {
+  color: inherit;
+}
 
-    .highlighted {
-        border: 2px solid red;
-    }
+.highlighted {
+  border: 2px solid red;
+}
 
-    span, strong{
-      font-family: $font-family;
-    }
+span,
+strong {
+  font-family: $font-family;
+}
 
-    .entity-tag {
-      font-family: Lato;
-      font-size: .75rem;
-      font-weight: 400;
-      line-height: 1.25rem;
-      padding: .25rem .75rem;
-      color: inherit;
-      display: inline-flex;
-    }
-
+.entity-tag {
+  font-family: Lato;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  padding: 0.25rem 0.75rem;
+  color: inherit;
+  display: inline-flex;
+}
 </style>

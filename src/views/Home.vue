@@ -3,12 +3,12 @@
     <div :class="['home', `page--${$route.name}`]">
       <section class="home__header">
         <div>
-          <unnnic-card
+          <UnnnicCard
             class="home__header__icon"
             :title="$t('webapp.intelligences_lib.title')"
             icon="neurology"
             type="title"
-            :has-information-icon="false"
+            :hasInformationIcon="false"
             scheme="weni-600"
           />
           <div
@@ -17,16 +17,20 @@
           />
         </div>
 
-        <unnnic-button
+        <UnnnicButton
           @click="createNewIntelligence"
           class="create-ia-button"
           iconLeft="add-1"
         >
           {{ $t('intelligences.create_button') }}
-        </unnnic-button>
+        </UnnnicButton>
       </section>
 
-      <unnnic-tab size="md" v-model="tab" :tabs='["own_intelligences","public_intelligences"]'>
+      <UnnnicTab
+        size="md"
+        v-model="tab"
+        :tabs="['own_intelligences', 'public_intelligences']"
+      >
         <template slot="tab-head-own_intelligences">
           {{ $t('intelligences.own_intelligences') }}
         </template>
@@ -34,25 +38,34 @@
         <template slot="tab-head-public_intelligences">
           {{ $t('intelligences.public_intelligences') }}
         </template>
-      </unnnic-tab>
+      </UnnnicTab>
 
       <div v-show="tab === 'own_intelligences'">
-        <intelligences-filter
+        <IntelligencesFilter
           class="filters"
           :name.sync="filterIntelligenceName"
           :type.sync="fitlerIntelligenceType"
         />
 
-        <div v-if="isListEmpty" class="intelligences-list--empty">
-          <img src="../assets/imgs/doris-doubt-reaction.png" alt="Doris Doubt Reaction">
+        <div
+          v-if="isListEmpty"
+          class="intelligences-list--empty"
+        >
+          <img
+            src="../assets/imgs/doris-doubt-reaction.png"
+            alt="Doris Doubt Reaction"
+          />
 
           <h1 class="intelligences-list__title">
             {{ $t('intelligences.no_intelligence_added') }}
           </h1>
         </div>
 
-        <div v-else class="intelligences-list">
-          <intelligence-from-project-item
+        <div
+          v-else
+          class="intelligences-list"
+        >
+          <IntelligenceFromProjectItem
             v-for="project in intelligences"
             :key="project.uuid"
             :project="project"
@@ -60,14 +73,22 @@
           />
 
           <template v-if="isLoading">
-            <unnnic-skeleton-loading v-for="i in 3" :key="i" tag="div" height="230px" />
+            <UnnnicSkeletonLoading
+              v-for="i in 3"
+              :key="i"
+              tag="div"
+              height="230px"
+            />
           </template>
 
-          <div v-show="!isLoading" ref="end-of-list-element"></div>
+          <div
+            v-show="!isLoading"
+            ref="end-of-list-element"
+          ></div>
         </div>
       </div>
 
-      <intelligences-public-list v-show="tab === 'public_intelligences'" />
+      <IntelligencesPublicList v-show="tab === 'public_intelligences'" />
 
       <!-- <unnnic-tab
         class="home__intelligences"
@@ -94,16 +115,14 @@
       </unnnic-tab> -->
     </div>
 
-    <modal-next
+    <ModalNext
       v-if="openModal"
       :title="$t('webapp.create_repository.intelligence')"
-      max-width="750px"
+      maxWidth="750px"
       class="create-intelligence-modal"
     >
-      <create-repository-form
-        @cancelCreation="openModal = false"
-      />
-    </modal-next>
+      <CreateRepositoryForm @cancelCreation="openModal = false" />
+    </ModalNext>
   </div>
 </template>
 
@@ -159,7 +178,7 @@ export default {
         {
           value: '2',
           label: 'Option 2',
-          description: 'This is the first option'
+          description: 'This is the first option',
         },
       ],
 
@@ -211,13 +230,18 @@ export default {
       if (this.fitlerIntelligenceType === 'generative') {
         items = this.intelligencesNexusAI.data;
       } else {
-        items = this.intelligencesFromProject.data.concat(this.intelligencesFromOrg.data.filter(
-          ({ uuid }) => !this.intelligencesFromProject.data
-            .some(intelligenceFromProject => uuid === intelligenceFromProject.uuid)
-        ))
+        items = this.intelligencesFromProject.data.concat(
+          this.intelligencesFromOrg.data.filter(
+            ({ uuid }) =>
+              !this.intelligencesFromProject.data.some(
+                (intelligenceFromProject) =>
+                  uuid === intelligenceFromProject.uuid,
+              ),
+          ),
+        );
       }
 
-      return items.filter(intelligence => {
+      return items.filter((intelligence) => {
         if (this.filterIntelligenceName) {
           return String(intelligence.name)
             .toLocaleLowerCase()
@@ -229,31 +253,41 @@ export default {
     },
 
     isLoading() {
-      return this.intelligencesFromProject.status === 'loading'
-        || this.intelligencesFromOrg.status === 'loading'
-        || this.intelligencesNexusAI.status === 'loading';
+      return (
+        this.intelligencesFromProject.status === 'loading' ||
+        this.intelligencesFromOrg.status === 'loading' ||
+        this.intelligencesNexusAI.status === 'loading'
+      );
     },
 
     isListEmpty() {
       if (this.fitlerIntelligenceType === 'generative') {
-        return this.intelligencesNexusAI.status === 'complete'
-          && this.intelligences.length === 0;
+        return (
+          this.intelligencesNexusAI.status === 'complete' &&
+          this.intelligences.length === 0
+        );
       }
 
-      return this.intelligencesFromProject.status === 'complete'
-        && this.intelligencesFromOrg.status === 'complete'
-        && this.intelligences.length === 0;
+      return (
+        this.intelligencesFromProject.status === 'complete' &&
+        this.intelligencesFromOrg.status === 'complete' &&
+        this.intelligences.length === 0
+      );
     },
   },
 
   watch: {
     isShowingEndOfList() {
       if (this.isShowingEndOfList) {
-        if (this.fitlerIntelligenceType === 'classification'
-          && this.intelligencesFromOrg.status !== 'complete') {
+        if (
+          this.fitlerIntelligenceType === 'classification' &&
+          this.intelligencesFromOrg.status !== 'complete'
+        ) {
           this.loadIntelligencesFromOrg();
-        } else if (this.fitlerIntelligenceType === 'generative'
-          && this.intelligencesNexusAI.status !== 'complete') {
+        } else if (
+          this.fitlerIntelligenceType === 'generative' &&
+          this.intelligencesNexusAI.status !== 'complete'
+        ) {
           this.loadIntelligencesNexusAI();
         }
       }
@@ -263,12 +297,16 @@ export default {
       immediate: true,
 
       handler() {
-        if (this.fitlerIntelligenceType === 'classification'
-          && this.intelligencesFromProject.status === null) {
+        if (
+          this.fitlerIntelligenceType === 'classification' &&
+          this.intelligencesFromProject.status === null
+        ) {
           this.loadIntelligencesFromProject();
           this.loadIntelligencesFromOrg();
-        } else if (this.fitlerIntelligenceType === 'generative'
-          && this.intelligencesNexusAI.firstLoad) {
+        } else if (
+          this.fitlerIntelligenceType === 'generative' &&
+          this.intelligencesNexusAI.firstLoad
+        ) {
           this.intelligencesNexusAI.firstLoad = false;
           this.loadIntelligencesNexusAI();
         }
@@ -280,8 +318,9 @@ export default {
     ...mapActions(['searchProjectWithFlow', 'getRepositories']),
 
     removed(intelligenceUuid) {
-      this.intelligencesNexusAI.data = this.intelligencesNexusAI.data
-        .filter(({ uuid }) => intelligenceUuid !== uuid);
+      this.intelligencesNexusAI.data = this.intelligencesNexusAI.data.filter(
+        ({ uuid }) => intelligenceUuid !== uuid,
+      );
     },
 
     async loadIntelligencesFromProject() {
@@ -289,18 +328,22 @@ export default {
         this.intelligencesFromProject.status = 'loading';
 
         const { data } = await this.searchProjectWithFlow({
-          projectUUID: this.$store.getters.getProjectSelected
+          projectUUID: this.$store.getters.getProjectSelected,
         });
 
         this.intelligencesFromProject.data = data;
 
-        localStorage.setItem('in_project',
-          JSON.stringify(data.map(({ uuid, version_default }) => ({
-            repository_uuid: uuid,
-            repository_version: version_default.id,
-            project_uuid: this.$store.getters.getProjectSelected,
-            organization: this.$store.getters.getOrgSelected,
-          }))));
+        localStorage.setItem(
+          'in_project',
+          JSON.stringify(
+            data.map(({ uuid, version_default }) => ({
+              repository_uuid: uuid,
+              repository_version: version_default.id,
+              project_uuid: this.$store.getters.getProjectSelected,
+              organization: this.$store.getters.getOrgSelected,
+            })),
+          ),
+        );
       } finally {
         this.intelligencesFromProject.status = 'complete';
       }
@@ -319,7 +362,9 @@ export default {
 
         this.intelligencesFromOrg.data = [
           ...this.intelligencesFromOrg.data,
-          ...data.results.filter(({ repository_type }) => repository_type === 'classifier')
+          ...data.results.filter(
+            ({ repository_type }) => repository_type === 'classifier',
+          ),
         ];
 
         this.intelligencesFromOrg.next = data.next;
@@ -361,21 +406,21 @@ export default {
     },
 
     onTabSelected(event) {
-      this.howTabIsShown = event
-      this.update = !this.update
+      this.howTabIsShown = event;
+      this.update = !this.update;
     },
     createNewIntelligence() {
       // this.$router.push({
       //   name: 'new',
       // });
-      this.openModal = true
+      this.openModal = true;
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .home__header__icon ::v-deep .avatar-icon {
   background-color: $unnnic-color-weni-100;
@@ -394,7 +439,10 @@ export default {
 .intelligences-list {
   display: grid;
   gap: $unnnic-spacing-sm;
-  grid-template-columns: repeat(auto-fill, minmax(20.625 * $unnnic-font-size, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(20.625 * $unnnic-font-size, 1fr)
+  );
 
   &--empty {
     padding-top: $unnnic-spacing-sm;
@@ -438,34 +486,35 @@ export default {
     }
   }
 
-    &__header{
-      padding: $unnnic-inline-md;
-      padding-bottom: $unnnic-spacing-stack-sm;
-      margin-bottom: $unnnic-spacing-lg;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: $unnnic-spacing-sm;
+  &__header {
+    padding: $unnnic-inline-md;
+    padding-bottom: $unnnic-spacing-stack-sm;
+    margin-bottom: $unnnic-spacing-lg;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $unnnic-spacing-sm;
 
-      .create-ia-button {
-        min-width: 18.75 * $unnnic-font-size;
-      }
-
-      .description {
-        margin-top: $unnnic-spacing-stack-sm;
-
-        ::v-deep a {
-          text-decoration: underline;
-          text-underline-offset: 3px;
-          font-weight: $unnnic-font-weight-bold;
-          color: inherit;
-        }
-      }
+    .create-ia-button {
+      min-width: 18.75 * $unnnic-font-size;
     }
 
-    &__intelligences {
-      margin: $unnnic-spacing-stack-sm $unnnic-spacing-stack-md $unnnic-spacing-stack-md;
+    .description {
+      margin-top: $unnnic-spacing-stack-sm;
+
+      ::v-deep a {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        font-weight: $unnnic-font-weight-bold;
+        color: inherit;
+      }
     }
+  }
+
+  &__intelligences {
+    margin: $unnnic-spacing-stack-sm $unnnic-spacing-stack-md
+      $unnnic-spacing-stack-md;
+  }
 }
 .home-loading {
   display: flex;
@@ -504,18 +553,18 @@ export default {
 
 .filters {
   margin-bottom: $unnnic-spacing-md;
-    }
-    ::v-deep {
-      // .text-input.size--sm .icon-right {
-      //   top: 15px;
-      // }
+}
+::v-deep {
+  // .text-input.size--sm .icon-right {
+  //   top: 15px;
+  // }
 
-      .input.size-md {
-        height: auto;
-      }
+  .input.size-md {
+    height: auto;
+  }
 
-      .unnnic-modal.type-default .container {
-        max-width: 750px;
-      }
-    }
+  .unnnic-modal.type-default .container {
+    max-width: 750px;
+  }
+}
 </style>

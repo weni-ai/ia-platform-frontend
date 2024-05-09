@@ -1,27 +1,27 @@
 <template>
-  <div
-    class="version-test-item">
-    <router-link :to="resultRouterParams">
-      <div
-        class="version-test-item__wrapper">
+  <div class="version-test-item">
+    <RouterLink :to="resultRouterParams">
+      <div class="version-test-item__wrapper">
         <div class="version-test-item__wrapper__info">
           <strong class="version-test-item__wrapper__info__item">
             {{ $t('webapp.result.test') }} #{{ version }}
           </strong>
-          <language-badge
+          <LanguageBadge
             :language="language"
             class="version-test-item__wrapper__info__item"
-            main/>
+            main
+          />
           <small class="version-test-item__wrapper__info__item">
-            {{ created_at | moment('from') }}</small>
+            {{ created_at | moment('from') }}</small
+          >
         </div>
         <div class="version-test-item__wrapper__links">
-          <router-link :to="resultRouterParams">
+          <RouterLink :to="resultRouterParams">
             <a> {{ $t('webapp.result.load_result') }} </a>
-          </router-link>
+          </RouterLink>
         </div>
       </div>
-    </router-link>
+    </RouterLink>
   </div>
 </template>
 
@@ -65,9 +65,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/utilities.scss';
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/utilities.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .version-test-item {
   margin: 1rem 0;
@@ -77,7 +77,7 @@ export default {
 
   &__wrapper {
     display: flex;
-    margin: .5rem;
+    margin: 0.5rem;
     align-items: center;
     cursor: pointer;
 
@@ -86,12 +86,12 @@ export default {
       align-self: center;
 
       &__item {
-        margin: 0 .3rem;
+        margin: 0 0.3rem;
       }
     }
 
     &__links {
-      margin: .5rem;
+      margin: 0.5rem;
     }
   }
 }

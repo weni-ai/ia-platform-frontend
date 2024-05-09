@@ -2,14 +2,19 @@
   <div class="example-entities__wrapper">
     <div
       v-if="entitiesList.length > 0"
-      class="example-entities">
-      <entity-tag
+      class="example-entities"
+    >
+      <EntityTag
         v-for="entity in uniqueEntities"
         :key="entity.entity"
-        :color-class="colorOnly && colorOnly !== entity.entity ? 'entity-selected' : entity.class"
+        :colorClass="
+          colorOnly && colorOnly !== entity.entity
+            ? 'entity-selected'
+            : entity.class
+        "
         :group="entity.group"
         :highlighted="entity.entity === highlighted"
-        :entity-name="entity.entity"
+        :entityName="entity.entity"
         @mouseenter.native.stop="$emit('update:highlighted', entity.entity)"
         @mouseleave.native.stop="$emit('update:highlighted', null)"
       />
@@ -18,7 +23,8 @@
       <div class="level-left">
         <div
           v-if="intent"
-          class="level-item has-text-grey">
+          class="level-item has-text-grey"
+        >
           <strong>{{ $t('webapp.evaluate.intent') }}:&nbsp;</strong>
           <span>{{ intent }}</span>
         </div>
@@ -38,7 +44,7 @@ export default {
   props: {
     entitiesList: {
       type: Array,
-      default: () => ([]),
+      default: () => [],
     },
     intent: {
       type: String,
@@ -73,14 +79,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import '~@/assets/scss/utilities.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/utilities.scss';
 
 .example {
-  $radius: .5rem;
+  $radius: 0.5rem;
 
-  margin: 1rem .5rem;
+  margin: 1rem 0.5rem;
   overflow: visible;
   background-color: $white-bis;
   border-radius: $radius;
@@ -91,7 +97,7 @@ export default {
     margin-bottom: 4px;
     background-color: $white-ter;
     border-radius: $radius;
-    transition: box-shadow .2s ease;
+    transition: box-shadow 0.2s ease;
 
     &__main {
       flex-grow: 1;
@@ -105,11 +111,11 @@ export default {
 
   &-entities,
   &-infos {
-    padding: .25rem .5rem .3rem 1rem;
+    padding: 0.25rem 0.5rem 0.3rem 1rem;
   }
 
   &-entities {
-      display: inline-flex;
+    display: inline-flex;
 
     &__wrapper {
       margin: 0 0 0 0.8rem;
@@ -121,7 +127,7 @@ export default {
     }
 
     > * {
-      margin: 0 .5rem 0 0;
+      margin: 0 0.5rem 0 0;
 
       &:last-child {
         margin: 0;

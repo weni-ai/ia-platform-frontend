@@ -2,50 +2,119 @@
 <template>
   <div class="log-loading">
     <div class="log-loading__header">
-      <unnnic-skeleton-loading class="log-loading__title" tag="div" width="40px" height="40px" />
-      <unnnic-skeleton-loading tag="div" width="189px" height="40px" />
-      <unnnic-skeleton-loading class="log-loading__button" tag="div" width="261px" height="50px" />
+      <UnnnicSkeletonLoading
+        class="log-loading__title"
+        tag="div"
+        width="40px"
+        height="40px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="189px"
+        height="40px"
+      />
+      <UnnnicSkeletonLoading
+        class="log-loading__button"
+        tag="div"
+        width="261px"
+        height="50px"
+      />
     </div>
     <div class="log-loading__description">
       <div>
-        <unnnic-skeleton-loading tag="div" width="507px" height="17px" />
-        <unnnic-skeleton-loading tag="div" width="507px" height="17px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="507px"
+          height="17px"
+        />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="507px"
+          height="17px"
+        />
       </div>
     </div>
 
-    <unnnic-divider />
+    <UnnnicDivider />
 
     <div class="log-loading__fields">
       <div>
-        <unnnic-skeleton-loading tag="div" width="384px" height="45px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="384px"
+          height="45px"
+        />
       </div>
       <div class="log-loading__fields__selects">
-        <unnnic-skeleton-loading tag="div" width="227px" height="45px" />
-        <unnnic-skeleton-loading tag="div" width="227px" height="45px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="227px"
+          height="45px"
+        />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="227px"
+          height="45px"
+        />
       </div>
     </div>
 
     <div class="log-loading__table">
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
-      <unnnic-skeleton-loading tag="div" width="100%" height="60px" />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
+      <UnnnicSkeletonLoading
+        tag="div"
+        width="100%"
+        height="60px"
+      />
     </div>
 
-    <unnnic-divider />
+    <UnnnicDivider />
 
     <div class="log-loading__fields">
       <div>
-        <unnnic-skeleton-loading tag="div" width="126px" height="36px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="126px"
+          height="36px"
+        />
       </div>
       <div class="log-loading__fields__selects">
-        <unnnic-skeleton-loading tag="div" width="300px" height="36px" />
+        <UnnnicSkeletonLoading
+          tag="div"
+          width="300px"
+          height="36px"
+        />
       </div>
     </div>
-
   </div>
 </template>
 
@@ -54,8 +123,8 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .log-loading {
   display: flex;
@@ -84,7 +153,6 @@ export default {};
     margin-left: auto;
     align-self: end;
   }
-
 
   &__fields {
     display: flex;

@@ -2,29 +2,33 @@
   <div class="repository-new-version-modal">
     <div class="repository-new-version-modal__container">
       <form @submit.prevent="onSubmit">
-        <b-field :label="$t('webapp.versions.title')">
-          <b-input
+        <BField :label="$t('webapp.versions.title')">
+          <BInput
             v-model="name"
             :maxlength="maxLength"
-            :has-counter="false"
+            :hasCounter="false"
             @input="onNameChange"
           />
-        </b-field>
-        <b-field :label="$t('webapp.versions.version')">
-          <b-input
+        </BField>
+        <BField :label="$t('webapp.versions.version')">
+          <BInput
             :placeholder="version.name"
-            disabled />
-        </b-field>
+            disabled
+          />
+        </BField>
         <div class="field repository-new-version-modal__button-container">
-          <b-button
+          <BButton
             type="is-light"
-            @click="onClose()">{{ $t('webapp.versions.cancel') }}</b-button>
-          <b-button
+            @click="onClose()"
+            >{{ $t('webapp.versions.cancel') }}</BButton
+          >
+          <BButton
             :loading="loading"
             :disabled="!canSubmit"
             type="is-primary"
-            native-type="submit"
-          >{{ $t('webapp.versions.add_new') }}</b-button>
+            nativeType="submit"
+            >{{ $t('webapp.versions.add_new') }}</BButton
+          >
         </div>
       </form>
     </div>
@@ -32,7 +36,6 @@
 </template>
 
 <script>
-
 import { mapActions } from 'vuex';
 import { formatters } from '@/utils/index';
 
@@ -92,7 +95,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@/assets/scss/utilities.scss";
+@import '@/assets/scss/utilities.scss';
 
 .repository-new-version-modal {
   &__container {

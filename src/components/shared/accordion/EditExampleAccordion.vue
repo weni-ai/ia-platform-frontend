@@ -1,13 +1,19 @@
 <template>
-  <div v-if="!edit" class="example">
+  <div
+    v-if="!edit"
+    class="example"
+  >
     <div>
       <div>
         {{ text }}
       </div>
-      <div class="example__intent" v-html="`${ $t('webapp.example.intent') + ': ' + intent}`" />
+      <div
+        class="example__intent"
+        v-html="`${$t('webapp.example.intent') + ': ' + intent}`"
+      />
     </div>
     <div>
-      <unnnic-button
+      <UnnnicButton
         size="small"
         type="secondary"
         iconCenter="pencil-write-1"
@@ -16,86 +22,93 @@
     </div>
   </div>
   <form
-      v-else
-      autocomplete="off"
-      class="columns wrapper is-vcentered is-2 is-flex-wrap-wrap mt-3 mb-0 example"
-      @submit.prevent="onSubmit()"
-      @keyup.enter="onEnter()"
-    >
-      <div class="column is-12 p-0">
-        <b-field
-          :message="errors.text || errors.language"
-        >
-          <p
-              slot="label"
-              class="unnnic-form__label"
-              v-html="$t('webapp.example.sentence')" />
-          <example-text-with-highlighted-entities-input
-            class="textInput"
-            ref="textInput"
-            v-model="text"
-            :entities="entities"
-            :placeholder="$t('webapp.example.enter_sentence')"
-            size="normal"
-            @textSelected="setTextSelected($event)"
-            @entityEdited="onEditEntity($event)"
-            @entityAdded="onEntityAdded()"
-          />
-        </b-field>
-      </div>
-      <div class="column is-12 mt-2 p-0">
-        <b-field
-          id="tour-training-step-4"
-          :is-previous-disabled="true"
-          :is-step-blocked="intent === ''"
-          :message="errors.intent">
-         <unnnic-autocomplete
-            :label="$t('webapp.example.intent')"
-            v-model="intent"
-            :data="optionsIntents"
-            :placeholder="$t('webapp.example.intent')"
-            :openWithFocus="true"
-            @focus="onInputClick('intent')"
-            @blur="onInputClick('intent')"
-            :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
-            @click.native="hideDropdown = false"
-            :class="hideDropdown ? 'hidden' : ''"
-            @input="intent = intentFormatters(intent)"
-          />
-        </b-field>
-      </div>
-      <div class="column is-12 mt-4 p-0">
-        <b-field class="entities-wrapper" :message="errors.entities">
-          <new-entities-input
-            ref="entitiesInput"
-            v-model="entities"
-            :repository="repository"
-            :text="text"
-            :text-selected="textSelected"
-            :available-entities="entitiesList"
-            :available-labels="availableLabels"
-            :show-hint="false"
-            @entityAdded="onEntityAdded()"
-          />
-        </b-field>
-      </div>
-      <div class="column p-0 mt-4 is-flex is-justify-content-space-between">
-          <unnnic-button
-            class="mr-4 example__edit-button"
-            type="tertiary"
-            size="small"
-            @click.prevent.stop="cancelEditSentence">
-            {{ $t('webapp.trainings.cancel_button') }}
-          </unnnic-button>
-          <unnnic-button
-            type="secondary"
-            size="small"
-            class="example__edit-button"
-            @click.prevent.stop="saveSentence">
-              {{ $t('webapp.trainings.save_button') }}
-          </unnnic-button>
-        </div>
-    </form>
+    v-else
+    autocomplete="off"
+    class="columns wrapper is-vcentered is-2 is-flex-wrap-wrap mt-3 mb-0 example"
+    @submit.prevent="onSubmit()"
+    @keyup.enter="onEnter()"
+  >
+    <div class="column is-12 p-0">
+      <BField :message="errors.text || errors.language">
+        <p
+          slot="label"
+          class="unnnic-form__label"
+          v-html="$t('webapp.example.sentence')"
+        />
+        <ExampleTextWithHighlightedEntitiesInput
+          class="textInput"
+          ref="textInput"
+          v-model="text"
+          :entities="entities"
+          :placeholder="$t('webapp.example.enter_sentence')"
+          size="normal"
+          @textSelected="setTextSelected($event)"
+          @entityEdited="onEditEntity($event)"
+          @entityAdded="onEntityAdded()"
+        />
+      </BField>
+    </div>
+    <div class="column is-12 mt-2 p-0">
+      <BField
+        id="tour-training-step-4"
+        :isPreviousDisabled="true"
+        :isStepBlocked="intent === ''"
+        :message="errors.intent"
+      >
+        <UnnnicAutocomplete
+          :label="$t('webapp.example.intent')"
+          v-model="intent"
+          :data="optionsIntents"
+          :placeholder="$t('webapp.example.intent')"
+          :openWithFocus="true"
+          @focus="onInputClick('intent')"
+          @blur="onInputClick('intent')"
+          :iconRight="
+            isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'
+          "
+          @click.native="hideDropdown = false"
+          :class="hideDropdown ? 'hidden' : ''"
+          @input="intent = intentFormatters(intent)"
+        />
+      </BField>
+    </div>
+    <div class="column is-12 mt-4 p-0">
+      <BField
+        class="entities-wrapper"
+        :message="errors.entities"
+      >
+        <NewEntitiesInput
+          ref="entitiesInput"
+          v-model="entities"
+          :repository="repository"
+          :text="text"
+          :textSelected="textSelected"
+          :availableEntities="entitiesList"
+          :availableLabels="availableLabels"
+          :showHint="false"
+          @entityAdded="onEntityAdded()"
+        />
+      </BField>
+    </div>
+    <div class="column p-0 mt-4 is-flex is-justify-content-space-between">
+      <UnnnicButton
+        class="mr-4 example__edit-button"
+        type="tertiary"
+        size="small"
+        @click.prevent.stop="cancelEditSentence"
+      >
+        {{ $t('webapp.trainings.cancel_button') }}
+      </UnnnicButton>
+      <UnnnicButton
+        type="secondary"
+        size="small"
+        class="example__edit-button"
+        @click.prevent.stop="saveSentence"
+      >
+        {{ $t('webapp.trainings.save_button') }}
+      </UnnnicButton>
+    </div>
+  </form>
 </template>
 
 <script>
@@ -132,12 +145,13 @@ export default {
       allEntitiesInput: [],
       edit: false,
       isIntentInputActive: false,
-      hideDropdown: true
+      hideDropdown: true,
     };
   },
   computed: {
     addEntityHelpText() {
-      if (this.textSelected === null) return this.$t('webapp.trainings.select_text');
+      if (this.textSelected === null)
+        return this.$t('webapp.trainings.select_text');
       return this.entityButtonText;
     },
     allEntities() {
@@ -145,15 +159,18 @@ export default {
     },
     filterIntents() {
       if (this.intents !== null) {
-        return this.repository.intents_list.filter(intent => intent
-          .toString()
-          .toLowerCase()
-          .indexOf(this.intent.toLowerCase()) >= 0);
+        return this.repository.intents_list.filter(
+          (intent) =>
+            intent
+              .toString()
+              .toLowerCase()
+              .indexOf(this.intent.toLowerCase()) >= 0,
+        );
       }
       return [];
     },
     optionsIntents() {
-      return this.filterIntents.map(intent => intent);
+      return this.filterIntents.map((intent) => intent);
     },
   },
   watch: {
@@ -175,72 +192,72 @@ export default {
   },
   methods: {
     editSentence() {
-      this.edit = true
+      this.edit = true;
     },
     onInputClick(target) {
-      if (target === 'intent') this.isIntentInputActive = !this.isIntentInputActive
+      if (target === 'intent')
+        this.isIntentInputActive = !this.isIntentInputActive;
     },
     cancelEditSentence() {
-      this.$emit('cancel')
-      this.edit = false
+      this.$emit('cancel');
+      this.edit = false;
     },
     saveSentence() {
-      this.cancelEditSentence()
+      this.cancelEditSentence();
     },
-  }
+  },
 };
 </script>
 
 <style scoped lang="scss">
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
 .icon {
   color: $color-grey-dark;
 }
-.input-custom-style{
+.input-custom-style {
   max-height: 150px;
   max-width: 100px;
 }
 .edit-sentence {
-    width: 100%;
-    margin: 0 1rem 1rem 0;
+  width: 100%;
+  margin: 0 1rem 1rem 0;
 
-    &__input {
-        margin-right: 0.5rem;
-        &__label {
-            font-size: 12px;
-        }
-    }
-
-      &__icon {
-        background-color: $color-grey-dark;
-        color: white;
-      }
-
-    &__icon-container {
-
-      > * {
-        margin-left: 0.25rem;
-      }
-
-      .icon {
-        margin-top: 1.75rem;
-      }
-
-      &--intent {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        .icon {
-          margin-top: 0;
-        }
+  &__input {
+    margin-right: 0.5rem;
+    &__label {
+      font-size: 12px;
     }
   }
-    &__options{
+
+  &__icon {
+    background-color: $color-grey-dark;
+    color: white;
+  }
+
+  &__icon-container {
+    > * {
+      margin-left: 0.25rem;
+    }
+
+    .icon {
+      margin-top: 1.75rem;
+    }
+
+    &--intent {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      .icon {
+        margin-top: 0;
+      }
+    }
+  }
+  &__options {
     width: 40rem;
   }
 }
-.custom-accordion{
+.custom-accordion {
   max-width: 100%;
 }
 .example {
@@ -250,29 +267,29 @@ export default {
   padding: 16px 24px;
   border-radius: 8px;
   background: #fff;
-  border: 1px solid #E2E6ED;
+  border: 1px solid #e2e6ed;
   font-size: 14px;
-  color: #3B414D;
+  color: #3b414d;
   text-align: left;
 
   &:not(:first-child) {
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 
   &__intent {
     font-family: 'Lato';
     font-size: 12px;
-    color: #67738B;
+    color: #67738b;
   }
 
-  &__edit-button{
-      width: 50%;
-    }
+  &__edit-button {
+    width: 50%;
+  }
 }
 .modal-background {
-    background-color: transparent;
-  }
-  .wrapper {
+  background-color: transparent;
+}
+.wrapper {
   margin: 1rem 0;
 }
 
@@ -281,15 +298,16 @@ export default {
   padding-right: 0;
 }
 
-.textarea, .input {
-  border: .0625rem solid #e2e6ed;
-  border-radius: .25rem;
+.textarea,
+.input {
+  border: 0.0625rem solid #e2e6ed;
+  border-radius: 0.25rem;
   color: #4e5666;
   font-weight: 400;
-  font-size: .875rem;
+  font-size: 0.875rem;
   box-sizing: border-box;
   width: 100%;
-  padding: .75rem 1rem;
+  padding: 0.75rem 1rem;
   height: 48px;
 }
 
@@ -302,21 +320,21 @@ export default {
 }
 .entities-wrapper {
   padding: 0 1rem;
-  border: 1px solid #E2E6ED;
+  border: 1px solid #e2e6ed;
   border-radius: 8px;
 }
 .example-txt-w-highlighted-entities__entity__before {
-  font-size: .875rem;
+  font-size: 0.875rem;
   border: 1px solid transparent;
 }
 .example-txt-w-highlighted-entities__entity__text {
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
-.hidden .unnnic-autocomplete__container-list{
+.hidden .unnnic-autocomplete__container-list {
   display: none;
 }
 .column {
-  padding: .5rem;
+  padding: 0.5rem;
 }
 .dropdown {
   display: block;
@@ -324,12 +342,13 @@ export default {
 .example-txt-w-highlighted-entities__entity {
   padding: 0.6rem 0.9rem !important;
 }
-.input:focus, .textarea:focus {
+.input:focus,
+.textarea:focus {
   box-shadow: none !important;
   border-color: #9caccc !important;
 }
 .self-adjust {
   min-height: 48px !important;
-  padding: .75rem 1rem !important;
+  padding: 0.75rem 1rem !important;
 }
 </style>

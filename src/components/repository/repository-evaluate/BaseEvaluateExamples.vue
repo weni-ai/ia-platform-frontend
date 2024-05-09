@@ -1,20 +1,25 @@
 <template>
   <div class="base-example-evaluate">
-    <new-evaluate-example
+    <NewEvaluateExample
       :language="filterByLanguage"
       :intents="repository.intents_list"
       @created="onEvaluateExampleCreated()"
-      @eventStep="dispatchNextEvent()"/>
-    <hr class="base-example-evaluate__divider">
-    <h2 class="base-example-evaluate__title">{{ $t('webapp.trainings.sentences_list') }}</h2>
-    <filter-evaluate-example
+      @eventStep="dispatchNextEvent()"
+    />
+    <hr class="base-example-evaluate__divider" />
+    <h2 class="base-example-evaluate__title">
+      {{ $t('webapp.trainings.sentences_list') }}
+    </h2>
+    <FilterEvaluateExample
       :intents="repository.intents_list"
       :entities="repository.entities"
-      @querystringformatted="onSearch($event)"/>
-    <evaluate-example-list
+      @querystringformatted="onSearch($event)"
+    />
+    <EvaluateExampleList
       :query="query"
       :update="update"
-      @deleted="onEvaluateExampleDeleted"/>
+      @deleted="onEvaluateExampleDeleted"
+    />
   </div>
 </template>
 
@@ -47,7 +52,7 @@ export default {
   },
   computed: {
     ...mapState({
-      repository: state => state.Repository.selectedRepository,
+      repository: (state) => state.Repository.selectedRepository,
     }),
   },
   watch: {
@@ -91,16 +96,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
 .base-example-evaluate {
-
-  &__title{
-      font-size: 1.75rem;
-      font-weight: $font-weight-medium;
-      color: $color-fake-black;
-      margin-bottom: $between-title-subtitle;
+  &__title {
+    font-size: 1.75rem;
+    font-weight: $font-weight-medium;
+    color: $color-fake-black;
+    margin-bottom: $between-title-subtitle;
   }
 
   &__divider {

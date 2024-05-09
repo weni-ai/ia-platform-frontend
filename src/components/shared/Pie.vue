@@ -1,33 +1,15 @@
 <template>
   <div
     :data-percent="validPercent"
-    class="pie">
-    <div class="pie-percent">{{ (percent/100) | percent }}</div>
+    class="pie"
+  >
+    <div class="pie-percent">{{ (percent / 100) | percent }}</div>
   </div>
 </template>
 
 <script>
 const validsPercents = [
-  0,
-  5,
-  10,
-  15,
-  20,
-  25,
-  30,
-  35,
-  40,
-  45,
-  50,
-  55,
-  60,
-  65,
-  70,
-  75,
-  80,
-  85,
-  90,
-  95,
+  0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95,
   100,
 ];
 
@@ -51,7 +33,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/utilities.scss';
+@import '@/assets/scss/utilities.scss';
 
 $pie-size: 100px;
 $pie-border: 8px;
@@ -62,7 +44,7 @@ $pie-border: 8px;
   width: $pie-size;
   height: $pie-size;
   border-radius: 50%;
-  background-color: #CEEDE9;
+  background-color: #ceede9;
   background-image: linear-gradient(to right, transparent 50%, $primary 0);
   position: relative;
 
@@ -89,8 +71,8 @@ $pie-border: 8px;
     transform-origin: left;
   }
 
-  $valid-percents: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50,
-  55, 60, 65, 70, 75, 80, 85, 90, 95, 100;
+  $valid-percents: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75,
+    80, 85, 90, 95, 100;
   @each $valid-percent in $valid-percents {
     &[data-percent='#{$valid-percent}']:before {
       @if $valid-percent < 10 {
@@ -104,9 +86,9 @@ $pie-border: 8px;
         transform-origin: left;
 
         @if $valid-percent-half < 10 {
-          transform: rotate(#{'.0' + $valid-percent-half +'turn'});
+          transform: rotate(#{'.0' + $valid-percent-half + 'turn'});
         } @else {
-          transform: rotate(#{'.' + $valid-percent-half +'turn'});
+          transform: rotate(#{'.' + $valid-percent-half + 'turn'});
         }
       }
     }

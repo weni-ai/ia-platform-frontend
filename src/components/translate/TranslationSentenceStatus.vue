@@ -1,6 +1,6 @@
 <template>
   <div class="translation-sentence-status">
-    <translation-stats-card
+    <TranslationStatsCard
       v-for="status in statusInfo"
       :key="status.key"
       :count="status.count || 0"
@@ -10,7 +10,8 @@
       clickable
       size="medium"
       class="translation-sentence-status__card"
-      @click="onClick(status.key, status.query)"/>
+      @click="onClick(status.key, status.query)"
+    />
   </div>
 </template>
 
@@ -53,7 +54,10 @@ export default {
       update: null,
       statusData: {
         sentences: {
-          key: 'all', label: this.$t('webapp.translate.sentences'), count: null, query: { },
+          key: 'all',
+          label: this.$t('webapp.translate.sentences'),
+          count: null,
+          query: {},
         },
         translated: {
           key: 'translated',
@@ -102,10 +106,11 @@ export default {
     clearTimeout(this.update);
   },
   methods: {
-    ...mapActions(['searchExamples',
-      'searchExamplesExternal']),
+    ...mapActions(['searchExamples', 'searchExamplesExternal']),
     onClick(key, query) {
-      const sendQuery = this.externalToken ? query : { language: this.language, ...query };
+      const sendQuery = this.externalToken
+        ? query
+        : { language: this.language, ...query };
       this.$emit('search', { key, query: sendQuery });
       this.active = key;
     },
@@ -114,12 +119,15 @@ export default {
       this.$emit('search', { key: 'all', query: {} });
     },
     async getStatusData() {
-      if (!(this.externalToken || (this.repositoryUuid && this.version))) return;
+      if (!(this.externalToken || (this.repositoryUuid && this.version)))
+        return;
       Object.entries(this.statusData).forEach(([key, value]) => {
         try {
-          this.searchExamplesAction(value.query)
-            .then(list => list.updateItems(1)
-              .then(() => { this.statusData[key].count = list.total; }));
+          this.searchExamplesAction(value.query).then((list) =>
+            list.updateItems(1).then(() => {
+              this.statusData[key].count = list.total;
+            }),
+          );
         } catch (e) {
           this.statusData[key].count = null;
         }
@@ -145,18 +153,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
-    .translation-sentence-status {
-        display: flex;
-        flex-wrap: wrap;
-        > * {
-            margin-right: 1rem;
-            margin-bottom: 1rem;
-        }
-        &__card {
-            border: 1px solid $color-border;
-            padding: 1rem 3rem;
-        }
-    }
+.translation-sentence-status {
+  display: flex;
+  flex-wrap: wrap;
+  > * {
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+  }
+  &__card {
+    border: 1px solid $color-border;
+    padding: 1rem 3rem;
+  }
+}
 </style>

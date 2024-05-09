@@ -1,25 +1,29 @@
 <template>
   <div class="token-item">
     <div class="token-item__info">
-      <language-badge
+      <LanguageBadge
         :language="language"
-        class="token-item__badge" />
+        class="token-item__badge"
+      />
       <div class="token-item__version">{{ repository_version__name }}</div>
     </div>
-    <b-field class="token-item__field">
-      <b-input
+    <BField class="token-item__field">
+      <BInput
         :value="url"
         expanded
-        readonly />
-      <b-button
+        readonly
+      />
+      <BButton
         class="token-item__button"
-        icon-right="content-copy"
-        @click="copy()" />
-      <b-button
+        iconRight="content-copy"
+        @click="copy()"
+      />
+      <BButton
         class="token-item__button"
-        icon-right="close-thick"
-        @click="deleteToken()" />
-    </b-field>
+        iconRight="close-thick"
+        @click="deleteToken()"
+      />
+    </BField>
   </div>
 </template>
 
@@ -70,31 +74,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
-    .token-item {
-        padding: 0.5rem 0;
-        display: grid;
-        grid-template-columns: 1fr 2.5fr;
+.token-item {
+  padding: 0.5rem 0;
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
 
-        &__info {
-          display: flex;
-          align-items: center;
-          > * {
-            margin-right: 1rem;
-          }
-        }
-
-        &__version {
-          text-overflow: ellipsis;
-          overflow: hidden;
-          max-width: 5rem;
-        }
-
-        &__button {
-            color: $color-white;
-            background-color: $color-grey;
-            margin-left: 0.5rem;
-        }
+  &__info {
+    display: flex;
+    align-items: center;
+    > * {
+      margin-right: 1rem;
     }
+  }
+
+  &__version {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 5rem;
+  }
+
+  &__button {
+    color: $color-white;
+    background-color: $color-grey;
+    margin-left: 0.5rem;
+  }
+}
 </style>

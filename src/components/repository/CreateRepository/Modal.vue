@@ -9,32 +9,45 @@
         :class="['content', { 'with-validation': data.validate }]"
       >
         <div class="icon">
-          <unnnic-icon-svg
+          <UnnnicIconSvg
             :icon="data.icon"
             :scheme="data.scheme"
             size="xl"
-          ></unnnic-icon-svg>
+          ></UnnnicIconSvg>
         </div>
 
         <div class="title">{{ data.title }}</div>
 
-        <div class="description" v-html="data.description"></div>
+        <div
+          class="description"
+          v-html="data.description"
+        ></div>
 
-        <div v-if="data.validate" class="confirm-text">
-          <unnnic-input
+        <div
+          v-if="data.validate"
+          class="confirm-text"
+        >
+          <UnnnicInput
             :placeholder="data.validate.placeholder"
             v-model="confirmText"
           >
-            <span slot="label" v-html="data.validate.label" />
-          </unnnic-input>
+            <span
+              slot="label"
+              v-html="data.validate.label"
+            />
+          </UnnnicInput>
         </div>
 
         <div class="actions">
-          <unnnic-button type="tertiary" @click="close" :disabled="loading">
+          <UnnnicButton
+            type="tertiary"
+            @click="close"
+            :disabled="loading"
+          >
             {{ data.cancelText }}
-          </unnnic-button>
+          </UnnnicButton>
 
-          <unnnic-button
+          <UnnnicButton
             type="primary"
             @click="data.onConfirm(justClose, { setLoading })"
             :class="['button', buttonType]"
@@ -42,22 +55,27 @@
             :loading="loading"
           >
             {{ data.confirmText }}
-          </unnnic-button>
+          </UnnnicButton>
         </div>
       </div>
 
       <template v-else-if="type === 'alert'">
         <div class="header">
-          <unnnic-icon-svg icon="close-1" size="sm" clickable @click="close" />
+          <UnnnicIconSvg
+            icon="close-1"
+            size="sm"
+            clickable
+            @click="close"
+          />
         </div>
 
         <div class="content">
           <div class="icon">
-            <unnnic-icon-svg
+            <UnnnicIconSvg
               :icon="data.icon"
               :scheme="data.scheme"
               size="xl"
-            ></unnnic-icon-svg>
+            ></UnnnicIconSvg>
           </div>
 
           <div class="title">{{ data.title }}</div>
@@ -123,8 +141,10 @@ export default {
 
     disabled() {
       return (
-        this.data && this.data.validate && this.data.validate.text
-        && this.confirmText !== this.data.validate.text
+        this.data &&
+        this.data.validate &&
+        this.data.validate.text &&
+        this.confirmText !== this.data.validate.text
       );
     },
   },
@@ -149,13 +169,14 @@ export default {
       if (!this.isPersistent) {
         this.close();
       }
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@use 'sass:math';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .modal__bases {
   z-index: 5;
@@ -219,7 +240,7 @@ export default {
       .aspect-ratio-box {
         height: 0;
         overflow: hidden;
-        padding-top: 9 / 16 * 100%;
+        padding-top: math.div(9, 16) * 100%;
         position: relative;
       }
 

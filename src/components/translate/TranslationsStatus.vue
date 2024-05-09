@@ -1,32 +1,35 @@
 <template>
   <div>
-    <b-loading
-      :is-full-page="false"
+    <BLoading
+      :isFullPage="false"
       :active="loading"
-      :can-cancel="false" />
-    <transition-group
+      :canCancel="false"
+    />
+    <TransitionGroup
       v-if="!translationList"
       name="list"
       mode="out-in"
       class="columns is-multiline"
-      tag="div">
+      tag="div"
+    >
       <div
         v-for="{ status, language, selected } in filteredLanguagesStatus"
         :key="language"
         :ref="`status-${language}`"
         class="list-item column is-3"
-        @click="select(language)">
+        @click="select(language)"
+      >
         <div :class="{ card: true, selected }">
           <div class="card-percentage">
-            <pie :percent="status.base_translations.percentage" />
+            <Pie :percent="status.base_translations.percentage" />
           </div>
           <p class="card-language">
-            <span>{{ language|languageVerbose }}</span>
-            <flag :language="language" />
+            <span>{{ language | languageVerbose }}</span>
+            <Flag :language="language" />
           </p>
         </div>
       </div>
-    </transition-group>
+    </TransitionGroup>
   </div>
 </template>
 
@@ -34,7 +37,6 @@
 import { mapActions } from 'vuex';
 import Pie from '@/components/shared/Pie';
 import Flag from '@/components/shared/Flag';
-
 
 const components = {
   Pie,
@@ -75,20 +77,26 @@ export default {
         return [];
       }
       return Object.keys(this.languagesStatus)
-        .map(language => ({
+        .map((language) => ({
           language,
           status: this.languagesStatus[language],
           selected: this.selected === language,
         }))
-        .filter(languageStatus => (!languageStatus.status.is_base_language))
-        .sort((a, b) => (
-          a.status.base_translations.percentage
-          < b.status.base_translations.percentage));
+        .filter((languageStatus) => !languageStatus.status.is_base_language)
+        .sort(
+          (a, b) =>
+            a.status.base_translations.percentage <
+            b.status.base_translations.percentage,
+        );
     },
   },
   watch: {
-    async ownerNickname() { await this.updateTranslationsStatus(); },
-    async repositorySlug() { await this.updateTranslationsStatus(); },
+    async ownerNickname() {
+      await this.updateTranslationsStatus();
+    },
+    async repositorySlug() {
+      await this.updateTranslationsStatus();
+    },
     selected() {
       this.$emit('input', this.selected);
     },
@@ -100,9 +108,7 @@ export default {
     await this.updateTranslationsStatus();
   },
   methods: {
-    ...mapActions([
-      'getRepositoryLanguagesStatus',
-    ]),
+    ...mapActions(['getRepositoryLanguagesStatus']),
     async updateTranslationsStatus() {
       this.loading = true;
       this.languagesStatus = null;
@@ -125,35 +131,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/utilities.scss';
+@import '@/assets/scss/utilities.scss';
 
-.list-enter-active, .list-leave-active {
+.list-enter-active,
+.list-leave-active {
   transition: all 1s;
 }
-.list-enter, .list-leave-to {
+.list-enter,
+.list-leave-to {
   opacity: 0.4;
   float: bottom;
   transform: translateY(-5%);
 }
 
 .list-item:not(:last-child) {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .card {
   background-color: $white-ter;
   box-shadow: 0 0 0 rgba(0, 0, 0, 0);
   cursor: pointer;
-  transition:
-    box-shadow .2s ease,
-    background-color .2s ease;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
   border-radius: 4px;
   padding: 8px;
 
   &:hover,
   &.selected {
     background-color: white;
-    box-shadow: 0 0 8px rgba(100, 100, 100, .3);
+    box-shadow: 0 0 8px rgba(100, 100, 100, 0.3);
   }
 
   &-percentage {

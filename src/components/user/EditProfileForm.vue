@@ -85,14 +85,14 @@ export default {
       return { ...this.data, ...this.groupData };
     },
     filteredSchema() {
-      if (runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')) return this.formSchema;
+      if (runtimeVariables.get('VITE_BOTHUB_WEBAPP_PAYMENT_ENABLED')) return this.formSchema;
 
       if (!this.formSchema) return {};
       const { biography, ...schema } = this.formSchema;
       return schema;
     },
     groupSchema() {
-      if (!this.formSchema || runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')) return {};
+      if (!this.formSchema || runtimeVariables.get('VITE_BOTHUB_WEBAPP_PAYMENT_ENABLED')) return {};
       const { biography } = this.formSchema;
       return {
         biography,

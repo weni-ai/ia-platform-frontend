@@ -1,18 +1,18 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <messages :msgs="msgs" />
-    <loading v-if="!formSchema" />
-    <form-generator
+    <Messages :msgs="msgs" />
+    <Loading v-if="!formSchema" />
+    <FormGenerator
       v-if="formSchema"
       :schema="formSchema"
       v-model="data"
-      :initial-data="initialData"
+      :initialData="initialData"
       :errors="errors"
-      :show-labels="false"
-      class="field"/>
+      :showLabels="false"
+      class="field"
+    />
     <div class="field">
-      <p
-        class="passwordError">
+      <p class="passwordError">
         {{ confirmError }}
       </p>
       <div class="control buttonStyle">
@@ -20,7 +20,9 @@
           :disabled="submitting"
           type="submit"
           class="button is-primary"
-        >{{ $t('webapp.recover_form.save_password') }}</button>
+        >
+          {{ $t('webapp.recover_form.save_password') }}
+        </button>
       </div>
     </div>
   </form>
@@ -31,7 +33,6 @@ import { mapActions } from 'vuex';
 import Messages from '@/components/shared/Messages';
 import FormGenerator from '@/components/form-generator/FormGenerator';
 import Loading from '@/components/shared/Loading';
-
 
 const components = {
   Messages,
@@ -68,10 +69,11 @@ export default {
   computed: {
     msgs() {
       return (
-        this.errors.token && this.errors.token
-          .map(text => ({ text, class: 'error' })))
-        || this.success_msgs.map(text => ({ text, class: 'success' }))
-        || [];
+        (this.errors.token &&
+          this.errors.token.map((text) => ({ text, class: 'error' }))) ||
+        this.success_msgs.map((text) => ({ text, class: 'success' })) ||
+        []
+      );
     },
   },
   watch: {
@@ -83,29 +85,32 @@ export default {
     this.updateFormSchema();
   },
   methods: {
-    ...mapActions([
-      'getResetPasswordSchema',
-      'resetPassword',
-    ]),
+    ...mapActions(['getResetPasswordSchema', 'resetPassword']),
     async onSubmit() {
       this.errors = {};
       this.submitting = true;
 
       try {
         if (this.data.confirmPassword !== this.data.password) {
-        // eslint-disable-next-line no-unused-expressions
+          // eslint-disable-next-line no-unused-expressions
           this.data.confirmPassword === ''
-            ? this.confirmError = this.$t('webapp.register_form.confirm_password_empty')
-            : this.confirmError = this.$t('webapp.register_form.password_didnt_match');
+            ? (this.confirmError = this.$t(
+                'webapp.register_form.confirm_password_empty',
+              ))
+            : (this.confirmError = this.$t(
+                'webapp.register_form.password_didnt_match',
+              ));
           this.submitting = false;
           return '';
-        // eslint-disable-next-line no-else-return
+          // eslint-disable-next-line no-else-return
         } else {
           this.confirmError = '';
         }
 
         if (this.data.confirmPassword === '') {
-          this.confirmError = this.$t('webapp.register_form.confirm_password_empty');
+          this.confirmError = this.$t(
+            'webapp.register_form.confirm_password_empty',
+          );
           this.submitting = false;
         } else {
           this.confirmError = '';
@@ -143,7 +148,8 @@ export default {
       });
       const { password } = recoverSchema;
       const confirmPassword = {
-        ...password, label: this.$t('webapp.recover_form.confirm_password'),
+        ...password,
+        label: this.$t('webapp.recover_form.confirm_password'),
       };
       this.formSchema = { ...recoverSchema, confirmPassword };
     },
@@ -152,20 +158,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
-.passwordError{
+.passwordError {
   color: #ff3860;
   font-size: 0.75rem;
   margin: -1.4rem 0px;
 }
-.buttonStyle{
+.buttonStyle {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.button{
+.button {
   margin-top: 2rem;
   width: 9.813rem;
   height: 2.188rem;
@@ -175,5 +181,4 @@ export default {
   font-family: $font-family;
   font-size: $font-size;
 }
-
 </style>

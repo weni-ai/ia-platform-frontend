@@ -1,15 +1,12 @@
 <template>
-  <div
-    class="translation" >
+  <div class="translation">
     <div class="columns">
       <div class="translation__language">
-        <language-badge
-          :language="languageEdit"/>
+        <LanguageBadge :language="languageEdit" />
       </div>
       <div class="column translation__text__container">
-        <b-field
-          :message="errors.text || errors.language">
-          <example-text-with-highlighted-entities-input
+        <BField :message="errors.text || errors.language">
+          <ExampleTextWithHighlightedEntitiesInput
             ref="textInput"
             v-model="text"
             :entities="allEntities"
@@ -19,35 +16,39 @@
             @entityEdited="onEditEntity($event)"
             @entityAdded="onEntityAdded()"
           />
-        </b-field>
-        <example-entity-small-input
+        </BField>
+        <ExampleEntitySmallInput
           v-model="allEntitiesInput"
           :text="text"
-          :available-entities="getAllEntities"
+          :availableEntities="getAllEntities"
           :entities="entities"
-          :text-selected="textSelected"
-          constrict-entities
-          @addedEntity="onEntityAdded" />
-        <b-field :message="errors.entities" />
+          :textSelected="textSelected"
+          constrictEntities
+          @addedEntity="onEntityAdded"
+        />
+        <BField :message="errors.entities" />
       </div>
       <div class="translation__icons column is-2">
         <span>
-          <b-button
+          <BButton
             class="translation__icon"
-            icon-right="close-thick"
-            @click.native.stop="cancelEditSentence" />
-          <b-button
+            iconRight="close-thick"
+            @click.native.stop="cancelEditSentence"
+          />
+          <BButton
             :disabled="submitting"
-            class="translation__icon">
-            <b-icon
+            class="translation__icon"
+          >
+            <BIcon
               :icon="submitting ? 'refresh' : 'check-bold'"
               :class="{
-                'translation__icon': true,
-                'icon-spin': submitting
+                translation__icon: true,
+                'icon-spin': submitting,
               }"
               size="is-small"
-              @click.native.stop="onSubmit" />
-          </b-button>
+              @click.native.stop="onSubmit"
+            />
+          </BButton>
         </span>
       </div>
     </div>
@@ -84,8 +85,10 @@ export default {
   },
   computed: {
     addEntityHelpText() {
-      if (!(this.getAllEntities && this.getAllEntities.length > 0)) return this.$t('webapp.translate.no_entities');
-      if (this.textSelected === null) return this.$t('webapp.trainings.select_text');
+      if (!(this.getAllEntities && this.getAllEntities.length > 0))
+        return this.$t('webapp.translate.no_entities');
+      if (this.textSelected === null)
+        return this.$t('webapp.trainings.select_text');
       return this.entityButtonText;
     },
     allEntities() {
@@ -93,16 +96,17 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'editTranslation',
-    ]),
+    ...mapActions(['editTranslation']),
     async onSubmit() {
       this.submitting = true;
-      const entities = this.allEntities.map(({
-        start, end, entity, value,
-      }) => ({
-        start, end, entity, value,
-      }));
+      const entities = this.allEntities.map(
+        ({ start, end, entity, value }) => ({
+          start,
+          end,
+          entity,
+          value,
+        }),
+      );
       try {
         const edited = await this.editTranslation({
           translationId: this.id,
@@ -127,22 +131,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
 .icon {
-    color: $color-grey-dark
+  color: $color-grey-dark;
 }
 
 .translation {
   padding: 0.75rem 0.75rem 1.5rem 0.75rem;
 
-    &__icon-container {
-      display: flex;
-      align-items: center;
-      .icon {
-        margin-top: 1rem;
-      }
+  &__icon-container {
+    display: flex;
+    align-items: center;
+    .icon {
+      margin-top: 1rem;
     }
+  }
 
   &__text {
     margin-bottom: 0.5rem;
@@ -158,8 +162,8 @@ export default {
   }
 
   &__icons {
-      text-align: right;
-      color: $color-grey-dark;
+    text-align: right;
+    color: $color-grey-dark;
   }
 
   &__icon {

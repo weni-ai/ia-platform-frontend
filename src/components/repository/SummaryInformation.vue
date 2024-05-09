@@ -1,7 +1,7 @@
 <template>
   <div class="summary-information">
     <div class="summary-information__info">
-      <unnnic-card
+      <UnnnicCard
         type="title"
         :title="$t('webapp.summary.general_information')"
         :hasInformationIcon="false"
@@ -12,46 +12,55 @@
         {{ $t('webapp.summary.general_information') }}
       </span> -->
       <div class="summary-information__info__container">
-        <unnnic-card-number
+        <UnnnicCardNumber
           class="summary-information__info__container__item--clickable"
           :description="
-            $tc('webapp.summary.information_sentences', getCurrentRepository.examples__count)
+            $tc(
+              'webapp.summary.information_sentences',
+              getCurrentRepository.examples__count,
+            )
           "
           :number="getCurrentRepository.examples__count"
           clickable
           @click.native="navigateToSentences"
-          full-size
+          fullSize
         />
 
-        <unnnic-card-number
+        <UnnnicCardNumber
           class="summary-information__info__container__item--clickable"
           :description="
-            $tc('webapp.summary.information_intents', getCurrentRepository.intents_list.length)
+            $tc(
+              'webapp.summary.information_intents',
+              getCurrentRepository.intents_list.length,
+            )
           "
           :number="getCurrentRepository.intents_list.length"
           clickable
           @click.native="scrollToIntent"
-          full-size
+          fullSize
         />
 
-        <unnnic-card-number
+        <UnnnicCardNumber
           class="summary-information__info__container__item--clickable"
           :description="
-            $tc('webapp.summary.information_entities', getCurrentRepository.entities.length)
+            $tc(
+              'webapp.summary.information_entities',
+              getCurrentRepository.entities.length,
+            )
           "
           :number="getCurrentRepository.entities.length"
           clickable
           @click.native="scrollToEntity"
-          full-size
+          fullSize
         />
 
-        <unnnic-tool-tip
+        <UnnnicToolTip
           side="bottom"
           :text="languagesList"
           enabled
-          max-width="15rem"
+          maxWidth="15rem"
         >
-          <unnnic-card-number
+          <UnnnicCardNumber
             :description="
               $tc(
                 'webapp.summary.information_language',
@@ -59,17 +68,17 @@
               )
             "
             :number="getCurrentRepository.available_languages.length"
-            full-size
+            fullSize
           />
-        </unnnic-tool-tip>
+        </UnnnicToolTip>
 
-        <unnnic-tool-tip
+        <UnnnicToolTip
           side="bottom"
           :text="contributorsList"
           enabled
-          max-width="15rem"
+          maxWidth="15rem"
         >
-          <unnnic-card-number
+          <UnnnicCardNumber
             :description="
               $tc(
                 'webapp.summary.information_contributors',
@@ -77,11 +86,11 @@
               )
             "
             :number="getCurrentRepository.authorizations.count"
-            full-size
+            fullSize
           />
-        </unnnic-tool-tip>
+        </UnnnicToolTip>
 
-        <unnnic-card-number
+        <UnnnicCardNumber
           :description="
             $tc(
               'webapp.summary.information_integrations',
@@ -89,11 +98,11 @@
             )
           "
           :number="getCurrentRepository.count_authorizations"
-          full-size
+          fullSize
         />
       </div>
     </div>
-    <intelligence-force/>
+    <IntelligenceForce />
   </div>
 </template>
 
@@ -115,9 +124,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'getCurrentRepository',
-    ]),
+    ...mapGetters(['getCurrentRepository']),
     languagesList() {
       const languageObject = Object.values(
         languageListToDict(this.getCurrentRepository.available_languages),
@@ -126,7 +133,7 @@ export default {
     },
     contributorsList() {
       const { users } = this.getCurrentRepository.authorizations;
-      const usersList = users.map(user => user.nickname);
+      const usersList = users.map((user) => user.nickname);
       return usersList.join(', ');
     },
   },
@@ -152,65 +159,64 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
-.summary-information{
+.summary-information {
   display: flex;
   gap: $unnnic-spacing-sm;
 
   @media screen and (max-width: 70em) {
-        flex-direction: column;
+    flex-direction: column;
   }
 
-    &__info{
-      // margin-left: 0.5rem;
-      width: 50%;
+  &__info {
+    // margin-left: 0.5rem;
+    width: 50%;
 
-        &__title{
-          color: $color-fake-black;
-          font-weight: $font-weight-medium;
-          font-family: $font-family;
-          font-size: 1.75rem;
-        }
+    &__title {
+      color: $color-fake-black;
+      font-weight: $font-weight-medium;
+      font-family: $font-family;
+      font-size: 1.75rem;
+    }
 
-        &__container{
-            margin-top: $unnnic-spacing-md;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: $unnnic-spacing-sm;
-            width: 100%;
+    &__container {
+      margin-top: $unnnic-spacing-md;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: $unnnic-spacing-sm;
+      width: 100%;
 
-          &__item--clickable {
-            cursor: pointer;
-          }
+      &__item--clickable {
+        cursor: pointer;
+      }
 
-            &__training{
-            display: flex;
-            height: 156px;
-            justify-content: space-around;
-            align-items: center;
-            text-align: center;
-            margin-right: 10px;
-            width: 50%;
-            border: 1px solid $color-border;
-            }
+      &__training {
+        display: flex;
+        height: 156px;
+        justify-content: space-around;
+        align-items: center;
+        text-align: center;
+        margin-right: 10px;
+        width: 50%;
+        border: 1px solid $color-border;
+      }
 
-              @media screen and (max-width: 60em) {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-              }
-        }
-
-      @media screen and (max-width: 70em) {
+      @media screen and (max-width: 60em) {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
         width: 100%;
       }
     }
-}
 
+    @media screen and (max-width: 70em) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
+  }
+}
 </style>

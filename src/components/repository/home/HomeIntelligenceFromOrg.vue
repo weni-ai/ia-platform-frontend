@@ -2,7 +2,7 @@
 
 <template>
   <div class="home-intelligences-from-org__wrapper">
-    <home-intelligence-container>
+    <HomeIntelligenceContainer>
       <div class="home-intelligences-from-org">
         <div class="home-intelligences-from-org__cards">
           <!-- <unnnic-card
@@ -13,26 +13,26 @@
             class="home-intelligences-from-org__cards__new"
             @click.native="createNewIntelligence()"
           /> -->
-          <home-repository-card
+          <HomeRepositoryCard
             v-for="list in repositoryOrgList"
             :key="list.uuid"
-            :repository-detail="list"
+            :repositoryDetail="list"
             @dispatchShowModal="showModal($event)"
             @onCopySuccess="getOrgsRepositories()"
           />
         </div>
-        <infinite-scroll
+        <InfiniteScroll
           v-show="!isComplete"
           @intersect="getOrgsRepositories()"
         />
       </div>
-      <modal-container
-        :info-modal="modalInfo"
-        :show-modal="openModal"
+      <ModalContainer
+        :infoModal="modalInfo"
+        :showModal="openModal"
         @closeModal="openModal = false"
       >
-      </modal-container>
-    </home-intelligence-container>
+      </ModalContainer>
+    </HomeIntelligenceContainer>
   </div>
 </template>
 <script>
@@ -70,7 +70,7 @@ export default {
       this.modalInfo = { ...value };
     },
     async getOrgsRepositories() {
-      this.$emit('loading', true)
+      this.$emit('loading', true);
       try {
         const { data } = await this.getRepositories({
           limit: 20,
@@ -83,7 +83,7 @@ export default {
       } catch (err) {
         this.error = err;
       } finally {
-        this.$emit('loading', false)
+        this.$emit('loading', false);
       }
     },
     createNewIntelligence() {
@@ -96,8 +96,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .home-intelligences-from-org {
   &__cards {

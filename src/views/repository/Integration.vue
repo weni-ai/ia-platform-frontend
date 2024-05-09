@@ -1,102 +1,110 @@
 <template>
-  <repository-view-base :repository="repository" :error-code="errorCode">
-    <integration-loading slot="loader" />
+  <RepositoryViewBase
+    :repository="repository"
+    :errorCode="errorCode"
+  >
+    <IntegrationLoading slot="loader" />
     <div v-if="repository">
-      <div v-if="authenticated" class="repository-analyze-text">
-        <unnnic-intelligence-header
+      <div
+        v-if="authenticated"
+        class="repository-analyze-text"
+      >
+        <UnnnicIntelligenceHeader
           class="repository-analyze-text__header"
           :title="$t('webapp.integration.title')"
           icon="charger-1"
-          icon-scheme="brand-weni-soft"
-          :description="$t('webapp.integration.description', {link: 'https://docs.weni.ai/l/pt/bothub/'})"
+          iconScheme="brand-weni-soft"
+          :description="
+            $t('webapp.integration.description', {
+              link: 'https://docs.weni.ai/l/pt/bothub/',
+            })
+          "
         >
-          <unnnic-button
+          <UnnnicButton
             v-if="hasIntegration && !hasIntegrationCheckError"
             type="secondary"
             :loading="!hasIntegrationDefined"
             @click="changeIntegrateModalState(true)"
           >
-            {{ $t("webapp.summary.remove_integrate") }}
-          </unnnic-button>
+            {{ $t('webapp.summary.remove_integrate') }}
+          </UnnnicButton>
 
-          <unnnic-button
+          <UnnnicButton
             v-else-if="!hasIntegrationCheckError"
             type="secondary"
             :loading="!hasIntegrationDefined"
             @click="changeIntegrateModalState(true)"
           >
-            {{ $t("webapp.summary.integrate") }}
-          </unnnic-button>
-        </unnnic-intelligence-header>
+            {{ $t('webapp.summary.integrate') }}
+          </UnnnicButton>
+        </UnnnicIntelligenceHeader>
 
-        <unnnic-tab initialTab="first" :tabs="tabs">
+        <UnnnicTab
+          initialTab="first"
+          :tabs="tabs"
+        >
           <template slot="tab-head-first">
-            {{ $t("webapp.integration.http_tab") }}
+            {{ $t('webapp.integration.http_tab') }}
           </template>
 
           <template slot="tab-panel-first">
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-gt"
               color="neutral-dark"
-              margin-bottom="md"
+              marginBottom="md"
             >
               {{ $t('webapp.integration.http_title') }}
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-lg"
               color="neutral-dark"
-              margin-bottom="xs"
+              marginBottom="xs"
             >
               URL
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-gt"
               color="neutral-dark"
-              margin-bottom="xs"
+              marginBottom="xs"
             >
               {{ $t('webapp.integration.url_description') }}
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
-            <highlighted-code code-class="plaintext">
+            <HighlightedCode codeClass="plaintext">
               {{ repository.nlp_server }}v2/parse/
-            </highlighted-code>
+            </HighlightedCode>
 
-
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-lg"
               color="neutral-dark"
-              margin-top="md"
-              margin-bottom="xs"
+              marginTop="md"
+              marginBottom="xs"
             >
               Headers
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-gt"
               color="neutral-dark"
-              margin-bottom="xs"
+              marginBottom="xs"
             >
               {{ $t('webapp.integration.headers_description') }}
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
-            <unnnic-form-element
-              :label="$t('webapp.integration.token_title')"
-            >
-              <unnnic-select
-                v-model="profileAuth"
-              >
+            <UnnnicFormElement :label="$t('webapp.integration.token_title')">
+              <UnnnicSelect v-model="profileAuth">
                 <option
                   v-for="option in getAuthorizations"
                   :key="option.index"
@@ -104,122 +112,133 @@
                 >
                   {{ option }}
                 </option>
-              </unnnic-select>
-            </unnnic-form-element>
+              </UnnnicSelect>
+            </UnnnicFormElement>
 
             <div class="repository-analyze-text__url">
-              <highlighted-code
+              <HighlightedCode
                 :code="codes.curl"
-                code-class="plaintext"
+                codeClass="plaintext"
               />
             </div>
 
-
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-lg"
               color="neutral-dark"
-              margin-top="md"
-              margin-bottom="xs"
+              marginTop="md"
+              marginBottom="xs"
             >
               Post Body
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-gt"
               color="neutral-dark"
-              margin-bottom="xs"
+              marginBottom="xs"
             >
               {{ $t('webapp.integration.post_body_description') }}
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
-            <highlighted-code code-class="json"
-              >{ "language":"[{{ $t("webapp.analyze_text.language_code") }}]", "text": "[{{
-                $t("webapp.analyze_text.text_to_analyze")
-              }}]" }
-            </highlighted-code>
+            <HighlightedCode codeClass="json"
+              >{ "language":"[{{ $t('webapp.analyze_text.language_code') }}]",
+              "text": "[{{ $t('webapp.analyze_text.text_to_analyze') }}]" }
+            </HighlightedCode>
 
-
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-lg"
               color="neutral-dark"
-              margin-top="md"
-              margin-bottom="xs"
+              marginTop="md"
+              marginBottom="xs"
             >
               Response
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-gt"
               color="neutral-dark"
-              margin-bottom="xs"
+              marginBottom="xs"
             >
               {{ $t('webapp.integration.response_description') }}
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
             <div class="repository-analyze-text__url">
               <div class="json-code">
                 <div class="json-code__short">
-                  <pre>{{ JSON.stringify(json, null, 2).split(/\n/).slice(0,3).join('\n') }}</pre>
+                  <pre>{{
+                    JSON.stringify(json, null, 2)
+                      .split(/\n/)
+                      .slice(0, 3)
+                      .join('\n')
+                  }}</pre>
                 </div>
-                <div class="json-code__full" v-show-slide="codeOpen">
-                  <pre>{{ JSON.stringify(json, null, 2).split(/\n/).slice(3).join('\n') }}</pre>
+                <div
+                  class="json-code__full"
+                  v-show-slide="codeOpen"
+                >
+                  <pre>{{
+                    JSON.stringify(json, null, 2)
+                      .split(/\n/)
+                      .slice(3)
+                      .join('\n')
+                  }}</pre>
                 </div>
               </div>
-              <unnnic-button
+              <UnnnicButton
                 size="large"
                 type="secondary"
                 @click="toggleCode"
               >
-              {{ codeOpen ?
-                $t("webapp.integration.code_button_short") :
-                $t("webapp.integration.code_button") }}
-              </unnnic-button>
+                {{
+                  codeOpen
+                    ? $t('webapp.integration.code_button_short')
+                    : $t('webapp.integration.code_button')
+                }}
+              </UnnnicButton>
             </div>
-
           </template>
 
           <template slot="tab-head-second">
-            {{ $t("webapp.integration.generator_tab") }}
+            {{ $t('webapp.integration.generator_tab') }}
           </template>
 
           <template slot="tab-panel-second">
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-gt"
               weight="bold"
               color="neutral-dark"
-              margin-bottom="xs"
+              marginBottom="xs"
             >
               {{ $t('webapp.analyze_text.code_generator') }}
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
-            <unnnic-intelligence-text
+            <UnnnicIntelligenceText
               tag="p"
               family="secondary"
               size="body-gt"
               color="neutral-dark"
-              margin-bottom="sm"
+              marginBottom="sm"
             >
               {{ $t('webapp.analyze_text.code_generator_text') }}
-            </unnnic-intelligence-text>
+            </UnnnicIntelligenceText>
 
-            <request-generator
-              :default-language-field="repository.language"
-              :authorization-uuid="getProfileDetail[1] || ''"
+            <RequestGenerator
+              :defaultLanguageField="repository.language"
+              :authorizationUuid="getProfileDetail[1] || ''"
               class="request_generator"
             />
           </template>
-        </unnnic-tab>
-        <integration-modal
+        </UnnnicTab>
+        <IntegrationModal
           :openModal="integrateModal"
           :repository="getCurrentRepository"
           :hasIntegration="hasIntegration"
@@ -228,13 +247,16 @@
         />
       </div>
       <div v-else>
-        <b-notification :closable="false" type="is-info">
-          {{ $t("webapp.analyze_text.notification_info") }}
-        </b-notification>
-        <login-form hide-forgot-password />
+        <BNotification
+          :closable="false"
+          type="is-info"
+        >
+          {{ $t('webapp.analyze_text.notification_info') }}
+        </BNotification>
+        <LoginForm hideForgotPassword />
       </div>
     </div>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -265,17 +287,17 @@ export default {
       json: {
         intent: {
           name: 'love',
-          confidence: 0.6943462393863934
+          confidence: 0.6943462393863934,
         },
         intent_ranking: [
           {
             name: 'love',
-            confidence: 0.6943462393863934
+            confidence: 0.6943462393863934,
           },
           {
             name: 'hate',
-            confidence: 0.30565376061360666
-          }
+            confidence: 0.30565376061360666,
+          },
         ],
         groups_list: ['animal'],
         entities_list: [],
@@ -284,14 +306,14 @@ export default {
             {
               value: 'puppy',
               entity: 'dog',
-              confidence: 0.67255946125065845
-            }
+              confidence: 0.67255946125065845,
+            },
           ],
-          other: []
+          other: [],
         },
         text: 'i love my puppy',
         update_id: 47,
-        language: 'en'
+        language: 'en',
       },
       profileAuth: '',
       integrateModal: false,
@@ -318,12 +340,14 @@ export default {
       if (this.repository.authorization.organizations !== undefined) {
         let authorization = [];
         if (this.repository.authorization.organizations.length !== 0) {
-          authorization = this.repository.authorization.organizations.map(auth => {
-            const nickname = auth.user__nickname;
-            const id = auth.uuid;
+          authorization = this.repository.authorization.organizations.map(
+            (auth) => {
+              const nickname = auth.user__nickname;
+              const id = auth.uuid;
 
-            return `${nickname} - Bearer ${id}`;
-          });
+              return `${nickname} - Bearer ${id}`;
+            },
+          );
         }
         return authorization;
       }
@@ -345,8 +369,8 @@ export default {
     codes() {
       return {
         curl: [
-          `${this.getProfileDetail[0]} - ${this.getProfileDetail[1]}`
-        ].join()
+          `${this.getProfileDetail[0]} - ${this.getProfileDetail[1]}`,
+        ].join(),
       };
     },
   },
@@ -354,7 +378,8 @@ export default {
     profileToken() {
       const { organizations } = this.repository.authorization;
       if (this.profileToken && organizations && organizations.length !== 0) {
-        const { user__nickname, uuid } = this.repository.authorization.organizations[0];
+        const { user__nickname, uuid } =
+          this.repository.authorization.organizations[0];
         const profileAuthorization = `${user__nickname} - Bearer ${uuid}`;
         this.profileAuth = profileAuthorization;
       }
@@ -369,7 +394,7 @@ export default {
     ...mapActions(['getIntegrationRepository']),
     async checkIfHasIntegration() {
       try {
-        console.log(this.getOrgSelected)
+        console.log(this.getOrgSelected);
         const { data } = await this.getIntegrationRepository({
           repository_version: this.getCurrentRepository.repository_version_id,
           repository_uuid: this.getCurrentRepository.uuid,
@@ -398,21 +423,21 @@ export default {
       navigator.clipboard.writeText(this.getProfileDetail[1]);
       this.$buefy.toast.open({
         message: this.$t('webapp.integration.copy'),
-        type: 'is-success'
+        type: 'is-success',
       });
     },
     toggleCode() {
-      this.codeOpen = !this.codeOpen
-    }
-  }
+      this.codeOpen = !this.codeOpen;
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .repository-analyze-text {
   font-family: $unnnic-font-family-secondary;
@@ -472,10 +497,10 @@ export default {
   }
   .unnnic-select {
     margin-bottom: $unnnic-spacing-stack-xs;
-    /deep/ .input {
+    :deep(.input) {
       height: 46px;
     }
-    /deep/ .dropdown {
+    :deep(.dropdown) {
       display: block;
     }
   }

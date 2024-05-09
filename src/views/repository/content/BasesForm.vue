@@ -835,7 +835,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .brain-deactivated-preview {
   flex: 1;
@@ -1045,7 +1045,7 @@ export default {
   .input.size-md {
     height: 46px;
   }
-  /deep/.input.size-md {
+  :deep(.input.size-md) {
     height: 46px;
   }
 

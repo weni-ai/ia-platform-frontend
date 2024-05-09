@@ -1,10 +1,11 @@
 <template>
   <div class="activity-item">
-    <user-avatar
+    <UserAvatar
       :profile="profile"
       :clickable="false"
       size="large"
-      class="activity-item__avatar"/>
+      class="activity-item__avatar"
+    />
     <div>
       <p>
         <strong> {{ userNickname }} </strong>
@@ -12,8 +13,14 @@
       </p>
       <p
         class="activity-item__activity"
-        v-html="$t('webapp.my_profile.activities.activity_complement', {org, intelligence}) "/>
-      <p class="activity-item__stamp"> {{ createdAt }} </p>
+        v-html="
+          $t('webapp.my_profile.activities.activity_complement', {
+            org,
+            intelligence,
+          })
+        "
+      />
+      <p class="activity-item__stamp">{{ createdAt }}</p>
     </div>
   </div>
 </template>
@@ -58,28 +65,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .activity-item {
-        display: flex;
-        align-items: center;
-        > * {
-            margin-right: 0.6rem;
+.activity-item {
+  display: flex;
+  align-items: center;
+  > * {
+    margin-right: 0.6rem;
 
-            &:last-child {
-                margin-right: 0;
-            }
-        }
-
-        &__avatar {
-            background-color: white;
-            box-shadow: 0px 3px 6px #00000029;
-        }
-
-        /deep/ &__activity {
-            font-size: 0.875rem;
-        }
-
-        &__stamp {
-            font-size: 0.625rem;
-        }
+    &:last-child {
+      margin-right: 0;
     }
+  }
+
+  &__avatar {
+    background-color: white;
+    box-shadow: 0px 3px 6px #00000029;
+  }
+
+  :deep(&__activity) {
+    font-size: 0.875rem;
+  }
+
+  &__stamp {
+    font-size: 0.625rem;
+  }
+}
 </style>

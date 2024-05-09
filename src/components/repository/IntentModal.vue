@@ -3,25 +3,25 @@
     id="tour-inbox-step-4"
     :is-previous-disabled="true"
     :is-finish-disabled="true"
-    class="modalStyle">
-    <div
-      class="modal-card modalStyle__content">
+    class="modalStyle"
+  >
+    <div class="modal-card modalStyle__content">
       <header class="modal-card-head">
         <p class="modal-card-title">{{ titleHeader }}</p>
       </header>
       <section class="modal-card-body">
-        <b-field>
-          <b-select
+        <BField>
+          <BSelect
             v-model="selectedOptions"
             :placeholder="$t('webapp.inbox.intent')"
             size="is-medium"
-            expanded>
-
+            expanded
+          >
             <option
               v-for="intent in repository.intents_list"
               v-show="info.intent_ranking.length == 0 || confidenceVerify"
               :key="intent"
-              :value="{name: intent}"
+              :value="{ name: intent }"
             >
               {{ intent }}
             </option>
@@ -30,30 +30,34 @@
               v-for="info in info.intent_ranking"
               v-show="!confidenceVerify"
               :key="info.confidence"
-              :value="{name: info.name, percent: info.confidence }">
+              :value="{ name: info.name, percent: info.confidence }"
+            >
               {{ info.name }} {{ info.confidence | percent }}
             </option>
-
-          </b-select>
-
-        </b-field>
+          </BSelect>
+        </BField>
       </section>
       <footer class="modal-card-foot modalStyle__content__footer">
         <button
           class="button"
           type="button"
-          @click="closeModal">{{ $t('webapp.inbox.add_log.close') }}</button>
+          @click="closeModal"
+        >
+          {{ $t('webapp.inbox.add_log.close') }}
+        </button>
         <button
           :disabled="!selectedOptions"
           class="button is-primary"
-          @click="addIntent"> {{ $t('webapp.inbox.add_log.add') }}</button>
+          @click="addIntent"
+        >
+          {{ $t('webapp.inbox.add_log.add') }}
+        </button>
       </footer>
     </div>
   </section>
 </template>
 
 <script>
-
 export default {
   name: 'IntentModal',
   props: {
@@ -92,22 +96,21 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
- @import '~@/assets/scss/utilities.scss';
+@import '@/assets/scss/utilities.scss';
 
-.modalStyle{
+.modalStyle {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  &__content{
+  &__content {
     width: $size-large + 25rem;
 
-      &__footer{
+    &__footer {
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      }
+    }
   }
-
 }
 </style>

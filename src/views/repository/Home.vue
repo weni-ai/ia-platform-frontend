@@ -1,10 +1,16 @@
 <template>
-  <repository-view-base :repository="repository" :error-code="errorCode">
-    <div v-if="repository" class="repository-home">
+  <RepositoryViewBase
+    :repository="repository"
+    :errorCode="errorCode"
+  >
+    <div
+      v-if="repository"
+      class="repository-home"
+    >
       <div class="repository-home__description">
         <div>
           <div class="repository-home__title">
-            <unnnic-card
+            <UnnnicCard
               type="title"
               :title="$t('webapp.home.description')"
               :hasInformationIcon="false"
@@ -14,8 +20,10 @@
           </div>
 
           <div class="repository-home__description__header">
-            <div class="repository-home__description__header__description-properly">
-              <vue-markdown
+            <div
+              class="repository-home__description__header__description-properly"
+            >
+              <VueMarkdown
                 :source="repository.description"
                 :show="show"
                 :html="html"
@@ -24,7 +32,7 @@
                 :emoji="emoji"
                 :typographer="typographer"
                 :toc="toc"
-                toc-id="toc"
+                tocId="toc"
                 class="repository-home__description__text markdown-body"
               />
 
@@ -35,12 +43,12 @@
 
               <p v-else>
                 <i class="text-color-grey-dark">{{
-                  $t("webapp.home.no_description")
+                  $t('webapp.home.no_description')
                 }}</i>
               </p>
             </div>
             <div class="repository-home__description__tags-wrapper">
-              <unnnic-tag
+              <UnnnicTag
                 v-for="(category, index) in getAllCategories"
                 :key="index"
                 :text="category"
@@ -51,79 +59,82 @@
         </div>
 
         <div>
-          <unnnic-button
+          <UnnnicButton
             v-if="hasIntegration && !hasIntegrationCheckError"
             type="secondary"
             :loading="!hasIntegrationDefined"
             @click="changeIntegrateModalState(true)"
           >
-            {{ $t("webapp.summary.remove_integrate") }}
-          </unnnic-button>
-          <unnnic-button
+            {{ $t('webapp.summary.remove_integrate') }}
+          </UnnnicButton>
+          <UnnnicButton
             v-else-if="!hasIntegrationCheckError"
             type="secondary"
             :loading="!hasIntegrationDefined"
             @click="changeIntegrateModalState(true)"
           >
-            {{ $t("webapp.summary.integrate") }}
-          </unnnic-button>
+            {{ $t('webapp.summary.integrate') }}
+          </UnnnicButton>
         </div>
       </div>
 
       <div class="repository-home__divider"></div>
 
-      <divider></divider>
+      <Divider></Divider>
 
-      <summary-information />
+      <SummaryInformation />
 
-      <unnnic-tab
+      <UnnnicTab
         class="repository-home__tabs"
         initialTab="first"
         :tabs="['first', 'second']"
       >
         <template slot="tab-head-first">
-          {{ $t("webapp.home.intents_list") }}
-          <unnnic-tool-tip
+          {{ $t('webapp.home.intents_list') }}
+          <UnnnicToolTip
             side="right"
             :text="$t('webapp.summary.intents_list_info')"
             enabled
           >
-            <unnnic-icon
+            <UnnnicIcon
               class="info"
               icon="information-circle-4"
               size="sm"
               scheme="neutral-soft"
             />
-          </unnnic-tool-tip>
+          </UnnnicToolTip>
         </template>
         <template slot="tab-panel-first">
-          <div id="intent-container" v-if="hasIntents">
-            <badges-intents :list="repository.intents" />
+          <div
+            id="intent-container"
+            v-if="hasIntents"
+          >
+            <BadgesIntents :list="repository.intents" />
           </div>
         </template>
         <template slot="tab-head-second">
-          {{ $t("webapp.home.entities_list") }}
-          <unnnic-tool-tip
+          {{ $t('webapp.home.entities_list') }}
+          <UnnnicToolTip
             side="right"
             :text="$t('webapp.summary.entity_groups_info')"
             enabled
           >
-            <unnnic-icon
+            <UnnnicIcon
               class="info"
               icon="information-circle-4"
               size="sm"
               scheme="neutral-soft"
             />
-          </unnnic-tool-tip>
+          </UnnnicToolTip>
         </template>
         <template slot="tab-panel-second">
-          <entity-edit
+          <EntityEdit
             id="entity-container"
             :groups="repository.groups || []"
-            :can-edit="repository.authorization.can_contribute"
+            :canEdit="repository.authorization.can_contribute"
             :ungrouped="unlabeled"
             :newGroup="newGroup"
-            :repository-uuid="repository.uuid"
+            :repositoryUuid="repository.uuid"
             @updateGroup="updatedGroup"
             @updateUngrouped="updateUngrouped"
             @updateNewGroup="updateNewGroup"
@@ -133,28 +144,31 @@
             @onEditGroups="editGroups"
           />
         </template>
-      </unnnic-tab>
+      </UnnnicTab>
     </div>
-    <integration-modal
+    <IntegrationModal
       :openModal="integrateModal"
       :repository="getCurrentRepository"
       :hasIntegration="hasIntegration"
       @closeIntegratationModal="changeIntegrateModalState(false)"
       @dispatchUpdateIntegration="changeIntegrationValue()"
     />
-    <unnnic-modal
+    <UnnnicModal
       :showModal="openModal"
       :text="$t('webapp.home.create_group_modal_title')"
       scheme="feedback-yellow"
-      modal-icon="alert-circle-1"
+      modalIcon="alert-circle-1"
       @close="openModal = false"
     >
       <span
         slot="message"
         v-html="$t('webapp.home.create_group_modal_subtitle')"
       />
-      <div slot="message" class="modal-header">
-        <unnnic-input
+      <div
+        slot="message"
+        class="modal-header"
+      >
+        <UnnnicInput
           :placeholder="$t('webapp.home.create_group_field_label')"
           v-model="newGroupName"
         >
@@ -162,26 +176,30 @@
             slot="label"
             v-html="$t('webapp.home.create_group_field_title')"
           />
-        </unnnic-input>
+        </UnnnicInput>
       </div>
-      <unnnic-button slot="options" type="tertiary" @click="openModal = false">
-        {{ $t("webapp.home.cancel") }}
-      </unnnic-button>
-      <unnnic-button
+      <UnnnicButton
+        slot="options"
+        type="tertiary"
+        @click="openModal = false"
+      >
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
         slot="options"
         class="create-repository__container__button"
         type="primary"
         scheme="feedback-yellow"
         @click="createGroup()"
       >
-        {{ $t("webapp.home.save_changes") }}
-      </unnnic-button>
-    </unnnic-modal>
+        {{ $t('webapp.home.save_changes') }}
+      </UnnnicButton>
+    </UnnnicModal>
 
     <template v-slot:loader>
-      <summary-loader />
+      <SummaryLoader />
     </template>
-  </repository-view-base>
+  </RepositoryViewBase>
 </template>
 
 <script>
@@ -263,13 +281,13 @@ export default {
     },
     repositoryIcon() {
       return (
-        (this.repository.categories[0] && this.repository.categories[0].icon)
-        || 'botinho'
+        (this.repository.categories[0] && this.repository.categories[0].icon) ||
+        'botinho'
       );
     },
     getAllCategories() {
       const categories = this.repository.categories_list.map(
-        (category) => category.name
+        (category) => category.name,
       );
       return categories;
     },
@@ -304,7 +322,9 @@ export default {
     },
     updatedGroup({ groupId, entities }) {
       const groupIndex = this.getGroupIndex(groupId);
-      if (groupIndex >= 0) { this.repository.groups[groupIndex].entities = entities; }
+      if (groupIndex >= 0) {
+        this.repository.groups[groupIndex].entities = entities;
+      }
     },
     updateUngrouped({ entities }) {
       this.repository.other_group.entities = entities;
@@ -331,7 +351,7 @@ export default {
         const removeIndex = this.repository.groups[
           groupIndex
         ].entities.findIndex(
-          (listEntity) => listEntity.entity_id === entity.entity_id
+          (listEntity) => listEntity.entity_id === entity.entity_id,
         );
 
         if (removeIndex < 0) return;
@@ -339,7 +359,7 @@ export default {
         this.repository.groups[groupIndex].entities.splice(removeIndex, 1);
       } else {
         const removeIndex = this.repository.other_group.entities.findIndex(
-          (listEntity) => listEntity.entity_id === entity.entity_id
+          (listEntity) => listEntity.entity_id === entity.entity_id,
         );
         if (removeIndex < 0) return;
         this.repository.other_group.entities.splice(removeIndex, 1);
@@ -348,9 +368,10 @@ export default {
     removeGroup(groupId) {
       const groupIndex = this.getGroupIndex(groupId);
       if (groupIndex < 0) return;
-      this.repository.other_group.entities = this.repository.other_group.entities.concat(
-        this.repository.groups[groupIndex].entities
-      );
+      this.repository.other_group.entities =
+        this.repository.other_group.entities.concat(
+          this.repository.groups[groupIndex].entities,
+        );
       this.repository.groups.splice(groupIndex, 1);
     },
     addedGroup(group) {
@@ -358,7 +379,7 @@ export default {
     },
     getGroupIndex(groupId) {
       return this.repository.groups.findIndex(
-        (group) => group.group_id === groupId
+        (group) => group.group_id === groupId,
       );
     },
     editGroups() {
@@ -401,10 +422,10 @@ export default {
       let message = this.$t('webapp.home.default_error');
 
       if (
-        error.response
-        && error.response.data
-        && error.response.data.non_field_errors
-        && error.response.data.non_field_errors.length > 0
+        error.response &&
+        error.response.data &&
+        error.response.data.non_field_errors &&
+        error.response.data.non_field_errors.length > 0
       ) {
         message = error.response.data.non_field_errors.join(', ');
       }
@@ -419,10 +440,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .repository-home {
   &__description {
@@ -527,15 +548,14 @@ export default {
   text-align: left;
   margin-top: 2rem;
 }
-/deep/ .tab-head > .unnnic-tooltip {
+:deep(.tab-head > .unnnic-tooltip) {
   margin-left: 10px;
 
   & > .unnnic-tooltip-label {
     max-width: 360px;
   }
 }
-/deep/ .tab-head > .unnnic-tooltip-label {
+:deep(.tab-head > .unnnic-tooltip-label) {
   max-width: 360px;
 }
-
 </style>

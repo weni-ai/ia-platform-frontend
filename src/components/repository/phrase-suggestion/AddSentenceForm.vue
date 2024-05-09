@@ -6,41 +6,43 @@
       @submit.prevent="onSubmit()"
       @keyup.enter="onEnter()"
     >
-      <unnnic-form-element
+      <UnnnicFormElement
         class="form-element"
         :label="$t('webapp.phrase-suggestion.add_a_sentence')"
         :message="errors.text || errors.language"
       >
-        <input-with-hightlights
+        <InputWithHightlights
           v-model="text"
           :entities="entities"
           :placeholder="$t('webapp.example.sentence')"
           :selected.sync="textSelected"
         />
-      </unnnic-form-element>
+      </UnnnicFormElement>
 
-      <unnnic-form-element
+      <UnnnicFormElement
         class="form-element"
         :label="$t('webapp.trainings.intent')"
         :message="errors.intent"
       >
-        <unnnic-autocomplete
+        <UnnnicAutocomplete
           v-model="intent"
           :data="filteredData"
           :placeholder="$t('webapp.example.intent')"
           :openWithFocus="true"
           @focus="onInputClick('intent')"
           @blur="onInputClick('intent')"
-          :iconRight="isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
+          :iconRight="
+            isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'
+          "
         />
-      </unnnic-form-element>
+      </UnnnicFormElement>
 
-      <unnnic-form-element
+      <UnnnicFormElement
         class="form-element"
         :label="$t('webapp.create_repository.language_placeholder')"
         :message="errors.intent"
       >
-        <unnnic-select
+        <UnnnicSelect
           :placeholder="$t('webapp.translate.languages_select')"
           v-model="language"
         >
@@ -52,40 +54,41 @@
           >
             {{ label }}
           </option>
-        </unnnic-select>
-      </unnnic-form-element>
+        </UnnnicSelect>
+      </UnnnicFormElement>
 
-      <unnnic-form-element
-        :message="errors.entities"
-      >
-        <div class="entities-wrapper" :message="errors.entities">
-          <new-entities-input
+      <UnnnicFormElement :message="errors.entities">
+        <div
+          class="entities-wrapper"
+          :message="errors.entities"
+        >
+          <NewEntitiesInput
             ref="entitiesInput"
             v-model="entities"
             :repository="repository"
             :text="text"
-            :text-selected="textSelected"
-            :available-entities="entitiesList"
-            :available-labels="availableLabels"
+            :textSelected="textSelected"
+            :availableEntities="entitiesList"
+            :availableLabels="availableLabels"
             @entityAdded="onEntityAdded()"
           />
         </div>
-      </unnnic-form-element>
+      </UnnnicFormElement>
 
-      <unnnic-button
+      <UnnnicButton
         id="tour-training-step-5"
-        :is-previous-disabled="true"
-        :is-next-disabled="true"
+        :isPreviousDisabled="true"
+        :isNextDisabled="true"
         :disabled="!shouldSubmit"
         :loading="submitting"
-        :is-step-blocked="!blockedNextStepTutorial"
-        native-type="submit"
+        :isStepBlocked="!blockedNextStepTutorial"
+        nativeType="submit"
         class="button-submit"
         type="secondary"
         size="large"
       >
         {{ $t('webapp.phrase-suggestion.submit') }}
-      </unnnic-button>
+      </UnnnicButton>
     </form>
   </div>
 </template>
@@ -98,7 +101,6 @@ import { mapActions, mapGetters } from 'vuex';
 import { formatters, LANGUAGES } from '@/utils';
 import InputWithHightlights from '../../InputWithHightlights';
 import { get } from 'lodash';
-
 
 export default {
   name: 'AddSentenceForm',
@@ -137,8 +139,9 @@ export default {
       return this.isValid && !this.submitting;
     },
     filteredData() {
-      return (this.repository.intents_list || []).filter(intent => intent
-        .startsWith(this.intent.toLowerCase()));
+      return (this.repository.intents_list || []).filter((intent) =>
+        intent.startsWith(this.intent.toLowerCase()),
+      );
     },
     validationErrors() {
       const errors = [];
@@ -158,25 +161,20 @@ export default {
     },
     availableEntities() {
       const repositoryEntities = this.repository.entities_list || [];
-      const entitiesFlat = this.entities.map(e => e.entity);
+      const entitiesFlat = this.entities.map((e) => e.entity);
       return repositoryEntities
         .concat(entitiesFlat)
-        .filter((entity, index, current) => (current.indexOf(entity) === index));
+        .filter((entity, index, current) => current.indexOf(entity) === index);
     },
     availableLabels() {
       const repositoryLabels = this.repository.labels_list || [];
 
       return repositoryLabels
-        .filter(label => !!label)
-        .filter((label, index, current) => (current.indexOf(label) === index));
+        .filter((label) => !!label)
+        .filter((label, index, current) => current.indexOf(label) === index);
     },
     data() {
-      const {
-        text,
-        language,
-        intent,
-        entities,
-      } = this;
+      const { text, language, intent, entities } = this;
 
       return {
         text,
@@ -186,8 +184,7 @@ export default {
       };
     },
     languageList() {
-      return Object.keys(LANGUAGES)
-        .map(lang => ([lang, LANGUAGES[lang]]));
+      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
   },
   watch: {
@@ -205,9 +202,7 @@ export default {
     this.entitiesList = this.availableEntities;
   },
   methods: {
-    ...mapActions([
-      'newExample',
-    ]),
+    ...mapActions(['newExample']),
     onEnter() {
       if (this.shouldSubmit) this.onSubmit();
     },
@@ -230,10 +225,9 @@ export default {
           ...this.data,
         });
 
-
         this.submitting = false;
 
-        this.$emit('onSubmit', this.data)
+        this.$emit('onSubmit', this.data);
         return true;
       } catch (error) {
         const message = get(error, 'response.data.detail', '');
@@ -242,9 +236,8 @@ export default {
           this.$store.state.alert = {
             text: message,
             type: 'error',
-          }
+          };
         }
-
 
         this.submitting = false;
       }
@@ -252,15 +245,17 @@ export default {
       return false;
     },
     onInputClick(target) {
-      if (target === 'intent') this.isIntentInputActive = !this.isIntentInputActive
-      if (target === 'language') this.isLanguageInputActive = !this.isLanguageInputActive
+      if (target === 'intent')
+        this.isIntentInputActive = !this.isIntentInputActive;
+      if (target === 'language')
+        this.isLanguageInputActive = !this.isLanguageInputActive;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .form-element + .form-element {
   margin-top: $unnnic-spacing-sm;
@@ -279,19 +274,20 @@ export default {
   padding-right: 0;
 }
 
-/deep/ .textarea, /deep/ .input {
-  border: .0625rem solid #e2e6ed;
-  border-radius: .25rem;
+:deep(.textarea),
+:deep(.input) {
+  border: 0.0625rem solid #e2e6ed;
+  border-radius: 0.25rem;
   color: #4e5666;
   font-weight: 400;
-  font-size: .875rem;
+  font-size: 0.875rem;
   box-sizing: border-box;
   width: 100%;
-  padding: .75rem 1rem;
+  padding: 0.75rem 1rem;
   height: 48px;
 }
 
-/deep/ .unnnic-form__label {
+:deep(.unnnic-form__label) {
   font-family: 'Lato';
 }
 
@@ -305,27 +301,26 @@ export default {
   border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
   border-radius: $unnnic-border-radius-md;
 }
-/deep/ .example-txt-w-highlighted-entities__entity__before {
-  font-size: .875rem;
+:deep(.example-txt-w-highlighted-entities__entity__before) {
+  font-size: 0.875rem;
   border: 1px solid transparent;
 }
-/deep/ .example-txt-w-highlighted-entities__entity__text {
-  font-size: .875rem;
+:deep(.example-txt-w-highlighted-entities__entity__text) {
+  font-size: 0.875rem;
 }
-/deep/ .hidden .unnnic-autocomplete__container-list{
+:deep(.hidden .unnnic-autocomplete__container-list) {
   display: none;
 }
-/deep/ .column {
-  padding: .5rem;
+:deep(.column) {
+  padding: 0.5rem;
 }
-/deep/ .dropdown {
+:deep(.dropdown) {
   display: block;
 }
-/deep/ .example-txt-w-highlighted-entities__entity {
+:deep(.example-txt-w-highlighted-entities__entity) {
   padding: 0.6rem 0.9rem;
 }
-/deep/ .alert {
+:deep(.alert) {
   word-spacing: 0;
 }
-
 </style>

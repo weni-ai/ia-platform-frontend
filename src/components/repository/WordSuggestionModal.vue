@@ -1,86 +1,107 @@
 <template>
-  <section
-    class="modal-style">
-    <div
-      class="modal-style__container">
+  <section class="modal-style">
+    <div class="modal-style__container">
       <div class="modal-style__container__close">
-        <b-icon
+        <BIcon
           icon="close"
-          @click.native="closeModal()"/>
+          @click.native="closeModal()"
+        />
       </div>
       <div class="modal-style__container__header">
-      <h3>{{ $t('webapp.word_suggestion.title') }}</h3>
-        <b-tooltip :label="$t('webapp.word_suggestion.tooltip_alert')"
-          position="is-bottom" multilined>
-          <b-field>
-              <b-tag size="is-medium" type="is-primary">BETA</b-tag>
-          </b-field>
-        </b-tooltip>
+        <h3>{{ $t('webapp.word_suggestion.title') }}</h3>
+        <BTooltip
+          :label="$t('webapp.word_suggestion.tooltip_alert')"
+          position="is-bottom"
+          multilined
+        >
+          <BField>
+            <BTag
+              size="is-medium"
+              type="is-primary"
+              >BETA</BTag
+            >
+          </BField>
+        </BTooltip>
       </div>
       <p>{{ $t('webapp.word_suggestion.subtitle') }}</p>
-      <loading
+      <Loading
         v-if="loading"
-        class="modal-style__container__loading"/>
+        class="modal-style__container__loading"
+      />
       <div
         v-else
-        class="modal-style__container__body">
+        class="modal-style__container__body"
+      >
         <div class="modal-style__container__body__content">
           <div class="modal-style__container__body__content__selects">
-            <b-field>
+            <BField>
               <div
                 v-for="(text, index) in allWords"
-                :key="index">
-                <b-select
+                :key="index"
+              >
+                <BSelect
                   v-model="selectWord[index]"
                   :placeholder="wordsTogether[index]"
-                  class="select-input">
+                  class="select-input"
+                >
                   <option
                     v-for="(word, index) in text"
                     :value="word"
-                    :key="index">
+                    :key="index"
+                  >
                     {{ word }}
                   </option>
-                </b-select>
+                </BSelect>
               </div>
-            </b-field>
+            </BField>
           </div>
           <div class="modal-style__container__body__content__icon">
-            <b-icon
+            <BIcon
               icon="check-bold"
               size="is-medium"
               class="icon-style"
-              @click.native="addSentence(selectWord)" />
-            <b-icon
+              @click.native="addSentence(selectWord)"
+            />
+            <BIcon
               class="icon-style"
               size="is-medium"
               icon="close-thick"
-              @click.native="clearSelects()" />
+              @click.native="clearSelects()"
+            />
           </div>
         </div>
-        <b-message
+        <BMessage
           :active="message.show"
           :type="`is-${message.type}`"
           :duration="3000"
-          auto-close>
+          autoClose
+        >
           {{ message.text }}
-        </b-message>
+        </BMessage>
 
-        <edit-word-suggestion
-          :per-page="5"
+        <EditWordSuggestion
+          :perPage="5"
           :key="updateSuggestion"
-          :phrases-variation="phraseList"
+          :phrasesVariation="phraseList"
           @dispatchDelete="deleteSentence($event)"
-          @dispatchSave="modifySentence($event)"/>
+          @dispatchSave="modifySentence($event)"
+        />
 
         <footer class="modal-style__container__footer">
           <button
             class="button is-primary"
             type="button"
-            @click="closeModal">{{ $t('webapp.word_suggestion.cancel') }}</button>
+            @click="closeModal"
+          >
+            {{ $t('webapp.word_suggestion.cancel') }}
+          </button>
           <button
             :disabled="phraseList.total === 0"
             class="button is-secondary"
-            @click="addToTraining"> {{ $t('webapp.word_suggestion.add_training') }}</button>
+            @click="addToTraining"
+          >
+            {{ $t('webapp.word_suggestion.add_training') }}
+          </button>
         </footer>
       </div>
     </div>
@@ -141,12 +162,12 @@ export default {
     ]),
     manipulateText() {
       this.wordsTogether = this.detail.text.split(' ');
-      this.wordsTogether.map(word => this.selectWord.push(word));
+      this.wordsTogether.map((word) => this.selectWord.push(word));
     },
     deleteSentence(sentence) {
-      this.phraseList.items = this.phraseList.items.filter(oldSentence => (
-        sentence.text !== oldSentence.text
-      ));
+      this.phraseList.items = this.phraseList.items.filter(
+        (oldSentence) => sentence.text !== oldSentence.text,
+      );
       this.phraseList.total = this.phraseList.items.length;
       this.updateSuggestion = !this.updateSuggestion;
     },
@@ -159,13 +180,15 @@ export default {
     async getWordSuggestion() {
       this.loading = true;
       try {
-        const { data } = await this.getExampleSuggestion({ id: this.detail.id });
+        const { data } = await this.getExampleSuggestion({
+          id: this.detail.id,
+        });
         const suggestions = Object.entries(data.suggestions);
-        const words = suggestions.map(suggestion => (
-          [suggestion[0],
-            [...suggestion[1].similar_words.map(similar => similar[0])]]
-        ));
-        const filterWords = words.map(word => word.flat());
+        const words = suggestions.map((suggestion) => [
+          suggestion[0],
+          [...suggestion[1].similar_words.map((similar) => similar[0])],
+        ]);
+        const filterWords = words.map((word) => word.flat());
         this.allWords = filterWords;
       } catch (error) {
         this.error = error;
@@ -174,7 +197,9 @@ export default {
     },
     addSentence(value) {
       const joinWords = value.join(' ');
-      const checkSentence = this.phraseList.items.find(sentence => sentence.text === joinWords);
+      const checkSentence = this.phraseList.items.find(
+        (sentence) => sentence.text === joinWords,
+      );
 
       if (checkSentence !== undefined || joinWords === '') return;
 
@@ -197,7 +222,10 @@ export default {
           this.dispatchMessage(
             true,
             'success',
-            this.$tc('webapp.word_suggestion.phrase_added', this.phraseList.total),
+            this.$tc(
+              'webapp.word_suggestion.phrase_added',
+              this.phraseList.total,
+            ),
           );
           this.phraseList.items = [];
           this.phraseList.total = this.phraseList.items.length;
@@ -224,13 +252,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/utilities.scss';
-@import '~@/assets/scss/colors.scss';
-@import '~@/assets/scss/variables.scss';
-@import '~@weni/unnnic-system/dist/unnnic.css';
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@/assets/scss/utilities.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
- ::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 4px;
 }
 
@@ -243,12 +271,12 @@ export default {
   border-radius: $unnnic-border-radius-pill;
 }
 
-.modal-style{
+.modal-style {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  &__container{
+  &__container {
     width: 700px;
     min-height: 400px;
     padding: 1rem 3rem 1rem;
@@ -260,13 +288,13 @@ export default {
       align-items: center;
     }
 
-    h3{
+    h3 {
       font-weight: $font-weight-medium;
       font-size: 1.75rem;
       margin-right: 1rem;
     }
 
-    &__close{
+    &__close {
       width: 100%;
       margin-left: 1.5rem;
       display: flex;
@@ -276,81 +304,78 @@ export default {
       cursor: pointer;
     }
 
-        &__loading{
-          margin-top: 4rem;
-        }
+    &__loading {
+      margin-top: 4rem;
+    }
 
-      &__body{
-        height: 85%;
+    &__body {
+      height: 85%;
 
-        p{
-          margin-bottom: $between-subtitle-content;
-        }
-
-
-        &__content{
-            display: flex;
-            justify-content: space-between;
-            margin-top: $between-subtitle-content;
-
-            &__icon {
-                display: flex;
-                justify-content: space-around;
-                width: 20%;
-
-                .icon-style {
-                width: 43px;
-                height: 40px;
-                color: white;
-                border-radius: 6px;
-                background-color: $color-primary;
-                box-shadow: 0px 3px 6px #00000029;
-                }
-
-                .icon-style:hover{
-                    cursor: pointer;
-                    background-color: $color-primary;
-                }
-            }
-
-            &__selects{
-                width: 75%;
-                overflow: auto;
-                scrollbar-width: none;
-                margin-bottom: $between-subtitle-content;
-
-                .select-input{
-                    margin-right: 0.3rem;
-                    margin-bottom: 0.5rem;
-                }
-            }
-        }
-
+      p {
+        margin-bottom: $between-subtitle-content;
       }
 
-      &__footer{
+      &__content {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 6%;
-        margin-bottom: 1rem;
+        justify-content: space-between;
+        margin-top: $between-subtitle-content;
 
-        button{
-            width: 160px;
-            height: 43px;
-            margin: 0 0.5rem;
-            font-weight: $font-weight-bolder;
-            font-family: $font-family;
+        &__icon {
+          display: flex;
+          justify-content: space-around;
+          width: 20%;
+
+          .icon-style {
+            width: 43px;
+            height: 40px;
+            color: white;
+            border-radius: 6px;
+            background-color: $color-primary;
             box-shadow: 0px 3px 6px #00000029;
-            white-space: normal;
-            word-wrap: break-word;
-            line-height: 0.95rem;
+          }
+
+          .icon-style:hover {
+            cursor: pointer;
+            background-color: $color-primary;
+          }
+        }
+
+        &__selects {
+          width: 75%;
+          overflow: auto;
+          scrollbar-width: none;
+          margin-bottom: $between-subtitle-content;
+
+          .select-input {
+            margin-right: 0.3rem;
+            margin-bottom: 0.5rem;
+          }
         }
       }
-       @media screen and (max-width: $mobile-width) {
-        width: 400px;
-      }
-  }
+    }
 
+    &__footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 6%;
+      margin-bottom: 1rem;
+
+      button {
+        width: 160px;
+        height: 43px;
+        margin: 0 0.5rem;
+        font-weight: $font-weight-bolder;
+        font-family: $font-family;
+        box-shadow: 0px 3px 6px #00000029;
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 0.95rem;
+      }
+    }
+    @media screen and (max-width: $mobile-width) {
+      width: 400px;
+    }
+  }
 }
 </style>

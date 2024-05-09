@@ -1,75 +1,88 @@
 <template>
-  <sentence-accordion
-    :open.sync="open">
+  <SentenceAccordion :open.sync="open">
     <div
       slot="header"
-      class="level">
+      class="level"
+    >
       <div class="example-accordion__tag level-left">
-        <language-badge :language="language"/>
+        <LanguageBadge :language="language" />
       </div>
-      <div
-        class="level-right example-accordion__text">
-        <highlighted-text
+      <div class="level-right example-accordion__text">
+        <HighlightedText
           v-if="!editing || !open"
           :text="text"
           :highlighted="highlighted"
           :entities="entities"
-          :color-only="entitySelected" />
+          :colorOnly="entitySelected"
+        />
       </div>
     </div>
     <div
       slot="options"
-      class="level example-accordion__btns-wrapper">
+      class="level example-accordion__btns-wrapper"
+    >
       <div
-        v-if="repository.authorization && repository.authorization.can_contribute"
-        class="level-right">
+        v-if="
+          repository.authorization && repository.authorization.can_contribute
+        "
+        class="level-right"
+      >
         <div class="level-item">
           <a
             v-if="!editing || !open"
             :href="`#delete-example-${id}`"
-            @click.prevent.stop="editSentence()">
-            <b-icon
+            @click.prevent.stop="editSentence()"
+          >
+            <BIcon
               icon="pencil"
               size="is-small"
-              class="example-accordion__icon example__icon" />
+              class="example-accordion__icon example__icon"
+            />
           </a>
         </div>
       </div>
       <div
-        v-if="repository.authorization && repository.authorization.can_contribute"
-        class="level-right">
+        v-if="
+          repository.authorization && repository.authorization.can_contribute
+        "
+        class="level-right"
+      >
         <div class="level-item">
           <a
             :href="`#delete-example-${id}`"
-            @click.prevent.stop="deleteThisExample()">
-            <b-icon
+            @click.prevent.stop="deleteThisExample()"
+          >
+            <BIcon
               icon="delete"
               size="is-small"
-              class="example-accordion__icon example__icon" />
+              class="example-accordion__icon example__icon"
+            />
           </a>
         </div>
       </div>
     </div>
     <div slot="body">
-      <example-info
+      <ExampleInfo
         v-if="!editing"
-        :entities-list="entitiesList"
+        :entitiesList="entitiesList"
         :highlighted.sync="highlighted"
-        :intent="intent" />
+        :intent="intent"
+      />
 
-      <edit-example
+      <EditExample
         v-else
         :entities="entitiesList"
-        :intent-to-edit="intent"
-        :edit-example="true"
-        :text-to-edit="text"
-        :sentence-id="id"
-        :language-edit="language"
-        :get-all-entities="getEntitiesName"
+        :intentToEdit="intent"
+        :editExample="true"
+        :textToEdit="text"
+        :sentenceId="id"
+        :languageEdit="language"
+        :getAllEntities="getEntitiesName"
         @saveList="updateList"
-        @cancel="cancelEditSentence"/>
+        @cancel="cancelEditSentence"
+      />
     </div>
-  </sentence-accordion>
+  </SentenceAccordion>
 </template>
 
 <script>
@@ -103,7 +116,7 @@ export default {
     },
     entities: {
       type: Array,
-      default: /* istanbul ignore next */ () => ([]),
+      default: /* istanbul ignore next */ () => [],
     },
     intent: {
       type: String,
@@ -130,37 +143,30 @@ export default {
 
   computed: {
     ...mapState({
-      repository: state => state.Repository.selectedRepository,
+      repository: (state) => state.Repository.selectedRepository,
     }),
     entitiesList() {
-      return this.entities
-        .map(entity => ({
-          value: entity.value,
-          class: this.getEntityClass(entity.entity),
-          group: entity.group,
-          ...entity,
-        }));
+      return this.entities.map((entity) => ({
+        value: entity.value,
+        class: this.getEntityClass(entity.entity),
+        group: entity.group,
+        ...entity,
+      }));
     },
     getEntitiesName() {
       const allEntitiesName = this.repository.entities.map(
-        entityValue => entityValue.value,
+        (entityValue) => entityValue.value,
       );
       return allEntitiesName;
     },
   },
   methods: {
-    ...mapActions([
-      'deleteEvaluateExample',
-      'deleteExample',
-    ]),
+    ...mapActions(['deleteEvaluateExample', 'deleteExample']),
     getEntityClass(entity) {
       const allEntitiesName = this.repository.entities.map(
-        entityValue => entityValue.value,
+        (entityValue) => entityValue.value,
       );
-      const color = getEntityColor(
-        entity,
-        allEntitiesName,
-      );
+      const color = getEntityColor(entity, allEntitiesName);
       return `entity-${color}`;
     },
     deleteThisExample() {
@@ -195,27 +201,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
- @import '~@/assets/scss/colors.scss';
- @import '~@/assets/scss/variables.scss';
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
 
-  .example-accordion {
-
-    &__text {
-      max-width: 100%;
-      font-family: $font-family;
-    }
-
-    &__tag {
-      margin-right: 0.5rem;
-    }
-
-    &__icon {
-      color: $color-grey-dark;
-    }
-
-    &__btns-wrapper {
-        display: flex;
-        justify-content: flex-end;
-      }
+.example-accordion {
+  &__text {
+    max-width: 100%;
+    font-family: $font-family;
   }
+
+  &__tag {
+    margin-right: 0.5rem;
+  }
+
+  &__icon {
+    color: $color-grey-dark;
+  }
+
+  &__btns-wrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
 </style>

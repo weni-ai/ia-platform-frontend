@@ -1,19 +1,21 @@
 <template>
   <div class="example">
     <div class="example-text">
-      <highlighted-text
+      <HighlightedText
         :text="text"
         :entities="entities"
         :highlighted="highlighted"
-        size="large" />
+        size="large"
+      />
     </div>
     <div
       v-if="entitiesList.length > 0"
-      class="example-entities">
-      <entity-tag
+      class="example-entities"
+    >
+      <EntityTag
         v-for="(entity, i) in entitiesList"
         :key="i"
-        :entity-name="entity"
+        :entityName="entity"
         :highlighted="highlighted === entity"
         @mouseenter.native.stop="highlighted = entity"
         @mouseleave.native.stop="highlighted = null"
@@ -23,7 +25,8 @@
       <div class="level-left">
         <div
           v-if="intent"
-          class="level-item has-text-grey">
+          class="level-item has-text-grey"
+        >
           <strong>{{ $t('webapp.translate.intent') }}&nbsp;</strong>
           <span>{{ intent }}</span>
         </div>
@@ -32,10 +35,13 @@
         </div>
       </div>
       <div
-        v-if="repository.authorization && (
-          repository.authorization.can_contribute || repository.authorization.can_translate
-        )"
-        class="level-right">
+        v-if="
+          repository.authorization &&
+          (repository.authorization.can_contribute ||
+            repository.authorization.can_translate)
+        "
+        class="level-right"
+      >
         <div class="level-item">
           <button
             id="tour-translate-step-3"
@@ -43,24 +49,26 @@
             :is-previous-disabled="true"
             :is-step-blocked="blockedNextStepTutorial"
             class="button is-primary"
-            @click="toggleFormOpen()">
+            @click="toggleFormOpen()"
+          >
             <span>{{ $t('webapp.translate.translate_sentence') }}</span>
-            <b-icon icon="chevron-down" />
+            <BIcon icon="chevron-down" />
           </button>
         </div>
       </div>
     </div>
-    <b-collapse :open="formOpen">
+    <BCollapse :open="formOpen">
       <div class="translate-form">
-        <new-translate-form
-          :example-id="id"
-          :translate-to="translateTo"
-          :extra-entities-list="entitiesList"
+        <NewTranslateForm
+          :exampleId="id"
+          :translateTo="translateTo"
+          :extraEntitiesList="entitiesList"
           :repository="repository"
           @translated="onTranslated()"
-          @eventStep="dispatchStep()" />
+          @eventStep="dispatchStep()"
+        />
       </div>
-    </b-collapse>
+    </BCollapse>
   </div>
 </template>
 
@@ -94,7 +102,7 @@ export default {
     },
     entities: {
       type: Array,
-      default: /* istanbul ignore next */ () => ([]),
+      default: /* istanbul ignore next */ () => [],
     },
     created_at: {
       type: String,
@@ -123,9 +131,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'activeTutorial',
-    ]),
+    ...mapGetters(['activeTutorial']),
     entitiesList() {
       return getEntitiesList(this.entities);
     },
@@ -140,9 +146,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'deleteExample',
-    ]),
+    ...mapActions(['deleteExample']),
     getEntityClass(entity) {
       const color = getEntityColor(
         entity,
@@ -176,7 +180,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/utilities.scss';
+@import '@/assets/scss/utilities.scss';
 
 .example {
   $radius: 8px;
@@ -189,14 +193,14 @@ export default {
   &:hover {
     .example-text {
       background-color: $white;
-      box-shadow: 0 2px 8px rgba(100, 100, 100, .5);
+      box-shadow: 0 2px 8px rgba(100, 100, 100, 0.5);
     }
   }
 
   &-text {
     background-color: $white-ter;
     border-radius: $radius;
-    transition: box-shadow .2s ease;
+    transition: box-shadow 0.2s ease;
     font-size: 1.25rem;
     padding: 8px 16px;
     margin-bottom: 4px;

@@ -1,54 +1,55 @@
 <template>
-<div>
-  <unnnic-table :items="orderedList" class="mt-4">
-    <template v-slot:header>
-      <unnnic-table-row :headers="table.headers">
-        <template v-slot:checkarea>
-          <unnnic-checkbox
-            :value="generalValue"
-            @change="changeGeneralCheckbox"
-            :style="{ margin: '4px' }"
-          />
-        </template>
-        <template v-slot:edit>
-          <span>
-            {{ $t('webapp.inbox.intent') }}
-          </span>
-          <unnnic-icon-svg
-            size="xs"
-            :icon="`sort-${sorts.intent}`"
-            :scheme="
-              sorts.intent === 'default'
-                ? 'neutral-clean'
-                : 'brand-weni-soft'
-            "
-            clickable
-            @click="sort('intent')"
-          />
-        </template>
-        <template v-slot:delete>
-          <span>
-            {{ $t('webapp.inbox.confidence') }}
-          </span>
-          <unnnic-icon-svg
-            size="xs"
-            :icon="`sort-${sorts.confidence}`"
-            :scheme="
-              sorts.confidence === 'default'
-                ? 'neutral-clean'
-                : 'brand-weni-soft'
-            "
-            clickable
-            @click="sort('confidence')"
-          />
-        </template>
-      </unnnic-table-row>
-    </template>
-
-    <template v-slot:item="{ item }">
-        <unnnic-table-row :headers="table.headers">
+  <div>
+    <UnnnicTable
+      :items="orderedList"
+      class="mt-4"
+    >
+      <template v-slot:header>
+        <UnnnicTableRow :headers="table.headers">
           <template v-slot:checkarea>
-            <unnnic-checkbox
+            <UnnnicCheckbox
+              :value="generalValue"
+              @change="changeGeneralCheckbox"
+              :style="{ margin: '4px' }"
+            />
+          </template>
+          <template v-slot:edit>
+            <span>
+              {{ $t('webapp.inbox.intent') }}
+            </span>
+            <UnnnicIconSvg
+              size="xs"
+              :icon="`sort-${sorts.intent}`"
+              :scheme="
+                sorts.intent === 'default' ? 'neutral-clean' : 'brand-weni-soft'
+              "
+              clickable
+              @click="sort('intent')"
+            />
+          </template>
+          <template v-slot:delete>
+            <span>
+              {{ $t('webapp.inbox.confidence') }}
+            </span>
+            <UnnnicIconSvg
+              size="xs"
+              :icon="`sort-${sorts.confidence}`"
+              :scheme="
+                sorts.confidence === 'default'
+                  ? 'neutral-clean'
+                  : 'brand-weni-soft'
+              "
+              clickable
+              @click="sort('confidence')"
+            />
+          </template>
+        </UnnnicTableRow>
+      </template>
+
+      <template v-slot:item="{ item }">
+        <UnnnicTableRow :headers="table.headers">
+          <template v-slot:checkarea>
+            <UnnnicCheckbox
               v-model="item.selected"
               @change="dispatchSelectedItems"
               :style="{ margin: '4px' }"
@@ -63,31 +64,34 @@
               :title="item.sentence"
               class="break-text example-accordion__sentence"
             >
-              <unnnic-icon-svg
-                :icon="
-                  `${open && selectedItem === item.id
-                    ? 'arrow-button-down-1' : 'arrow-button-right-1'}`
-                "
+              <UnnnicIconSvg
+                :icon="`${
+                  open && selectedItem === item.id
+                    ? 'arrow-button-down-1'
+                    : 'arrow-button-right-1'
+                }`"
                 scheme="neutral-cleanest"
                 size="xs"
                 clickable
                 class="mr-2"
               />
-              <span class="example-accordion__tag">[{{ item.nlp_log.language }}]</span>
-              <highlighted-entity
+              <span class="example-accordion__tag"
+                >[{{ item.nlp_log.language }}]</span
+              >
+              <HighlightedEntity
                 :ref="item.id"
                 :id="item.id"
                 :text="item.text"
                 :highlighted="item.highlighted"
                 :entities="item.nlp_log.entities.other || []"
-                :color-only="item.entitySelected"
+                :colorOnly="item.entitySelected"
                 :state="isSentenceActive"
               />
               <span
                 v-if="showIntents"
                 class="ml-4 intent-label"
               >
-              {{ $t("webapp.translate.intent") + ' ' + item.intent }}
+                {{ $t('webapp.translate.intent') + ' ' + item.intent }}
               </span>
             </div>
           </template>
@@ -115,7 +119,7 @@
               <span>{{ item.confidence }}</span>
             </div>
           </template>
-        </unnnic-table-row>
+        </UnnnicTableRow>
 
         <!-- <edit-example-intent
           v-if="open && item.id === selectedItem"
@@ -129,7 +133,7 @@
           @saveList="updateList"
           @cancel="cancelEditSentence"
         /> -->
-        <log-accordion
+        <LogAccordion
           v-if="open && item.id === selectedItem"
           :nlp_log="item.nlp_log"
           :id="item.id"
@@ -141,8 +145,8 @@
           @event_removeLog="removeLogStructure($event)"
         />
       </template>
-  </unnnic-table>
-  <!-- <unnnic-modal
+    </UnnnicTable>
+    <!-- <unnnic-modal
     :showModal="openModal"
     :text="$t('webapp.trainings.delete_title')"
     scheme="feedback-red"
@@ -175,7 +179,7 @@
     slot="message"
     v-html="$t('webapp.intent.delete_success_subtitle')" />
   </unnnic-modal> -->
-</div>
+  </div>
 </template>
 
 <script>
@@ -242,13 +246,13 @@ export default {
           {
             id: 'edit',
             text: this.$t('webapp.inbox.intent'),
-            flex: 3
+            flex: 3,
           },
           {
             id: 'delete',
             text: this.$t('webapp.inbox.confidence'),
             flex: 2,
-          }
+          },
         ],
       },
       sorts: {
@@ -261,13 +265,13 @@ export default {
       sentenceId: null,
       openSuccessModal: false,
       isSentenceActive: false,
-      orderedList: null
+      orderedList: null,
     };
   },
 
   computed: {
     ...mapState({
-      repository: state => state.Repository.selectedRepository,
+      repository: (state) => state.Repository.selectedRepository,
     }),
     // entities() {
     //   return Object.keys(this.list.nlp_log.entities).map(key => this.nlp_log.entities[key].map(
@@ -307,7 +311,7 @@ export default {
     // },
     getEntitiesName() {
       const allEntitiesName = this.repository.entities.map(
-        (entityValue) => entityValue.value
+        (entityValue) => entityValue.value,
       );
       return allEntitiesName;
     },
@@ -323,24 +327,26 @@ export default {
       return 'less';
     },
     selectedItems() {
-      return this.orderedList.filter((item) => item.selected === true)
+      return this.orderedList.filter((item) => item.selected === true);
     },
     formattedConfidence() {
       return this.list.items.map((item) => ({
         ...item,
-        confidence: `${parseFloat(item.nlp_log.intent.confidence * 100).toFixed(0)}%`
+        confidence: `${parseFloat(item.nlp_log.intent.confidence * 100).toFixed(
+          0,
+        )}%`,
       }));
-    }
+    },
   },
   watch: {
     sentence(value) {
       if (value) {
-        const { id } = value
-        this.$refs[id].active = this.isSentenceActive
+        const { id } = value;
+        this.$refs[id].active = this.isSentenceActive;
       }
     },
     sorts: {
-      handler(value){
+      handler(value) {
         if (value.intent === 'desc') {
           this.orderedList = this.formattedConfidence.sort((x, y) => {
             const a = x.nlp_log.intent.name.toUpperCase();
@@ -358,32 +364,34 @@ export default {
           });
         }
         if (value.confidence === 'desc') {
-          this.orderedList = this.formattedConfidence
-            .sort((a, b) => a.nlp_log.intent.confidence - b.nlp_log.intent.confidence)
+          this.orderedList = this.formattedConfidence.sort(
+            (a, b) => a.nlp_log.intent.confidence - b.nlp_log.intent.confidence,
+          );
         }
         if (value.confidence === 'asc') {
-          this.orderedList = this.formattedConfidence
-            .sort((a, b) => b.nlp_log.intent.confidence - a.nlp_log.intent.confidence)
+          this.orderedList = this.formattedConfidence.sort(
+            (a, b) => b.nlp_log.intent.confidence - a.nlp_log.intent.confidence,
+          );
         }
         if (value.intent === 'default' || value.confidence === 'default') {
-          this.orderedList = this.formattedConfidence
+          this.orderedList = this.formattedConfidence;
         }
       },
-      deep: true
+      deep: true,
     },
     async formattedConfidence() {
       await this.$nextTick();
-      this.orderedList = this.formattedConfidence
+      this.orderedList = this.formattedConfidence;
     },
     orderedList() {
       this.dispatchSelectedItems();
-    }
+    },
   },
   methods: {
     ...mapActions(['deleteEvaluateExample', 'deleteExample']),
     getEntityClass(entity) {
       const allEntitiesName = this.repository.entities.map(
-        (entityValue) => entityValue.value
+        (entityValue) => entityValue.value,
       );
       const color = getEntityColor(entity, allEntitiesName);
       return `entity-${color}`;
@@ -397,7 +405,9 @@ export default {
         await this.deleteExample({ id: this.sentenceId });
         this.$emit('dispatchEvent', { event: 'itemDeleted' });
         this.openModal = false;
-        setTimeout(() => { this.openSuccessModal = true }, 2000);
+        setTimeout(() => {
+          this.openSuccessModal = true;
+        }, 2000);
       } catch {
         this.$emit('dispatchEvent', { event: 'error' });
       }
@@ -405,14 +415,14 @@ export default {
     cancelEditSentence() {
       this.open = !this.open;
       this.editing = false;
-      this.$refs[this.selectedItem].active = false
+      this.$refs[this.selectedItem].active = false;
       this.selectedItem = null;
     },
     editSentence(id) {
-      this.selectedItem = id
+      this.selectedItem = id;
       this.open = !this.open;
       this.editing = true;
-      this.$refs[id].active = true
+      this.$refs[id].active = true;
     },
     updateList() {
       this.$emit('updateList');
@@ -424,24 +434,25 @@ export default {
       }));
     },
     activeSentence(item) {
-      const { id } = item
+      const { id } = item;
       if (!this.editing) {
-        this.$refs[id].active = true
+        this.$refs[id].active = true;
       }
     },
     inactiveSentence(item) {
-      const { id } = item
+      const { id } = item;
       if (!this.editing) {
-        this.$refs[id].active = false
+        this.$refs[id].active = false;
       }
     },
     sort(name) {
       ['intent', 'confidence'].forEach((key) => {
         if (key === name) {
           // eslint-disable-next-line no-nested-ternary
-          this.sorts[key] = this.sorts[key] === 'default'
-            ? 'asc'
-            : this.sorts[key] === 'asc'
+          this.sorts[key] =
+            this.sorts[key] === 'default'
+              ? 'asc'
+              : this.sorts[key] === 'asc'
               ? 'desc'
               : 'default';
 
@@ -458,17 +469,20 @@ export default {
       // this.reload();
     },
     dispatchSelectedItems() {
-      this.$emit('dispatchEvent', { event: 'onUpdateSelected', value: this.selectedItems });
-    }
+      this.$emit('dispatchEvent', {
+        event: 'onUpdateSelected',
+        value: this.selectedItems,
+      });
+    },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/colors.scss";
-@import "~@/assets/scss/variables.scss";
-@import "~@weni/unnnic-system/dist/unnnic.css";
-@import "~@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@/assets/scss/colors.scss';
+@import '@/assets/scss/variables.scss';
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .example-accordion {
   &__text {
@@ -502,25 +516,25 @@ export default {
 .intent-label {
   font-family: 'Lato';
   font-size: 12px;
-  color: #67738B;
+  color: #67738b;
   padding-top: 1px;
 }
 
-/deep/ .test > .item {
+:deep(.test > .item) {
   background-color: blue;
 }
 
-/deep/ .scroll {
+:deep(.scroll) {
   padding-right: 0;
 }
 
-/deep/ .header .break-text {
+:deep(.header .break-text) {
   overflow: initial;
 }
-/deep/ .unnnic-table .header {
+:deep(.unnnic-table .header) {
   padding: 0.75rem 1.5rem;
 }
-/deep/ .unnnic-table .item {
+:deep(.unnnic-table .item) {
   padding: 0.75rem 1.5rem;
   border: 1px solid white;
 
@@ -528,14 +542,13 @@ export default {
     margin-bottom: 0;
   }
 }
-/deep/ .unnnic-table .item:hover {
+:deep(.unnnic-table .item:hover) {
   border: 1px solid $unnnic-color-neutral-soft;
 }
-/deep/ .test .unnnic-table .item {
+:deep(.test .unnnic-table .item) {
   background: black;
 }
-/deep/ .highlighted-text--size-normal {
+:deep(.highlighted-text--size-normal) {
   font-size: $unnnic-font-size-body-gt;
 }
-
 </style>

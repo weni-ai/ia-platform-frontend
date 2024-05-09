@@ -1,26 +1,32 @@
 <template>
   <div class="translation-status-info">
-    <translation-stats-card
+    <TranslationStatsCard
       :disabled="!languages"
-      :help-text="(languages || []).join(', ')"
+      :helpText="(languages || []).join(', ')"
       :count="(languages || []).length"
-      :label="$tc('webapp.summary.information_language',
-                  (languages || []).length)"
-      size="medium" />
-    <translation-stats-card
+      :label="
+        $tc('webapp.summary.information_language', (languages || []).length)
+      "
+      size="medium"
+    />
+    <TranslationStatsCard
       :disabled="!completedLanguages"
-      :help-text="(completedLanguages || []).join(', ')"
+      :helpText="(completedLanguages || []).join(', ')"
       :count="(completedLanguages || []).length"
-      :label="$tc('webapp.translate.completed',
-                  (completedLanguages || []).length)"
-      size="medium" />
-    <translation-stats-card
+      :label="
+        $tc('webapp.translate.completed', (completedLanguages || []).length)
+      "
+      size="medium"
+    />
+    <TranslationStatsCard
       :disabled="!translatorsList"
-      :help-text="(translatorsList || []).join(', ')"
+      :helpText="(translatorsList || []).join(', ')"
       :count="(translatorsList || []).length"
-      :label="$tc('webapp.translate.translators',
-                  (translatorsList || []).length)"
-      size="medium" />
+      :label="
+        $tc('webapp.translate.translators', (translatorsList || []).length)
+      "
+      size="medium"
+    />
   </div>
 </template>
 
@@ -61,9 +67,7 @@ export default {
     this.getTranslators();
   },
   methods: {
-    ...mapActions([
-      'repositoryAuthorizationList',
-    ]),
+    ...mapActions(['repositoryAuthorizationList']),
     async getTranslators() {
       if (!this.repositoryUuid) return;
       try {
@@ -72,8 +76,8 @@ export default {
         });
         const list = await authorizationsList.getAllItems();
         this.translatorsList = list
-          .filter(user => user.level >= 2)
-          .map(user => user.user__nickname);
+          .filter((user) => user.level >= 2)
+          .map((user) => user.user__nickname);
       } catch (e) {
         this.translatorsList = null;
       }
@@ -83,17 +87,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/assets/scss/colors.scss';
+@import '@/assets/scss/colors.scss';
 
-  .translation-status-info {
-    display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        padding: 0.35rem 1.5rem;
-        border: 1px solid $color-border;
+.translation-status-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 0.35rem 1.5rem;
+  border: 1px solid $color-border;
 
-        > * {
-          margin-right: 1rem;
-        }
+  > * {
+    margin-right: 1rem;
   }
+}
 </style>
