@@ -25,6 +25,17 @@
       v-show="open"
       class="advanced__content"
     >
+      <slot></slot>
+      <UnnnicIntelligenceText
+        color="neutral-dark"
+        family="secondary"
+        weight="bold"
+        size="body-gt"
+        marginTop="md"
+        tag="p"
+      >
+        {{ $t('router.tunings.advanced.brain') }}
+      </UnnnicIntelligenceText>
       <UnnnicIntelligenceText
         color="neutral-cloudy"
         family="secondary"
