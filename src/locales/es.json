@@ -1,4 +1,5 @@
 {
+  "and": " y ",
   "delete": "Eliminar",
   "cancel": "Cancelar",
   "announcements": {
@@ -199,7 +200,8 @@
     "feedback": {
       "liked": "Buena respuesta",
       "disliked": "Mala respuesta"
-    }
+    },
+    "sources": "Fuente: | Fuentes:"
   },
   "log": {
     "interaction_received_on": "Interacción recibida el:",
