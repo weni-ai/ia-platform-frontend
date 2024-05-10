@@ -14,7 +14,7 @@
     <template v-for="(field, index) in fields">
       <UnnnicIntelligenceText
         :key="`language-${index}`"
-        v-if="field.name === 'select-language'"
+        v-if="field.name === 'language'"
         color="neutral-dark"
         family="secondary"
         weight="bold"
@@ -22,7 +22,7 @@
         size="body-gt"
         tag="p"
       >
-        {{ $t('router.tunings.fields.language') }}
+        {{ $t('router.tunings.fields.select-language') }}
       </UnnnicIntelligenceText>
       <header
         v-if="['radio', 'select'].includes(field.type)"
@@ -223,9 +223,9 @@ export default {
             },
             {
               type: 'select',
-              name: 'select-language',
-              default: 'portugues',
-              options: ['inglês', 'espanhol'],
+              name: 'language',
+              default: 'português',
+              options: ['português', 'inglês', 'espanhol'],
             },
             {
               type: 'naf-header',
@@ -272,9 +272,9 @@ export default {
             },
             {
               type: 'select',
-              name: 'select-language',
-              default: 'portugues',
-              options: ['inglês', 'espanhol'],
+              name: 'language',
+              default: 'português',
+              options: ['português', 'inglês', 'espanhol'],
             },
             {
               type: 'naf-header',
