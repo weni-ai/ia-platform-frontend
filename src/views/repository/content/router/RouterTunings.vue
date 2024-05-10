@@ -24,21 +24,8 @@
       >
         {{ $t('router.tunings.fields.language') }}
       </UnnnicIntelligenceText>
-      <UnnnicIntelligenceText
-        :key="index"
-        v-if="field.type === 'naf-header'"
-        color="neutral-dark"
-        family="secondary"
-        weight="bold"
-        size="body-gt"
-        marginTop="md"
-        tag="p"
-      >
-        {{ $t(`router.tunings.fields.${field.name}`) }}
-      </UnnnicIntelligenceText>
-
       <header
-        v-if="['radio', 'select', 'slider'].includes(field.type)"
+        v-if="['radio', 'select'].includes(field.type)"
         :key="`label-${index}`"
         class="tunings__form-element__label"
       >
@@ -50,24 +37,7 @@
         >
           {{ $t(`router.tunings.fields.${field.name}`) }}
         </UnnnicIntelligenceText>
-
-        <UnnnicToolTip
-          v-if="['temperature', 'top_p', 'top_k'].includes(field.name)"
-          side="top"
-          :text="$t(`router.tunings.fields.${field.name}_info`)"
-          enabled
-          maxWidth="13rem"
-          class="tunings__form-element__label__tooltip"
-        >
-          <UnnnicIcon
-            icon="info"
-            size="sm"
-            scheme="neutral-cleanest"
-            filled
-          />
-        </UnnnicToolTip>
       </header>
-
       <section
         :key="index"
         v-if="field.type === 'radio' && !loadingData"
@@ -90,24 +60,6 @@
         tag="div"
         height="32px"
         width="280px"
-      />
-
-      <UnnnicSlider
-        v-if="field.type === 'slider' && !loadingData"
-        :key="index + ':' + field.value"
-        :minValue="field.min"
-        :maxValue="field.max"
-        :step="field.step"
-        :initialValue="field.value"
-        @valueChange="$set(values, field.name, Number($event))"
-        class="tunings__form-element__slider"
-      />
-      <UnnnicSkeletonLoading
-        :key="index"
-        v-if="field.type === 'slider' && loadingData"
-        tag="div"
-        height="36px"
-        width="384px"
       />
       <UnnnicSelectSmart
         class="tunings__container_fields-element"
@@ -145,7 +97,69 @@
     <RouterTuningsAdvanced
       class="tunings__advanced"
       :brainOn.sync="data.brainOn"
-    />
+    >
+      <template v-for="(field, index) in fields">
+        <UnnnicIntelligenceText
+          :key="index"
+          v-if="field.type === 'naf-header'"
+          color="neutral-dark"
+          family="secondary"
+          weight="bold"
+          size="body-gt"
+          marginTop="md"
+          tag="p"
+        >
+          {{ $t(`router.tunings.fields.${field.name}`) }}
+        </UnnnicIntelligenceText>
+        <header
+          v-if="['slider'].includes(field.type)"
+          :key="`label-${index}`"
+          class="tunings__form-element__label"
+        >
+          <UnnnicIntelligenceText
+            color="neutral-cloudy"
+            family="secondary"
+            size="body-gt"
+            tag="p"
+          >
+            {{ $t(`router.tunings.fields.${field.name}`) }}
+          </UnnnicIntelligenceText>
+
+          <UnnnicToolTip
+            v-if="['temperature', 'top_p', 'top_k'].includes(field.name)"
+            side="top"
+            :text="$t(`router.tunings.fields.${field.name}_info`)"
+            enabled
+            maxWidth="13rem"
+            class="tunings__form-element__label__tooltip"
+          >
+            <UnnnicIcon
+              icon="info"
+              size="sm"
+              scheme="neutral-cleanest"
+              filled
+            />
+          </UnnnicToolTip>
+        </header>
+        <UnnnicSlider
+          v-if="field.type === 'slider' && !loadingData"
+          :key="index + ':' + field.value"
+          :minValue="field.min"
+          :maxValue="field.max"
+          :step="field.step"
+          :initialValue="field.value"
+          @valueChange="$set(values, field.name, Number($event))"
+          class="tunings__form-element__slider"
+        />
+        <UnnnicSkeletonLoading
+          :key="index"
+          v-if="field.type === 'slider' && loadingData"
+          tag="div"
+          height="36px"
+          width="384px"
+        />
+      </template>
+    </RouterTuningsAdvanced>
 
     <UnnnicDivider ySpacing="md" />
 
