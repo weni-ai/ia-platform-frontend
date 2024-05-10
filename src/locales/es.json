@@ -86,6 +86,8 @@
         "token": "Token",
         "version": "Versión",
         "version-gpt": "Versión",
+        "language": "Idioma",
+        "select-language": "Selecciona el idioma por defecto",
         "parameter": "Parámetros",
         "temperature": "Temperatura",
         "temperature_info": "Ajustar la Temperatura para controlar la diversidad de las respuestas generadas",

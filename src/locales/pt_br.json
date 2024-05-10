@@ -85,6 +85,8 @@
         "model": "Selecione o modelo",
         "token": "Token",
         "version": "Versão",
+        "language": "Idioma",
+        "select-language": "Selecione o idiome padrão",
         "version-gpt": "Versão",
         "parameter": "Parâmetros",
         "temperature": "Temperatura",
