@@ -13,6 +13,18 @@
 
     <template v-for="(field, index) in fields">
       <UnnnicIntelligenceText
+        :key="`language-${index}`"
+        v-if="field.name === 'select-language'"
+        color="neutral-dark"
+        family="secondary"
+        weight="bold"
+        marginTop="md"
+        size="body-gt"
+        tag="p"
+      >
+        {{ $t('router.tunings.fields.language') }}
+      </UnnnicIntelligenceText>
+      <UnnnicIntelligenceText
         :key="index"
         v-if="field.type === 'naf-header'"
         color="neutral-dark"
@@ -196,6 +208,12 @@ export default {
               options: Object.keys(WENIGPT_OPTIONS),
             },
             {
+              type: 'select',
+              name: 'select-language',
+              default: 'portugues',
+              options: ['inglês', 'espanhol'],
+            },
+            {
               type: 'naf-header',
               name: 'parameter',
             },
@@ -237,6 +255,12 @@ export default {
               name: 'version-gpt',
               default: 'gpt-4-turbo',
               options: ['gpt-3.5-turbo', 'gpt-4-turbo'],
+            },
+            {
+              type: 'select',
+              name: 'select-language',
+              default: 'portugues',
+              options: ['inglês', 'espanhol'],
             },
             {
               type: 'naf-header',
