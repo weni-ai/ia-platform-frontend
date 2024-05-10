@@ -9,15 +9,7 @@
     >
       {{ $tc('quick_test.sources', sources.length) }}
 
-      <template v-for="{ source, sufix } in list(sources)">
-        <span
-          class="source"
-          :key="source.uuid"
-          >{{ name(source) }}</span
-        >
-
-        <template v-if="sufix">{{ sufix }}</template> </template
-      >.
+      {{ list(sources) }}.
     </UnnnicIntelligenceText>
   </section>
 </template>
@@ -30,15 +22,11 @@ export default {
 
   methods: {
     list(sources) {
-      return sources.map((source, index) => ({
-        source,
-        sufix:
-          index + 1 === sources.length
-            ? null
-            : index + 2 < sources.length
-            ? ', '
-            : this.$t('and'),
-      }));
+      const list = sources.map(this.name);
+
+      return [list.slice(0, -1).join(', '), list.at(-1)]
+        .filter((i) => i)
+        .join(this.$t('and'));
     },
 
     type(source) {
@@ -82,9 +70,5 @@ export default {
 
 .sources {
   margin-top: $unnnic-spacing-xs;
-
-  .source {
-    color: $unnnic-color-weni-600;
-  }
 }
 </style>
