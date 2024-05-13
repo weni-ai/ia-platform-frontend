@@ -47,6 +47,11 @@
               :content="message.text"
             />
 
+            <AnswerSources
+              v-if="shouldShowSources(message)"
+              :sources="message.sources"
+            />
+
             <AnswerFeedback
               v-if="message.type === 'answer' && message.question_uuid"
               :feedback.sync="message.feedback"
@@ -97,6 +102,7 @@
 <script>
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
+import AnswerSources from '../../../components/QuickTest/AnswerSources.vue';
 import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
 import FlowPreview from '../../../utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
@@ -113,6 +119,7 @@ export default {
 
   components: {
     Markdown,
+    AnswerSources,
     AnswerFeedback,
   },
 
@@ -168,6 +175,12 @@ export default {
   },
 
   methods: {
+    shouldShowSources(message) {
+      return (
+        this.usePreview && message.type === 'answer' && message.sources?.length
+      );
+    },
+
     shouldShowQuickReplies(message) {
       return (
         this.usePreview &&
@@ -302,6 +315,7 @@ export default {
                   'message',
                   this.$t('quick_test.unable_to_find_an_answer', this.language),
                 );
+                answer.sources = get(data, 'fonts', []);
 
                 this.scrollToLastMessage();
               } else if (data.type === 'flowstart') {
