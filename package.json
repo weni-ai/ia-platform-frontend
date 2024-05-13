@@ -5,7 +5,7 @@
   "author": "Weni <contato@weni.ai>",
   "private": true,
   "scripts": {
-    "lint": "eslint",
+    "lint": "eslint --ext .vue,.js --ignore-path .gitignore src",
     "dev": "concurrently \"vite\" \"node --watch mock/server.mjs\"",
     "build": "vite build",
     "serve": "vite preview",
@@ -75,5 +75,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "resolutions": {
+    "strip-ansi": "6.0.1"
+  }
 }
