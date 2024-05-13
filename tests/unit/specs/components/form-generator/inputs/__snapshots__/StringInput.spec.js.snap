@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`StringInput.vue renders correctly 1`] = `<b-input-stub has-counter="true" placeholder="" type="text" value=""></b-input-stub>`;

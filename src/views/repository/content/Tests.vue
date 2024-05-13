@@ -42,9 +42,10 @@
           </UnnnicIntelligenceText>
 
           <template v-else>
-            <VueMarkdown :class="`messages__${message.type}__content`">
-              {{ message.text }}
-            </VueMarkdown>
+            <Markdown
+              :class="`messages__${message.type}__content`"
+              :content="message.text"
+            />
 
             <AnswerSources
               v-if="shouldShowSources(message)"
@@ -99,13 +100,13 @@
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import AnswerSources from '../../../components/QuickTest/AnswerSources.vue';
 import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
 import FlowPreview from '../../../utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
+import Markdown from '../../../components/Markdown.vue';
 
 export default {
   name: 'RepositoryContentTests',
@@ -117,7 +118,7 @@ export default {
   },
 
   components: {
-    VueMarkdown,
+    Markdown,
     AnswerSources,
     AnswerFeedback,
   },
