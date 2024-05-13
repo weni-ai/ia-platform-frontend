@@ -207,7 +207,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
-import VueMarkdown from 'vue-markdown';
 import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard';
 import RepositoryContentNavigation from './Navigation';
 import Modal from '@/components/repository/CreateRepository/Modal';
@@ -220,7 +219,6 @@ export default {
   mixins: [RemoveBulmaMixin],
   components: {
     RepositoryViewBase,
-    VueMarkdown,
     HomeRepositoryCard,
     RepositoryContentNavigation,
     Modal,
