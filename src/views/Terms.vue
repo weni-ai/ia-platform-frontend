@@ -309,7 +309,7 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
+@import '~@/assets/scss/colors.scss';
 
 .termsStyle {
   $max-width: 1200px;

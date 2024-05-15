@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     profileURL() {
-      return `${runtimeVariables.get('VITE_BOTHUB_WEBAPP_BASE_URL')}
+      return `${runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_BASE_URL')}
       ${this.profile.nickname}/`;
     },
   },

@@ -95,7 +95,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/utilities.scss';
+@import '~@/assets/scss/utilities.scss';
 
 .repository-new-version-modal {
   &__container {

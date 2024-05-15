@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/utilities.scss';
+@import '~@/assets/scss/utilities.scss';
 
 $pie-size: 100px;
 $pie-border: 8px;

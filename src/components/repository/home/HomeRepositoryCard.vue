@@ -747,7 +747,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .button-quick-test {
   margin-right: $unnnic-spacing-xs;
@@ -759,7 +759,7 @@ export default {
 </style>
 
 <style lang="scss">
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .base__footer {
   margin-top: 0.625 * $unnnic-font-size - $unnnic-border-width-thinner;

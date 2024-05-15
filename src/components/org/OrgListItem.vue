@@ -81,8 +81,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/variables.scss';
-@import '@/assets/scss/colors.scss';
+@import '~@/assets/scss/variables.scss';
+@import '~@/assets/scss/colors.scss';
 
 .org-card {
   $org-card-margin: 1rem;

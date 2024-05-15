@@ -191,12 +191,12 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/utilities.scss';
-@import '@/assets/scss/default.scss';
-@import '@/assets/scss/colors.scss';
-@import '@/assets/scss/variables.scss';
-@import '@weni/unnnic-system/dist/unnnic.css';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@/assets/scss/utilities.scss';
+@import '~@/assets/scss/default.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@/assets/scss/variables.scss';
+@import '~@weni/unnnic-system/dist/unnnic.css';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 html:not(.not-bulma) {
   @import 'bulma/bulma.sass';

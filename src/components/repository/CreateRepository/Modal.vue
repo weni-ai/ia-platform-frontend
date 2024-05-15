@@ -176,7 +176,7 @@ export default {
 
 <style lang="scss" scoped>
 @use 'sass:math';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .modal__bases {
   z-index: 5;
@@ -240,7 +240,7 @@ export default {
       .aspect-ratio-box {
         height: 0;
         overflow: hidden;
-        padding-top: math.div(9, 16) * 100%;
+        padding-top: 9 /  16 * 100%;
         position: relative;
       }
 

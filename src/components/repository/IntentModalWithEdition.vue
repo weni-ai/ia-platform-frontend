@@ -168,7 +168,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/utilities.scss';
+@import '~@/assets/scss/utilities.scss';
 
 .modalStyle {
   display: flex;

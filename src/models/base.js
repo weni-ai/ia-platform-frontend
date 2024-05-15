@@ -5,7 +5,7 @@ class ModelBase extends Model {
   getRequest(config) {
     return super.getRequest({
       ...config,
-      baseURL: runtimeVariables.get('VITE_API_BASE_URL'),
+      baseURL: runtimeVariables.get('VUE_APP_API_BASE_URL'),
       headers: store.getters.authenticated
         ? { Authorization: `${store.getters.authToken}` }
         : {},
@@ -15,7 +15,7 @@ class ModelBase extends Model {
   getRequestExternal(config, token) {
     return super.getRequest({
       ...config,
-      baseURL: runtimeVariables.get('VITE_API_BASE_URL'),
+      baseURL: runtimeVariables.get('VUE_APP_API_BASE_URL'),
       headers: store.getters.authenticated
         ? { Authorization: `Translator ${token}` }
         : {},
