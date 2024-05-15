@@ -420,7 +420,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .home__header__icon ::v-deep .avatar-icon {
   background-color: $unnnic-color-weni-100;

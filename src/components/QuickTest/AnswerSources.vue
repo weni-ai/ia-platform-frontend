@@ -66,7 +66,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .sources {
   margin-top: $unnnic-spacing-xs;

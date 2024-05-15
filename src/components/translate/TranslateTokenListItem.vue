@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
+@import '~@/assets/scss/colors.scss';
 
 .token-item {
   padding: 0.5rem 0;

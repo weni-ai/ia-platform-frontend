@@ -160,9 +160,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
-@import '@/assets/scss/variables.scss';
-@import '@/assets/scss/utilities.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@/assets/scss/variables.scss';
+@import '~@/assets/scss/utilities.scss';
 
 .landing-page {
   $max-width: 1200px;

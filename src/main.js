@@ -22,9 +22,9 @@ import UnnnicSystemPlugin from './utils/UnnnicSystemPlugin';
 
 iframessa.register('ai');
 
-LogRocket.init(runtimeVariables.get('VITE_LOGROCKET_ID'), {
+LogRocket.init(runtimeVariables.get('VUE_APP_LOGROCKET_ID'), {
   mergeIframes: true,
-  parentDomain: runtimeVariables.get('VITE_LOGROCKET_PARENT_DOMAIN'),
+  parentDomain: runtimeVariables.get('VUE_APP_LOGROCKET_PARENT_DOMAIN'),
 });
 
 Vue.use(Buefy);
@@ -49,11 +49,11 @@ Vue.config.productionTip = false;
 applyFilters(Vue);
 
 if (
-  runtimeVariables.get('VITE_BOTHUB_WEBAPP_USE_SENTRY') &&
-  runtimeVariables.get('VITE_BOTHUB_WEBAPP_SENTRY')
+  runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_USE_SENTRY') &&
+  runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_SENTRY')
 ) {
   Sentry.init({
-    dsn: runtimeVariables.get('VITE_BOTHUB_WEBAPP_SENTRY'),
+    dsn: runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_SENTRY'),
     integrations: [new VueIntegration({ Vue, attachProps: true })],
     environment: runtimeVariables.get('SENTRY_ENVIRONMENT'),
     logErrors: true,

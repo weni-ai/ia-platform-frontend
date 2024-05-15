@@ -93,8 +93,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/dist/unnnic.css';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/dist/unnnic.css';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 .no-examples {
   font-family: $unnnic-font-family-secondary;
   font-size: $unnnic-font-size-body-gt;

@@ -74,7 +74,7 @@ export default {
       return Object.keys(this.getRequirements.languages_warnings).length;
     },
     tutorialEnabled() {
-      return runtimeVariables.get('VITE_BOTHUB_WEBAPP_TUTORIAL_ENABLED');
+      return runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED');
     },
     categoryIcon() {
       if (
@@ -107,7 +107,7 @@ export default {
       'resetRepositoryVersion',
     ]),
     openBeginnerTutorialModal() {
-      if (runtimeVariables.get('VITE_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
+      if (runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
         this.setTutorialMenuActive();
         Analytics.send({ category: 'Tutorial', event: 'tutorial open event' });
       }
@@ -143,10 +143,10 @@ export default {
 // @import "~buefy/src/scss/buefy";
 </style>
 <style lang="scss">
-@import '@/assets/scss/utilities.scss';
-@import '@/assets/scss/colors.scss';
-@import '@/assets/scss/variables.scss';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@/assets/scss/utilities.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@/assets/scss/variables.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 html {
   overflow-y: auto;

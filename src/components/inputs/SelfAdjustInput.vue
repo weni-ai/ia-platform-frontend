@@ -119,7 +119,7 @@ export default {
 
 <style lang="scss" scoped>
 @use 'sass:math';
-@import '@/assets/scss/variables.scss';
+@import '~@/assets/scss/variables.scss';
 
 .self-adjust {
   resize: none;
@@ -153,7 +153,7 @@ export default {
 .event-clickable {
   display: flex;
   justify-content: flex-end;
-  margin-right: math.div($form-append-width, 4);
+  margin-right: $form-append-width /  4;
   pointer-events: all !important;
   min-width: $form-append-width !important;
   > * {
@@ -161,7 +161,7 @@ export default {
   }
 
   &--small {
-    margin-right: math.div($form-append-width, 8);
+    margin-right: $form-append-width /  8;
   }
 }
 </style>

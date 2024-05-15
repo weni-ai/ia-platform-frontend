@@ -74,7 +74,7 @@ export default {
   computed: {
     ...mapGetters(['lastVersionSeen', 'authenticated']),
     currentVersion() {
-      return runtimeVariables.get('VITE_VERSION');
+      return runtimeVariables.get('VUE_APP_VERSION');
     },
     shouldShow() {
       return (
@@ -109,7 +109,7 @@ export default {
     onClose() {
       this.active = false;
       this.setLastVersionSeen(this.currentVersion);
-      // if (runtimeVariables.get('VITE_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
+      // if (runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_TUTORIAL_ENABLED')) {
       //   this.setTutorialMenuActive();
       // }
     },
@@ -118,8 +118,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
-@import '@/assets/scss/variables.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@/assets/scss/variables.scss';
 
 .news-modal {
   border-radius: 10px;

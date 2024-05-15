@@ -263,8 +263,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/variables.scss';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@/assets/scss/variables.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .filter-evaluate-example {
   width: 100%;

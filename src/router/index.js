@@ -42,11 +42,8 @@ import nexusaiAPI from '../api/nexusaiAPI';
 
 Vue.use(Router);
 
-console.log('router', import.meta.env.BASE_URL);
-
 const router = new Router({
   mode: 'history',
-  base: import.meta.env.BASE_URL,
   routes: [
     {
       path: '/',
@@ -321,7 +318,7 @@ const router = new Router({
           name: 'repository-result',
           component: RepositoryResult,
         },
-        // ...((runtimeVariables.get('VITE_VERSION_ENABLED'))
+        // ...((runtimeVariables.get('VUE_APP_VERSION_ENABLED'))
         //   ? [{
         //     path: ':ownerNickname/:slug/versions/',
         //     name: 'repository-versions',
@@ -329,7 +326,7 @@ const router = new Router({
         //   }] : []),
       ],
     },
-    ...(runtimeVariables.get('VITE_BOTHUB_WEBAPP_PAYMENT_ENABLED')
+    ...(runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')
       ? [
           {
             path: '/payment-options',

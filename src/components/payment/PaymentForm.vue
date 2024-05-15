@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
+@import '~@/assets/scss/colors.scss';
 
 :deep(.card-number) {
   box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);

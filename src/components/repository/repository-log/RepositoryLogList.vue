@@ -391,8 +391,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
-@import '@/assets/scss/variables.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@/assets/scss/variables.scss';
 .repository-log-list {
   &__pagination {
     margin-top: 1.25rem;
