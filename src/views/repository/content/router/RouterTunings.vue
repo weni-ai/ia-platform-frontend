@@ -249,8 +249,8 @@ export default {
             {
               type: 'select',
               name: 'version-gpt',
-              default: 'gpt-4-turbo',
-              options: ['gpt-3.5-turbo', 'gpt-4-turbo'],
+              default: 'gpt-4o',
+              options: ['gpt-3.5-turbo', 'gpt-4-turbo', 'gpt-4o'],
             },
             {
               type: 'naf-header',
