@@ -239,18 +239,6 @@ export default {
           }),
       );
 
-      if (this.preview.session?.status === 'completed') {
-        this.messages.push({
-          type: 'flowsend',
-          name: '',
-          question_uuid: null,
-          feedback: {
-            value: null,
-            reason: null,
-          },
-        });
-      }
-
       this.scrollToLastMessage();
     },
 
