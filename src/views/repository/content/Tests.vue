@@ -27,18 +27,13 @@
           ></div>
 
           <UnnnicIntelligenceText
-            v-else-if="message.type === 'change'"
+            v-else-if="isStatus(message)"
             color="neutral-cloudy"
             family="secondary"
             weight="regular"
             size="body-md"
           >
-            {{
-              $t('router.preview.field_changed_to_value', {
-                field: handleLetter($t(message.name)),
-                value: message.value,
-              })
-            }}
+            {{ statusDescription(message) }}
           </UnnnicIntelligenceText>
 
           <template v-else>
@@ -188,6 +183,27 @@ export default {
         this.isTheLastMessage(message) &&
         this.preview.quickReplies?.length
       );
+    },
+
+    isStatus(message) {
+      return ['change', 'flowstart', 'flowsend'].includes(message.type);
+    },
+
+    statusDescription(message) {
+      if (message.type === 'change') {
+        return this.$t('router.preview.field_changed_to_value', {
+          field: this.handleLetter(this.$t(message.name)),
+          value: message.value,
+        });
+      }
+
+      if (message.type === 'flowstart') {
+        return this.$t('router.preview.flow_started', { name: message.name });
+      }
+
+      if (message.type === 'flowsend') {
+        return this.$t('router.preview.flow_finished');
+      }
     },
 
     handleLetter(message) {
@@ -398,7 +414,7 @@ export default {
   margin: 0 $dot-size * 1.75;
   margin-top: $unnnic-font-size-body-md + $unnnic-line-height-md - $dot-size;
   // margin-bottom: ($unnnic-font-size-body-md + $unnnic-line-height-md) * 0.25;
-  border-radius: $dot-size /  2;
+  border-radius: $dot-size / 2;
   background-color: transparent;
   box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
     0 ($dot-min-height) $dot-color,
@@ -520,7 +536,9 @@ export default {
       margin-right: 1.875 * $unnnic-font-size;
     }
 
-    &__change {
+    &__change,
+    &__flowstart,
+    &__flowsend {
       text-align: center;
 
       + .messages__change {
