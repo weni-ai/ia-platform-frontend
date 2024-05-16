@@ -134,6 +134,8 @@
           :key="index + ':' + field.value"
           :minValue="field.min"
           :maxValue="field.max"
+          :minLabel="field.min"
+          :maxLabel="field.max"
           :step="field.step"
           :initialValue="field.value"
           @valueChange="$set(values, field.name, Number($event))"
