@@ -91,7 +91,7 @@ export default {
       this.$router.push({
         name:
           this.authenticated &&
-          runtimeVariables.get('VITE_BOTHUB_WEBAPP_PAYMENT_ENABLED')
+          runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')
             ? 'payment-options'
             : 'home',
       });
@@ -181,9 +181,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
-@import '@/assets/scss/variables.scss';
-@import '@/assets/scss/utilities.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@/assets/scss/variables.scss';
+@import '~@/assets/scss/utilities.scss';
 
 .footer {
   background-color: $color-fake-white;

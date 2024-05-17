@@ -100,7 +100,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
+@import '~@/assets/scss/colors.scss';
 
 .payment-options {
   &__primary {

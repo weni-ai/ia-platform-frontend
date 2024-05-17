@@ -43,7 +43,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .modal-preview-qr-code {
   :deep(.unnnic-modal-container-background-body-title) {

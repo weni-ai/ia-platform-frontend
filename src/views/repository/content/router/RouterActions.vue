@@ -206,7 +206,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .actions__container {
   margin-top: $unnnic-spacing-xs;

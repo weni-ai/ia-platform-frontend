@@ -27,24 +27,25 @@
           ></div>
 
           <UnnnicIntelligenceText
-            v-else-if="message.type === 'change'"
+            v-else-if="isStatus(message)"
             color="neutral-cloudy"
             family="secondary"
             weight="regular"
             size="body-md"
           >
-            {{
-              $t('router.preview.field_changed_to_value', {
-                field: handleLetter($t(message.name)),
-                value: message.value,
-              })
-            }}
+            {{ statusDescription(message) }}
           </UnnnicIntelligenceText>
 
           <template v-else>
-            <VueMarkdown :class="`messages__${message.type}__content`">
-              {{ message.text }}
-            </VueMarkdown>
+            <Markdown
+              :class="`messages__${message.type}__content`"
+              :content="message.text"
+            />
+
+            <AnswerSources
+              v-if="shouldShowSources(message)"
+              :sources="message.sources"
+            />
 
             <AnswerFeedback
               v-if="message.type === 'answer' && message.question_uuid"
@@ -94,12 +95,13 @@
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
+import AnswerSources from '../../../components/QuickTest/AnswerSources.vue';
 import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
 import FlowPreview from '../../../utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
+import Markdown from '../../../components/Markdown.vue';
 
 export default {
   name: 'RepositoryContentTests',
@@ -111,7 +113,8 @@ export default {
   },
 
   components: {
-    VueMarkdown,
+    Markdown,
+    AnswerSources,
     AnswerFeedback,
   },
 
@@ -167,6 +170,12 @@ export default {
   },
 
   methods: {
+    shouldShowSources(message) {
+      return (
+        this.usePreview && message.type === 'answer' && message.sources?.length
+      );
+    },
+
     shouldShowQuickReplies(message) {
       return (
         this.usePreview &&
@@ -174,6 +183,27 @@ export default {
         this.isTheLastMessage(message) &&
         this.preview.quickReplies?.length
       );
+    },
+
+    isStatus(message) {
+      return ['change', 'flowstart', 'flowsend'].includes(message.type);
+    },
+
+    statusDescription(message) {
+      if (message.type === 'change') {
+        return this.$t('router.preview.field_changed_to_value', {
+          field: this.handleLetter(this.$t(message.name)),
+          value: message.value,
+        });
+      }
+
+      if (message.type === 'flowstart') {
+        return this.$t('router.preview.flow_started', { name: message.name });
+      }
+
+      if (message.type === 'flowsend') {
+        return this.$t('router.preview.flow_finished');
+      }
     },
 
     handleLetter(message) {
@@ -208,18 +238,6 @@ export default {
             }
           }),
       );
-
-      if (this.preview.session?.status === 'completed') {
-        this.messages.push({
-          type: 'flowsend',
-          name: '',
-          question_uuid: null,
-          feedback: {
-            value: null,
-            reason: null,
-          },
-        });
-      }
 
       this.scrollToLastMessage();
     },
@@ -301,6 +319,7 @@ export default {
                   'message',
                   this.$t('quick_test.unable_to_find_an_answer', this.language),
                 );
+                answer.sources = get(data, 'fonts', []);
 
                 this.scrollToLastMessage();
               } else if (data.type === 'flowstart') {
@@ -353,7 +372,7 @@ export default {
 
 <style lang="scss" scoped>
 @use 'sass:math';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .quick-replies {
   margin-top: $unnnic-spacing-sm;
@@ -383,7 +402,7 @@ export default {
   margin: 0 $dot-size * 1.75;
   margin-top: $unnnic-font-size-body-md + $unnnic-line-height-md - $dot-size;
   // margin-bottom: ($unnnic-font-size-body-md + $unnnic-line-height-md) * 0.25;
-  border-radius: math.div($dot-size, 2);
+  border-radius: $dot-size / 2;
   background-color: transparent;
   box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
     0 ($dot-min-height) $dot-color,
@@ -505,7 +524,9 @@ export default {
       margin-right: 1.875 * $unnnic-font-size;
     }
 
-    &__change {
+    &__change,
+    &__flowstart,
+    &__flowsend {
       text-align: center;
 
       + .messages__change {

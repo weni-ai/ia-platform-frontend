@@ -227,8 +227,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .sentence-input {
   margin-bottom: $unnnic-spacing-xs;

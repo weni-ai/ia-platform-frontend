@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Flag.vue renders correctly 1`] = `<span class=""><img src="@/assets/imgs/flags/us.svg"></span>`;

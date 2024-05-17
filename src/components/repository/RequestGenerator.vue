@@ -102,7 +102,7 @@ export default {
       return {
         curl: [
           `  curl --location '${runtimeVariables.get(
-            'VITE_BOTHUB_NLP_BASE_URL',
+            'VUE_APP_BOTHUB_NLP_BASE_URL',
           )}v2/parse/' \\`,
           `  --header 'Authorization: ${this.authorizationUuid}' \\`,
           '  --header Content-Type: application/json \\',
@@ -121,7 +121,7 @@ export default {
           '',
           `headers = { 'Authorization': '${this.authorizationUuid}' }`,
           `r = requests.post('${runtimeVariables.get(
-            'VITE_BOTHUB_NLP_BASE_URL',
+            'VUE_APP_BOTHUB_NLP_BASE_URL',
           )}v2/parse/', headers=headers, data=data)`,
           'print(r.json())',
         ].join('\n'),
@@ -136,7 +136,7 @@ export default {
           '};',
           '',
           `request.open('POST', '${runtimeVariables.get(
-            'VITE_BOTHUB_NLP_BASE_URL',
+            'VUE_APP_BOTHUB_NLP_BASE_URL',
           )}v2/parse/');`,
           `request.setRequestHeader('Authorization', '${this.authorizationUuid}');`,
           'request.send(data);',
@@ -148,8 +148,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/dist/unnnic.css';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/dist/unnnic.css';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .form-element + .form-element {
   margin-top: $unnnic-spacing-sm;

@@ -23,8 +23,8 @@
             <div
               class="repository-home__description__header__description-properly"
             >
-              <VueMarkdown
-                :source="repository.description"
+              <Markdown
+                :content="repository.description"
                 :show="show"
                 :html="html"
                 :breaks="breaks"
@@ -206,7 +206,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import BadgesIntents from '@/components/repository/BadgesIntents';
-import VueMarkdown from 'vue-markdown';
+import Markdown from '../../components/Markdown.vue';
 import EntityEdit from '@/components/repository/EntityEdit';
 import SummaryInformation from '@/components/repository/SummaryInformation';
 import IntegrationModal from '@/components/shared/IntegrationModal';
@@ -219,7 +219,7 @@ export default {
   components: {
     RepositoryViewBase,
     BadgesIntents,
-    VueMarkdown,
+    Markdown,
     EntityEdit,
     SummaryInformation,
     IntegrationModal,
@@ -440,10 +440,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
-@import '@/assets/scss/variables.scss';
-@import '@weni/unnnic-system/dist/unnnic.css';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@/assets/scss/variables.scss';
+@import '~@weni/unnnic-system/dist/unnnic.css';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .repository-home {
   &__description {

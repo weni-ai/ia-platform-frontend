@@ -231,7 +231,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
+@import '~@/assets/scss/colors.scss';
 
 .icon {
   color: $color-grey-dark;

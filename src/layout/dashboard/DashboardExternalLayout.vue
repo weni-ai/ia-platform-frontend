@@ -99,10 +99,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/utilities.scss';
-@import '@/assets/scss/variables.scss';
-@import '@/assets/scss/colors.scss';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@/assets/scss/utilities.scss';
+@import '~@/assets/scss/variables.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .external-dashboard-layout {
   &__notification {

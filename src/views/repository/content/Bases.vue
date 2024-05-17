@@ -207,7 +207,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
-import VueMarkdown from 'vue-markdown';
 import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard';
 import RepositoryContentNavigation from './Navigation';
 import Modal from '@/components/repository/CreateRepository/Modal';
@@ -220,7 +219,6 @@ export default {
   mixins: [RemoveBulmaMixin],
   components: {
     RepositoryViewBase,
-    VueMarkdown,
     HomeRepositoryCard,
     RepositoryContentNavigation,
     Modal,
@@ -423,7 +421,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .delete-base-modal ::v-deep {
   .unnnic-modal-container-background-body {

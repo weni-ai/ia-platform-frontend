@@ -146,6 +146,8 @@
           :key="index + ':' + field.value"
           :minValue="field.min"
           :maxValue="field.max"
+          :minLabel="field.min"
+          :maxLabel="field.max"
           :step="field.step"
           :initialValue="field.value"
           @valueChange="$set(values, field.name, Number($event))"
@@ -267,8 +269,8 @@ export default {
             {
               type: 'select',
               name: 'version-gpt',
-              default: 'gpt-4-turbo',
-              options: ['gpt-3.5-turbo', 'gpt-4-turbo'],
+              default: 'gpt-4o',
+              options: ['gpt-3.5-turbo', 'gpt-4-turbo', 'gpt-4o'],
             },
             {
               type: 'select',
@@ -476,7 +478,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .tunings__form-element__label {
   display: flex;

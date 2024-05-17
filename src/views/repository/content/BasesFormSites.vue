@@ -274,7 +274,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .delete-site-modal ::v-deep {
   .unnnic-modal-container-background-body-description-container {

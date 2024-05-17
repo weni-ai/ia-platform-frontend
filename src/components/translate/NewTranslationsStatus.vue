@@ -296,10 +296,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/utilities.scss';
-@import '@/assets/scss/colors.scss';
-@import '@weni/unnnic-system/dist/unnnic.css';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '~@/assets/scss/utilities.scss';
+@import '~@/assets/scss/colors.scss';
+@import '~@weni/unnnic-system/dist/unnnic.css';
+@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .add-language-modal {
   ::v-deep .unnnic-modal-container-background-body {

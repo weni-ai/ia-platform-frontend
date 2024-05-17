@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
+@import '~@/assets/scss/colors.scss';
 .payment-options {
   margin: 4rem 0 0 0;
   text-align: center;

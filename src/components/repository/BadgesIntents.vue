@@ -60,8 +60,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/variables.scss';
-@import '@/assets/scss/colors.scss';
+@import '~@/assets/scss/variables.scss';
+@import '~@/assets/scss/colors.scss';
 
 .badges-without-styles {
   // padding-top: .75rem;

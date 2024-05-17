@@ -196,7 +196,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/colors.scss';
+@import '~@/assets/scss/colors.scss';
 
 .authorization-item {
   padding: 0 1rem;

@@ -6,7 +6,7 @@ export default {
 
   get $http() {
     const client = axios.create({
-      baseURL: runtimeVariables.get('VITE_API_BASE_URL'),
+      baseURL: runtimeVariables.get('VUE_APP_API_BASE_URL'),
       headers: {
         ...(store.getters.authenticated
           ? { Authorization: `${store.getters.authToken}` } : {}),

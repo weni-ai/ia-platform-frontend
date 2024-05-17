@@ -131,7 +131,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/utilities.scss';
+@import '~@/assets/scss/utilities.scss';
 
 .list-enter-active,
 .list-leave-active {
