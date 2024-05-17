@@ -86,6 +86,13 @@
         "model": "Select model",
         "token": "Token",
         "version": "Version",
+        "select-language": "Language",
+        "language": "Select the default language",
+        "languages": {
+          "pt_br": "Brazilian Portuguese",
+          "en": "English",
+          "es": "Spanish"
+        },
         "version-gpt": "Version",
         "parameter": "Parameters",
         "temperature": "Temperature",

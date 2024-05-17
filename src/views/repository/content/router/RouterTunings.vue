@@ -12,6 +12,18 @@
     </UnnnicIntelligenceText>
 
     <template v-for="(field, index) in fields">
+      <UnnnicIntelligenceText
+        :key="`language-${index}`"
+        v-if="field.name === 'language'"
+        color="neutral-dark"
+        family="secondary"
+        weight="bold"
+        marginTop="md"
+        size="body-gt"
+        tag="p"
+      >
+        {{ $t('router.tunings.fields.select-language') }}
+      </UnnnicIntelligenceText>
       <header
         v-if="['radio', 'select'].includes(field.type)"
         :key="`label-${index}`"
@@ -53,11 +65,9 @@
         class="tunings__container_fields-element"
         v-if="field.type === 'select' && !loadingData"
         :key="index"
-        :value="[{ value: field.value, label: field.value }]"
+        :value="handleSelectValue(field)"
         @input="$set(values, field.name, $event[0].value)"
-        :options="
-          field.options.map((option) => ({ value: option, label: option }))
-        "
+        :options="handleSelectOptions(field)"
         orderedByIndex
       />
       <UnnnicSkeletonLoading
@@ -134,8 +144,8 @@
           :key="index + ':' + field.value"
           :minValue="field.min"
           :maxValue="field.max"
-          :minLabel="field.min"
-          :maxLabel="field.max"
+          :minLabel="field.min?.toString()"
+          :maxLabel="field.max?.toString()"
           :step="field.step"
           :initialValue="field.value"
           @valueChange="$set(values, field.name, Number($event))"
@@ -201,6 +211,12 @@ export default {
         model: null,
       },
 
+      language_options: {
+        por: this.$t('router.tunings.fields.languages.pt_br'),
+        eng: this.$t('router.tunings.fields.languages.en'),
+        spa: this.$t('router.tunings.fields.languages.es'),
+      },
+
       models: [
         {
           name: 'WeniGPT',
@@ -210,6 +226,12 @@ export default {
               name: 'version',
               default: Object.keys(WENIGPT_OPTIONS)[0],
               options: Object.keys(WENIGPT_OPTIONS),
+            },
+            {
+              type: 'select',
+              name: 'language',
+              default: 'por',
+              options: ['por', 'eng', 'spa'],
             },
             {
               type: 'naf-header',
@@ -253,6 +275,12 @@ export default {
               name: 'version-gpt',
               default: 'gpt-4o',
               options: ['gpt-3.5-turbo', 'gpt-4-turbo', 'gpt-4o'],
+            },
+            {
+              type: 'select',
+              name: 'language',
+              default: 'por',
+              options: ['por', 'eng', 'spa'],
             },
             {
               type: 'naf-header',
@@ -394,6 +422,26 @@ export default {
       } finally {
         this.$store.state.modalWarn = null;
       }
+    },
+
+    handleSelectValue(field) {
+      const label = this.isLanguage(field.name)
+        ? this.language_options[field.value]
+        : field.value;
+      return [{ value: field.value, label }];
+    },
+
+    isLanguage(name = '') {
+      return name === 'language';
+    },
+
+    handleSelectOptions(field) {
+      const handleLabel = (v) =>
+        this.isLanguage(field.name) ? this.language_options[v] : v;
+      return field.options.map((option) => ({
+        value: option,
+        label: handleLabel(option),
+      }));
     },
 
     async save() {
