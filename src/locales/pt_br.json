@@ -87,7 +87,7 @@
         "token": "Token",
         "version": "Versão",
         "select-language": "Idioma",
-        "language": "Selecione o idiome padrão",
+        "language": "Selecione o idioma padrão",
         "languages": {
           "pt_br": "Português Brasileiro",
           "en": "Inglês",
