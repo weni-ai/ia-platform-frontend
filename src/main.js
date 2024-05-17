@@ -1,38 +1,19 @@
 import Vue from 'vue';
-import Buefy from 'buefy';
-import VueMoment from 'vue-moment';
 import * as Sentry from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
-import VueTour from 'vue-tour';
-import App from './App';
+
+import App from './App.vue';
 import router from './router';
 import store from './store';
-import applyFilters from './utils/filters';
-import API from './utils/plugins/API';
 import i18n from './utils/plugins/i18n';
-import '@mdi/font/css/materialdesignicons.css';
-import VueHighlightJS from 'vue-highlightjs';
-import LogRocket from 'logrocket';
-import VShowSlide from 'v-show-slide';
 import iframessa from 'iframessa';
-import UnnnicDivider from './components/Divider';
-import UnnnicIntelligenceHeader from './components/unnnic-intelligence/Header';
-import UnnnicIntelligenceText from './components/unnnic-intelligence/Text';
-import UnnnicSystemPlugin from './utils/UnnnicSystemPlugin';
+import UnnnicDivider from './components/Divider.vue';
+import UnnnicIntelligenceHeader from './components/unnnic-intelligence/Header.vue';
+import UnnnicIntelligenceText from './components/unnnic-intelligence/Text.vue';
+import UnnnicSystemPlugin from './utils/UnnnicSystemPlugin.js';
 
 iframessa.register('ai');
 
-LogRocket.init(runtimeVariables.get('VITE_LOGROCKET_ID'), {
-  mergeIframes: true,
-  parentDomain: runtimeVariables.get('VITE_LOGROCKET_PARENT_DOMAIN'),
-});
-
-Vue.use(Buefy);
-Vue.use(VueMoment);
-Vue.use(API);
-Vue.use(VueTour);
-Vue.use(VueHighlightJS);
-Vue.use(VShowSlide);
 Vue.use(UnnnicSystemPlugin);
 
 Vue.component('unnnic-divider', UnnnicDivider);
@@ -45,8 +26,6 @@ Vue.component('unnnic-intelligence-text', UnnnicIntelligenceText);
 Vue.component('UnnnicIntelligenceText', UnnnicIntelligenceText);
 
 Vue.config.productionTip = false;
-
-applyFilters(Vue);
 
 if (
   runtimeVariables.get('VITE_BOTHUB_WEBAPP_USE_SENTRY') &&
@@ -68,7 +47,6 @@ if (
 }
 
 new Vue({
-  el: '#app',
   i18n,
   router,
   store,

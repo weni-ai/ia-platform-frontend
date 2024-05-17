@@ -4,8 +4,6 @@ import update from '@/api/update';
 import TYPES from './types';
 
 export default {
-
-
   async getNewRepositorySchema() {
     const response = await repository.getNewSchema();
     return response;
@@ -19,7 +17,7 @@ export default {
   createQAKnowledgeBase(store, { repositoryUUID, title }) {
     return repository.createQAKnowledgeBase(repositoryUUID, title);
   },
-  editQAKnowledgeBase(store, { repositoryUUID, title, id }){
+  editQAKnowledgeBase(store, { repositoryUUID, title, id }) {
     return repository.editQAKnowledgeBase(repositoryUUID, title, id);
   },
   getQAKnowledgeBase(store, { repositoryUUID, id }) {
@@ -32,10 +30,21 @@ export default {
     return repository.getQATexts(repositoryUUID, knowledgeBaseId, page);
   },
   createQAText(store, { repositoryUUID, knowledgeBaseId, text, language }) {
-    return repository.createQAText(repositoryUUID, knowledgeBaseId, text, language);
+    return repository.createQAText(
+      repositoryUUID,
+      knowledgeBaseId,
+      text,
+      language,
+    );
   },
   updateQAText(store, { repositoryUUID, knowledgeBaseId, id, text, language }) {
-    return repository.updateQAText(repositoryUUID, knowledgeBaseId, id, text, language);
+    return repository.updateQAText(
+      repositoryUUID,
+      knowledgeBaseId,
+      id,
+      text,
+      language,
+    );
   },
   getVersions(store, { limit, query }) {
     return repository.getVersions(limit, query);
@@ -67,42 +76,74 @@ export default {
     /* istanbul ignore next */
     return repository.getProjectsWithFlows(projectUUID);
   },
-  getCommunityRepository(store, limit, offset, language, categories, recommended, most_used) {
+  getCommunityRepository(
+    store,
+    limit,
+    offset,
+    language,
+    categories,
+    recommended,
+    most_used,
+  ) {
     /* istanbul ignore next */
     return repository.communityRepository(
-      limit, offset, language, categories, recommended, most_used
+      limit,
+      offset,
+      language,
+      categories,
+      recommended,
+      most_used,
     );
   },
   getRepository(store, { ownerNickname, slug }) {
     /* istanbul ignore next */
     return repository.get(ownerNickname, slug);
   },
-  trainRepository(store, { repositoryUuid, repositoryVersion, repositoryLanguage }) {
+  trainRepository(
+    store,
+    { repositoryUuid, repositoryVersion, repositoryLanguage },
+  ) {
     /* istanbul ignore next */
-    return repository.train(repositoryUuid, repositoryVersion, repositoryLanguage);
+    return repository.train(
+      repositoryUuid,
+      repositoryVersion,
+      repositoryLanguage,
+    );
   },
-  debugParse(store, {
-    repositoryUUID, repositoryVersion, language, text,
-  }) {
+  debugParse(store, { repositoryUUID, repositoryVersion, language, text }) {
     /* istanbul ignore next */
-    return repository.debugParse(repositoryUUID, repositoryVersion, language, text);
+    return repository.debugParse(
+      repositoryUUID,
+      repositoryVersion,
+      language,
+      text,
+    );
   },
   searchLogs(store, { repositoryVersionLanguage, query, limit }) {
     return repository.searchLogs(repositoryVersionLanguage, query, limit);
   },
-  analyzeText(store, {
-    repositoryUUID, repositoryVersion, language, text,
-  }) {
+  analyzeText(store, { repositoryUUID, repositoryVersion, language, text }) {
     /* istanbul ignore next */
-    return repository.analyze(repositoryUUID, repositoryVersion, language, text);
+    return repository.analyze(
+      repositoryUUID,
+      repositoryVersion,
+      language,
+      text,
+    );
   },
   async getEditRepositorySchema(store, { repositoryUuid, repositoryVersion }) {
     /* istanbul ignore next */
-    const response = await repository.getEditSchema(repositoryUuid, repositoryVersion);
+    const response = await repository.getEditSchema(
+      repositoryUuid,
+      repositoryVersion,
+    );
     return response;
   },
   async getTrainingStatus(store, { repositoryUUID, version }) {
-    const response = await repository.getRepositoryInfo(repositoryUUID, version);
+    const response = await repository.getRepositoryInfo(
+      repositoryUUID,
+      version,
+    );
     if (!response.data) return null;
     const {
       ready_for_train,
@@ -121,22 +162,25 @@ export default {
       intents_list,
     };
   },
-  editRepository(store, {
-    ownerNickname,
-    repositorySlug,
-    name,
-    slug,
-    language,
-    categories,
-    description,
-    is_private: isPrivate,
-    algorithm,
-    use_competing_intents: useCompetingIntents,
-    use_name_entities: useNameEntities,
-    use_analyze_char: useAnalyzeChar,
-    use_transformer_entities: useTransformerEntities,
-    repositoryUuid,
-  }) {
+  editRepository(
+    store,
+    {
+      ownerNickname,
+      repositorySlug,
+      name,
+      slug,
+      language,
+      categories,
+      description,
+      is_private: isPrivate,
+      algorithm,
+      use_competing_intents: useCompetingIntents,
+      use_name_entities: useNameEntities,
+      use_analyze_char: useAnalyzeChar,
+      use_transformer_entities: useTransformerEntities,
+      repositoryUuid,
+    },
+  ) {
     return repository.edit(
       ownerNickname,
       repositorySlug,
@@ -164,9 +208,15 @@ export default {
     return repository.voteDown(ownerNickname, slug);
   },
   getRepositoryStatusTraining(store, { repositoryUUID, repositoryVersion }) {
-    return repository.repositoryStatusTraining(repositoryUUID, repositoryVersion);
+    return repository.repositoryStatusTraining(
+      repositoryUUID,
+      repositoryVersion,
+    );
   },
-  repositoryUpdateAuthorizationRole(store, { repositoryUuid, userNickname, newRole }) {
+  repositoryUpdateAuthorizationRole(
+    store,
+    { repositoryUuid, userNickname, newRole },
+  ) {
     return repository.updateAuthorizationRole(
       repositoryUuid,
       userNickname,
@@ -222,20 +272,35 @@ export default {
   resetRepositoryVersion({ commit }) {
     commit('resetVersion');
   },
-  getRepositoryRequirements(store, { repositoryUuid, version, repositoryLanguage }) {
-    return repository.repositoryRequirements(repositoryUuid, version, repositoryLanguage);
+  getRepositoryRequirements(
+    store,
+    { repositoryUuid, version, repositoryLanguage },
+  ) {
+    return repository.repositoryRequirements(
+      repositoryUuid,
+      version,
+      repositoryLanguage,
+    );
   },
-  setMigrateIntelligence(store, {
-    repositoryVersion, AuthToken, Language, Classifier,
-  }) {
-    return repository.repositoryMigrateData(repositoryVersion, AuthToken, Language, Classifier);
+  setMigrateIntelligence(
+    store,
+    { repositoryVersion, AuthToken, Language, Classifier },
+  ) {
+    return repository.repositoryMigrateData(
+      repositoryVersion,
+      AuthToken,
+      Language,
+      Classifier,
+    );
   },
-  setUploadRasaDataset(store, {
-    formData, repositoryVersion, repositoryUUID,
-  }) {
-    return repository.repositoryUploadRasa(formData, repositoryVersion, repositoryUUID);
+  setUploadRasaDataset(store, { formData, repositoryVersion, repositoryUUID }) {
+    return repository.repositoryUploadRasa(
+      formData,
+      repositoryVersion,
+      repositoryUUID,
+    );
   },
-  cloneRepository(store, { repositoryUUID, ownerId }){
+  cloneRepository(store, { repositoryUUID, ownerId }) {
     return repository.clone(repositoryUUID, ownerId);
   },
 };

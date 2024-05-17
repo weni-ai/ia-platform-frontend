@@ -28,10 +28,14 @@ export default {
     return org.getAuthorizationList(orgNickname, limit);
   },
 
-  getOrgRepositories(store, {
-    nickname, limit, search, categories, language,
-  }) {
-    return repository.searchByOrg(nickname, limit, search, categories, language);
+  getOrgRepositories(store, { nickname, limit, search, categories, language }) {
+    return repository.searchByOrg(
+      nickname,
+      limit,
+      search,
+      categories,
+      language,
+    );
   },
 
   getEditOrgSchema(store, { nickname }) {
@@ -43,20 +47,14 @@ export default {
   },
 
   orgUpdateAuthorizationRole(store, { orgNickname, userNickname, newRole }) {
-    return org.updateAuthorizationRole(
-      orgNickname,
-      userNickname,
-      newRole,
-    );
+    return org.updateAuthorizationRole(orgNickname, userNickname, newRole);
   },
 
   removeOrgAuthorization(store, { userNickname, orgNickname }) {
     return org.removeAuthorization(userNickname, orgNickname);
   },
 
-  getOrgReports(store, {
-    orgNickname, startDate, endDate, limit = 20,
-  }) {
+  getOrgReports(store, { orgNickname, startDate, endDate, limit = 20 }) {
     return org.getReports(orgNickname, startDate, endDate, limit);
   },
 };

@@ -15,7 +15,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import Tests from '../../../views/repository/content/Tests';
+import Tests from '../../../views/repository/content/Tests.vue';
 import RightSidebar from '../../RightSidebar.vue';
 
 export default {

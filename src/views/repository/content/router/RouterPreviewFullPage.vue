@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import RemoveBulmaMixin from '../../../../utils/RemoveBulmaMixin';
 import Tests from '../Tests.vue';
 
 export default {
@@ -21,8 +20,6 @@ export default {
       height: 10,
     };
   },
-
-  mixins: [RemoveBulmaMixin],
 
   mounted() {
     document.documentElement.style.overscrollBehavior = 'none';

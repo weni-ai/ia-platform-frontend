@@ -134,8 +134,8 @@
 <script>
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
-import BasesFormFilesItem from './BasesFormFilesItem';
-import BasesFormGenericList from './BasesFormGenericList';
+import BasesFormFilesItem from './BasesFormFilesItem.vue';
+import BasesFormGenericList from './BasesFormGenericList.vue';
 
 export default {
   components: {
@@ -269,7 +269,7 @@ export default {
         return;
       }
 
-      files.forEach(this.addFile);
+      Object.values(files).forEach(this.addFile);
     },
 
     updateFileItem(uuid, key, value) {

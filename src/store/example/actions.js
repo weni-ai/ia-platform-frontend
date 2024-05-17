@@ -2,16 +2,35 @@ import example from '@/api/example';
 import entity from '@/api/entity';
 
 export default {
-  async newExample(store, {
-    repository, repositoryVersion, text, language, entities, intent, isCorrected = false,
-  }) {
+  async newExample(
+    store,
+    {
+      repository,
+      repositoryVersion,
+      text,
+      language,
+      entities,
+      intent,
+      isCorrected = false,
+    },
+  ) {
     // eslint-disable-next-line
     const response = await example.new(repository, repositoryVersion, text, language, entities, intent, isCorrected);
     return response;
   },
-  async editSentence(store, {
-    repository, version, text, language, entities, intent, id, isCorrected = false,
-  }) {
+  async editSentence(
+    store,
+    {
+      repository,
+      version,
+      text,
+      language,
+      entities,
+      intent,
+      id,
+      isCorrected = false,
+    },
+  ) {
     const response = await example.edit(
       repository,
       version,
@@ -28,20 +47,35 @@ export default {
     const response = await example.all(repositoryUuid);
     return response;
   },
-  searchExamples(store, {
-    repositoryUuid, version, query, limit = 20, startCreatedAt, endCreatedAt,
-  }) {
-    const response = example.search(repositoryUuid, version,
-      query, limit, startCreatedAt, endCreatedAt);
+  searchExamples(
+    store,
+    {
+      repositoryUuid,
+      version,
+      query,
+      limit = 20,
+      startCreatedAt,
+      endCreatedAt,
+    },
+  ) {
+    const response = example.search(
+      repositoryUuid,
+      version,
+      query,
+      limit,
+      startCreatedAt,
+      endCreatedAt,
+    );
     return response;
   },
   async deleteExample(store, { id }) {
     await example.delete(id);
     return true;
   },
-  async getExamplesToTranslate(store, {
-    repositoryUuid, version, from, to, query,
-  }) {
+  async getExamplesToTranslate(
+    store,
+    { repositoryUuid, version, from, to, query },
+  ) {
     const response = await example.search(repositoryUuid, version, {
       language: from,
       has_not_translation_to: to,
@@ -59,12 +93,12 @@ export default {
     return response;
   },
   async getEntities(store, { repositoryUuid, repositoryVersion, value }) {
-    const response = await entity.search(repositoryUuid, repositoryVersion, { value });
+    const response = await entity.search(repositoryUuid, repositoryVersion, {
+      value,
+    });
     return response;
   },
-  async editEntityName(store, {
-    entityId, value, repositoryVersion,
-  }) {
+  async editEntityName(store, { entityId, value, repositoryVersion }) {
     const response = await entity.editEntityName(
       entityId,
       value,
@@ -72,20 +106,29 @@ export default {
     );
     return response;
   },
-  getAllEntities(store, {
-    repositoryUuid, repositoryVersion,
-  }) {
-    const response = entity.getEntities(
-      repositoryUuid,
-      repositoryVersion,
-    );
+  getAllEntities(store, { repositoryUuid, repositoryVersion }) {
+    const response = entity.getEntities(repositoryUuid, repositoryVersion);
     return response;
   },
-  async getAllExamples(store, {
-    repositoryUuid, version, query, limit = 20, startCreatedAt, endCreatedAt,
-  }) {
-    const response = await example.getAll(repositoryUuid, version,
-      query, limit, startCreatedAt, endCreatedAt);
+  async getAllExamples(
+    store,
+    {
+      repositoryUuid,
+      version,
+      query,
+      limit = 20,
+      startCreatedAt,
+      endCreatedAt,
+    },
+  ) {
+    const response = await example.getAll(
+      repositoryUuid,
+      version,
+      query,
+      limit,
+      startCreatedAt,
+      endCreatedAt,
+    );
     return response;
   },
 };

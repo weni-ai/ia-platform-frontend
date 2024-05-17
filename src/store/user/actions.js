@@ -1,7 +1,6 @@
 import user from '@/api/user';
 import TYPES from '../types';
 
-
 export default {
   async updateMyProfile({ commit, dispatch, getters }) {
     if (!getters.authenticated) {
@@ -14,7 +13,9 @@ export default {
           data: response.data,
           lastUpdate: Date.now(),
         });
-        commit(TYPES.SET_NICKNAME_AUTHENTICATED, { nickname: response.data.nickname });
+        commit(TYPES.SET_NICKNAME_AUTHENTICATED, {
+          nickname: response.data.nickname,
+        });
       } catch (error) {
         /* istanbul ignore next */
         dispatch('logout');
@@ -23,13 +24,15 @@ export default {
   },
   async updateProfile({ commit, getters }, { nickname, forced, isOrg }) {
     const lastUpdate = getters.getProfileLastUpdate(nickname);
-    const profileVersionValidUntil = lastUpdate + (30 * 1000);
+    const profileVersionValidUntil = lastUpdate + 30 * 1000;
     if (profileVersionValidUntil < Date.now() || forced) {
       commit(TYPES.SET_PROFILE, {
         nickname,
         lastUpdate: Date.now(),
       });
-      const response = isOrg ? await user.org_profile(nickname) : await user.profile(nickname);
+      const response = isOrg
+        ? await user.org_profile(nickname)
+        : await user.profile(nickname);
       commit(TYPES.SET_PROFILE, {
         nickname,
         data: response.data,
@@ -37,10 +40,10 @@ export default {
       });
     }
   },
-  setUserName({ commit }, username){
+  setUserName({ commit }, username) {
     commit(TYPES.SET_USERNAME, {
       username,
-    })
+    });
   },
   getPaymentHistory(store, limit = 20) {
     return user.getPaymentHistory(limit);
@@ -64,9 +67,7 @@ export default {
     const schema = await user.getMyProfileSchema(nickname);
     return schema;
   },
-  patchMyProfile(store, {
-    nickname, email, name, locale, biography,
-  }) {
+  patchMyProfile(store, { nickname, email, name, locale, biography }) {
     return user.updateMyProfile(nickname, email, name, locale, biography);
   },
   async getChangePasswordSchema() {

@@ -1,4 +1,4 @@
-import qs from 'query-string';
+import qs from '../../utils/QueryString.js';
 import request from '../request';
 import requestExternal from '../requestExternal';
 
@@ -66,7 +66,9 @@ export default class Page {
   async fetchAll(items, startingPage) {
     const response = await this.fetchItems(startingPage);
     const updatedItems = [...items, ...response.data.results];
-    if (response.data.next === null) { return updatedItems; }
+    if (response.data.next === null) {
+      return updatedItems;
+    }
     return this.fetchAll(updatedItems, startingPage + 1);
   }
 

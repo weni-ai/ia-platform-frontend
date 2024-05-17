@@ -68,7 +68,7 @@
 
 <script>
 import nexusaiAPI from '../api/nexusaiAPI';
-import ModalNext from './ModalNext';
+import ModalNext from './ModalNext.vue';
 import { get } from 'lodash';
 
 export default {

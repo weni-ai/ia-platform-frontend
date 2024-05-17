@@ -59,14 +59,10 @@
 </template>
 
 <script>
-import { getModel } from 'vue-mc-drf-model';
 import { mapActions, mapGetters } from 'vuex';
-import { updateAttrsValues } from '@/utils/index';
-import RepositoryModel from '@/models/newRepository';
-import Analytics from '@/utils/plugins/analytics';
-import IntelligenceTab from '@/components/repository/CreateRepository/IntelligenceTab';
-import DefinitionsTab from '@/components/repository/CreateRepository/DefinitionsTab';
-import Emoji from '@/components/shared/Emoji';
+import IntelligenceTab from '@/components/repository/CreateRepository/IntelligenceTab.vue';
+import DefinitionsTab from '@/components/repository/CreateRepository/DefinitionsTab.vue';
+import Emoji from '@/components/shared/Emoji.vue';
 import repositoryV2 from '../../../api/v2/repository';
 import { get } from 'lodash';
 import nexusaiAPI from '../../../api/nexusaiAPI';
@@ -150,25 +146,12 @@ export default {
   },
   async mounted() {
     this.formSchema = await this.getNewRepositorySchema();
-    this.constructModels();
   },
   methods: {
     ...mapActions(['getNewRepositorySchema', 'newRepository']),
     changeStepContent(value, current) {
       this.data = { ...this.data, ...value };
       this.current = current;
-    },
-    sendEvent() {
-      Analytics.send({
-        category: 'Intelligence',
-        event: 'create intelligence event',
-      });
-    },
-    constructModels() {
-      const Model = getModel(this.computedSchema, RepositoryModel);
-      this.drfRepositoryModel = new Model({}, null, {
-        validateOnChange: true,
-      });
     },
     repositoryDetailsRouterParams() {
       const { repository_type, owner__nickname, slug } = this.createdRepository;

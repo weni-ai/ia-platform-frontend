@@ -103,7 +103,7 @@
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import AnswerSources from '../../../components/QuickTest/AnswerSources.vue';
-import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
+import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback.vue';
 import FlowPreview from '../../../utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 import Markdown from '../../../components/Markdown.vue';

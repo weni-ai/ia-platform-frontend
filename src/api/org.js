@@ -20,7 +20,9 @@ export default {
   },
 
   async getEditOrgSchema(nickname) {
-    const { data } = await request.$http.options(`/v2/org/organization/${nickname}/`);
+    const { data } = await request.$http.options(
+      `/v2/org/organization/${nickname}/`,
+    );
     return data.actions.PUT;
   },
 
@@ -29,7 +31,9 @@ export default {
   },
 
   getAuthorizationList(orgNickname, limit) {
-    return new utils.Page('/v2/org/authorizations/', limit, { org_nickname: orgNickname });
+    return new utils.Page('/v2/org/authorizations/', limit, {
+      org_nickname: orgNickname,
+    });
   },
 
   updateAuthorizationRole(orgNickname, userNickname, role) {
@@ -46,12 +50,10 @@ export default {
   },
 
   getReports(orgNickname, startDate, endDate, limit = 20) {
-    return new utils.Page('/v2/repository/repository-reports/',
-      limit,
-      {
-        start_date: startDate,
-        end_date: endDate,
-        organization_nickname: orgNickname,
-      });
+    return new utils.Page('/v2/repository/repository-reports/', limit, {
+      start_date: startDate,
+      end_date: endDate,
+      organization_nickname: orgNickname,
+    });
   },
 };

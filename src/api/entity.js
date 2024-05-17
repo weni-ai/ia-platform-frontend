@@ -1,30 +1,22 @@
-import qs from 'query-string';
+import qs from '../utils/QueryString.js';
 import request from './request';
 import utils from './utils';
 
-
 export default {
-
   addGroup(name, repositoryUUID, version) {
-    return request.$http.post(
-      'v2/repository/entity/group/',
-      {
-        value: name,
-        repository: repositoryUUID,
-        repository_version: version,
-      },
-    );
+    return request.$http.post('v2/repository/entity/group/', {
+      value: name,
+      repository: repositoryUUID,
+      repository_version: version,
+    });
   },
 
-  editGroupName(name, groupId, repositoryUUID, version){
-    return request.$http.put(
-      `v2/repository/entity/group/${groupId}/`,
-      {
-        value: name,
-        repository: repositoryUUID,
-        repository_version: version,
-      },
-    );
+  editGroupName(name, groupId, repositoryUUID, version) {
+    return request.$http.put(`v2/repository/entity/group/${groupId}/`, {
+      value: name,
+      repository: repositoryUUID,
+      repository_version: version,
+    });
   },
 
   deleteGroup(groupUuid) {
@@ -36,14 +28,11 @@ export default {
   },
 
   editEntity(entityId, name, groupId, repositoryVersion) {
-    return request.$http.patch(
-      `v2/repository/entities/${entityId}/`,
-      {
-        value: name,
-        repository_version: repositoryVersion,
-        group_id: groupId,
-      },
-    );
+    return request.$http.patch(`v2/repository/entities/${entityId}/`, {
+      value: name,
+      repository_version: repositoryVersion,
+      group_id: groupId,
+    });
   },
 
   search(repositoryUuid, repositoryVersion, query = {}) {
@@ -55,13 +44,10 @@ export default {
     return new utils.List(`/v2/repository/entities?${queryString}`);
   },
   editEntityName(entityId, value, repositoryVersion) {
-    return request.$http.patch(
-      `/v2/repository/entities/${entityId}/`,
-      {
-        value,
-        repository_version: repositoryVersion,
-      },
-    );
+    return request.$http.patch(`/v2/repository/entities/${entityId}/`, {
+      value,
+      repository_version: repositoryVersion,
+    });
   },
   getEntities(repositoryUuid, repositoryVersion) {
     const queryString = qs.stringify({

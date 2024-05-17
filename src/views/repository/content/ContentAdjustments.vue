@@ -93,14 +93,9 @@
 </template>
 
 <script>
-import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import { mapActions } from 'vuex';
-import Loading from '@/components/shared/Loading';
-import Modal from '@/components/repository/CreateRepository/Modal';
-import Repository from '@/models/repository';
 import router from '@/router/index';
-import RemoveBulmaMixin from '@/utils/RemoveBulmaMixin';
-import PageContainer from '@/components/PageContainer';
+import PageContainer from '@/components/PageContainer.vue';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
@@ -126,7 +121,6 @@ export default {
       removePageExitAdvisor: null,
     };
   },
-  mixins: [RemoveBulmaMixin],
   computed: {
     hasUpdates() {
       if (
@@ -141,9 +135,6 @@ export default {
     },
   },
   components: {
-    RepositoryViewBase,
-    Loading,
-    Modal,
     PageContainer,
   },
 
