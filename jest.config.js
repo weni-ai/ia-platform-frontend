@@ -2,6 +2,7 @@
 
 const config = {
   rootDir: 'src/',
+  testEnvironment: 'jsdom',
   moduleFileExtensions: [
     'js',
     'json',
