@@ -88,6 +88,11 @@
         "version": "Versão",
         "select-language": "Idioma",
         "language": "Selecione o idiome padrão",
+        "languages": {
+          "pt_br": "Português Brasileiro",
+          "en": "Inglês",
+          "es": "Espanhol"
+        },
         "version-gpt": "Versão",
         "parameter": "Parâmetros",
         "temperature": "Temperatura",
