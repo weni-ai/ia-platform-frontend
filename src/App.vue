@@ -31,16 +31,14 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import NewsModal from '@/components/NewsModal';
 import hotjar from '@/utils/plugins/hotjar';
 import I18n from '@/utils/plugins/i18n';
 import store from './store';
-import ModalDependingOnFlowsLength from './components/ModalDependingOnFlowsLength';
+import ModalDependingOnFlowsLength from './components/ModalDependingOnFlowsLength.vue';
 import ModalWarn from './components/ModalWarn.vue';
 
 export default {
   components: {
-    NewsModal,
     I18n,
     ModalDependingOnFlowsLength,
     ModalWarn,
@@ -191,21 +189,20 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/utilities.scss';
-@import '@/assets/scss/default.scss';
-@import '@/assets/scss/colors.scss';
-@import '@/assets/scss/variables.scss';
-@import '@weni/unnnic-system/dist/unnnic.css';
 @import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
-html:not(.not-bulma) {
-  @import 'bulma/bulma.sass';
-  @import 'buefy/src/scss/buefy';
-}
 
 body {
   background-color: $unnnic-color-background-snow;
   min-height: 100vh;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
 }
 
 ::-webkit-scrollbar {
@@ -226,47 +223,6 @@ body {
 }
 .container-padding {
   padding: 0 8px;
-}
-
-.button[disabled] {
-  background-color: $color-grey-dark !important;
-}
-
-// based on https://flatuicolors.com/palette/nl
-$entities-colors: (
-  ('selected', $grey-lighter, black),
-  ('sunflower', #ffc312, black),
-  ('energos', #c4e538, black),
-  ('blue-martina', #12cbc4, black),
-  ('lavender-rose', #fda7df, black),
-  ('bara-red', #ed4c67, white),
-  ('radiant-yellow', #f79f1f, white),
-  ('android-green', #a3cb38, white),
-  ('mediterranean-sea', #1289a7, white),
-  ('lavender-tea', #d980fa, black),
-  ('very-berry', #b53471, white)
-);
-
-@each $entity-color in $entities-colors {
-  $name: nth($entity-color, 1);
-  $bg: nth($entity-color, 2);
-  $color: nth($entity-color, 3);
-
-  .entity-#{$name},
-  .entity-#{$name}:not(.body) {
-    color: $color;
-    background-color: $bg;
-  }
-
-  .entity-#{$name}--active {
-    background-color: $bg;
-  }
-  .entity-#{$name}--inactive {
-    background: transparent;
-    text-decoration: underline;
-    text-decoration-color: $bg;
-    text-decoration-thickness: 3px;
-  }
 }
 
 .clickable {
@@ -313,9 +269,5 @@ $entities-colors: (
 
 .align-items-center {
   align-items: center;
-}
-
-body {
-  font-family: $font-family;
 }
 </style>

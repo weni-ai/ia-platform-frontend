@@ -494,9 +494,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import IntegrationModal from '@/components/shared/IntegrationModal';
-import SideBarContentBases from './SideBarContentBases';
-import SideBarQuickTest from './SideBarQuickTest';
+import IntegrationModal from '@/components/shared/IntegrationModal.vue';
+import SideBarContentBases from './SideBarContentBases.vue';
+import SideBarQuickTest from './SideBarQuickTest.vue';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 

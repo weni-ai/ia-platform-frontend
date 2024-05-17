@@ -3,17 +3,17 @@ import * as Sentry from '@sentry/browser';
 import store from '../store';
 
 export default {
-
   get $http() {
     const client = axios.create({
       baseURL: runtimeVariables.get('VITE_API_BASE_URL'),
       headers: {
         ...(store.getters.authenticated
-          ? { Authorization: `${store.getters.authToken}` } : {}),
+          ? { Authorization: `${store.getters.authToken}` }
+          : {}),
       },
     });
     client.interceptors.response.use(
-      res => res,
+      (res) => res,
       (err) => {
         if (err.response.status === 500 || err.response.status === 408) {
           Sentry.captureException(err);

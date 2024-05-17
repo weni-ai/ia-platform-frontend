@@ -20,6 +20,7 @@ export default {
 
 .divider {
   border: none;
+  width: 100%;
   height: $unnnic-border-width-thinner;
   background-color: $unnnic-color-neutral-soft;
   margin-block: ($unnnic-spacing-stack-md - $unnnic-border-width-thinner)

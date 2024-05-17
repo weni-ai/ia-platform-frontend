@@ -1,4 +1,4 @@
-import qs from 'query-string';
+import qs from '../utils/QueryString.js';
 import request from './request';
 
 export default {
@@ -6,38 +6,44 @@ export default {
     repository_version,
     repository_uuid,
     project_uuid,
-    organization
+    organization,
   ) {
     const queryString = qs.stringify({
       project_uuid,
-      organization
+      organization,
     });
     return request.$http.get(
-      `/v2/repository/info/${repository_uuid}/${repository_version}/projectrepository/?${queryString}`
+      `/v2/repository/info/${repository_uuid}/${repository_version}/projectrepository/?${queryString}`,
     );
   },
-  async integrateRepository(repository_version, repository_uuid, name, project_uuid, organization) {
+  async integrateRepository(
+    repository_version,
+    repository_uuid,
+    name,
+    project_uuid,
+    organization,
+  ) {
     return request.$http.post(
       `/v2/repository/info/${repository_uuid}/${repository_version}/add_repository_project/`,
       {
         project_uuid,
         name,
-        organization
-      }
+        organization,
+      },
     );
   },
   async disintegrateRepository(
     repository_version,
     repository_uuid,
     project_uuid,
-    organization
+    organization,
   ) {
     return request.$http.post(
       `/v2/repository/info/${repository_uuid}/${repository_version}/remove_repository_project/`,
       {
         project_uuid,
-        organization
-      }
+        organization,
+      },
     );
-  }
+  },
 };

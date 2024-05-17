@@ -1,9 +1,10 @@
 import entity from '@/api/entity';
 
 export default {
-  async editEntity(store, {
-    entityId, name, groupId = null, repositoryVersion,
-  }) {
+  async editEntity(
+    store,
+    { entityId, name, groupId = null, repositoryVersion },
+  ) {
     return entity.editEntity(entityId, name, groupId, repositoryVersion);
   },
 

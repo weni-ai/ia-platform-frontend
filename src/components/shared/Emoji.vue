@@ -1,5 +1,8 @@
 <template>
-  <img :src="currentEmote" :title="name" />
+  <img
+    :src="currentEmote"
+    :title="name"
+  />
 </template>
 
 <script>

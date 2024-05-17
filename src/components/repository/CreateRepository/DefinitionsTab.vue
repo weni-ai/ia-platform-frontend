@@ -126,7 +126,7 @@
 <script>
 import { mapActions } from 'vuex';
 import { LANGUAGES } from '@/utils/index';
-import Loading from '@/components/shared/Loading';
+import Loading from '@/components/shared/Loading.vue';
 
 export default {
   name: 'DefinitionsTab',

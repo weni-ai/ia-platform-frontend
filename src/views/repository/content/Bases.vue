@@ -206,22 +206,16 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
-import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard';
-import RepositoryContentNavigation from './Navigation';
-import Modal from '@/components/repository/CreateRepository/Modal';
-import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
+import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard.vue';
+import RepositoryContentNavigation from './Navigation.vue';
 import nexusaiAPI from '../../../api/nexusaiAPI';
-import BaseSettingsForm from '../../../components/BaseSettingsForm';
+import BaseSettingsForm from '../../../components/BaseSettingsForm.vue';
 
 export default {
   name: 'RepositoryBase',
-  mixins: [RemoveBulmaMixin],
   components: {
-    RepositoryViewBase,
     HomeRepositoryCard,
     RepositoryContentNavigation,
-    Modal,
     BaseSettingsForm,
   },
   data() {

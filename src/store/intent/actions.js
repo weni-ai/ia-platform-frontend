@@ -2,9 +2,7 @@ import intent from '@/api/intent';
 import TYPES from './types';
 
 export default {
-  async editIntentName(store, {
-    intentId, text, repositoryVersion,
-  }) {
+  async editIntentName(store, { intentId, text, repositoryVersion }) {
     const response = await intent.editIntentName(
       intentId,
       text,

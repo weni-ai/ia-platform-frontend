@@ -1,6 +1,5 @@
 import request from '../request';
 
-
 export default class List {
   constructor(initial) {
     this.total = 0;
@@ -20,7 +19,7 @@ export default class List {
           ...data,
         },
       }))
-      .filter(item => !this.deletions.includes(item.id));
+      .filter((item) => !this.deletions.includes(item.id));
   }
 
   get hasNext() {

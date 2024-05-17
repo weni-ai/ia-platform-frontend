@@ -31,7 +31,10 @@ export default {
     localStorage.setItem('finishedTutorials', JSON.stringify(finished));
   },
   async updateTutorialsDone({ commit }) {
-    commit('tutorialsDone', JSON.parse(localStorage.getItem('finishedTutorials')));
+    commit(
+      'tutorialsDone',
+      JSON.parse(localStorage.getItem('finishedTutorials')),
+    );
   },
   // eslint-disable-next-line no-unused-vars
   async setCreateIntelligence({ commit }, name) {

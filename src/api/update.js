@@ -1,7 +1,6 @@
-import qs from 'query-string';
+import qs from '../utils/QueryString.js';
 
 import utils from './utils';
-
 
 export default {
   search(repositoryUuid, query = {}) {

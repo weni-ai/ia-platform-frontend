@@ -37,8 +37,8 @@
 
 <script>
 import repository from '../../api/repository';
-import IntelligenceFromProjectItem from '../repository/home/IntelligenceFromProjectItem';
-import IntelligencesFilter from './IntelligencesFilter';
+import IntelligenceFromProjectItem from '../repository/home/IntelligenceFromProjectItem.vue';
+import IntelligencesFilter from './IntelligencesFilter.vue';
 
 export default {
   components: {
