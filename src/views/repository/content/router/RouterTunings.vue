@@ -228,12 +228,6 @@ export default {
               options: Object.keys(WENIGPT_OPTIONS),
             },
             {
-              type: 'select',
-              name: 'language',
-              default: 'por',
-              options: ['por', 'eng', 'spa'],
-            },
-            {
               type: 'naf-header',
               name: 'parameter',
             },
