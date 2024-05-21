@@ -485,10 +485,16 @@ export default {
 
     removedFile(fileUuid) {
       this.files.data = this.files.data.filter(({ uuid }) => uuid !== fileUuid);
+      this.filters.files.data = this.files.data.filter(
+        ({ uuid }) => uuid !== fileUuid,
+      );
     },
 
     removedSite(siteUuid) {
       this.sites.data = this.sites.data.filter(({ uuid }) => uuid !== siteUuid);
+      this.filters.sites.data = this.sites.data.filter(
+        ({ uuid }) => uuid !== siteUuid,
+      );
     },
 
     async loadFiles() {
@@ -528,7 +534,7 @@ export default {
 
     async loadSites() {
       this.sites.status = 'loading';
-
+      console.log('loadSites');
       try {
         const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
           {
@@ -553,12 +559,14 @@ export default {
         );
 
         this.sites.data = sitesData;
+        console.log('Sites DAta', sitesData);
         this.filters.sites = {
           data: sitesData,
           status,
         };
 
         this.sites.status = status;
+        this.filterName = '';
       } finally {
         if (this.sites.status !== 'complete') {
           this.filters.sites.status = null;
@@ -672,6 +680,14 @@ export default {
     },
   },
   watch: {
+    sites: function () {
+      console.log('sites.data', this.sites, this.filters);
+      this.sites = this.filters.sites;
+    },
+    'files.data': function () {
+      console.log('files.data');
+      this.files = this.filters.files;
+    },
     '$route.params.intelligenceUuid': {
       immediate: true,
 
@@ -733,6 +749,13 @@ export default {
       this.$set(this.filters, 'sites', {
         ...this.sites,
         data: sitesData,
+      });
+      console.log({
+        filterName: this.filterName,
+        sitesData,
+        filesData,
+        files: this.files,
+        sites: this.sites,
       });
     }, 300),
   },
