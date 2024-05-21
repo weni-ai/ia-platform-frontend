@@ -273,7 +273,7 @@ export default {
 
       delete({ projectUuid, id }) {
         return request.$http.delete(
-          `api/${projectUuid}/customization?id=${id}`,
+          `api/${projectUuid}/customization/?id=${id}`,
         );
       },
     },

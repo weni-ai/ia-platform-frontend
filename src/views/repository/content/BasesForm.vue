@@ -14,7 +14,18 @@
     "
   >
     <UnnnicButton
-      v-if="!isRouterView"
+      v-if="isRouterView"
+      slot="actions"
+      class="save-button"
+      :disabled="!brainHasCustomizationChanged"
+      :loading="brain.isSavingChanges"
+      @click="brainSaveChanges"
+    >
+      {{ $t('router.tunings.save_changes') }}
+    </UnnnicButton>
+
+    <UnnnicButton
+      v-else
       class="settings-button"
       slot="actions"
       iconCenter="settings"
@@ -158,6 +169,8 @@
               />
               <RouterCustomization
                 v-else-if="$route.name === 'router-personalization'"
+                :agent="brain.agent"
+                :instructions="brain.instructions"
               />
               <RouterTunings
                 v-else-if="$route.name === 'router-tunings'"
@@ -348,6 +361,7 @@ import RouterActions from './router/RouterActions.vue';
 import RouterTunings from './router/RouterTunings.vue';
 import RouterCustomization from './router/RouterCustomization.vue';
 import ModalPreviewQRCode from './router/ModalPreviewQRCode.vue';
+import MixinBrain from '../../../utils/MixinBrain.js';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -364,7 +378,7 @@ export default {
     RouterCustomization,
     ModalPreviewQRCode,
   },
-  mixins: [RemoveBulmaMixin],
+  mixins: [RemoveBulmaMixin, MixinBrain],
   data() {
     return {
       tab: 'files',
@@ -933,8 +947,13 @@ export default {
   }
 }
 
+.save-button,
 .settings-button {
   margin-left: auto;
+}
+
+.save-button {
+  width: 18.5 * $unnnic-font-size;
 }
 
 .base-tabs {
