@@ -569,7 +569,11 @@ export default {
         data.results
           .map((file) => ({
             ...file,
-            status: file.status === 'success' ? 'uploaded' : 'processing',
+            status:
+              {
+                Processing: 'processing',
+                success: 'uploaded',
+              }[file.status] || file.status,
           }))
           .filter(
             ({ uuid }) =>
@@ -610,7 +614,11 @@ export default {
               ...site,
               extension_file: 'site',
               created_file_name: site.link,
-              status: site.status === 'success' ? 'uploaded' : 'processing',
+              status:
+                {
+                  Processing: 'processing',
+                  success: 'uploaded',
+                }[site.status] || site.status,
             }))
             .filter(
               ({ uuid }) =>
