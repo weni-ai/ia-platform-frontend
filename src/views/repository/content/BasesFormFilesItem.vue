@@ -1,66 +1,77 @@
 <template>
-  <div
-    :class="[
-      'files-list__content__file',
-      { 'files-list__content__file--compressed': compressed },
-    ]"
+  <UnnnicToolTip
+    side="top"
+    :text="$t('content_bases.files.file_error')"
+    :enabled="icon === 'warning' ? true : false"
+    maxWidth="18rem"
   >
-    <div class="files-list__content__file__icon">
-      <UnnnicIcon
-        :icon="icon"
-        class="files-list__content__file__icon__itself"
-        :size="compressed ? 'sm' : 'avatar-nano'"
-      />
-    </div>
-
-    <div class="files-list__content__file__content">
-      <div class="files-list__content__file__content__title">
-        {{ name }}
-      </div>
-
-      <div class="files-list__content__file__content__status">
-        <template v-if="file.status === 'uploading'">
-          {{ $t('content_bases.files.status.uploading') }}
-        </template>
-      </div>
-    </div>
-
-    <div class="files-list__content__file__actions">
-      <UnnnicIcon
-        v-if="downloading"
-        icon="cached"
-        size="sm"
-        scheme="neutral-cloudy"
-        class="files-list__content__file__actions__loading"
-      />
-
-      <UnnnicIcon
-        v-else-if="file.status === 'uploaded' && file.extension_file !== 'site'"
-        icon="download"
-        size="sm"
-        class="files-list__content__file__actions__icon"
-        @click.native.stop="download"
-      />
-
-      <UnnnicIcon
-        v-if="!file.uuid.startsWith('temp-')"
-        icon="delete"
-        size="sm"
-        class="files-list__content__file__actions__icon"
-        @click.native.stop="$emit('remove')"
-      />
-    </div>
-
     <div
-      v-if="file.status === 'uploading'"
-      :class="['files-list__content__file__status-bar', file.extension_file]"
+      :class="[
+        'files-list__content__file',
+        { 'files-list__content__file--compressed': compressed },
+        { 'files-list__content__file--error': icon === 'warning' },
+      ]"
     >
+      <div class="files-list__content__file__icon">
+        <UnnnicIcon
+          :icon="icon"
+          class="files-list__content__file__icon__itself"
+          :size="compressed ? 'sm' : 'avatar-nano'"
+          :scheme="icon === 'warning' ? 'feedback-red' : 'weni-600'"
+        />
+      </div>
+
+      <div class="files-list__content__file__content">
+        <div class="files-list__content__file__content__title">
+          {{ name }}
+        </div>
+
+        <div class="files-list__content__file__content__status">
+          <template v-if="file.status === 'uploading'">
+            {{ $t('content_bases.files.status.uploading') }}
+          </template>
+        </div>
+      </div>
+
+      <div class="files-list__content__file__actions">
+        <UnnnicIcon
+          v-if="downloading"
+          icon="cached"
+          size="sm"
+          scheme="neutral-cloudy"
+          class="files-list__content__file__actions__loading"
+        />
+
+        <UnnnicIcon
+          v-else-if="
+            file.status === 'uploaded' && file.extension_file !== 'site'
+          "
+          icon="download"
+          size="sm"
+          class="files-list__content__file__actions__icon"
+          @click.native.stop="download"
+        />
+
+        <UnnnicIcon
+          v-if="!file.uuid.startsWith('temp-')"
+          icon="delete"
+          size="sm"
+          class="files-list__content__file__actions__icon"
+          @click.native.stop="$emit('remove')"
+        />
+      </div>
+
       <div
-        class="files-list__content__file__status-bar__filled"
-        :style="{ width: `${file.progress * 100}%` }"
-      ></div>
+        v-if="file.status === 'uploading'"
+        :class="['files-list__content__file__status-bar', file.extension_file]"
+      >
+        <div
+          class="files-list__content__file__status-bar__filled"
+          :style="{ width: `${file.progress * 100}%` }"
+        ></div>
+      </div>
     </div>
-  </div>
+  </UnnnicToolTip>
 </template>
 
 <script>
@@ -114,7 +125,7 @@ export default {
           docx: 'draft',
           site: 'globe',
           action: 'account_tree',
-        }[this.extension] || 'draft'
+        }[this.extension] || 'warning'
       );
     },
 
@@ -182,6 +193,11 @@ export default {
   align-items: center;
   position: relative;
 
+  &--error {
+    outline-color: $unnnic-color-aux-red-500;
+    background: $unnnic-color-aux-red-100;
+  }
+
   &--compressed {
     column-gap: $unnnic-spacing-xs;
 
@@ -192,13 +208,8 @@ export default {
 
   &__icon {
     display: flex;
-    background-color: $unnnic-color-neutral-light;
     border-radius: $unnnic-border-radius-sm;
     padding: 0.6875 * $unnnic-font-size;
-
-    &__itself {
-      color: $unnnic-color-neutral-clean;
-    }
   }
 
   &__content {
