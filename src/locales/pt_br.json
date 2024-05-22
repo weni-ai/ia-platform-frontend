@@ -156,6 +156,7 @@
       "upload_content": "Carregar conteúdo de arquivos",
       "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",
       "supported_files": "Formatos suportados: .pdf, .doc, docx, .txt, .xls e .xlsx.<br /> Limite de 250MB por arquivo.",
+      "file_error": "Arquivo com erro. Exclua e adicione-o novamente.",
       "browse_file": "Adicionar arquivo",
       "uploaded_files": "Arquivos carregados",
       "status": {
