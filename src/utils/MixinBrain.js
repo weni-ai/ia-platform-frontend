@@ -1,4 +1,5 @@
-import { differenceBy, cloneDeep } from 'lodash';
+import { WENIGPT_OPTIONS } from './index.js';
+import { differenceBy, cloneDeep, pick } from 'lodash';
 import nexusaiAPI from '../api/nexusaiAPI.js';
 
 export default {
@@ -6,6 +7,7 @@ export default {
     return {
       brain: {
         isSavingChanges: false,
+        isLoadingTunings: false,
 
         agent: {
           name: {
@@ -30,6 +32,92 @@ export default {
           current: [],
           old: [],
         },
+
+        tunings: {},
+        tuningsOld: {},
+
+        models: [
+          {
+            name: 'WeniGPT',
+            fields: [
+              {
+                type: 'select',
+                name: 'version',
+                default: Object.keys(WENIGPT_OPTIONS)[0],
+                options: Object.keys(WENIGPT_OPTIONS),
+              },
+              {
+                type: 'naf-header',
+                name: 'parameter',
+              },
+              {
+                type: 'slider',
+                name: 'temperature',
+                default: 0.1,
+                step: 0.05,
+                min: 0,
+                max: 1,
+              },
+              {
+                type: 'slider',
+                name: 'top_p',
+                default: 0.95,
+                step: 0.05,
+                min: 0,
+                max: 1,
+              },
+              {
+                type: 'slider',
+                name: 'top_k',
+                default: 10,
+                step: 1,
+                min: 1,
+                max: 100,
+              },
+            ],
+          },
+          {
+            name: 'ChatGPT',
+            fields: [
+              {
+                type: 'password',
+                name: 'token',
+              },
+              {
+                type: 'select',
+                name: 'version-gpt',
+                default: 'gpt-4o',
+                options: ['gpt-3.5-turbo', 'gpt-4-turbo', 'gpt-4o'],
+              },
+              {
+                type: 'select',
+                name: 'language',
+                default: 'por',
+                options: ['por', 'eng', 'spa'],
+              },
+              {
+                type: 'naf-header',
+                name: 'parameter',
+              },
+              {
+                type: 'slider',
+                name: 'temperature',
+                default: 0.1,
+                step: 0.05,
+                min: 0,
+                max: 1,
+              },
+              {
+                type: 'slider',
+                name: 'top_p',
+                default: 0.95,
+                step: 0.05,
+                min: 0,
+                max: 1,
+              },
+            ],
+          },
+        ],
       },
     };
   },
@@ -37,6 +125,7 @@ export default {
   mounted() {
     if (this.isRouterView) {
       this.loadCustomization();
+      this.loadTunings();
     }
   },
 
@@ -53,6 +142,39 @@ export default {
           'instruction',
         ).length
       );
+    },
+
+    brainHasTuningsChanged() {
+      return this.brainTuningsFields.some(
+        ({ value, previousValue }) => value !== previousValue,
+      );
+    },
+
+    brainTuningsFields() {
+      const useValue = (field) => {
+        const value = this.brain.tunings[field.name] || field.default;
+        const previousValue =
+          this.brain.tuningsOld[field.name] || field.default;
+
+        return {
+          ...field,
+          value,
+          previousValue,
+        };
+      };
+
+      const model = useValue({
+        type: 'radio',
+        name: 'model',
+        options: this.brain.models.map(({ name }) => name),
+        default: this.brain.models[0].name,
+      });
+
+      return [model].concat([
+        ...this.brain.models
+          .find(({ name }) => name === model.value)
+          .fields.map(useValue),
+      ]);
     },
   },
 
@@ -75,6 +197,33 @@ export default {
         this.brain.instructions.old = cloneDeep(
           this.brain.instructions.current,
         );
+      } else if (type === 'tunings') {
+        const handleName = (name) =>
+          name === 'version' && data.model === 'ChatGPT' ? 'version-gpt' : name;
+        const getValue = (name) => {
+          const specialValues = ['temperature', 'top_p', 'top_k'];
+
+          if (specialValues.includes(name)) {
+            return Number(data.setup[name]);
+          }
+
+          if (name === 'version' && data.model === 'WeniGPT') {
+            const option = Object.entries(WENIGPT_OPTIONS).find(
+              ([_, value]) => value === data.setup[name],
+            );
+            return option ? option[0] : '';
+          }
+
+          return data.setup[name];
+        };
+
+        this.$set(this.brain.tunings, 'model', data.model);
+        this.$set(this.brain.tuningsOld, 'model', data.model);
+
+        Object.keys(data.setup).forEach((name) => {
+          this.$set(this.brain.tunings, handleName(name), getValue(name));
+          this.$set(this.brain.tuningsOld, handleName(name), getValue(name));
+        });
       }
     },
 
@@ -103,6 +252,20 @@ export default {
       }
 
       this.setInitialValues('customization', currentData);
+    },
+
+    async loadTunings() {
+      try {
+        this.brain.isLoadingTunings = true;
+
+        const { data } = await nexusaiAPI.router.tunings.read({
+          projectUuid: this.$store.state.Auth.connectProjectUuid,
+        });
+
+        this.setInitialValues('tunings', data);
+      } finally {
+        this.brain.isLoadingTunings = false;
+      }
     },
 
     async brainSaveChanges() {
@@ -137,6 +300,57 @@ export default {
           };
 
           promises.push(saveCustomization());
+        }
+
+        if (this.brainHasTuningsChanged) {
+          const saveTunings = async () => {
+            const handleFieldName = (name) =>
+              name === 'version-gpt' ? 'version' : name;
+            const handleFieldValue = (name, value) =>
+              name === 'version' ? WENIGPT_OPTIONS[value] : value;
+
+            const { data } = await nexusaiAPI.router.tunings.edit({
+              projectUuid: this.$store.state.Auth.connectProjectUuid,
+              values: this.brainTuningsFields.reduce(
+                (values, field) => ({
+                  ...values,
+                  [handleFieldName(field.name)]: handleFieldValue(
+                    field.name,
+                    field.value,
+                  ),
+                }),
+                {},
+              ),
+            });
+
+            const fieldsChangeds = this.brainTuningsFields
+              .filter(({ value, previousValue }) => value !== previousValue)
+              .map((field) => pick(field, ['name', 'value', 'type']));
+
+            this.setInitialValues('tunings', data);
+
+            if (window.brainPreviewAddMessage) {
+              fieldsChangeds.forEach((field) => {
+                const name =
+                  {
+                    model: 'router.tunings.model',
+                  }[field.name] || `router.tunings.fields.${field.name}`;
+
+                window.brainPreviewAddMessage({
+                  type: 'change',
+                  name,
+                  value:
+                    field.type === 'password'
+                      ? field.value.replace(/./g, '•')
+                      : field.value,
+                });
+              });
+
+              this.setInitialValues('tunings', data);
+            }
+          };
+
+          promises.push(saveTunings());
         }
 
         await Promise.all(promises);

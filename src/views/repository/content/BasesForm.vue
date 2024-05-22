@@ -17,7 +17,7 @@
       v-if="isRouterView"
       slot="actions"
       class="save-button"
-      :disabled="!brainHasCustomizationChanged"
+      :disabled="!brainHasCustomizationChanged && !brainHasTuningsChanged"
       :loading="brain.isSavingChanges"
       @click="brainSaveChanges"
     >
@@ -175,6 +175,10 @@
               <RouterTunings
                 v-else-if="$route.name === 'router-tunings'"
                 :data="routerTunings"
+                :fields="brainTuningsFields"
+                :loadingData="brain.isLoadingTunings"
+                @updateField="updateTuningsField"
+                @setInitialValues="setInitialValues('tunings', $event)"
               />
             </section>
           </section>
@@ -482,6 +486,10 @@ export default {
     };
   },
   methods: {
+    updateTuningsField([name, value]) {
+      this.$set(this.brain.tunings, name, value);
+    },
+
     ...mapActions([
       'createQAKnowledgeBase',
       'getQAKnowledgeBase',
