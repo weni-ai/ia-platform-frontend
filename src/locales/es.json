@@ -46,6 +46,10 @@
     }
   },
   "router": {
+    "modal_save_changes_error": {
+      "title": "Error al guardar los cambios",
+      "description": "Se ha producido un error al guardar los cambios en la pestaña {tabs}. Intente guardar de nuevo.|Se ha producido un error al guardar los cambios en las pestañas {tabs}. Intente guardar de nuevo."
+    },
     "warn": {
       "brain_is_deactivated": "Brain está desactivado.",
       "click_here": "haz clic aquí",

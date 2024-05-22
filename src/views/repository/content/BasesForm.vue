@@ -317,6 +317,11 @@
       @close="isMobilePreviewModalOpen = false"
     />
 
+    <ModalSaveChangesError
+      v-if="$store.state.Brain.tabsWithError"
+      @close="$store.state.Brain.tabsWithError = null"
+    />
+
     <UnnnicAlert
       v-if="isAlertOpen"
       :text="$t('content_bases.changes_saved')"
@@ -359,6 +364,7 @@ import RouterActions from './router/RouterActions.vue';
 import RouterTunings from './router/RouterTunings.vue';
 import RouterCustomization from './router/RouterCustomization.vue';
 import ModalPreviewQRCode from './router/ModalPreviewQRCode.vue';
+import ModalSaveChangesError from './router/ModalSaveChangesError.vue';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -374,6 +380,7 @@ export default {
     RouterTunings,
     RouterCustomization,
     ModalPreviewQRCode,
+    ModalSaveChangesError,
   },
   mixins: [RemoveBulmaMixin],
   data() {

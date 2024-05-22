@@ -1,4 +1,4 @@
-import { differenceBy, cloneDeep, pick } from 'lodash';
+import { differenceBy, cloneDeep, pick, get } from 'lodash';
 import { WENIGPT_OPTIONS } from '../../utils';
 import nexusaiAPI from '../../api/nexusaiAPI.js';
 import Vue from 'vue';
@@ -6,6 +6,7 @@ import i18n from '../../utils/plugins/i18n';
 
 export default {
   state: {
+    tabsWithError: null,
     isSavingChanges: false,
     customizationStatus: 'waitingToLoad',
     tuningsStatus: 'waitingToLoad',
@@ -309,14 +310,26 @@ export default {
           promises.push(saveTunings());
         }
 
-        await Promise.all(promises);
+        const tabsWithError = (await Promise.allSettled(promises))
+          .filter(({ status }) => status === 'rejected')
+          .map(({ reason }) => get(reason, 'config.routerName'))
+          .map(
+            (routerName) =>
+              ({
+                'brain-customization-edit': 'personalization',
+                'brain-tunings-edit': 'tunings',
+              }[routerName]),
+          )
+          .filter((tab) => tab);
 
-        rootState.alert = {
-          type: 'success',
-          text: i18n.t('router.tunings.changes_saved'),
-        };
-      } catch (error) {
-        console.log('error', error);
+        if (tabsWithError.length) {
+          state.tabsWithError = tabsWithError;
+        } else {
+          rootState.alert = {
+            type: 'success',
+            text: i18n.t('router.tunings.changes_saved'),
+          };
+        }
       } finally {
         state.isSavingChanges = false;
       }

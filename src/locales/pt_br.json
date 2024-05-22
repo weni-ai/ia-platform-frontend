@@ -46,6 +46,10 @@
     }
   },
   "router": {
+    "modal_save_changes_error": {
+      "title": "Erro ao salvar as alterações",
+      "description": "Ocorreu um erro ao salvar as alterações na aba {tabs}. Tente salvar novamente.|Ocorreu um erro ao salvar as alterações nas abas {tabs}. Tente salvar novamente."
+    },
     "warn": {
       "brain_is_deactivated": "O Brain está desativado.",
       "click_here": "clique aqui",

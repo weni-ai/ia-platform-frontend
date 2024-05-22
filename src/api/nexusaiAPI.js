@@ -19,6 +19,10 @@ const request = {
       (err) => {
         Sentry.captureException(err);
 
+        if (get(err, 'config.hideGenericErrorAlert')) {
+          throw err;
+        }
+
         if (err.response.status === 500 || err.response.status === 408) {
           store.state.alert = {
             text:
@@ -243,10 +247,17 @@ export default {
       edit({ projectUuid, values }) {
         const { model, ...others } = values;
 
-        return request.$http.patch(`api/${projectUuid}/llm/`, {
-          model,
-          setup: others,
-        });
+        return request.$http.patch(
+          `api/${projectUuid}/llm/`,
+          {
+            model,
+            setup: others,
+          },
+          {
+            routerName: 'brain-tunings-edit',
+            hideGenericErrorAlert: true,
+          },
+        );
       },
 
       advanced: {
@@ -268,7 +279,10 @@ export default {
       },
 
       edit({ projectUuid, data }) {
-        return request.$http.put(`api/${projectUuid}/customization/`, data);
+        return request.$http.put(`api/${projectUuid}/customization/`, data, {
+          routerName: 'brain-customization-edit',
+          hideGenericErrorAlert: true,
+        });
       },
 
       delete({ projectUuid, id }) {
