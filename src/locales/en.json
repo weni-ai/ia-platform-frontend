@@ -1445,7 +1445,7 @@
     },
     "instructions": {
       "title": "General instructions",
-      "sub_title": "How you want the agent to behave. Example: You're funny but you don't make jokes.",
+      "sub_title": "How you want the agent to behave.",
       "add_instruction_btn": "Add instruction",
       "modals": {
         "title": "Remove instruction",

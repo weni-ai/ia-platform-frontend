@@ -1403,7 +1403,7 @@
     },
     "instructions": {
       "title": "Instruções gerais",
-      "sub_title": "Como você quer que o agente se comporte. Exemplo: Você é divertido mas não faz piadas.",
+      "sub_title": "Como você quer que o agente se comporte.",
       "add_instruction_btn": "Adicionar instrução",
       "modals": {
         "title": "Remover instrução",

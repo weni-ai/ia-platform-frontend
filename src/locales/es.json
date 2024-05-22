@@ -1424,7 +1424,7 @@
     },
     "instructions": {
       "title": "Instrucciones generales",
-      "sub_title": "Cómo quieres que se comporte el agente. Ejemplo: Eres gracioso pero no haces chistes",
+      "sub_title": "Cómo quieres que se comporte el agente.",
       "add_instruction_btn": "Añadir instrucción",
       "modals": {
         "title": "Quitar instrucción",
