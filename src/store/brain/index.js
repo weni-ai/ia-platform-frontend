@@ -1,5 +1,6 @@
 import { differenceBy, cloneDeep, pick, get } from 'lodash';
 import { WENIGPT_OPTIONS } from '../../utils';
+import { models } from './models.js';
 import nexusaiAPI from '../../api/nexusaiAPI.js';
 import Vue from 'vue';
 import i18n from '../../utils/plugins/i18n';
@@ -43,89 +44,6 @@ export default {
 
     tunings: {},
     tuningsOld: {},
-
-    models: [
-      {
-        name: 'WeniGPT',
-        fields: [
-          {
-            type: 'select',
-            name: 'version',
-            default: Object.keys(WENIGPT_OPTIONS)[0],
-            options: Object.keys(WENIGPT_OPTIONS),
-          },
-          {
-            type: 'naf-header',
-            name: 'parameter',
-          },
-          {
-            type: 'slider',
-            name: 'temperature',
-            default: 0.1,
-            step: 0.05,
-            min: 0,
-            max: 1,
-          },
-          {
-            type: 'slider',
-            name: 'top_p',
-            default: 0.95,
-            step: 0.05,
-            min: 0,
-            max: 1,
-          },
-          {
-            type: 'slider',
-            name: 'top_k',
-            default: 10,
-            step: 1,
-            min: 1,
-            max: 100,
-          },
-        ],
-      },
-      {
-        name: 'ChatGPT',
-        fields: [
-          {
-            type: 'password',
-            name: 'token',
-          },
-          {
-            type: 'select',
-            name: 'version-gpt',
-            default: 'gpt-4o',
-            options: ['gpt-3.5-turbo', 'gpt-4-turbo', 'gpt-4o'],
-          },
-          {
-            type: 'select',
-            name: 'language',
-            default: 'por',
-            options: ['por', 'eng', 'spa'],
-          },
-          {
-            type: 'naf-header',
-            name: 'parameter',
-          },
-          {
-            type: 'slider',
-            name: 'temperature',
-            default: 0.1,
-            step: 0.05,
-            min: 0,
-            max: 1,
-          },
-          {
-            type: 'slider',
-            name: 'top_p',
-            default: 0.95,
-            step: 0.05,
-            min: 0,
-            max: 1,
-          },
-        ],
-      },
-    ],
   },
 
   getters: {
@@ -161,7 +79,7 @@ export default {
       );
     },
 
-    brainTuningsFields({ tunings, tuningsOld, models }) {
+    brainTuningsFields({ tunings, tuningsOld }) {
       const useValue = (field) => {
         const value = tunings[field.name] || field.default;
         const previousValue = tuningsOld[field.name] || field.default;
@@ -239,114 +157,112 @@ export default {
       }
     },
 
-    async saveBrainChanges({ state, getters, commit, rootState }) {
+    async saveBrainCustomization({ state, commit, rootState }) {
+      const agent = Object.keys(state.agent).reduce(
+        (obj, key) => ({
+          ...obj,
+          [key]: state.agent[key].current,
+        }),
+        {},
+      );
+
+      const currentValue = {
+        agent,
+        instructions: state.instructions.current.filter((e) => e.instruction),
+      };
+
+      const { data } = await nexusaiAPI.router.customization.edit({
+        projectUuid: rootState.Auth.connectProjectUuid,
+        data: currentValue,
+      });
+
+      commit('setBrainCustomizationInitialValues', data);
+    },
+
+    async saveBrainContentText({ state, commit, rootState }) {
+      if (state.contentText.uuid) {
+        const { data: contentBaseTextData } =
+          await nexusaiAPI.updateIntelligenceContentBaseText({
+            contentBaseUuid: rootState.router.contentBaseUuid,
+            contentBaseTextUuid: state.contentText.uuid,
+            text: state.contentText.current,
+            hideGenericErrorAlert: true,
+          });
+
+        commit('setBrainContentTextInitialValues', contentBaseTextData);
+      } else {
+        const { data: contentBaseTextData } =
+          await nexusaiAPI.createIntelligenceContentBaseText({
+            contentBaseUuid: rootState.router.contentBaseUuid,
+            text: state.contentText.current,
+            hideGenericErrorAlert: true,
+          });
+
+        commit('setBrainContentTextInitialValues', contentBaseTextData);
+      }
+    },
+
+    async saveBrainTunings({ getters, commit, rootState }) {
+      const handleFieldName = (name) =>
+        name === 'version-gpt' ? 'version' : name;
+      const handleFieldValue = (name, value) =>
+        name === 'version' ? WENIGPT_OPTIONS[value] : value;
+
+      const { data } = await nexusaiAPI.router.tunings.edit({
+        projectUuid: rootState.Auth.connectProjectUuid,
+        values: getters.brainTuningsFields.reduce(
+          (values, field) => ({
+            ...values,
+            [handleFieldName(field.name)]: handleFieldValue(
+              field.name,
+              field.value,
+            ),
+          }),
+          {},
+        ),
+      });
+
+      const fieldsChangeds = getters.brainTuningsFields
+        .filter(({ value, previousValue }) => value !== previousValue)
+        .map((field) => pick(field, ['name', 'value', 'type']));
+
+      commit('setBrainTuningsInitialValues', data);
+
+      if (window.brainPreviewAddMessage) {
+        fieldsChangeds.forEach((field) => {
+          const name =
+            {
+              model: 'router.tunings.model',
+            }[field.name] || `router.tunings.fields.${field.name}`;
+
+          window.brainPreviewAddMessage({
+            type: 'change',
+            name,
+            value:
+              field.type === 'password'
+                ? field.value.replace(/./g, '•')
+                : field.value,
+          });
+        });
+      }
+    },
+
+    async saveBrainChanges({ state, getters, rootState, dispatch }) {
       try {
         state.isSavingChanges = true;
 
         const promises = [];
 
         if (getters.hasBrainCustomizationChanged) {
-          const saveCustomization = async () => {
-            const agent = Object.keys(state.agent).reduce(
-              (obj, key) => ({
-                ...obj,
-                [key]: state.agent[key].current,
-              }),
-              {},
-            );
-
-            const currentValue = {
-              agent,
-              instructions: state.instructions.current.filter(
-                (e) => e.instruction,
-              ),
-            };
-
-            const { data } = await nexusaiAPI.router.customization.edit({
-              projectUuid: rootState.Auth.connectProjectUuid,
-              data: currentValue,
-            });
-
-            commit('setBrainCustomizationInitialValues', data);
-          };
-
-          promises.push(saveCustomization());
+          promises.push(dispatch('saveBrainCustomization'));
         }
 
         if (getters.hasBrainTuningsChanged) {
-          const saveTunings = async () => {
-            const handleFieldName = (name) =>
-              name === 'version-gpt' ? 'version' : name;
-            const handleFieldValue = (name, value) =>
-              name === 'version' ? WENIGPT_OPTIONS[value] : value;
-
-            const { data } = await nexusaiAPI.router.tunings.edit({
-              projectUuid: rootState.Auth.connectProjectUuid,
-              values: getters.brainTuningsFields.reduce(
-                (values, field) => ({
-                  ...values,
-                  [handleFieldName(field.name)]: handleFieldValue(
-                    field.name,
-                    field.value,
-                  ),
-                }),
-                {},
-              ),
-            });
-
-            const fieldsChangeds = getters.brainTuningsFields
-              .filter(({ value, previousValue }) => value !== previousValue)
-              .map((field) => pick(field, ['name', 'value', 'type']));
-
-            commit('setBrainTuningsInitialValues', data);
-
-            if (window.brainPreviewAddMessage) {
-              fieldsChangeds.forEach((field) => {
-                const name =
-                  {
-                    model: 'router.tunings.model',
-                  }[field.name] || `router.tunings.fields.${field.name}`;
-
-                window.brainPreviewAddMessage({
-                  type: 'change',
-                  name,
-                  value:
-                    field.type === 'password'
-                      ? field.value.replace(/./g, '•')
-                      : field.value,
-                });
-              });
-            }
-          };
-
-          promises.push(saveTunings());
+          promises.push(dispatch('saveBrainTunings'));
         }
 
         if (getters.hasBrainContentTextChanged) {
-          const saveContentText = async () => {
-            if (state.contentText.uuid) {
-              const { data: contentBaseTextData } =
-                await nexusaiAPI.updateIntelligenceContentBaseText({
-                  contentBaseUuid: rootState.router.contentBaseUuid,
-                  contentBaseTextUuid: state.contentText.uuid,
-                  text: state.contentText.current,
-                  hideGenericErrorAlert: true,
-                });
-
-              commit('setBrainContentTextInitialValues', contentBaseTextData);
-            } else {
-              const { data: contentBaseTextData } =
-                await nexusaiAPI.createIntelligenceContentBaseText({
-                  contentBaseUuid: rootState.router.contentBaseUuid,
-                  text: state.contentText.current,
-                  hideGenericErrorAlert: true,
-                });
-
-              commit('setBrainContentTextInitialValues', contentBaseTextData);
-            }
-          };
-
-          promises.push(saveContentText());
+          promises.push(dispatch('saveBrainContentText'));
         }
 
         const tabsWithError = (await Promise.allSettled(promises))
@@ -356,8 +272,8 @@ export default {
             (routerName) =>
               ({
                 'brain-customization-edit': 'personalization',
-                'contentBase-text-edit': 'content',
                 'contentBase-text-create': 'content',
+                'contentBase-text-edit': 'content',
                 'brain-tunings-edit': 'tunings',
               }[routerName]),
           )
