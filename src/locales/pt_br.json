@@ -1396,10 +1396,10 @@
       }
     },
     "placeholders": {
-      "instruction": "Instrução",
-      "name": "Nome do agente",
-      "occupation": "Ocupação do agente", 
-      "goal": "Objetivo do agente"
+      "instruction": "Você é divertido mas não faz piadas",
+      "name": "Tainá",
+      "occupation": "Especialista em lhamas", 
+      "goal": "Tirar dúvidas e dar informações sobre lhamas"
     },
     "instructions": {
       "title": "Instruções gerais",

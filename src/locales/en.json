@@ -1438,10 +1438,10 @@
       }
     },
     "placeholders": {
-      "instruction": "Instruction",
-      "name": "Agent's name",
-      "occupation": "Agent's occupation", 
-      "goal": "Agent's goal"
+      "instruction": "You're funny but you don't make jokes",
+      "name": "Tainá",
+      "occupation": "Llama expert", 
+      "goal": "To answer questions and give information about llamas"
     },
     "instructions": {
       "title": "General instructions",

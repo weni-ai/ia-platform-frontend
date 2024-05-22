@@ -1417,10 +1417,10 @@
       }
     },
     "placeholders": {
-      "instruction": "Instrucción",
-      "name": "Nombre del agente",
-      "occupation": "Ocupación del agente", 
-      "goal": "Objetivo del agente"
+      "instruction": "Eres gracioso pero no haces bromas",
+      "name": "Tainá",
+      "occupation": "Experto en llamas", 
+      "goal": "Responder preguntas y dar información sobre llamas"
     },
     "instructions": {
       "title": "Instrucciones generales",
