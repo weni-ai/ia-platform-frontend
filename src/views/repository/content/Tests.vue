@@ -347,6 +347,9 @@ export default {
 
                 this.flowStart(answer, { name: data.name, uuid: data.uuid });
               }
+            })
+            .catch(() => {
+              this.messages.splice(this.messages.indexOf(answer), 1);
             });
         } else {
           nexusaiAPI.question
