@@ -74,6 +74,12 @@
       </div>
     </div>
 
+    <QuickTestWarn
+      v-if="shouldShowRequireSaveWarn"
+      icon="info"
+      :text="$t('router.preview.save_changes_to_test_the_agent')"
+    />
+
     <div class="write-message">
       <UnnnicInput
         v-model="message"
@@ -102,6 +108,7 @@ import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
 import FlowPreview from '../../../utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 import Markdown from '../../../components/Markdown.vue';
+import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
 
 export default {
   name: 'RepositoryContentTests',
@@ -116,6 +123,7 @@ export default {
     Markdown,
     AnswerSources,
     AnswerFeedback,
+    QuickTestWarn,
   },
 
   mixins: [FlowPreview],
@@ -129,6 +137,10 @@ export default {
   },
 
   computed: {
+    shouldShowRequireSaveWarn() {
+      return this.usePreview && !this.$store.getters.isBrainSaveButtonDisabled;
+    },
+
     language() {
       const language = this.contentBaseLanguage;
 

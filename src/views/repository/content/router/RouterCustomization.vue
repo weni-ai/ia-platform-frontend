@@ -13,7 +13,7 @@
           class="customization__form-element"
         >
           <UnnnicInput
-            v-model="values.agent.name"
+            v-model="brain.agent.name.current"
             :placeholder="$t('customization.placeholders.name')"
           />
         </UnnnicFormElement>
@@ -24,7 +24,7 @@
           class="customization__form-element"
         >
           <UnnnicInput
-            v-model="values.agent.role"
+            v-model="brain.agent.role.current"
             :placeholder="$t('customization.placeholders.occupation')"
           />
         </UnnnicFormElement>
@@ -33,8 +33,8 @@
           class="customization__form-element"
         >
           <UnnnicSelectSmart
-            :value="handlePersonalityValue(values.agent.personality)"
-            @input="values.agent.personality = $event[0].value"
+            :value="handlePersonalityValue(brain.agent.personality.current)"
+            @input="brain.agent.personality.current = $event[0].value"
             :options="personalities"
             orderedByIndex
           />
@@ -43,7 +43,7 @@
       <div class="customization__container__persona">
         <UnnnicTextArea
           v-bind="$props"
-          v-model="values.agent.goal"
+          v-model="brain.agent.goal.current"
           :label="$t('customization.fields.goal')"
           :placeholder="$t('customization.placeholders.goal')"
         />
@@ -61,7 +61,7 @@
       </section>
       <section
         class="customization__instructions"
-        v-for="(instruction, index) in values?.instructions"
+        v-for="(instruction, index) in brain.instructions.current"
         :key="index"
       >
         <UnnnicFormElement
@@ -70,7 +70,7 @@
         >
           <section class="customization__instructions__form_group">
             <UnnnicInput
-              v-model="values.instructions[index].instruction"
+              v-model="instruction.instruction"
               :placeholder="$t('customization.placeholders.instruction')"
             />
             <UnnnicButtonIcon
@@ -91,17 +91,6 @@
         type="tertiary"
         iconLeft="add-1"
         :disabled="false"
-      />
-    </div>
-    <div class="customization__footer">
-      <UnnnicButton
-        @click="saveChanges"
-        size="large"
-        :text="$t('customization.save_btn')"
-        type="primary"
-        iconLeft="add-1"
-        :disabled="hasChanged"
-        :loading="saving"
       />
     </div>
     <UnnnicModalNext
@@ -126,37 +115,10 @@ import nexusaiAPI from '../../../../api/nexusaiAPI';
 export default {
   data() {
     return {
-      removeInstructions: [],
       currentInstruction: 0,
       showRemoveModal: false,
       saving: false,
       removing: false,
-      values: {
-        agent: {
-          name: '',
-          role: '',
-          goal: '',
-          personality: '',
-        },
-        instructions: [
-          {
-            instruction: '',
-          },
-        ],
-      },
-      oldValues: {
-        agent: {
-          name: '',
-          role: '',
-          goal: '',
-          personality: '',
-        },
-        instructions: [
-          {
-            instruction: '',
-          },
-        ],
-      },
       personalities: [
         {
           label: this.$t('customization.fields.personalities.friendly'),
@@ -201,83 +163,20 @@ export default {
       ],
     };
   },
+
   computed: {
-    hasChanged() {
-      const changedProperties = Object.keys(this.values).flatMap((key) => {
-        if (key === 'agent') {
-          return Object.keys(this.values.agent).filter(
-            (agentKey) =>
-              this.values.agent[agentKey] !== this.oldValues.agent[agentKey],
-          );
-        } else if (key === 'instructions') {
-          const isValidText = this.values.instructions.some(
-            (v) => v.instruction.length > 0,
-          );
-          if (
-            this.values.instructions.length !==
-              this.oldValues.instructions.length &&
-            isValidText
-          ) {
-            return key;
-          } else {
-            for (let i = 0; i < this.values.instructions.length; i++) {
-              const currentInstruction =
-                this.values.instructions[i].instruction;
-              const oldInstruction =
-                this.oldValues.instructions[i]?.instruction || '';
-              if (currentInstruction !== oldInstruction && isValidText) {
-                return key;
-              }
-            }
-          }
-        }
-        return [];
-      });
-
-      return changedProperties.length === 0;
+    brain() {
+      return this.$store.state.Brain;
     },
   },
 
-  async created() {
-    const { data } = await nexusaiAPI.router.customization
-      .read({
-        projectUuid: this.$store.state.Auth.connectProjectUuid,
-      })
-      .catch(() => {
-        this.$store.state.alert = {
-          type: 'error',
-          text: this.$t('customization.invalid_get_data'),
-        };
-        return { data: null };
-      });
-
-    let currentData = data;
-
-    if (currentData.agent === null) {
-      currentData.agent = {
-        name: '',
-        role: '',
-        goal: '',
-        personality: '',
-      };
-    }
-
-    if (currentData.instructions.length === 0) {
-      currentData.instructions = [
-        {
-          instruction: '',
-        },
-      ];
-    }
-    this.setInitialValues(currentData);
+  mounted() {
+    this.$store.dispatch('loadBrainCustomization');
   },
+
   methods: {
-    setInitialValues(data) {
-      this.values = data;
-      this.oldValues = JSON.parse(JSON.stringify(data));
-    },
     addInstruction() {
-      this.values.instructions.push({
+      this.brain.instructions.current.push({
         instruction: '',
       });
     },
@@ -297,16 +196,13 @@ export default {
     async removeInstruction() {
       try {
         this.removing = true;
-        if (this.values.instructions[this.currentInstruction].id) {
+        if (this.brain.instructions.current[this.currentInstruction].id) {
           await nexusaiAPI.router.customization.delete({
             projectUuid: this.$store.state.Auth.connectProjectUuid,
-            id: this.values.instructions[this.currentInstruction].id,
+            id: this.brain.instructions.current[this.currentInstruction].id,
           });
-          this.removeInstructions.push(
-            this.values.instructions[this.currentInstruction],
-          );
         }
-        this.values.instructions.splice(this.currentInstruction, 1);
+        this.brain.instructions.current.splice(this.currentInstruction, 1);
 
         this.showRemoveModal = false;
         this.currentInstruction = null;
@@ -315,6 +211,10 @@ export default {
           type: 'success',
           text: this.$t('customization.instructions.modals.success_message'),
         };
+
+        if (this.brain.instructions.current.length === 0) {
+          this.addInstruction();
+        }
       } catch (e) {
         this.$store.state.alert = {
           type: 'error',
@@ -322,30 +222,6 @@ export default {
         };
       } finally {
         this.removing = false;
-      }
-    },
-    async saveChanges() {
-      try {
-        this.saving = true;
-
-        const currentValue = {
-          agent: this.values.agent,
-          instructions: this.values.instructions.filter((e) => e.instruction),
-        };
-
-        const { data } = await nexusaiAPI.router.customization.edit({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
-          data: currentValue,
-        });
-
-        this.setInitialValues(data);
-
-        this.$store.state.alert = {
-          type: 'success',
-          text: this.$t('router.tunings.changes_saved'),
-        };
-      } finally {
-        this.saving = false;
       }
     },
   },
@@ -460,16 +336,6 @@ export default {
     }
 
     &-element {
-      width: 100%;
-    }
-  }
-
-  &__footer {
-    width: 100%;
-    border-top: 1px solid #e2e6ed;
-    padding-top: $unnnic-spacing-md;
-
-    button {
       width: 100%;
     }
   }
