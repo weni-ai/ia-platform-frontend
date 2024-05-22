@@ -49,7 +49,7 @@
           :value="option"
           :globalValue="field.value"
           size="md"
-          @change="$emit('updateField', [field.name, option])"
+          @change="updateField(field.name, option)"
         >
           {{ option }}
         </UnnnicRadio>
@@ -67,7 +67,7 @@
         :key="index"
         :value="useSelectSmart(field).value"
         :options="useSelectSmart(field).options"
-        @input="$emit('updateField', [field.name, $event[0].value])"
+        @input="updateField(field.name, $event[0].value)"
         orderedByIndex
       />
       <UnnnicSkeletonLoading
@@ -84,7 +84,7 @@
       >
         <UnnnicInput
           :value="field.value"
-          @input="$emit('updateField', [field.name, $event])"
+          @input="updateField(field.name, $event)"
           :type="hasValidate ? 'error' : 'normal'"
           :message="hasValidate ? $t('customization.invalid_field') : ''"
           :nativeType="field.type"
@@ -148,7 +148,7 @@
           :maxLabel="field.max?.toString()"
           :step="field.step"
           :initialValue="field.value"
-          @valueChange="$emit('updateField', [field.name, Number($event)])"
+          @valueChange="updateField(field.name, Number($event))"
           class="tunings__form-element__slider"
         />
         <UnnnicSkeletonLoading
@@ -181,8 +181,6 @@ import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
 export default {
   props: {
     data: Object,
-    fields: Array,
-    loadingData: Boolean,
   },
 
   components: {
@@ -196,6 +194,14 @@ export default {
   },
 
   computed: {
+    loadingData() {
+      return this.$store.state.Brain.tuningsStatus === 'loading';
+    },
+
+    fields() {
+      return this.$store.getters.brainTuningsFields;
+    },
+
     hasValidate() {
       return !!this.fields.find((field) => {
         return field.type === 'text' && field.value === undefined;
@@ -203,7 +209,15 @@ export default {
     },
   },
 
+  mounted() {
+    this.$store.dispatch('loadBrainTunings');
+  },
+
   methods: {
+    updateField(name, value) {
+      this.$set(this.$store.state.Brain.tunings, name, value);
+    },
+
     openRestoreDefaultModal() {
       this.$store.state.modalWarn = {
         title: this.$t('router.tunings.restore_default_modal.title'),
@@ -225,7 +239,7 @@ export default {
           projectUuid: this.$store.state.Auth.connectProjectUuid,
         });
 
-        this.$emit('setInitialValues', data);
+        this.$store.commit('setBrainTuningsInitialValues', data);
 
         this.$store.state.alert = {
           type: 'success',

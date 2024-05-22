@@ -13,7 +13,7 @@
           class="customization__form-element"
         >
           <UnnnicInput
-            v-model="agent.name.current"
+            v-model="brain.agent.name.current"
             :placeholder="$t('customization.placeholders.name')"
           />
         </UnnnicFormElement>
@@ -22,7 +22,7 @@
           class="customization__form-element"
         >
           <UnnnicInput
-            v-model="agent.role.current"
+            v-model="brain.agent.role.current"
             :placeholder="$t('customization.placeholders.occupation')"
           />
         </UnnnicFormElement>
@@ -40,7 +40,7 @@
                 'customization__personality__item',
                 {
                   'customization__personality-selected':
-                    agent.personality.current === item?.value,
+                    brain.agent.personality.current === item?.value,
                 },
               ]"
               v-for="(item, index) in personalities"
@@ -57,7 +57,7 @@
       <div class="customization__container__persona">
         <UnnnicTextArea
           v-bind="$props"
-          v-model="agent.goal.current"
+          v-model="brain.agent.goal.current"
           :label="$t('customization.fields.goal')"
           :placeholder="$t('customization.placeholders.goal')"
         />
@@ -75,7 +75,7 @@
       </section>
       <section
         class="customization__instructions"
-        v-for="(instruction, index) in instructions.current"
+        v-for="(instruction, index) in brain.instructions.current"
         :key="index"
       >
         <UnnnicFormElement
@@ -127,11 +127,6 @@
 import nexusaiAPI from '../../../../api/nexusaiAPI';
 
 export default {
-  props: {
-    agent: Object,
-    instructions: Object,
-  },
-
   data() {
     return {
       currentInstruction: 0,
@@ -183,9 +178,19 @@ export default {
     };
   },
 
+  computed: {
+    brain() {
+      return this.$store.state.Brain;
+    },
+  },
+
+  mounted() {
+    this.$store.dispatch('loadBrainCustomization');
+  },
+
   methods: {
     addInstruction() {
-      this.instructions.current.push({
+      this.brain.instructions.current.push({
         instruction: '',
       });
     },
@@ -196,13 +201,13 @@ export default {
     async removeInstruction() {
       try {
         this.removing = true;
-        if (this.instructions.current[this.currentInstruction].id) {
+        if (this.brain.instructions.current[this.currentInstruction].id) {
           await nexusaiAPI.router.customization.delete({
             projectUuid: this.$store.state.Auth.connectProjectUuid,
-            id: this.instructions.current[this.currentInstruction].id,
+            id: this.brain.instructions.current[this.currentInstruction].id,
           });
         }
-        this.instructions.current.splice(this.currentInstruction, 1);
+        this.brain.instructions.current.splice(this.currentInstruction, 1);
 
         this.showRemoveModal = false;
         this.currentInstruction = null;
@@ -212,7 +217,7 @@ export default {
           text: this.$t('customization.instructions.modals.success_message'),
         };
 
-        if (this.instructions.current.length === 0) {
+        if (this.brain.instructions.current.length === 0) {
           this.addInstruction();
         }
       } catch (e) {
@@ -226,9 +231,9 @@ export default {
     },
 
     handlePersonalitySelect(personality) {
-      if (this.agent.personality.current === personality.value) {
-        this.agent.personality.current = '';
-      } else this.agent.personality.current = personality.value;
+      if (this.brain.agent.personality.current === personality.value) {
+        this.brain.agent.personality.current = '';
+      } else this.brain.agent.personality.current = personality.value;
     },
   },
 };

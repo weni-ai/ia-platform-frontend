@@ -17,9 +17,9 @@
       v-if="isRouterView"
       slot="actions"
       class="save-button"
-      :disabled="!brainHasCustomizationChanged && !brainHasTuningsChanged"
-      :loading="brain.isSavingChanges"
-      @click="brainSaveChanges"
+      :disabled="$store.getters.isBrainSaveButtonDisabled"
+      :loading="$store.state.Brain.isSavingChanges"
+      @click="$store.dispatch('saveBrainChanges')"
     >
       {{ $t('router.tunings.save_changes') }}
     </UnnnicButton>
@@ -169,16 +169,10 @@
               />
               <RouterCustomization
                 v-else-if="$route.name === 'router-personalization'"
-                :agent="brain.agent"
-                :instructions="brain.instructions"
               />
               <RouterTunings
                 v-else-if="$route.name === 'router-tunings'"
                 :data="routerTunings"
-                :fields="brainTuningsFields"
-                :loadingData="brain.isLoadingTunings"
-                @updateField="updateTuningsField"
-                @setInitialValues="setInitialValues('tunings', $event)"
               />
             </section>
           </section>
@@ -365,7 +359,6 @@ import RouterActions from './router/RouterActions.vue';
 import RouterTunings from './router/RouterTunings.vue';
 import RouterCustomization from './router/RouterCustomization.vue';
 import ModalPreviewQRCode from './router/ModalPreviewQRCode.vue';
-import MixinBrain from '../../../utils/MixinBrain.js';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -382,7 +375,7 @@ export default {
     RouterCustomization,
     ModalPreviewQRCode,
   },
-  mixins: [RemoveBulmaMixin, MixinBrain],
+  mixins: [RemoveBulmaMixin],
   data() {
     return {
       tab: 'files',
@@ -486,10 +479,6 @@ export default {
     };
   },
   methods: {
-    updateTuningsField([name, value]) {
-      this.$set(this.brain.tunings, name, value);
-    },
-
     ...mapActions([
       'createQAKnowledgeBase',
       'getQAKnowledgeBase',
