@@ -168,10 +168,21 @@ export default {
     );
   },
 
-  createIntelligenceContentBaseText({ contentBaseUuid, text }) {
-    return request.$http.post(`api/${contentBaseUuid}/content-bases-text/`, {
-      text,
-    });
+  createIntelligenceContentBaseText({
+    contentBaseUuid,
+    text,
+    hideGenericErrorAlert = false,
+  }) {
+    return request.$http.post(
+      `api/${contentBaseUuid}/content-bases-text/`,
+      {
+        text,
+      },
+      {
+        routerName: 'contentBase-text-create',
+        hideGenericErrorAlert,
+      },
+    );
   },
 
   listIntelligenceContentBaseTexts({ contentBaseUuid }) {
@@ -182,11 +193,16 @@ export default {
     contentBaseUuid,
     contentBaseTextUuid,
     text,
+    hideGenericErrorAlert = false,
   }) {
     return request.$http.put(
       `api/${contentBaseUuid}/content-bases-text/${contentBaseTextUuid}/`,
       {
         text,
+      },
+      {
+        routerName: 'contentBase-text-edit',
+        hideGenericErrorAlert,
       },
     );
   },

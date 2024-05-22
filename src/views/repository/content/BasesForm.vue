@@ -157,6 +157,8 @@
 
                   <BasesFormText
                     v-if="text.open"
+                    useBrain
+                    dontShowSaveButton
                     :item="text"
                     class="content-base__content-tab__text"
                   />
@@ -722,10 +724,15 @@ export default {
           '',
         );
 
-        this.text.uuid = this.knowledgeBase.text.uuid;
+        this.$store.state.Brain.contentText.uuid = this.text.uuid =
+          this.knowledgeBase.text.uuid;
 
         this.knowledgeBase.text.value = text === '--empty--' ? '' : text;
         this.knowledgeBase.text.oldValue = this.knowledgeBase.text.value;
+
+        this.$store.state.Brain.contentText.current =
+          this.$store.state.Brain.contentText.old =
+            this.knowledgeBase.text.value;
 
         this.text.value = this.knowledgeBase.text.value;
         this.text.oldValue = this.knowledgeBase.text.oldValue;

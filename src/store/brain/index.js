@@ -11,6 +11,12 @@ export default {
     customizationStatus: 'waitingToLoad',
     tuningsStatus: 'waitingToLoad',
 
+    contentText: {
+      uuid: null,
+      current: '',
+      old: '',
+    },
+
     agent: {
       name: {
         current: '',
@@ -123,7 +129,7 @@ export default {
   },
 
   getters: {
-    brainHasCustomizationChanged(state) {
+    hasBrainCustomizationChanged(state) {
       return (
         Object.keys(state.agent).some((key) => {
           const { current, old } = state.agent[key];
@@ -137,15 +143,21 @@ export default {
       );
     },
 
-    brainHasTuningsChanged(_state, getters) {
+    hasBrainTuningsChanged(_state, getters) {
       return getters.brainTuningsFields.some(
         ({ value, previousValue }) => value !== previousValue,
       );
     },
 
+    hasBrainContentTextChanged(state) {
+      return state.contentText.current !== state.contentText.old;
+    },
+
     isBrainSaveButtonDisabled(_state, getters) {
       return (
-        !getters.brainHasCustomizationChanged && !getters.brainHasTuningsChanged
+        !getters.hasBrainCustomizationChanged &&
+        !getters.hasBrainTuningsChanged &&
+        !getters.hasBrainContentTextChanged
       );
     },
 
@@ -233,7 +245,7 @@ export default {
 
         const promises = [];
 
-        if (getters.brainHasCustomizationChanged) {
+        if (getters.hasBrainCustomizationChanged) {
           const saveCustomization = async () => {
             const agent = Object.keys(state.agent).reduce(
               (obj, key) => ({
@@ -261,7 +273,7 @@ export default {
           promises.push(saveCustomization());
         }
 
-        if (getters.brainHasTuningsChanged) {
+        if (getters.hasBrainTuningsChanged) {
           const saveTunings = async () => {
             const handleFieldName = (name) =>
               name === 'version-gpt' ? 'version' : name;
@@ -310,6 +322,33 @@ export default {
           promises.push(saveTunings());
         }
 
+        if (getters.hasBrainContentTextChanged) {
+          const saveContentText = async () => {
+            if (state.contentText.uuid) {
+              const { data: contentBaseTextData } =
+                await nexusaiAPI.updateIntelligenceContentBaseText({
+                  contentBaseUuid: rootState.router.contentBaseUuid,
+                  contentBaseTextUuid: state.contentText.uuid,
+                  text: state.contentText.current,
+                  hideGenericErrorAlert: true,
+                });
+
+              commit('setBrainContentTextInitialValues', contentBaseTextData);
+            } else {
+              const { data: contentBaseTextData } =
+                await nexusaiAPI.createIntelligenceContentBaseText({
+                  contentBaseUuid: rootState.router.contentBaseUuid,
+                  text: state.contentText.current,
+                  hideGenericErrorAlert: true,
+                });
+
+              commit('setBrainContentTextInitialValues', contentBaseTextData);
+            }
+          };
+
+          promises.push(saveContentText());
+        }
+
         const tabsWithError = (await Promise.allSettled(promises))
           .filter(({ status }) => status === 'rejected')
           .map(({ reason }) => get(reason, 'config.routerName'))
@@ -317,6 +356,8 @@ export default {
             (routerName) =>
               ({
                 'brain-customization-edit': 'personalization',
+                'contentBase-text-edit': 'content',
+                'contentBase-text-create': 'content',
                 'brain-tunings-edit': 'tunings',
               }[routerName]),
           )
@@ -380,6 +421,11 @@ export default {
         Vue.set(state.tunings, handleName(name), getValue(name));
         Vue.set(state.tuningsOld, handleName(name), getValue(name));
       });
+    },
+
+    setBrainContentTextInitialValues(state, data) {
+      state.contentText.uuid = data.uuid;
+      state.contentText.current = state.contentText.old = data.text;
     },
   },
 };
