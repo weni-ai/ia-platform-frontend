@@ -17,6 +17,7 @@
       {{ $t('content_bases.write_content') }}
 
       <UnnnicButton
+        v-if="!dontShowSaveButton"
         :loading="item.status === 'saving'"
         @click="saveText"
         size="small"
@@ -28,7 +29,12 @@
     </header>
 
     <textarea
-      v-model="item.value"
+      :value="useBrain ? $store.state.Brain.contentText.current : item.value"
+      @input="
+        useBrain
+          ? ($store.state.Brain.contentText.current = $event.target.value)
+          : (item.value = $event.target.value)
+      "
       name=""
       id="textId"
       cols="30"
@@ -58,6 +64,8 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
   props: {
+    dontShowSaveButton: Boolean,
+    useBrain: Boolean,
     item: Object,
   },
 

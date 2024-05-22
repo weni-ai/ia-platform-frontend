@@ -49,7 +49,7 @@
           :value="option"
           :globalValue="field.value"
           size="md"
-          @change="$set(values, field.name, option)"
+          @change="updateField(field.name, option)"
         >
           {{ option }}
         </UnnnicRadio>
@@ -65,9 +65,9 @@
         class="tunings__container_fields-element"
         v-if="field.type === 'select' && !loadingData"
         :key="index"
-        :value="handleSelectValue(field)"
-        @input="$set(values, field.name, $event[0].value)"
-        :options="handleSelectOptions(field)"
+        :value="useSelectSmart(field).value"
+        :options="useSelectSmart(field).options"
+        @input="updateField(field.name, $event[0].value)"
         orderedByIndex
       />
       <UnnnicSkeletonLoading
@@ -84,7 +84,7 @@
       >
         <UnnnicInput
           :value="field.value"
-          @input="$set(values, field.name, $event)"
+          @input="updateField(field.name, $event)"
           :type="hasValidate ? 'error' : 'normal'"
           :message="hasValidate ? $t('customization.invalid_field') : ''"
           :nativeType="field.type"
@@ -148,7 +148,7 @@
           :maxLabel="field.max?.toString()"
           :step="field.step"
           :initialValue="field.value"
-          @valueChange="$set(values, field.name, Number($event))"
+          @valueChange="updateField(field.name, Number($event))"
           class="tunings__form-element__slider"
         />
         <UnnnicSkeletonLoading
@@ -170,14 +170,6 @@
       >
         {{ $t('router.tunings.restore_default') }}
       </UnnnicButton>
-
-      <UnnnicButton
-        :disabled="!hasChanged || hasValidate"
-        :loading="saving"
-        @click="save"
-      >
-        {{ $t('router.tunings.save_changes') }}
-      </UnnnicButton>
     </footer>
   </section>
 </template>
@@ -185,8 +177,6 @@
 <script>
 import nexusaiAPI from '../../../../api/nexusaiAPI';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
-import { WENIGPT_OPTIONS } from '@/utils';
-import { pick } from 'lodash';
 
 export default {
   props: {
@@ -200,136 +190,16 @@ export default {
   data() {
     return {
       restoring: false,
-      saving: false,
-      loadingData: false,
-
-      oldValues: {
-        model: null,
-      },
-
-      values: {
-        model: null,
-      },
-
-      language_options: {
-        por: this.$t('router.tunings.fields.languages.pt_br'),
-        eng: this.$t('router.tunings.fields.languages.en'),
-        spa: this.$t('router.tunings.fields.languages.es'),
-      },
-
-      models: [
-        {
-          name: 'WeniGPT',
-          fields: [
-            {
-              type: 'select',
-              name: 'version',
-              default: Object.keys(WENIGPT_OPTIONS)[0],
-              options: Object.keys(WENIGPT_OPTIONS),
-            },
-            {
-              type: 'naf-header',
-              name: 'parameter',
-            },
-            {
-              type: 'slider',
-              name: 'temperature',
-              default: 0.1,
-              step: 0.05,
-              min: 0,
-              max: 1,
-            },
-            {
-              type: 'slider',
-              name: 'top_p',
-              default: 0.95,
-              step: 0.05,
-              min: 0,
-              max: 1,
-            },
-            {
-              type: 'slider',
-              name: 'top_k',
-              default: 10,
-              step: 1,
-              min: 1,
-              max: 100,
-            },
-          ],
-        },
-        {
-          name: 'ChatGPT',
-          fields: [
-            {
-              type: 'password',
-              name: 'token',
-            },
-            {
-              type: 'select',
-              name: 'version-gpt',
-              default: 'gpt-4o',
-              options: ['gpt-3.5-turbo', 'gpt-4-turbo', 'gpt-4o'],
-            },
-            {
-              type: 'select',
-              name: 'language',
-              default: 'por',
-              options: ['por', 'eng', 'spa'],
-            },
-            {
-              type: 'naf-header',
-              name: 'parameter',
-            },
-            {
-              type: 'slider',
-              name: 'temperature',
-              default: 0.1,
-              step: 0.05,
-              min: 0,
-              max: 1,
-            },
-            {
-              type: 'slider',
-              name: 'top_p',
-              default: 0.95,
-              step: 0.05,
-              min: 0,
-              max: 1,
-            },
-          ],
-        },
-      ],
     };
   },
 
   computed: {
+    loadingData() {
+      return this.$store.state.Brain.tuningsStatus === 'loading';
+    },
+
     fields() {
-      return [
-        {
-          type: 'radio',
-          name: 'model',
-          value: this.values.model,
-          options: this.models.map(({ name }) => name),
-        },
-        ...this.models
-          .find(({ name }) => name === this.values.model)
-          .fields.map((field) => ({
-            ...field,
-            value: this.values[field.name] || field.default,
-          })),
-      ];
-    },
-
-    fieldsChangeds() {
-      return this.fields
-        .filter((field) => {
-          return field.value !== this.oldValues[field.name];
-        })
-        .map((field) => ({ ...field, oldValue: this.oldValues[field.name] }));
-    },
-
-    hasChanged() {
-      return !!this.fieldsChangeds.length;
+      return this.$store.getters.brainTuningsFields;
     },
 
     hasValidate() {
@@ -339,24 +209,15 @@ export default {
     },
   },
 
-  async created() {
-    try {
-      this.loadingData = true;
-      if (!this.values.model) {
-        this.values.model = this.models[0].name;
-      }
-
-      const { data } = await nexusaiAPI.router.tunings.read({
-        projectUuid: this.$store.state.Auth.connectProjectUuid,
-      });
-
-      this.setInitialValues(data);
-    } finally {
-      this.loadingData = false;
-    }
+  mounted() {
+    this.$store.dispatch('loadBrainTunings');
   },
 
   methods: {
+    updateField(name, value) {
+      this.$set(this.$store.state.Brain.tunings, name, value);
+    },
+
     openRestoreDefaultModal() {
       this.$store.state.modalWarn = {
         title: this.$t('router.tunings.restore_default_modal.title'),
@@ -370,35 +231,6 @@ export default {
       };
     },
 
-    setInitialValues(data) {
-      this.$set(this.oldValues, 'model', data.model || this.values.model);
-      this.$set(this.values, 'model', data.model || this.values.model);
-
-      const handleName = (name) =>
-        name === 'version' && data.model === 'ChatGPT' ? 'version-gpt' : name;
-      const getValue = (name) => {
-        const specialValues = ['temperature', 'top_p', 'top_k'];
-
-        if (specialValues.includes(name)) {
-          return Number(data.setup[name]);
-        }
-
-        if (name === 'version' && data.model === 'WeniGPT') {
-          const option = Object.entries(WENIGPT_OPTIONS).find(
-            ([_, value]) => value === data.setup[name],
-          );
-          return option ? option[0] : '';
-        }
-
-        return data.setup[name];
-      };
-
-      Object.keys(data.setup).forEach((name) => {
-        this.$set(this.oldValues, handleName(name), getValue(name));
-        this.$set(this.values, handleName(name), getValue(name));
-      });
-    },
-
     async restoreDefault() {
       try {
         this.$store.state.modalWarn.loading = true;
@@ -407,7 +239,7 @@ export default {
           projectUuid: this.$store.state.Auth.connectProjectUuid,
         });
 
-        this.setInitialValues(data);
+        this.$store.commit('setBrainTuningsInitialValues', data);
 
         this.$store.state.alert = {
           type: 'success',
@@ -418,78 +250,31 @@ export default {
       }
     },
 
-    handleSelectValue(field) {
-      const label = this.isLanguage(field.name)
-        ? this.language_options[field.value]
-        : field.value;
-      return [{ value: field.value, label }];
+    useSelectSmart(field) {
+      const languageOptions = {
+        por: this.$t('router.tunings.fields.languages.pt_br'),
+        eng: this.$t('router.tunings.fields.languages.en'),
+        spa: this.$t('router.tunings.fields.languages.es'),
+      };
+
+      const handleLabel = (v) =>
+        this.isLanguage(field.name) ? languageOptions[v] : v;
+
+      const options = field.options.map((option) => ({
+        value: option,
+        label: handleLabel(option),
+      }));
+
+      const value = [options.find(({ value }) => value === field.value)];
+
+      return {
+        value,
+        options,
+      };
     },
 
     isLanguage(name = '') {
       return name === 'language';
-    },
-
-    handleSelectOptions(field) {
-      const handleLabel = (v) =>
-        this.isLanguage(field.name) ? this.language_options[v] : v;
-      return field.options.map((option) => ({
-        value: option,
-        label: handleLabel(option),
-      }));
-    },
-
-    async save() {
-      try {
-        this.saving = true;
-        const handleFieldName = (name) =>
-          name === 'version-gpt' ? 'version' : name;
-        const handleFieldValue = (name, value) =>
-          name === 'version' ? WENIGPT_OPTIONS[value] : value;
-        const { data } = await nexusaiAPI.router.tunings.edit({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
-          values: this.fields.reduce(
-            (values, field) => ({
-              ...values,
-              [handleFieldName(field.name)]: handleFieldValue(
-                field.name,
-                field.value,
-              ),
-            }),
-            {},
-          ),
-        });
-
-        const fieldsChangeds = this.fieldsChangeds.map((field) =>
-          pick(field, ['name', 'value', 'type']),
-        );
-
-        this.setInitialValues(data);
-
-        this.$store.state.alert = {
-          type: 'success',
-          text: this.$t('router.tunings.changes_saved'),
-        };
-
-        if (window.brainPreviewAddMessage) {
-          fieldsChangeds.forEach((field) => {
-            const name =
-              {
-                model: 'router.tunings.model',
-              }[field.name] || `router.tunings.fields.${field.name}`;
-
-            window.brainPreviewAddMessage({
-              type: 'change',
-              name,
-              value:
-                field.type === 'password'
-                  ? field.value.replace(/./g, '•')
-                  : field.value,
-            });
-          });
-        }
-      } finally {
-        this.saving = false;
-      }
     },
   },
 };

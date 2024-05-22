@@ -14,7 +14,18 @@
     "
   >
     <UnnnicButton
-      v-if="!isRouterView"
+      v-if="isRouterView"
+      slot="actions"
+      class="save-button"
+      :disabled="$store.getters.isBrainSaveButtonDisabled"
+      :loading="$store.state.Brain.isSavingChanges"
+      @click="$store.dispatch('saveBrainChanges')"
+    >
+      {{ $t('router.tunings.save_changes') }}
+    </UnnnicButton>
+
+    <UnnnicButton
+      v-else
       class="settings-button"
       slot="actions"
       iconCenter="settings"
@@ -148,6 +159,8 @@
 
                   <BasesFormText
                     v-if="text.open"
+                    useBrain
+                    dontShowSaveButton
                     :item="text"
                     class="content-base__content-tab__text"
                   />
@@ -308,6 +321,11 @@
       @close="isMobilePreviewModalOpen = false"
     />
 
+    <ModalSaveChangesError
+      v-if="$store.state.Brain.tabsWithError"
+      @close="$store.state.Brain.tabsWithError = null"
+    />
+
     <UnnnicAlert
       v-if="isAlertOpen"
       :text="$t('content_bases.changes_saved')"
@@ -350,6 +368,7 @@ import RouterActions from './router/RouterActions.vue';
 import RouterTunings from './router/RouterTunings.vue';
 import RouterCustomization from './router/RouterCustomization.vue';
 import ModalPreviewQRCode from './router/ModalPreviewQRCode.vue';
+import ModalSaveChangesError from './router/ModalSaveChangesError.vue';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -365,6 +384,7 @@ export default {
     RouterTunings,
     RouterCustomization,
     ModalPreviewQRCode,
+    ModalSaveChangesError,
   },
   mixins: [RemoveBulmaMixin],
   data() {
@@ -752,10 +772,15 @@ export default {
           '',
         );
 
-        this.text.uuid = this.knowledgeBase.text.uuid;
+        this.$store.state.Brain.contentText.uuid = this.text.uuid =
+          this.knowledgeBase.text.uuid;
 
         this.knowledgeBase.text.value = text === '--empty--' ? '' : text;
         this.knowledgeBase.text.oldValue = this.knowledgeBase.text.value;
+
+        this.$store.state.Brain.contentText.current =
+          this.$store.state.Brain.contentText.old =
+            this.knowledgeBase.text.value;
 
         this.text.value = this.knowledgeBase.text.value;
         this.text.oldValue = this.knowledgeBase.text.oldValue;
@@ -964,8 +989,13 @@ export default {
   }
 }
 
+.save-button,
 .settings-button {
   margin-left: auto;
+}
+
+.save-button {
+  width: 18.5 * $unnnic-font-size;
 }
 
 .base-tabs {

@@ -46,6 +46,10 @@
     }
   },
   "router": {
+    "modal_save_changes_error": {
+      "title": "Error al guardar los cambios",
+      "description": "Se ha producido un error al guardar los cambios en la pestaña {tabs}. Intente guardar de nuevo.|Se ha producido un error al guardar los cambios en las pestañas {tabs}. Intente guardar de nuevo."
+    },
     "warn": {
       "brain_is_deactivated": "Brain está desactivado.",
       "click_here": "haz clic aquí",
@@ -133,6 +137,7 @@
       "active_to_see": "Activar Brain para ver la vista previa del agente",
       "active_to_see_description": "Activar Brain se puede hacer dentro de las opciones avanzadas en la pestaña Configuración",
       "placeholder": "Envíe un mensaje para probar su agente inteligente",
+      "save_changes_to_test_the_agent": "Guarde los cambios para probar el agente",
       "field_changed_to_value": "Parámetro {field} cambiada a {value}",
       "flow_started": "Flujo {name} iniciado",
       "flow_finished": "Flujo finalizado"
