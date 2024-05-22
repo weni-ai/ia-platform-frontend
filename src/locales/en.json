@@ -85,6 +85,7 @@
       "fields": {
         "model": "Select model",
         "token": "Token",
+        "token_info": "Code required to access OpenAI services. Get your token by creating an OpenAI account and generating an API key in the control panel.",
         "version": "Version",
         "select-language": "Language",
         "language": "Select the default language",

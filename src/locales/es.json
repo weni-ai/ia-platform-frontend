@@ -85,6 +85,7 @@
       "fields": {
         "model": "Seleccionar modelo",
         "token": "Token",
+        "token_info": "Código necesario para acceder a los servicios de OpenAI. Obtén tu token creando una cuenta OpenAI y generando una clave API en el panel de control.",
         "version": "Versión",
         "version-gpt": "Versión",
         "select-language": "Idioma",

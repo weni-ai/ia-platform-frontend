@@ -85,6 +85,7 @@
       "fields": {
         "model": "Selecione o modelo",
         "token": "Token",
+        "token_info": "Código necessário para acessar os serviços da OpenAI. Obtenha o seu token criando uma conta na OpenAI e gerando uma chave de API no painel de controle.",
         "version": "Versão",
         "select-language": "Idioma",
         "language": "Selecione o idioma padrão",
