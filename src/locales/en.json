@@ -137,6 +137,7 @@
       "active_to_see": "Activate Brain to see the agent preview",
       "active_to_see_description": "Brain can be activated from the advanced options in the Tunings tab",
       "placeholder": "Send a message to test your intelligent agent",
+      "save_changes_to_test_the_agent": "Save the changes to test the agent",
       "field_changed_to_value": "Parameter {field} changed to {value}",
       "flow_started": "Flow {name} started",
       "flow_finished": "Flow finished"
