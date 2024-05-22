@@ -121,6 +121,7 @@
                   <template v-else>
                     <BasesFormFiles
                       :files.sync="filters.files"
+                      @update:files="handleUpdateFile"
                       @load-more="loadFiles"
                       @removed="removedFile"
                       :shape="contentStyle"
@@ -131,6 +132,7 @@
                 <template v-if="tab === 'sites' || isRouterView">
                   <BasesFormSites
                     :items.sync="filters.sites"
+                    @update:items="handleUpdateSite"
                     @load-more="loadSites"
                     @removed="removedSite"
                     :shape="contentStyle"
@@ -467,6 +469,9 @@ export default {
       },
     };
   },
+  created() {
+    this.debouncedFilterName = debounce(this.filterData, 300);
+  },
   methods: {
     ...mapActions([
       'createQAKnowledgeBase',
@@ -495,6 +500,41 @@ export default {
       this.filters.sites.data = this.sites.data.filter(
         ({ uuid }) => uuid !== siteUuid,
       );
+    },
+
+    handleUpdateSite(value) {
+      this.sites = {
+        data: value.data,
+        status: value.status,
+      };
+    },
+
+    handleUpdateFile(value) {
+      this.files = {
+        data: value.data,
+        status: value.status,
+      };
+    },
+
+    filterData() {
+      const filesData = this.files.data.filter((e) =>
+        e.file_name?.toLowerCase().includes(this.filterName?.toLowerCase()),
+      );
+      const sitesData = this.sites.data.filter((e) =>
+        e.created_file_name
+          ?.toLowerCase()
+          .includes(this.filterName?.toLowerCase()),
+      );
+
+      this.$set(this.filters, 'files', {
+        ...this.files,
+        data: filesData,
+      });
+
+      this.$set(this.filters, 'sites', {
+        ...this.sites,
+        data: sitesData,
+      });
     },
 
     async loadFiles() {
@@ -534,7 +574,7 @@ export default {
 
     async loadSites() {
       this.sites.status = 'loading';
-      console.log('loadSites');
+
       try {
         const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
           {
@@ -559,7 +599,7 @@ export default {
         );
 
         this.sites.data = sitesData;
-        console.log('Sites DAta', sitesData);
+
         this.filters.sites = {
           data: sitesData,
           status,
@@ -680,14 +720,6 @@ export default {
     },
   },
   watch: {
-    sites: function () {
-      console.log('sites.data', this.sites, this.filters);
-      this.sites = this.filters.sites;
-    },
-    'files.data': function () {
-      console.log('files.data');
-      this.files = this.filters.files;
-    },
     '$route.params.intelligenceUuid': {
       immediate: true,
 
@@ -731,33 +763,9 @@ export default {
         this.text.status = null;
       },
     },
-    filterName: debounce(function () {
-      const filesData = this.files.data.filter((e) =>
-        e.file_name?.toLowerCase().includes(this.filterName?.toLowerCase()),
-      );
-      const sitesData = this.sites.data.filter((e) =>
-        e.created_file_name
-          ?.toLowerCase()
-          .includes(this.filterName?.toLowerCase()),
-      );
-
-      this.$set(this.filters, 'files', {
-        ...this.files,
-        data: filesData,
-      });
-
-      this.$set(this.filters, 'sites', {
-        ...this.sites,
-        data: sitesData,
-      });
-      console.log({
-        filterName: this.filterName,
-        sitesData,
-        filesData,
-        files: this.files,
-        sites: this.sites,
-      });
-    }, 300),
+    filterName() {
+      this.debouncedFilterName();
+    },
   },
   computed: {
     contentBaseUuid() {
