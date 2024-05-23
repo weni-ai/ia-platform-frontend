@@ -1,28 +1,53 @@
 <template>
   <section class="sources">
-    <UnnnicIntelligenceText
-      color="neutral-cloudy"
-      family="secondary"
-      weight="regular"
-      size="body-md"
-      tag="p"
+    <UnnnicCollapse
+      size="md"
+      v-model="active"
+      :unspacedIcon="true"
     >
-      {{ $tc('quick_test.sources', sources.length) }}
-
-      {{ list(sources) }}.
-    </UnnnicIntelligenceText>
+      <template slot="header">
+        <UnnnicIntelligenceText
+          color="neutral-cloudy"
+          family="secondary"
+          weight="regular"
+          size="body-md"
+          tag="p"
+        >
+          {{
+            $tc('quick_test.sources', sources.length, { len: sources.length })
+          }}
+        </UnnnicIntelligenceText></template
+      >
+      <UnnnicIntelligenceText
+        color="neutral-cloudy"
+        family="secondary"
+        weight="regular"
+        size="body-md"
+        tag="p"
+      >
+        {{ list(sources) }}.
+      </UnnnicIntelligenceText>
+    </UnnnicCollapse>
   </section>
 </template>
 
 <script>
+import { uniq } from 'lodash';
+
 export default {
   props: {
     sources: Array,
   },
 
+  data() {
+    return {
+      active: false,
+    };
+  },
+
   methods: {
     list(sources) {
-      const list = sources.map(this.name);
+      const list = uniq(sources.map(this.name));
 
       return [list.slice(0, -1).join(', '), list.at(-1)]
         .filter((i) => i)
@@ -70,5 +95,16 @@ export default {
 
 .sources {
   margin-top: $unnnic-spacing-xs;
+
+  ::v-deep .unnnic-collapse {
+    padding: 0;
+  }
+
+  ::v-deep .unnnic-icon {
+    min-width: 10px;
+    min-height: 10px;
+    height: 10px;
+    width: 10px;
+  }
 }
 </style>

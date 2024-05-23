@@ -14,7 +14,18 @@
     "
   >
     <UnnnicButton
-      v-if="!isRouterView"
+      v-if="isRouterView"
+      slot="actions"
+      class="save-button"
+      :disabled="$store.getters.isBrainSaveButtonDisabled"
+      :loading="$store.state.Brain.isSavingChanges"
+      @click="$store.dispatch('saveBrainChanges')"
+    >
+      {{ $t('router.tunings.save_changes') }}
+    </UnnnicButton>
+
+    <UnnnicButton
+      v-else
       class="settings-button"
       slot="actions"
       iconCenter="settings"
@@ -121,6 +132,7 @@
                   <template v-else>
                     <BasesFormFiles
                       :files.sync="filters.files"
+                      @update:files="handleUpdateFile"
                       @load-more="loadFiles"
                       @removed="removedFile"
                       :shape="contentStyle"
@@ -131,6 +143,7 @@
                 <template v-if="tab === 'sites' || isRouterView">
                   <BasesFormSites
                     :items.sync="filters.sites"
+                    @update:items="handleUpdateSite"
                     @load-more="loadSites"
                     @removed="removedSite"
                     :shape="contentStyle"
@@ -146,6 +159,8 @@
 
                   <BasesFormText
                     v-if="text.open"
+                    useBrain
+                    dontShowSaveButton
                     :item="text"
                     class="content-base__content-tab__text"
                   />
@@ -301,6 +316,11 @@
       @close="isMobilePreviewModalOpen = false"
     />
 
+    <ModalSaveChangesError
+      v-if="$store.state.Brain.tabsWithError"
+      @close="$store.state.Brain.tabsWithError = null"
+    />
+
     <UnnnicAlert
       v-if="isAlertOpen"
       :text="$t('content_bases.changes_saved')"
@@ -341,6 +361,7 @@ import RouterActions from './router/RouterActions.vue';
 import RouterTunings from './router/RouterTunings.vue';
 import RouterCustomization from './router/RouterCustomization.vue';
 import ModalPreviewQRCode from './router/ModalPreviewQRCode.vue';
+import ModalSaveChangesError from './router/ModalSaveChangesError.vue';
 
 export default {
   name: 'RepositoryBaseEdit',
@@ -356,6 +377,7 @@ export default {
     RouterTunings,
     RouterCustomization,
     ModalPreviewQRCode,
+    ModalSaveChangesError,
   },
   data() {
     return {
@@ -458,6 +480,9 @@ export default {
       },
     };
   },
+  created() {
+    this.debouncedFilterName = debounce(this.filterData, 300);
+  },
   methods: {
     ...mapActions([
       'createQAKnowledgeBase',
@@ -476,10 +501,51 @@ export default {
 
     removedFile(fileUuid) {
       this.files.data = this.files.data.filter(({ uuid }) => uuid !== fileUuid);
+      this.filters.files.data = this.files.data.filter(
+        ({ uuid }) => uuid !== fileUuid,
+      );
     },
 
     removedSite(siteUuid) {
       this.sites.data = this.sites.data.filter(({ uuid }) => uuid !== siteUuid);
+      this.filters.sites.data = this.sites.data.filter(
+        ({ uuid }) => uuid !== siteUuid,
+      );
+    },
+
+    handleUpdateSite(value) {
+      this.sites = {
+        data: value.data,
+        status: value.status,
+      };
+    },
+
+    handleUpdateFile(value) {
+      this.files = {
+        data: value.data,
+        status: value.status,
+      };
+    },
+
+    filterData() {
+      const filesData = this.files.data.filter((e) =>
+        e.file_name?.toLowerCase().includes(this.filterName?.toLowerCase()),
+      );
+      const sitesData = this.sites.data.filter((e) =>
+        e.created_file_name
+          ?.toLowerCase()
+          .includes(this.filterName?.toLowerCase()),
+      );
+
+      this.$set(this.filters, 'files', {
+        ...this.files,
+        data: filesData,
+      });
+
+      this.$set(this.filters, 'sites', {
+        ...this.sites,
+        data: sitesData,
+      });
     },
 
     async loadFiles() {
@@ -494,7 +560,11 @@ export default {
         data.results
           .map((file) => ({
             ...file,
-            status: file.status === 'success' ? 'uploaded' : 'processing',
+            status:
+              {
+                Processing: 'processing',
+                success: 'uploaded',
+              }[file.status] || file.status,
           }))
           .filter(
             ({ uuid }) =>
@@ -535,7 +605,11 @@ export default {
               ...site,
               extension_file: 'site',
               created_file_name: site.link,
-              status: site.status === 'success' ? 'uploaded' : 'processing',
+              status:
+                {
+                  Processing: 'processing',
+                  success: 'uploaded',
+                }[site.status] || site.status,
             }))
             .filter(
               ({ uuid }) =>
@@ -544,12 +618,14 @@ export default {
         );
 
         this.sites.data = sitesData;
+
         this.filters.sites = {
           data: sitesData,
           status,
         };
 
         this.sites.status = status;
+        this.filterName = '';
       } finally {
         if (this.sites.status !== 'complete') {
           this.filters.sites.status = null;
@@ -695,10 +771,15 @@ export default {
           '',
         );
 
-        this.text.uuid = this.knowledgeBase.text.uuid;
+        this.$store.state.Brain.contentText.uuid = this.text.uuid =
+          this.knowledgeBase.text.uuid;
 
         this.knowledgeBase.text.value = text === '--empty--' ? '' : text;
         this.knowledgeBase.text.oldValue = this.knowledgeBase.text.value;
+
+        this.$store.state.Brain.contentText.current =
+          this.$store.state.Brain.contentText.old =
+            this.knowledgeBase.text.value;
 
         this.text.value = this.knowledgeBase.text.value;
         this.text.oldValue = this.knowledgeBase.text.oldValue;
@@ -706,26 +787,9 @@ export default {
         this.text.status = null;
       },
     },
-    filterName: debounce(function () {
-      const filesData = this.files.data.filter((e) =>
-        e.file_name?.toLowerCase().includes(this.filterName?.toLowerCase()),
-      );
-      const sitesData = this.sites.data.filter((e) =>
-        e.created_file_name
-          ?.toLowerCase()
-          .includes(this.filterName?.toLowerCase()),
-      );
-
-      this.$set(this.filters, 'files', {
-        ...this.files,
-        data: filesData,
-      });
-
-      this.$set(this.filters, 'sites', {
-        ...this.sites,
-        data: sitesData,
-      });
-    }, 300),
+    filterName() {
+      this.debouncedFilterName();
+    },
   },
   computed: {
     shouldShowSideareaTest() {
@@ -933,8 +997,13 @@ export default {
   }
 }
 
+.save-button,
 .settings-button {
   margin-left: auto;
+}
+
+.save-button {
+  width: 18.5 * $unnnic-font-size;
 }
 
 .base-tabs {
