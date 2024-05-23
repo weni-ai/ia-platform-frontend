@@ -80,7 +80,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .create-intelligence__form-element + .create-intelligence__form-element {
   margin-top: $unnnic-spacing-sm;

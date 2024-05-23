@@ -181,7 +181,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .files-list__content__file {
   outline-style: solid;
@@ -230,8 +230,13 @@ export default {
 
   &__icon {
     display: flex;
+    background-color: $unnnic-color-neutral-light;
     border-radius: $unnnic-border-radius-sm;
     padding: 0.6875 * $unnnic-font-size;
+
+    &__itself {
+      color: $unnnic-color-neutral-clean;
+    }
   }
 
   &__content {

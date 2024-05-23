@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import RemoveBulmaMixin from '../../../../utils/RemoveBulmaMixin';
 import Tests from '../Tests.vue';
 
 export default {
@@ -21,8 +20,6 @@ export default {
       height: 10,
     };
   },
-
-  mixins: [RemoveBulmaMixin],
 
   mounted() {
     document.documentElement.style.overscrollBehavior = 'none';
@@ -41,7 +38,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .preview {
   display: flex;

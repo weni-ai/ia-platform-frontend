@@ -7,8 +7,8 @@
 export default {
   addHotjar() {
     if (
-      runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_USE_HOTJAR') &&
-      runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_HOTJAR_ID')
+      runtimeVariables.get('VITE_BOTHUB_WEBAPP_USE_HOTJAR') &&
+      runtimeVariables.get('VITE_BOTHUB_WEBAPP_HOTJAR_ID')
     ) {
       (function (h, o, t, j, a, r) {
         h.hj =
@@ -17,7 +17,7 @@ export default {
             (h.hj.q = h.hj.q || []).push(arguments);
           };
         h._hjSettings = {
-          hjid: runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_HOTJAR_ID'),
+          hjid: runtimeVariables.get('VITE_BOTHUB_WEBAPP_HOTJAR_ID'),
           hjsv: 6,
         };
         a = o.getElementsByTagName('head')[0];

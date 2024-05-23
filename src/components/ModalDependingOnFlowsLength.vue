@@ -1,48 +1,52 @@
 <template>
   <div>
-    <unnnic-modal-next
+    <UnnnicModalNext
       class="integrate"
       v-if="showHowToIntegrate"
       @close="showHowToIntegrate = false"
-      show-close-button
+      showCloseButton
     >
-    <div class="integrate--title">
-      {{ $t('modals.how_to_integrate.title') }}
-    </div>
+      <div class="integrate--title">
+        {{ $t('modals.how_to_integrate.title') }}
+      </div>
 
-    <div class="integrate__content">
-      <img class="integrate__gif" :src="currentImage" alt="" />
+      <div class="integrate__content">
+        <img
+          class="integrate__gif"
+          :src="currentImage"
+          alt=""
+        />
 
-      <span
-        v-if="step === 1"
-        class="integrate__description"
-        v-html="$t('modals.how_to_integrate.first_step.description')"
-      />
-      <span
-        v-else
-        class="integrate__description"
-        v-html="$t('modals.how_to_integrate.second_step.description')"
-      />
-    </div>
+        <span
+          v-if="step === 1"
+          class="integrate__description"
+          v-html="$t('modals.how_to_integrate.first_step.description')"
+        />
+        <span
+          v-else
+          class="integrate__description"
+          v-html="$t('modals.how_to_integrate.second_step.description')"
+        />
+      </div>
 
-    <div class="integrate__buttons">
-      <unnnic-button
-        v-if="step === 2"
-        type="tertiary"
-        @click.stop="step = 1"
-        :text="$t('modals.how_to_integrate.second_step.back_button')"
-      />
-      <unnnic-button
-        type="secondary"
-        @click="nextStep"
-        :text="
-          step === 2 ? $t('modals.how_to_integrate.second_step.close_button')
-          :
-          $t('modals.how_to_integrate.first_step.next_step')
-        "
-      />
-    </div>
-  </unnnic-modal-next>
+      <div class="integrate__buttons">
+        <UnnnicButton
+          v-if="step === 2"
+          type="tertiary"
+          @click.stop="step = 1"
+          :text="$t('modals.how_to_integrate.second_step.back_button')"
+        />
+        <UnnnicButton
+          type="secondary"
+          @click="nextStep"
+          :text="
+            step === 2
+              ? $t('modals.how_to_integrate.second_step.close_button')
+              : $t('modals.how_to_integrate.first_step.next_step')
+          "
+        />
+      </div>
+    </UnnnicModalNext>
   </div>
 </template>
 
@@ -56,7 +60,7 @@ export default {
     return {
       showHowToIntegrate: false,
       hasFlows: null,
-      step: 1
+      step: 1,
     };
   },
 
@@ -72,9 +76,7 @@ export default {
 
   computed: {
     projectUuidAndHasFlows() {
-      return [
-        this.$store.state.Auth.project,
-      ].join(':');
+      return [this.$store.state.Auth.project].join(':');
     },
     currentImage() {
       if (this.step === 2) return IntelligenceSecondGif;
@@ -127,8 +129,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@weni/unnnic-system/dist/unnnic.css";
-@import "@weni/unnnic-system/src/assets/scss/unnnic.scss";
+@import '@weni/unnnic-system/dist/unnnic.css';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .unnnic-modal ::v-deep > .container > .content {
   box-sizing: initial;
@@ -184,7 +186,7 @@ export default {
   }
 
   &__description {
-    padding-right: .5rem;
+    padding-right: 0.5rem;
     font-size: $unnnic-font-size-body-gt;
     line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
     color: $unnnic-color-neutral-cloudy;

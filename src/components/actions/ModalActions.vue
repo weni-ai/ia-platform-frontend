@@ -290,7 +290,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .create-intelligence-modal {
   ::v-deep .create-intelligence-modal__container {

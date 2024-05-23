@@ -37,8 +37,8 @@
 
 <script>
 import repository from '../../api/repository';
-import IntelligenceFromProjectItem from '../repository/home/IntelligenceFromProjectItem';
-import IntelligencesFilter from './IntelligencesFilter';
+import IntelligenceFromProjectItem from '../repository/home/IntelligenceFromProjectItem.vue';
+import IntelligencesFilter from './IntelligencesFilter.vue';
 
 export default {
   components: {
@@ -166,7 +166,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .filters {
   margin-bottom: $unnnic-spacing-md;

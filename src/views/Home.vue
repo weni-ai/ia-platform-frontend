@@ -127,35 +127,23 @@
 </template>
 
 <script>
-import HomeTabNavigation from '@/components/repository/home/HomeTabNavigation';
-import HomeIntelligenceFromProject from '@/components/repository/home/HomeIntelligenceFromProject';
-import HomeIntelligenceFromCommunity from '../components/repository/home/HomeIntelligenceFromCommunity';
-import HomeIntelligenceFromOrg from '../components/repository/home/HomeIntelligenceFromOrg';
-import CreateRepositoryForm from '../components/repository/CreateRepository/CreateRepositoryForm';
+import CreateRepositoryForm from '../components/repository/CreateRepository/CreateRepositoryForm.vue';
 import { mapActions } from 'vuex';
-import IntelligenceFromProjectItem from '../components/repository/home/IntelligenceFromProjectItem';
-import IntelligenceFromOrgItem from '../components/repository/home/IntelligenceFromOrgItem';
-import IntelligencesPublicList from '../components/intelligences/IntelligencesPublicList';
-import IntelligencesFilter from '../components/intelligences/IntelligencesFilter';
-import ModalNext from '../components/ModalNext';
-import RemoveBulmaMixin from '../utils/RemoveBulmaMixin';
+import IntelligenceFromProjectItem from '../components/repository/home/IntelligenceFromProjectItem.vue';
+import IntelligencesPublicList from '../components/intelligences/IntelligencesPublicList.vue';
+import IntelligencesFilter from '../components/intelligences/IntelligencesFilter.vue';
+import ModalNext from '../components/ModalNext.vue';
 import nexusaiAPI from '../api/nexusaiAPI';
 
 export default {
   name: 'Home',
   components: {
-    HomeTabNavigation,
-    HomeIntelligenceFromProject,
-    HomeIntelligenceFromOrg,
-    HomeIntelligenceFromCommunity,
     CreateRepositoryForm,
     IntelligenceFromProjectItem,
-    IntelligenceFromOrgItem,
     IntelligencesPublicList,
     IntelligencesFilter,
     ModalNext,
   },
-  mixins: [RemoveBulmaMixin],
   data() {
     return {
       filterIntelligenceName: '',
@@ -420,7 +408,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .home__header__icon ::v-deep .avatar-icon {
   background-color: $unnnic-color-weni-100;

@@ -1,12 +1,12 @@
-import qs from 'query-string';
+import qs from '../utils/QueryString.js';
 import request from './request';
 import utils from './utils';
 
-
 export default {
-
   async getNewSchema() {
-    const { data } = await request.$http.options('/v2/repository/repository-details');
+    const { data } = await request.$http.options(
+      '/v2/repository/repository-details',
+    );
     return data.actions.POST;
   },
   getQAKnowledgeBases(repositoryUUID, page = 0) {
@@ -42,14 +42,18 @@ export default {
       title,
     });
   },
-  editQAKnowledgeBase(repositoryUUID, title, id){
-    return request.$http.patch(`v2/repository/qa/knowledge-base/${id}/`, {
-      title,
-    }, {
-      params: {
-        repository_uuid: repositoryUUID
+  editQAKnowledgeBase(repositoryUUID, title, id) {
+    return request.$http.patch(
+      `v2/repository/qa/knowledge-base/${id}/`,
+      {
+        title,
       },
-    });
+      {
+        params: {
+          repository_uuid: repositoryUUID,
+        },
+      },
+    );
   },
   getQAKnowledgeBase(repositoryUUID, id) {
     return request.$http.get(`v2/repository/qa/knowledge-base/${id}/`, {
@@ -82,19 +86,23 @@ export default {
       repository_uuid: repositoryUUID,
       knowledge_base: knowledgeBaseId,
       text,
-      language
+      language,
     });
   },
   updateQAText(repositoryUUID, knowledgeBaseId, id, text, language) {
-    return request.$http.put(`v2/repository/qa/text/${id}/`, {
-      knowledge_base: knowledgeBaseId,
-      text,
-      language
-    }, {
-      params: {
-        repository_uuid: repositoryUUID,
+    return request.$http.put(
+      `v2/repository/qa/text/${id}/`,
+      {
+        knowledge_base: knowledgeBaseId,
+        text,
+        language,
       },
-    });
+      {
+        params: {
+          repository_uuid: repositoryUUID,
+        },
+      },
+    );
   },
   getAll(limit = 20) {
     return new utils.Page('/repository/repositories/', limit);
@@ -103,49 +111,59 @@ export default {
     return new utils.Page('/v2/repository/version/', limit, query);
   },
   searchLogs(repositoryVersionLanguage, query, limit) {
-    return new utils.Page('/v2/repository/log/', limit, { repository_version_language: repositoryVersionLanguage, ...query });
+    return new utils.Page('/v2/repository/log/', limit, {
+      repository_version_language: repositoryVersionLanguage,
+      ...query,
+    });
   },
   makeVersionDefault(repositoryUUID, versionUUID) {
-    return request.$http.patch(
-      `/v2/repository/version/${versionUUID}/`,
-      {
-        id: versionUUID,
-        repository: repositoryUUID,
-      },
-    );
+    return request.$http.patch(`/v2/repository/version/${versionUUID}/`, {
+      id: versionUUID,
+      repository: repositoryUUID,
+    });
   },
   addNewVersion(repositoryUUID, versionUUID, name) {
-    return request.$http.post(
-      '/v2/repository/version/',
-      {
-        id: versionUUID,
-        name,
-        repository: repositoryUUID,
-      },
-    );
+    return request.$http.post('/v2/repository/version/', {
+      id: versionUUID,
+      name,
+      repository: repositoryUUID,
+    });
   },
   getFirstFiveVersions(repositoryUuid) {
-    return request.$http.get(`/v2/repository/version/?repository=${repositoryUuid}&limit=5&ordering=-last_update`);
+    return request.$http.get(
+      `/v2/repository/version/?repository=${repositoryUuid}&limit=5&ordering=-last_update`,
+    );
   },
   setDefaultVersion(repositoryUuid, id) {
-    return request.$http.patch(`/v2/repository/version/${id}/`,
-      {
-        repository: repositoryUuid,
-        id,
-        is_default: true,
-      });
+    return request.$http.patch(`/v2/repository/version/${id}/`, {
+      repository: repositoryUuid,
+      id,
+      is_default: true,
+    });
   },
   deleteVersion(id) {
     return request.$http.delete(`/v2/repository/version/${id}/`);
   },
-  search(limit, offset,) {
-    const queryString = qs.stringify(limit, offset);
+  search(limit, offset) {
+    const queryString = qs.stringify({ limit, offset });
     return request.$http.get(`/v2/repository/repositories/?${queryString}`);
   },
-  communityRepository(limit = 20, offset, language, categories, recommended, most_used) {
-    const queryString = qs.stringify(
-      limit, offset, language, categories, recommended, most_used
-    );
+  communityRepository(
+    limit = 20,
+    offset,
+    language,
+    categories,
+    recommended,
+    most_used,
+  ) {
+    const queryString = qs.stringify({
+      limit,
+      offset,
+      language,
+      categories,
+      recommended,
+      most_used,
+    });
     return request.$http.get(`/v2/repository/repositories/?${queryString}`);
   },
 
@@ -161,24 +179,29 @@ export default {
 
   searchByOrg(orgNickname, limit = 20, search, categories, language) {
     return new utils.Page('/v2/repository/search-repositories/', limit, {
-      nickname: orgNickname, search, categories, language,
+      nickname: orgNickname,
+      search,
+      categories,
+      language,
     });
   },
   editVersion(repository, id, name) {
-    return request.$http.patch(`/v2/repository/version/${id}/`,
-      {
-        name,
-        repository,
-      });
+    return request.$http.patch(`/v2/repository/version/${id}/`, {
+      name,
+      repository,
+    });
   },
   get(ownerNickname, slug) {
     return request.$http.get(`/v1/repository/${ownerNickname}/${slug}/`);
   },
   train(repositoryUUID, repositoryVersion, repositoryLanguage) {
-    return request.$http.post(`/v2/repository/repository-details/${repositoryUUID}/train/`, {
-      repository_version: repositoryVersion,
-      language: repositoryLanguage
-    });
+    return request.$http.post(
+      `/v2/repository/repository-details/${repositoryUUID}/train/`,
+      {
+        repository_version: repositoryVersion,
+        language: repositoryLanguage,
+      },
+    );
   },
   analyze(repositoryUUID, repositoryVersion, language, text) {
     return request.$http.post(
@@ -214,10 +237,13 @@ export default {
     );
   },
   async getEditSchema(repositoryUuid) {
-    const { data } = await request.$http.options(`/v2/repository/repository-details/${repositoryUuid}/`);
+    const { data } = await request.$http.options(
+      `/v2/repository/repository-details/${repositoryUuid}/`,
+    );
     return data.actions.PUT;
   },
-  edit(ownerNickname,
+  edit(
+    ownerNickname,
     slug,
     name,
     newSlug,
@@ -226,8 +252,12 @@ export default {
     description,
     isPrivate,
     algorithm,
-    useCompetingIntents, useNameEntities, useAnalyzeChar, useTransformerEntities,
-    repositoryUuid) {
+    useCompetingIntents,
+    useNameEntities,
+    useAnalyzeChar,
+    useTransformerEntities,
+    repositoryUuid,
+  ) {
     return request.$http.patch(
       `/v2/repository/repository-details/${repositoryUuid}/`,
       {
@@ -251,12 +281,9 @@ export default {
     );
   },
   vote(ownerNickname, slug, value) {
-    return request.$http.post(
-      `/v1/repository/${ownerNickname}/${slug}/vote/`,
-      {
-        vote: value,
-      },
-    );
+    return request.$http.post(`/v1/repository/${ownerNickname}/${slug}/vote/`, {
+      vote: value,
+    });
   },
   voteUp(ownerNickname, slug) {
     return this.vote(ownerNickname, slug, 1);
@@ -271,28 +298,34 @@ export default {
     );
   },
   getAuthorizationList(repositoryUuid, limit) {
-    return new utils.Page('/v2/repository/authorizations/', limit, { repository: repositoryUuid });
-  },
-  async getRequestAuthorizationSchema() {
-    const { data } = await request.$http.options('/v2/repository/authorization-requests/');
-    return data.actions.POST;
-  },
-  requestAuthorization(repositoryUuid, text) {
-    return request.$http.post(
-      '/v2/repository/authorization-requests/',
-      {
-        repository: repositoryUuid,
-        text,
-      },
-    );
-  },
-  removeAuthorization(repositoryUuid, id) {
-    return request.$http.delete(`/v2/repository/authorization-requests/${id}/`, {
+    return new utils.Page('/v2/repository/authorizations/', limit, {
       repository: repositoryUuid,
     });
   },
+  async getRequestAuthorizationSchema() {
+    const { data } = await request.$http.options(
+      '/v2/repository/authorization-requests/',
+    );
+    return data.actions.POST;
+  },
+  requestAuthorization(repositoryUuid, text) {
+    return request.$http.post('/v2/repository/authorization-requests/', {
+      repository: repositoryUuid,
+      text,
+    });
+  },
+  removeAuthorization(repositoryUuid, id) {
+    return request.$http.delete(
+      `/v2/repository/authorization-requests/${id}/`,
+      {
+        repository: repositoryUuid,
+      },
+    );
+  },
   getAuthorizationRequestsList(repositoryUuid, limit = 20) {
-    return new utils.Page('/v2/repository/authorization-requests/', limit, { repository_uuid: repositoryUuid });
+    return new utils.Page('/v2/repository/authorization-requests/', limit, {
+      repository_uuid: repositoryUuid,
+    });
   },
   approveRequestAuthorization(repositoryUuid, id) {
     return request.$http.put(`/v2/repository/authorization-requests/${id}/`, {
@@ -312,19 +345,16 @@ export default {
   },
   repositoryRequirements(repositoryUUID, version, repositoryLanguage) {
     return request.$http.get(
-      `/v2/repository/train/info/${repositoryUUID}/${version}/${repositoryLanguage}`
+      `/v2/repository/train/info/${repositoryUUID}/${version}/${repositoryLanguage}`,
     );
   },
   repositoryMigrateData(repositoryVersion, AuthToken, Language, Classifier) {
-    return request.$http.post(
-      '/v2/repository/repository-migrate/',
-      {
-        repository_version: repositoryVersion,
-        auth_token: AuthToken,
-        language: Language,
-        classifier: Classifier,
-      },
-    );
+    return request.$http.post('/v2/repository/repository-migrate/', {
+      repository_version: repositoryVersion,
+      auth_token: AuthToken,
+      language: Language,
+      classifier: Classifier,
+    });
   },
   repositoryUploadRasa(formData, repositoryVersion, repositoryUUID) {
     return request.$http.put(
@@ -339,12 +369,9 @@ export default {
     );
   },
   clone(repositoryUUID, ownerId) {
-    return request.$http.post(
-      '/v2/repository/clone-repository/',
-      {
-        repository: repositoryUUID,
-        owner: ownerId
-      },
-    );
+    return request.$http.post('/v2/repository/clone-repository/', {
+      repository: repositoryUUID,
+      owner: ownerId,
+    });
   },
 };

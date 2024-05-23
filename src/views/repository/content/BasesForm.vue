@@ -50,7 +50,7 @@
           >
             <UnnnicIcon
               :icon="icon"
-              scheme="weni-600"
+              scheme="inherit"
               size="avatar-nano"
               class="base-tabs__tab__icon"
             />
@@ -184,12 +184,7 @@
       </div>
 
       <div
-        v-if="
-          files.data.length ||
-          sites.data.length ||
-          knowledgeBase.text.oldValue ||
-          isRouterView
-        "
+        v-if="shouldShowSideareaTest"
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container',
@@ -352,17 +347,15 @@
 <script>
 import { get, debounce } from 'lodash';
 import { mapActions } from 'vuex';
-import { LANGUAGES } from '@/utils/index';
 import router from '@/router/index';
-import Tests from './Tests';
+import Tests from './Tests.vue';
 import { unnnicCallAlert } from '@weni/unnnic-system';
-import RemoveBulmaMixin from '../../../utils/RemoveBulmaMixin';
-import PageContainer from '../../../components/PageContainer';
+import PageContainer from '../../../components/PageContainer.vue';
 import nexusaiAPI from '../../../api/nexusaiAPI';
-import BasesFormFiles from './BasesFormFiles';
-import BasesFormSites from './BasesFormSites';
-import BasesFormText from './BasesFormText';
-import BaseSettingsForm from '../../../components/BaseSettingsForm';
+import BasesFormFiles from './BasesFormFiles.vue';
+import BasesFormSites from './BasesFormSites.vue';
+import BasesFormText from './BasesFormText.vue';
+import BaseSettingsForm from '../../../components/BaseSettingsForm.vue';
 import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
 import RouterActions from './router/RouterActions.vue';
 import RouterTunings from './router/RouterTunings.vue';
@@ -386,7 +379,6 @@ export default {
     ModalPreviewQRCode,
     ModalSaveChangesError,
   },
-  mixins: [RemoveBulmaMixin],
   data() {
     return {
       tab: 'files',
@@ -448,7 +440,6 @@ export default {
       },
       destroyVerifying: null,
       provisoryTitle: '',
-      languages: LANGUAGES,
       isAlertOpen: false,
 
       repositoryConfig: '',
@@ -475,8 +466,8 @@ export default {
         open: true,
         status: null,
         uuid: null,
-        oldValue: null,
-        value: null,
+        oldValue: '',
+        value: '',
       },
 
       routerActions: {
@@ -801,6 +792,15 @@ export default {
     },
   },
   computed: {
+    shouldShowSideareaTest() {
+      return (
+        this.files.data.length ||
+        this.sites.data.length ||
+        this.knowledgeBase.text.oldValue ||
+        this.isRouterView
+      );
+    },
+
     contentBaseUuid() {
       return (
         this.$route.params.contentBaseUuid ||
@@ -899,7 +899,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .brain-deactivated-preview {
   flex: 1;

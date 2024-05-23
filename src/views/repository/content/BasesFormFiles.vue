@@ -134,8 +134,8 @@
 <script>
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
-import BasesFormFilesItem from './BasesFormFilesItem';
-import BasesFormGenericList from './BasesFormGenericList';
+import BasesFormFilesItem from './BasesFormFilesItem.vue';
+import BasesFormGenericList from './BasesFormGenericList.vue';
 
 export default {
   components: {
@@ -269,7 +269,7 @@ export default {
         return;
       }
 
-      files.forEach(this.addFile);
+      Object.values(files).forEach(this.addFile);
     },
 
     updateFileItem(uuid, key, value) {
@@ -408,7 +408,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .delete-file-modal ::v-deep {
   .unnnic-modal-container-background-body-description-container {

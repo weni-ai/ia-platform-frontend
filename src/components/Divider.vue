@@ -16,10 +16,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .divider {
   border: none;
+  width: 100%;
   height: $unnnic-border-width-thinner;
   background-color: $unnnic-color-neutral-soft;
   margin-block: ($unnnic-spacing-stack-md - $unnnic-border-width-thinner)

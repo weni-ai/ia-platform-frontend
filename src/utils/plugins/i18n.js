@@ -10,27 +10,32 @@ Vue.use(VueI18n);
 const languages = {
   'en-US': en,
   'pt-BR': ptbr,
-  es
+  es,
 };
 
 const numberFormats = {
   'en-US': {
     currency: {
-      style: 'currency', currency: 'BRL', currencyDisplay: 'symbol',
+      style: 'currency',
+      currency: 'BRL',
+      currencyDisplay: 'symbol',
     },
   },
   'pt-BR': {
     currency: {
-      style: 'currency', currency: 'BRL', currencyDisplay: 'symbol',
+      style: 'currency',
+      currency: 'BRL',
+      currencyDisplay: 'symbol',
     },
   },
   es: {
     currency: {
-      style: 'currency', currency: 'BRL', currencyDisplay: 'symbol',
+      style: 'currency',
+      currency: 'BRL',
+      currencyDisplay: 'symbol',
     },
   },
 };
-
 
 const messages = Object.assign(languages);
 

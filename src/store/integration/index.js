@@ -7,5 +7,5 @@ export default {
   actions,
   mutations,
   types,
-  state
+  state,
 };

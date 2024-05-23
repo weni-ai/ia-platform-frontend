@@ -12,7 +12,7 @@ export default {
   },
   [TYPES.REMOVE_SELECTED_SUGGESTION](state, value) {
     const selectedFiltered = state.selectedSuggestion.filter(
-      example => example.text !== value.text,
+      (example) => example.text !== value.text,
     );
     state.selectedSuggestion = selectedFiltered;
   },

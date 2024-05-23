@@ -126,7 +126,7 @@
 <script>
 import { mapActions } from 'vuex';
 import { LANGUAGES } from '@/utils/index';
-import Loading from '@/components/shared/Loading';
+import Loading from '@/components/shared/Loading.vue';
 
 export default {
   name: 'DefinitionsTab',
@@ -187,7 +187,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .intelligence-private-or-public {
   display: flex;

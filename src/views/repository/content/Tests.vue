@@ -104,7 +104,7 @@
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import AnswerSources from '../../../components/QuickTest/AnswerSources.vue';
-import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback';
+import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback.vue';
 import FlowPreview from '../../../utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 import Markdown from '../../../components/Markdown.vue';
@@ -387,7 +387,7 @@ export default {
 
 <style lang="scss" scoped>
 @use 'sass:math';
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .quick-replies {
   margin-top: $unnnic-spacing-sm;
@@ -417,7 +417,7 @@ export default {
   margin: 0 $dot-size * 1.75;
   margin-top: $unnnic-font-size-body-md + $unnnic-line-height-md - $dot-size;
   // margin-bottom: ($unnnic-font-size-body-md + $unnnic-line-height-md) * 0.25;
-  border-radius: $dot-size / 2;
+  border-radius: math.div($dot-size, 2);
   background-color: transparent;
   box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
     0 ($dot-min-height) $dot-color,

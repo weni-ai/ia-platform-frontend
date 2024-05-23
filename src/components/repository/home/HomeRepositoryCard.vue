@@ -494,9 +494,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import IntegrationModal from '@/components/shared/IntegrationModal';
-import SideBarContentBases from './SideBarContentBases';
-import SideBarQuickTest from './SideBarQuickTest';
+import IntegrationModal from '@/components/shared/IntegrationModal.vue';
+import SideBarContentBases from './SideBarContentBases.vue';
+import SideBarQuickTest from './SideBarQuickTest.vue';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 
@@ -747,7 +747,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .button-quick-test {
   margin-right: $unnnic-spacing-xs;
@@ -759,7 +759,7 @@ export default {
 </style>
 
 <style lang="scss">
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .base__footer {
   margin-top: 0.625 * $unnnic-font-size - $unnnic-border-width-thinner;

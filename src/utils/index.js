@@ -27,13 +27,13 @@ export const languageListToDict = (list) =>
 
 export const LANGUAGES = languageListToDict(
   runtimeVariables
-    .get('VUE_APP_SUPPORTED_LANGUAGES')
+    .get('VITE_SUPPORTED_LANGUAGES')
     .split('|')
     .map((v) => v.split(':')[0]),
 );
 
 export const WENIGPT_OPTIONS = JSON.parse(
-  runtimeVariables.get('VUE_APP_OPTIONS_WENIGPT'),
+  runtimeVariables.get('VITE_OPTIONS_WENIGPT'),
 );
 
 export const ROLE_NOT_SETTED = 0;

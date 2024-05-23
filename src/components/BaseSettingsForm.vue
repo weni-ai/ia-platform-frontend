@@ -68,7 +68,7 @@
 
 <script>
 import nexusaiAPI from '../api/nexusaiAPI';
-import ModalNext from './ModalNext';
+import ModalNext from './ModalNext.vue';
 import { get } from 'lodash';
 
 export default {
@@ -193,7 +193,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .create-base__form-element + .create-base__form-element {
   margin-top: $unnnic-spacing-sm;

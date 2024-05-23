@@ -15,7 +15,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import Tests from '../../../views/repository/content/Tests';
+import Tests from '../../../views/repository/content/Tests.vue';
 import RightSidebar from '../../RightSidebar.vue';
 
 export default {
@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@weni/unnnic-system/src/assets/scss/unnnic.scss';
+@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .content-bases-list {
   margin-top: $unnnic-spacing-sm;

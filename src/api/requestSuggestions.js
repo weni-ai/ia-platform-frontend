@@ -5,8 +5,8 @@ export default {
     return axios.create({
       baseURL: 'https://chatguy-nlp.weni.ai/',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
   },
 };

@@ -1,23 +1,27 @@
 <template>
   <div>
-    <home-repository-card
-      :repository-detail="project"
-      :type="project.hasOwnProperty('content_bases_count') ? 'intelligence' : 'repository'"
+    <HomeRepositoryCard
+      :repositoryDetail="project"
+      :type="
+        project.hasOwnProperty('content_bases_count')
+          ? 'intelligence'
+          : 'repository'
+      "
       @dispatchShowModal="showModal($event)"
       @removed="$emit('removed')"
     />
 
-    <modal-container
-      :info-modal="modalInfo"
-      :show-modal="openModal"
+    <ModalContainer
+      :infoModal="modalInfo"
+      :showModal="openModal"
       @closeModal="openModal = false"
     >
-    </modal-container>
+    </ModalContainer>
   </div>
 </template>
 <script>
-import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard';
-import ModalContainer from '@/components/repository/home/ModalContainer';
+import HomeRepositoryCard from '@/components/repository/home/HomeRepositoryCard.vue';
+import ModalContainer from '@/components/repository/home/ModalContainer.vue';
 
 export default {
   name: 'HomeIntelligenceFromProject',
@@ -36,6 +40,6 @@ export default {
       this.openModal = true;
       this.modalInfo = { ...value };
     },
-  }
+  },
 };
 </script>

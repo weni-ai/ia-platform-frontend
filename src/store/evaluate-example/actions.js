@@ -1,21 +1,32 @@
 import evaluateExample from '@/api/v2/evaluate-example';
 
 export default {
-  async newEvaluateExample(store, {
-    repository, repositoryVersion, text, language, entities, intent, isCorrected = false,
-  }) {
+  async newEvaluateExample(
+    store,
+    {
+      repository,
+      repositoryVersion,
+      text,
+      language,
+      entities,
+      intent,
+      isCorrected = false,
+    },
+  ) {
     // eslint-disable-next-line
     const response = await evaluateExample.new(repository, repositoryVersion, text, language, entities, intent, isCorrected);
     return response;
   },
-  searchEvaluateExamples(store, {
-    repositoryUUID, version, query, limit = 20,
-  }) {
+  searchEvaluateExamples(
+    store,
+    { repositoryUUID, version, query, limit = 20 },
+  ) {
     return evaluateExample.search(repositoryUUID, version, query, limit);
   },
-  async updateEvaluateExample(store, {
-    repository, version, text, language, entities, intent, id,
-  }) {
+  async updateEvaluateExample(
+    store,
+    { repository, version, text, language, entities, intent, id },
+  ) {
     const response = await evaluateExample.update(
       repository,
       version,
@@ -41,7 +52,11 @@ export default {
     return response.data;
   },
   async runNewEvaluate(store, { repositoryUUID, language, version }) {
-    const response = await evaluateExample.runEvaluate(repositoryUUID, language, version);
+    const response = await evaluateExample.runEvaluate(
+      repositoryUUID,
+      language,
+      version,
+    );
     return response;
   },
   getAllResults(store, { repositoryUuid, version, limit = 20 }) {

@@ -1,9 +1,7 @@
 import TYPES from './types';
 
 export default {
-  [TYPES.SET_REPOSITORY_RELATED_UUID](state, {
-    ownerNickname, slug, uuid,
-  }) {
+  [TYPES.SET_REPOSITORY_RELATED_UUID](state, { ownerNickname, slug, uuid }) {
     state.relatedUuid = {
       ...state.relatedUuid,
       [`${ownerNickname}/${slug}/`]: uuid,
@@ -39,7 +37,7 @@ export default {
       state.repositoryVersionName = value.version.name;
     }
   },
-  resetVersion(state){
+  resetVersion(state) {
     state.repositoryVersion = null;
   },
   updateRepositoryTraining(state, value) {
