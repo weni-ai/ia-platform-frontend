@@ -19,6 +19,10 @@ const request = {
       (err) => {
         Sentry.captureException(err);
 
+        if (get(err, 'config.hideGenericErrorAlert')) {
+          throw err;
+        }
+
         if (err.response.status === 500 || err.response.status === 408) {
           store.state.alert = {
             text:
@@ -164,10 +168,21 @@ export default {
     );
   },
 
-  createIntelligenceContentBaseText({ contentBaseUuid, text }) {
-    return request.$http.post(`api/${contentBaseUuid}/content-bases-text/`, {
-      text,
-    });
+  createIntelligenceContentBaseText({
+    contentBaseUuid,
+    text,
+    hideGenericErrorAlert = false,
+  }) {
+    return request.$http.post(
+      `api/${contentBaseUuid}/content-bases-text/`,
+      {
+        text,
+      },
+      {
+        routerName: 'contentBase-text-create',
+        hideGenericErrorAlert,
+      },
+    );
   },
 
   listIntelligenceContentBaseTexts({ contentBaseUuid }) {
@@ -178,11 +193,16 @@ export default {
     contentBaseUuid,
     contentBaseTextUuid,
     text,
+    hideGenericErrorAlert = false,
   }) {
     return request.$http.put(
       `api/${contentBaseUuid}/content-bases-text/${contentBaseTextUuid}/`,
       {
         text,
+      },
+      {
+        routerName: 'contentBase-text-edit',
+        hideGenericErrorAlert,
       },
     );
   },
@@ -243,10 +263,17 @@ export default {
       edit({ projectUuid, values }) {
         const { model, ...others } = values;
 
-        return request.$http.patch(`api/${projectUuid}/llm/`, {
-          model,
-          setup: others,
-        });
+        return request.$http.patch(
+          `api/${projectUuid}/llm/`,
+          {
+            model,
+            setup: others,
+          },
+          {
+            routerName: 'brain-tunings-edit',
+            hideGenericErrorAlert: true,
+          },
+        );
       },
 
       advanced: {
@@ -268,12 +295,15 @@ export default {
       },
 
       edit({ projectUuid, data }) {
-        return request.$http.put(`api/${projectUuid}/customization/`, data);
+        return request.$http.put(`api/${projectUuid}/customization/`, data, {
+          routerName: 'brain-customization-edit',
+          hideGenericErrorAlert: true,
+        });
       },
 
       delete({ projectUuid, id }) {
         return request.$http.delete(
-          `api/${projectUuid}/customization?id=${id}`,
+          `api/${projectUuid}/customization/?id=${id}`,
         );
       },
     },

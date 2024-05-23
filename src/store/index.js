@@ -17,6 +17,7 @@ import Tutorial from './tutorial';
 import External from './external';
 import Integration from './integration';
 import Suggestions from './suggestions';
+import Brain from './brain';
 
 Vue.use(Vuex);
 
@@ -49,6 +50,7 @@ const store = new Vuex.Store({
     Intent,
     Integration,
     Suggestions,
+    Brain,
   },
 });
 
