@@ -1,66 +1,75 @@
 <template>
-  <div
-    :class="[
-      'files-list__content__file',
-      { 'files-list__content__file--compressed': compressed },
-    ]"
+  <UnnnicToolTip
+    side="top"
+    :text="failureMessage"
+    :enabled="file.status === 'fail'"
   >
-    <div class="files-list__content__file__icon">
-      <UnnnicIcon
-        :icon="icon"
-        class="files-list__content__file__icon__itself"
-        :size="compressed ? 'sm' : 'avatar-nano'"
-      />
-    </div>
-
-    <div class="files-list__content__file__content">
-      <div class="files-list__content__file__content__title">
-        {{ name }}
-      </div>
-
-      <div class="files-list__content__file__content__status">
-        <template v-if="file.status === 'uploading'">
-          {{ $t('content_bases.files.status.uploading') }}
-        </template>
-      </div>
-    </div>
-
-    <div class="files-list__content__file__actions">
-      <UnnnicIcon
-        v-if="downloading"
-        icon="cached"
-        size="sm"
-        scheme="neutral-cloudy"
-        class="files-list__content__file__actions__loading"
-      />
-
-      <UnnnicIcon
-        v-else-if="file.status === 'uploaded' && file.extension_file !== 'site'"
-        icon="download"
-        size="sm"
-        class="files-list__content__file__actions__icon"
-        @click.native.stop="download"
-      />
-
-      <UnnnicIcon
-        v-if="!file.uuid.startsWith('temp-')"
-        icon="delete"
-        size="sm"
-        class="files-list__content__file__actions__icon"
-        @click.native.stop="$emit('remove')"
-      />
-    </div>
-
-    <div
-      v-if="file.status === 'uploading'"
-      :class="['files-list__content__file__status-bar', file.extension_file]"
+    <section
+      :class="[
+        'files-list__content__file',
+        `files-list__content__file--status-${file.status}`,
+        { 'files-list__content__file--compressed': compressed },
+      ]"
     >
-      <div
-        class="files-list__content__file__status-bar__filled"
-        :style="{ width: `${file.progress * 100}%` }"
-      ></div>
-    </div>
-  </div>
+      <section class="files-list__content__file__icon">
+        <UnnnicIcon
+          :icon="file.status === 'fail' ? 'warning' : icon"
+          class="files-list__content__file__icon__itself"
+          :size="compressed ? 'sm' : 'avatar-nano'"
+        />
+      </section>
+
+      <header class="files-list__content__file__content">
+        <p class="files-list__content__file__content__title">
+          {{ name }}
+        </p>
+
+        <p class="files-list__content__file__content__status">
+          <template v-if="file.status === 'uploading'">
+            {{ $t('content_bases.files.status.uploading') }}
+          </template>
+        </p>
+      </header>
+
+      <section class="files-list__content__file__actions">
+        <UnnnicIcon
+          v-if="downloading"
+          icon="cached"
+          size="sm"
+          scheme="neutral-cloudy"
+          class="files-list__content__file__actions__loading"
+        />
+
+        <UnnnicIcon
+          v-else-if="
+            file.status === 'uploaded' && file.extension_file !== 'site'
+          "
+          icon="download"
+          size="sm"
+          class="files-list__content__file__actions__icon"
+          @click.native.stop="download"
+        />
+
+        <UnnnicIcon
+          v-if="!file.uuid.startsWith('temp-')"
+          icon="delete"
+          size="sm"
+          class="files-list__content__file__actions__icon"
+          @click.native.stop="$emit('remove')"
+        />
+      </section>
+
+      <section
+        v-if="file.status === 'uploading'"
+        :class="['files-list__content__file__status-bar', file.extension_file]"
+      >
+        <div
+          class="files-list__content__file__status-bar__filled"
+          :style="{ width: `${file.progress * 100}%` }"
+        ></div>
+      </section>
+    </section>
+  </UnnnicToolTip>
 </template>
 
 <script>
@@ -101,6 +110,13 @@ export default {
       return this.fileName.lastIndexOf('.') === -1
         ? this.fileName
         : this.fileName.slice(this.fileName.lastIndexOf('.') + 1);
+    },
+
+    failureMessage() {
+      const message =
+        { site: 'site_with_error' }[this.extension] || 'file_with_error';
+
+      return this.$t(`content_bases.${message}`);
     },
 
     icon() {
@@ -182,11 +198,32 @@ export default {
   align-items: center;
   position: relative;
 
+  p {
+    margin: 0;
+  }
+
   &--compressed {
     column-gap: $unnnic-spacing-xs;
 
     .files-list__content__file__icon {
       padding: 0.4375 * $unnnic-font-size; // transformed 7px into Unnnic base size
+    }
+  }
+
+  &--status-fail {
+    outline-color: $unnnic-color-aux-red-500;
+    background-color: $unnnic-color-aux-red-100;
+    color: $unnnic-color-aux-red-500;
+
+    .files-list__content__file__icon {
+      background-color: inherit;
+    }
+
+    .files-list__content__file__icon__itself,
+    .files-list__content__file__content__title,
+    .files-list__content__file__actions__icon,
+    .files-list__content__file__actions__loading {
+      color: inherit;
     }
   }
 

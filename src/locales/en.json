@@ -156,6 +156,8 @@
       "sites": "Websites",
       "text": "Text"
     },
+    "file_with_error": "File with error. Delete and add it again.",
+    "site_with_error": "Site with error. Delete and add it again.",
     "files": {
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
