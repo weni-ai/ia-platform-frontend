@@ -18,11 +18,10 @@ RUN yarn build
 FROM nginxinc/nginx-unprivileged:1.25-alpine
 
 COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
-COPY --from=builder --chown=nginx:nginx /app/dist /usr/share/nginx/html/intelligence-webapp/ 
-# /app/config.js.tmpl 
-COPY docker-entrypoint.sh /
-RUN mv /usr/share/nginx/html/intelligence-webapp/index.html /usr/share/nginx/html/intelligence-webapp/index.html.tmpl \
-    && cd /usr/share/nginx/html/intelligence-webapp/ \
+COPY --from=builder --chown=nginx:nginx /app/dist /app/config.js.tmpl /usr/share/nginx/html/bothub-webapp/ 
+COPY docker/docker-entrypoint.sh /
+RUN mv /usr/share/nginx/html/bothub-webapp/index.html /usr/share/nginx/html/bothub-webapp/index.html.tmpl \
+    && cd /usr/share/nginx/html/bothub-webapp/ \
     && ln -s /tmp/index.html
 
 EXPOSE 8080
