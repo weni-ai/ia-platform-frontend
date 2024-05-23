@@ -217,7 +217,7 @@
       "liked": "Good answer",
       "disliked": "Bad answer"
     },
-    "sources": "Source: | Sources:"
+    "sources": "Source ({len}) | Sources ({len})"
   },
   "log": {
     "interaction_received_on": "Interaction received on:",
