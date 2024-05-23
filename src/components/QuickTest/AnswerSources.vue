@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { uniq } from 'lodash';
+
 export default {
   props: {
     sources: Array,
@@ -45,7 +47,7 @@ export default {
 
   methods: {
     list(sources) {
-      const list = sources.map(this.name);
+      const list = uniq(sources.map(this.name));
 
       return [list.slice(0, -1).join(', '), list.at(-1)]
         .filter((i) => i)

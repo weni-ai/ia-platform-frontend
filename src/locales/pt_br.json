@@ -157,6 +157,8 @@
       "sites": "Sites",
       "text": "Texto"
     },
+    "file_with_error": "Arquivo com erro. Exclua e adicione-o novamente.",
+    "site_with_error": "Site com erro. Exclua e adicione-o novamente.",
     "files": {
       "upload_content": "Carregar conteúdo de arquivos",
       "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",

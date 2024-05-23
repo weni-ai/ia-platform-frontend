@@ -157,6 +157,8 @@
       "sites": "Sitios",
       "text": "Texto"
     },
+    "file_with_error": "Archivo con error. Bórrelo y añádalo de nuevo.",
+    "site_with_error": "Sitio con error. Borrar y añadir de nuevo.",
     "files": {
       "upload_content": "Cargar contenido a partir de archivos",
       "drag_and_drop_your_file_here": "Arrastre y suelte su archivo aquí para añadir el contenido a la base de conocimientos de IA.",
