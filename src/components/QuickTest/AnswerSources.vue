@@ -1,16 +1,33 @@
 <template>
   <section class="sources">
-    <UnnnicIntelligenceText
-      color="neutral-cloudy"
-      family="secondary"
-      weight="regular"
-      size="body-md"
-      tag="p"
+    <UnnnicCollapse
+      size="md"
+      v-model="active"
+      :unspacedIcon="true"
     >
-      {{ $tc('quick_test.sources', sources.length) }}
-
-      {{ list(sources) }}.
-    </UnnnicIntelligenceText>
+      <template slot="header">
+        <UnnnicIntelligenceText
+          color="neutral-cloudy"
+          family="secondary"
+          weight="regular"
+          size="body-md"
+          tag="p"
+        >
+          {{
+            $tc('quick_test.sources', sources.length, { len: sources.length })
+          }}
+        </UnnnicIntelligenceText></template
+      >
+      <UnnnicIntelligenceText
+        color="neutral-cloudy"
+        family="secondary"
+        weight="regular"
+        size="body-md"
+        tag="p"
+      >
+        {{ list(sources) }}.
+      </UnnnicIntelligenceText>
+    </UnnnicCollapse>
   </section>
 </template>
 
@@ -18,6 +35,12 @@
 export default {
   props: {
     sources: Array,
+  },
+
+  data() {
+    return {
+      active: false,
+    };
   },
 
   methods: {
@@ -70,5 +93,16 @@ export default {
 
 .sources {
   margin-top: $unnnic-spacing-xs;
+
+  ::v-deep .unnnic-collapse {
+    padding: 0;
+  }
+
+  ::v-deep .unnnic-icon {
+    min-width: 10px;
+    min-height: 10px;
+    height: 10px;
+    width: 10px;
+  }
 }
 </style>
