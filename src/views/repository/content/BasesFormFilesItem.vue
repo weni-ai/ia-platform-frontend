@@ -16,6 +16,7 @@
           :icon="file.status === 'fail' ? 'warning' : icon"
           class="files-list__content__file__icon__itself"
           :size="compressed ? 'sm' : 'avatar-nano'"
+          :scheme="file.status === 'fail' ? 'feedback-red' : 'weni-600'"
         />
       </section>
 
@@ -130,7 +131,7 @@ export default {
           docx: 'draft',
           site: 'globe',
           action: 'account_tree',
-        }[this.extension] || 'warning'
+        }[this.extension] || 'draft'
       );
     },
 
