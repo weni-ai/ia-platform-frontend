@@ -76,20 +76,45 @@
         tag="div"
         height="46px"
       />
-      <UnnnicFormElement
-        class="tunings__container_fields-element"
-        :label="$t(`router.tunings.fields.${field.name}`)"
-        v-if="field.type === 'password'"
-        :key="index"
+      <header
+        v-if="['token'].includes(field.name)"
+        :key="`label-${index}`"
+        class="tunings__form-element__label"
       >
-        <UnnnicInput
-          :value="field.value"
-          @input="updateField(field.name, $event)"
-          :type="hasValidate ? 'error' : 'normal'"
-          :message="hasValidate ? $t('customization.invalid_field') : ''"
-          :nativeType="field.type"
-        />
-      </UnnnicFormElement>
+        <UnnnicIntelligenceText
+          color="neutral-cloudy"
+          family="secondary"
+          size="body-gt"
+          tag="p"
+        >
+          {{ $t(`router.tunings.fields.${field.name}`) }}
+        </UnnnicIntelligenceText>
+
+        <UnnnicToolTip
+          v-if="['token'].includes(field.name)"
+          side="right"
+          :text="$t(`router.tunings.fields.token_info`)"
+          enabled
+          maxWidth="29rem"
+          class="tunings__form-element__label__tooltip"
+        >
+          <UnnnicIcon
+            icon="info"
+            size="sm"
+            scheme="neutral-cleanest"
+            filled
+          />
+        </UnnnicToolTip>
+      </header>
+      <UnnnicInput
+        v-if="['token'].includes(field.name)"
+        :key="index"
+        :value="field.value"
+        @input="$set(values, field.name, $event)"
+        :type="hasValidate ? 'error' : 'normal'"
+        :message="hasValidate ? $t('customization.invalid_field') : ''"
+        :nativeType="field.type"
+      />
     </template>
 
     <RouterTuningsAdvanced

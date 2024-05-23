@@ -17,6 +17,8 @@
             :placeholder="$t('customization.placeholders.name')"
           />
         </UnnnicFormElement>
+      </div>
+      <div class="customization__form">
         <UnnnicFormElement
           :label="$t('customization.fields.occupation')"
           class="customization__form-element"
@@ -26,33 +28,17 @@
             :placeholder="$t('customization.placeholders.occupation')"
           />
         </UnnnicFormElement>
-      </div>
-      <div class="customization__container__persona">
-        <section>
-          <UnnnicLabel
-            v-bind="$props"
-            :label="$t('customization.fields.personality')"
-            class="customization__container__label"
+        <UnnnicFormElement
+          :label="$t('customization.fields.personality')"
+          class="customization__form-element"
+        >
+          <UnnnicSelectSmart
+            :value="handlePersonalityValue(brain.agent.personality.current)"
+            @input="brain.agent.personality.current = $event[0].value"
+            :options="personalities"
+            orderedByIndex
           />
-          <div class="customization__personality">
-            <section
-              :class="[
-                'customization__personality__item',
-                {
-                  'customization__personality-selected':
-                    brain.agent.personality.current === item?.value,
-                },
-              ]"
-              v-for="(item, index) in personalities"
-              :key="index"
-              @click="handlePersonalitySelect(item)"
-            >
-              <p>
-                {{ $t(`customization.fields.personalities.${item.label}`) }}
-              </p>
-            </section>
-          </div>
-        </section>
+        </UnnnicFormElement>
       </div>
       <div class="customization__container__persona">
         <UnnnicTextArea
@@ -135,43 +121,43 @@ export default {
       removing: false,
       personalities: [
         {
-          label: 'friendly',
+          label: this.$t('customization.fields.personalities.friendly'),
           value: 'Amigável',
         },
         {
-          label: 'cooperative',
+          label: this.$t('customization.fields.personalities.cooperative'),
           value: 'Cooperativo',
         },
         {
-          label: 'extrovert',
+          label: this.$t('customization.fields.personalities.extrovert'),
           value: 'Extrovertido',
         },
         {
-          label: 'generous',
+          label: this.$t('customization.fields.personalities.generous'),
           value: 'Generoso',
         },
         {
-          label: 'relaxed',
+          label: this.$t('customization.fields.personalities.relaxed'),
           value: 'Relaxado',
         },
         {
-          label: 'organized',
+          label: this.$t('customization.fields.personalities.organized'),
           value: 'Organizado',
         },
         {
-          label: 'systematic',
+          label: this.$t('customization.fields.personalities.systematic'),
           value: 'Sistemático',
         },
         {
-          label: 'innovative',
+          label: this.$t('customization.fields.personalities.innovative'),
           value: 'Inovador',
         },
         {
-          label: 'creative',
+          label: this.$t('customization.fields.personalities.creative'),
           value: 'Criativo',
         },
         {
-          label: 'intellectual',
+          label: this.$t('customization.fields.personalities.intellectual'),
           value: 'Intelectual',
         },
       ],
@@ -197,6 +183,15 @@ export default {
     handleShowRemoveModal(index) {
       this.showRemoveModal = true;
       this.currentInstruction = index;
+    },
+    handlePersonalityValue(value) {
+      if (!value) {
+        return [this.personalities[0]];
+      }
+
+      const personality = this.personalities.find((e) => value === e.value);
+
+      return [personality];
     },
     async removeInstruction() {
       try {
@@ -228,12 +223,6 @@ export default {
       } finally {
         this.removing = false;
       }
-    },
-
-    handlePersonalitySelect(personality) {
-      if (this.brain.agent.personality.current === personality.value) {
-        this.brain.agent.personality.current = '';
-      } else this.brain.agent.personality.current = personality.value;
     },
   },
 };

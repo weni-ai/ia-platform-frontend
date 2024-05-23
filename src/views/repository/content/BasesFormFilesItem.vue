@@ -16,6 +16,7 @@
           :icon="file.status === 'fail' ? 'warning' : icon"
           class="files-list__content__file__icon__itself"
           :size="compressed ? 'sm' : 'avatar-nano'"
+          :scheme="file.status === 'fail' ? 'feedback-red' : 'weni-600'"
         />
       </section>
 
@@ -229,13 +230,8 @@ export default {
 
   &__icon {
     display: flex;
-    background-color: $unnnic-color-neutral-light;
     border-radius: $unnnic-border-radius-sm;
     padding: 0.6875 * $unnnic-font-size;
-
-    &__itself {
-      color: $unnnic-color-neutral-clean;
-    }
   }
 
   &__content {
