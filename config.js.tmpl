@@ -27,6 +27,7 @@ const runtimeVariables = (() => ({
   SENTRY_ENVIRONMENT: ('${SENTRY_ENVIRONMENT}' || ''),
   NEXUS_API_BASE_URL: '${NEXUS_API_BASE_URL}',
   FLOWS_API_BASE_URL: '${FLOWS_API_BASE_URL}',
+  INTELLIGENCE_NEXT_URL: '${INTELLIGENCE_NEXT_URL}',
   
   get(name){
     return this[name];
