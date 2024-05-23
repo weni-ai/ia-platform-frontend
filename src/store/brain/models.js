@@ -44,14 +44,14 @@ export const models = [
     name: 'ChatGPT',
     fields: [
       {
-        type: 'password',
-        name: 'token',
-      },
-      {
         type: 'select',
         name: 'version-gpt',
         default: 'gpt-4o',
         options: ['gpt-3.5-turbo', 'gpt-4-turbo', 'gpt-4o'],
+      },
+      {
+        type: 'password',
+        name: 'token',
       },
       {
         type: 'select',

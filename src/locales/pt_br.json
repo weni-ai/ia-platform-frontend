@@ -89,6 +89,7 @@
       "fields": {
         "model": "Selecione o modelo",
         "token": "Token",
+        "token_info": "Código necessário para acessar os serviços da OpenAI. Obtenha o seu token criando uma conta na OpenAI e gerando uma chave de API no painel de controle.",
         "version": "Versão",
         "select-language": "Idioma",
         "language": "Selecione o idioma padrão",
@@ -162,6 +163,7 @@
       "upload_content": "Carregar conteúdo de arquivos",
       "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",
       "supported_files": "Formatos suportados: .pdf, .doc, docx, .txt, .xls e .xlsx.<br /> Limite de 250MB por arquivo.",
+      "file_error": "Arquivo com erro. Exclua e adicione-o novamente.",
       "browse_file": "Adicionar arquivo",
       "uploaded_files": "Arquivos carregados",
       "status": {
@@ -217,7 +219,7 @@
       "liked": "Boa resposta",
       "disliked": "Resposta ruim"
     },
-    "sources": "Fonte: | Fontes:"
+    "sources": "Fonte ({len}) | Fontes ({len})"
   },
   "log": {
     "interaction_received_on": "Interação recebida em:",
@@ -1403,14 +1405,14 @@
       }
     },
     "placeholders": {
-      "instruction": "Instrução",
-      "name": "Nome do agente",
-      "occupation": "Ocupação do agente", 
-      "goal": "Objetivo do agente"
+      "instruction": "Você é divertido mas não faz piadas",
+      "name": "Tainá",
+      "occupation": "Especialista em lhamas", 
+      "goal": "Tirar dúvidas e dar informações sobre lhamas"
     },
     "instructions": {
       "title": "Instruções gerais",
-      "sub_title": "Como você quer que o agente se comporte. Exemplo: Você é divertido mas não faz piadas.",
+      "sub_title": "Como você quer que o agente se comporte.",
       "add_instruction_btn": "Adicionar instrução",
       "modals": {
         "title": "Remover instrução",
