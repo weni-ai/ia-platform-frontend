@@ -12,6 +12,8 @@ import nexusaiAPI from '../api/nexusaiAPI';
 
 Vue.use(Router);
 
+let nextFromRedirect = '';
+
 const router = new Router({
   mode: 'history',
   base: import.meta.env.BASE_URL,
@@ -29,13 +31,18 @@ const router = new Router({
         store.state.Auth.connectOrgUuid = to.query?.org_uuid;
         store.state.Auth.connectProjectUuid = to.query?.project_uuid;
 
+        sessionStorage.setItem('orgUuid', store.state.Auth.connectOrgUuid);
+
         sessionStorage.setItem(
           'projectUuid',
           store.state.Auth.connectProjectUuid,
         );
 
-        if (to.query.next) {
-          next(to.query.next);
+        const nextPath = to.query.next || to.query.next_from_redirect;
+
+        if (nextPath) {
+          nextFromRedirect = to.query.next_from_redirect;
+          next(nextPath);
         } else {
           next('/home');
         }
@@ -119,6 +126,32 @@ const router = new Router({
       path: '*',
       name: '404',
       component: NotFound,
+      beforeEnter(to, _from, next) {
+        if (to.fullPath === nextFromRedirect) {
+          next();
+        } else {
+          const bearerToken = window.localStorage
+            .getItem('authToken')
+            .replace(' ', '+');
+
+          const intelligenceOrgId = store.state.Auth.org;
+          const orgUuid = sessionStorage.getItem('orgUuid');
+          const projectUuid = sessionStorage.getItem('projectUuid');
+
+          const path = `/loginexternal/${bearerToken}/${intelligenceOrgId}/${projectUuid}/`;
+
+          const redirectUrl = new URL(
+            path,
+            runtimeVariables.get('INTELLIGENCE_NEXT_URL'),
+          );
+
+          redirectUrl.searchParams.append('org_uuid', orgUuid);
+          redirectUrl.searchParams.append('project_uuid', projectUuid);
+          redirectUrl.searchParams.append('next_from_redirect', to.fullPath);
+
+          location.href = redirectUrl.toString();
+        }
+      },
     },
   ],
 });

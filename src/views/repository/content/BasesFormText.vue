@@ -17,6 +17,7 @@
       {{ $t('content_bases.write_content') }}
 
       <UnnnicButton
+        v-if="!dontShowSaveButton"
         :loading="item.status === 'saving'"
         @click="saveText"
         size="small"
@@ -28,7 +29,12 @@
     </header>
 
     <textarea
-      v-model="item.value"
+      :value="useBrain ? $store.state.Brain.contentText.current : item.value"
+      @input="
+        useBrain
+          ? ($store.state.Brain.contentText.current = $event.target.value)
+          : (item.value = $event.target.value)
+      "
       name=""
       id="textId"
       cols="30"
@@ -58,6 +64,8 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
   props: {
+    dontShowSaveButton: Boolean,
+    useBrain: Boolean,
     item: Object,
   },
 
@@ -83,16 +91,7 @@ export default {
               text: this.item.value,
             });
 
-          console.log('vai atualizar', this.item);
-
-          // this.$emit('update:item', {
-          //   ...this.item,
-          //   oldValue: contentBaseTextData.text,
-          // });
-
           this.item.oldValue = contentBaseTextData.text;
-
-          console.log('vai atualizar 2', this.item.oldValue);
         } else {
           const { data: contentBaseTextData } =
             await nexusaiAPI.createIntelligenceContentBaseText({

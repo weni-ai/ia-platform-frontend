@@ -46,6 +46,10 @@
     }
   },
   "router": {
+    "modal_save_changes_error": {
+      "title": "Error al guardar los cambios",
+      "description": "Se ha producido un error al guardar los cambios en la pestaña {tabs}. Intente guardar de nuevo.|Se ha producido un error al guardar los cambios en las pestañas {tabs}. Intente guardar de nuevo."
+    },
     "warn": {
       "brain_is_deactivated": "Brain está desactivado.",
       "click_here": "haz clic aquí",
@@ -85,8 +89,16 @@
       "fields": {
         "model": "Seleccionar modelo",
         "token": "Token",
+        "token_info": "Código necesario para acceder a los servicios de OpenAI. Obtén tu token creando una cuenta OpenAI y generando una clave API en el panel de control.",
         "version": "Versión",
         "version-gpt": "Versión",
+        "select-language": "Idioma",
+        "language": "Selecciona el idioma por defecto",
+        "languages": {
+          "pt_br": "Portugués de Brasil",
+          "en": "Inglés",
+          "es": "Español"
+        },
         "parameter": "Parámetros",
         "temperature": "Temperatura",
         "temperature_info": "Ajustar la Temperatura para controlar la diversidad de las respuestas generadas",
@@ -126,7 +138,10 @@
       "active_to_see": "Activar Brain para ver la vista previa del agente",
       "active_to_see_description": "Activar Brain se puede hacer dentro de las opciones avanzadas en la pestaña Configuración",
       "placeholder": "Envíe un mensaje para probar su agente inteligente",
-      "field_changed_to_value": "Parámetro {field} cambiada a {value}"
+      "save_changes_to_test_the_agent": "Guarde los cambios para probar el agente",
+      "field_changed_to_value": "Parámetro {field} cambiada a {value}",
+      "flow_started": "Flujo {name} iniciado",
+      "flow_finished": "Flujo finalizado"
     }
   },
   "content_bases": {
@@ -142,10 +157,13 @@
       "sites": "Sitios",
       "text": "Texto"
     },
+    "file_with_error": "Archivo con error. Bórrelo y añádalo de nuevo.",
+    "site_with_error": "Sitio con error. Borrar y añadir de nuevo.",
     "files": {
       "upload_content": "Cargar contenido a partir de archivos",
       "drag_and_drop_your_file_here": "Arrastre y suelte su archivo aquí para añadir el contenido a la base de conocimientos de IA.",
       "supported_files": "Formatos admitidos: .pdf, .doc, docx, .txt, .xls y .xlsx.<br /> Límite de 250 MB por archivo.",
+      "file_error": "Error de archivo. Eliminar y añadir de nuevo",
       "browse_file": "Añadir archivo",
       "uploaded_files": "Archivos cargados",
       "status": {
@@ -201,7 +219,7 @@
       "liked": "Buena respuesta",
       "disliked": "Mala respuesta"
     },
-    "sources": "Fuente: | Fuentes:"
+    "sources": "Fuente ({len}) | Fuentes ({len})"
   },
   "log": {
     "interaction_received_on": "Interacción recibida el:",
@@ -1408,14 +1426,14 @@
       }
     },
     "placeholders": {
-      "instruction": "Instrucción",
-      "name": "Nombre del agente",
-      "occupation": "Ocupación del agente", 
-      "goal": "Objetivo del agente"
+      "instruction": "Eres gracioso pero no haces bromas",
+      "name": "Tainá",
+      "occupation": "Experto en llamas", 
+      "goal": "Responder preguntas y dar información sobre llamas"
     },
     "instructions": {
       "title": "Instrucciones generales",
-      "sub_title": "Cómo quieres que se comporte el agente. Ejemplo: Eres gracioso pero no haces chistes",
+      "sub_title": "Cómo quieres que se comporte el agente.",
       "add_instruction_btn": "Añadir instrucción",
       "modals": {
         "title": "Quitar instrucción",

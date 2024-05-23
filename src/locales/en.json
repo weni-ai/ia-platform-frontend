@@ -46,6 +46,10 @@
     }
   },
   "router": {
+    "modal_save_changes_error": {
+      "title": "Error saving changes",
+      "description": "An error occurred while saving changes to the {tabs} tab. Try saving again.|An error occurred while saving changes to the {tabs} tabs. Try saving again."
+    },
     "warn": {
       "brain_is_deactivated": "Brain is deactivated.",
       "click_here": "click here",
@@ -85,7 +89,15 @@
       "fields": {
         "model": "Select model",
         "token": "Token",
+        "token_info": "Code required to access OpenAI services. Get your token by creating an OpenAI account and generating an API key in the control panel.",
         "version": "Version",
+        "select-language": "Language",
+        "language": "Select the default language",
+        "languages": {
+          "pt_br": "Brazilian Portuguese",
+          "en": "English",
+          "es": "Spanish"
+        },
         "version-gpt": "Version",
         "parameter": "Parameters",
         "temperature": "Temperature",
@@ -126,7 +138,10 @@
       "active_to_see": "Activate Brain to see the agent preview",
       "active_to_see_description": "Brain can be activated from the advanced options in the Tunings tab",
       "placeholder": "Send a message to test your intelligent agent",
-      "field_changed_to_value": "Parameter {field} changed to {value}"
+      "save_changes_to_test_the_agent": "Save the changes to test the agent",
+      "field_changed_to_value": "Parameter {field} changed to {value}",
+      "flow_started": "Flow {name} started",
+      "flow_finished": "Flow finished"
     }
   },
   "content_bases": {
@@ -142,10 +157,13 @@
       "sites": "Websites",
       "text": "Text"
     },
+    "file_with_error": "File with error. Delete and add it again.",
+    "site_with_error": "Site with error. Delete and add it again.",
     "files": {
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
       "supported_files": "Supported formats: .pdf, .doc, docx, .txt, .xls and .xlsx.<br /> 250MB limit per file.",
+      "file_error": "File error. Delete and add again",
       "browse_file": "Add file",
       "uploaded_files": "Uploaded files",
       "status": {
@@ -201,7 +219,7 @@
       "liked": "Good answer",
       "disliked": "Bad answer"
     },
-    "sources": "Source: | Sources:"
+    "sources": "Source ({len}) | Sources ({len})"
   },
   "log": {
     "interaction_received_on": "Interaction received on:",
@@ -1429,14 +1447,14 @@
       }
     },
     "placeholders": {
-      "instruction": "Instruction",
-      "name": "Agent's name",
-      "occupation": "Agent's occupation", 
-      "goal": "Agent's goal"
+      "instruction": "You're funny but you don't make jokes",
+      "name": "Tainá",
+      "occupation": "Llama expert", 
+      "goal": "To answer questions and give information about llamas"
     },
     "instructions": {
       "title": "General instructions",
-      "sub_title": "How you want the agent to behave. Example: You're funny but you don't make jokes.",
+      "sub_title": "How you want the agent to behave.",
       "add_instruction_btn": "Add instruction",
       "modals": {
         "title": "Remove instruction",

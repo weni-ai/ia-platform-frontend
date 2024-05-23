@@ -304,7 +304,7 @@ export default {
         extension_file: extension,
         status: 'waiting',
         progress: 0,
-        file_name: null,
+        file_name: file.name,
       };
 
       this.files.data.push(fileItem);
@@ -335,6 +335,8 @@ export default {
           } else {
             fileItem.status = 'processing';
           }
+
+          this.updateFileItem(data.uuid, undefined, 'uploaded');
         });
     },
 

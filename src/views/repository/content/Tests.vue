@@ -27,18 +27,13 @@
           ></div>
 
           <UnnnicIntelligenceText
-            v-else-if="message.type === 'change'"
+            v-else-if="isStatus(message)"
             color="neutral-cloudy"
             family="secondary"
             weight="regular"
             size="body-md"
           >
-            {{
-              $t('router.preview.field_changed_to_value', {
-                field: handleLetter($t(message.name)),
-                value: message.value,
-              })
-            }}
+            {{ statusDescription(message) }}
           </UnnnicIntelligenceText>
 
           <template v-else>
@@ -79,6 +74,12 @@
       </div>
     </div>
 
+    <QuickTestWarn
+      v-if="shouldShowRequireSaveWarn"
+      icon="info"
+      :text="$t('router.preview.save_changes_to_test_the_agent')"
+    />
+
     <div class="write-message">
       <UnnnicInput
         v-model="message"
@@ -107,6 +108,7 @@ import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback.vue';
 import FlowPreview from '../../../utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 import Markdown from '../../../components/Markdown.vue';
+import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
 
 export default {
   name: 'RepositoryContentTests',
@@ -121,6 +123,7 @@ export default {
     Markdown,
     AnswerSources,
     AnswerFeedback,
+    QuickTestWarn,
   },
 
   mixins: [FlowPreview],
@@ -134,6 +137,10 @@ export default {
   },
 
   computed: {
+    shouldShowRequireSaveWarn() {
+      return this.usePreview && !this.$store.getters.isBrainSaveButtonDisabled;
+    },
+
     language() {
       const language = this.contentBaseLanguage;
 
@@ -190,6 +197,27 @@ export default {
       );
     },
 
+    isStatus(message) {
+      return ['change', 'flowstart', 'flowsend'].includes(message.type);
+    },
+
+    statusDescription(message) {
+      if (message.type === 'change') {
+        return this.$t('router.preview.field_changed_to_value', {
+          field: this.handleLetter(this.$t(message.name)),
+          value: message.value,
+        });
+      }
+
+      if (message.type === 'flowstart') {
+        return this.$t('router.preview.flow_started', { name: message.name });
+      }
+
+      if (message.type === 'flowsend') {
+        return this.$t('router.preview.flow_finished');
+      }
+    },
+
     handleLetter(message) {
       return lowerFirstCapitalLetter(message);
     },
@@ -222,18 +250,6 @@ export default {
             }
           }),
       );
-
-      if (this.preview.session?.status === 'completed') {
-        this.messages.push({
-          type: 'flowsend',
-          name: '',
-          question_uuid: null,
-          feedback: {
-            value: null,
-            reason: null,
-          },
-        });
-      }
 
       this.scrollToLastMessage();
     },
@@ -331,6 +347,9 @@ export default {
 
                 this.flowStart(answer, { name: data.name, uuid: data.uuid });
               }
+            })
+            .catch(() => {
+              this.messages.splice(this.messages.indexOf(answer), 1);
             });
         } else {
           nexusaiAPI.question
@@ -520,7 +539,9 @@ export default {
       margin-right: 1.875 * $unnnic-font-size;
     }
 
-    &__change {
+    &__change,
+    &__flowstart,
+    &__flowsend {
       text-align: center;
 
       + .messages__change {
