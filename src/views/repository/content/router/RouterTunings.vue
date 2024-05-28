@@ -110,7 +110,7 @@
         v-if="['token'].includes(field.name)"
         :key="index"
         :value="field.value"
-        @input="$set(values, field.name, $event)"
+        @input="updateField(field.name, $event)"
         :type="hasValidate ? 'error' : 'normal'"
         :message="hasValidate ? $t('customization.invalid_field') : ''"
         :nativeType="field.type"
