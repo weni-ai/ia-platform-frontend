@@ -65,6 +65,7 @@
       :description="removeHTML($t('content_bases.files.supported_files'))"
       :addText="$t('content_bases.files.browse_file')"
       :items.sync="files"
+      :filterItem="filterItem"
       @add="$refs['browser-file-input'].click()"
       @remove="
         ($event) =>
@@ -146,6 +147,7 @@ export default {
   props: {
     files: Object,
     shape: String,
+    filterText: String,
   },
 
   data() {
@@ -255,6 +257,12 @@ export default {
   },
 
   methods: {
+    filterItem(item) {
+      return item.file_name
+        ?.toLowerCase()
+        .includes(this.filterText?.toLowerCase());
+    },
+
     removeHTML(string) {
       const span = document.createElement('span');
       span.innerHTML = string;
