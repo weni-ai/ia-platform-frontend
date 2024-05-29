@@ -729,11 +729,6 @@ export default {
         'webapp.home.bases.edit-base-saved-time',
       )} ${hour}h${minutes}`;
     },
-    goToTests() {
-      this.$router.push({
-        name: 'repository-content-tests',
-      });
-    },
     refreshPreview() {
       this.refreshPreviewValue += 1;
     },

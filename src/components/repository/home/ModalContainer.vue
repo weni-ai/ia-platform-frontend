@@ -88,14 +88,9 @@ export default {
       this.$emit('closeModal');
     },
     goToIntentList(intent) {
-      this.$router.push({
-        name: 'repository-intentlist',
-        params: {
-          ownerNickname: this.infoModal.ownerNickname,
-          slug: this.infoModal.slug,
-          intent,
-        },
-      });
+      this.$router.push(
+        `/${this.infoModal.ownerNickname}/${this.infoModal.slug}/intentlist/${intent}`,
+      );
     },
   },
 };

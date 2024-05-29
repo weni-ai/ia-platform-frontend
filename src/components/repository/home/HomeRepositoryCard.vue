@@ -670,20 +670,15 @@ export default {
           },
         });
       } else if (this.type === 'repository') {
-        let name;
+        let path;
 
         if (this.repositoryDetail.repository_type === 'content') {
-          name = 'repository-content-bases';
+          path = `/dashboard/${this.repositoryDetail.owner__nickname}/${this.repositoryDetail.slug}/content/bases`;
         } else if (this.repositoryDetail.repository_type === 'classifier') {
-          name = 'repository-summary';
+          path = `/dashboard/${this.repositoryDetail.owner__nickname}/${this.repositoryDetail.slug}/`;
         }
-        this.$router.push({
-          name,
-          params: {
-            ownerNickname: this.repositoryDetail.owner__nickname,
-            slug: this.repositoryDetail.slug,
-          },
-        });
+
+        this.$router.push(path);
       } else if (this.type === 'base') {
         this.$router.push({
           name: 'intelligence-content-base-edit',
