@@ -9,7 +9,7 @@
               type="tertiary"
               iconCenter="arrow_left_alt"
               scheme="neutral-dark"
-              @click="$router.push({ name: 'home' })"
+              @click="$router.push('/home')"
             />
 
             <UnnnicSkeletonLoading

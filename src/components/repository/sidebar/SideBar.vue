@@ -599,10 +599,14 @@ export default {
         path !== this.$router.currentRoute.name ||
         path === 'repository-settings'
       ) {
-        this.$router.push({
-          name: `${path}`,
-          ...opts,
-        });
+        if (path === 'home') {
+          this.$router.push('/home');
+        } else {
+          this.$router.push({
+            name: `${path}`,
+            ...opts,
+          });
+        }
       }
     },
     setInitialSelectedMenu() {

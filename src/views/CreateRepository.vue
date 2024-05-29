@@ -1,6 +1,6 @@
 <template>
   <div class="create-repository">
-    <create-repository-form/>
+    <CreateRepositoryForm />
   </div>
 </template>
 
@@ -14,9 +14,7 @@ export default {
     CreateRepositoryForm,
   },
   computed: {
-    ...mapGetters([
-      'authenticated',
-    ]),
+    ...mapGetters(['authenticated']),
   },
   mounted() {
     this.checkIsAuthenticated();
@@ -24,12 +22,10 @@ export default {
   methods: {
     checkIsAuthenticated() {
       if (!this.authenticated) {
-        this.$router.push({
-          name: 'home'
-        });
+        this.$router.push('/home');
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -38,5 +34,4 @@ export default {
   height: 100vh;
   width: 100%;
 }
-
 </style>

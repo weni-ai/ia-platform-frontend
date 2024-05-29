@@ -129,9 +129,7 @@ export default {
   },
   watch: {
     authenticated() {
-      this.$router.push({
-        name: 'home',
-      });
+      this.$router.push('/home');
     },
   },
   mounted() {
@@ -141,9 +139,7 @@ export default {
   },
   methods: {
     showAllBots() {
-      this.$router.push({
-        name: 'home',
-      });
+      this.$router.push('/home');
     },
     signIn() {
       this.$router.push({

@@ -317,9 +317,7 @@ export default {
         if (target === 'home' || target === 'new') {
           if (target === 'home') return;
           this.setTutorialActive(name);
-          this.$router.push({
-            name: 'home',
-          });
+          this.$router.push('/home');
           this.closeTutorialMenu();
         } else if (
           Object.keys(this.finished).includes(previous) ||
