@@ -47,6 +47,7 @@
       :description="$t('content_bases.sites.sidebar_add.description')"
       :addText="$t('content_bases.sites.add_site')"
       :items.sync="items"
+      :filterItem="filterItem"
       @load-more="$emit('load-more')"
       @add="isAddSiteOpen = true"
       @remove="
@@ -159,6 +160,7 @@ export default {
   props: {
     items: Object,
     shape: String,
+    filterText: String,
   },
 
   components: {
@@ -190,6 +192,12 @@ export default {
   },
 
   methods: {
+    filterItem(item) {
+      return item.created_file_name
+        ?.toLowerCase()
+        .includes(this.filterText?.toLowerCase());
+    },
+
     addSites() {
       const sites = this.sites
         .filter((site) => this.validURL(site.value))

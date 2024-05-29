@@ -131,8 +131,8 @@
 
                   <template v-else>
                     <BasesFormFiles
-                      :files.sync="filters.files"
-                      @update:files="handleUpdateFile"
+                      :files.sync="files"
+                      :filterText="filterName"
                       @load-more="loadFiles"
                       @removed="removedFile"
                       :shape="contentStyle"
@@ -142,8 +142,8 @@
 
                 <template v-if="tab === 'sites' || isRouterView">
                   <BasesFormSites
-                    :items.sync="filters.sites"
-                    @update:items="handleUpdateSite"
+                    :items.sync="sites"
+                    :filterText="filterName"
                     @load-more="loadSites"
                     @removed="removedSite"
                     :shape="contentStyle"
@@ -345,7 +345,7 @@
 </template>
 
 <script>
-import { get, debounce } from 'lodash';
+import { get } from 'lodash';
 import { mapActions } from 'vuex';
 import router from '@/router/index';
 import Tests from './Tests.vue';
@@ -451,11 +451,6 @@ export default {
         data: [],
       },
 
-      filters: {
-        files: null,
-        sites: null,
-      },
-
       sites: {
         status: null,
         next: null,
@@ -480,9 +475,7 @@ export default {
       },
     };
   },
-  created() {
-    this.debouncedFilterName = debounce(this.filterData, 300);
-  },
+
   methods: {
     ...mapActions([
       'createQAKnowledgeBase',
@@ -501,51 +494,10 @@ export default {
 
     removedFile(fileUuid) {
       this.files.data = this.files.data.filter(({ uuid }) => uuid !== fileUuid);
-      this.filters.files.data = this.files.data.filter(
-        ({ uuid }) => uuid !== fileUuid,
-      );
     },
 
     removedSite(siteUuid) {
       this.sites.data = this.sites.data.filter(({ uuid }) => uuid !== siteUuid);
-      this.filters.sites.data = this.sites.data.filter(
-        ({ uuid }) => uuid !== siteUuid,
-      );
-    },
-
-    handleUpdateSite(value) {
-      this.sites = {
-        data: value.data,
-        status: value.status,
-      };
-    },
-
-    handleUpdateFile(value) {
-      this.files = {
-        data: value.data,
-        status: value.status,
-      };
-    },
-
-    filterData() {
-      const filesData = this.files.data.filter((e) =>
-        e.file_name?.toLowerCase().includes(this.filterName?.toLowerCase()),
-      );
-      const sitesData = this.sites.data.filter((e) =>
-        e.created_file_name
-          ?.toLowerCase()
-          .includes(this.filterName?.toLowerCase()),
-      );
-
-      this.$set(this.filters, 'files', {
-        ...this.files,
-        data: filesData,
-      });
-
-      this.$set(this.filters, 'sites', {
-        ...this.sites,
-        data: sitesData,
-      });
     },
 
     async loadFiles() {
@@ -556,7 +508,7 @@ export default {
         next: this.files.next,
       });
 
-      const filesData = this.files.data.concat(
+      this.files.data = this.files.data.concat(
         data.results
           .map((file) => ({
             ...file,
@@ -572,18 +524,12 @@ export default {
           ),
       );
 
-      const formatResult = {
-        data: filesData,
-        next: data.next,
-      };
-
-      this.files = formatResult;
-      this.filters.files = formatResult;
+      this.files.status = null;
+      this.files.next = data.next;
 
       if (!data.next) {
         const status = 'complete';
         this.files.status = status;
-        this.filters.files.status = status;
       }
     },
 
@@ -598,8 +544,9 @@ export default {
           },
         );
 
-        const status = 'complete';
-        const sitesData = this.sites.data.concat(
+        this.sites.status = 'complete';
+
+        this.sites.data = this.sites.data.concat(
           data
             .map((site) => ({
               ...site,
@@ -616,19 +563,8 @@ export default {
                 !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
             ),
         );
-
-        this.sites.data = sitesData;
-
-        this.filters.sites = {
-          data: sitesData,
-          status,
-        };
-
-        this.sites.status = status;
-        this.filterName = '';
       } finally {
         if (this.sites.status !== 'complete') {
-          this.filters.sites.status = null;
           this.sites.status = null;
         }
       }
@@ -781,9 +717,6 @@ export default {
 
         this.text.status = null;
       },
-    },
-    filterName() {
-      this.debouncedFilterName();
     },
   },
   computed: {

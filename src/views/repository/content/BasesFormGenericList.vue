@@ -26,7 +26,7 @@
         :class="['files-list__content', `files-list__content--shape-${shape}`]"
       >
         <BasesFormFilesItem
-          v-for="file in items.data"
+          v-for="file in itemsFiltered"
           :key="file.uuid"
           :file="file"
           :compressed="shape === 'accordion'"
@@ -75,6 +75,7 @@ export default {
     canEditItem: Boolean,
     hideCounter: Boolean,
     hideToggle: Boolean,
+    filterItem: Function,
 
     shape: {
       type: String,
@@ -100,7 +101,19 @@ export default {
 
   computed: {
     counter() {
-      return String(this.items.next ? '10+' : this.items.data.length);
+      return String(
+        this.items.next
+          ? `${this.itemsFiltered.length}+`
+          : this.itemsFiltered.length,
+      );
+    },
+
+    itemsFiltered() {
+      if (this.filterItem) {
+        return this.items.data.filter(this.filterItem);
+      }
+
+      return this.items.data;
     },
   },
 
