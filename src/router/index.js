@@ -142,7 +142,7 @@ const router = new Router({
 
           const redirectUrl = new URL(
             path,
-            runtimeVariables.get('INTELLIGENCE_NEXT_URL'),
+            runtimeVariables.get('INTELLIGENCE_LEGACY_URL'),
           );
 
           redirectUrl.searchParams.append('org_uuid', orgUuid);
