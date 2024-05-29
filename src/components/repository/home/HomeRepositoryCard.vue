@@ -663,12 +663,7 @@ export default {
         (this.type === 'repository' &&
           this.repositoryDetail?.repository_type === 'content')
       ) {
-        this.$router.push({
-          name: 'intelligence-home',
-          params: {
-            intelligenceUuid: this.repositoryDetail.uuid,
-          },
-        });
+        this.$router.push(`/intelligences/${this.repositoryDetail.uuid}`);
       } else if (this.type === 'repository') {
         let name;
 
@@ -685,13 +680,9 @@ export default {
           },
         });
       } else if (this.type === 'base') {
-        this.$router.push({
-          name: 'intelligence-content-base-edit',
-          params: {
-            intelligenceUuid: this.$route.params.intelligenceUuid,
-            contentBaseUuid: this.repositoryDetail.uuid,
-          },
-        });
+        this.$router.push(
+          `/intelligences/${this.$route.params.intelligenceUuid}/bases/${this.repositoryDetail.uuid}/edit`,
+        );
       }
     },
     async copyIntelligence() {

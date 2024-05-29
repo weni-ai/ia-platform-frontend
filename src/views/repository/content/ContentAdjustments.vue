@@ -279,12 +279,9 @@ export default {
       }
     },
     goToSummary() {
-      this.$router.push({
-        name: 'intelligence-home',
-        params: {
-          intelligenceUuid: this.$route.params.intelligenceUuid,
-        },
-      });
+      this.$router.push(
+        `/intelligences/${this.$route.params.intelligenceUuid}`,
+      );
     },
   },
 };

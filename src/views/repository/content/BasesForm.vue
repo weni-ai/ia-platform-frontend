@@ -4,14 +4,7 @@
     :title="contentBase.title"
     :dontShowBack="isRouterView"
     :brainIsDeactivated="!routerTunings.brainOn"
-    @back="
-      $router.push({
-        name: 'intelligence-home',
-        params: {
-          intelligenceUuid: intelligenceUuid,
-        },
-      })
-    "
+    @back="$router.push(`/intelligences/${intelligenceUuid}`)"
   >
     <UnnnicButton
       v-if="isRouterView"

@@ -193,12 +193,9 @@
       @close="isAddContentBaseOpen = false"
       @success="
         ($event) =>
-          $router.push({
-            name: 'intelligence-content-base-edit',
-            params: {
-              contentBaseUuid: $event.uuid,
-            },
-          })
+          $router.push(
+            `/intelligences/${$route.params.intelligenceUuid}/bases/${$event.uuid}/edit`,
+          )
       "
     ></BaseSettingsForm>
   </div>

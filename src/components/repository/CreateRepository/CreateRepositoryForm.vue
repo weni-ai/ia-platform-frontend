@@ -213,12 +213,7 @@ export default {
             description: this.data.description,
           });
 
-          this.$router.push({
-            name: 'intelligence-home',
-            params: {
-              intelligenceUuid: data.uuid,
-            },
-          });
+          this.$router.push(`/intelligences/${data.uuid}`);
         } else {
           const response = await repositoryV2.create({
             organization: this.getOrgSelected,
