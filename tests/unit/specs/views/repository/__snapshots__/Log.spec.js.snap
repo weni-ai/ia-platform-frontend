@@ -1,0 +1,142 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RepositoryLog.vue renders correctly 1`] = `
+VueWrapper {
+  "_emitted": Object {
+    "hook:beforeCreate": Array [
+      Array [],
+    ],
+    "hook:beforeMount": Array [
+      Array [],
+    ],
+    "hook:beforeUpdate": Array [
+      Array [],
+    ],
+    "hook:created": Array [
+      Array [],
+    ],
+    "hook:mounted": Array [
+      Array [],
+    ],
+    "hook:renderTracked": Array [
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+      Array [],
+    ],
+    "hook:renderTriggered": Array [
+      Array [],
+    ],
+    "hook:updated": Array [
+      Array [],
+    ],
+  },
+  "_emittedByOrder": Array [
+    Object {
+      "args": Array [],
+      "name": "hook:beforeCreate",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:created",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:beforeMount",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTriggered",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:mounted",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:beforeUpdate",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:renderTracked",
+    },
+    Object {
+      "args": Array [],
+      "name": "hook:updated",
+    },
+  ],
+  "isFunctionalComponent": undefined,
+}
+`;
