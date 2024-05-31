@@ -1,8 +1,24 @@
 /** @returns {Promise<import('jest').Config>} */
 
+const esModules = [
+  'axios',
+  'query-string',
+  'decode-uri-component',
+  'split-on-first',
+  'filter-obj',
+].join('|');
+
 const config = {
-  rootDir: 'src/',
+  roots: ['<rootDir>'],
+  verbose: true,
+  moduleNameMapper: {
+    '@/(.*)': '<rootDir>/src/$1',
+    '\\.css$': '<rootDir>/tests/__mocks__/styleMock.js',
+  },
+  moduleDirectories: ['node_modules', 'src'],
   testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/tests/unit/setup.js'],
+  transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
   moduleFileExtensions: [
     'js',
     'json',
