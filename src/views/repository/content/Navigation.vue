@@ -1,12 +1,7 @@
 <template>
   <UnnnicButton
     @click.native="
-      $router.push({
-        name: 'intelligence-edit',
-        params: {
-          intelligenceUuid: $route.params.intelligenceUuid,
-        },
-      })
+      $router.push(`/intelligences/${$route.params.intelligenceUuid}/edit`)
     "
     iconCenter="settings"
     type="secondary"

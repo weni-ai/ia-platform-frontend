@@ -29,9 +29,7 @@ export default {
   },
   methods: {
     onAuthenticated() {
-      this.$router.push({
-        name: 'home',
-      });
+      this.$router.push('/home');
     },
   },
 };

@@ -42,6 +42,8 @@ import nexusaiAPI from '../api/nexusaiAPI';
 
 Vue.use(Router);
 
+let nextFromRedirect = '';
+
 const router = new Router({
   mode: 'history',
   routes: [
@@ -87,13 +89,18 @@ const router = new Router({
         store.state.Auth.connectOrgUuid = to.query?.org_uuid;
         store.state.Auth.connectProjectUuid = to.query?.project_uuid;
 
+        sessionStorage.setItem('orgUuid', store.state.Auth.connectOrgUuid);
+
         sessionStorage.setItem(
           'projectUuid',
           store.state.Auth.connectProjectUuid,
         );
 
-        if (to.query.next) {
-          next(to.query.next);
+        const nextPath = to.query.next || to.query.next_from_redirect;
+
+        if (nextPath) {
+          nextFromRedirect = to.query.next_from_redirect;
+          next(nextPath);
         } else {
           next('/home');
         }
@@ -124,11 +131,6 @@ const router = new Router({
       },
     },
     {
-      path: '/home',
-      name: 'home',
-      component: Home,
-    },
-    {
       path: '/new/',
       name: 'new',
       component: CreateRepository,
@@ -148,75 +150,6 @@ const router = new Router({
           component: RepositoryTranslateExternal,
         },
       ],
-    },
-    {
-      path: '/brain/preview',
-      name: 'brain-preview-full-page',
-      component: RouterPreviewFullPage,
-      beforeEnter: async (to, from, next) => {
-        store.dispatch('externalLogin', { token: `Bearer ${to.query?.token}` });
-        store.dispatch('projectSelected', { project: to.query?.project_uuid });
-
-        store.state.Auth.connectProjectUuid = to.query?.project_uuid;
-
-        sessionStorage.setItem(
-          'projectUuid',
-          store.state.Auth.connectProjectUuid,
-        );
-
-        next();
-      },
-    },
-    {
-      path: '/router',
-      name: 'router',
-      component: RepositoryContentBasesForm,
-      redirect: () => {
-        return { name: 'router-personalization' };
-      },
-      async beforeEnter(_to, _from, next) {
-        const { data } = await nexusaiAPI.router.read({
-          projectUuid: store.state.Auth.connectProjectUuid,
-        });
-
-        store.state.router.contentBaseUuid = data.uuid;
-        store.state.router.intelligenceUuid = data.intelligence;
-
-        next();
-      },
-      children: [
-        {
-          path: 'personalization',
-          name: 'router-personalization',
-        },
-        {
-          path: 'content',
-          name: 'router-content',
-        },
-        {
-          path: 'actions',
-          name: 'router-actions',
-        },
-        {
-          path: 'tunings',
-          name: 'router-tunings',
-        },
-      ],
-    },
-    {
-      path: '/intelligences/:intelligenceUuid',
-      name: 'intelligence-home',
-      component: RepositoryContentBases,
-    },
-    {
-      path: '/intelligences/:intelligenceUuid/edit',
-      name: 'intelligence-edit',
-      component: RepositoryContentAdjustment,
-    },
-    {
-      path: '/intelligences/:intelligenceUuid/bases/:contentBaseUuid/edit',
-      name: 'intelligence-content-base-edit',
-      component: RepositoryContentBasesForm,
     },
     {
       path: '/dashboard',
@@ -395,6 +328,32 @@ const router = new Router({
       path: '*',
       name: '404',
       component: NotFound,
+      beforeEnter(to, _from, next) {
+        if (to.fullPath === nextFromRedirect) {
+          next();
+        } else {
+          const bearerToken = window.localStorage
+            .getItem('authToken')
+            .replace(' ', '+');
+
+          const intelligenceOrgId = store.state.Auth.org;
+          const orgUuid = sessionStorage.getItem('orgUuid');
+          const projectUuid = sessionStorage.getItem('projectUuid');
+
+          const path = `/loginexternal/${bearerToken}/${intelligenceOrgId}/${projectUuid}/`;
+
+          const redirectUrl = new URL(
+            path,
+            runtimeVariables.get('INTELLIGENCE_NEXT_URL'),
+          );
+
+          redirectUrl.searchParams.append('org_uuid', orgUuid);
+          redirectUrl.searchParams.append('project_uuid', projectUuid);
+          redirectUrl.searchParams.append('next_from_redirect', to.fullPath);
+
+          location.href = redirectUrl.toString();
+        }
+      },
     },
     {
       path: '/safariAlert/',

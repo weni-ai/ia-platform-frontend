@@ -88,13 +88,16 @@ export default {
   },
   watch: {
     authenticated() {
-      this.$router.push({
-        name:
-          this.authenticated &&
-          runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')
-            ? 'payment-options'
-            : 'home',
-      });
+      if (
+        this.authenticated &&
+        runtimeVariables.get('VUE_APP_BOTHUB_WEBAPP_PAYMENT_ENABLED')
+      ) {
+        this.$router.push({
+          name: 'payment-options',
+        });
+      } else {
+        this.$router.push('/home');
+      }
     },
   },
   mounted() {

@@ -9,7 +9,7 @@
               type="tertiary"
               iconCenter="arrow_left_alt"
               scheme="neutral-dark"
-              @click="$router.push({ name: 'home' })"
+              @click="$router.push('/home')"
             />
 
             <UnnnicSkeletonLoading
@@ -193,12 +193,9 @@
       @close="isAddContentBaseOpen = false"
       @success="
         ($event) =>
-          $router.push({
-            name: 'intelligence-content-base-edit',
-            params: {
-              contentBaseUuid: $event.uuid,
-            },
-          })
+          $router.push(
+            `/intelligences/${$route.params.intelligenceUuid}/bases/${$event.uuid}/edit`,
+          )
       "
     ></BaseSettingsForm>
   </div>
