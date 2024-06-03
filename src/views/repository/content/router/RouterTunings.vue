@@ -169,8 +169,8 @@
           :key="index + ':' + field.value"
           :minValue="field.min"
           :maxValue="field.max"
-          :minLabel="field.min?.toString()"
-          :maxLabel="field.max?.toString()"
+          :minLabel="numberToString(field.min)"
+          :maxLabel="numberToString(field.max)"
           :step="field.step"
           :initialValue="field.value"
           @valueChange="updateField(field.name, Number($event))"
@@ -239,6 +239,10 @@ export default {
   },
 
   methods: {
+    numberToString(value) {
+      return value || value === 0 ? String(value) : undefined;
+    },
+
     updateField(name, value) {
       this.$set(this.$store.state.Brain.tunings, name, value);
     },
