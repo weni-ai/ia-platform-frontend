@@ -1,6 +1,3 @@
-jest.mock('../../../api/request');
-jest.mock('../../../api/auth');
-
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import store from '../../../store';
 import EditProfileForm from '../../../components/user/EditProfileForm';
