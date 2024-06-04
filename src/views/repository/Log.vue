@@ -4,7 +4,7 @@
     :errorCode="errorCode"
   >
     <div
-      v-if="repository && repository.authorization.can_contribute"
+      v-if="canContribute"
       class="repository-log"
     >
       <UnnnicIntelligenceHeader
@@ -64,7 +64,7 @@
       <RepositoryLogList
         :perPage="perPage"
         :query="query"
-        :editable="repository.authorization.can_contribute"
+        :editable="canContribute"
         @dispatchNext="dispatchClick()"
         @dispatchSkip="dispatchClickSkip()"
         @finishedTutorial="dispatchClickFinish()"
@@ -156,6 +156,10 @@ export default {
     };
   },
   computed: {
+    canContribute() {
+      return this.repository && this.repository.authorization?.can_contribute;
+    },
+
     ...mapGetters({
       authenticated: 'authenticated',
       activeTutorial: 'activeTutorial',
