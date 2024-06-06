@@ -93,9 +93,9 @@ const router = new Router({
         );
 
         if (to.query.next) {
-          next(to.query.next);
+          next({ path: to.query.next, replace: true });
         } else {
-          next('/home');
+          next({ path: '/home', replace: true });
         }
       },
     },
