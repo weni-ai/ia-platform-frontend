@@ -116,7 +116,7 @@ describe('NewExampleForm.vue', () => {
   //   });
   // });
 
-  /*describe('entitiesInput emit entityAdded', () => {
+  describe('entitiesInput emit entityAdded', () => {
     let entitiesInput;
     beforeEach(() => {
       entitiesInput = wrapper.findComponent({ ref: 'entitiesInput' });
@@ -139,22 +139,22 @@ describe('NewExampleForm.vue', () => {
       expect(entitiesInput.emitted('entityEdited')).toBeDefined();
     });
   });
-
-  describe('textInput emit textSelected', () => {
-    let textInput;
-    const eventValue = { start: 0, end: 3 };
-
-    beforeEach(() => {
-      textInput = wrapper.findComponent({ ref: 'textInput' });
-      textInput.vm.$emit('textSelected', eventValue);
-    });
-
-    test('textSelected event emitted by entitiesInput', () => {
-      expect(textInput.emitted('textSelected')).toBeDefined();
-    });
-
-    test('textSelected is equal to value emitted by textInput', () => {
-      expect(wrapper.vm.textSelected).toMatchObject(eventValue);
-    });
-  });*/
+  /*
+    describe('textInput emit textSelected', () => {
+      let textInput;
+      const eventValue = { start: 0, end: 3 };
+  
+      beforeEach(() => {
+        textInput = wrapper.findComponent({ ref: 'textInput' });
+        textInput.vm.$emit('textSelected', eventValue);
+      });
+  
+      test('textSelected event emitted by entitiesInput', () => {
+        expect(textInput.emitted('textSelected')).toBeDefined();
+      });
+  
+      test('textSelected is equal to value emitted by textInput', () => {
+        expect(wrapper.vm.textSelected).toMatchObject(eventValue);
+      });
+    });*/
 });
