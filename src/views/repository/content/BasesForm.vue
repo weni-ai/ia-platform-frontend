@@ -581,7 +581,6 @@ export default {
     },
     onTabChange(pageName) {
       if (this.$route.name !== pageName) {
-        console.log(pageName);
         this.$router.push({ name: pageName });
       }
     },
