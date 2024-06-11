@@ -246,7 +246,7 @@ export default {
   resize: none;
   flex: 1;
   padding: $unnnic-spacing-sm;
-  padding-top: 4.375 * $unnnic-font-size;
+  padding-top: 3.375 * $unnnic-font-size;
   margin: 0;
   font-family: $unnnic-font-family-primary;
   font-weight: $unnnic-font-weight-regular;
