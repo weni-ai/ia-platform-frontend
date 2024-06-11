@@ -237,16 +237,16 @@ export default {
     font-family: $unnnic-font-family-secondary;
     font-size: $unnnic-font-size-body-gt;
     font-weight: $unnnic-font-weight-bold;
-    line-height: $unnnic-line-height-md;
-    padding-bottom: $unnnic-spacing-xs;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
   }
 
   &-sub_title {
+    margin-top: $unnnic-spacing-xs;
     color: $unnnic-color-neutral-cloudy;
     font-family: $unnnic-font-family-secondary;
     font-size: $unnnic-font-size-body-gt;
     font-weight: $unnnic-font-weight-regular;
-    line-height: $unnnic-line-height-md;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
   }
 
   &__container {
@@ -255,6 +255,7 @@ export default {
     align-items: flex-start;
     align-self: stretch;
     gap: $unnnic-spacing-md;
+    margin: $unnnic-spacing-sm 0 $unnnic-spacing-sm 0;
 
     &__persona {
       width: 100%;
