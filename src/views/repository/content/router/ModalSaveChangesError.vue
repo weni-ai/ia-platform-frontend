@@ -1,7 +1,7 @@
 <template>
   <UnnnicModal
     scheme="aux-red-500"
-    modalIcon="warning"
+    modalIcon="error"
     :text="$t('router.modal_save_changes_error.title')"
     class="modal-save-changes-error"
     @close="$emit('close')"
