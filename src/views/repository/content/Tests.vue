@@ -91,7 +91,8 @@
 
       <UnnnicButton
         size="large"
-        iconCenter="send-email-3-1"
+        iconCenter="send"
+        :iconFilled="true"
         type="alternative"
         class="button-send-message"
         @click="sendMessage"
