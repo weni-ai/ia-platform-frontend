@@ -69,26 +69,17 @@
           :class="'content-base__container'"
         >
           <template v-if="isRouterView">
-            <ul class="router-tabs">
-              <RouterLink
-                v-for="(tab, index) in routerTabs"
-                :key="index"
-                :to="{ name: tab.page }"
-              >
-                <li
-                  :class="[
-                    'router-tabs__tab',
-                    {
-                      'router-tabs__tab--selected': $route.name === tab.page,
-                    },
-                  ]"
-                >
+            <UnnnicTab
+              :tabs="routerTabs.map((e) => e.page)"
+              :initialTab="routerTabs.find((e) => e.page === $route.name).page"
+              @change="onTabChange"
+            >
+              <template v-for="tab in routerTabs">
+                <template :slot="`tab-head-${tab.page}`">
                   {{ $t(`router.tabs.${tab.title}`) }}
-                </li>
-              </RouterLink>
-            </ul>
-
-            <UnnnicDivider ySpacing="sm"></UnnnicDivider>
+                </template>
+              </template>
+            </UnnnicTab>
           </template>
 
           <section class="content-base__scrollable">
@@ -588,6 +579,11 @@ export default {
     onTitleChange(event) {
       this.knowledgeBase.title = event.srcElement.textContent;
     },
+    onTabChange(pageName) {
+      if (this.$route.name !== pageName) {
+        this.$router.push({ name: pageName });
+      }
+    },
     routerHandle(path) {
       if (path !== this.$router.currentRoute.name) {
         this.$router.push({
@@ -839,31 +835,6 @@ export default {
   margin: -$unnnic-spacing-sm;
   padding: $unnnic-spacing-lg;
   text-align: center;
-}
-
-.router-tabs {
-  margin: 0;
-  padding: 0;
-  display: inline-flex;
-  column-gap: $unnnic-spacing-lg;
-
-  &__tab {
-    display: block;
-    padding-inline: $unnnic-spacing-sm;
-
-    color: $unnnic-color-neutral-clean;
-    font-family: $unnnic-font-family-secondary;
-    font-size: $unnnic-font-size-body-lg;
-    line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
-    font-weight: $unnnic-font-weight-bold;
-
-    cursor: pointer;
-    user-select: none;
-
-    &--selected {
-      color: $unnnic-color-neutral-darkest;
-    }
-  }
 }
 
 .content-base {

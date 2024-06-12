@@ -230,7 +230,6 @@ export default {
 
   &__icon {
     display: flex;
-    background-color: $unnnic-color-neutral-light;
     border-radius: $unnnic-border-radius-sm;
     padding: 0.6875 * $unnnic-font-size;
 

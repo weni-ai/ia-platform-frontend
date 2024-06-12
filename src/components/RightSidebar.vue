@@ -3,35 +3,40 @@
     class="side-bar__container"
     @click.self="$emit('close')"
   >
-    <section class="side-bar__content">
-      <section class="side-bar__content__scrollable">
-        <header class="side-bar__header">
-          <section class="side-bar__header__title">
-            {{ title }}
+    <Transition
+      appear
+      name="drawer"
+    >
+      <section class="side-bar__content">
+        <section class="side-bar__content__scrollable">
+          <header class="side-bar__header">
+            <section class="side-bar__header__title">
+              {{ title }}
 
-            <UnnnicButton
-              class="side-bar__header__title__close-button"
-              size="small"
-              type="tertiary"
-              iconCenter="close"
-              scheme="neutral-dark"
-              @click="$emit('close')"
-            />
-          </section>
+              <UnnnicButton
+                class="side-bar__header__title__close-button"
+                size="small"
+                type="tertiary"
+                iconCenter="close"
+                scheme="neutral-dark"
+                @click="$emit('close')"
+              />
+            </section>
 
-          <div class="side-bar__header__description">
-            {{ description }}
-          </div>
-        </header>
+            <div class="side-bar__header__description">
+              {{ description }}
+            </div>
+          </header>
 
-        <UnnnicDivider
-          v-if="dividerYSpacing"
-          :ySpacing="dividerYSpacing"
-        />
+          <UnnnicDivider
+            v-if="dividerYSpacing"
+            :ySpacing="dividerYSpacing"
+          />
 
-        <slot></slot>
+          <slot></slot>
+        </section>
       </section>
-    </section>
+    </Transition>
   </aside>
 </template>
 
@@ -47,6 +52,35 @@ export default {
 
 <style lang="scss" scoped>
 @import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+
+@keyframes drawerOpen {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes drawerClose {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.drawer-enter-active,
+.drawer-enter-to {
+  animation: drawerOpen 200ms ease-in;
+}
+
+.drawer-leave-active,
+.drawer-leave-to {
+  display: none;
+  animation: drawerClose 200ms ease-in;
+}
 
 .side-bar {
   &__header {
@@ -79,7 +113,7 @@ export default {
 
   &__container {
     z-index: 1;
-    background: rgba(#262626, $unnnic-opacity-level-overlay);
+    background-color: rgba(0, 0, 0, $unnnic-opacity-level-overlay);
     position: fixed;
     top: 0;
     right: 0;
