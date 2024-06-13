@@ -135,9 +135,7 @@
         "title": "View preview on mobile",
         "description": "Scan the QR Code to access the agent preview on your cell phone"
       },
-      "active_to_see": "Activate Brain to see the agent preview",
-      "active_to_see_description": "Brain can be activated from the advanced options in the Tunings tab",
-      "placeholder": "Send a message to test your intelligent agent",
+      "placeholder": "Start a conversation with your agent to test it out",
       "save_changes_to_test_the_agent": "Save the changes to test the agent",
       "field_changed_to_value": "Parameter {field} changed to {value}",
       "flow_started": "Flow {name} started",

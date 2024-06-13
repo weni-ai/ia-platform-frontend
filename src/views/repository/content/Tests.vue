@@ -1,20 +1,24 @@
 <template>
   <div class="quick-test">
-    <div class="messages">
+    <PreviewPlaceholder
+      v-if="shouldShowPreviewPlaceholder"
+      class="messages"
+    />
+
+    <div
+      v-else
+      class="messages"
+    >
       <div
         class="messages__content"
         ref="messages"
       >
-        <div
+        <section
           v-if="!messages.length"
           class="messages__empty-text"
         >
-          {{
-            usePreview
-              ? $t('router.preview.placeholder')
-              : $t('quick_test.send_a_message')
-          }}
-        </div>
+          {{ $t('quick_test.send_a_message') }}
+        </section>
 
         <section
           v-for="(message, index) in messages"
@@ -110,6 +114,7 @@ import FlowPreview from '../../../utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 import Markdown from '../../../components/Markdown.vue';
 import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
+import PreviewPlaceholder from './router/Preview/Placeholder.vue';
 
 export default {
   name: 'RepositoryContentTests',
@@ -125,6 +130,7 @@ export default {
     AnswerSources,
     AnswerFeedback,
     QuickTestWarn,
+    PreviewPlaceholder,
   },
 
   mixins: [FlowPreview],
@@ -138,6 +144,10 @@ export default {
   },
 
   computed: {
+    shouldShowPreviewPlaceholder() {
+      return this.usePreview && this.messages.length === 0;
+    },
+
     shouldShowRequireSaveWarn() {
       return this.usePreview && !this.$store.getters.isBrainSaveButtonDisabled;
     },
