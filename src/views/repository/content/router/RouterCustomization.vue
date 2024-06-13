@@ -15,7 +15,10 @@
           <UnnnicInput
             v-model="brain.agent.name.current"
             :placeholder="$t('customization.placeholders.name')"
+            :type="errorRequiredFields.name ? 'error' : 'normal'"
           />
+
+          <FieldErrorRequired v-if="errorRequiredFields.name" />
         </UnnnicFormElement>
       </div>
       <div class="customization__form">
@@ -26,7 +29,10 @@
           <UnnnicInput
             v-model="brain.agent.role.current"
             :placeholder="$t('customization.placeholders.occupation')"
+            :type="errorRequiredFields.role ? 'error' : 'normal'"
           />
+
+          <FieldErrorRequired v-if="errorRequiredFields.role" />
         </UnnnicFormElement>
         <UnnnicFormElement
           :label="$t('customization.fields.personality')"
@@ -41,12 +47,19 @@
         </UnnnicFormElement>
       </div>
       <div class="customization__container__persona">
-        <UnnnicTextArea
-          v-bind="$props"
-          v-model="brain.agent.goal.current"
+        <UnnnicFormElement
           :label="$t('customization.fields.goal')"
-          :placeholder="$t('customization.placeholders.goal')"
-        />
+          class="customization__form-element"
+        >
+          <UnnnicTextArea
+            v-bind="$props"
+            v-model="brain.agent.goal.current"
+            :placeholder="$t('customization.placeholders.goal')"
+            :type="errorRequiredFields.goal ? 'error' : 'normal'"
+          />
+
+          <FieldErrorRequired v-if="errorRequiredFields.goal" />
+        </UnnnicFormElement>
       </div>
     </div>
 
@@ -111,8 +124,13 @@
 
 <script>
 import nexusaiAPI from '../../../../api/nexusaiAPI';
+import FieldErrorRequired from './Preview/FieldErrorRequired.vue';
 
 export default {
+  components: {
+    FieldErrorRequired,
+  },
+
   data() {
     return {
       currentInstruction: 0,
@@ -167,6 +185,14 @@ export default {
   computed: {
     brain() {
       return this.$store.state.Brain;
+    },
+
+    errorRequiredFields() {
+      return {
+        name: !this.brain.agent.name.current,
+        role: !this.brain.agent.role.current,
+        goal: !this.brain.agent.goal.current,
+      };
     },
   },
 
@@ -320,6 +346,20 @@ export default {
     :hover {
       border-color: $unnnic-color-weni-300;
       background-color: $unnnic-color-weni-100;
+    }
+  }
+
+  &__form-element {
+    :deep(textarea) {
+      display: block;
+    }
+
+    :deep(.error-list) {
+      margin-bottom: -$unnnic-spacing-nano;
+    }
+
+    :deep(.unnnic-text-area.md.error textarea::placeholder) {
+      color: $unnnic-color-neutral-cleanest;
     }
   }
 
