@@ -233,40 +233,7 @@
           </article>
         </div>
 
-        <section
-          v-if="isRouterView && !routerTunings.brainOn"
-          class="brain-deactivated-preview"
-        >
-          <UnnnicIcon
-            size="lg"
-            icon="warning"
-            scheme="neutral-cloudy"
-          />
-
-          <UnnnicIntelligenceText
-            tag="h2"
-            family="secondary"
-            color="neutral-cloudy"
-            size="body-lg"
-            weight="bold"
-            marginTop="ant"
-            marginBottom="nano"
-          >
-            {{ $t('router.preview.active_to_see') }}
-          </UnnnicIntelligenceText>
-
-          <UnnnicIntelligenceText
-            tag="p"
-            family="secondary"
-            color="neutral-cloudy"
-            size="body-gt"
-          >
-            {{ $t('router.preview.active_to_see_description') }}
-          </UnnnicIntelligenceText>
-        </section>
-
         <Tests
-          v-else
           :key="refreshPreviewValue"
           :contentBaseUuid="contentBaseUuid"
           :contentBaseLanguage="contentBase.language"
