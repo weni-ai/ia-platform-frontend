@@ -42,9 +42,9 @@ const router = new Router({
 
         if (nextPath) {
           nextFromRedirect = to.query.next_from_redirect;
-          next(nextPath);
+          next({ path: nextPath, replace: true });
         } else {
-          next('/home');
+          next({ path: '/home', replace: true });
         }
       },
     },
