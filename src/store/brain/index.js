@@ -71,6 +71,20 @@ export default {
       return state.contentText.current !== state.contentText.old;
     },
 
+    hasBrainRequiredFieldsNotFilledIn(state) {
+      const agentRequiredFields = ['name', 'role', 'goal'];
+
+      const agentHasRequiredFieldError = agentRequiredFields.some(
+        (field) => !state.agent[field].current,
+      );
+
+      if (agentHasRequiredFieldError) {
+        return true;
+      }
+
+      return false;
+    },
+
     isBrainSaveButtonDisabled(_state, getters) {
       return (
         !getters.hasBrainCustomizationChanged &&
