@@ -67,14 +67,7 @@
       :items.sync="files"
       :filterItem="filterItem"
       @add="$refs['browser-file-input'].click()"
-      @remove="
-        ($event) =>
-          openDeleteFileModal(
-            $event.uuid,
-            $event.created_file_name || '',
-            $event.extension_file || '',
-          )
-      "
+      @remove="onRemove"
       @load-more="$emit('load-more')"
     />
 
@@ -158,7 +151,6 @@ export default {
       leave: null,
 
       modalDeleteFile: null,
-
       filesBeingProcessedIndex: 0,
       listOfFilesBeingProcessedTimeOut: null,
 
@@ -238,15 +230,6 @@ export default {
     },
 
     countUploading(currentValue, pastValue) {
-      if (this.countUploading === 0) {
-        this.alert = {
-          type: 'success',
-          text: this.$t(
-            'content_bases.files.content_of_the_files_has_been_added',
-          ),
-        };
-      }
-
       if (currentValue > pastValue) {
         this.alert = {
           type: 'default',
@@ -276,7 +259,6 @@ export default {
       if (!get(files, 'length', 0)) {
         return;
       }
-
       Object.values(files).forEach(this.addFile);
     },
 
@@ -340,11 +322,19 @@ export default {
           if (data.status === 'success') {
             fileItem.status = 'uploaded';
             fileItem.file_name = data.file_name;
+            this.successMessage();
+          } else if (data.status === 'fail') {
+            fileItem.status = data.status;
+            fileItem.file_name = data.file_name;
           } else {
             fileItem.status = 'processing';
           }
 
           this.updateFileItem(data.uuid, undefined, 'uploaded');
+        })
+        .catch(() => {
+          fileItem.status = 'fail-upload';
+          fileItem.file_name = file.name;
         });
     },
 
@@ -367,6 +357,10 @@ export default {
           if (data.status === 'success') {
             fileItem.status = 'uploaded';
             fileItem.file_name = data.file_name;
+            this.successMessage();
+          } else if (data.status === 'fail') {
+            fileItem.status = data.status;
+            fileItem.file_name = data.file_name;
           } else {
             this.filesBeingProcessedIndex += 1;
           }
@@ -374,7 +368,7 @@ export default {
           if (this.listOfFilesBeingProcessed.length) {
             this.listOfFilesBeingProcessedTimeOut = setTimeout(
               this.waitTillURLBeCreated,
-              6000,
+              10000,
             );
           }
         });
@@ -386,8 +380,31 @@ export default {
       this.modalDeleteFile = {
         uuid: fileUuid,
         name,
-        status: null,
       };
+    },
+
+    successMessage() {
+      this.alert = {
+        type: 'success',
+        text: this.$t(
+          'content_bases.files.content_of_the_files_has_been_added',
+        ),
+      };
+    },
+
+    onRemove($event) {
+      if ($event.status === 'fail-upload') {
+        this.$emit('update:files', {
+          ...this.files,
+          data: this.files.data.filter((file) => file.status !== 'fail-upload'),
+        });
+      } else {
+        this.openDeleteFileModal(
+          $event.uuid,
+          $event.created_file_name || '',
+          $event.extension_file || '',
+        );
+      }
     },
 
     remove() {
