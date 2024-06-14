@@ -2,21 +2,29 @@
   <UnnnicToolTip
     side="top"
     :text="failureMessage"
-    :enabled="file.status === 'fail'"
+    :enabled="['fail', 'fail-upload'].includes(file.status)"
   >
     <section
       :class="[
         'files-list__content__file',
-        `files-list__content__file--status-${file.status}`,
+        `files-list__content__file--status-${
+          file.status === 'fail-upload' ? 'fail' : file.status
+        }`,
         { 'files-list__content__file--compressed': compressed },
       ]"
     >
       <section class="files-list__content__file__icon">
         <UnnnicIcon
-          :icon="file.status === 'fail' ? 'warning' : icon"
+          :icon="
+            ['fail', 'fail-upload'].includes(file.status) ? 'warning' : icon
+          "
           class="files-list__content__file__icon__itself"
           :size="compressed ? 'sm' : 'avatar-nano'"
-          :scheme="file.status === 'fail' ? 'feedback-red' : 'weni-600'"
+          :scheme="
+            ['fail', 'fail-upload'].includes(file.status)
+              ? 'feedback-red'
+              : 'weni-600'
+          "
         />
       </section>
 
@@ -52,16 +60,18 @@
         />
 
         <UnnnicIcon
-          v-if="!file.uuid.startsWith('temp-')"
+          v-if="
+            !file.uuid.startsWith('temp-') ||
+            ['fail-upload'].includes(file.status)
+          "
           icon="delete"
           size="sm"
           class="files-list__content__file__actions__icon"
           @click.native.stop="$emit('remove')"
         />
       </section>
-
       <section
-        v-if="file.status === 'uploading'"
+        v-if="['uploading', 'processing'].includes(file.status)"
         :class="['files-list__content__file__status-bar', file.extension_file]"
       >
         <div
@@ -303,10 +313,6 @@ export default {
       height: $unnnic-border-width-thin;
       border-radius: $unnnic-border-radius-pill;
       background-color: $unnnic-color-weni-500;
-      transition: width 100ms;
-    }
-
-    &.site &__filled {
       animation: loading-site 1s infinite;
     }
 
