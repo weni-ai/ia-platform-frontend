@@ -1,6 +1,5 @@
 import Vue from 'vue';
-import * as Sentry from '@sentry/browser';
-import { Vue as VueIntegration } from '@sentry/integrations';
+import * as Sentry from '@sentry/vue';
 
 import App from './App.vue';
 import router from './router';
@@ -27,20 +26,30 @@ Vue.component('UnnnicIntelligenceText', UnnnicIntelligenceText);
 
 Vue.config.productionTip = false;
 
-if (
-  runtimeVariables.get('VITE_BOTHUB_WEBAPP_USE_SENTRY') &&
-  runtimeVariables.get('VITE_BOTHUB_WEBAPP_SENTRY')
-) {
+if (runtimeVariables.get('VITE_BOTHUB_WEBAPP_SENTRY')) {
   Sentry.init({
+    Vue,
     dsn: runtimeVariables.get('VITE_BOTHUB_WEBAPP_SENTRY'),
-    integrations: [new VueIntegration({ Vue, attachProps: true })],
     environment: runtimeVariables.get('SENTRY_ENVIRONMENT'),
-    logErrors: true,
+    integrations: [
+      Sentry.browserTracingIntegration({ router }),
+      Sentry.replayIntegration(),
+    ],
+
+    tracesSampleRate: 1.0,
+
+    tracePropagationTargets: [/.*\.weni\.ai/],
+
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+
+    trackComponents: true,
 
     beforeSend: (event) => {
       if (window.location.hostname === 'localhost') {
         return null;
       }
+
       return event;
     },
   });

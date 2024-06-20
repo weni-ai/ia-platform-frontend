@@ -5,10 +5,38 @@
   >
     <article class="flow-modal__container">
       <header class="flow-modal__header">
-        <section class="flow-modal__header__title__container">
-          <h3>{{ $t('modals.actions.descriptions.change_title') }}</h3>
-          <h4 v-if="item">{{ item }}</h4>
-          <p>{{ $t('modals.actions.descriptions.change_sub_title') }}</p>
+        <section>
+          <UnnnicIntelligenceText
+            tag="h3"
+            color="neutral-darkest"
+            family="secondary"
+            size="title-sm"
+            weight="black"
+          >
+            {{ $t('modals.actions.descriptions.change_title') }}
+          </UnnnicIntelligenceText>
+
+          <UnnnicIntelligenceText
+            v-if="item"
+            tag="h4"
+            color="neutral-dark"
+            family="secondary"
+            size="body-gt"
+            weight="black"
+            marginTop="sm"
+          >
+            {{ item }}
+          </UnnnicIntelligenceText>
+
+          <UnnnicIntelligenceText
+            tag="p"
+            color="neutral-dark"
+            family="secondary"
+            size="body-gt"
+            marginTop="xs"
+          >
+            {{ $t('modals.actions.descriptions.change_sub_title') }}
+          </UnnnicIntelligenceText>
         </section>
       </header>
       <main class="flow-modal__body">
@@ -83,26 +111,6 @@ export default {
     align-items: center;
     text-align: center;
     margin-bottom: $unnnic-spacing-md;
-
-    &__title {
-      &__container {
-        h3 {
-          font-family: $unnnic-font-family-secondary;
-          font-size: $unnnic-font-size-title-sm;
-          font-weight: $unnnic-font-weight-black;
-          line-height: $unnnic-line-height-md;
-          color: $unnnic-color-neutral-darkest;
-        }
-
-        p {
-          font-family: $unnnic-font-family-secondary;
-          font-size: $unnnic-font-size-body-gt;
-          font-weight: $unnnic-font-weight-regular;
-          line-height: $unnnic-line-height-md;
-          color: $unnnic-color-neutral-dark;
-        }
-      }
-    }
   }
 
   &__footer {
