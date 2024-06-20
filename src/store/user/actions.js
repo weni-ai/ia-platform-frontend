@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/vue';
 import user from '@/api/user';
 import TYPES from '../types';
 
@@ -80,8 +81,13 @@ export default {
   searchUser(store, query) {
     return user.search(query);
   },
-  async getMyProfileInfo(nickname) {
-    const response = await user.myProfile(nickname);
+  async getMyProfileInfo() {
+    const response = await user.myProfile();
+
+    const { nickname, name, language, locale } = response.data;
+
+    Sentry.setUser({ username: nickname, name, language, locale });
+
     return response;
   },
 };

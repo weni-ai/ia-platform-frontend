@@ -109,13 +109,13 @@ export default {
         this.$set(this.$store.state.User, 'me', data);
 
         this.setUserName(data.name);
-        if (data.language.includes('-')) {
+        if (data.language?.includes?.('-')) {
           const [first, second] = data.language.split('-');
           const secondUpperCase = second.toUpperCase();
           const languageResult = `${first}-${secondUpperCase}`;
           this.$i18n.locale = languageResult;
         } else {
-          this.$i18n.locale = data.language;
+          this.$i18n.locale = data.language || 'en-US';
         }
       }
       return true;
