@@ -6,53 +6,63 @@
     <article class="flow-modal__container">
       <div class="flow-modal__header">
         <div class="flow-modal__header__fill">
-          <div class="flow-modal__header__fill__container">
-            <div
-              class="flow-modal__header__fill__bar flow-modal__header__fill__bar--green"
-            ></div>
-            <p
-              :class="[
-                'flow-modal__header__fill__label',
-                { 'flow-modal__header__fill__label--green': index === 0 },
-              ]"
-            >
-              {{ $t('modals.actions.flow.fill_name') }}
-            </p>
-          </div>
-          <div class="flow-modal__header__fill__container">
-            <div
+          <section
+            v-for="({ tabName }, stepIndex) in steps"
+            :key="stepIndex"
+            class="flow-modal__header__fill__container"
+          >
+            <section
               :class="[
                 'flow-modal__header__fill__bar',
-                { 'flow-modal__header__fill__bar--green': index === 1 },
+                { 'flow-modal__header__fill__bar--green': index >= stepIndex },
               ]"
             />
-            <p
-              :class="[
-                'flow-modal__header__fill__label',
-                { 'flow-modal__header__fill__label--green': index === 1 },
-              ]"
+
+            <UnnnicIntelligenceText
+              :color="index === stepIndex ? 'weni-700' : 'neutral-clean'"
+              family="secondary"
+              size="body-md"
+              marginTop="nano"
             >
-              {{ $t('modals.actions.descriptions.fill_name') }}
-            </p>
-          </div>
+              {{ $t(tabName) }}
+            </UnnnicIntelligenceText>
+          </section>
         </div>
-        <div class="flow-modal__header__title__container">
-          <h3>
-            {{
-              index === 0
-                ? $t('modals.actions.flow.title')
-                : $t('modals.actions.descriptions.title')
-            }}
-          </h3>
-          <h4 v-if="index === 1">{{ flowSelected.name }}</h4>
-          <p>
-            {{
-              index === 0
-                ? $t('modals.actions.flow.sub_title')
-                : $t('modals.actions.descriptions.sub_title')
-            }}
-          </p>
-        </div>
+
+        <section>
+          <UnnnicIntelligenceText
+            tag="h3"
+            color="neutral-darkest"
+            family="secondary"
+            size="title-sm"
+            weight="black"
+            marginTop="lg"
+          >
+            {{ $t(steps[index].title) }}
+          </UnnnicIntelligenceText>
+
+          <UnnnicIntelligenceText
+            v-if="steps[index].showSelectedFlowName"
+            tag="h4"
+            color="neutral-dark"
+            family="secondary"
+            size="body-gt"
+            weight="black"
+            marginTop="sm"
+          >
+            {{ flowSelected.name }}
+          </UnnnicIntelligenceText>
+
+          <UnnnicIntelligenceText
+            tag="p"
+            color="neutral-dark"
+            family="secondary"
+            size="body-gt"
+            marginTop="xs"
+          >
+            {{ $t(steps[index].subTitle) }}
+          </UnnnicIntelligenceText>
+        </section>
       </div>
       <div class="flow-modal__body">
         <div
@@ -92,7 +102,15 @@
                   size="sm"
                   scheme="neutral-cloudy"
                 />
-                <p>{{ handleFlowName(item.name) }}</p>
+                <UnnnicIntelligenceText
+                  tag="p"
+                  color="neutral-darkest"
+                  family="secondary"
+                  size="body-gt"
+                  class="text-truncate"
+                >
+                  {{ handleFlowName(item.name) }}
+                </UnnnicIntelligenceText>
               </UnnnicToolTip>
             </div>
             <template v-if="items.status === 'loading'">
@@ -118,9 +136,17 @@
           <UnnnicIcon
             icon="delete-1"
             size="sm"
-            scheme="neutral-cloudy"
+            scheme="neutral-dark"
           />
-          {{ $t('modals.actions.flow.not_found_message') }}
+
+          <UnnnicIntelligenceText
+            color="neutral-dark"
+            family="secondary"
+            size="body-gt"
+            marginTop="xs"
+          >
+            {{ $t('modals.actions.flow.not_found_message') }}
+          </UnnnicIntelligenceText>
         </section>
         <div
           class="flow-modal__body_description"
@@ -177,6 +203,21 @@ export default {
   data() {
     return {
       index: 0,
+
+      steps: [
+        {
+          tabName: 'modals.actions.flow.fill_name',
+          title: 'modals.actions.flow.title',
+          subTitle: 'modals.actions.flow.sub_title',
+        },
+        {
+          tabName: 'modals.actions.descriptions.fill_name',
+          title: 'modals.actions.descriptions.title',
+          subTitle: 'modals.actions.descriptions.sub_title',
+          showSelectedFlowName: true,
+        },
+      ],
+
       description: '',
 
       filterName: '',
@@ -339,38 +380,6 @@ export default {
           background: $unnnic-color-weni-600;
         }
       }
-
-      &__label {
-        color: $unnnic-color-neutral-clean;
-        font-family: $unnnic-font-family-secondary;
-        font-size: $unnnic-font-size-body-md;
-        font-weight: $unnnic-font-weight-regular;
-        line-height: $unnnic-line-height-md;
-
-        &--green {
-          color: $unnnic-color-weni-700;
-        }
-      }
-    }
-
-    &__title {
-      &__container {
-        h3 {
-          font-family: $unnnic-font-family-secondary;
-          font-size: $unnnic-font-size-title-sm;
-          font-weight: $unnnic-font-weight-black;
-          line-height: $unnnic-line-height-md;
-          color: $unnnic-color-neutral-darkest;
-        }
-
-        p {
-          font-family: $unnnic-font-family-secondary;
-          font-size: $unnnic-font-size-body-gt;
-          font-weight: $unnnic-font-weight-regular;
-          line-height: $unnnic-line-height-md;
-          color: $unnnic-color-neutral-dark;
-        }
-      }
     }
   }
 
@@ -409,15 +418,7 @@ export default {
             background: rgba(0, 222, 210, 0.16);
           }
 
-          p {
-            font-family: $unnnic-font-family-secondary;
-            font-size: $unnnic-font-size-body-gt;
-            font-weight: $unnnic-font-weight-regular;
-            line-height: $unnnic-line-height-md;
-            color: $unnnic-color-neutral-darkest;
-          }
-
-          &__tooltip {
+          & &__tooltip {
             display: flex;
             align-items: center;
             align-self: stretch;
