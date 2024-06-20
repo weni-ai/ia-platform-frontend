@@ -40,6 +40,8 @@ if (runtimeVariables.get('VITE_BOTHUB_WEBAPP_SENTRY')) {
 
     tracesSampleRate: 1.0,
 
+    tracePropagationTargets: [/.*\.weni\.ai/],
+
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0,
 
