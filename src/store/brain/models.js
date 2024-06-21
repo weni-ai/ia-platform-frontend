@@ -7,8 +7,8 @@ export const models = [
       {
         type: 'select',
         name: 'version',
-        default: Object.keys(WENIGPT_OPTIONS)[0],
-        options: Object.keys(WENIGPT_OPTIONS),
+        default: WENIGPT_OPTIONS[0],
+        options: WENIGPT_OPTIONS,
       },
       {
         type: 'naf-header',

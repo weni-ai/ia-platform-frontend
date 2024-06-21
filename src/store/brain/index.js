@@ -220,7 +220,9 @@ export default {
       const handleFieldName = (name) =>
         name === 'version-gpt' ? 'version' : name;
       const handleFieldValue = (name, value) =>
-        name === 'version' ? WENIGPT_OPTIONS[value] : value;
+        name === 'version'
+          ? WENIGPT_OPTIONS.find((e) => e.name === value).model
+          : value;
 
       const { data } = await nexusaiAPI.router.tunings.edit({
         projectUuid: rootState.Auth.connectProjectUuid,
@@ -335,12 +337,11 @@ export default {
         }
 
         if (name === 'version' && data.model === 'WeniGPT') {
-          const option = Object.entries(WENIGPT_OPTIONS).find(
-            ([_, value]) => value === data.setup[name],
+          const option = WENIGPT_OPTIONS.find(
+            (value) => value.model === data.setup[name],
           );
-          return option ? option[0] : '';
+          return option ? option.name : '';
         }
-
         return data.setup[name];
       };
 
