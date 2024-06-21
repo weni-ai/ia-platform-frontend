@@ -6,26 +6,16 @@
         class="create-repository__definitions__wrapper__fields"
       >
         <UnnnicLabel :label="$t('webapp.create_repository.language_label')" />
-        <UnnnicSelect
-          class="unnic--clickable"
+
+        <UnnnicSelectSmart
+          :value="[languages.find(({ value }) => value === language)]"
+          @input="$emit('update:language', $event[0].value)"
+          :options="languages"
+          orderedByIndex
+          autocomplete
+          autocompleteClearOnFocus
           size="sm"
-          :placeholder="$t('webapp.create_repository.language_placeholder')"
-          :value="language"
-          @input="$emit('update:language', $event)"
-          search
-          :searchPlaceholder="
-            $t('webapp.create_repository.language_placeholder_search')
-          "
-        >
-          <option
-            v-for="language in languages"
-            :value="language.value"
-            :key="language.id"
-            size="sm"
-          >
-            {{ language.title }}
-          </option>
-        </UnnnicSelect>
+        />
       </section>
 
       <div
@@ -152,11 +142,17 @@ export default {
   },
   computed: {
     languages() {
-      return Object.keys(LANGUAGES).map((lang, index) => ({
-        id: index + 1,
-        title: LANGUAGES[lang],
-        value: lang,
-      }));
+      return [
+        {
+          value: '',
+          label: this.$t('webapp.create_repository.language_placeholder'),
+        },
+      ].concat(
+        Object.keys(LANGUAGES).map((lang) => ({
+          value: lang,
+          label: LANGUAGES[lang],
+        })),
+      );
     },
   },
   methods: {
