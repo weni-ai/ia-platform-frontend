@@ -42,20 +42,11 @@
           :label="$t('webapp.inbox.language')"
           class="edit-sentence__language-select"
         >
-          <UnnnicSelect
+          <SelectLanguage
             size="sm"
             :placeholder="$t('webapp.inbox.language')"
             v-model="language"
-          >
-            <option
-              v-for="[option, label] in languageList"
-              :key="option"
-              :value="option"
-              @select="language = option"
-            >
-              {{ label }}
-            </option>
-          </UnnnicSelect>
+          />
         </UnnnicFormElement>
       </div>
       <div class="add-entity">
@@ -260,6 +251,7 @@ import ExampleTextWithHighlightedEntitiesInput from '@/components/inputs/Example
 import EntityAccordion from '@/components/shared/accordion/EntityAccordion';
 import WordCard from '@/components/shared/accordion/WordCard';
 import InputWithHightlights from '../../InputWithHightlights';
+import SelectLanguage from '../../SelectLanguage.vue';
 
 export default {
   name: 'EditExampleIntent',
@@ -268,6 +260,7 @@ export default {
     EntityAccordion,
     WordCard,
     InputWithHightlights,
+    SelectLanguage,
   },
   props: {
     from: {

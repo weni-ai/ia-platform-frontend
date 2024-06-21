@@ -42,19 +42,10 @@
         :label="$t('webapp.create_repository.language_placeholder')"
         :message="errors.intent"
       >
-        <UnnnicSelect
-          :placeholder="$t('webapp.translate.languages_select')"
+        <SelectLanguage
           v-model="language"
-        >
-          <option
-            v-for="[option, label] in languageList"
-            :key="option"
-            :value="option"
-            @select="language = option"
-          >
-            {{ label }}
-          </option>
-        </UnnnicSelect>
+          :placeholder="$t('webapp.translate.languages_select')"
+        />
       </UnnnicFormElement>
 
       <UnnnicFormElement :message="errors.entities">
@@ -101,6 +92,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { formatters, LANGUAGES } from '@/utils';
 import InputWithHightlights from '../../InputWithHightlights';
 import { get } from 'lodash';
+import SelectLanguage from '../../SelectLanguage.vue';
 
 export default {
   name: 'AddSentenceForm',
@@ -108,6 +100,7 @@ export default {
     ExampleTextWithHighlightedEntitiesInput,
     NewEntitiesInput,
     InputWithHightlights,
+    SelectLanguage,
   },
   props: {
     repository: {
@@ -182,9 +175,6 @@ export default {
         intent,
         entities,
       };
-    },
-    languageList() {
-      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
   },
   watch: {

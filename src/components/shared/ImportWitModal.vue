@@ -10,18 +10,10 @@
             />
           </BField>
           <BField class="migrate-intelligence-modal__fields__inputs">
-            <UnnnicSelect
+            <SelectLanguage
               v-model="languageSelect"
-              :label="$t('webapp.migrate_intelligence.language')"
-            >
-              <option
-                v-for="[language, label] in languages"
-                :value="language"
-                :key="language"
-              >
-                {{ label }}
-              </option>
-            </UnnnicSelect>
+              :placeholder="$t('webapp.migrate_intelligence.language')"
+            />
           </BField>
         </div>
       </section>
@@ -51,10 +43,15 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { LANGUAGES } from '@/utils';
+import SelectLanguage from '../SelectLanguage.vue';
 
 export default {
   name: 'ImportWitModal',
+
+  components: {
+    SelectLanguage,
+  },
+
   props: {
     isModalVisible: {
       type: Boolean,
@@ -64,7 +61,7 @@ export default {
   data() {
     return {
       authToken: '',
-      languageSelect: null,
+      languageSelect: '',
       isButtonLoading: false,
     };
   },
@@ -76,9 +73,6 @@ export default {
       }
 
       return false;
-    },
-    languages() {
-      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
   },
   methods: {

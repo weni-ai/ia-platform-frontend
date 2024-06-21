@@ -4,19 +4,10 @@
       :label="$t('webapp.analyze_text.language')"
       class="form-element"
     >
-      <UnnnicSelect
-        :placeholder="$t('webapp.analyze_text.language')"
+      <SelectLanguage
         v-model="language"
-      >
-        <option
-          v-for="[option, label] in languageList"
-          :key="option"
-          :value="option"
-          @select="language = option"
-        >
-          {{ label }}
-        </option>
-      </UnnnicSelect>
+        :placeholder="$t('webapp.analyze_text.language')"
+      />
     </UnnnicFormElement>
 
     <UnnnicFormElement
@@ -61,9 +52,11 @@
 <script>
 import HighlightedCode from '@/components/shared/HighlightedCode';
 import { LANGUAGES } from '@/utils';
+import SelectLanguage from '../SelectLanguage.vue';
 
 const components = {
   HighlightedCode,
+  SelectLanguage,
 };
 
 export default {
@@ -88,9 +81,6 @@ export default {
     };
   },
   computed: {
-    languageList() {
-      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
-    },
     text_escaped() {
       return {
         curl: this.text.replace(/\\/g, '\\\\').replace(/"/g, '\\"'),

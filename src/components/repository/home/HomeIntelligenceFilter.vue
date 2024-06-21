@@ -39,20 +39,12 @@
       </div>
       <div class="intelligence-filter__container__languages">
         <h3>{{ $t('webapp.home.intelligence_filter.languages') }}</h3>
-        <UnnnicSelect
-          :placeholder="$t('webapp.translate.languages_select')"
+
+        <SelectLanguage
           v-model="language"
+          :placeholder="$t('webapp.translate.languages_select')"
           size="sm"
-        >
-          <option
-            v-for="[option, label] in languageList"
-            :key="option"
-            :value="option"
-            @select="language = option"
-          >
-            {{ label }}
-          </option>
-        </UnnnicSelect>
+        />
       </div>
     </section>
   </div>
@@ -60,16 +52,21 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { LANGUAGES } from '@/utils';
+import SelectLanguage from '../../SelectLanguage.vue';
 
 export default {
   name: 'HomeIntelligenceFilter',
+
+  components: {
+    SelectLanguage,
+  },
+
   data() {
     return {
       recommended: false,
       mostUsed: false,
       categories: [],
-      language: null,
+      language: '',
     };
   },
   watch: {
@@ -93,9 +90,6 @@ export default {
         (a, [k, v]) => (v ? ((a[k] = v), a) : a),
         {},
       );
-    },
-    languageList() {
-      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
   },
   mounted() {
