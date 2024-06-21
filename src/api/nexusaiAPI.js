@@ -23,25 +23,21 @@ const request = {
           throw err;
         }
 
-        if (err.response.status === 500 || err.response.status === 408) {
-          store.state.alert = {
-            text:
-              get(err, 'response.data.detail') ||
-              i18n.t('internal_server_error'),
-            type: 'error',
-          };
-        } else if (err.response.status === 401) {
-          store.state.alert = {
-            text: get(err, 'response.data.detail') || i18n.t('unauthorized'),
-            type: 'error',
-          };
+        const statusCode = get(err, 'response.status');
+        let defaultMessage;
+
+        if ([500, 408].includes(statusCode)) {
+          defaultMessage = i18n.t('internal_server_error');
+        } else if (statusCode === 401) {
+          defaultMessage = i18n.t('unauthorized');
         } else {
-          store.state.alert = {
-            text:
-              get(err, 'response.data.detail') || i18n.t('unexpected_error'),
-            type: 'error',
-          };
+          defaultMessage = i18n.t('unexpected_error');
         }
+
+        store.state.alert = {
+          text: get(err, 'response.data.detail') || defaultMessage,
+          type: 'error',
+        };
 
         throw err;
       },
