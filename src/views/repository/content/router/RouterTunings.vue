@@ -282,12 +282,17 @@ export default {
         spa: this.$t('router.tunings.fields.languages.es'),
       };
 
+      const weniGptOptions = {
+        'golfinho-1': this.$t('router.tunings.fields.golfinho-1'),
+      };
+
       const handleLabel = (v) =>
         this.isLanguage(field.name) ? languageOptions[v] : v;
 
       const options = field.options.map((option) => ({
         value: option,
         label: handleLabel(option),
+        description: this.isWeniGpt(field.name) ? weniGptOptions[option] : null,
       }));
 
       const value = [options.find(({ value }) => value === field.value)];
@@ -300,6 +305,9 @@ export default {
 
     isLanguage(name = '') {
       return name === 'language';
+    },
+    isWeniGpt(name = '') {
+      return name === 'version';
     },
   },
 };
