@@ -48,22 +48,11 @@
           />
         </div>
         <div v-if="languageFilter && languages">
-          <UnnnicSelect
-            :placeholder="$t('webapp.evaluate.all_languages')"
-            v-model="language"
-          >
-            <option
-              v-for="language in languages"
-              :key="language.id"
-              :selected="language.value === language"
-              :value="language.value"
-            >
-              {{ language.title }}
-            </option>
-            <option :value="null">
-              {{ $t('webapp.home.all_languages') }}
-            </option>
-          </UnnnicSelect>
+          <UnnnicSelectSmart
+            :value="languagesSelectSmart.value"
+            :options="languagesSelectSmart.options"
+            @input="language = $event[0].value"
+          />
         </div>
 
         <BField
@@ -85,7 +74,7 @@
   </div>
 </template>
 <script>
-import { formatters, LANGUAGES } from '@/utils/index';
+import { formatters, LANGUAGES, useSelectSmart } from '@/utils/index';
 import { mapGetters } from 'vuex';
 import _ from 'lodash';
 
@@ -128,7 +117,7 @@ export default {
       intent: '',
       entity: '',
       versionName: '',
-      language: null,
+      language: '',
       setTimeoutId: null,
       errors: {},
       isIntentInputActive: false,
@@ -160,6 +149,17 @@ export default {
         }),
       );
     },
+
+    languagesSelectSmart() {
+      return useSelectSmart({
+        from: this.languages,
+        value: 'value',
+        label: 'title',
+        placeholder: this.$t('webapp.evaluate.all_languages'),
+        currentValue: this.language,
+      });
+    },
+
     filterIntents() {
       if (this.intents !== null) {
         return this.intents.filter(

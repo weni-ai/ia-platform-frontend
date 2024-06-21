@@ -15,19 +15,16 @@
     openWithFocus
     @input="updateInput"
     @choose="selectOption"/>
-  <unnnic-select
+  <unnnic-select-smart
     v-else
-    v-model="value"
-    @input="update()">
-    <option
-      v-for="choice in choices"
-      :key="choice.value"
-      :value="choice.value">{{ choice.display_name }}</option>
-  </unnnic-select>
+    :value="choicesSelectSmart.value"
+    :options="choicesSelectSmart.options"
+    @input="update($event[0].value)"
+  ></unnnic-select-smart>
 </template>
 
 <script>
-import { formatters } from '@/utils';
+import { formatters, useSelectSmart } from '@/utils';
 import FetchChoiceInput from './FetchChoiceInput';
 
 export default {
@@ -71,6 +68,16 @@ export default {
           choice => search.test(formatters.bothubItemKey()(choice.display_name.toLowerCase())),
         );
     },
+
+    choicesSelectSmart() {
+      return useSelectSmart({
+        from: this.choices,
+        value: 'value',
+        label: 'display_name',
+        placeholder: '',
+        currentValue: this.value,
+      });
+    },
   },
   mounted() {
     this.update();
@@ -95,7 +102,8 @@ export default {
         this.$emit('input', '');
       }
     },
-    update() {
+    update(value) {
+      this.value = value;
       this.$emit('input', this.value);
     },
   },

@@ -119,18 +119,11 @@
               <UnnnicFormElement
                 :label="$t('webapp.phrase-suggestion.select_intent')"
               >
-                <UnnnicSelect
-                  v-model="intentSelected"
-                  @onChange="addIntents"
-                >
-                  <option
-                    v-for="intent in repository.intents"
-                    :key="intent.id"
-                    :value="intent.value"
-                  >
-                    {{ intent.value }}
-                  </option>
-                </UnnnicSelect>
+                <UnnnicSelectSmart
+                  :value="intentsSelectSmart.value"
+                  :options="intentsSelectSmart.options"
+                  @input="addIntents($event[0].value)"
+                />
               </UnnnicFormElement>
             </div>
 
@@ -375,6 +368,7 @@ import GeneratedSentencesTable from '@/components/repository/GeneratedSentencesT
 import PaginatedList from '@/components/shared/PaginatedList';
 import IntentSuggestion from '@/components/shared/accordion/IntentSuggestion';
 import PhraseSuggestionLoading from './PhraseSuggestionLoading';
+import { useSelectSmart } from '../../utils';
 
 export default {
   name: 'PhraseSuggestion',
@@ -471,6 +465,16 @@ export default {
 
       return '';
     },
+
+    intentsSelectSmart() {
+      return useSelectSmart({
+        from: this.repository.intents,
+        value: 'value',
+        label: 'value',
+        placeholder: '',
+        currentValue: this.intentSelected,
+      });
+    },
   },
   watch: {
     versionSelected() {
@@ -553,6 +557,8 @@ export default {
     },
     async addIntents(intent) {
       // this.loading = true
+      this.intentSelected = intent;
+
       const { id } = this.repository.intents.find((e) => e.value === intent);
       this.phraseList = await this.searchExamples({
         repositoryUuid: this.repository.uuid,

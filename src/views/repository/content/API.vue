@@ -27,21 +27,13 @@
         </p>
         <div class="repository-api__select__inputs">
           <div class="repository-api__select__input">
-            <UnnnicSelect
+            <UnnnicSelectSmart
               v-if="bases.length"
+              :value="basesSelectSmart.value"
+              :options="basesSelectSmart.options"
+              @input="baseIdLang = $event[0].value"
               size="sm"
-              placeholder=""
-              v-model="baseIdLang"
-            >
-              <option
-                v-for="base in bases"
-                :value="[base.knowledge_base, base.language]"
-                :key="base.knowledge_base"
-                size="sm"
-              >
-                {{ base.title }}
-              </option>
-            </UnnnicSelect>
+            />
           </div>
         </div>
       </section>
@@ -503,6 +495,7 @@
 import RepositoryViewBase from '@/components/repository/RepositoryViewBase';
 import RepositoryBase from '../Base';
 import { mapActions, mapGetters } from 'vuex';
+import { useSelectSmart } from '../../../utils';
 
 export default {
   name: 'RepositoryContentAPI',
@@ -584,6 +577,19 @@ export default {
     idLang() {
       const infos = this.baseIdLang;
       return infos.split(',');
+    },
+
+    basesSelectSmart() {
+      return useSelectSmart({
+        from: this.bases.map(({ title, knowledge_base, language }) => ({
+          title,
+          value: `${knowledge_base},${language}`,
+        })),
+        value: 'value',
+        label: 'title',
+        placeholder: '',
+        currentValue: this.baseIdLang,
+      });
     },
   },
   methods: {

@@ -104,19 +104,12 @@
                     </UnnnicIntelligenceText>
 
                     <UnnnicFormElement>
-                      <UnnnicSelect
-                        v-model="allTranslations"
+                      <UnnnicSelectSmart
+                        :value="exportOptionSelectSmart.value"
+                        :options="exportOptionSelectSmart.options"
+                        @input="allTranslations = $event[0].value"
                         class="select-translation"
-                      >
-                        <option
-                          v-for="option in exportOption"
-                          :key="option.id"
-                          :value="option.value"
-                          @select="allTranslations = option.value"
-                        >
-                          {{ option.label }}
-                        </option>
-                      </UnnnicSelect>
+                      />
                     </UnnnicFormElement>
                   </template>
                 </UnnnicModalNext>
@@ -305,7 +298,7 @@ import Loading from '@/components/shared/Loading';
 import TranslateTokenModal from '@/components/translate/TranslateTokenModal';
 import TranslateList from '@/components/translate/TranslateList';
 import Tour from '@/components/Tour';
-import { languageListToDict } from '@/utils/index';
+import { languageListToDict, useSelectSmart } from '@/utils/index';
 import RepositoryBase from './Base';
 import SentenceFilters from '@/components/repository/repository-evaluate/example/SentenceFilters';
 import TranslationsList from '@/components/translate/TranslationsList';
@@ -393,6 +386,16 @@ export default {
         this.totalItems?.items?.filter((item) => item.is_trained === false) ||
         []
       );
+    },
+
+    exportOptionSelectSmart() {
+      return useSelectSmart({
+        from: this.exportOption,
+        value: 'value',
+        label: 'label',
+        placeholder: '',
+        currentValue: this.allTranslations,
+      });
     },
   },
   watch: {

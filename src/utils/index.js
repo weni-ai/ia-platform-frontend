@@ -149,3 +149,28 @@ export const entityEquals = (entities1, entities2) => {
     );
   });
 };
+
+export const useSelectSmart = ({
+  from,
+  value,
+  label,
+  placeholder,
+  currentValue,
+}) => {
+  const placeholderOption = {
+    value: '',
+    label: placeholder,
+  };
+
+  const options = [placeholderOption].concat(
+    from.map((item) => ({
+      value: item[value],
+      label: item[label],
+    })),
+  );
+
+  return {
+    value: [options.find(({ value }) => value === currentValue)],
+    options: options,
+  };
+};

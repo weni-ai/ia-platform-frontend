@@ -26,19 +26,12 @@
             <span class="entity-list__results">{{
               $t('webapp.intent.sentences_perpage')
             }}</span>
-            <UnnnicSelect
-              class="unnic--clickable"
+            <UnnnicSelectSmart
+              :value="optionsSelectSmart.value"
+              :options="optionsSelectSmart.options"
+              @input="selectedOption = $event[0].value"
               size="md"
-              v-model="selectedOption"
-            >
-              <option
-                v-for="(option, index) in options"
-                :key="index"
-                size="sm"
-              >
-                {{ option.value }}
-              </option>
-            </UnnnicSelect>
+            />
           </div>
         </div>
         <IntentPagination
@@ -107,6 +100,7 @@ import Loading from '@/components/shared/Loading';
 import RepositoryBase from './Base';
 import IntentPagination from '@/components/shared/IntentPagination';
 import IntentLoader from '@/views/repository/loadings/Intent';
+import { useSelectSmart } from '../../utils';
 
 export default {
   name: 'Intent',
@@ -157,6 +151,16 @@ export default {
       repositoryVersion: 'getSelectedVersion',
       repositoryList: 'getCurrentRepository',
     }),
+
+    optionsSelectSmart() {
+      return useSelectSmart({
+        from: this.options,
+        value: 'value',
+        label: 'value',
+        placeholder: '',
+        currentValue: this.selectedOption,
+      });
+    },
   },
   watch: {
     query() {
