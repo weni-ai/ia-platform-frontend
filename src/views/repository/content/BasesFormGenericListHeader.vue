@@ -7,7 +7,7 @@
     @click="toggleAccordionOpen"
   >
     <UnnnicIntelligenceText
-      color="neutral-darkest"
+      color="neutral-dark"
       family="secondary"
       weight="bold"
       :size="shape === 'accordion' ? 'body-gt' : 'body-lg'"
