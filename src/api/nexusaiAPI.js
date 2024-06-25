@@ -152,9 +152,14 @@ export default {
     return request.$http.get(`api/${intelligenceUuid}/content-bases/`);
   },
 
-  readIntelligenceContentBase({ intelligenceUuid, contentBaseUuid }) {
+  readIntelligenceContentBase({
+    intelligenceUuid,
+    contentBaseUuid,
+    obstructiveErrorProducer,
+  }) {
     return request.$http.get(
       `api/${intelligenceUuid}/content-bases/${contentBaseUuid}/`,
+      { obstructiveErrorProducer },
     );
   },
 
@@ -204,8 +209,10 @@ export default {
   },
 
   router: {
-    read({ projectUuid }) {
-      return request.$http.get(`api/${projectUuid}/router/`);
+    read({ projectUuid, obstructiveErrorProducer }) {
+      return request.$http.get(`api/${projectUuid}/router/`, {
+        obstructiveErrorProducer,
+      });
     },
 
     actions: {

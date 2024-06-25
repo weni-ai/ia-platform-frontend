@@ -647,6 +647,8 @@ export default {
           await nexusaiAPI.readIntelligenceContentBase({
             intelligenceUuid: this.intelligenceUuid,
             contentBaseUuid: this.contentBaseUuid,
+
+            obstructiveErrorProducer: true,
           });
 
         this.loadingContentBase = false;

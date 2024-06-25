@@ -82,7 +82,7 @@ export default {
     return user.search(query);
   },
   async getMyProfileInfo() {
-    const response = await user.myProfile();
+    const response = await user.myProfile({ obstructiveErrorProducer: true });
 
     const { nickname, name, language, locale } = response.data;
 

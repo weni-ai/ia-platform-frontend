@@ -81,6 +81,7 @@ const router = new Router({
       async beforeEnter(_to, _from, next) {
         const { data } = await nexusaiAPI.router.read({
           projectUuid: store.state.Auth.connectProjectUuid,
+          obstructiveErrorProducer: true,
         });
 
         store.state.router.contentBaseUuid = data.uuid;
