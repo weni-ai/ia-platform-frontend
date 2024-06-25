@@ -23,6 +23,8 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    obstructiveError: null,
+
     alert: null,
 
     modalWarn: null,

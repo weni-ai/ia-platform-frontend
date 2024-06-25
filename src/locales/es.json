@@ -1442,5 +1442,15 @@
         "remove_btn": "Eliminar"
       }
     }
+  },
+  "obstructive_error": {
+    "default": {
+      "title": "Estamos experimentando una inestabilidad",
+      "description": "Estamos trabajando para resolver el problema lo antes posible"
+    },
+    "unauthorized": {
+      "title": "No tiene permiso para acceder a este módulo",
+      "description": "Si desea acceder a este módulo, póngase en contacto con el administrador de la organización"
+    }
   }
 }

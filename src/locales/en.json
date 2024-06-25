@@ -1463,5 +1463,15 @@
         "remove_btn": "Remove"
       }
     }
+  },
+  "obstructive_error": {
+    "default": {
+      "title": "We are experiencing an instability",
+      "description": "We are working to resolve the problem as quickly as possible"
+    },
+    "unauthorized": {
+      "title": "You do not have permission to access this module",
+      "description": "If you wish to access this module, please contact the organization's administrator"
+    }
   }
 }

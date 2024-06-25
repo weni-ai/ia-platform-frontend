@@ -10,8 +10,10 @@ export default {
   org_profile(nickname) {
     return request.$http.get(`v2/org/profile/${nickname}/`);
   },
-  myProfile() {
-    return request.$http.get('/v2/account/my-profile/');
+  myProfile({ obstructiveErrorProducer }) {
+    return request.$http.get('/v2/account/my-profile/', {
+      obstructiveErrorProducer,
+    });
   },
   searchByOwner(limit, offset, owner_id, next) {
     if (next) {
