@@ -24,16 +24,10 @@
         :label="$t('webapp.trainings.intent')"
         :message="errors.intent"
       >
-        <UnnnicAutocomplete
+        <Autocomplete
           v-model="intent"
-          :data="filteredData"
+          :options="filteredData"
           :placeholder="$t('webapp.example.intent')"
-          :openWithFocus="true"
-          @focus="onInputClick('intent')"
-          @blur="onInputClick('intent')"
-          :iconRight="
-            isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'
-          "
         />
       </UnnnicFormElement>
 
@@ -93,6 +87,7 @@ import { formatters, LANGUAGES } from '@/utils';
 import InputWithHightlights from '../../InputWithHightlights';
 import { get } from 'lodash';
 import SelectLanguage from '../../SelectLanguage.vue';
+import Autocomplete from '../../Autocomplete.vue';
 
 export default {
   name: 'AddSentenceForm',
@@ -101,6 +96,7 @@ export default {
     NewEntitiesInput,
     InputWithHightlights,
     SelectLanguage,
+    Autocomplete,
   },
   props: {
     repository: {
@@ -120,8 +116,6 @@ export default {
       entitiesList: [],
       blockedNextStepTutorial: false,
       hideDropdown: true,
-      isIntentInputActive: false,
-      isLanguageInputActive: false,
     };
   },
   computed: {
@@ -132,9 +126,7 @@ export default {
       return this.isValid && !this.submitting;
     },
     filteredData() {
-      return (this.repository.intents_list || []).filter((intent) =>
-        intent.startsWith(this.intent.toLowerCase()),
-      );
+      return this.repository.intents_list || [];
     },
     validationErrors() {
       const errors = [];
@@ -233,12 +225,6 @@ export default {
       }
 
       return false;
-    },
-    onInputClick(target) {
-      if (target === 'intent')
-        this.isIntentInputActive = !this.isIntentInputActive;
-      if (target === 'language')
-        this.isLanguageInputActive = !this.isLanguageInputActive;
     },
   },
 };

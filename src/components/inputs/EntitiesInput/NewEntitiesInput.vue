@@ -73,16 +73,15 @@
       :closeIcon="false"
     >
       <div slot="message" class="modal-header text-left">
-        <unnnic-autocomplete
-            :label="$t('webapp.trainings.add_entity_field_label')"
-            ref="entityInputField"
+        <UnnnicFormElement
+          :label="$t('webapp.trainings.add_entity_field_label')"
+        >
+          <Autocomplete
             v-model="entity"
-            :data="filteredEntities"
-            :openWithFocus="true"
-            :iconRight="isEntityInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'"
-            @focus="onInputClick()"
-            @blur="onInputClick()"
-        />
+            ref="entityInputField"
+            :options="filteredEntities"
+          />
+        </UnnnicFormElement>
         <div>
           <unnnic-label  class="mt-5" :label="$t('webapp.trainings.add_entity_checkbox_title')" />
           <div class="words-wrapper">
@@ -167,7 +166,6 @@ export default {
       isOpen: false,
       entityModal: false,
       entity: '',
-      isEntityInputActive: false,
       selectedEntities: []
     };
   },
@@ -281,9 +279,6 @@ export default {
         return true;
       });
       this.entities = this.entities.filter(value => !!value);
-    },
-    onInputClick() {
-      this.isEntityInputActive = !this.isEntityInputActive
     },
     onWordSelected(event) {
       const temporaryEntityId = generateTemporaryId();

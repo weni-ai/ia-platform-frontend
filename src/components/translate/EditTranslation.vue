@@ -134,20 +134,17 @@
             slot="message"
             class="modal-header text-left"
           >
-            <UnnnicAutocomplete
+            <UnnnicFormElement
               :label="$t('webapp.trainings.add_entity_field_label')"
-              ref="entityInputField"
-              :data="getAllEntities"
-              v-model="entity"
-              :openWithFocus="true"
-              :iconRight="
-                isEntityInputActive
-                  ? 'arrow-button-up-1'
-                  : 'arrow-button-down-1'
-              "
-              @focus="onInputClick()"
-              @blur="onInputClick()"
-            />
+            >
+              <Autocomplete
+                v-model="entity"
+                ref="entityInputField"
+                :options="getAllEntities"
+                :placeholder="$t('webapp.example.intent')"
+              />
+            </UnnnicFormElement>
+
             <div>
               <UnnnicLabel
                 class="mt-5"
@@ -215,6 +212,7 @@ import ExampleTextWithHighlightedEntitiesInput from '@/components/inputs/Example
 import EntityAccordion from '@/components/shared/accordion/EntityAccordion';
 import WordCard from '@/components/shared/accordion/WordCard';
 import { mapActions, mapGetters } from 'vuex';
+import Autocomplete from '../Autocomplete.vue';
 
 export default {
   name: 'EditTranslation',
@@ -222,6 +220,7 @@ export default {
     ExampleTextWithHighlightedEntitiesInput,
     EntityAccordion,
     WordCard,
+    Autocomplete,
   },
   props: {
     from: {
@@ -238,7 +237,6 @@ export default {
       hideDropdown: true,
       isOpen: false,
       entityModal: false,
-      isEntityInputActive: false,
       selectedEntities: [],
       entity: '',
     };
@@ -329,9 +327,6 @@ export default {
       }));
 
       this.cancelEditEntity();
-    },
-    onInputClick() {
-      this.isEntityInputActive = !this.isEntityInputActive;
     },
     async saveTranslation() {
       this.submitting = true;
