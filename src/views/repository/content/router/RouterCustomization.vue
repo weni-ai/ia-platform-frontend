@@ -281,7 +281,7 @@ export default {
     align-items: flex-start;
     align-self: stretch;
     gap: $unnnic-spacing-md;
-    margin: $unnnic-spacing-sm 0 $unnnic-spacing-sm 0;
+    margin: $unnnic-spacing-xs 0 $unnnic-spacing-sm 0;
 
     &__persona {
       width: 100%;
