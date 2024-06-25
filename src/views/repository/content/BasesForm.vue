@@ -99,7 +99,7 @@
                 ]"
               >
                 <template v-if="$route.name === 'router-content'">
-                  <section class="search_container">
+                  <section class="search-container">
                     <UnnnicInput
                       size="md"
                       :iconLeftClickable="true"
@@ -807,7 +807,7 @@ export default {
   text-align: center;
 }
 
-.search_container {
+.search-container {
   margin-top: $unnnic-spacing-xs;
 }
 
