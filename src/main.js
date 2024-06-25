@@ -11,6 +11,8 @@ import UnnnicIntelligenceHeader from './components/unnnic-intelligence/Header.vu
 import UnnnicIntelligenceText from './components/unnnic-intelligence/Text.vue';
 import UnnnicSystemPlugin from './utils/UnnnicSystemPlugin.js';
 
+import './utils/HandlerObstructiveError.js';
+
 iframessa.register('ai');
 
 Vue.use(UnnnicSystemPlugin);

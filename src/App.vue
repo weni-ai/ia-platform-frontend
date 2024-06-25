@@ -1,9 +1,8 @@
 <template>
   <div id="app">
-    <!-- <news-modal /> -->
-    <RouterView />
-    <!-- <tutorial-modal
-      :open="activeMenu"/> -->
+    <ObstructiveError v-if="$store.state.obstructiveError" />
+
+    <RouterView v-else />
 
     <ModalDependingOnFlowsLength />
 
@@ -36,12 +35,14 @@ import I18n from '@/utils/plugins/i18n';
 import store from './store';
 import ModalDependingOnFlowsLength from './components/ModalDependingOnFlowsLength.vue';
 import ModalWarn from './components/ModalWarn.vue';
+import ObstructiveError from './views/ObstructiveError.vue';
 
 export default {
   components: {
     I18n,
     ModalDependingOnFlowsLength,
     ModalWarn,
+    ObstructiveError,
   },
 
   name: 'App',
