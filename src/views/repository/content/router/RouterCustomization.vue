@@ -8,7 +8,13 @@
         </p>
       </section>
       <div class="customization__form">
+        <LoadingFormElement
+          label
+          v-if="loading"
+        />
+
         <UnnnicFormElement
+          v-else
           :label="$t('customization.fields.name')"
           class="customization__form-element"
         >
@@ -22,7 +28,13 @@
         </UnnnicFormElement>
       </div>
       <div class="customization__form">
+        <LoadingFormElement
+          label
+          v-if="loading"
+        />
+
         <UnnnicFormElement
+          v-else
           :label="$t('customization.fields.occupation')"
           class="customization__form-element"
         >
@@ -34,7 +46,14 @@
 
           <FieldErrorRequired v-if="errorRequiredFields.role" />
         </UnnnicFormElement>
+
+        <LoadingFormElement
+          label
+          v-if="loading"
+        />
+
         <UnnnicFormElement
+          v-else
           :label="$t('customization.fields.personality')"
           class="customization__form-element"
         >
@@ -47,7 +66,14 @@
         </UnnnicFormElement>
       </div>
       <div class="customization__container__persona">
+        <LoadingFormElement
+          label
+          v-if="loading"
+          element="textarea"
+        />
+
         <UnnnicFormElement
+          v-else
           :label="$t('customization.fields.goal')"
           class="customization__form-element"
         >
@@ -72,7 +98,14 @@
           {{ $t('customization.instructions.sub_title') }}
         </p>
       </section>
+
+      <LoadingFormElement
+        label
+        v-if="loading"
+      />
+
       <section
+        v-else
         class="customization__instructions"
         v-for="(instruction, index) in brain.instructions.current"
         :key="index"
@@ -97,7 +130,10 @@
         </UnnnicFormElement>
       </section>
 
+      <LoadingFormElement v-if="loading" />
+
       <UnnnicButton
+        v-else
         @click="addInstruction"
         size="large"
         :text="$t('customization.instructions.add_instruction_btn')"
@@ -124,11 +160,13 @@
 
 <script>
 import nexusaiAPI from '../../../../api/nexusaiAPI';
+import LoadingFormElement from '../../../../components/LoadingFormElement.vue';
 import FieldErrorRequired from './Preview/FieldErrorRequired.vue';
 
 export default {
   components: {
     FieldErrorRequired,
+    LoadingFormElement,
   },
 
   data() {
@@ -138,6 +176,10 @@ export default {
       saving: false,
       removing: false,
       personalities: [
+        {
+          label: this.$t('customization.fields.personality'),
+          value: '',
+        },
         {
           label: this.$t('customization.fields.personalities.friendly'),
           value: 'Amigável',
@@ -183,6 +225,10 @@ export default {
   },
 
   computed: {
+    loading() {
+      return this.brain.customizationStatus === 'loading';
+    },
+
     brain() {
       return this.$store.state.Brain;
     },
@@ -211,10 +257,6 @@ export default {
       this.currentInstruction = index;
     },
     handlePersonalityValue(value) {
-      if (!value) {
-        return [this.personalities[0]];
-      }
-
       const personality = this.personalities.find((e) => value === e.value);
 
       return [personality];

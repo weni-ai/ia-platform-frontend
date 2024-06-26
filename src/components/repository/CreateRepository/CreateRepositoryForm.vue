@@ -155,16 +155,15 @@ export default {
     },
     repositoryDetailsRouterParams() {
       const { repository_type, owner__nickname, slug } = this.createdRepository;
-      let name;
 
-      if (repository_type === 'content') {
-        name = 'repository-content-bases';
-      } else if (repository_type === 'classifier') {
-        name = 'repository-summary';
+      if (repository_type === 'classifier') {
+        return {
+          path: `/dashboard/${owner__nickname}/${slug}/`,
+        };
       }
 
       return {
-        name,
+        name: 'repository-content-bases',
         params: {
           ownerNickname: owner__nickname,
           slug,

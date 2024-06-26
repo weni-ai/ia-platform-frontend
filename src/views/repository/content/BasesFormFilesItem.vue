@@ -2,7 +2,7 @@
   <UnnnicToolTip
     side="top"
     :text="failureMessage"
-    :enabled="['fail', 'fail-upload'].includes(file.status)"
+    :enabled="isFailed"
   >
     <section
       :class="[
@@ -15,28 +15,29 @@
     >
       <section class="files-list__content__file__icon">
         <UnnnicIcon
-          :icon="
-            ['fail', 'fail-upload'].includes(file.status) ? 'warning' : icon
-          "
+          :icon="isFailed ? 'warning' : icon"
           class="files-list__content__file__icon__itself"
           :size="compressed ? 'sm' : 'avatar-nano'"
-          :scheme="
-            ['fail', 'fail-upload'].includes(file.status)
-              ? 'feedback-red'
-              : 'weni-600'
-          "
+          :scheme="iconScheme"
         />
       </section>
 
       <header class="files-list__content__file__content">
-        <p class="files-list__content__file__content__title">
-          {{ name }}
-        </p>
+        <UnnnicToolTip
+          side="top"
+          :text="fileName"
+          enabled
+        >
+          <p class="files-list__content__file__content__title">
+            {{ fileName }}
+          </p>
+        </UnnnicToolTip>
 
-        <p class="files-list__content__file__content__status">
-          <template v-if="file.status === 'uploading'">
-            {{ $t('content_bases.files.status.uploading') }}
-          </template>
+        <p
+          v-if="file.status === 'uploading'"
+          class="files-list__content__file__content__status"
+        >
+          {{ $t('content_bases.files.status.uploading') }}
         </p>
       </header>
 
@@ -60,24 +61,26 @@
         />
 
         <UnnnicIcon
-          v-if="
-            !file.uuid.startsWith('temp-') ||
-            ['fail-upload'].includes(file.status)
-          "
+          v-if="!file.uuid.startsWith('temp-') || isFailed"
           icon="delete"
           size="sm"
           class="files-list__content__file__actions__icon"
           @click.native.stop="$emit('remove')"
         />
       </section>
+
       <section
-        v-if="['uploading', 'processing'].includes(file.status)"
+        v-if="isProcessing"
         :class="['files-list__content__file__status-bar', file.extension_file]"
       >
-        <div
+        <section
           class="files-list__content__file__status-bar__filled"
+          :class="{
+            'files-list__content__file__status-bar__filled--infinite-loading':
+              !file.progress,
+          }"
           :style="{ width: `${file.progress * 100}%` }"
-        ></div>
+        />
       </section>
     </section>
   </UnnnicToolTip>
@@ -145,23 +148,24 @@ export default {
       );
     },
 
-    name() {
-      const n = this.fileName.slice(0, -this.extension.length - 1);
+    isFailed() {
+      return ['fail', 'fail-upload'].includes(this.file.status);
+    },
 
-      if (
-        ['site', 'action'].includes(this.extension) &&
-        this.fileName.length > 23
-      ) {
-        return this.fileName.slice(0, 15) + '...' + this.fileName.slice(-8);
+    isProcessing() {
+      return ['uploading', 'processing'].includes(this.file.status);
+    },
+
+    iconScheme() {
+      if (this.isFailed) {
+        return 'feedback-red';
       }
 
-      if (['site', 'action'].includes(this.extension)) {
-        return this.fileName;
+      if (this.isProcessing) {
+        return 'neutral-clean';
       }
 
-      return this.fileName.length > 15
-        ? `${n.slice(0, 15)}....${this.extension}`
-        : this.fileName;
+      return 'weni-600';
     },
   },
 
@@ -191,6 +195,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:math';
 @import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
 
 .files-list__content__file {
@@ -216,8 +221,18 @@ export default {
   &--compressed {
     column-gap: $unnnic-spacing-xs;
 
+    :has(.files-list__content__file__content__status) {
+      margin-block: -(math.div($unnnic-spacing-nano, 2));
+    }
+
     .files-list__content__file__icon {
       padding: 0.4375 * $unnnic-font-size; // transformed 7px into Unnnic base size
+    }
+
+    .files-list__content__file__content__status {
+      margin-top: -$unnnic-spacing-nano;
+      font-size: $unnnic-font-size-body-sm;
+      line-height: $unnnic-font-size-body-sm + $unnnic-line-height-md;
     }
   }
 
@@ -251,6 +266,8 @@ export default {
   &__content {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    width: 0;
 
     &__title {
       color: $unnnic-color-neutral-dark;
@@ -258,6 +275,10 @@ export default {
       font-size: $unnnic-font-size-body-gt;
       line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
       font-weight: $unnnic-font-weight-regular;
+
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     &__status {
@@ -313,7 +334,11 @@ export default {
       height: $unnnic-border-width-thin;
       border-radius: $unnnic-border-radius-pill;
       background-color: $unnnic-color-weni-500;
-      animation: loading-site 1s infinite;
+      transition: width 300ms ease;
+
+      &--infinite-loading {
+        animation: loading-site 1s infinite;
+      }
     }
 
     @keyframes loading-site {

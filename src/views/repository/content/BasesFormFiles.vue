@@ -259,7 +259,12 @@ export default {
       if (!get(files, 'length', 0)) {
         return;
       }
+
       Object.values(files).forEach(this.addFile);
+
+      const srcElement = get(event, 'srcElement');
+
+      srcElement.value = '';
     },
 
     updateFileItem(uuid, key, value) {
@@ -314,6 +319,7 @@ export default {
         .then(({ data }) => {
           fileItem.uuid = data.uuid;
           fileItem.extension_file = data.extension_file;
+          fileItem.progress = 0;
 
           if (data.created_file_name) {
             fileItem.created_file_name = data.created_file_name;
@@ -487,6 +493,7 @@ export default {
 
   border-radius: $unnnic-border-radius-md;
   padding: $unnnic-spacing-xl $unnnic-spacing-sm;
+  box-sizing: border-box;
 
   text-align: center;
 

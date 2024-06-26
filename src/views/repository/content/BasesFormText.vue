@@ -40,6 +40,9 @@
       cols="30"
       rows="10"
       class="repository-base-edit__textarea"
+      :class="{
+        'repository-base-edit__textarea--button-on-header': !dontShowSaveButton,
+      }"
       :placeholder="$t('content_bases.write_content_placeholder')"
     ></textarea>
 
@@ -247,6 +250,11 @@ export default {
   flex: 1;
   padding: $unnnic-spacing-sm;
   padding-top: 3.375 * $unnnic-font-size;
+
+  &--button-on-header {
+    padding-top: 4.375 * $unnnic-font-size;
+  }
+
   margin: 0;
   font-family: $unnnic-font-family-primary;
   font-weight: $unnnic-font-weight-regular;
