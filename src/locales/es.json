@@ -91,6 +91,8 @@
         "token": "Token",
         "token_info": "Código necesario para acceder a los servicios de OpenAI. Obtén tu token creando una cuenta OpenAI y generando una clave API en el panel de control.",
         "version": "Versión",
+        "golfinho-1": "Utilícelo cuando necesite un equilibrio entre calidad y velocidad. Ideal para la mayoría de aplicaciones con respuestas rápidas y precisas.",
+        "shark-1": "Utilícelo cuando sea esencial la máxima precisión en la respuesta, aunque sea más lenta.",
         "version-gpt": "Versión",
         "select-language": "Idioma",
         "language": "Selecciona el idioma por defecto",

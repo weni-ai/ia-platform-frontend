@@ -26,7 +26,8 @@ const runtimeVariables = (() => ({
   VITE_QA_FLOW_CHANNEL: '4c46585b-8393-415b-856a-280c7d9ca9af',
   VITE_LOGROCKET_ID: 'weni/develop',
   VITE_LOGROCKET_PARENT_DOMAIN: 'https://dash-develop.weni.ai/',
-  VITE_OPTIONS_WENIGPT: '{"golfinho-1": "runpod"}',
+  VITE_OPTIONS_WENIGPT:
+    '[{"name": "golfinho-1", "description": "router.tunings.fields.golfinho-1", "model": "golfinho-1"}, {"name": "shark-1", "description": "router.tunings.fields.shark-1", "model": "shark-1"}]',
   SENTRY_ENVIRONMENT: 'develop',
 
   get(name) {

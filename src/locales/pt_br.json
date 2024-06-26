@@ -98,6 +98,8 @@
           "en": "Inglês",
           "es": "Espanhol"
         },
+        "golfinho-1": "Use quando precisar de equilíbrio entre qualidade e velocidade. Ideal para a maioria das aplicações com respostas rápidas e precisas.",
+        "shark-1": "Use quando a máxima precisão na resposta for essencial, mesmo que seja mais lento.",
         "version-gpt": "Versão",
         "parameter": "Parâmetros",
         "temperature": "Temperatura",
