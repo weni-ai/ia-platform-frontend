@@ -487,6 +487,7 @@ export default {
 
   border-radius: $unnnic-border-radius-md;
   padding: $unnnic-spacing-xl $unnnic-spacing-sm;
+  box-sizing: border-box;
 
   text-align: center;
 
