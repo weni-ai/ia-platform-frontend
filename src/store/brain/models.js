@@ -54,12 +54,6 @@ export const models = [
         name: 'token',
       },
       {
-        type: 'select',
-        name: 'language',
-        default: 'por',
-        options: ['por', 'eng', 'spa'],
-      },
-      {
         type: 'naf-header',
         name: 'parameter',
       },
