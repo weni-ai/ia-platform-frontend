@@ -29,9 +29,15 @@
       </section>
 
       <header class="files-list__content__file__content">
-        <p class="files-list__content__file__content__title">
-          {{ name }}
-        </p>
+        <UnnnicToolTip
+          side="top"
+          :text="fileName"
+          enabled
+        >
+          <p class="files-list__content__file__content__title">
+            {{ fileName }}
+          </p>
+        </UnnnicToolTip>
 
         <p class="files-list__content__file__content__status">
           <template v-if="file.status === 'uploading'">
@@ -144,25 +150,6 @@ export default {
         }[this.extension] || 'draft'
       );
     },
-
-    name() {
-      const n = this.fileName.slice(0, -this.extension.length - 1);
-
-      if (
-        ['site', 'action'].includes(this.extension) &&
-        this.fileName.length > 23
-      ) {
-        return this.fileName.slice(0, 15) + '...' + this.fileName.slice(-8);
-      }
-
-      if (['site', 'action'].includes(this.extension)) {
-        return this.fileName;
-      }
-
-      return this.fileName.length > 15
-        ? `${n.slice(0, 15)}....${this.extension}`
-        : this.fileName;
-    },
   },
 
   methods: {
@@ -251,6 +238,8 @@ export default {
   &__content {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    width: 0;
 
     &__title {
       color: $unnnic-color-neutral-dark;
@@ -258,6 +247,10 @@ export default {
       font-size: $unnnic-font-size-body-gt;
       line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
       font-weight: $unnnic-font-weight-regular;
+
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     &__status {
