@@ -259,7 +259,12 @@ export default {
       if (!get(files, 'length', 0)) {
         return;
       }
+
       Object.values(files).forEach(this.addFile);
+
+      const srcElement = get(event, 'srcElement');
+
+      srcElement.value = '';
     },
 
     updateFileItem(uuid, key, value) {
