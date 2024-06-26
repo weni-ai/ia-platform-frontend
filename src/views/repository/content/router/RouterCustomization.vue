@@ -177,6 +177,10 @@ export default {
       removing: false,
       personalities: [
         {
+          label: this.$t('customization.fields.personality'),
+          value: '',
+        },
+        {
           label: this.$t('customization.fields.personalities.friendly'),
           value: 'Amigável',
         },
@@ -253,10 +257,6 @@ export default {
       this.currentInstruction = index;
     },
     handlePersonalityValue(value) {
-      if (!value) {
-        return [this.personalities[0]];
-      }
-
       const personality = this.personalities.find((e) => value === e.value);
 
       return [personality];
