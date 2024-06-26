@@ -25,7 +25,7 @@
         {{ $t('router.tunings.fields.select-language') }}
       </UnnnicIntelligenceText>
       <header
-        v-if="['radio', 'select'].includes(field.type)"
+        v-if="['radio', 'select'].includes(field.type) && !loadingData"
         :key="`label-${index}`"
         class="tunings__form-element__label"
       >
@@ -54,13 +54,16 @@
           {{ option }}
         </UnnnicRadio>
       </section>
-      <UnnnicSkeletonLoading
+
+      <LoadingFormElement
         :key="index"
         v-if="field.type === 'radio' && loadingData"
-        tag="div"
-        height="32px"
-        width="280px"
+        label
+        elementHeight="32px"
+        elementWidth="280px"
+        marginTop="8px"
       />
+
       <UnnnicSelectSmart
         class="tunings__container_fields-element"
         v-if="field.type === 'select' && !loadingData"
@@ -70,12 +73,14 @@
         @input="updateField(field.name, $event[0].value)"
         orderedByIndex
       />
-      <UnnnicSkeletonLoading
+
+      <LoadingFormElement
         :key="index"
         v-if="field.type === 'select' && loadingData"
-        tag="div"
-        height="46px"
+        label
+        marginTop="16px"
       />
+
       <header
         v-if="['token'].includes(field.name)"
         :key="`label-${index}`"
@@ -201,6 +206,7 @@
 
 <script>
 import nexusaiAPI from '../../../../api/nexusaiAPI';
+import LoadingFormElement from '../../../../components/LoadingFormElement.vue';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
 
 export default {
@@ -210,6 +216,7 @@ export default {
 
   components: {
     RouterTuningsAdvanced,
+    LoadingFormElement,
   },
 
   data() {
