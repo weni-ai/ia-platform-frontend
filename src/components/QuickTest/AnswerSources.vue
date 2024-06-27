@@ -95,6 +95,7 @@ export default {
 
 .sources {
   margin-top: $unnnic-spacing-xs;
+  word-break: break-word;
 
   ::v-deep .unnnic-collapse {
     padding: 0;
