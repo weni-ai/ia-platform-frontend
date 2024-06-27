@@ -331,7 +331,6 @@ export default {
             this.successMessage();
           } else if (data.status === 'fail') {
             fileItem.status = data.status;
-            fileItem.file_name = data.file_name;
           } else {
             fileItem.status = 'processing';
           }
@@ -366,7 +365,6 @@ export default {
             this.successMessage();
           } else if (data.status === 'fail') {
             fileItem.status = data.status;
-            fileItem.file_name = data.file_name;
           } else {
             this.filesBeingProcessedIndex += 1;
           }
