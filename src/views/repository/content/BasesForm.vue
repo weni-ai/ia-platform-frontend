@@ -74,7 +74,7 @@
           <template v-if="isRouterView">
             <UnnnicTab
               :tabs="routerTabs.map((e) => e.page)"
-              :initialTab="routerTabs.find((e) => e.page === $route.name).page"
+              :activeTab="routerTabs.find((e) => e.page === $route.name).page"
               @change="onTabChange"
             >
               <template v-for="tab in routerTabs">
