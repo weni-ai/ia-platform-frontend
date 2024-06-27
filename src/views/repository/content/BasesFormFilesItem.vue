@@ -26,7 +26,7 @@
         <UnnnicToolTip
           side="top"
           :text="fileName"
-          enabled
+          :enabled="!isFailed"
         >
           <p class="files-list__content__file__content__title">
             {{ fileName }}
