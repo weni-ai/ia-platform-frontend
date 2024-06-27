@@ -72,14 +72,16 @@ export default {
     },
 
     hasBrainRequiredFieldsNotFilledIn(state) {
-      const agentRequiredFields = ['name', 'role', 'goal'];
+      if (state.customizationStatus === 'loaded') {
+        const agentRequiredFields = ['name', 'role', 'goal'];
 
-      const agentHasRequiredFieldError = agentRequiredFields.some(
-        (field) => !state.agent[field].current,
-      );
+        const agentHasRequiredFieldError = agentRequiredFields.some(
+          (field) => !state.agent[field].current,
+        );
 
-      if (agentHasRequiredFieldError) {
-        return true;
+        if (agentHasRequiredFieldError) {
+          return true;
+        }
       }
 
       return false;
