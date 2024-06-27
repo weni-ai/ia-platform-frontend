@@ -393,8 +393,8 @@ export default {
       gap: $unnnic-spacing-sm;
 
       &__list {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         gap: $unnnic-spacing-ant;
         max-height: 300px;
         overflow-y: auto;
@@ -402,7 +402,6 @@ export default {
         &__item {
           cursor: pointer;
           display: flex;
-          flex-basis: calc(50% - 6px);
           border-radius: $unnnic-border-radius-sm;
           padding: $unnnic-spacing-ant;
           border: 1px solid $unnnic-color-neutral-cleanest;
@@ -419,6 +418,7 @@ export default {
           }
 
           & &__tooltip {
+            width: 100%;
             display: flex;
             align-items: center;
             align-self: stretch;
