@@ -10,7 +10,7 @@
     autocomplete
     autocompleteClearOnFocus
     v-bind="$attrs"
-  />\
+  />
 </template>
 
 <script>
