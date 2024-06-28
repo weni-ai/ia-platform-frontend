@@ -42,20 +42,11 @@
           :label="$t('webapp.inbox.language')"
           class="edit-sentence__language-select"
         >
-          <UnnnicSelect
+          <SelectLanguage
             size="sm"
             :placeholder="$t('webapp.inbox.language')"
             v-model="language"
-          >
-            <option
-              v-for="[option, label] in languageList"
-              :key="option"
-              :value="option"
-              @select="language = option"
-            >
-              {{ label }}
-            </option>
-          </UnnnicSelect>
+          />
         </UnnnicFormElement>
       </div>
       <div class="add-entity">
@@ -172,20 +163,18 @@
             slot="message"
             class="modal-header text-left"
           >
-            <UnnnicAutocomplete
+            <UnnnicFormElement
               :label="$t('webapp.trainings.add_entity_field_label')"
-              ref="entityInputField"
-              :data="getAllEntities"
-              v-model="entity"
-              :openWithFocus="true"
-              :iconRight="
-                isEntityInputActive
-                  ? 'arrow-button-up-1'
-                  : 'arrow-button-down-1'
-              "
-              @focus="onInputClick()"
-              @blur="onInputClick()"
-            />
+            >
+              <Autocomplete
+                v-model="entity"
+                ref="entityInputField"
+                :options="getAllEntities"
+                :placeholder="$t('webapp.example.intent')"
+                entityFormat
+              />
+            </UnnnicFormElement>
+
             <div>
               <UnnnicLabel
                 class="mt-5"
@@ -260,6 +249,8 @@ import ExampleTextWithHighlightedEntitiesInput from '@/components/inputs/Example
 import EntityAccordion from '@/components/shared/accordion/EntityAccordion';
 import WordCard from '@/components/shared/accordion/WordCard';
 import InputWithHightlights from '../../InputWithHightlights';
+import SelectLanguage from '../../SelectLanguage.vue';
+import Autocomplete from '../../Autocomplete.vue';
 
 export default {
   name: 'EditExampleIntent',
@@ -268,6 +259,8 @@ export default {
     EntityAccordion,
     WordCard,
     InputWithHightlights,
+    SelectLanguage,
+    Autocomplete,
   },
   props: {
     from: {
@@ -280,7 +273,6 @@ export default {
       hideDropdown: true,
       isOpen: false,
       entityModal: false,
-      isEntityInputActive: false,
       selectedEntities: [],
       entity: '',
       textSelected: null,
@@ -371,9 +363,6 @@ export default {
       }));
 
       this.cancelEditEntity();
-    },
-    onInputClick() {
-      this.isEntityInputActive = !this.isEntityInputActive;
     },
   },
 };

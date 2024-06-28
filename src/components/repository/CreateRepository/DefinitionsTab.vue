@@ -6,26 +6,15 @@
         class="create-repository__definitions__wrapper__fields"
       >
         <UnnnicLabel :label="$t('webapp.create_repository.language_label')" />
-        <UnnnicSelect
-          class="unnic--clickable"
-          size="sm"
-          :placeholder="$t('webapp.create_repository.language_placeholder')"
-          :value="language"
+
+        <SelectLanguage
+          :language="language"
           @input="$emit('update:language', $event)"
-          search
-          :searchPlaceholder="
-            $t('webapp.create_repository.language_placeholder_search')
-          "
-        >
-          <option
-            v-for="language in languages"
-            :value="language.value"
-            :key="language.id"
-            size="sm"
-          >
-            {{ language.title }}
-          </option>
-        </UnnnicSelect>
+          :placeholder="$t('webapp.create_repository.language_placeholder')"
+          size="sm"
+          autocomplete
+          autocompleteClearOnFocus
+        />
       </section>
 
       <div
@@ -125,8 +114,8 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { LANGUAGES } from '@/utils/index';
 import Loading from '@/components/shared/Loading';
+import SelectLanguage from '../../SelectLanguage.vue';
 
 export default {
   name: 'DefinitionsTab',
@@ -139,6 +128,7 @@ export default {
   },
   components: {
     Loading,
+    SelectLanguage,
   },
   data() {
     return {
@@ -149,15 +139,6 @@ export default {
 
   mounted() {
     this.getCategories();
-  },
-  computed: {
-    languages() {
-      return Object.keys(LANGUAGES).map((lang, index) => ({
-        id: index + 1,
-        title: LANGUAGES[lang],
-        value: lang,
-      }));
-    },
   },
   methods: {
     ...mapActions(['getAllCategories']),

@@ -67,29 +67,16 @@
           </div>
         </div>
 
-        <UnnnicSelect
+        <UnnnicSelectSmart
           v-if="repositoryType === 'classifier'"
-          :selected="getNameVersion"
           v-show="collapse"
-          class="unnic--clickable sidebar-wrapper__header__select"
+          :value="allVersionsSelectSmart.value"
+          :options="allVersionsSelectSmart.options"
+          @input="selectedVersion = $event[0].value"
+          orderedByIndex
           size="sm"
-          hasCloudyColor
-          :placeholder="getNameVersion"
-          v-model="selectedVersion"
-          :optionsHeader="optionsHeader"
-        >
-          <option
-            v-for="(version, index) in allVersions"
-            :key="index"
-            size="sm"
-          >
-            {{ version.name }}
-          </option>
-          <div
-            slot="header"
-            class="sidebar-wrapper__header__versions"
-          ></div>
-        </UnnnicSelect>
+          class="unnic--clickable sidebar-wrapper__header__select"
+        />
       </section>
       <section class="sidebar-wrapper__body">
         <UnnnicSidebarMenu v-if="repositoryType === 'content'">
@@ -468,6 +455,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import CustomIcon from '@/components/shared/CustomIcon';
+import { useSelectSmart } from '../../../utils';
 
 export default {
   name: 'SideBar',
@@ -485,17 +473,6 @@ export default {
       allVersions: [],
       dropSelect: '',
       selectedVersion: this.getNameVersion,
-      optionsHeader: [
-        {
-          text: this.$t('webapp.dashboard.all_versions'),
-          click: () =>
-            this.routerHandle('repository-settings', {
-              query: {
-                tab: 'versions',
-              },
-            }),
-        },
-      ],
     };
   },
   computed: {
@@ -514,6 +491,20 @@ export default {
       if (!this.getCurrentRepository) return null;
       return this.getCurrentRepository.repository_type;
     },
+
+    allVersionsSelectSmart() {
+      return useSelectSmart({
+        from: [
+          {
+            name: this.$t('webapp.dashboard.all_versions'),
+          },
+        ].concat(this.allVersions),
+        value: 'name',
+        label: 'name',
+        placeholder: this.getNameVersion,
+        currentValue: this.selectedVersion || '',
+      });
+    },
   },
   watch: {
     repositoryUUID() {
@@ -527,6 +518,16 @@ export default {
       }
     },
     selectedVersion() {
+      if (this.selectedVersion === this.$t('webapp.dashboard.all_versions')) {
+        this.routerHandle('repository-settings', {
+          query: {
+            tab: 'versions',
+          },
+        });
+
+        return;
+      }
+
       let defaultVersions;
 
       try {

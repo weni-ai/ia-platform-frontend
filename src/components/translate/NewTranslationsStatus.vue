@@ -64,19 +64,10 @@
           :label="$t('webapp.translate.select_language_label')"
           class="form-element"
         >
-          <UnnnicSelect
+          <SelectLanguage
             v-model="languageSelected"
             class="select-add-modal"
-          >
-            <option
-              v-for="[option, label] in languageList"
-              :key="option"
-              :value="option"
-              @select="languageSelected = option"
-            >
-              {{ label }}
-            </option>
-          </UnnnicSelect>
+          />
         </UnnnicFormElement>
       </template>
 
@@ -101,11 +92,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { formatters, languageListToDict, LANGUAGES } from '@/utils';
+import { formatters, languageListToDict } from '@/utils';
 import Loading from '@/components/shared/Loading';
+import SelectLanguage from '../SelectLanguage.vue';
 
 const components = {
   Loading,
+  SelectLanguage,
 };
 
 export default {
@@ -206,9 +199,6 @@ export default {
             ? 1
             : -1,
         );
-    },
-    languageList() {
-      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
   },
   watch: {

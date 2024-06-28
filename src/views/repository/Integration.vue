@@ -104,15 +104,11 @@
             </UnnnicIntelligenceText>
 
             <UnnnicFormElement :label="$t('webapp.integration.token_title')">
-              <UnnnicSelect v-model="profileAuth">
-                <option
-                  v-for="option in getAuthorizations"
-                  :key="option.index"
-                  :value="option"
-                >
-                  {{ option }}
-                </option>
-              </UnnnicSelect>
+              <UnnnicSelectSmart
+                :value="getAuthorizationsSelectSmart.value"
+                :options="getAuthorizationsSelectSmart.options"
+                @input="profileAuth = $event[0].value"
+              />
             </UnnnicFormElement>
 
             <div class="repository-analyze-text__url">
@@ -269,6 +265,7 @@ import RepositoryBase from './Base';
 import I18n from '@/utils/plugins/i18n';
 import IntegrationModal from '@/components/shared/IntegrationModal';
 import IntegrationLoading from '@/views/repository/loadings/Integration';
+import { useSelectSmart } from '../../utils';
 
 export default {
   name: 'RepositoryIntegration',
@@ -372,6 +369,16 @@ export default {
           `${this.getProfileDetail[0]} - ${this.getProfileDetail[1]}`,
         ].join(),
       };
+    },
+
+    getAuthorizationsSelectSmart() {
+      return useSelectSmart({
+        from: this.getAuthorizations.map((value) => ({ value })),
+        value: 'value',
+        label: 'value',
+        placeholder: '',
+        currentValue: this.profileAuth,
+      });
     },
   },
   watch: {

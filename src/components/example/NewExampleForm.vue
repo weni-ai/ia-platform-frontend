@@ -38,18 +38,11 @@
             </div>
 
             <UnnnicFormElement :message="errors.intent">
-              <UnnnicAutocomplete
+              <Autocomplete
                 v-model="intent"
-                :data="filteredData"
+                :options="filteredData"
                 :placeholder="$t('webapp.example.intent')"
-                :openWithFocus="true"
-                @focus="onIntentInputClick"
-                @blur="onIntentInputClick"
-                :iconRight="
-                  isIntentInputActive
-                    ? 'arrow-button-up-1'
-                    : 'arrow-button-down-1'
-                "
+                entityFormat
               />
             </UnnnicFormElement>
           </div>
@@ -58,19 +51,10 @@
             :label="$t('webapp.create_repository.language_placeholder')"
             :message="errors.intent"
           >
-            <UnnnicSelect
-              :placeholder="$t('webapp.translate.languages_select')"
+            <SelectLanguage
               v-model="language"
-            >
-              <option
-                v-for="[option, label] in languageList"
-                :key="option"
-                :value="option"
-                @select="language = option"
-              >
-                {{ label }}
-              </option>
-            </UnnnicSelect>
+              :placeholder="$t('webapp.translate.languages_select')"
+            />
           </UnnnicFormElement>
         </div>
 
@@ -125,6 +109,8 @@ import NewEntitiesInput from '@/components/inputs/EntitiesInput/NewEntitiesInput
 import { mapActions, mapGetters } from 'vuex';
 import { formatters, LANGUAGES } from '@/utils';
 import InputWithHightlights from '../InputWithHightlights';
+import SelectLanguage from '../SelectLanguage.vue';
+import Autocomplete from '../Autocomplete.vue';
 
 export default {
   name: 'NewExampleForm',
@@ -132,6 +118,8 @@ export default {
     ExampleTextWithHighlightedEntitiesInput,
     NewEntitiesInput,
     InputWithHightlights,
+    SelectLanguage,
+    Autocomplete,
   },
   props: {
     repository: {
@@ -151,7 +139,6 @@ export default {
       entitiesList: [],
       blockedNextStepTutorial: false,
       hideDropdown: true,
-      isIntentInputActive: false,
       isLanguageInputActive: false,
       alertSuccess: false,
       addEntity: false,
@@ -165,9 +152,7 @@ export default {
       return this.isValid && !this.submitting;
     },
     filteredData() {
-      return (this.repository.intents_list || []).filter((intent) =>
-        intent.startsWith(this.intent.toLowerCase()),
-      );
+      return this.repository.intents_list || [];
     },
     validationErrors() {
       const errors = [];
@@ -208,9 +193,6 @@ export default {
         intent,
         entities,
       };
-    },
-    languageList() {
-      return Object.keys(LANGUAGES).map((lang) => [lang, LANGUAGES[lang]]);
     },
   },
   watch: {
@@ -293,9 +275,6 @@ export default {
         this.submitting = false;
       }
       return false;
-    },
-    onIntentInputClick() {
-      this.isIntentInputActive = !this.isIntentInputActive;
     },
   },
 };

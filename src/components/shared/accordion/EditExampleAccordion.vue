@@ -55,21 +55,14 @@
         :isStepBlocked="intent === ''"
         :message="errors.intent"
       >
-        <UnnnicAutocomplete
-          :label="$t('webapp.example.intent')"
-          v-model="intent"
-          :data="optionsIntents"
-          :placeholder="$t('webapp.example.intent')"
-          :openWithFocus="true"
-          @focus="onInputClick('intent')"
-          @blur="onInputClick('intent')"
-          :iconRight="
-            isIntentInputActive ? 'arrow-button-up-1' : 'arrow-button-down-1'
-          "
-          @click.native="hideDropdown = false"
-          :class="hideDropdown ? 'hidden' : ''"
-          @input="intent = intentFormatters(intent)"
-        />
+        <UnnnicFormElement :label="$t('webapp.example.intent')">
+          <Autocomplete
+            v-model="intent"
+            :options="filterIntents"
+            :placeholder="$t('webapp.example.intent')"
+            entityFormat
+          />
+        </UnnnicFormElement>
       </BField>
     </div>
     <div class="column is-12 mt-4 p-0">
@@ -118,6 +111,7 @@ import LanguageBadge from '@/components/shared/LanguageBadge';
 import ExampleEntitySmallInput from '@/components/example/ExampleEntitySmallInput';
 import EditExampleBase from './EditExampleBase';
 import NewEntitiesInput from '@/components/inputs/EntitiesInput/NewEntitiesInput';
+import Autocomplete from '../../Autocomplete.vue';
 
 export default {
   name: 'EditExampleAccordion',
@@ -127,6 +121,7 @@ export default {
     LanguageBadge,
     ExampleEntitySmallInput,
     NewEntitiesInput,
+    Autocomplete,
   },
   extends: EditExampleBase,
   props: {
@@ -159,18 +154,9 @@ export default {
     },
     filterIntents() {
       if (this.intents !== null) {
-        return this.repository.intents_list.filter(
-          (intent) =>
-            intent
-              .toString()
-              .toLowerCase()
-              .indexOf(this.intent.toLowerCase()) >= 0,
-        );
+        return this.repository.intents_list;
       }
       return [];
-    },
-    optionsIntents() {
-      return this.filterIntents.map((intent) => intent);
     },
   },
   watch: {
