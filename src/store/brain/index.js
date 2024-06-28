@@ -4,6 +4,14 @@ import { models } from './models.js';
 import nexusaiAPI from '../../api/nexusaiAPI.js';
 import Vue from 'vue';
 import i18n from '../../utils/plugins/i18n';
+import store from '../index.js';
+
+function watchOnce(...args) {
+  const unwatch = store.watch(args[0], () => {
+    args[1]();
+    unwatch();
+  });
+}
 
 export default {
   state: {
@@ -44,6 +52,12 @@ export default {
 
     tunings: {},
     tuningsOld: {},
+
+    customizationErrorRequiredFields: {
+      name: false,
+      role: false,
+      goal: false,
+    },
   },
 
   getters: {
@@ -71,27 +85,16 @@ export default {
       return state.contentText.current !== state.contentText.old;
     },
 
-    hasBrainRequiredFieldsNotFilledIn(state) {
-      if (state.customizationStatus === 'loaded') {
-        const agentRequiredFields = ['name', 'role', 'goal'];
+    isBrainSaveButtonDisabled(state, getters) {
+      const hasCustomizationErrorRequiredFields = Object.values(
+        state.customizationErrorRequiredFields,
+      ).includes(true);
 
-        const agentHasRequiredFieldError = agentRequiredFields.some(
-          (field) => !state.agent[field].current,
-        );
-
-        if (agentHasRequiredFieldError) {
-          return true;
-        }
-      }
-
-      return false;
-    },
-
-    isBrainSaveButtonDisabled(_state, getters) {
       return (
-        !getters.hasBrainCustomizationChanged &&
-        !getters.hasBrainTuningsChanged &&
-        !getters.hasBrainContentTextChanged
+        (!getters.hasBrainCustomizationChanged &&
+          !getters.hasBrainTuningsChanged &&
+          !getters.hasBrainContentTextChanged) ||
+        hasCustomizationErrorRequiredFields
       );
     },
 
@@ -170,6 +173,29 @@ export default {
         commit('setBrainTuningsInitialValues', data);
       } finally {
         state.tuningsStatus = 'loaded';
+      }
+    },
+
+    validateBrainCustomization({ state }) {
+      const unfilledFields = ['name', 'role', 'goal'].filter(
+        (property) => !state.agent[property].current,
+      );
+
+      unfilledFields.forEach((property) => {
+        state.customizationErrorRequiredFields[property] = true;
+
+        watchOnce(
+          ({ Brain }) => Brain.agent[property].current,
+          () => {
+            state.customizationErrorRequiredFields[property] = false;
+          },
+        );
+      });
+
+      if (unfilledFields.length) {
+        throw {
+          tab: 'personalization',
+        };
       }
     },
 
@@ -267,6 +293,9 @@ export default {
 
     async saveBrainChanges({ state, getters, rootState, dispatch }) {
       try {
+        getters.hasBrainCustomizationChanged &&
+          (await dispatch('validateBrainCustomization'));
+
         state.isSavingChanges = true;
 
         const promises = [];
@@ -304,6 +333,12 @@ export default {
             type: 'success',
             text: i18n.t('router.tunings.changes_saved'),
           };
+        }
+      } catch (error) {
+        const tabWithError = get(error, 'tab');
+
+        if (tabWithError) {
+          state.tabsWithError = [tabWithError];
         }
       } finally {
         state.isSavingChanges = false;
