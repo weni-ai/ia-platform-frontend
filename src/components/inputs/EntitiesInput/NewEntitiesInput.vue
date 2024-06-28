@@ -80,6 +80,7 @@
             v-model="entity"
             ref="entityInputField"
             :options="filteredEntities"
+            entityFormat
           />
         </UnnnicFormElement>
         <div>

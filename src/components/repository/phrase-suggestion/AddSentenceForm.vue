@@ -28,6 +28,7 @@
           v-model="intent"
           :options="filteredData"
           :placeholder="$t('webapp.example.intent')"
+          entityFormat
         />
       </UnnnicFormElement>
 

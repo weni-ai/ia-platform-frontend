@@ -1,5 +1,6 @@
 <template>
   <UnnnicSelectSmart
+    ref="autocomplete"
     :value="[
       finalOptions.find(({ value: insideValue }) => insideValue === value),
     ]"
@@ -9,10 +10,12 @@
     autocomplete
     autocompleteClearOnFocus
     v-bind="$attrs"
-  />
+  />\
 </template>
 
 <script>
+import { formatters } from '../utils';
+
 export default {
   props: {
     value: String,
@@ -23,14 +26,55 @@ export default {
     },
 
     options: Array,
+
+    entityFormat: Boolean,
+  },
+
+  data() {
+    return {
+      createdValue: '',
+    };
   },
 
   computed: {
     finalOptions() {
-      return [{ value: '', label: this.placeholder }].concat(
+      const options = [{ value: '', label: this.placeholder }].concat(
         this.options.map((value) => ({ value, label: value })),
       );
+
+      if (this.createdValue) {
+        options.push({ value: this.createdValue, label: this.createdValue });
+      }
+
+      return options;
     },
+  },
+
+  methods: {
+    formatOnBlur(event) {
+      if (this.entityFormat) {
+        let { value } = event.target;
+
+        value =
+          formatters.bothubItemKey()(value.toLowerCase()) || this.createdValue;
+
+        this.$emit('input', value);
+
+        this.createdValue = value;
+      }
+    },
+  },
+
+  mounted() {
+    this.$refs.autocomplete.$el
+      .querySelector('input')
+      .addEventListener('blur', this.formatOnBlur);
+  },
+
+  beforeDestroy() {
+    this.$refs.autocomplete.$el
+      .querySelector('input')
+      .removeEventListener('blur', this.formatOnBlur);
   },
 };
 </script>

@@ -142,6 +142,7 @@
                 ref="entityInputField"
                 :options="getAllEntities"
                 :placeholder="$t('webapp.example.intent')"
+                entityFormat
               />
             </UnnnicFormElement>
 

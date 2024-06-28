@@ -60,6 +60,7 @@
             v-model="intent"
             :options="filterIntents"
             :placeholder="$t('webapp.example.intent')"
+            entityFormat
           />
         </UnnnicFormElement>
       </BField>
