@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StringInput.vue renders correctly 1`] = `
+VueWrapper {
+  "_emitted": Object {
+    "input": Array [
+      Array [
+        "",
+      ],
+    ],
+  },
+  "_emittedByOrder": Array [
+    Object {
+      "args": Array [
+        "",
+      ],
+      "name": "input",
+    },
+  ],
+  "isFunctionalComponent": undefined,
+}
+`;
