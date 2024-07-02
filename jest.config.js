@@ -20,7 +20,8 @@ const config = {
   verbose: true,
   moduleNameMapper: {
     '@/(.*)': '<rootDir>/$1',
-    '\\.css$': '<rootDir>/tests/__mocks__/styleMock.js',
+    '\\.css$': '<rootDir>/__tests__/__mocks__/styleMock.js',
+    '\\.(svg)$': '<rootDir>/__tests__/__mocks__/fileMock.js',
   },
   moduleDirectories: ['node_modules', 'src'],
   testEnvironment: 'jsdom',
