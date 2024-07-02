@@ -46,8 +46,6 @@ const currentError = computed(() => {
 </script>
 
 <style lang="scss">
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .obstructive-error {
   min-height: 100vh;
   padding: $unnnic-spacing-lg $unnnic-spacing-md;

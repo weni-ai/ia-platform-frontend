@@ -58,8 +58,12 @@
           class="customization__form-element"
         >
           <UnnnicSelectSmart
-            :value="handlePersonalityValue(brain.agent.personality.current)"
-            @input="brain.agent.personality.current = $event[0].value"
+            :modelValue="
+              handlePersonalityValue(brain.agent.personality.current)
+            "
+            @update:model-value="
+              brain.agent.personality.current = $event[0].value
+            "
             :options="personalities"
             orderedByIndex
           />
@@ -297,8 +301,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .customization {
   &-title {
     color: $unnnic-color-neutral-dark;

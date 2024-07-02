@@ -3,7 +3,7 @@ module.exports = {
   env: {
     es2021: true,
   },
-  extends: ['@weni/eslint-config/vue2'],
+  extends: ['@weni/eslint-config/vue3'],
   rules: {
     'vue/multi-word-component-names': 'off',
     'vue/no-unused-components': 'off',

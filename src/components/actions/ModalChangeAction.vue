@@ -43,15 +43,15 @@
         <section class="flow-modal__body_description">
           <UnnnicTextArea
             v-bind="$props"
-            :value="description"
-            @input="$emit('update:description', $event)"
+            :modelValue="description"
+            @update:model-value="$emit('update:description', $event)"
             :label="$t('modals.actions.descriptions.label')"
           />
         </section>
       </main>
       <footer class="flow-modal__footer">
         <UnnnicButton
-          slot="options"
+          #options
           class="create-repository__container__button"
           type="tertiary"
           @click="$emit('closeModal')"
@@ -59,7 +59,7 @@
           {{ $t('modals.actions.btn_cancel') }}
         </UnnnicButton>
         <UnnnicButton
-          slot="options"
+          #options
           size="large"
           :loading="editing"
           @click="$emit('edit')"
@@ -90,8 +90,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .create-intelligence-modal {
   :deep(.create-intelligence-modal__container) {
     padding: $unnnic-spacing-xl $unnnic-spacing-md $unnnic-spacing-md

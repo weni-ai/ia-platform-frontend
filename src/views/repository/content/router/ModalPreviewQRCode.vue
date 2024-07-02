@@ -11,7 +11,7 @@
       size="380"
       renderAs="svg"
       level="M"
-      :value="previewFullPageURL"
+      :modelValue="previewFullPageURL"
       class="modal-preview-qr-code__qr-code"
     />
   </UnnnicModal>
@@ -43,8 +43,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .modal-preview-qr-code {
   :deep(.unnnic-modal-container-background-body-title) {
     padding-bottom: $unnnic-spacing-sm;

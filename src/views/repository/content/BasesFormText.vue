@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { unnnicCallAlert } from '@weni/unnnic-system';
+import Unnnic from '@weni/unnnic-system';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
@@ -119,7 +119,7 @@ export default {
     },
 
     alertError(title) {
-      unnnicCallAlert({
+      Unnnic.unnnicCallAlert({
         props: { text: title, scheme: 'feedback-red', icon: 'alert-circle-1' },
         seconds: 5,
       });
@@ -129,8 +129,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .repository-base-edit__wrapper {
   flex: 1;
   display: flex;
@@ -237,7 +235,7 @@ export default {
 
       border-radius: 0 0 $unnnic-border-radius-sm $unnnic-border-radius-sm;
 
-      ::v-deep a {
+      :deep(a) {
         color: inherit;
         text-underline-offset: $unnnic-spacing-stack-nano;
       }

@@ -50,9 +50,9 @@
 
           <UnnnicButton
             v-if="canContribute"
-            @click="isAddContentBaseOpen = true"
             class="create-base-button"
             iconLeft="add-1"
+            @click="isAddContentBaseOpen = true"
           >
             {{ $t('webapp.home.bases.new_knowledge_base') }}
           </UnnnicButton>
@@ -124,9 +124,9 @@
 
         <div class="bases-list">
           <HomeRepositoryCard
-            type="base"
             v-for="base in basesFiltered"
             :key="base.id"
+            type="base"
             :repositoryDetail="base"
             :canContribute="canContribute"
             @deleteBase="openDeleteModal"
@@ -150,6 +150,7 @@
     </div>
 
     <UnnnicModal
+      v-if="isDeleteModalOpen"
       class="delete-base-modal"
       persistent
       :closeIcon="false"
@@ -159,32 +160,30 @@
           name: isDeleteModalOpen.name,
         })
       "
-      v-if="isDeleteModalOpen"
       @close="isDeleteModalOpen = null"
     >
-      <UnnnicIcon
-        slot="icon"
-        icon="error"
-        scheme="aux-red-500"
-        size="lg"
-      />
-
-      <UnnnicButton
-        slot="options"
-        type="tertiary"
-        @click="isDeleteModalOpen = null"
-      >
-        {{ $t('webapp.home.bases.edit-base_modal_delete_button_cancel') }}
-      </UnnnicButton>
-
-      <UnnnicButton
-        slot="options"
-        type="warning"
-        :loading="isDeleteModalOpen.loading"
-        @click="deleteBase"
-      >
-        {{ $t('webapp.home.bases.edit-base_modal_delete_button_confirm') }}
-      </UnnnicButton>
+      <template #icon>
+        <UnnnicIcon
+          icon="error"
+          scheme="aux-red-500"
+          size="lg"
+        />
+      </template>
+      <template #options>
+        <UnnnicButton
+          type="tertiary"
+          @click="isDeleteModalOpen = null"
+        >
+          {{ $t('webapp.home.bases.edit-base_modal_delete_button_cancel') }}
+        </UnnnicButton>
+        <UnnnicButton
+          type="warning"
+          :loading="isDeleteModalOpen.loading"
+          @click="deleteBase"
+        >
+          {{ $t('webapp.home.bases.edit-base_modal_delete_button_confirm') }}
+        </UnnnicButton>
+      </template>
     </UnnnicModal>
 
     <BaseSettingsForm
@@ -253,7 +252,7 @@ export default {
 
   mounted() {},
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
   },
 
@@ -415,26 +414,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
-.delete-base-modal ::v-deep {
-  .unnnic-modal-container-background-body {
+.delete-base-modal {
+  :deep(.unnnic-modal-container-background-body) {
     padding-top: $unnnic-spacing-giant;
   }
 
-  .unnnic-modal-container-background-body__icon-slot {
+  :deep(.unnnic-modal-container-background-body__icon-slot) {
     margin-bottom: $unnnic-spacing-sm;
   }
 
-  .unnnic-modal-container-background-body-title {
+  :deep(.unnnic-modal-container-background-body-title) {
     padding-bottom: $unnnic-spacing-sm;
   }
 
-  .unnnic-modal-container-background-body-description-container {
+  :deep(.unnnic-modal-container-background-body-description-container) {
     padding-bottom: 0;
   }
 
-  .unnnic-modal-container-background-button {
+  :deep(.unnnic-modal-container-background-button) {
     padding-top: $unnnic-spacing-lg;
     padding-bottom: $unnnic-spacing-lg;
   }
@@ -576,23 +573,21 @@ export default {
   }
 }
 
-::v-deep {
-  .unnnic-card-intelligence__detail {
-    display: none;
-  }
-  .unnnic-card-intelligence__divider {
-    display: none;
-  }
-  .unnnic-card-intelligence__description {
-    -webkit-line-clamp: 2;
-  }
-  .repository-base__description__text--link {
-    color: $unnnic-color-neutral-dark;
-    text-decoration: underline;
-  }
+:deep(.unnnic-card-intelligence__detail) {
+  display: none;
+}
+:deep(.unnnic-card-intelligence__divider) {
+  display: none;
+}
+:deep(.unnnic-card-intelligence__description) {
+  -webkit-line-clamp: 2;
+}
+:deep(.repository-base__description__text--link) {
+  color: $unnnic-color-neutral-dark;
+  text-decoration: underline;
+}
 
-  .unnnic-modal-container-background-body-description-container {
-    padding-bottom: $unnnic-spacing-sm;
-  }
+:deep(.unnnic-modal-container-background-body-description-container) {
+  padding-bottom: $unnnic-spacing-sm;
 }
 </style>

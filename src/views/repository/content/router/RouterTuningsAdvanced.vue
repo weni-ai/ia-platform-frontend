@@ -49,9 +49,9 @@
         <UnnnicSwitch
           :key="brainOn"
           :textRight="$t('router.tunings.advanced.brain')"
-          :value="brainOn"
+          :modelValue="brainOn"
           class="custom-switch"
-          @input="openActiveOrDeactivateBrain"
+          @update:model-value="openActiveOrDeactivateBrain"
         />
       </UnnnicFormElement>
     </section>
@@ -177,8 +177,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .custom-switch :deep(span) {
   cursor: pointer;
 }

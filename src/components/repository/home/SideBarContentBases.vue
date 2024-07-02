@@ -90,7 +90,7 @@ export default {
     this.intersectionObserver.observe(this.$refs['end-of-list-element']);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
   },
 
@@ -131,8 +131,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .content-bases-list {
   display: flex;
   flex-direction: column;

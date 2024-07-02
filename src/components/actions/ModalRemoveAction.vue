@@ -17,7 +17,7 @@
       </header>
       <footer class="flow-modal__footer">
         <UnnnicButton
-          slot="options"
+          #options
           class="create-repository__container__button"
           type="tertiary"
           @click="$emit('closeModal')"
@@ -27,7 +27,7 @@
         <UnnnicButton
           class="btn-remove"
           type="warning"
-          slot="options"
+          #options
           size="large"
           :loading="removing"
           @click="$emit('remove')"
@@ -57,8 +57,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .create-intelligence-modal {
   :deep(.create-intelligence-modal__container) {
     padding: $unnnic-spacing-giant $unnnic-spacing-md $unnnic-spacing-md

@@ -1,10 +1,10 @@
 <template>
   <div>
     <IntelligencesFilter
+      v-model:name="filterIntelligenceName"
+      v-model:type="fitlerIntelligenceType"
+      v-model:category="filterIntelligenceCategory"
       class="filters"
-      :name.sync="filterIntelligenceName"
-      :type.sync="fitlerIntelligenceType"
-      :category.sync="filterIntelligenceCategory"
     />
 
     <div class="intelligences-list">
@@ -89,22 +89,6 @@ export default {
     },
   },
 
-  mounted() {
-    this.loadIntelligences();
-
-    this.intersectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        this.isShowingEndOfList = entry.isIntersecting;
-      });
-    });
-
-    this.intersectionObserver.observe(this.$refs['end-of-list-element']);
-  },
-
-  beforeDestroy() {
-    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
-  },
-
   watch: {
     isShowingEndOfList() {
       if (
@@ -126,6 +110,22 @@ export default {
 
       this.loadIntelligences();
     },
+  },
+
+  mounted() {
+    this.loadIntelligences();
+
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        this.isShowingEndOfList = entry.isIntersecting;
+      });
+    });
+
+    this.intersectionObserver.observe(this.$refs['end-of-list-element']);
+  },
+
+  beforeUnmount() {
+    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
   },
 
   methods: {
@@ -166,8 +166,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .filters {
   margin-bottom: $unnnic-spacing-md;
 }

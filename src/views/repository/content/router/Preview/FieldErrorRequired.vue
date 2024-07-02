@@ -11,8 +11,6 @@
 </template>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .field-error {
   margin-top: $unnnic-spacing-nano;
 

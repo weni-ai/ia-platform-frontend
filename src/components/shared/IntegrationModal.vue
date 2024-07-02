@@ -15,41 +15,43 @@
     modalIcon="alert-circle-1"
     :closeIcon="false"
   >
-    <div slot="message">
-      <span
-        v-html="
-          hasIntegration
-            ? $t('webapp.home.remove_integrate_modal_subtitle')
-            : $t('webapp.home.integrate_modal_subtitle')
-        "
-      />
-      <div
-        class="integration-modal__field"
-        v-show="hasIntegration"
-      >
+    <template #message>
+      <div>
         <span
-          class="integration-modal__field__label"
           v-html="
-            $t('webapp.home.confirm_with_username', { username: getUsername })
+            hasIntegration
+              ? $t('webapp.home.remove_integrate_modal_subtitle')
+              : $t('webapp.home.integrate_modal_subtitle')
           "
         />
-        <UnnnicInput
-          v-model="username"
-          class="integration-modal__field__input"
-          :placeholder="$t('webapp.home.confirm_with_username_placeholder')"
-        />
+        <div
+          class="integration-modal__field"
+          v-show="hasIntegration"
+        >
+          <span
+            class="integration-modal__field__label"
+            v-html="
+              $t('webapp.home.confirm_with_username', { username: getUsername })
+            "
+          />
+          <UnnnicInput
+            v-model="username"
+            class="integration-modal__field__input"
+            :placeholder="$t('webapp.home.confirm_with_username_placeholder')"
+          />
+        </div>
       </div>
-    </div>
+    </template>
 
     <UnnnicButton
-      slot="options"
+      #options
       type="tertiary"
       @click.prevent.stop="dispatchCloseModal()"
     >
       {{ $t('webapp.home.cancel') }}
     </UnnnicButton>
     <UnnnicButton
-      slot="options"
+      #options
       class="integration-modal__button"
       :class="{
         'integration-modal__button__opacity':
@@ -166,8 +168,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .integration-modal {
   &__container {
     margin-top: 1.5rem;

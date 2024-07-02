@@ -66,16 +66,16 @@
       </div>
       <div class="flow-modal__body">
         <div
-          class="flow-modal__body__flow"
           v-if="index === 0"
+          class="flow-modal__body__flow"
         >
           <div>
             <UnnnicInput
+              v-model="filterName"
               size="sm"
               :iconLeftClickable="true"
               iconLeft="search-1"
               :placeholder="$t('modals.actions.flow.placeholder')"
-              v-model="filterName"
             />
           </div>
           <div class="flow-modal__body__flow__list">
@@ -149,8 +149,8 @@
           </UnnnicIntelligenceText>
         </section>
         <div
-          class="flow-modal__body_description"
           v-if="index === 1"
+          class="flow-modal__body_description"
         >
           <UnnnicTextArea
             v-bind="$props"
@@ -161,7 +161,7 @@
       </div>
       <div class="flow-modal__footer">
         <UnnnicButton
-          slot="options"
+          #options
           class="create-repository__container__button"
           type="tertiary"
           @click="handleBackBtn"
@@ -169,11 +169,11 @@
           {{ $t('modals.actions.btn_back') }}
         </UnnnicButton>
         <UnnnicButton
-          slot="options"
+          #options
           size="large"
-          @click="handleNextBtn()"
           :disabled="isDisableNextBtn()"
           :loading="saving"
+          @click="handleNextBtn()"
         >
           {{
             index === 0
@@ -270,7 +270,7 @@ export default {
     this.intersectionObserver.observe(this.$refs['end-of-list-element']);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
   },
 
@@ -331,10 +331,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .create-intelligence-modal {
-  ::v-deep .create-intelligence-modal__container {
+  :deep(.create-intelligence-modal__container) {
     padding: $unnnic-spacing-xl $unnnic-spacing-md $unnnic-spacing-md
       $unnnic-spacing-md;
   }

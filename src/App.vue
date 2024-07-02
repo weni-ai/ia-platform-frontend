@@ -107,7 +107,7 @@ export default {
     async profileInfo() {
       const { data } = await this.getMyProfileInfo();
       if (data) {
-        this.$set(this.$store.state.User, 'me', data);
+        this.$store.state.User.me = data;
 
         this.setUserName(data.name);
         if (data.language?.includes?.('-')) {
@@ -188,8 +188,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 body {
   background-color: $unnnic-color-background-snow;
   min-height: 100vh;

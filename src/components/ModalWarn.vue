@@ -12,7 +12,7 @@
       <div v-html="message" />
     </template>
     <UnnnicButton
-      slot="options"
+      #options
       class="create-repository__container__button"
       type="tertiary"
       @click="$emit('close')"
@@ -21,7 +21,7 @@
     </UnnnicButton>
 
     <UnnnicButton
-      slot="options"
+      #options
       class="create-repository__container__button attention-button"
       type="attention"
       :loading="loading"
@@ -47,8 +47,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .modal-warn
   :deep(.unnnic-modal-container-background-body-description-container) {
   padding-bottom: $unnnic-spacing-xs;

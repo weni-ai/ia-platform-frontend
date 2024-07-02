@@ -6,7 +6,7 @@ import types from './types';
 
 export default {
   actions,
-  state,
+  state: () => state,
   mutations,
   getters,
   types,

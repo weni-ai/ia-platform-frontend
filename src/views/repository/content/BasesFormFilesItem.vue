@@ -195,9 +195,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use 'sass:math';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .files-list__content__file {
   outline-style: solid;
   outline-color: $unnnic-color-neutral-soft;
@@ -222,7 +219,7 @@ export default {
     column-gap: $unnnic-spacing-xs;
 
     :has(.files-list__content__file__content__status) {
-      margin-block: -(math.div($unnnic-spacing-nano, 2));
+      margin-block: -(calc($unnnic-spacing-nano / 2));
     }
 
     .files-list__content__file__icon {

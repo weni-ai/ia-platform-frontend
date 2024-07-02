@@ -3,7 +3,7 @@ import actions from './actions';
 export default {
   actions,
 
-  state: {
+  state: () => ({
     allCategories: null,
-  },
+  }),
 };

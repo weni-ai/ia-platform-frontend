@@ -129,10 +129,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/dist/unnnic.css';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
-.unnnic-modal ::v-deep > .container > .content {
+.unnnic-modal :deep(> .container > .content) {
   box-sizing: initial;
 }
 
@@ -144,20 +141,18 @@ export default {
 .integrate {
   font-family: $unnnic-font-family-secondary;
 
-  ::v-deep {
-    .container {
-      padding: $unnnic-squish-md !important;
-    }
+  :deep(.container) {
+    padding: $unnnic-squish-md !important;
+  }
 
-    .header {
-      margin-bottom: $unnnic-spacing-stack-nano !important;
-    }
+  :deep(.header) {
+    margin-bottom: $unnnic-spacing-stack-nano !important;
+  }
 
-    .content {
-      display: flex;
-      flex-direction: column;
-      overflow: auto !important;
-    }
+  :deep(.content) {
+    display: flex;
+    flex-direction: column;
+    overflow: auto !important;
   }
 
   &--title {

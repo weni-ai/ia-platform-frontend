@@ -153,8 +153,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .unnnic-modal {
   &__background {
     background-color: transparentize($unnnic-color-neutral-darkest, 0.5);

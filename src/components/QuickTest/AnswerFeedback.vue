@@ -75,7 +75,7 @@
         <UnnnicRadio
           v-for="reason in reasons"
           :key="reason.value"
-          :value="reason.value"
+          :modelValue="reason.value"
           :globalValue="feedback.reason"
           size="md"
           @change="
@@ -213,8 +213,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .feedback {
   &__thumbs {
     display: flex;

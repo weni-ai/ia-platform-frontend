@@ -18,33 +18,33 @@
         </div>
 
         <UnnnicButton
-          @click="createNewIntelligence"
           class="create-ia-button"
           iconLeft="add-1"
+          @click="createNewIntelligence"
         >
           {{ $t('intelligences.create_button') }}
         </UnnnicButton>
       </section>
 
       <UnnnicTab
-        size="md"
         v-model="tab"
+        size="md"
         :tabs="['own_intelligences', 'public_intelligences']"
       >
-        <template slot="tab-head-own_intelligences">
+        <template #tab-head-own_intelligences>
           {{ $t('intelligences.own_intelligences') }}
         </template>
 
-        <template slot="tab-head-public_intelligences">
+        <template #tab-head-public_intelligences>
           {{ $t('intelligences.public_intelligences') }}
         </template>
       </UnnnicTab>
 
       <div v-show="tab === 'own_intelligences'">
         <IntelligencesFilter
+          v-model:name="filterIntelligenceName"
+          v-model:type="fitlerIntelligenceType"
           class="filters"
-          :name.sync="filterIntelligenceName"
-          :type.sync="fitlerIntelligenceType"
         />
 
         <div
@@ -95,19 +95,19 @@
         initialTab="first"
         :tabs="['first', 'second']"
       >
-        <template slot="tab-head-first">
+        <template #tab-head-first>
           {{ $t('webapp.intelligences_lib.tab_org_title') }}
         </template>
-        <template slot="tab-panel-first">
+        <template #tab-panel-first>
           <home-intelligence-from-org
             @loading="loading = $event"
             :key="update"
           />
         </template>
-        <template slot="tab-head-second">
+        <template #tab-head-second>
           {{ $t('webapp.intelligences_lib.tab_community_title') }}
         </template>
-        <template slot="tab-panel-second">
+        <template #tab-panel-second>
           <home-intelligence-from-community
             @loading="loading = $event"
           />
@@ -195,20 +195,6 @@ export default {
       intersectionObserver: null,
       isShowingEndOfList: false,
     };
-  },
-
-  mounted() {
-    this.intersectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        this.isShowingEndOfList = entry.isIntersecting;
-      });
-    });
-
-    this.intersectionObserver.observe(this.$refs['end-of-list-element']);
-  },
-
-  beforeDestroy() {
-    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
   },
 
   computed: {
@@ -300,6 +286,20 @@ export default {
         }
       },
     },
+  },
+
+  mounted() {
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        this.isShowingEndOfList = entry.isIntersecting;
+      });
+    });
+
+    this.intersectionObserver.observe(this.$refs['end-of-list-element']);
+  },
+
+  beforeUnmount() {
+    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
   },
 
   methods: {
@@ -408,18 +408,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
-.home__header__icon ::v-deep .avatar-icon {
+.home__header__icon :deep(.avatar-icon) {
   background-color: $unnnic-color-weni-100;
 }
 
-.home__header__icon ::v-deep .title {
+.home__header__icon :deep(.title) {
   font-weight: $unnnic-font-weight-bold;
 }
 
 .create-intelligence-modal {
-  ::v-deep .create-intelligence-modal__container {
+  :deep(.create-intelligence-modal__container) {
     padding-bottom: $unnnic-spacing-md;
   }
 }
@@ -490,7 +488,7 @@ export default {
     .description {
       margin-top: $unnnic-spacing-stack-sm;
 
-      ::v-deep a {
+      :deep(a) {
         text-decoration: underline;
         text-underline-offset: 3px;
         font-weight: $unnnic-font-weight-bold;
@@ -542,17 +540,12 @@ export default {
 .filters {
   margin-bottom: $unnnic-spacing-md;
 }
-::v-deep {
-  // .text-input.size--sm .icon-right {
-  //   top: 15px;
-  // }
 
-  .input.size-md {
-    height: auto;
-  }
+:deep(.input.size-md) {
+  height: auto;
+}
 
-  .unnnic-modal.type-default .container {
-    max-width: 750px;
-  }
+:deep(.unnnic-modal.type-default .container) {
+  max-width: 750px;
 }
 </style>

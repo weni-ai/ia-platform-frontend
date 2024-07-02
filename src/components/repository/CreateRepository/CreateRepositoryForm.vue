@@ -28,19 +28,19 @@
         @close="onChangeModalState(false)"
         :closeIcon="false"
       >
-        <span
-          slot="message"
-          v-html="$t('webapp.create_repository.modal_description')"
-        />
+        <template #message>
+          <span v-html="$t('webapp.create_repository.modal_description')" />
+        </template>
+
         <UnnnicButton
-          slot="options"
+          #options
           type="tertiary"
           @click="onChangeModalState(false)"
         >
           {{ $t('webapp.create_repository.modal_continue_button') }}
         </UnnnicButton>
         <UnnnicButton
-          slot="options"
+          #options
           @click="navigateToHomepage()"
           class="attention-button"
         >
@@ -235,8 +235,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .attention-button {
   background-color: $unnnic-color-aux-yellow-500;
 
@@ -298,10 +296,9 @@ export default {
     }
   }
 }
-::v-deep {
-  .text-input.size--sm .icon-right,
-  .text-input.size--sm .icon-left {
-    top: 15px;
-  }
+
+:deep(.text-input.size--sm .icon-right),
+:deep(.text-input.size--sm .icon-left) {
+  top: 15px;
 }
 </style>

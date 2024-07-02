@@ -46,7 +46,7 @@
         <UnnnicRadio
           v-for="option in field.options"
           :key="option"
-          :value="option"
+          :modelValue="option"
           :globalValue="field.value"
           size="md"
           @change="updateField(field.name, option)"
@@ -68,9 +68,9 @@
         class="tunings__container_fields-element"
         v-if="field.type === 'select' && !loadingData"
         :key="index"
-        :value="useSelectSmart(field).value"
+        :modelValue="useSelectSmart(field).value"
         :options="useSelectSmart(field).options"
-        @input="updateField(field.name, $event[0].value)"
+        @update:model-value="updateField(field.name, $event[0].value)"
         orderedByIndex
       />
 
@@ -114,8 +114,8 @@
       <UnnnicInput
         v-if="['token'].includes(field.name)"
         :key="index"
-        :value="field.value"
-        @input="updateField(field.name, $event)"
+        :modelValue="field.value"
+        @update:model-value="updateField(field.name, $event)"
         :type="hasValidate ? 'error' : 'normal'"
         :message="hasValidate ? $t('customization.invalid_field') : ''"
         :nativeType="field.type"
@@ -247,7 +247,7 @@ export default {
 
   methods: {
     updateField(name, value) {
-      this.$set(this.$store.state.Brain.tunings, name, value);
+      this.$store.state.Brain.tunings.name = value;
     },
 
     openRestoreDefaultModal() {
@@ -324,8 +324,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .tunings__form-element__label {
   display: flex;
   align-items: center;

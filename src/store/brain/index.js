@@ -2,11 +2,10 @@ import { differenceBy, cloneDeep, pick, get } from 'lodash';
 import { WENIGPT_OPTIONS } from '../../utils';
 import { models } from './models.js';
 import nexusaiAPI from '../../api/nexusaiAPI.js';
-import Vue from 'vue';
 import i18n from '../../utils/plugins/i18n';
 
 export default {
-  state: {
+  state: () => ({
     tabsWithError: null,
     isSavingChanges: false,
     customizationStatus: 'waitingToLoad',
@@ -44,7 +43,7 @@ export default {
 
     tunings: {},
     tuningsOld: {},
-  },
+  }),
 
   getters: {
     hasBrainCustomizationChanged(state) {
@@ -347,12 +346,12 @@ export default {
         return data.setup[name];
       };
 
-      Vue.set(state.tunings, 'model', data.model);
-      Vue.set(state.tuningsOld, 'model', data.model);
+      state.tunings['model'] = data.model;
+      state.tuningsOld['model'] = data.model;
 
       Object.keys(data.setup).forEach((name) => {
-        Vue.set(state.tunings, handleName(name), getValue(name));
-        Vue.set(state.tuningsOld, handleName(name), getValue(name));
+        state.tunings[handleName(name)] = getValue(name);
+        state.tuningsOld[handleName(name)] = getValue(name);
       });
     },
 

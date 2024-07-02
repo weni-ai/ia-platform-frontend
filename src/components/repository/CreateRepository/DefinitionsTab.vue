@@ -8,8 +8,8 @@
         <UnnnicLabel :label="$t('webapp.create_repository.language_label')" />
 
         <UnnnicSelectSmart
-          :value="[languages.find(({ value }) => value === language)]"
-          @input="$emit('update:language', $event[0].value)"
+          :modelValue="[languages.find(({ value }) => value === language)]"
+          @update:model-value="$emit('update:language', $event[0].value)"
           :options="languages"
           orderedByIndex
           autocomplete
@@ -183,8 +183,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .intelligence-private-or-public {
   display: flex;
   gap: $unnnic-spacing-xs;
@@ -192,7 +190,7 @@ export default {
   &__item {
     flex: 1;
 
-    ::v-deep .unnnic-card-content__content__title {
+    :deep(.unnnic-card-content__content__title) {
       font-weight: $unnnic-font-weight-regular;
     }
   }
@@ -255,13 +253,11 @@ export default {
       border: 1px solid $unnnic-color-weni-200;
       background: $unnnic-color-weni-100;
 
-      ::v-deep {
-        .unnnic-card-default__description {
-          white-space: unset;
-          overflow: unset;
-          text-overflow: unset;
-          max-width: unset;
-        }
+      :deep(.unnnic-card-default__description) {
+        white-space: unset;
+        overflow: unset;
+        text-overflow: unset;
+        max-width: unset;
       }
     }
   }

@@ -72,16 +72,14 @@
             position="bottom-left"
             :open.sync="dropdownOpen"
           >
-            <div slot="trigger">
-              <UnnnicIconSvg
-                icon="navigation-menu-vertical-1"
-                class="unnnic-card-intelligence__header__buttons__icon"
-                scheme="neutral-clean"
-                size="sm"
-                slot="trigger"
-                clickable
-              />
-            </div>
+            <UnnnicIconSvg
+              icon="navigation-menu-vertical-1"
+              class="unnnic-card-intelligence__header__buttons__icon"
+              scheme="neutral-clean"
+              size="sm"
+              #trigger
+              clickable
+            />
 
             <div v-if="repositoryDetail.repository_type === 'classifier'">
               <UnnnicDropdownItem @click="showDetailModal(intentModal)">
@@ -400,19 +398,21 @@
       modalIcon="alert-circle-1"
       @close="openConfirmModal = false"
     >
-      <span
-        slot="message"
-        v-html="$t('webapp.intelligences_lib.clone.confirm_modal_message')"
-      />
+      <template #message>
+        <span
+          v-html="$t('webapp.intelligences_lib.clone.confirm_modal_message')"
+        />
+      </template>
+
       <UnnnicButton
-        slot="options"
+        #options
         type="tertiary"
         @click="openConfirmModal = false"
       >
         {{ $t('webapp.home.cancel') }}
       </UnnnicButton>
       <UnnnicButton
-        slot="options"
+        #options
         type="secondary"
         @click="copyIntelligence()"
       >
@@ -432,10 +432,9 @@
       "
       @close="openNotificationModal = false"
     >
-      <span
-        slot="message"
-        v-html="notificationModalMessage"
-      />
+      <template #message>
+        <span v-html="notificationModalMessage" />
+      </template>
     </UnnnicModal>
 
     <SideBarContentBases
@@ -461,27 +460,28 @@
       modalIcon="error"
       @close="isDeleteIntelligenceConfirmationOpen = false"
     >
-      <span
-        slot="message"
-        v-html="
-          $t(
-            'intelligences.delete_intelligence_confirmation_modal_description',
-            {
-              name: repositoryDetail.name,
-            },
-          )
-        "
-      ></span>
+      <template #message>
+        <span
+          v-html="
+            $t(
+              'intelligences.delete_intelligence_confirmation_modal_description',
+              {
+                name: repositoryDetail.name,
+              },
+            )
+          "
+        ></span>
+      </template>
 
       <UnnnicButton
-        slot="options"
+        #options
         type="tertiary"
         @click="isDeleteIntelligenceConfirmationOpen = false"
       >
         {{ $t('cancel') }}
       </UnnnicButton>
       <UnnnicButton
-        slot="options"
+        #options
         type="warning"
         @click="deleteIntelligence"
         :loading="deletingIntelligence"
@@ -742,8 +742,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .button-quick-test {
   margin-right: $unnnic-spacing-xs;
 
@@ -754,8 +752,6 @@ export default {
 </style>
 
 <style lang="scss">
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .base__footer {
   margin-top: 0.625 * $unnnic-font-size - $unnnic-border-width-thinner;
   padding-top: 0.625 * $unnnic-font-size;

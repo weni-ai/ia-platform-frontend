@@ -23,8 +23,8 @@
       class="create-base__form-element"
     >
       <UnnnicSelectSmart
-        :value="[languages.find(({ value }) => value === language)]"
-        @input="language = $event[0].value"
+        :modelValue="[languages.find(({ value }) => value === language)]"
+        @update:model-value="language = $event[0].value"
         :options="languages"
         orderedByIndex
       />
@@ -120,7 +120,7 @@ export default {
 
     if (this.preFilledValues) {
       Object.keys(this.preFilledValues).forEach((name) => {
-        this.$set(this, name, this.preFilledValues[name]);
+        this.name = this.preFilledValues[name];
       });
     }
   },
@@ -193,13 +193,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .create-base__form-element + .create-base__form-element {
   margin-top: $unnnic-spacing-sm;
 }
 
-.create-base__description-textarea ::v-deep textarea {
+.create-base__description-textarea :deep(textarea) {
   display: block;
   min-height: 4.6875 * $unnnic-font-size;
   outline-style: solid;

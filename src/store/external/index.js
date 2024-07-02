@@ -5,7 +5,7 @@ import getters from './getters';
 
 export default {
   actions,
-  state,
+  state: () => state,
   getters,
   mutations,
 };
