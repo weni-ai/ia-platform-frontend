@@ -35,8 +35,8 @@ export default {
         contact: {
           fields: {},
           groups: [],
-          urns: ['tel:+12065551212'],
-          uuid: '29de4e4e-6cde-42ca-a96d-80fdeb373077',
+          urns: [],
+          uuid: '',
         },
 
         active: false,
@@ -69,10 +69,23 @@ export default {
   },
 
   methods: {
-    previewInit() {
+    previewInit({ contentBaseUuid }) {
+      const numberBasedOnContentBaseUuid = contentBaseUuid
+        .slice(-12)
+        .split('')
+        .map((char) => char.charCodeAt().toString().slice(-2).padStart(2, '0'))
+        .join('');
+
+      const threeRandomDigits = String(
+        Math.floor(Math.random() * 1000),
+      ).padStart(3, '0');
+
+      const urn = `tel:${numberBasedOnContentBaseUuid}${threeRandomDigits}`;
+
+      contentBaseUuid;
       this.preview.contact = {
         uuid: createUUID(),
-        urns: ['tel:+12065551212'],
+        urns: [urn],
         fields: {},
         groups: [],
         created_on: new Date().toISOString(),
