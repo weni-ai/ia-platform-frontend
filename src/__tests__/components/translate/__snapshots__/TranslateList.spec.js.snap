@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TranslateList.vue renders correctly 1`] = `
+VueWrapper {
+  "_emitted": Object {
+    "listPhrase": Array [
+      Array [
+        Page {
+          "baseUrl": "/v2/repository/examples/",
+          "items": Array [],
+          "loading": false,
+          "params": Object {
+            "end_created_at": undefined,
+            "language": "de",
+            "repository_uuid": null,
+            "repository_version": null,
+            "start_created_at": undefined,
+          },
+          "perPage": 50,
+          "token": null,
+          "total": 0,
+        },
+      ],
+    ],
+  },
+  "_emittedByOrder": Array [
+    Object {
+      "args": Array [
+        Page {
+          "baseUrl": "/v2/repository/examples/",
+          "items": Array [],
+          "loading": false,
+          "params": Object {
+            "end_created_at": undefined,
+            "language": "de",
+            "repository_uuid": null,
+            "repository_version": null,
+            "start_created_at": undefined,
+          },
+          "perPage": 50,
+          "token": null,
+          "total": 0,
+        },
+      ],
+      "name": "listPhrase",
+    },
+  ],
+  "isFunctionalComponent": undefined,
+}
+`;

@@ -20,7 +20,7 @@ export default {
       repositoryVersion: 'getSelectedVersion',
     }),
     ...mapState({
-      repositoryUuid: state => state.Repository.selectedRepository.uuid,
+      repositoryUuid: state => state.Repository.selectedRepository?.uuid,
       repositoryVersionObject: state => state.Repository.repositoryVersion,
     }),
   },
@@ -45,7 +45,7 @@ export default {
     },
     repositoryUuid() {
       this.updateRepositoryVersion(
-        this.repository.version_default,
+        this.repository?.version_default,
       );
     },
   },
@@ -53,7 +53,7 @@ export default {
     await this.updateRepository();
     if (!this.repositoryVersion) {
       this.updateRepositoryVersion(
-        this.repository.version_default,
+        this.repository?.version_default,
       );
     }
   },
@@ -92,7 +92,7 @@ export default {
     updateRepositoryVersion(version) {
       this.setRepositoryVersion({
         version,
-        repositoryUUID: this.repository.uuid,
+        repositoryUUID: this.repository?.uuid,
       });
     },
     onReady({ error }) {

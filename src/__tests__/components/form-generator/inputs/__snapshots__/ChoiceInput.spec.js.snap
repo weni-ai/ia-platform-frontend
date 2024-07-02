@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChoiceInput.vue renders correctly 1`] = `
+VueWrapper {
+  "_emitted": Object {
+    "input": Array [
+      Array [
+        null,
+      ],
+    ],
+  },
+  "_emittedByOrder": Array [
+    Object {
+      "args": Array [
+        null,
+      ],
+      "name": "input",
+    },
+  ],
+  "isFunctionalComponent": undefined,
+}
+`;
