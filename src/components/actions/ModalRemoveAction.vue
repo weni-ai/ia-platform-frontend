@@ -25,9 +25,9 @@
           {{ $t('modals.actions.btn_cancel') }}
         </UnnnicButton>
         <UnnnicButton
+          #options
           class="btn-remove"
           type="warning"
-          #options
           size="large"
           :loading="removing"
           @click="$emit('remove')"

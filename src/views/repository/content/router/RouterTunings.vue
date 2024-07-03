@@ -13,8 +13,8 @@
 
     <template v-for="(field, index) in fields">
       <UnnnicIntelligenceText
-        :key="`language-${index}`"
         v-if="field.name === 'language'"
+        :key="`language-${index}`"
         color="neutral-dark"
         family="secondary"
         weight="bold"
@@ -39,8 +39,8 @@
         </UnnnicIntelligenceText>
       </header>
       <section
-        :key="index"
         v-if="field.type === 'radio' && !loadingData"
+        :key="index"
         class="tunings__form-element__radio"
       >
         <UnnnicRadio
@@ -56,8 +56,8 @@
       </section>
 
       <LoadingFormElement
-        :key="index"
         v-if="field.type === 'radio' && loadingData"
+        :key="index"
         label
         elementHeight="32px"
         elementWidth="280px"
@@ -65,18 +65,18 @@
       />
 
       <UnnnicSelectSmart
-        class="tunings__container_fields-element"
         v-if="field.type === 'select' && !loadingData"
         :key="index"
+        class="tunings__container_fields-element"
         :modelValue="useSelectSmart(field).value"
         :options="useSelectSmart(field).options"
-        @update:model-value="updateField(field.name, $event[0].value)"
         orderedByIndex
+        @update:model-value="updateField(field.name, $event[0].value)"
       />
 
       <LoadingFormElement
-        :key="index"
         v-if="field.type === 'select' && loadingData"
+        :key="index"
         label
         marginTop="16px"
       />
@@ -115,21 +115,21 @@
         v-if="['token'].includes(field.name)"
         :key="index"
         :modelValue="field.value"
-        @update:model-value="updateField(field.name, $event)"
         :type="hasValidate ? 'error' : 'normal'"
         :message="hasValidate ? $t('customization.invalid_field') : ''"
         :nativeType="field.type"
+        @update:model-value="updateField(field.name, $event)"
       />
     </template>
 
     <RouterTuningsAdvanced
+      v-model:brainOn="data.brainOn"
       class="tunings__advanced"
-      :brainOn.sync="data.brainOn"
     >
       <template v-for="(field, index) in fields">
         <UnnnicIntelligenceText
-          :key="index"
           v-if="field.type === 'naf-header'"
+          :key="index"
           color="neutral-dark"
           family="secondary"
           weight="bold"
@@ -178,12 +178,12 @@
           :maxLabel="field.max?.toString()"
           :step="field.step"
           :initialValue="field.value"
-          @valueChange="updateField(field.name, Number($event))"
           class="tunings__form-element__slider"
+          @valueChange="updateField(field.name, Number($event))"
         />
         <UnnnicSkeletonLoading
-          :key="index"
           v-if="field.type === 'slider' && loadingData"
+          :key="index"
           tag="div"
           height="36px"
           width="384px"
@@ -210,13 +210,12 @@ import LoadingFormElement from '../../../../components/LoadingFormElement.vue';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
 
 export default {
-  props: {
-    data: Object,
-  },
-
   components: {
     RouterTuningsAdvanced,
     LoadingFormElement,
+  },
+  props: {
+    data: Object,
   },
 
   data() {

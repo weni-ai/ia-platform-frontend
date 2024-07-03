@@ -51,11 +51,11 @@
 
             <h1
               v-else
+              id="titleId"
               ref="focusInput"
               class="repository-base-edit__title"
               :contenteditable="canEditTitle"
               @update:model-value="$emit('update:title', $event)"
-              id="titleId"
             >
               {{ title }}
             </h1>

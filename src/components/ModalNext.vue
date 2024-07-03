@@ -5,8 +5,8 @@
       :style="{ maxWidth: maxWidth }"
     >
       <h1
-        class="create-intelligence-modal__container__title"
         v-if="title"
+        class="create-intelligence-modal__container__title"
       >
         {{ title }}
       </h1>

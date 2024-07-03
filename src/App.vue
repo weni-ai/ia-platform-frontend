@@ -38,14 +38,13 @@ import ModalWarn from './components/ModalWarn.vue';
 import ObstructiveError from './views/ObstructiveError.vue';
 
 export default {
+  name: 'App',
   components: {
     I18n,
     ModalDependingOnFlowsLength,
     ModalWarn,
     ObstructiveError,
   },
-
-  name: 'App',
 
   data() {
     return {

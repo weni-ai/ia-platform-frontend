@@ -105,7 +105,7 @@ export default {
     },
 
     hasFooter() {
-      return !!this.$scopedSlots.footer;
+      return !!this.$slots.footer;
     },
 
     modalDynamicAttributes() {

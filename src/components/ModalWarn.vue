@@ -8,7 +8,7 @@
     :closeIcon="false"
     class="modal-warn"
   >
-    <template v-slot:message>
+    <template #message>
       <div v-html="message" />
     </template>
     <UnnnicButton

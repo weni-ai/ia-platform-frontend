@@ -19,24 +19,19 @@
       <UnnnicButton
         v-if="!dontShowSaveButton"
         :loading="item.status === 'saving'"
-        @click="saveText"
         size="small"
         class="repository-base-edit__wrapper__card-content__header__save-button"
         :disabled="!item.value.trim() || item.value === item.oldValue"
+        @click="saveText"
       >
         {{ $t('webapp.settings.save') }}
       </UnnnicButton>
     </header>
 
     <textarea
-      :value="useBrain ? $store.state.Brain.contentText.current : item.value"
-      @input="
-        useBrain
-          ? ($store.state.Brain.contentText.current = $event.target.value)
-          : (item.value = $event.target.value)
-      "
-      name=""
       id="textId"
+      :value="useBrain ? $store.state.Brain.contentText.current : item.value"
+      name=""
       cols="30"
       rows="10"
       class="repository-base-edit__textarea"
@@ -44,6 +39,11 @@
         'repository-base-edit__textarea--button-on-header': !dontShowSaveButton,
       }"
       :placeholder="$t('content_bases.write_content_placeholder')"
+      @input="
+        useBrain
+          ? ($store.state.Brain.contentText.current = $event.target.value)
+          : (item.value = $event.target.value)
+      "
     ></textarea>
 
     <section

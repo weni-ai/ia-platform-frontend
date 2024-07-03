@@ -3,20 +3,20 @@
     <div class="create-repository__container">
       <section class="create-repository__container__steps">
         <IntelligenceTab
-          :name.sync="data.name"
-          :description.sync="data.description"
-          :repository_type.sync="data.repository_type"
+          v-model:name="data.name"
+          v-model:description="data.description"
+          v-model:repository_type="data.repository_type"
         />
       </section>
       <section class="create-repository__container__steps">
         <DefinitionsTab
-          @createRepository="createRepository($event)"
-          @backModal="onChangeModalState(true)"
+          v-model:language="data.language"
+          v-model:is_private="data.is_private"
+          v-model:categories="data.categories"
           :disabledSubmit="disabledSubmit"
           :repository_type="data.repository_type"
-          :language.sync="data.language"
-          :is_private.sync="data.is_private"
-          :categories.sync="data.categories"
+          @createRepository="createRepository($event)"
+          @backModal="onChangeModalState(true)"
         />
       </section>
 
@@ -25,8 +25,8 @@
         :text="$t('webapp.create_repository.modal_title')"
         scheme="aux-yellow-500"
         modalIcon="warning"
-        @close="onChangeModalState(false)"
         :closeIcon="false"
+        @close="onChangeModalState(false)"
       >
         <template #message>
           <span v-html="$t('webapp.create_repository.modal_description')" />
@@ -41,8 +41,8 @@
         </UnnnicButton>
         <UnnnicButton
           #options
-          @click="navigateToHomepage()"
           class="attention-button"
+          @click="navigateToHomepage()"
         >
           {{ $t('webapp.create_repository.modal_exit_button') }}
         </UnnnicButton>

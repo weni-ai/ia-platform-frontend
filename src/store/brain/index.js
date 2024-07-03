@@ -292,7 +292,7 @@ export default {
                 'contentBase-text-create': 'content',
                 'contentBase-text-edit': 'content',
                 'brain-tunings-edit': 'tunings',
-              }[routerName]),
+              })[routerName],
           )
           .filter((tab) => tab);
 

@@ -78,6 +78,14 @@ export default {
     };
   },
 
+  watch: {
+    isShowingEndOfList() {
+      if (this.isShowingEndOfList && this.contentBases.status !== 'complete') {
+        this.loadContentBases();
+      }
+    },
+  },
+
   mounted() {
     this.loadContentBases();
 
@@ -92,14 +100,6 @@ export default {
 
   beforeUnmount() {
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
-  },
-
-  watch: {
-    isShowingEndOfList() {
-      if (this.isShowingEndOfList && this.contentBases.status !== 'complete') {
-        this.loadContentBases();
-      }
-    },
   },
 
   methods: {

@@ -9,8 +9,8 @@
       </section>
       <div class="customization__form">
         <LoadingFormElement
-          label
           v-if="loading"
+          label
         />
 
         <UnnnicFormElement
@@ -29,8 +29,8 @@
       </div>
       <div class="customization__form">
         <LoadingFormElement
-          label
           v-if="loading"
+          label
         />
 
         <UnnnicFormElement
@@ -48,8 +48,8 @@
         </UnnnicFormElement>
 
         <LoadingFormElement
-          label
           v-if="loading"
+          label
         />
 
         <UnnnicFormElement
@@ -61,18 +61,18 @@
             :modelValue="
               handlePersonalityValue(brain.agent.personality.current)
             "
+            :options="personalities"
+            orderedByIndex
             @update:model-value="
               brain.agent.personality.current = $event[0].value
             "
-            :options="personalities"
-            orderedByIndex
           />
         </UnnnicFormElement>
       </div>
       <div class="customization__container__persona">
         <LoadingFormElement
-          label
           v-if="loading"
+          label
           element="textarea"
         />
 
@@ -104,15 +104,15 @@
       </section>
 
       <LoadingFormElement
-        label
         v-if="loading"
+        label
       />
 
       <section
-        v-else
-        class="customization__instructions"
         v-for="(instruction, index) in brain.instructions.current"
+        v-else
         :key="index"
+        class="customization__instructions"
       >
         <UnnnicFormElement
           :label="$t('customization.fields.instruction')"
@@ -138,15 +138,16 @@
 
       <UnnnicButton
         v-else
-        @click="addInstruction"
         size="large"
         :text="$t('customization.instructions.add_instruction_btn')"
         type="tertiary"
         iconLeft="add-1"
         :disabled="false"
+        @click="addInstruction"
       />
     </div>
     <UnnnicModalNext
+      v-show="showRemoveModal"
       type="alert"
       icon="error"
       scheme="feedback-red"
@@ -154,10 +155,9 @@
       :description="$t('customization.instructions.modals.description')"
       :actionPrimaryLabel="$t('customization.instructions.modals.remove_btn')"
       :actionSecondaryLabel="$t('customization.instructions.modals.back_btn')"
-      v-show="showRemoveModal"
+      :actionPrimaryLoading="removing"
       @close="showRemoveModal = false"
       @click-action-primary="removeInstruction"
-      :actionPrimaryLoading="removing"
     />
   </section>
 </template>

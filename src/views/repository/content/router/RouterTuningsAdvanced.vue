@@ -62,11 +62,10 @@
 import nexusaiAPI from '../../../../api/nexusaiAPI';
 
 export default {
+  components: {},
   props: {
     brainOn: Boolean,
   },
-
-  components: {},
 
   data() {
     return {
@@ -77,8 +76,6 @@ export default {
       isActiveBrainOpen: false,
     };
   },
-
-  mounted() {},
 
   watch: {
     open() {
@@ -104,6 +101,8 @@ export default {
       },
     },
   },
+
+  mounted() {},
 
   methods: {
     openActiveOrDeactivateBrain($event) {

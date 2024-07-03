@@ -44,8 +44,8 @@
           <UnnnicTextArea
             v-bind="$props"
             :modelValue="description"
-            @update:model-value="$emit('update:description', $event)"
             :label="$t('modals.actions.descriptions.label')"
+            @update:model-value="$emit('update:description', $event)"
           />
         </section>
       </main>

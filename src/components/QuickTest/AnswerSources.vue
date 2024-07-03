@@ -1,8 +1,8 @@
 <template>
   <section class="sources">
     <UnnnicCollapse
-      size="md"
       v-model="active"
+      size="md"
       :unspacedIcon="true"
     >
       <template #header>

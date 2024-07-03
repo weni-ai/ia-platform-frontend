@@ -8,31 +8,31 @@
       v-if="category !== undefined"
       size="sm"
       :modelValue="category"
-      @update:model-value="$emit('update:category', $event)"
       :options="categories"
+      @update:model-value="$emit('update:category', $event)"
     />
 
     <UnnnicInput
       class="search-input"
       :modelValue="name"
-      @update:model-value="$emit('update:name', $event)"
       size="sm"
       iconLeft="search-1"
       :placeholder="$t('intelligences.search_intelligence_placeholder')"
+      @update:model-value="$emit('update:name', $event)"
     />
 
     <UnnnicRadio
       :globalValue="type"
-      @change="$emit('update:type', $event)"
       modelValue="generative"
+      @change="$emit('update:type', $event)"
     >
       {{ $t('intelligences.filter_type_generative_label') }}
     </UnnnicRadio>
 
     <UnnnicRadio
       :globalValue="type"
-      @change="$emit('update:type', $event)"
       modelValue="classification"
+      @change="$emit('update:type', $event)"
     >
       {{ $t('intelligences.filter_type_classification_label') }}
     </UnnnicRadio>

@@ -1,13 +1,13 @@
 <template>
   <section class="actions__container">
     <BasesFormGenericList
+      v-model:items="items"
       shape="accordion"
       hideCounter
       hideToggle
       :title="$t('router.actions.title')"
       :description="$t('router.actions.description')"
       :addText="$t('router.actions.add')"
-      :items.sync="items"
       canEditItem
       @add="isAddActionOpen = true"
       @edit="openEditAction"
@@ -26,8 +26,8 @@
 
     <ModalChangeAction
       v-if="modalEditAction"
+      v-model:description="modalEditAction.description"
       :editing="modalEditAction.status === 'editing'"
-      :description.sync="modalEditAction.description"
       :item="modalEditAction.name"
       @closeModal="modalEditAction = null"
       @edit="editAction"
@@ -51,19 +51,14 @@ import ModalChangeAction from '../../../../components/actions/ModalChangeAction.
 import ModalRemoveAction from '../../../../components/actions/ModalRemoveAction.vue';
 
 export default {
-  props: {
-    items: Object,
-  },
-
   components: {
     BasesFormGenericList,
     ModalActions,
     ModalChangeAction,
     ModalRemoveAction,
   },
-
-  created() {
-    this.loadActions();
+  props: {
+    items: Object,
   },
 
   data() {
@@ -75,6 +70,10 @@ export default {
       modalDeleteAction: null,
       flowName: null,
     };
+  },
+
+  created() {
+    this.loadActions();
   },
 
   methods: {

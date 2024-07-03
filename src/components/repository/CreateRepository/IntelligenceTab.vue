@@ -10,8 +10,8 @@
             $t('webapp.create_repository.intelligence_name_placeholder')
           "
           :modelValue="name"
-          @update:model-value="$emit('update:name', $event)"
           maxlength="64"
+          @update:model-value="$emit('update:name', $event)"
         />
       </UnnnicFormElement>
 

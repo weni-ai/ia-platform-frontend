@@ -10,8 +10,8 @@
       class="messages"
     >
       <div
-        class="messages__content"
         ref="messages"
+        class="messages__content"
       >
         <section
           v-if="!messages.length"
@@ -53,7 +53,7 @@
 
             <AnswerFeedback
               v-if="message.type === 'answer' && message.question_uuid"
-              :feedback.sync="message.feedback"
+              v-model:feedback="message.feedback"
               :contentBaseUuid="contentBaseUuid"
               :questionUuid="message.question_uuid"
             />
@@ -119,12 +119,6 @@ import PreviewPlaceholder from './router/Preview/Placeholder.vue';
 export default {
   name: 'RepositoryContentTests',
 
-  props: {
-    contentBaseUuid: String,
-    contentBaseLanguage: String,
-    usePreview: Boolean,
-  },
-
   components: {
     Markdown,
     AnswerSources,
@@ -134,6 +128,12 @@ export default {
   },
 
   mixins: [FlowPreview],
+
+  props: {
+    contentBaseUuid: String,
+    contentBaseLanguage: String,
+    usePreview: Boolean,
+  },
 
   data() {
     return {
@@ -166,16 +166,6 @@ export default {
     },
   },
 
-  mounted() {
-    if (this.usePreview) {
-      this.previewInit();
-
-      window.brainPreviewAddMessage = (message) => {
-        this.messages.push(message);
-      };
-    }
-  },
-
   watch: {
     'preview.session.status'(value, previous) {
       if (previous === 'waiting' && value === 'completed') {
@@ -190,6 +180,16 @@ export default {
         });
       }
     },
+  },
+
+  mounted() {
+    if (this.usePreview) {
+      this.previewInit();
+
+      window.brainPreviewAddMessage = (message) => {
+        this.messages.push(message);
+      };
+    }
   },
 
   methods: {
@@ -428,38 +428,44 @@ export default {
 
   border-radius: calc($dot-size / 2);
   background-color: transparent;
-  box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+  box-shadow:
+    -$dot-size * 1.75 ($dot-min-height) $dot-color,
     0 ($dot-min-height) $dot-color,
     $dot-size * 1.75 ($dot-min-height) $dot-color;
   animation: dot-typing 1s infinite ease;
 
   @keyframes dot-typing {
     0% {
-      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+      box-shadow:
+        -$dot-size * 1.75 ($dot-min-height) $dot-color,
         0 ($dot-min-height) $dot-color,
         $dot-size * 1.75 ($dot-min-height) $dot-color;
     }
 
     20% {
-      box-shadow: -$dot-size * 1.75 ($dot-max-height) $dot-color,
+      box-shadow:
+        -$dot-size * 1.75 ($dot-max-height) $dot-color,
         0 ($dot-min-height) $dot-color,
         $dot-size * 1.75 ($dot-min-height) $dot-color;
     }
 
     40% {
-      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+      box-shadow:
+        -$dot-size * 1.75 ($dot-min-height) $dot-color,
         0 ($dot-max-height) $dot-color,
         $dot-size * 1.75 ($dot-min-height) $dot-color;
     }
 
     60% {
-      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+      box-shadow:
+        -$dot-size * 1.75 ($dot-min-height) $dot-color,
         0 ($dot-min-height) $dot-color,
         $dot-size * 1.75 ($dot-max-height) $dot-color;
     }
 
     80% {
-      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+      box-shadow:
+        -$dot-size * 1.75 ($dot-min-height) $dot-color,
         0 ($dot-min-height) $dot-color,
         $dot-size * 1.75 ($dot-min-height) $dot-color;
     }

@@ -24,9 +24,9 @@
     >
       <UnnnicSelectSmart
         :modelValue="[languages.find(({ value }) => value === language)]"
-        @update:model-value="language = $event[0].value"
         :options="languages"
         orderedByIndex
+        @update:model-value="language = $event[0].value"
       />
     </UnnnicFormElement>
 
@@ -58,9 +58,9 @@
             : $t('webapp.home.bases.adjustments_button')
         "
         type="primary"
-        @click="createNewBase"
         :disabled="disabledSave"
         :loading="creatingNewBase"
+        @click="createNewBase"
       />
     </div>
   </ModalNext>
@@ -72,14 +72,13 @@ import ModalNext from './ModalNext.vue';
 import { get } from 'lodash';
 
 export default {
+  components: {
+    ModalNext,
+  },
   props: {
     intelligenceUuid: String,
     contentBaseUuid: String,
     preFilledValues: Object,
-  },
-
-  components: {
-    ModalNext,
   },
 
   data() {
@@ -107,24 +106,6 @@ export default {
     };
   },
 
-  mounted() {
-    const userLanguage = get(
-      this.$store.state.User,
-      'me.language',
-      '',
-    ).toLowerCase();
-
-    this.language = ['pt-br', 'en-us', 'es'].includes(userLanguage)
-      ? userLanguage
-      : 'pt-br';
-
-    if (this.preFilledValues) {
-      Object.keys(this.preFilledValues).forEach((name) => {
-        this.name = this.preFilledValues[name];
-      });
-    }
-  },
-
   computed: {
     type() {
       if (this.contentBaseUuid) {
@@ -150,6 +131,24 @@ export default {
 
       return false;
     },
+  },
+
+  mounted() {
+    const userLanguage = get(
+      this.$store.state.User,
+      'me.language',
+      '',
+    ).toLowerCase();
+
+    this.language = ['pt-br', 'en-us', 'es'].includes(userLanguage)
+      ? userLanguage
+      : 'pt-br';
+
+    if (this.preFilledValues) {
+      Object.keys(this.preFilledValues).forEach((name) => {
+        this.name = this.preFilledValues[name];
+      });
+    }
   },
 
   methods: {

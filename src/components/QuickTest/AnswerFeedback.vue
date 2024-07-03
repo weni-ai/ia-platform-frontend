@@ -46,8 +46,8 @@
 
     <section
       v-if="feedback.value === 'disliked' && feedback.reason !== 'close_reason'"
-      class="feedback__reason"
       ref="reason-container"
+      class="feedback__reason"
     >
       <header class="feedback__reason__header">
         <UnnnicIntelligenceText

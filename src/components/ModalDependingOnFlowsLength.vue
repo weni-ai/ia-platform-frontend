@@ -1,10 +1,10 @@
 <template>
   <div>
     <UnnnicModalNext
-      class="integrate"
       v-if="showHowToIntegrate"
-      @close="showHowToIntegrate = false"
+      class="integrate"
       showCloseButton
+      @close="showHowToIntegrate = false"
     >
       <div class="integrate--title">
         {{ $t('modals.how_to_integrate.title') }}
@@ -33,17 +33,17 @@
         <UnnnicButton
           v-if="step === 2"
           type="tertiary"
-          @click.stop="step = 1"
           :text="$t('modals.how_to_integrate.second_step.back_button')"
+          @click.stop="step = 1"
         />
         <UnnnicButton
           type="secondary"
-          @click="nextStep"
           :text="
             step === 2
               ? $t('modals.how_to_integrate.second_step.close_button')
               : $t('modals.how_to_integrate.first_step.next_step')
           "
+          @click="nextStep"
         />
       </div>
     </UnnnicModalNext>
@@ -62,16 +62,6 @@ export default {
       hasFlows: null,
       step: 1,
     };
-  },
-
-  created() {
-    iframessa.get('hasFlows', ({ data: hasFlows }) => {
-      this.hasFlows = hasFlows;
-    });
-
-    iframessa.on('update:hasFlows', ({ data: hasFlows }) => {
-      this.hasFlows = hasFlows;
-    });
   },
 
   computed: {
@@ -114,6 +104,16 @@ export default {
         }
       },
     },
+  },
+
+  created() {
+    iframessa.get('hasFlows', ({ data: hasFlows }) => {
+      this.hasFlows = hasFlows;
+    });
+
+    iframessa.on('update:hasFlows', ({ data: hasFlows }) => {
+      this.hasFlows = hasFlows;
+    });
   },
 
   methods: {

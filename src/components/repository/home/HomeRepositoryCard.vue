@@ -7,8 +7,8 @@
     }"
   >
     <div
-      @click.prevent.stop="repositoryDetailsRouterParams()"
       :class="['unnnic-card-intelligence', `unnnic-card-intelligence--${type}`]"
+      @click.prevent.stop="repositoryDetailsRouterParams()"
     >
       <section class="unnnic-card-intelligence__header">
         <div class="unnnic-card-intelligence__header__detail">
@@ -41,12 +41,12 @@
             >
               <UnnnicButton
                 v-if="!hasIntegration"
-                @click.prevent.stop="changeIntegrateModalState(true)"
                 iconCenter="add-1"
                 size="small"
                 icon="add-1"
                 class="mr-2"
                 type="alternative"
+                @click.prevent.stop="changeIntegrateModalState(true)"
               />
             </UnnnicToolTip>
           </div>
@@ -69,15 +69,15 @@
 
           <UnnnicDropdown
             v-if="(type === 'base' && canContribute) || type !== 'base'"
+            v-model:open="dropdownOpen"
             position="bottom-left"
-            :open.sync="dropdownOpen"
           >
             <UnnnicIconSvg
+              #trigger
               icon="navigation-menu-vertical-1"
               class="unnnic-card-intelligence__header__buttons__icon"
               scheme="neutral-clean"
               size="sm"
-              #trigger
               clickable
             />
 
@@ -94,7 +94,7 @@
                     {{
                       $tc(
                         'webapp.intelligences_lib.show_intents',
-                        this.repositoryDetail.intents.length,
+                        repositoryDetail.intents.length,
                       )
                     }}
                   </div>
@@ -113,7 +113,7 @@
                     {{
                       $tc(
                         'webapp.intelligences_lib.show_languages',
-                        this.repositoryDetail.available_languages.length,
+                        repositoryDetail.available_languages.length,
                       )
                     }}
                   </div>
@@ -230,8 +230,8 @@
       </section> -->
 
       <footer
-        class="base__footer"
         v-if="type === 'base'"
+        class="base__footer"
       >
         {{ language }}
       </footer>
@@ -241,14 +241,14 @@
       <section class="unnnic-card-intelligence__detail">
         <div
           v-if="type === 'repository'"
-          class="unnnic-card-intelligence__detail__content"
           v-show="repositoryDetail.repository_type === 'classifier'"
+          class="unnnic-card-intelligence__detail__content"
         >
           <div class="unnnic-card-intelligence__detail__content__data">
             {{
               $tc(
                 'webapp.intelligences_lib.intent',
-                this.repositoryDetail.intents.length,
+                repositoryDetail.intents.length,
               )
             }}
           </div>
@@ -315,7 +315,7 @@
             {{
               $tc(
                 'webapp.intelligences_lib.language',
-                this.repositoryDetail.available_languages.length,
+                repositoryDetail.available_languages.length,
               )
             }}
           </div>
@@ -337,14 +337,14 @@
 
         <div
           v-if="type === 'repository'"
-          class="unnnic-card-intelligence__detail__content"
           v-show="repositoryDetail.repository_type === 'classifier'"
+          class="unnnic-card-intelligence__detail__content"
         >
           <div class="unnnic-card-intelligence__detail__content__data">
             {{
               $tc(
                 'webapp.intelligences_lib.intelligence_force',
-                this.repositoryDetail.intents.length,
+                repositoryDetail.intents.length,
               )
             }}
             <UnnnicToolTip
@@ -391,7 +391,7 @@
       :showModal="openConfirmModal"
       :text="
         $t('webapp.intelligences_lib.clone.confirm_modal_title', {
-          intelligence: this.selectedIntelligence,
+          intelligence: selectedIntelligence,
         })
       "
       scheme="feedback-yellow"
@@ -439,18 +439,18 @@
 
     <SideBarContentBases
       v-if="isViewBasesOpen"
-      @close="isViewBasesOpen = false"
       :name="repositoryDetail.name"
       :intelligenceUuid="repositoryDetail.uuid"
+      @close="isViewBasesOpen = false"
     />
 
     <SideBarQuickTest
       v-if="isQuickTestOpen"
-      @close="isQuickTestOpen = false"
+      :id="repositoryDetail.id"
       :name="repositoryDetail.title"
       :repositoryUuid="repositoryDetail.uuid"
       :repositoryLanguage="repositoryDetail.language"
-      :id="repositoryDetail.id"
+      @close="isQuickTestOpen = false"
     />
 
     <UnnnicModal
@@ -483,8 +483,8 @@
       <UnnnicButton
         #options
         type="warning"
-        @click="deleteIntelligence"
         :loading="deletingIntelligence"
+        @click="deleteIntelligence"
       >
         {{ $t('delete') }}
       </UnnnicButton>
@@ -503,6 +503,19 @@ import { get } from 'lodash';
 export default {
   name: 'HomeRepositoryCard',
   components: { IntegrationModal, SideBarContentBases, SideBarQuickTest },
+  props: {
+    type: {
+      type: String,
+      default: 'repository',
+    },
+
+    repositoryDetail: {
+      type: [Object, Array],
+      default: null,
+    },
+
+    canContribute: Boolean,
+  },
   data() {
     return {
       dropdownOpen: false,
@@ -521,19 +534,6 @@ export default {
       isDeleteIntelligenceConfirmationOpen: false,
       deletingIntelligence: false,
     };
-  },
-  props: {
-    type: {
-      type: String,
-      default: 'repository',
-    },
-
-    repositoryDetail: {
-      type: [Object, Array],
-      default: null,
-    },
-
-    canContribute: Boolean,
   },
   mounted() {
     this.checkIfHasIntegration();

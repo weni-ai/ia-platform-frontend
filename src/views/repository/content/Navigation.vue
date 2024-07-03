@@ -1,5 +1,7 @@
 <template>
   <UnnnicButton
+    iconCenter="settings"
+    type="secondary"
     @click.native="
       $router.push({
         name: 'intelligence-edit',
@@ -8,8 +10,6 @@
         },
       })
     "
-    iconCenter="settings"
-    type="secondary"
   />
 </template>
 <script>

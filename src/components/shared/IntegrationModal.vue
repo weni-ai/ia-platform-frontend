@@ -25,8 +25,8 @@
           "
         />
         <div
-          class="integration-modal__field"
           v-show="hasIntegration"
+          class="integration-modal__field"
         >
           <span
             class="integration-modal__field__label"

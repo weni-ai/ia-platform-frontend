@@ -19,16 +19,15 @@ import Tests from '../../../views/repository/content/Tests.vue';
 import RightSidebar from '../../RightSidebar.vue';
 
 export default {
+  components: {
+    Tests,
+    RightSidebar,
+  },
   props: {
     name: String,
     repositoryUuid: String,
     repositoryLanguage: String,
     id: Number,
-  },
-
-  components: {
-    Tests,
-    RightSidebar,
   },
 
   data() {

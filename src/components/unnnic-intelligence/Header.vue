@@ -10,8 +10,8 @@
       />
 
       <p
-        v-html="description"
         class="description"
+        v-html="description"
       ></p>
     </div>
 

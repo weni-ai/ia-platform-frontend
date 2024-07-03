@@ -9,12 +9,12 @@
 
         <UnnnicSelectSmart
           :modelValue="[languages.find(({ value }) => value === language)]"
-          @update:model-value="$emit('update:language', $event[0].value)"
           :options="languages"
           orderedByIndex
           autocomplete
           autocompleteClearOnFocus
           size="sm"
+          @update:model-value="$emit('update:language', $event[0].value)"
         />
       </section>
 
@@ -64,11 +64,13 @@
           </template>
 
           <UnnnicTag
-            v-else
             v-for="category in categoryList"
+            v-else
             :key="category.id"
             :text="category.name"
             :disabled="categories.includes(category.id)"
+            clickable
+            type="brand"
             @click.native="
               $emit(
                 'update:categories',
@@ -77,8 +79,6 @@
                   : [...categories, category.id],
               )
             "
-            clickable
-            type="brand"
           />
         </div>
       </section>
@@ -94,8 +94,8 @@
 
         <UnnnicButton
           class="create-repository__definitions__buttons__btn"
-          @click.native="dispatchCreateRepository()"
           :disabled="disabledSubmit"
+          @click.native="dispatchCreateRepository()"
         >
           {{ $t('webapp.create_repository.create_intelligence_button') }}
         </UnnnicButton>
@@ -120,6 +120,9 @@ import Loading from '@/components/shared/Loading.vue';
 
 export default {
   name: 'DefinitionsTab',
+  components: {
+    Loading,
+  },
   props: {
     disabledSubmit: Boolean,
     repository_type: String,
@@ -127,18 +130,11 @@ export default {
     is_private: Boolean,
     categories: Array,
   },
-  components: {
-    Loading,
-  },
   data() {
     return {
       categoryListLoading: false,
       categoryList: [],
     };
-  },
-
-  mounted() {
-    this.getCategories();
   },
   computed: {
     languages() {
@@ -154,6 +150,10 @@ export default {
         })),
       );
     },
+  },
+
+  mounted() {
+    this.getCategories();
   },
   methods: {
     ...mapActions(['getAllCategories']),
