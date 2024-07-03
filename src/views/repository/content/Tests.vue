@@ -115,6 +115,7 @@ import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 import Markdown from '../../../components/Markdown.vue';
 import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
 import PreviewPlaceholder from './router/Preview/Placeholder.vue';
+import { reactive } from 'vue';
 
 export default {
   name: 'RepositoryContentTests',
@@ -309,7 +310,7 @@ export default {
       this.scrollToLastMessage();
 
       setTimeout(() => {
-        const answer = {
+        const answer = reactive({
           type: 'answer',
           text: '',
           status: 'loading',
@@ -318,7 +319,7 @@ export default {
             value: null,
             reason: null,
           },
-        };
+        });
 
         this.messages.push(answer);
 
@@ -391,7 +392,9 @@ export default {
 
     scrollToLastMessage() {
       this.$nextTick(() => {
-        this.$refs.messages.lastChild.scrollIntoView({ behavior: 'smooth' });
+        this.$refs.messages.lastElementChild.scrollIntoView({
+          behavior: 'smooth',
+        });
       });
     },
   },

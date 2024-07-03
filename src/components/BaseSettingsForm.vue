@@ -146,7 +146,7 @@ export default {
 
     if (this.preFilledValues) {
       Object.keys(this.preFilledValues).forEach((name) => {
-        this.name = this.preFilledValues[name];
+        this[name] = this.preFilledValues[name];
       });
     }
   },

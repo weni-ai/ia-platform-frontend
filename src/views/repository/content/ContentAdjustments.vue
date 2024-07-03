@@ -33,7 +33,6 @@
         v-else
         v-model="description"
         :label="$t('webapp.create_repository.description_label')"
-        :placeholder="$t('')"
       />
 
       <section class="repository-adjustments__wrapper__buttons">
