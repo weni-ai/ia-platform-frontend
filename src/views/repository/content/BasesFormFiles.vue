@@ -114,7 +114,6 @@
         </UnnnicButton>
 
         <UnnnicButton
-          #options
           class="create-repository__container__button attention-button"
           type="warning"
           :loading="modalDeleteFile.status === 'deleting'"
@@ -132,6 +131,7 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import BasesFormFilesItem from './BasesFormFilesItem.vue';
 import BasesFormGenericList from './BasesFormGenericList.vue';
+import { reactive } from 'vue';
 
 export default {
   components: {
@@ -291,7 +291,7 @@ export default {
           ? file.name
           : file.name.slice(file.name.lastIndexOf('.') + 1);
 
-      const fileItem = {
+      const fileItem = reactive({
         uuid: `temp-${Math.floor(Math.random() * 1e9)}`,
         file: file.name,
         created_file_name:
@@ -302,7 +302,7 @@ export default {
         status: 'waiting',
         progress: 0,
         file_name: file.name,
-      };
+      });
 
       this.files.data.push(fileItem);
 
