@@ -1400,7 +1400,7 @@
       },
       "remove": {
         "title": "Remove action",
-        "description": "Are you sure you want to remove the <strong>{name}</strong> action? <br><br>This action cannot be reversed"
+        "description": "Are you sure you want to remove the <strong>{name}</strong> action?<br />This action cannot be reversed"
       }
     },
     "cant_access": {

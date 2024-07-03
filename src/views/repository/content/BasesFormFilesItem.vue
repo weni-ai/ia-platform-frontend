@@ -65,7 +65,8 @@
           icon="delete"
           size="sm"
           class="files-list__content__file__actions__icon"
-          @click.native.stop="$emit('remove')"
+          clickable
+          @click.stop="$emit('remove')"
         />
       </section>
 
