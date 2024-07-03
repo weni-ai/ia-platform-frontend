@@ -1,7 +1,8 @@
 <template>
-  <ModalNext
-    class="flow-modal create-intelligence-modal"
-    maxWidth="604px"
+  <UnnnicModal
+    showModal
+    :closeIcon="false"
+    class="flow-modal"
   >
     <article class="flow-modal__container">
       <header class="flow-modal__header">
@@ -41,43 +42,38 @@
       </header>
       <main class="flow-modal__body">
         <section class="flow-modal__body_description">
-          <UnnnicTextArea
-            v-bind="$props"
-            :modelValue="description"
-            :label="$t('modals.actions.descriptions.label')"
-            @update:model-value="$emit('update:description', $event)"
-          />
+          <UnnnicFormElement :label="$t('modals.actions.descriptions.label')">
+            <UnnnicTextArea
+              v-bind="$props"
+              :modelValue="description"
+              @update:model-value="$emit('update:description', $event)"
+            />
+          </UnnnicFormElement>
         </section>
       </main>
-      <footer class="flow-modal__footer">
-        <UnnnicButton
-          #options
-          class="create-repository__container__button"
-          type="tertiary"
-          @click="$emit('closeModal')"
-        >
-          {{ $t('modals.actions.btn_cancel') }}
-        </UnnnicButton>
-        <UnnnicButton
-          #options
-          size="large"
-          :loading="editing"
-          @click="$emit('edit')"
-        >
-          {{ $t('modals.actions.btn_complete') }}
-        </UnnnicButton>
-      </footer>
     </article>
-  </ModalNext>
+
+    <template #options>
+      <UnnnicButton
+        class="create-repository__container__button"
+        type="tertiary"
+        @click="$emit('closeModal')"
+      >
+        {{ $t('modals.actions.btn_cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
+        size="large"
+        :loading="editing"
+        @click="$emit('edit')"
+      >
+        {{ $t('modals.actions.btn_complete') }}
+      </UnnnicButton>
+    </template>
+  </UnnnicModal>
 </template>
 
 <script>
-import ModalNext from '../ModalNext.vue';
-
 export default {
-  components: {
-    ModalNext,
-  },
   props: {
     description: String,
     item: String,
@@ -90,14 +86,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.create-intelligence-modal {
-  :deep(.create-intelligence-modal__container) {
-    padding: $unnnic-spacing-xl $unnnic-spacing-md $unnnic-spacing-md
-      $unnnic-spacing-md;
-  }
-}
-
 .flow-modal {
+  :deep(.unnnic-modal-container-background) {
+    width: 100%;
+    max-width: 37.75 * $unnnic-font-size;
+  }
+
+  :deep(.unnnic-modal-container-background-body-description-container) {
+    padding-bottom: 0;
+  }
+
   &__container {
     display: flex;
     flex-direction: column;
@@ -111,15 +109,8 @@ export default {
     margin-bottom: $unnnic-spacing-md;
   }
 
-  &__footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: $unnnic-spacing-md;
-    gap: $unnnic-spacing-sm;
-
-    button {
-      width: 100%;
-    }
+  &__body {
+    text-align: left;
   }
 }
 </style>

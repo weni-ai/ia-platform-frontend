@@ -32,7 +32,7 @@
           :compressed="shape === 'accordion'"
           :class="[{ 'files-list__item--can-edit': canEditItem }]"
           @remove="$emit('remove', file)"
-          @click.native="$emit('edit', file)"
+          @click="$emit('edit', file)"
         />
 
         <template v-if="items.status === 'loading'">

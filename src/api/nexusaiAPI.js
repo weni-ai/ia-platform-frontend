@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as Sentry from '@sentry/browser';
 import store from '../store';
 import i18n from '../utils/plugins/i18n';
-import { get, delay } from 'lodash';
+import { get } from 'lodash';
 
 const request = {
   get $http() {
@@ -27,11 +27,11 @@ const request = {
         let defaultMessage;
 
         if ([500, 408].includes(statusCode)) {
-          defaultMessage = i18n.t('internal_server_error');
+          defaultMessage = i18n.global.t('internal_server_error');
         } else if (statusCode === 401) {
-          defaultMessage = i18n.t('unauthorized');
+          defaultMessage = i18n.global.t('unauthorized');
         } else {
-          defaultMessage = i18n.t('unexpected_error');
+          defaultMessage = i18n.global.t('unexpected_error');
         }
 
         store.state.alert = {
