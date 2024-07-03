@@ -24,7 +24,7 @@
     <UnnnicRadio
       :globalValue="type"
       modelValue="generative"
-      @change="$emit('update:type', $event)"
+      @update:modelValue="$emit('update:type', $event)"
     >
       {{ $t('intelligences.filter_type_generative_label') }}
     </UnnnicRadio>
@@ -32,7 +32,7 @@
     <UnnnicRadio
       :globalValue="type"
       modelValue="classification"
-      @change="$emit('update:type', $event)"
+      @update:modelValue="$emit('update:type', $event)"
     >
       {{ $t('intelligences.filter_type_classification_label') }}
     </UnnnicRadio>

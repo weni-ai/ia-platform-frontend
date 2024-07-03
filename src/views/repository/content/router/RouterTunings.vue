@@ -49,7 +49,7 @@
           :modelValue="option"
           :globalValue="field.value"
           size="md"
-          @change="updateField(field.name, option)"
+          @update:modelValue="updateField(field.name, option)"
         >
           {{ option }}
         </UnnnicRadio>
@@ -246,7 +246,8 @@ export default {
 
   methods: {
     updateField(name, value) {
-      this.$store.state.Brain.tunings.name = value;
+      console.log('updateField', name, value, this.$store.state.Brain.tunings[name])
+      this.$store.state.Brain.tunings[name] = value;
     },
 
     openRestoreDefaultModal() {

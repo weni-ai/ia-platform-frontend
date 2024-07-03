@@ -15,7 +15,7 @@
       ref="browser-file-input"
       type="file"
       multiple
-      @change="drop"
+      @update:modelValue="drop"
     />
 
     <div

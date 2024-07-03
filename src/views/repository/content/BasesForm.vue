@@ -72,7 +72,7 @@
             <UnnnicTab
               :tabs="routerTabs.map((e) => e.page)"
               :activeTab="routerTabs.find((e) => e.page === $route.name).page"
-              @change="onTabChange"
+              @update:modelValue="onTabChange"
             >
               <template
                 v-for="tab in routerTabs"

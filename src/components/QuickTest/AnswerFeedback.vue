@@ -78,7 +78,7 @@
           :modelValue="reason.value"
           :globalValue="feedback.reason"
           size="md"
-          @change="
+          @update:modelValue="
             $emit('update:feedback', { ...feedback, reason: reason.value })
           "
         >
