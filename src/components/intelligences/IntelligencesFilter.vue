@@ -22,16 +22,16 @@
     />
 
     <UnnnicRadio
-      :value="type"
-      modelValue="generative"
+      :modelValue="type"
+      value="generative"
       @update:modelValue="$emit('update:type', $event)"
     >
       {{ $t('intelligences.filter_type_generative_label') }}
     </UnnnicRadio>
 
     <UnnnicRadio
-      :value="type"
-      modelValue="classification"
+      :modelValue="type"
+      value="classification"
       @update:modelValue="$emit('update:type', $event)"
     >
       {{ $t('intelligences.filter_type_classification_label') }}
