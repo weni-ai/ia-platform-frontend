@@ -47,7 +47,7 @@
           v-for="option in field.options"
           :key="option"
           :modelValue="option"
-          :globalValue="field.value"
+          :value="field.value"
           size="md"
           @update:modelValue="updateField(field.name, option)"
         >
@@ -118,7 +118,7 @@
         :type="hasValidate ? 'error' : 'normal'"
         :message="hasValidate ? $t('customization.invalid_field') : ''"
         :nativeType="field.type"
-        @update:model-value="updateField(field.name, $event)"
+        @update:modelValue="updateField(field.name, $event)"
       />
     </template>
 

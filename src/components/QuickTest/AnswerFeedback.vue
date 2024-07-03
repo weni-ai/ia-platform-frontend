@@ -76,7 +76,7 @@
           v-for="reason in reasons"
           :key="reason.value"
           :modelValue="reason.value"
-          :globalValue="feedback.reason"
+          :value="feedback.reason"
           size="md"
           @update:modelValue="
             $emit('update:feedback', { ...feedback, reason: reason.value })

@@ -22,7 +22,7 @@
     />
 
     <UnnnicRadio
-      :globalValue="type"
+      :value="type"
       modelValue="generative"
       @update:modelValue="$emit('update:type', $event)"
     >
@@ -30,7 +30,7 @@
     </UnnnicRadio>
 
     <UnnnicRadio
-      :globalValue="type"
+      :value="type"
       modelValue="classification"
       @update:modelValue="$emit('update:type', $event)"
     >
