@@ -305,7 +305,7 @@ export default {
       }));
       const conditionValue = (value) => this.isWeniGpt(field.name) ? value === field.value.name : value === field.value
       const value = [options.find(({ value }) => conditionValue(value))];
-      console.log("useSelectSmart", value, options, field, options.find(({ value }) => conditionValue(value)))
+      
       return {
         value,
         options,
