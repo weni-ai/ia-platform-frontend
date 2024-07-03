@@ -168,7 +168,9 @@ export default {
 
   mounted() {
     if (this.usePreview) {
-      this.previewInit();
+      this.previewInit({
+        contentBaseUuid: this.$store.state.router.contentBaseUuid,
+      });
 
       window.brainPreviewAddMessage = (message) => {
         this.messages.push(message);
