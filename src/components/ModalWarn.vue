@@ -11,24 +11,23 @@
     <template #message>
       <div v-html="message" />
     </template>
-    <UnnnicButton
-      #options
-      class="create-repository__container__button"
-      type="tertiary"
-      @click="$emit('close')"
-    >
-      {{ closeText }}
-    </UnnnicButton>
-
-    <UnnnicButton
-      #options
-      class="create-repository__container__button attention-button"
-      type="attention"
-      :loading="loading"
-      @click="$emit('action')"
-    >
-      {{ actionText }}
-    </UnnnicButton>
+    <template #options>
+      <UnnnicButton
+        class="create-repository__container__button"
+        type="tertiary"
+        @click="$emit('close')"
+      >
+        {{ closeText }}
+      </UnnnicButton>
+      <UnnnicButton
+        class="create-repository__container__button attention-button"
+        type="attention"
+        :loading="loading"
+        @click="$emit('action')"
+      >
+        {{ actionText }}
+      </UnnnicButton>
+    </template>
   </UnnnicModal>
 </template>
 

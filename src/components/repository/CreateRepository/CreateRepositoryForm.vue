@@ -31,21 +31,20 @@
         <template #message>
           <span v-html="$t('webapp.create_repository.modal_description')" />
         </template>
-
-        <UnnnicButton
-          #options
-          type="tertiary"
-          @click="onChangeModalState(false)"
-        >
-          {{ $t('webapp.create_repository.modal_continue_button') }}
-        </UnnnicButton>
-        <UnnnicButton
-          #options
-          class="attention-button"
-          @click="navigateToHomepage()"
-        >
-          {{ $t('webapp.create_repository.modal_exit_button') }}
-        </UnnnicButton>
+        <template #options>
+          <UnnnicButton
+            type="tertiary"
+            @click="onChangeModalState(false)"
+          >
+            {{ $t('webapp.create_repository.modal_continue_button') }}
+          </UnnnicButton>
+          <UnnnicButton
+            class="attention-button"
+            @click="navigateToHomepage()"
+          >
+            {{ $t('webapp.create_repository.modal_exit_button') }}
+          </UnnnicButton>
+        </template>
       </UnnnicModal>
     </div>
 

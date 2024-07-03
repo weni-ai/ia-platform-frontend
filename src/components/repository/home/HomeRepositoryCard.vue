@@ -72,14 +72,15 @@
             v-model:open="dropdownOpen"
             position="bottom-left"
           >
-            <UnnnicIconSvg
-              #trigger
-              icon="navigation-menu-vertical-1"
-              class="unnnic-card-intelligence__header__buttons__icon"
-              scheme="neutral-clean"
-              size="sm"
-              clickable
-            />
+            <template #trigger>
+              <UnnnicIconSvg
+                icon="navigation-menu-vertical-1"
+                class="unnnic-card-intelligence__header__buttons__icon"
+                scheme="neutral-clean"
+                size="sm"
+                clickable
+              />
+            </template>
 
             <div v-if="repositoryDetail.repository_type === 'classifier'">
               <UnnnicDropdownItem @click="showDetailModal(intentModal)">
@@ -403,21 +404,20 @@
           v-html="$t('webapp.intelligences_lib.clone.confirm_modal_message')"
         />
       </template>
-
-      <UnnnicButton
-        #options
-        type="tertiary"
-        @click="openConfirmModal = false"
-      >
-        {{ $t('webapp.home.cancel') }}
-      </UnnnicButton>
-      <UnnnicButton
-        #options
-        type="secondary"
-        @click="copyIntelligence()"
-      >
-        {{ $t('webapp.intelligences_lib.clone.copy') }}
-      </UnnnicButton>
+      <template #options>
+        <UnnnicButton
+          type="tertiary"
+          @click="openConfirmModal = false"
+        >
+          {{ $t('webapp.home.cancel') }}
+        </UnnnicButton>
+        <UnnnicButton
+          type="secondary"
+          @click="copyIntelligence()"
+        >
+          {{ $t('webapp.intelligences_lib.clone.copy') }}
+        </UnnnicButton>
+      </template>
     </UnnnicModal>
     <UnnnicModal
       :showModal="openNotificationModal"
@@ -472,22 +472,21 @@
           "
         ></span>
       </template>
-
-      <UnnnicButton
-        #options
-        type="tertiary"
-        @click="isDeleteIntelligenceConfirmationOpen = false"
-      >
-        {{ $t('cancel') }}
-      </UnnnicButton>
-      <UnnnicButton
-        #options
-        type="warning"
-        :loading="deletingIntelligence"
-        @click="deleteIntelligence"
-      >
-        {{ $t('delete') }}
-      </UnnnicButton>
+      <template #options>
+        <UnnnicButton
+          type="tertiary"
+          @click="isDeleteIntelligenceConfirmationOpen = false"
+        >
+          {{ $t('cancel') }}
+        </UnnnicButton>
+        <UnnnicButton
+          type="warning"
+          :loading="deletingIntelligence"
+          @click="deleteIntelligence"
+        >
+          {{ $t('delete') }}
+        </UnnnicButton>
+      </template>
     </UnnnicModal>
   </div>
 </template>

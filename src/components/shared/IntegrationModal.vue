@@ -42,37 +42,36 @@
         </div>
       </div>
     </template>
-
-    <UnnnicButton
-      #options
-      type="tertiary"
-      @click.prevent.stop="dispatchCloseModal()"
-    >
-      {{ $t('webapp.home.cancel') }}
-    </UnnnicButton>
-    <UnnnicButton
-      #options
-      class="integration-modal__button"
-      :class="{
-        'integration-modal__button__opacity':
-          checkInputConfirm && hasIntegration,
-      }"
-      type="secondary"
-      :loading="loading"
-      :disabled="hasIntegration && checkInputConfirm"
-      @click.prevent.stop="
-        hasIntegration
-          ? dispatchRemoveIntegrateRepository()
-          : dispatchIntegrateRepository()
-      "
-    >
-      <span
-        v-if="hasIntegration"
-        class="integration-modal__button__txt"
-        >{{ $t('webapp.home.confirm_remove_integrate') }}</span
+    <template #options>
+      <UnnnicButton
+        type="tertiary"
+        @click.prevent.stop="dispatchCloseModal()"
       >
-      <span v-else>{{ $t('webapp.home.confirm_integrate') }}</span>
-    </UnnnicButton>
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
+        class="integration-modal__button"
+        :class="{
+          'integration-modal__button__opacity':
+            checkInputConfirm && hasIntegration,
+        }"
+        type="secondary"
+        :loading="loading"
+        :disabled="hasIntegration && checkInputConfirm"
+        @click.prevent.stop="
+          hasIntegration
+            ? dispatchRemoveIntegrateRepository()
+            : dispatchIntegrateRepository()
+        "
+      >
+        <span
+          v-if="hasIntegration"
+          class="integration-modal__button__txt"
+          >{{ $t('webapp.home.confirm_remove_integrate') }}</span
+        >
+        <span v-else>{{ $t('webapp.home.confirm_integrate') }}</span>
+      </UnnnicButton>
+    </template>
   </UnnnicModal>
 </template>
 
