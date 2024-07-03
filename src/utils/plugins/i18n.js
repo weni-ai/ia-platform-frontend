@@ -37,7 +37,6 @@ const numberFormats = {
 const messages = Object.assign(languages);
 
 const i18n = VueI18n.createI18n({
-  legacy: false,
   locale: navigator.language || navigator.userLanguage,
   fallbackLocale: 'en-US',
   messages,
