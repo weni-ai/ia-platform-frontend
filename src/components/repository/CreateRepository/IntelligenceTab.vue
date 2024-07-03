@@ -43,7 +43,7 @@
           icon="typing-1"
           class="intelligence-types__item"
           :enabled="repository_type === 'classifier'"
-          @click.native="$emit('update:repository_type', 'classifier')"
+          @click="$emit('update:repository_type', 'classifier')"
         />
 
         <UnnnicCard
@@ -58,7 +58,7 @@
           icon="paginate-filter-text-1"
           class="intelligence-types__item"
           :enabled="repository_type === 'content'"
-          @click.native="$emit('update:repository_type', 'content')"
+          @click="$emit('update:repository_type', 'content')"
         />
       </section>
     </div>

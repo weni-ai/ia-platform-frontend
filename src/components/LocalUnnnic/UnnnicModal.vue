@@ -18,7 +18,8 @@
           class="unnnic-modal__header__button-close"
           icon="close"
           size="md"
-          @click.native="$emit('close')"
+          clickable
+          @click="$emit('close')"
         />
       </header>
 

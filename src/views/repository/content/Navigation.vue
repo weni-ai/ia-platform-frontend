@@ -2,7 +2,7 @@
   <UnnnicButton
     iconCenter="settings"
     type="secondary"
-    @click.native="
+    @click="
       $router.push({
         name: 'intelligence-edit',
         params: {

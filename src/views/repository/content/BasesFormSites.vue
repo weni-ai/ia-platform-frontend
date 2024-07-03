@@ -30,7 +30,7 @@
         size="small"
         type="primary"
         class="sites__content__button-add-site"
-        @click.native="isAddSiteOpen = true"
+        @click="isAddSiteOpen = true"
       >
         {{ $t('content_bases.sites.add_site') }}
       </UnnnicButton>

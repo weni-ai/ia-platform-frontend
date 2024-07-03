@@ -45,7 +45,7 @@
                   clickable
                   enableTooltip
                   :tooltipText="$t('webapp.intelligences_lib.intent_count')"
-                  @click.native="goToIntentList(tag.id)"
+                  @click="goToIntentList(tag.id)"
                 />
               </span>
             </div>
