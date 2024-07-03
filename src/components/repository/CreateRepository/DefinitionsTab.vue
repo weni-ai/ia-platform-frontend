@@ -95,6 +95,7 @@
         <UnnnicButton
           class="create-repository__definitions__buttons__btn"
           :disabled="disabledSubmit"
+          :loading="loading"
           @click.native="dispatchCreateRepository()"
         >
           {{ $t('webapp.create_repository.create_intelligence_button') }}
@@ -124,6 +125,7 @@ export default {
     Loading,
   },
   props: {
+    loading: Boolean,
     disabledSubmit: Boolean,
     repository_type: String,
     language: String,

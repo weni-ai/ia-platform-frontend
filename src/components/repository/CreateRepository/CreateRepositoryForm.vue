@@ -15,6 +15,7 @@
           v-model:categories="data.categories"
           :disabledSubmit="disabledSubmit"
           :repository_type="data.repository_type"
+          :loading="submitting"
           @createRepository="createRepository($event)"
           @backModal="onChangeModalState(true)"
         />
