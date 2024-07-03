@@ -394,5 +394,8 @@ export default {
       state.contentText.uuid = data.uuid;
       state.contentText.current = state.contentText.old = data.text;
     },
+    updateTuning(state, { name, value }) {
+      state.tunings[name] = value;
+    },
   },
 };
