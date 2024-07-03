@@ -27,9 +27,10 @@
       </section>
 
       <UnnnicTab
-        v-model="tab"
+        :activeTab="tab"
         size="md"
         :tabs="['own_intelligences', 'public_intelligences']"
+        @change="tab = $event"
       >
         <template #tab-head-own_intelligences>
           {{ $t('intelligences.own_intelligences') }}
