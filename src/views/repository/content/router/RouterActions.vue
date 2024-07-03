@@ -1,7 +1,7 @@
 <template>
   <section class="actions__container">
     <BasesFormGenericList
-      v-model:items="items"
+      :items="items"
       shape="accordion"
       hideCounter
       hideToggle
