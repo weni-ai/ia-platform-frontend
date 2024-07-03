@@ -17,10 +17,7 @@
       <UnnnicButton
         v-if="isRouterView"
         class="save-button"
-        :disabled="
-          $store.getters.hasBrainRequiredFieldsNotFilledIn ||
-          $store.getters.isBrainSaveButtonDisabled
-        "
+        :disabled="$store.getters.isBrainSaveButtonDisabled"
         :loading="$store.state.Brain.isSavingChanges"
         @click="$store.dispatch('saveBrainChanges')"
       >

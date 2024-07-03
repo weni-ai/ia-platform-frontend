@@ -238,11 +238,7 @@ export default {
     },
 
     errorRequiredFields() {
-      return {
-        name: !this.brain.agent.name.current,
-        role: !this.brain.agent.role.current,
-        goal: !this.brain.agent.goal.current,
-      };
+      return this.brain.customizationErrorRequiredFields;
     },
   },
 
