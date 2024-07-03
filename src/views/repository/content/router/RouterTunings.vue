@@ -71,7 +71,7 @@
         :modelValue="useSelectSmart(field).value"
         :options="useSelectSmart(field).options"
         orderedByIndex
-        @update:model-value="updateField(field.name, $event[0].value)"
+        @update:model-value="handleUpdateSelect(field.name, $event[0])"
       />
 
       <LoadingFormElement
@@ -246,8 +246,12 @@ export default {
 
   methods: {
     updateField(name, value) {
-      console.log('updateField', name, value, this.$store.state.Brain.tunings[name])
-      this.$store.state.Brain.tunings[name] = value;
+      this.$store.commit('updateTuning', { name, value });
+    },
+
+    handleUpdateSelect(name, obj) {
+      if (this.isWeniGpt()) return this.updateField(name, obj);
+      return this.updateField(name, obj.value);
     },
 
     openRestoreDefaultModal() {
@@ -304,9 +308,12 @@ export default {
           ? this.$t(option.description)
           : null,
       }));
-      const conditionValue = (value) => this.isWeniGpt(field.name) ? value === field.value.name : value === field.value
+      const conditionValue = (value) =>
+        typeof field.value === 'string'
+          ? value === field.value
+          : value === field.value.name;
       const value = [options.find(({ value }) => conditionValue(value))];
-      
+
       return {
         value,
         options,
