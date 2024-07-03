@@ -57,7 +57,8 @@
           icon="download"
           size="sm"
           class="files-list__content__file__actions__icon"
-          @click.native.stop="download"
+          clickable
+          @click.stop="download"
         />
 
         <UnnnicIcon
