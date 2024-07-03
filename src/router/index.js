@@ -90,18 +90,30 @@ const router = createRouter({
         {
           path: 'personalization',
           name: 'router-personalization',
+          component: () =>
+            import(
+              '../views/repository/content/router/RouterCustomization.vue'
+            ),
         },
         {
           path: 'content',
           name: 'router-content',
+          component: () =>
+            import(
+              '../views/repository/content/router/RouterCustomization.vue'
+            ),
         },
         {
           path: 'actions',
           name: 'router-actions',
+          component: () =>
+            import('../views/repository/content/router/RouterActions.vue'),
         },
         {
           path: 'tunings',
           name: 'router-tunings',
+          component: () =>
+            import('../views/repository/content/router/RouterTunings.vue'),
         },
       ],
     },
