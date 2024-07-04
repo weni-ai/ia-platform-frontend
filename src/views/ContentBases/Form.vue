@@ -56,11 +56,7 @@
             <section class="content-base__content-tab">
               <template v-if="tab === 'files'">
                 <UnnnicSkeletonLoading
-                  v-if="
-                    files.status === 'loading' &&
-                    files.data.length === 0 &&
-                    'normal' !== 'accordion'
-                  "
+                  v-if="files.status === 'loading' && files.data.length === 0"
                   tag="div"
                   height="100%"
                   class="repository-base-edit__wrapper__card-content"
