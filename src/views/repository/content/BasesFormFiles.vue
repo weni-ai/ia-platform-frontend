@@ -192,11 +192,6 @@ export default {
       return this.files.next ? '10+' : this.files.data.length;
     },
 
-    countUploading() {
-      return this.files.data.filter(({ status }) => status === 'uploading')
-        .length;
-    },
-
     listOfFilesBeingProcessed() {
       return this.files.data.filter(({ status }) => status === 'processing');
     },
@@ -215,15 +210,6 @@ export default {
           );
         }
       },
-    },
-
-    countUploading(currentValue, pastValue) {
-      if (currentValue > pastValue) {
-        this.alert = {
-          type: 'default',
-          text: this.$t('content_bases.files.content_of_the_files_is_loading'),
-        };
-      }
     },
   },
 

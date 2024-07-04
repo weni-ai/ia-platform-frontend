@@ -172,7 +172,6 @@
         "processing": "Processing content"
       },
       "content_of_the_files_has_been_added": "The content of the files has been added to the base",
-      "content_of_the_files_is_loading": "Loading the content of the files",
       "file_removed_from_base": "{name} removed from content base",
       "delete_file": {
         "title": "Delete file",
