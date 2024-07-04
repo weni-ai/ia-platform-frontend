@@ -15,7 +15,7 @@
           size="sm"
           clickable
           :filled="feedback.value === 'liked'"
-          @click.native="
+          @click="
             $emit('update:feedback', { ...feedback, value: 'liked' });
             $nextTick(sendFeedback);
           "
@@ -33,7 +33,7 @@
           size="sm"
           clickable
           :filled="feedback.value === 'disliked'"
-          @click.native="
+          @click="
             $emit('update:feedback', {
               ...feedback,
               value: 'disliked',

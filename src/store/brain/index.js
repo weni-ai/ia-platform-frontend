@@ -150,7 +150,7 @@ export default {
       } catch (error) {
         rootState.alert = {
           type: 'error',
-          text: i18n.t('customization.invalid_get_data'),
+          text: i18n.global.t('customization.invalid_get_data'),
         };
       } finally {
         state.customizationStatus = 'loaded';
@@ -330,7 +330,7 @@ export default {
         } else {
           rootState.alert = {
             type: 'success',
-            text: i18n.t('router.tunings.changes_saved'),
+            text: i18n.global.t('router.tunings.changes_saved'),
           };
         }
       } catch (error) {

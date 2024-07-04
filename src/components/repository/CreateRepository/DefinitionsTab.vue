@@ -32,7 +32,7 @@
           icon="lock-unlock-1-1"
           class="intelligence-private-or-public__item"
           :enabled="!is_private"
-          @click.native="$emit('update:is_private', false)"
+          @click="$emit('update:is_private', false)"
         />
 
         <UnnnicCard
@@ -45,7 +45,7 @@
           icon="lock-2-1"
           class="intelligence-private-or-public__item"
           :enabled="is_private"
-          @click.native="$emit('update:is_private', true)"
+          @click="$emit('update:is_private', true)"
         />
       </div>
 
@@ -71,7 +71,7 @@
             :disabled="categories.includes(category.id)"
             clickable
             type="brand"
-            @click.native="
+            @click="
               $emit(
                 'update:categories',
                 categories.includes(category.id)
@@ -87,7 +87,7 @@
         <UnnnicButton
           type="tertiary"
           class="create-repository__definitions__buttons__btn"
-          @click.native="dispatchBackModal()"
+          @click="dispatchBackModal()"
         >
           {{ $t('webapp.create_repository.cancel_create_intelligence_button') }}
         </UnnnicButton>
@@ -95,7 +95,8 @@
         <UnnnicButton
           class="create-repository__definitions__buttons__btn"
           :disabled="disabledSubmit"
-          @click.native="dispatchCreateRepository()"
+          :loading="loading"
+          @click="dispatchCreateRepository()"
         >
           {{ $t('webapp.create_repository.create_intelligence_button') }}
         </UnnnicButton>
@@ -124,6 +125,7 @@ export default {
     Loading,
   },
   props: {
+    loading: Boolean,
     disabledSubmit: Boolean,
     repository_type: String,
     language: String,
