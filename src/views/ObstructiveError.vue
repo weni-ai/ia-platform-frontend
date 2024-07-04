@@ -2,21 +2,19 @@
   <section class="obstructive-error">
     <img v-bind="currentError.image" />
 
-    <h1>{{ t(`obstructive_error.${errorType}.title`) }}</h1>
+    <h1>{{ $t(`obstructive_error.${errorType}.title`) }}</h1>
 
-    <p>{{ t(`obstructive_error.${errorType}.description`) }}</p>
+    <p>{{ $t(`obstructive_error.${errorType}.description`) }}</p>
   </section>
 </template>
 
 <script setup>
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
 import DorisFacePalm from '../assets/imgs/doris-face-palm-reaction.png';
 import DorisSignalingStop from '../assets/imgs/doris-signaling-to-stop.png';
 
-const { t } = useI18n();
 const store = useStore();
 
 const errors = {
