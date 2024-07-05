@@ -9,8 +9,8 @@
       </section>
       <div class="customization__form">
         <LoadingFormElement
-          label
           v-if="loading"
+          label
         />
 
         <UnnnicFormElement
@@ -29,8 +29,8 @@
       </div>
       <div class="customization__form">
         <LoadingFormElement
-          label
           v-if="loading"
+          label
         />
 
         <UnnnicFormElement
@@ -48,8 +48,8 @@
         </UnnnicFormElement>
 
         <LoadingFormElement
-          label
           v-if="loading"
+          label
         />
 
         <UnnnicFormElement
@@ -58,17 +58,21 @@
           class="customization__form-element"
         >
           <UnnnicSelectSmart
-            :value="handlePersonalityValue(brain.agent.personality.current)"
-            @input="brain.agent.personality.current = $event[0].value"
+            :modelValue="
+              handlePersonalityValue(brain.agent.personality.current)
+            "
             :options="personalities"
             orderedByIndex
+            @update:model-value="
+              brain.agent.personality.current = $event[0].value
+            "
           />
         </UnnnicFormElement>
       </div>
       <div class="customization__container__persona">
         <LoadingFormElement
-          label
           v-if="loading"
+          label
           element="textarea"
         />
 
@@ -100,15 +104,15 @@
       </section>
 
       <LoadingFormElement
-        label
         v-if="loading"
+        label
       />
 
       <section
-        v-else
-        class="customization__instructions"
         v-for="(instruction, index) in brain.instructions.current"
+        v-else
         :key="index"
+        class="customization__instructions"
       >
         <UnnnicFormElement
           :label="$t('customization.fields.instruction')"
@@ -134,27 +138,42 @@
 
       <UnnnicButton
         v-else
-        @click="addInstruction"
         size="large"
         :text="$t('customization.instructions.add_instruction_btn')"
         type="tertiary"
         iconLeft="add-1"
         :disabled="false"
+        @click="addInstruction"
       />
     </div>
-    <UnnnicModalNext
-      type="alert"
-      icon="error"
-      scheme="feedback-red"
-      :title="$t('customization.instructions.modals.title')"
+
+    <UnnnicModal
+      v-if="showRemoveModal"
+      showModal
+      scheme="aux-red-500"
+      modalIcon="error"
+      :text="$t('customization.instructions.modals.title')"
       :description="$t('customization.instructions.modals.description')"
-      :actionPrimaryLabel="$t('customization.instructions.modals.remove_btn')"
-      :actionSecondaryLabel="$t('customization.instructions.modals.back_btn')"
-      v-show="showRemoveModal"
-      @close="showRemoveModal = false"
-      @click-action-primary="removeInstruction"
-      :actionPrimaryLoading="removing"
-    />
+      :closeIcon="false"
+      class="modal-remove-instructions"
+    >
+      <template #options>
+        <UnnnicButton
+          type="tertiary"
+          @click="showRemoveModal = false"
+        >
+          {{ $t('customization.instructions.modals.back_btn') }}
+        </UnnnicButton>
+
+        <UnnnicButton
+          type="warning"
+          :loading="removing"
+          @click="removeInstruction"
+        >
+          {{ $t('customization.instructions.modals.remove_btn') }}
+        </UnnnicButton>
+      </template>
+    </UnnnicModal>
   </section>
 </template>
 
@@ -247,6 +266,10 @@ export default {
       this.brain.instructions.current.push({
         instruction: '',
       });
+
+      this.brain.instructions.old.push({
+        instruction: '',
+      });
     },
     handleShowRemoveModal(index) {
       this.showRemoveModal = true;
@@ -260,13 +283,19 @@ export default {
     async removeInstruction() {
       try {
         this.removing = true;
-        if (this.brain.instructions.current[this.currentInstruction].id) {
+
+        const { id: removeId } =
+          this.brain.instructions.current[this.currentInstruction];
+
+        if (removeId) {
           await nexusaiAPI.router.customization.delete({
             projectUuid: this.$store.state.Auth.connectProjectUuid,
-            id: this.brain.instructions.current[this.currentInstruction].id,
+            id: removeId,
           });
         }
+
         this.brain.instructions.current.splice(this.currentInstruction, 1);
+        this.brain.instructions.old.splice(this.currentInstruction, 1);
 
         this.showRemoveModal = false;
         this.currentInstruction = null;
@@ -293,7 +322,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
+.modal-remove-instructions {
+  :deep(.unnnic-modal-container-background-body-description-container) {
+    padding-bottom: 0;
+  }
+
+  :deep(.unnnic-modal-container-background-body-title) {
+    padding-bottom: $unnnic-spacing-sm;
+  }
+}
 
 .customization {
   &-title {

@@ -8,13 +8,13 @@
         <UnnnicLabel :label="$t('webapp.create_repository.language_label')" />
 
         <UnnnicSelectSmart
-          :value="[languages.find(({ value }) => value === language)]"
-          @input="$emit('update:language', $event[0].value)"
+          :modelValue="[languages.find(({ value }) => value === language)]"
           :options="languages"
           orderedByIndex
           autocomplete
           autocompleteClearOnFocus
           size="sm"
+          @update:model-value="$emit('update:language', $event[0].value)"
         />
       </section>
 
@@ -32,7 +32,7 @@
           icon="lock-unlock-1-1"
           class="intelligence-private-or-public__item"
           :enabled="!is_private"
-          @click.native="$emit('update:is_private', false)"
+          @click="$emit('update:is_private', false)"
         />
 
         <UnnnicCard
@@ -45,7 +45,7 @@
           icon="lock-2-1"
           class="intelligence-private-or-public__item"
           :enabled="is_private"
-          @click.native="$emit('update:is_private', true)"
+          @click="$emit('update:is_private', true)"
         />
       </div>
 
@@ -64,12 +64,14 @@
           </template>
 
           <UnnnicTag
-            v-else
             v-for="category in categoryList"
+            v-else
             :key="category.id"
             :text="category.name"
             :disabled="categories.includes(category.id)"
-            @click.native="
+            clickable
+            type="brand"
+            @click="
               $emit(
                 'update:categories',
                 categories.includes(category.id)
@@ -77,8 +79,6 @@
                   : [...categories, category.id],
               )
             "
-            clickable
-            type="brand"
           />
         </div>
       </section>
@@ -87,15 +87,16 @@
         <UnnnicButton
           type="tertiary"
           class="create-repository__definitions__buttons__btn"
-          @click.native="dispatchBackModal()"
+          @click="dispatchBackModal()"
         >
           {{ $t('webapp.create_repository.cancel_create_intelligence_button') }}
         </UnnnicButton>
 
         <UnnnicButton
           class="create-repository__definitions__buttons__btn"
-          @click.native="dispatchCreateRepository()"
           :disabled="disabledSubmit"
+          :loading="loading"
+          @click="dispatchCreateRepository()"
         >
           {{ $t('webapp.create_repository.create_intelligence_button') }}
         </UnnnicButton>
@@ -120,25 +121,22 @@ import Loading from '@/components/shared/Loading.vue';
 
 export default {
   name: 'DefinitionsTab',
+  components: {
+    Loading,
+  },
   props: {
+    loading: Boolean,
     disabledSubmit: Boolean,
     repository_type: String,
     language: String,
     is_private: Boolean,
     categories: Array,
   },
-  components: {
-    Loading,
-  },
   data() {
     return {
       categoryListLoading: false,
       categoryList: [],
     };
-  },
-
-  mounted() {
-    this.getCategories();
   },
   computed: {
     languages() {
@@ -154,6 +152,10 @@ export default {
         })),
       );
     },
+  },
+
+  mounted() {
+    this.getCategories();
   },
   methods: {
     ...mapActions(['getAllCategories']),
@@ -183,8 +185,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .intelligence-private-or-public {
   display: flex;
   gap: $unnnic-spacing-xs;
@@ -192,7 +192,7 @@ export default {
   &__item {
     flex: 1;
 
-    ::v-deep .unnnic-card-content__content__title {
+    :deep(.unnnic-card-content__content__title) {
       font-weight: $unnnic-font-weight-regular;
     }
   }
@@ -255,13 +255,11 @@ export default {
       border: 1px solid $unnnic-color-weni-200;
       background: $unnnic-color-weni-100;
 
-      ::v-deep {
-        .unnnic-card-default__description {
-          white-space: unset;
-          overflow: unset;
-          text-overflow: unset;
-          max-width: unset;
-        }
+      :deep(.unnnic-card-default__description) {
+        white-space: unset;
+        overflow: unset;
+        text-overflow: unset;
+        max-width: unset;
       }
     }
   }

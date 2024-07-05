@@ -4,7 +4,7 @@ import actions from './actions';
 import mutations from './mutations';
 
 export default {
-  state,
+  state: () => state,
   getters,
   actions,
   mutations,

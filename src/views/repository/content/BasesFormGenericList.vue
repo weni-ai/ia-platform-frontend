@@ -1,8 +1,8 @@
 <template>
   <section :class="['files-list__container', `files-list--shape-${shape}`]">
     <BasesFormGenericListHeader
+      v-model:open="open"
       :shape="shape"
-      :open.sync="open"
       :title="title"
       :counter="hideCounter ? undefined : counter"
       :addText="addText"
@@ -32,7 +32,7 @@
           :compressed="shape === 'accordion'"
           :class="[{ 'files-list__item--can-edit': canEditItem }]"
           @remove="$emit('remove', file)"
-          @click.native="$emit('edit', file)"
+          @click="$emit('edit', file)"
         />
 
         <template v-if="items.status === 'loading'">
@@ -46,9 +46,9 @@
 
         <UnnnicButton
           v-if="shape === 'accordion'"
-          @click="$emit('add')"
           type="secondary"
           iconLeft="add-1"
+          @click="$emit('add')"
         >
           {{ addText }}
         </UnnnicButton>
@@ -67,6 +67,10 @@ import BasesFormFilesItem from './BasesFormFilesItem.vue';
 import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
 
 export default {
+  components: {
+    BasesFormFilesItem,
+    BasesFormGenericListHeader,
+  },
   props: {
     title: String,
     description: String,
@@ -84,11 +88,6 @@ export default {
         return ['normal', 'accordion'].includes(value);
       },
     },
-  },
-
-  components: {
-    BasesFormFilesItem,
-    BasesFormGenericListHeader,
   },
 
   data() {
@@ -135,7 +134,7 @@ export default {
     this.intersectionObserver.observe(this.$refs['end-of-list-element']);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
   },
 
@@ -152,8 +151,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .files-list {
   &__container {
     height: 0;

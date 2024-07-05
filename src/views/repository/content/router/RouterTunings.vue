@@ -13,8 +13,8 @@
 
     <template v-for="(field, index) in fields">
       <UnnnicIntelligenceText
-        :key="`language-${index}`"
         v-if="field.name === 'language'"
+        :key="`language-${index}`"
         color="neutral-dark"
         family="secondary"
         weight="bold"
@@ -39,25 +39,25 @@
         </UnnnicIntelligenceText>
       </header>
       <section
-        :key="index"
         v-if="field.type === 'radio' && !loadingData"
+        :key="index"
         class="tunings__form-element__radio"
       >
         <UnnnicRadio
           v-for="option in field.options"
           :key="option"
-          :value="option"
-          :globalValue="field.value"
+          :modelValue="option"
+          :value="field.value"
           size="md"
-          @change="updateField(field.name, option)"
+          @update:modelValue="updateField(field.name, option)"
         >
           {{ option }}
         </UnnnicRadio>
       </section>
 
       <LoadingFormElement
-        :key="index"
         v-if="field.type === 'radio' && loadingData"
+        :key="index"
         label
         elementHeight="32px"
         elementWidth="280px"
@@ -65,18 +65,18 @@
       />
 
       <UnnnicSelectSmart
-        class="tunings__container_fields-element"
         v-if="field.type === 'select' && !loadingData"
         :key="index"
-        :value="useSelectSmart(field).value"
+        class="tunings__container_fields-element"
+        :modelValue="useSelectSmart(field).value"
         :options="useSelectSmart(field).options"
-        @input="updateField(field.name, $event[0].value)"
         orderedByIndex
+        @update:model-value="handleUpdateSelect(field.name, $event[0])"
       />
 
       <LoadingFormElement
-        :key="index"
         v-if="field.type === 'select' && loadingData"
+        :key="index"
         label
         marginTop="16px"
       />
@@ -114,22 +114,22 @@
       <UnnnicInput
         v-if="['token'].includes(field.name)"
         :key="index"
-        :value="field.value"
-        @input="updateField(field.name, $event)"
+        :modelValue="field.value"
         :type="hasValidate ? 'error' : 'normal'"
         :message="hasValidate ? $t('customization.invalid_field') : ''"
         :nativeType="field.type"
+        @update:modelValue="updateField(field.name, $event)"
       />
     </template>
 
     <RouterTuningsAdvanced
+      v-model:brainOn="data.brainOn"
       class="tunings__advanced"
-      :brainOn.sync="data.brainOn"
     >
       <template v-for="(field, index) in fields">
         <UnnnicIntelligenceText
-          :key="index"
           v-if="field.type === 'naf-header'"
+          :key="index"
           color="neutral-dark"
           family="secondary"
           weight="bold"
@@ -178,12 +178,12 @@
           :maxLabel="field.max?.toString()"
           :step="field.step"
           :initialValue="field.value"
-          @valueChange="updateField(field.name, Number($event))"
           class="tunings__form-element__slider"
+          @valueChange="updateField(field.name, Number($event))"
         />
         <UnnnicSkeletonLoading
-          :key="index"
           v-if="field.type === 'slider' && loadingData"
+          :key="index"
           tag="div"
           height="36px"
           width="384px"
@@ -210,13 +210,12 @@ import LoadingFormElement from '../../../../components/LoadingFormElement.vue';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
 
 export default {
-  props: {
-    data: Object,
-  },
-
   components: {
     RouterTuningsAdvanced,
     LoadingFormElement,
+  },
+  props: {
+    data: Object,
   },
 
   data() {
@@ -247,7 +246,12 @@ export default {
 
   methods: {
     updateField(name, value) {
-      this.$set(this.$store.state.Brain.tunings, name, value);
+      this.$store.commit('updateTuning', { name, value });
+    },
+
+    handleUpdateSelect(name, obj) {
+      if (this.isWeniGpt()) return this.updateField(name, obj);
+      return this.updateField(name, obj.value);
     },
 
     openRestoreDefaultModal() {
@@ -304,8 +308,11 @@ export default {
           ? this.$t(option.description)
           : null,
       }));
-
-      const value = [options.find(({ value }) => value === field.value)];
+      const conditionValue = (value) =>
+        typeof field.value === 'string'
+          ? value === field.value
+          : value === field.value.name;
+      const value = [options.find(({ value }) => conditionValue(value))];
 
       return {
         value,
@@ -324,8 +331,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .tunings__form-element__label {
   display: flex;
   align-items: center;

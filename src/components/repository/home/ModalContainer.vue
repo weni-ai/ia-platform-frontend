@@ -1,7 +1,7 @@
 <template>
   <Transition
-    name="modal-transition"
     v-if="showModal"
+    name="modal-transition"
   >
     <div class="modal-container">
       <div class="modal-container__content">
@@ -10,8 +10,8 @@
             <UnnnicIconSvg
               size="lg"
               icon="keyboard-arrow-down-1"
-              @click="closeModal()"
               clickable
+              @click="closeModal()"
             />
 
             <div class="modal-container__content__background__header__text">
@@ -29,16 +29,15 @@
           </section>
 
           <section
-            class="modal-container__content__background__content"
             v-if="infoModal.type === 0"
+            class="modal-container__content__background__content"
           >
             <div class="modal-container__content__background__content__tags">
               <span
-                :key="tag.id"
                 v-for="tag in infoModal.intents"
+                :key="tag.id"
               >
                 <UnnnicTag
-                  @click.native="goToIntentList(tag.id)"
                   :text="tag.value"
                   type="indicator"
                   :count="tag.examples__count"
@@ -46,19 +45,20 @@
                   clickable
                   enableTooltip
                   :tooltipText="$t('webapp.intelligences_lib.intent_count')"
+                  @click="goToIntentList(tag.id)"
                 />
               </span>
             </div>
           </section>
 
           <section
-            class="modal-container__content__background__content"
             v-else
+            class="modal-container__content__background__content"
           >
             <div class="modal-container__content__background__content__list">
               <span
+                v-for="language in infoModal.languages"
                 :key="language"
-                v-for="language in this.infoModal.languages"
               >
                 {{ language | languageVerbose }}
               </span>
@@ -97,9 +97,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/dist/unnnic.css';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .modal-transition-leave-to {
   animation: transition 0.2s reverse;
 }

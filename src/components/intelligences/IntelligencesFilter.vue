@@ -7,32 +7,32 @@
     <UnnnicSelectSmart
       v-if="category !== undefined"
       size="sm"
-      :value="category"
-      @input="$emit('update:category', $event)"
+      :modelValue="category"
       :options="categories"
+      @update:model-value="$emit('update:category', $event)"
     />
 
     <UnnnicInput
       class="search-input"
-      :value="name"
-      @input="$emit('update:name', $event)"
+      :modelValue="name"
       size="sm"
       iconLeft="search-1"
       :placeholder="$t('intelligences.search_intelligence_placeholder')"
+      @update:model-value="$emit('update:name', $event)"
     />
 
     <UnnnicRadio
-      :globalValue="type"
-      @change="$emit('update:type', $event)"
+      :modelValue="type"
       value="generative"
+      @update:modelValue="$emit('update:type', $event)"
     >
       {{ $t('intelligences.filter_type_generative_label') }}
     </UnnnicRadio>
 
     <UnnnicRadio
-      :globalValue="type"
-      @change="$emit('update:type', $event)"
+      :modelValue="type"
       value="classification"
+      @update:modelValue="$emit('update:type', $event)"
     >
       {{ $t('intelligences.filter_type_classification_label') }}
     </UnnnicRadio>
@@ -84,8 +84,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .intelligences-filters {
   display: flex;
   align-items: center;

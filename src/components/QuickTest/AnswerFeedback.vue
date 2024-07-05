@@ -15,7 +15,7 @@
           size="sm"
           clickable
           :filled="feedback.value === 'liked'"
-          @click.native="
+          @click="
             $emit('update:feedback', { ...feedback, value: 'liked' });
             $nextTick(sendFeedback);
           "
@@ -33,7 +33,7 @@
           size="sm"
           clickable
           :filled="feedback.value === 'disliked'"
-          @click.native="
+          @click="
             $emit('update:feedback', {
               ...feedback,
               value: 'disliked',
@@ -46,8 +46,8 @@
 
     <section
       v-if="feedback.value === 'disliked' && feedback.reason !== 'close_reason'"
-      class="feedback__reason"
       ref="reason-container"
+      class="feedback__reason"
     >
       <header class="feedback__reason__header">
         <UnnnicIntelligenceText
@@ -75,10 +75,10 @@
         <UnnnicRadio
           v-for="reason in reasons"
           :key="reason.value"
-          :value="reason.value"
-          :globalValue="feedback.reason"
+          :modelValue="reason.value"
+          :value="feedback.reason"
           size="md"
-          @change="
+          @update:modelValue="
             $emit('update:feedback', { ...feedback, reason: reason.value })
           "
         >
@@ -213,8 +213,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .feedback {
   &__thumbs {
     display: flex;

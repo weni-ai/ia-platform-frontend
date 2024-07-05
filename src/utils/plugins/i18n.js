@@ -1,11 +1,8 @@
-import Vue from 'vue';
-import VueI18n from 'vue-i18n';
+import * as VueI18n from 'vue-i18n';
 
 import en from '../../locales/en.json';
 import ptbr from '../../locales/pt_br.json';
 import es from '../../locales/es.json';
-
-Vue.use(VueI18n);
 
 const languages = {
   'en-US': en,
@@ -39,7 +36,7 @@ const numberFormats = {
 
 const messages = Object.assign(languages);
 
-const i18n = new VueI18n({
+const i18n = VueI18n.createI18n({
   locale: navigator.language || navigator.userLanguage,
   fallbackLocale: 'en-US',
   messages,

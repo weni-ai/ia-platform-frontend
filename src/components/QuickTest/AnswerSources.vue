@@ -1,11 +1,11 @@
 <template>
   <section class="sources">
     <UnnnicCollapse
-      size="md"
       v-model="active"
+      size="md"
       :unspacedIcon="true"
     >
-      <template slot="header">
+      <template #header>
         <UnnnicIntelligenceText
           color="neutral-cloudy"
           family="secondary"
@@ -91,17 +91,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .sources {
   margin-top: $unnnic-spacing-xs;
   word-break: break-word;
 
-  ::v-deep .unnnic-collapse {
+  :deep(.unnnic-collapse) {
     padding: 0;
   }
 
-  ::v-deep .unnnic-icon {
+  :deep(.unnnic-icon) {
     min-width: 10px;
     min-height: 10px;
     height: 10px;

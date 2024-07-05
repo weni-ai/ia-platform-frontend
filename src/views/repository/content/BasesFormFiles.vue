@@ -45,10 +45,10 @@
       </section>
 
       <UnnnicButton
-        @click="$refs['browser-file-input'].click()"
         size="small"
         type="primary"
         class="paste-area__button"
+        @click="$refs['browser-file-input'].click()"
       >
         {{ $t('content_bases.files.browse_file') }}
       </UnnnicButton>
@@ -56,6 +56,7 @@
 
     <BasesFormGenericList
       v-else
+      :items="files"
       :shape="shape"
       :title="
         shape === 'accordion'
@@ -64,7 +65,6 @@
       "
       :description="removeHTML($t('content_bases.files.supported_files'))"
       :addText="$t('content_bases.files.browse_file')"
-      :items.sync="files"
       :filterItem="filterItem"
       @add="$refs['browser-file-input'].click()"
       @remove="onRemove"
@@ -72,12 +72,12 @@
     />
 
     <UnnnicAlert
-      :style="{ zIndex: 1 }"
       v-if="alert"
       :key="alert.text"
-      @close="alert = null"
+      :style="{ zIndex: 1 }"
       :type="alert.type"
       :text="alert.text"
+      @close="alert = null"
     ></UnnnicAlert>
 
     <UnnnicModal
@@ -87,40 +87,41 @@
       class="delete-file-modal"
       persistent
     >
-      <UnnnicIcon
-        slot="icon"
-        icon="error"
-        size="md"
-        scheme="aux-red-500"
-      />
+      <template #icon>
+        <UnnnicIcon
+          icon="error"
+          size="md"
+          scheme="aux-red-500"
+        />
+      </template>
 
-      <div
-        slot="message"
-        v-html="
-          $t('content_bases.files.delete_file.description', {
-            name: modalDeleteFile.name,
-          })
-        "
-      ></div>
+      <template #message>
+        <div
+          v-html="
+            $t('content_bases.files.delete_file.description', {
+              name: modalDeleteFile.name,
+            })
+          "
+        ></div>
+      </template>
+      <template #options>
+        <UnnnicButton
+          class="create-repository__container__button"
+          type="tertiary"
+          @click="modalDeleteFile = false"
+        >
+          {{ $t('content_bases.files.delete_file.cancel') }}
+        </UnnnicButton>
 
-      <UnnnicButton
-        slot="options"
-        class="create-repository__container__button"
-        type="tertiary"
-        @click="modalDeleteFile = false"
-      >
-        {{ $t('content_bases.files.delete_file.cancel') }}
-      </UnnnicButton>
-
-      <UnnnicButton
-        slot="options"
-        class="create-repository__container__button attention-button"
-        type="warning"
-        @click="remove"
-        :loading="modalDeleteFile.status === 'deleting'"
-      >
-        {{ $t('content_bases.files.delete_file.delete') }}
-      </UnnnicButton>
+        <UnnnicButton
+          class="create-repository__container__button attention-button"
+          type="warning"
+          :loading="modalDeleteFile.status === 'deleting'"
+          @click="remove"
+        >
+          {{ $t('content_bases.files.delete_file.delete') }}
+        </UnnnicButton>
+      </template>
     </UnnnicModal>
   </div>
 </template>
@@ -130,6 +131,7 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import BasesFormFilesItem from './BasesFormFilesItem.vue';
 import BasesFormGenericList from './BasesFormGenericList.vue';
+import { reactive } from 'vue';
 
 export default {
   components: {
@@ -178,20 +180,6 @@ export default {
     };
   },
 
-  mounted() {
-    Object.keys(this.events).forEach((eventName) => {
-      window.addEventListener(eventName, this.events[eventName]);
-    });
-  },
-
-  beforeDestroy() {
-    Object.keys(this.events).forEach((eventName) => {
-      window.removeEventListener(eventName, this.events[eventName]);
-    });
-
-    clearTimeout(this.listOfFilesBeingProcessedTimeOut);
-  },
-
   computed: {
     contentBaseUuid() {
       return (
@@ -202,11 +190,6 @@ export default {
 
     counter() {
       return this.files.next ? '10+' : this.files.data.length;
-    },
-
-    countUploading() {
-      return this.files.data.filter(({ status }) => status === 'uploading')
-        .length;
     },
 
     listOfFilesBeingProcessed() {
@@ -228,15 +211,20 @@ export default {
         }
       },
     },
+  },
 
-    countUploading(currentValue, pastValue) {
-      if (currentValue > pastValue) {
-        this.alert = {
-          type: 'default',
-          text: this.$t('content_bases.files.content_of_the_files_is_loading'),
-        };
-      }
-    },
+  mounted() {
+    Object.keys(this.events).forEach((eventName) => {
+      window.addEventListener(eventName, this.events[eventName]);
+    });
+  },
+
+  beforeUnmount() {
+    Object.keys(this.events).forEach((eventName) => {
+      window.removeEventListener(eventName, this.events[eventName]);
+    });
+
+    clearTimeout(this.listOfFilesBeingProcessedTimeOut);
   },
 
   methods: {
@@ -289,7 +277,7 @@ export default {
           ? file.name
           : file.name.slice(file.name.lastIndexOf('.') + 1);
 
-      const fileItem = {
+      const fileItem = reactive({
         uuid: `temp-${Math.floor(Math.random() * 1e9)}`,
         file: file.name,
         created_file_name:
@@ -300,7 +288,7 @@ export default {
         status: 'waiting',
         progress: 0,
         file_name: file.name,
-      };
+      });
 
       this.files.data.push(fileItem);
 
@@ -437,24 +425,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
-.delete-file-modal ::v-deep {
-  .unnnic-modal-container-background-body-description-container {
+.delete-file-modal {
+  :deep(.unnnic-modal-container-background-body-description-container) {
     padding-bottom: $unnnic-spacing-xs;
   }
 
-  .unnnic-modal-container-background-body__icon-slot {
+  :deep(.unnnic-modal-container-background-body__icon-slot) {
     display: flex;
     justify-content: center;
     margin-bottom: $unnnic-spacing-sm;
   }
 
-  .unnnic-modal-container-background-body-title {
+  :deep(.unnnic-modal-container-background-body-title) {
     padding-bottom: $unnnic-spacing-sm;
   }
 
-  .unnnic-modal-container-background-body {
+  :deep(.unnnic-modal-container-background-body) {
     padding-top: $unnnic-spacing-giant;
   }
 }

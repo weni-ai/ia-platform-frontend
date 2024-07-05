@@ -1,7 +1,8 @@
 <template>
-  <ModalNext
-    class="flow-modal create-intelligence-modal"
-    maxWidth="604px"
+  <UnnnicModal
+    showModal
+    :closeIcon="false"
+    class="flow-modal"
   >
     <article class="flow-modal__container">
       <div class="flow-modal__header">
@@ -14,7 +15,9 @@
             <section
               :class="[
                 'flow-modal__header__fill__bar',
-                { 'flow-modal__header__fill__bar--green': index >= stepIndex },
+                {
+                  'flow-modal__header__fill__bar--green': index >= stepIndex,
+                },
               ]"
             />
 
@@ -66,16 +69,16 @@
       </div>
       <div class="flow-modal__body">
         <div
+          v-show="index === 0"
           class="flow-modal__body__flow"
-          v-if="index === 0"
         >
           <div>
             <UnnnicInput
+              v-model="filterName"
               size="sm"
               :iconLeftClickable="true"
               iconLeft="search-1"
               :placeholder="$t('modals.actions.flow.placeholder')"
-              v-model="filterName"
             />
           </div>
           <div class="flow-modal__body__flow__list">
@@ -149,53 +152,49 @@
           </UnnnicIntelligenceText>
         </section>
         <div
-          class="flow-modal__body_description"
           v-if="index === 1"
+          class="flow-modal__body_description"
         >
-          <UnnnicTextArea
-            v-bind="$props"
-            v-model="description"
-            :label="$t('modals.actions.descriptions.label')"
-          />
+          <UnnnicFormElement :label="$t('modals.actions.descriptions.label')">
+            <UnnnicTextArea
+              v-bind="$props"
+              v-model="description"
+            />
+          </UnnnicFormElement>
         </div>
       </div>
-      <div class="flow-modal__footer">
-        <UnnnicButton
-          slot="options"
-          class="create-repository__container__button"
-          type="tertiary"
-          @click="handleBackBtn"
-        >
-          {{ $t('modals.actions.btn_back') }}
-        </UnnnicButton>
-        <UnnnicButton
-          slot="options"
-          size="large"
-          @click="handleNextBtn()"
-          :disabled="isDisableNextBtn()"
-          :loading="saving"
-        >
-          {{
-            index === 0
-              ? $t('modals.actions.btn_next')
-              : $t('modals.actions.btn_create')
-          }}
-        </UnnnicButton>
-      </div>
     </article>
-  </ModalNext>
+
+    <template #options>
+      <UnnnicButton
+        class="create-repository__container__button"
+        type="tertiary"
+        @click="handleBackBtn"
+      >
+        {{ $t('modals.actions.btn_back') }}
+      </UnnnicButton>
+
+      <UnnnicButton
+        size="large"
+        :disabled="isDisableNextBtn()"
+        :loading="saving"
+        @click="handleNextBtn()"
+      >
+        {{
+          index === 0
+            ? $t('modals.actions.btn_next')
+            : $t('modals.actions.btn_create')
+        }}
+      </UnnnicButton>
+    </template>
+  </UnnnicModal>
 </template>
 
 <script>
 import { debounce } from 'lodash';
 import nexusaiAPI from '../../api/nexusaiAPI';
-import ModalNext from '../ModalNext.vue';
 
 export default {
-  components: {
-    ModalNext,
-  },
-
   props: {
     saving: Boolean,
   },
@@ -270,7 +269,7 @@ export default {
     this.intersectionObserver.observe(this.$refs['end-of-list-element']);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
   },
 
@@ -331,15 +330,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
-.create-intelligence-modal {
-  ::v-deep .create-intelligence-modal__container {
-    padding: $unnnic-spacing-xl $unnnic-spacing-md $unnnic-spacing-md
-      $unnnic-spacing-md;
-  }
-}
-
 .text-truncate {
   overflow: hidden;
   white-space: nowrap;
@@ -347,6 +337,15 @@ export default {
 }
 
 .flow-modal {
+  :deep(.unnnic-modal-container-background) {
+    width: 100%;
+    max-width: 37.75 * $unnnic-font-size;
+  }
+
+  :deep(.unnnic-modal-container-background-body-description-container) {
+    padding-bottom: 0;
+  }
+
   &__container {
     display: flex;
     flex-direction: column;
@@ -384,6 +383,8 @@ export default {
   }
 
   &__body {
+    text-align: left;
+
     &__not_found_container {
       text-align: center;
     }
@@ -426,17 +427,6 @@ export default {
           }
         }
       }
-    }
-  }
-
-  &__footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: $unnnic-spacing-md;
-    gap: $unnnic-spacing-sm;
-
-    button {
-      width: 100%;
     }
   }
 }

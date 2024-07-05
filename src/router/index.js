@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import RepositoryContentBases from '../views/repository/content/Bases.vue';
 import RepositoryContentBasesForm from '../views/repository/content/BasesForm.vue';
@@ -10,13 +9,11 @@ import NotFound from '../views/NotFound.vue';
 import store from '../store';
 import nexusaiAPI from '../api/nexusaiAPI';
 
-Vue.use(Router);
-
 let nextFromRedirect = '';
 
-const router = new Router({
+const router = createRouter({
   mode: 'history',
-  base: import.meta.env.BASE_URL,
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/loginexternal/:token/:org/:project',
@@ -93,18 +90,30 @@ const router = new Router({
         {
           path: 'personalization',
           name: 'router-personalization',
+          component: () =>
+            import(
+              '../views/repository/content/router/RouterCustomization.vue'
+            ),
         },
         {
           path: 'content',
           name: 'router-content',
+          component: () =>
+            import(
+              '../views/repository/content/router/RouterCustomization.vue'
+            ),
         },
         {
           path: 'actions',
           name: 'router-actions',
+          component: () =>
+            import('../views/repository/content/router/RouterActions.vue'),
         },
         {
           path: 'tunings',
           name: 'router-tunings',
+          component: () =>
+            import('../views/repository/content/router/RouterTunings.vue'),
         },
       ],
     },
@@ -124,23 +133,21 @@ const router = new Router({
       component: RepositoryContentBasesForm,
     },
     {
-      path: '*',
+      path: '/:pathMatch(.*)*',
       name: '404',
       component: NotFound,
-      beforeEnter(to, _from, next) {
+      beforeEnter: (to, from, next) => {
         if (to.fullPath === nextFromRedirect) {
           next();
         } else {
           const bearerToken = window.localStorage
             .getItem('authToken')
             .replace(' ', '+');
-
           const intelligenceOrgId = store.state.Auth.org;
           const orgUuid = sessionStorage.getItem('orgUuid');
           const projectUuid = sessionStorage.getItem('projectUuid');
 
           const path = `/loginexternal/${bearerToken}/${intelligenceOrgId}/${projectUuid}/`;
-
           const redirectUrl = new URL(
             path,
             runtimeVariables.get('INTELLIGENCE_LEGACY_URL'),

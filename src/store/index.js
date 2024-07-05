@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 
 import Auth from './auth';
 import User from './user';
@@ -19,20 +18,20 @@ import Integration from './integration';
 import Suggestions from './suggestions';
 import Brain from './brain';
 
-Vue.use(Vuex);
+export const store = createStore({
+  state() {
+    return {
+      obstructiveError: null,
 
-const store = new Vuex.Store({
-  state: {
-    obstructiveError: null,
+      alert: null,
 
-    alert: null,
+      modalWarn: null,
 
-    modalWarn: null,
-
-    router: {
-      intelligenceUuid: null,
-      contentBaseUuid: null,
-    },
+      router: {
+        intelligenceUuid: null,
+        contentBaseUuid: null,
+      },
+    };
   },
 
   modules: {

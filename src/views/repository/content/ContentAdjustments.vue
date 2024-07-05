@@ -17,8 +17,8 @@
 
       <UnnnicInput
         v-else
-        :label="$t('webapp.create_repository.intelligence_name_label')"
         v-model="name"
+        :label="$t('webapp.create_repository.intelligence_name_label')"
       />
 
       <UnnnicSkeletonLoading
@@ -31,9 +31,8 @@
 
       <UnnnicInput
         v-else
-        :label="$t('webapp.create_repository.description_label')"
-        :placeholder="$t('')"
         v-model="description"
+        :label="$t('webapp.create_repository.description_label')"
       />
 
       <section class="repository-adjustments__wrapper__buttons">
@@ -48,10 +47,10 @@
         <UnnnicButton
           size="large"
           :text="$t('webapp.home.bases.adjustments_button')"
-          @click="onSubmit()"
           :loading="submitting"
           :disabled="!hasUpdates"
           class="repository-adjustments__buttons"
+          @click="onSubmit()"
         >
         </UnnnicButton>
       </section>
@@ -70,24 +69,24 @@
       :description="$t('webapp.home.bases.adjustments_modal_alert_description')"
       @close="isDiscardModalOpen = false"
     >
-      <UnnnicButton
-        slot="options"
-        class="create-repository__container__button"
-        type="tertiary"
-        @click="discardUpdate()"
-      >
-        {{ $t('webapp.home.bases.adjustments_modal_alert_discard') }}
-      </UnnnicButton>
-      <UnnnicButton
-        slot="options"
-        class="create-repository__container__button"
-        type="primary"
-        scheme="feedback-yellow"
-        @click="saveClose()"
-        :loading="submitting"
-      >
-        {{ $t('webapp.home.bases.adjustments_modal_alert_save') }}
-      </UnnnicButton>
+      <template #options>
+        <UnnnicButton
+          class="create-repository__container__button"
+          type="tertiary"
+          @click="discardUpdate()"
+        >
+          {{ $t('webapp.home.bases.adjustments_modal_alert_discard') }}
+        </UnnnicButton>
+        <UnnnicButton
+          class="create-repository__container__button"
+          type="primary"
+          scheme="feedback-yellow"
+          :loading="submitting"
+          @click="saveClose()"
+        >
+          {{ $t('webapp.home.bases.adjustments_modal_alert_save') }}
+        </UnnnicButton>
+      </template>
     </UnnnicModal>
   </PageContainer>
 </template>
@@ -100,6 +99,9 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 
 export default {
   name: 'RepositoryContentAdjustment',
+  components: {
+    PageContainer,
+  },
   data() {
     return {
       loadingIntelligence: false,
@@ -134,24 +136,6 @@ export default {
       return false;
     },
   },
-  components: {
-    PageContainer,
-  },
-
-  mounted() {
-    this.removePageExitAdvisor = router.beforeEach((to, from, next) => {
-      if (this.hasUpdates) {
-        this.isDiscardModalOpen = true;
-        this.localNext = next;
-      } else {
-        next();
-      }
-    });
-  },
-
-  beforeDestroy() {
-    this.removePageExitAdvisor();
-  },
 
   watch: {
     '$route.params.intelligenceUuid': {
@@ -185,6 +169,21 @@ export default {
           });
       },
     },
+  },
+
+  mounted() {
+    this.removePageExitAdvisor = router.beforeEach((to, from, next) => {
+      if (this.hasUpdates) {
+        this.isDiscardModalOpen = true;
+        this.localNext = next;
+      } else {
+        next();
+      }
+    });
+  },
+
+  beforeUnmount() {
+    this.removePageExitAdvisor();
   },
   methods: {
     isEqualsArrays(arrayA, arrayB) {
@@ -282,8 +281,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .categories-list {
   display: flex;
   flex-wrap: wrap;
@@ -358,20 +355,19 @@ hr.divider {
     width: 50%;
   }
 }
-::v-deep {
-  .unnnic-select.unnic--clickable {
-    width: 100%;
-  }
 
-  .input.size-md {
-    height: auto;
-  }
+:deep(.unnnic-select.unnic--clickable) {
+  width: 100%;
+}
 
-  .text-input.size--sm .icon-right {
-    top: 15px;
-  }
-  .unnnic-form {
-    margin-bottom: $unnnic-spacing-sm;
-  }
+:deep(.input.size-md) {
+  height: auto;
+}
+
+:deep(.text-input.size--sm .icon-right) {
+  top: 15px;
+}
+:deep(.unnnic-form) {
+  margin-bottom: $unnnic-spacing-sm;
 }
 </style>

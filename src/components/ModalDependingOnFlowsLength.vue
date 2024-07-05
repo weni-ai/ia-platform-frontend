@@ -1,10 +1,10 @@
 <template>
   <div>
     <UnnnicModalNext
-      class="integrate"
       v-if="showHowToIntegrate"
-      @close="showHowToIntegrate = false"
+      class="integrate"
       showCloseButton
+      @close="showHowToIntegrate = false"
     >
       <div class="integrate--title">
         {{ $t('modals.how_to_integrate.title') }}
@@ -33,17 +33,17 @@
         <UnnnicButton
           v-if="step === 2"
           type="tertiary"
-          @click.stop="step = 1"
           :text="$t('modals.how_to_integrate.second_step.back_button')"
+          @click.stop="step = 1"
         />
         <UnnnicButton
           type="secondary"
-          @click="nextStep"
           :text="
             step === 2
               ? $t('modals.how_to_integrate.second_step.close_button')
               : $t('modals.how_to_integrate.first_step.next_step')
           "
+          @click="nextStep"
         />
       </div>
     </UnnnicModalNext>
@@ -62,16 +62,6 @@ export default {
       hasFlows: null,
       step: 1,
     };
-  },
-
-  created() {
-    iframessa.get('hasFlows', ({ data: hasFlows }) => {
-      this.hasFlows = hasFlows;
-    });
-
-    iframessa.on('update:hasFlows', ({ data: hasFlows }) => {
-      this.hasFlows = hasFlows;
-    });
   },
 
   computed: {
@@ -116,6 +106,16 @@ export default {
     },
   },
 
+  created() {
+    iframessa.get('hasFlows', ({ data: hasFlows }) => {
+      this.hasFlows = hasFlows;
+    });
+
+    iframessa.on('update:hasFlows', ({ data: hasFlows }) => {
+      this.hasFlows = hasFlows;
+    });
+  },
+
   methods: {
     redirectToFlows() {
       iframessa.emit('redirectToFlows', { path: 'init' });
@@ -129,10 +129,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/dist/unnnic.css';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
-.unnnic-modal ::v-deep > .container > .content {
+.unnnic-modal :deep(> .container > .content) {
   box-sizing: initial;
 }
 
@@ -144,20 +141,18 @@ export default {
 .integrate {
   font-family: $unnnic-font-family-secondary;
 
-  ::v-deep {
-    .container {
-      padding: $unnnic-squish-md !important;
-    }
+  :deep(.container) {
+    padding: $unnnic-squish-md !important;
+  }
 
-    .header {
-      margin-bottom: $unnnic-spacing-stack-nano !important;
-    }
+  :deep(.header) {
+    margin-bottom: $unnnic-spacing-stack-nano !important;
+  }
 
-    .content {
-      display: flex;
-      flex-direction: column;
-      overflow: auto !important;
-    }
+  :deep(.content) {
+    display: flex;
+    flex-direction: column;
+    overflow: auto !important;
   }
 
   &--title {

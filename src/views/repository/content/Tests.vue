@@ -10,8 +10,8 @@
       class="messages"
     >
       <div
-        class="messages__content"
         ref="messages"
+        class="messages__content"
       >
         <section
           v-if="!messages.length"
@@ -53,7 +53,7 @@
 
             <AnswerFeedback
               v-if="message.type === 'answer' && message.question_uuid"
-              :feedback.sync="message.feedback"
+              v-model:feedback="message.feedback"
               :contentBaseUuid="contentBaseUuid"
               :questionUuid="message.question_uuid"
             />
@@ -115,15 +115,10 @@ import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 import Markdown from '../../../components/Markdown.vue';
 import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
 import PreviewPlaceholder from './router/Preview/Placeholder.vue';
+import { reactive } from 'vue';
 
 export default {
   name: 'RepositoryContentTests',
-
-  props: {
-    contentBaseUuid: String,
-    contentBaseLanguage: String,
-    usePreview: Boolean,
-  },
 
   components: {
     Markdown,
@@ -134,6 +129,12 @@ export default {
   },
 
   mixins: [FlowPreview],
+
+  props: {
+    contentBaseUuid: String,
+    contentBaseLanguage: String,
+    usePreview: Boolean,
+  },
 
   data() {
     return {
@@ -166,18 +167,6 @@ export default {
     },
   },
 
-  mounted() {
-    if (this.usePreview) {
-      this.previewInit({
-        contentBaseUuid: this.$store.state.router.contentBaseUuid,
-      });
-
-      window.brainPreviewAddMessage = (message) => {
-        this.messages.push(message);
-      };
-    }
-  },
-
   watch: {
     'preview.session.status'(value, previous) {
       if (previous === 'waiting' && value === 'completed') {
@@ -192,6 +181,18 @@ export default {
         });
       }
     },
+  },
+
+  mounted() {
+    if (this.usePreview) {
+      this.previewInit({
+        contentBaseUuid: this.$store.state.router.contentBaseUuid,
+      });
+
+      window.brainPreviewAddMessage = (message) => {
+        this.messages.push(message);
+      };
+    }
   },
 
   methods: {
@@ -309,7 +310,7 @@ export default {
       this.scrollToLastMessage();
 
       setTimeout(() => {
-        const answer = {
+        const answer = reactive({
           type: 'answer',
           text: '',
           status: 'loading',
@@ -318,7 +319,7 @@ export default {
             value: null,
             reason: null,
           },
-        };
+        });
 
         this.messages.push(answer);
 
@@ -391,7 +392,9 @@ export default {
 
     scrollToLastMessage() {
       this.$nextTick(() => {
-        this.$refs.messages.lastChild.scrollIntoView({ behavior: 'smooth' });
+        this.$refs.messages.lastElementChild.scrollIntoView({
+          behavior: 'smooth',
+        });
       });
     },
   },
@@ -399,9 +402,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use 'sass:math';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .quick-replies {
   margin-top: $unnnic-spacing-sm;
   display: flex;
@@ -430,40 +430,47 @@ export default {
   margin: 0 $dot-size * 1.75;
   margin-top: $unnnic-font-size-body-md + $unnnic-line-height-md - $dot-size;
   // margin-bottom: ($unnnic-font-size-body-md + $unnnic-line-height-md) * 0.25;
-  border-radius: math.div($dot-size, 2);
+
+  border-radius: calc($dot-size / 2);
   background-color: transparent;
-  box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+  box-shadow:
+    -$dot-size * 1.75 ($dot-min-height) $dot-color,
     0 ($dot-min-height) $dot-color,
     $dot-size * 1.75 ($dot-min-height) $dot-color;
   animation: dot-typing 1s infinite ease;
 
   @keyframes dot-typing {
     0% {
-      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+      box-shadow:
+        -$dot-size * 1.75 ($dot-min-height) $dot-color,
         0 ($dot-min-height) $dot-color,
         $dot-size * 1.75 ($dot-min-height) $dot-color;
     }
 
     20% {
-      box-shadow: -$dot-size * 1.75 ($dot-max-height) $dot-color,
+      box-shadow:
+        -$dot-size * 1.75 ($dot-max-height) $dot-color,
         0 ($dot-min-height) $dot-color,
         $dot-size * 1.75 ($dot-min-height) $dot-color;
     }
 
     40% {
-      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+      box-shadow:
+        -$dot-size * 1.75 ($dot-min-height) $dot-color,
         0 ($dot-max-height) $dot-color,
         $dot-size * 1.75 ($dot-min-height) $dot-color;
     }
 
     60% {
-      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+      box-shadow:
+        -$dot-size * 1.75 ($dot-min-height) $dot-color,
         0 ($dot-min-height) $dot-color,
         $dot-size * 1.75 ($dot-max-height) $dot-color;
     }
 
     80% {
-      box-shadow: -$dot-size * 1.75 ($dot-min-height) $dot-color,
+      box-shadow:
+        -$dot-size * 1.75 ($dot-min-height) $dot-color,
         0 ($dot-min-height) $dot-color,
         $dot-size * 1.75 ($dot-min-height) $dot-color;
     }
@@ -531,10 +538,8 @@ export default {
       border-radius: $unnnic-border-radius-md;
       padding: $unnnic-spacing-ant;
 
-      ::v-deep {
-        p {
-          margin: 0;
-        }
+      :deep(p) {
+        margin: 0;
       }
     }
 
@@ -576,126 +581,80 @@ export default {
 #webchat {
   height: 100%;
 
-  ::v-deep {
-    & > div,
-    & > div > div.push-widget-container {
-      height: 100%;
+  :deep(& > div),
+  :deep(& > div > div.push-widget-container) {
+    height: 100%;
+  }
+
+  :deep(.push-widget-container) {
+    position: unset;
+    width: 100%;
+    height: 430px;
+    box-shadow: none;
+    padding: 0;
+
+    @media (min-width: 1440px) {
+      height: 500px;
     }
 
-    .push-widget-container {
-      position: unset;
-      width: 100%;
-      height: 430px;
-      box-shadow: none;
-      padding: 0;
-
-      @media (min-width: 1440px) {
-        height: 500px;
-      }
-
-      section:has(.push-group-message) {
-        height: 0;
-      }
+    section:has(.push-group-message) {
+      height: 0;
     }
-    .push-poweredby-container {
-      display: none;
-    }
-    .push-launcher {
-      display: none;
-    }
-    .push-header.push-with-subtitle {
-      display: none;
-    }
-    .push-conversation-container {
-      box-shadow: none;
-    }
+  }
+  :deep(.push-poweredby-container) {
+    display: none;
+  }
+  :deep(.push-launcher) {
+    display: none;
+  }
+  :deep(.push-header.push-with-subtitle) {
+    display: none;
+  }
+  :deep(.push-conversation-container) {
+    box-shadow: none;
+  }
 
-    .push-conversation-container {
-      overflow: visible;
-      animation: none;
-    }
+  :deep(.push-conversation-container) {
+    overflow: visible;
+    animation: none;
+  }
 
-    .push-sender {
-      padding: 0;
-      margin-top: $unnnic-spacing-xs;
-      display: flex;
-      column-gap: $unnnic-spacing-nano;
-      height: 2.875 * $unnnic-font-size;
+  :deep(.push-sender) {
+    padding: 0;
+    margin-top: $unnnic-spacing-xs;
+    display: flex;
+    column-gap: $unnnic-spacing-nano;
+    height: 2.875 * $unnnic-font-size;
 
-      .push-new-message {
-        background-color: $unnnic-color-neutral-snow;
-        padding: ($unnnic-spacing-ant - $unnnic-border-width-thinner)
-          $unnnic-spacing-sm;
-        border: $unnnic-border-width-thinner solid
-          $unnnic-color-neutral-cleanest;
-        border-radius: $unnnic-border-radius-sm;
-        flex: 1;
+    .push-new-message {
+      background-color: $unnnic-color-neutral-snow;
+      padding: ($unnnic-spacing-ant - $unnnic-border-width-thinner)
+        $unnnic-spacing-sm;
+      border: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
+      border-radius: $unnnic-border-radius-sm;
+      flex: 1;
 
-        color: $unnnic-color-neutral-dark;
+      color: $unnnic-color-neutral-dark;
+      font-family: $unnnic-font-family-secondary;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+      font-weight: $unnnic-font-weight-regular;
+
+      height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+
+      &::placeholder {
+        color: $unnnic-color-neutral-cleanest;
         font-family: $unnnic-font-family-secondary;
         font-size: $unnnic-font-size-body-gt;
         line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
         font-weight: $unnnic-font-weight-regular;
-
-        height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-
-        &::placeholder {
-          color: $unnnic-color-neutral-cleanest;
-          font-family: $unnnic-font-family-secondary;
-          font-size: $unnnic-font-size-body-gt;
-          line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-          font-weight: $unnnic-font-weight-regular;
-        }
-
-        &:focus {
-          border-color: $unnnic-color-neutral-clean;
-        }
-
-        $scroll-size: $unnnic-inline-nano;
-
-        &::-webkit-scrollbar {
-          width: $scroll-size;
-        }
-
-        &::-webkit-scrollbar-thumb {
-          background: $unnnic-color-neutral-clean;
-          border-radius: $unnnic-border-radius-pill;
-        }
-
-        &::-webkit-scrollbar-track {
-          background: $unnnic-color-neutral-soft;
-          border-radius: $unnnic-border-radius-pill;
-        }
       }
 
-      .push-send {
-        background-color: $unnnic-color-weni-50;
-        border: 0;
-        width: 2.875 * $unnnic-font-size;
-        height: 2.875 * $unnnic-font-size;
-        padding: 0;
-        display: block;
-
-        &:hover:enabled {
-          background-color: $unnnic-color-weni-100;
-          border: 0;
-        }
-
-        &:active:enabled {
-          background-color: $unnnic-color-weni-200;
-          color: $unnnic-color-weni-900;
-        }
+      &:focus {
+        border-color: $unnnic-color-neutral-clean;
       }
-    }
-
-    .push-messages-container {
-      overflow-y: auto;
 
       $scroll-size: $unnnic-inline-nano;
-
-      padding: 0;
-      padding-right: $unnnic-inline-nano + $scroll-size;
-      margin-right: -($unnnic-inline-nano + $scroll-size);
 
       &::-webkit-scrollbar {
         width: $scroll-size;
@@ -712,86 +671,129 @@ export default {
       }
     }
 
-    .push-group-message + .push-group-message {
-      margin-block-start: $unnnic-spacing-xs;
+    .push-send {
+      background-color: $unnnic-color-weni-50;
+      border: 0;
+      width: 2.875 * $unnnic-font-size;
+      height: 2.875 * $unnnic-font-size;
+      padding: 0;
+      display: block;
+
+      &:hover:enabled {
+        background-color: $unnnic-color-weni-100;
+        border: 0;
+      }
+
+      &:active:enabled {
+        background-color: $unnnic-color-weni-200;
+        color: $unnnic-color-weni-900;
+      }
+    }
+  }
+
+  :deep(.push-messages-container) {
+    overflow-y: auto;
+
+    $scroll-size: $unnnic-inline-nano;
+
+    padding: 0;
+    padding-right: $unnnic-inline-nano + $scroll-size;
+    margin-right: -($unnnic-inline-nano + $scroll-size);
+
+    &::-webkit-scrollbar {
+      width: $scroll-size;
     }
 
-    .push-message {
+    &::-webkit-scrollbar-thumb {
+      background: $unnnic-color-neutral-clean;
+      border-radius: $unnnic-border-radius-pill;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $unnnic-color-neutral-soft;
+      border-radius: $unnnic-border-radius-pill;
+    }
+  }
+
+  :deep(.push-group-message + .push-group-message) {
+    margin-block-start: $unnnic-spacing-xs;
+  }
+
+  :deep(.push-message) {
+    margin: 0;
+  }
+
+  :deep(.push-response) {
+    border-radius: $unnnic-border-radius-md $unnnic-border-radius-md
+      $unnnic-border-radius-md $unnnic-border-radius-sm;
+    background-color: $unnnic-color-neutral-light;
+  }
+
+  :deep(.push-client) {
+    border-radius: $unnnic-border-radius-md $unnnic-border-radius-md
+      $unnnic-border-radius-sm $unnnic-border-radius-md;
+    background-color: $unnnic-color-weni-100;
+  }
+
+  :deep(.push-response),
+  :deep(.push-client) {
+    padding: $unnnic-spacing-xs;
+    max-width: 80%;
+
+    .push-message-text,
+    .push-markdown h4,
+    .push-markdown h4,
+    .push-markdown h2,
+    .push-markdown p {
+      color: $unnnic-color-neutral-dark;
+      font-family: $unnnic-font-family-secondary;
+      font-size: $unnnic-font-size-body-md;
+      line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+      font-weight: $unnnic-font-weight-regular;
+
       margin: 0;
-    }
 
-    .push-response {
-      border-radius: $unnnic-border-radius-md $unnnic-border-radius-md
-        $unnnic-border-radius-md $unnnic-border-radius-sm;
-      background-color: $unnnic-color-neutral-light;
-    }
-
-    .push-client {
-      border-radius: $unnnic-border-radius-md $unnnic-border-radius-md
-        $unnnic-border-radius-sm $unnnic-border-radius-md;
-      background-color: $unnnic-color-weni-100;
-    }
-
-    .push-response,
-    .push-client {
-      padding: $unnnic-spacing-xs;
-      max-width: 80%;
-
-      .push-message-text,
-      .push-markdown h4,
-      .push-markdown h4,
-      .push-markdown h2,
-      .push-markdown p {
+      strong {
         color: $unnnic-color-neutral-dark;
         font-family: $unnnic-font-family-secondary;
         font-size: $unnnic-font-size-body-md;
         line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
-        font-weight: $unnnic-font-weight-regular;
-
-        margin: 0;
-
-        strong {
-          color: $unnnic-color-neutral-dark;
-          font-family: $unnnic-font-family-secondary;
-          font-size: $unnnic-font-size-body-md;
-          line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
-          font-weight: $unnnic-font-weight-bold;
-        }
+        font-weight: $unnnic-font-weight-bold;
       }
     }
+  }
 
-    .push-markdown {
-      ul {
-        list-style-type: disc;
-        padding-inline-start: 40px;
-      }
+  :deep(.push-markdown) {
+    ul {
+      list-style-type: disc;
+      padding-inline-start: 40px;
     }
+  }
 
-    label[for='push-file-upload'] {
+  :deep(label[for='push-file-upload']) {
+    display: none;
+  }
+  :deep(.push-send) {
+    border: 1px solid $unnnic-color-neutral-cleanest;
+    padding: $unnnic-spacing-ant $unnnic-spacing-sm;
+    border-radius: $unnnic-border-radius-sm;
+    width: 12px;
+    img {
       display: none;
     }
-    .push-send {
-      border: 1px solid $unnnic-color-neutral-cleanest;
-      padding: $unnnic-spacing-ant $unnnic-spacing-sm;
-      border-radius: $unnnic-border-radius-sm;
-      width: 12px;
-      img {
-        display: none;
-      }
-      &:after {
-        background-image: url('@/assets/imgs/send.svg');
-        background-repeat: no-repeat;
-        background-position: center;
-        padding: 0 $unnnic-spacing-xs;
-        content: ' ';
-        font-family: $unnnic-font-family-secondary;
-        font-weight: $unnnic-font-weight-regular;
-        font-size: $unnnic-font-size-body-lg;
-        color: #4e5666;
-      }
-      &:hover {
-        border: 1px solid $unnnic-color-neutral-clean;
-      }
+    &:after {
+      background-image: url('@/assets/imgs/send.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      padding: 0 $unnnic-spacing-xs;
+      content: ' ';
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-regular;
+      font-size: $unnnic-font-size-body-lg;
+      color: #4e5666;
+    }
+    &:hover {
+      border: 1px solid $unnnic-color-neutral-clean;
     }
   }
 }

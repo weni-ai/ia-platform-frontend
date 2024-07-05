@@ -78,6 +78,14 @@ export default {
     };
   },
 
+  watch: {
+    isShowingEndOfList() {
+      if (this.isShowingEndOfList && this.contentBases.status !== 'complete') {
+        this.loadContentBases();
+      }
+    },
+  },
+
   mounted() {
     this.loadContentBases();
 
@@ -90,16 +98,8 @@ export default {
     this.intersectionObserver.observe(this.$refs['end-of-list-element']);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
-  },
-
-  watch: {
-    isShowingEndOfList() {
-      if (this.isShowingEndOfList && this.contentBases.status !== 'complete') {
-        this.loadContentBases();
-      }
-    },
   },
 
   methods: {
@@ -131,8 +131,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .content-bases-list {
   display: flex;
   flex-direction: column;

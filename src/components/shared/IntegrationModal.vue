@@ -15,62 +15,63 @@
     modalIcon="alert-circle-1"
     :closeIcon="false"
   >
-    <div slot="message">
-      <span
-        v-html="
-          hasIntegration
-            ? $t('webapp.home.remove_integrate_modal_subtitle')
-            : $t('webapp.home.integrate_modal_subtitle')
-        "
-      />
-      <div
-        class="integration-modal__field"
-        v-show="hasIntegration"
-      >
+    <template #message>
+      <div>
         <span
-          class="integration-modal__field__label"
           v-html="
-            $t('webapp.home.confirm_with_username', { username: getUsername })
+            hasIntegration
+              ? $t('webapp.home.remove_integrate_modal_subtitle')
+              : $t('webapp.home.integrate_modal_subtitle')
           "
         />
-        <UnnnicInput
-          v-model="username"
-          class="integration-modal__field__input"
-          :placeholder="$t('webapp.home.confirm_with_username_placeholder')"
-        />
+        <div
+          v-show="hasIntegration"
+          class="integration-modal__field"
+        >
+          <span
+            class="integration-modal__field__label"
+            v-html="
+              $t('webapp.home.confirm_with_username', { username: getUsername })
+            "
+          />
+          <UnnnicInput
+            v-model="username"
+            class="integration-modal__field__input"
+            :placeholder="$t('webapp.home.confirm_with_username_placeholder')"
+          />
+        </div>
       </div>
-    </div>
-
-    <UnnnicButton
-      slot="options"
-      type="tertiary"
-      @click.prevent.stop="dispatchCloseModal()"
-    >
-      {{ $t('webapp.home.cancel') }}
-    </UnnnicButton>
-    <UnnnicButton
-      slot="options"
-      class="integration-modal__button"
-      :class="{
-        'integration-modal__button__opacity':
-          checkInputConfirm && hasIntegration,
-      }"
-      type="secondary"
-      :loading="loading"
-      :disabled="hasIntegration && checkInputConfirm"
-      @click.prevent.stop="
-        hasIntegration
-          ? dispatchRemoveIntegrateRepository()
-          : dispatchIntegrateRepository()
-      "
-    >
-      <span
-        v-if="hasIntegration"
-        class="integration-modal__button__txt"
-        >{{ $t('webapp.home.confirm_remove_integrate') }}</span
+    </template>
+    <template #options>
+      <UnnnicButton
+        type="tertiary"
+        @click.prevent.stop="dispatchCloseModal()"
       >
-      <span v-else>{{ $t('webapp.home.confirm_integrate') }}</span>
-    </UnnnicButton>
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
+        class="integration-modal__button"
+        :class="{
+          'integration-modal__button__opacity':
+            checkInputConfirm && hasIntegration,
+        }"
+        type="secondary"
+        :loading="loading"
+        :disabled="hasIntegration && checkInputConfirm"
+        @click.prevent.stop="
+          hasIntegration
+            ? dispatchRemoveIntegrateRepository()
+            : dispatchIntegrateRepository()
+        "
+      >
+        <span
+          v-if="hasIntegration"
+          class="integration-modal__button__txt"
+          >{{ $t('webapp.home.confirm_remove_integrate') }}</span
+        >
+        <span v-else>{{ $t('webapp.home.confirm_integrate') }}</span>
+      </UnnnicButton>
+    </template>
   </UnnnicModal>
 </template>
 
@@ -166,8 +167,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .integration-modal {
   &__container {
     margin-top: 1.5rem;

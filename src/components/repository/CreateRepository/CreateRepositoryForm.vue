@@ -3,20 +3,21 @@
     <div class="create-repository__container">
       <section class="create-repository__container__steps">
         <IntelligenceTab
-          :name.sync="data.name"
-          :description.sync="data.description"
-          :repository_type.sync="data.repository_type"
+          v-model:name="data.name"
+          v-model:description="data.description"
+          v-model:repository_type="data.repository_type"
         />
       </section>
       <section class="create-repository__container__steps">
         <DefinitionsTab
-          @createRepository="createRepository($event)"
-          @backModal="onChangeModalState(true)"
+          v-model:language="data.language"
+          v-model:is_private="data.is_private"
+          v-model:categories="data.categories"
           :disabledSubmit="disabledSubmit"
           :repository_type="data.repository_type"
-          :language.sync="data.language"
-          :is_private.sync="data.is_private"
-          :categories.sync="data.categories"
+          :loading="submitting"
+          @createRepository="createRepository($event)"
+          @backModal="onChangeModalState(true)"
         />
       </section>
 
@@ -25,27 +26,26 @@
         :text="$t('webapp.create_repository.modal_title')"
         scheme="aux-yellow-500"
         modalIcon="warning"
-        @close="onChangeModalState(false)"
         :closeIcon="false"
+        @close="onChangeModalState(false)"
       >
-        <span
-          slot="message"
-          v-html="$t('webapp.create_repository.modal_description')"
-        />
-        <UnnnicButton
-          slot="options"
-          type="tertiary"
-          @click="onChangeModalState(false)"
-        >
-          {{ $t('webapp.create_repository.modal_continue_button') }}
-        </UnnnicButton>
-        <UnnnicButton
-          slot="options"
-          @click="navigateToHomepage()"
-          class="attention-button"
-        >
-          {{ $t('webapp.create_repository.modal_exit_button') }}
-        </UnnnicButton>
+        <template #message>
+          <span v-html="$t('webapp.create_repository.modal_description')" />
+        </template>
+        <template #options>
+          <UnnnicButton
+            type="tertiary"
+            @click="onChangeModalState(false)"
+          >
+            {{ $t('webapp.create_repository.modal_continue_button') }}
+          </UnnnicButton>
+          <UnnnicButton
+            class="attention-button"
+            @click="navigateToHomepage()"
+          >
+            {{ $t('webapp.create_repository.modal_exit_button') }}
+          </UnnnicButton>
+        </template>
       </UnnnicModal>
     </div>
 
@@ -235,8 +235,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .attention-button {
   background-color: $unnnic-color-aux-yellow-500;
 
@@ -298,10 +296,9 @@ export default {
     }
   }
 }
-::v-deep {
-  .text-input.size--sm .icon-right,
-  .text-input.size--sm .icon-left {
-    top: 15px;
-  }
+
+:deep(.text-input.size--sm .icon-right),
+:deep(.text-input.size--sm .icon-left) {
+  top: 15px;
 }
 </style>

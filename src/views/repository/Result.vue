@@ -70,7 +70,7 @@ export default {
     document.head.appendChild(window.bulmaStyle);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     document.head.removeChild(window.bulmaStyle);
   },
 

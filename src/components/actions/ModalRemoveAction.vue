@@ -1,42 +1,31 @@
 <template>
-  <ModalNext
-    class="flow-modal create-intelligence-modal"
-    maxWidth="498px"
+  <UnnnicModal
+    showModal
+    scheme="aux-red-500"
+    modalIcon="error"
+    :text="$t('modals.actions.remove.title')"
+    :closeIcon="false"
+    class="flow-modal"
   >
-    <article class="flow-modal__container">
-      <header class="flow-modal__header">
-        <section class="flow-modal__header__title__container">
-          <UnnnicIcon
-            icon="error"
-            size="lg"
-            scheme="aux-red-500"
-          />
-          <h3>{{ $t('modals.actions.remove.title') }}</h3>
-          <p v-html="$t('modals.actions.remove.description', { name: name })" />
-        </section>
-      </header>
-      <footer class="flow-modal__footer">
-        <UnnnicButton
-          slot="options"
-          class="create-repository__container__button"
-          type="tertiary"
-          @click="$emit('closeModal')"
-        >
-          {{ $t('modals.actions.btn_cancel') }}
-        </UnnnicButton>
-        <UnnnicButton
-          class="btn-remove"
-          type="warning"
-          slot="options"
-          size="large"
-          :loading="removing"
-          @click="$emit('remove')"
-        >
-          {{ $t('modals.actions.btn_complete') }}
-        </UnnnicButton>
-      </footer>
-    </article>
-  </ModalNext>
+    <p v-html="$t('modals.actions.remove.description', { name })" />
+
+    <template #options>
+      <UnnnicButton
+        type="tertiary"
+        @click="$emit('closeModal')"
+      >
+        {{ $t('modals.actions.btn_cancel') }}
+      </UnnnicButton>
+
+      <UnnnicButton
+        type="warning"
+        :loading="removing"
+        @click="$emit('remove')"
+      >
+        {{ $t('modals.actions.btn_complete') }}
+      </UnnnicButton>
+    </template>
+  </UnnnicModal>
 </template>
 
 <script>
@@ -57,62 +46,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
-.create-intelligence-modal {
-  :deep(.create-intelligence-modal__container) {
-    padding: $unnnic-spacing-giant $unnnic-spacing-md $unnnic-spacing-md
-      $unnnic-spacing-md;
-  }
-}
-
-.btn-remove {
-  background-color: $unnnic-color-aux-red-500;
-}
-
 .flow-modal {
-  &__container {
-    display: flex;
-    flex-direction: column;
+  :deep(.unnnic-modal-container-background-body-title) {
+    padding-bottom: $unnnic-spacing-sm;
   }
 
-  &__header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-bottom: $unnnic-spacing-lg;
-
-    &__title {
-      &__container {
-        h3 {
-          font-family: $unnnic-font-family-secondary;
-          font-size: $unnnic-font-size-title-sm;
-          font-weight: $unnnic-font-weight-black;
-          line-height: $unnnic-line-height-md;
-          color: $unnnic-color-neutral-darkest;
-          padding: $unnnic-spacing-sm 0 $unnnic-spacing-sm 0;
-        }
-
-        p {
-          font-family: $unnnic-font-family-secondary;
-          font-size: $unnnic-font-size-body-gt;
-          font-weight: $unnnic-font-weight-regular;
-          line-height: $unnnic-line-height-md;
-          color: $unnnic-color-neutral-dark;
-        }
-      }
-    }
-  }
-
-  &__footer {
-    display: flex;
-    justify-content: space-between;
-    gap: $unnnic-spacing-sm;
-
-    button {
-      width: 100%;
-    }
+  :deep(.unnnic-modal-container-background-body-description-container) {
+    padding-bottom: $unnnic-spacing-xs;
   }
 }
 </style>

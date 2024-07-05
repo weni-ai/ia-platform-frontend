@@ -51,11 +51,11 @@
 
             <h1
               v-else
+              id="titleId"
               ref="focusInput"
               class="repository-base-edit__title"
               :contenteditable="canEditTitle"
-              @input="$emit('update:title', $event)"
-              id="titleId"
+              @update:model-value="$emit('update:title', $event)"
             >
               {{ title }}
             </h1>
@@ -91,8 +91,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .news-bar {
   margin: -$unnnic-spacing-lg;
   margin-bottom: $unnnic-spacing-md;

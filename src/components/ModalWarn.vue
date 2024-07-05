@@ -8,27 +8,26 @@
     :closeIcon="false"
     class="modal-warn"
   >
-    <template v-slot:message>
+    <template #message>
       <div v-html="message" />
     </template>
-    <UnnnicButton
-      slot="options"
-      class="create-repository__container__button"
-      type="tertiary"
-      @click="$emit('close')"
-    >
-      {{ closeText }}
-    </UnnnicButton>
-
-    <UnnnicButton
-      slot="options"
-      class="create-repository__container__button attention-button"
-      type="attention"
-      :loading="loading"
-      @click="$emit('action')"
-    >
-      {{ actionText }}
-    </UnnnicButton>
+    <template #options>
+      <UnnnicButton
+        class="create-repository__container__button"
+        type="tertiary"
+        @click="$emit('close')"
+      >
+        {{ closeText }}
+      </UnnnicButton>
+      <UnnnicButton
+        class="create-repository__container__button attention-button"
+        type="attention"
+        :loading="loading"
+        @click="$emit('action')"
+      >
+        {{ actionText }}
+      </UnnnicButton>
+    </template>
   </UnnnicModal>
 </template>
 
@@ -47,8 +46,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .modal-warn
   :deep(.unnnic-modal-container-background-body-description-container) {
   padding-bottom: $unnnic-spacing-xs;

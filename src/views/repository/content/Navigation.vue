@@ -1,6 +1,8 @@
 <template>
   <UnnnicButton
-    @click.native="
+    iconCenter="settings"
+    type="secondary"
+    @click="
       $router.push({
         name: 'intelligence-edit',
         params: {
@@ -8,8 +10,6 @@
         },
       })
     "
-    iconCenter="settings"
-    type="secondary"
   />
 </template>
 <script>
@@ -23,7 +23,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import '@weni/unnnic-system/dist/unnnic.css';
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-</style>
+<style lang="scss" scoped></style>

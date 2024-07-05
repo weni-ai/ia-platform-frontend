@@ -172,7 +172,6 @@
         "processing": "Processing content"
       },
       "content_of_the_files_has_been_added": "The content of the files has been added to the base",
-      "content_of_the_files_is_loading": "Loading the content of the files",
       "file_removed_from_base": "{name} removed from content base",
       "delete_file": {
         "title": "Delete file",
@@ -1400,7 +1399,7 @@
       },
       "remove": {
         "title": "Remove action",
-        "description": "Are you sure you want to remove the <strong>{name}</strong> action? <br><br>This action cannot be reversed"
+        "description": "Are you sure you want to remove the <strong>{name}</strong> action?<br />This action cannot be reversed"
       }
     },
     "cant_access": {

@@ -47,8 +47,6 @@ const elementHeight = computed(
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .skeleton-loading {
   display: block;
   width: 100%;

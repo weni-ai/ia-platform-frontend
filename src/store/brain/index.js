@@ -2,7 +2,6 @@ import { differenceBy, cloneDeep, pick, get } from 'lodash';
 import { WENIGPT_OPTIONS } from '../../utils';
 import { models } from './models.js';
 import nexusaiAPI from '../../api/nexusaiAPI.js';
-import Vue from 'vue';
 import i18n from '../../utils/plugins/i18n';
 import store from '../index.js';
 
@@ -14,7 +13,7 @@ function watchOnce(...args) {
 }
 
 export default {
-  state: {
+  state: () => ({
     tabsWithError: null,
     isSavingChanges: false,
     customizationStatus: 'waitingToLoad',
@@ -58,7 +57,7 @@ export default {
       role: false,
       goal: false,
     },
-  },
+  }),
 
   getters: {
     hasBrainCustomizationChanged(state) {
@@ -151,7 +150,7 @@ export default {
       } catch (error) {
         rootState.alert = {
           type: 'error',
-          text: i18n.t('customization.invalid_get_data'),
+          text: i18n.global.t('customization.invalid_get_data'),
         };
       } finally {
         state.customizationStatus = 'loaded';
@@ -322,7 +321,7 @@ export default {
                 'contentBase-text-create': 'content',
                 'contentBase-text-edit': 'content',
                 'brain-tunings-edit': 'tunings',
-              }[routerName]),
+              })[routerName],
           )
           .filter((tab) => tab);
 
@@ -331,7 +330,7 @@ export default {
         } else {
           rootState.alert = {
             type: 'success',
-            text: i18n.t('router.tunings.changes_saved'),
+            text: i18n.global.t('router.tunings.changes_saved'),
           };
         }
       } catch (error) {
@@ -382,18 +381,21 @@ export default {
         return data.setup[name];
       };
 
-      Vue.set(state.tunings, 'model', data.model);
-      Vue.set(state.tuningsOld, 'model', data.model);
+      state.tunings['model'] = data.model;
+      state.tuningsOld['model'] = data.model;
 
       Object.keys(data.setup).forEach((name) => {
-        Vue.set(state.tunings, handleName(name), getValue(name));
-        Vue.set(state.tuningsOld, handleName(name), getValue(name));
+        state.tunings[handleName(name)] = getValue(name);
+        state.tuningsOld[handleName(name)] = getValue(name);
       });
     },
 
     setBrainContentTextInitialValues(state, data) {
       state.contentText.uuid = data.uuid;
       state.contentText.current = state.contentText.old = data.text;
+    },
+    updateTuning(state, { name, value }) {
+      state.tunings[name] = value;
     },
   },
 };

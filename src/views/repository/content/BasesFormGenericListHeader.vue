@@ -26,10 +26,10 @@
 
     <UnnnicButton
       v-else-if="!hideToggle"
-      @click="$emit('add')"
       size="small"
       type="primary"
       class="files-list__header__button"
+      @click="$emit('add')"
     >
       {{ addText }}
     </UnnnicButton>
@@ -60,8 +60,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .header {
   display: flex;
   align-items: center;

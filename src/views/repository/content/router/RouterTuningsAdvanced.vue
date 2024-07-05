@@ -49,9 +49,9 @@
         <UnnnicSwitch
           :key="brainOn"
           :textRight="$t('router.tunings.advanced.brain')"
-          :value="brainOn"
+          :modelValue="brainOn"
           class="custom-switch"
-          @input="openActiveOrDeactivateBrain"
+          @update:model-value="openActiveOrDeactivateBrain"
         />
       </UnnnicFormElement>
     </section>
@@ -62,11 +62,10 @@
 import nexusaiAPI from '../../../../api/nexusaiAPI';
 
 export default {
+  components: {},
   props: {
     brainOn: Boolean,
   },
-
-  components: {},
 
   data() {
     return {
@@ -77,8 +76,6 @@ export default {
       isActiveBrainOpen: false,
     };
   },
-
-  mounted() {},
 
   watch: {
     open() {
@@ -104,6 +101,8 @@ export default {
       },
     },
   },
+
+  mounted() {},
 
   methods: {
     openActiveOrDeactivateBrain($event) {
@@ -177,8 +176,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .custom-switch :deep(span) {
   cursor: pointer;
 }

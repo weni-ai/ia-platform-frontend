@@ -13,25 +13,25 @@
       })
     "
   >
-    <UnnnicButton
-      v-if="isRouterView"
-      slot="actions"
-      class="save-button"
-      :disabled="$store.getters.isBrainSaveButtonDisabled"
-      :loading="$store.state.Brain.isSavingChanges"
-      @click="$store.dispatch('saveBrainChanges')"
-    >
-      {{ $t('router.tunings.save_changes') }}
-    </UnnnicButton>
+    <template #actions>
+      <UnnnicButton
+        v-if="isRouterView"
+        class="save-button"
+        :disabled="$store.getters.isBrainSaveButtonDisabled"
+        :loading="$store.state.Brain.isSavingChanges"
+        @click="$store.dispatch('saveBrainChanges')"
+      >
+        {{ $t('router.tunings.save_changes') }}
+      </UnnnicButton>
 
-    <UnnnicButton
-      v-else
-      class="settings-button"
-      slot="actions"
-      iconCenter="settings"
-      type="secondary"
-      @click="isEditContentBaseOpen = true"
-    />
+      <UnnnicButton
+        v-else
+        class="settings-button"
+        iconCenter="settings"
+        type="secondary"
+        @click="isEditContentBaseOpen = true"
+      />
+    </template>
 
     <section class="repository-base-edit__wrapper">
       <div class="repository-base-edit__wrapper__left-side">
@@ -74,10 +74,11 @@
               :activeTab="routerTabs.find((e) => e.page === $route.name).page"
               @change="onTabChange"
             >
-              <template v-for="tab in routerTabs">
-                <template :slot="`tab-head-${tab.page}`">
-                  {{ $t(`router.tabs.${tab.title}`) }}
-                </template>
+              <template
+                v-for="tab in routerTabs"
+                #[`tab-head-${tab.page}`]
+              >
+                {{ $t(`router.tabs.${tab.title}`) }}
               </template>
             </UnnnicTab>
           </template>
@@ -98,13 +99,13 @@
                 <template v-if="$route.name === 'router-content'">
                   <section class="search-container">
                     <UnnnicInput
+                      v-model="filterName"
                       size="md"
                       :iconLeftClickable="true"
                       iconLeft="search-1"
                       :placeholder="
                         $t('router.content.fields.search_placeholder')
                       "
-                      v-model="filterName"
                     />
                   </section>
                 </template>
@@ -122,29 +123,29 @@
 
                   <template v-else>
                     <BasesFormFiles
-                      :files.sync="files"
+                      v-model:files="files"
                       :filterText="filterName"
+                      :shape="contentStyle"
                       @load-more="loadFiles"
                       @removed="removedFile"
-                      :shape="contentStyle"
                     />
                   </template>
                 </template>
 
                 <template v-if="tab === 'sites' || isRouterView">
                   <BasesFormSites
-                    :items.sync="sites"
+                    v-model:items="sites"
                     :filterText="filterName"
+                    :shape="contentStyle"
                     @load-more="loadSites"
                     @removed="removedSite"
-                    :shape="contentStyle"
                   />
                 </template>
 
                 <section v-if="isRouterView">
                   <BasesFormGenericListHeader
+                    v-model:open="text.open"
                     :shape="contentStyle"
-                    :open.sync="text.open"
                     :title="$t('content_bases.tabs.text')"
                   />
 
@@ -190,19 +191,20 @@
 
           <article v-if="isRouterView">
             <UnnnicDropdown
+              v-model:open="dropdownOpen"
               position="bottom-left"
-              :open.sync="dropdownOpen"
             >
-              <section slot="trigger">
-                <UnnnicIconSvg
-                  icon="navigation-menu-vertical-1"
-                  class="unnnic-card-intelligence__header__buttons__icon"
-                  :scheme="dropdownOpen ? 'neutral-dark' : 'neutral-clean'"
-                  size="sm"
-                  slot="trigger"
-                  clickable
-                />
-              </section>
+              <template #trigger>
+                <section>
+                  <UnnnicIconSvg
+                    icon="navigation-menu-vertical-1"
+                    class="unnnic-card-intelligence__header__buttons__icon"
+                    :scheme="dropdownOpen ? 'neutral-dark' : 'neutral-clean'"
+                    size="sm"
+                    clickable
+                  />
+                </section>
+              </template>
 
               <UnnnicDropdownItem>
                 <section
@@ -251,22 +253,22 @@
       :closeIcon="false"
       class="exit-content-base-modal"
     >
-      <UnnnicButton
-        slot="options"
-        class="create-repository__container__button"
-        type="tertiary"
-        @click="openModal = false"
-      >
-        {{ $t('webapp.home.bases.edit-base_modal_alert_discard') }}
-      </UnnnicButton>
-      <UnnnicButton
-        slot="options"
-        class="create-repository__container__button attention-button"
-        type="primary"
-        @click="discardUpdate()"
-      >
-        {{ $t('webapp.home.bases.edit-base_modal_alert_save') }}
-      </UnnnicButton>
+      <template #options>
+        <UnnnicButton
+          class="create-repository__container__button"
+          type="tertiary"
+          @click="openModal = false"
+        >
+          {{ $t('webapp.home.bases.edit-base_modal_alert_discard') }}
+        </UnnnicButton>
+        <UnnnicButton
+          class="create-repository__container__button attention-button"
+          type="primary"
+          @click="discardUpdate()"
+        >
+          {{ $t('webapp.home.bases.edit-base_modal_alert_save') }}
+        </UnnnicButton>
+      </template>
     </UnnnicModal>
 
     <ModalPreviewQRCode
@@ -307,7 +309,7 @@ import { get } from 'lodash';
 import { mapActions } from 'vuex';
 import router from '@/router/index';
 import Tests from './Tests.vue';
-import { unnnicCallAlert } from '@weni/unnnic-system';
+import Unnnic from '@weni/unnnic-system';
 import PageContainer from '../../../components/PageContainer.vue';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import BasesFormFiles from './BasesFormFiles.vue';
@@ -537,7 +539,7 @@ export default {
     },
 
     alertError(title) {
-      unnnicCallAlert({
+      Unnnic.unnnicCallAlert({
         props: { text: title, scheme: 'feedback-red', icon: 'alert-circle-1' },
         seconds: 5,
       });
@@ -632,58 +634,6 @@ export default {
       this.refreshPreviewValue += 1;
     },
   },
-  watch: {
-    '$route.params.intelligenceUuid': {
-      immediate: true,
-
-      async handler() {
-        this.loadingContentBase = true;
-        this.text.status = 'loading';
-
-        const { data: contentBaseData } =
-          await nexusaiAPI.readIntelligenceContentBase({
-            intelligenceUuid: this.intelligenceUuid,
-            contentBaseUuid: this.contentBaseUuid,
-
-            obstructiveErrorProducer: true,
-          });
-
-        this.loadingContentBase = false;
-
-        this.contentBase.title = contentBaseData.title;
-        this.contentBase.description = contentBaseData.description;
-        this.contentBase.language = contentBaseData.language;
-
-        const { data: contentBaseTextsData } =
-          await nexusaiAPI.listIntelligenceContentBaseTexts({
-            contentBaseUuid: this.contentBaseUuid,
-          });
-
-        const text = get(contentBaseTextsData, 'results.0.text', '');
-
-        this.knowledgeBase.text.uuid = get(
-          contentBaseTextsData,
-          'results.0.uuid',
-          '',
-        );
-
-        this.$store.state.Brain.contentText.uuid = this.text.uuid =
-          this.knowledgeBase.text.uuid;
-
-        this.knowledgeBase.text.value = text === '--empty--' ? '' : text;
-        this.knowledgeBase.text.oldValue = this.knowledgeBase.text.value;
-
-        this.$store.state.Brain.contentText.current =
-          this.$store.state.Brain.contentText.old =
-            this.knowledgeBase.text.value;
-
-        this.text.value = this.knowledgeBase.text.value;
-        this.text.oldValue = this.knowledgeBase.text.oldValue;
-
-        this.text.status = null;
-      },
-    },
-  },
   computed: {
     shouldShowSideareaTest() {
       return (
@@ -762,6 +712,58 @@ export default {
       return this.knowledgeBase.text.value !== this.knowledgeBase.text.oldValue;
     },
   },
+  watch: {
+    '$route.params.intelligenceUuid': {
+      immediate: true,
+
+      async handler() {
+        this.loadingContentBase = true;
+        this.text.status = 'loading';
+
+        const { data: contentBaseData } =
+          await nexusaiAPI.readIntelligenceContentBase({
+            intelligenceUuid: this.intelligenceUuid,
+            contentBaseUuid: this.contentBaseUuid,
+
+            obstructiveErrorProducer: true,
+          });
+
+        this.loadingContentBase = false;
+
+        this.contentBase.title = contentBaseData.title;
+        this.contentBase.description = contentBaseData.description;
+        this.contentBase.language = contentBaseData.language;
+
+        const { data: contentBaseTextsData } =
+          await nexusaiAPI.listIntelligenceContentBaseTexts({
+            contentBaseUuid: this.contentBaseUuid,
+          });
+
+        const text = get(contentBaseTextsData, 'results.0.text', '');
+
+        this.knowledgeBase.text.uuid = get(
+          contentBaseTextsData,
+          'results.0.uuid',
+          '',
+        );
+
+        this.$store.state.Brain.contentText.uuid = this.text.uuid =
+          this.knowledgeBase.text.uuid;
+
+        this.knowledgeBase.text.value = text === '--empty--' ? '' : text;
+        this.knowledgeBase.text.oldValue = this.knowledgeBase.text.value;
+
+        this.$store.state.Brain.contentText.current =
+          this.$store.state.Brain.contentText.old =
+            this.knowledgeBase.text.value;
+
+        this.text.value = this.knowledgeBase.text.value;
+        this.text.oldValue = this.knowledgeBase.text.oldValue;
+
+        this.text.status = null;
+      },
+    },
+  },
   mounted() {
     if (this.$route.name === 'repository-content-bases-edit') {
       this.loadingTitle = true;
@@ -785,15 +787,13 @@ export default {
     }
   },
 
-  destroyed() {
+  unmounted() {
     this.destroyVerifying();
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .brain-deactivated-preview {
   flex: 1;
   display: flex;
@@ -921,8 +921,7 @@ export default {
 }
 
 .exit-content-base-modal
-  ::v-deep
-  .unnnic-modal-container-background-body-description-container {
+  :deep(.unnnic-modal-container-background-body-description-container) {
   padding-bottom: $unnnic-spacing-xs;
 }
 
@@ -1099,7 +1098,7 @@ export default {
 
         border-radius: 0 0 $unnnic-border-radius-sm $unnnic-border-radius-sm;
 
-        ::v-deep a {
+        :deep(a) {
           color: inherit;
           text-underline-offset: $unnnic-spacing-stack-nano;
         }
@@ -1108,31 +1107,30 @@ export default {
   }
 }
 
-::v-deep {
-  .unnnic-tooltip-label-bottom {
-    top: 75px !important;
-  }
-  .shake-me {
-    animation: shake 3s infinite alternate;
+:deep(.unnnic-tooltip-label-bottom) {
+  top: 75px !important;
+}
+:deep(.shake-me) {
+  animation: shake 3s infinite alternate;
 
-    &:after {
-      content: '\10A50';
-      color: red !important;
-      font-size: 70px;
+  &:after {
+    content: '\10A50';
+    color: red !important;
+    font-size: 70px;
 
-      display: flex;
-      justify-content: left;
-      align-items: center;
-    }
-  }
-  .input.size-md {
-    height: 46px;
-  }
-
-  .rpstr-vw-bs {
-    margin-top: 0;
+    display: flex;
+    justify-content: left;
+    align-items: center;
   }
 }
+:deep(.input.size-md) {
+  height: 46px;
+}
+
+:deep(.rpstr-vw-bs) {
+  margin-top: 0;
+}
+
 .input.size-md {
   height: 46px;
 }

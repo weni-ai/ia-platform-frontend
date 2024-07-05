@@ -172,7 +172,6 @@
         "processing": "Processando conteúdo"
       },
       "content_of_the_files_has_been_added": "O conteúdo dos arquivos foi adicionado à base",
-      "content_of_the_files_is_loading": "Carregando conteúdo dos arquivos",
       "file_removed_from_base": "{name} removido da base de conteúdo",
       "delete_file": {
         "title": "Excluir arquivo",
@@ -1358,7 +1357,7 @@
       },
       "remove": {
         "title": "Remover ação",
-        "description": "Tem certeza que deseja remover a ação <strong>{name}</strong>? <br><br>Essa ação não poderá ser revertida"
+        "description": "Tem certeza que deseja remover a ação <strong>{name}</strong>?<br/>Essa ação não poderá ser revertida"
       }
     },
     "cant_access": {

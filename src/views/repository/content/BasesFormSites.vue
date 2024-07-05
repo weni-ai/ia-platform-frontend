@@ -30,7 +30,7 @@
         size="small"
         type="primary"
         class="sites__content__button-add-site"
-        @click.native="isAddSiteOpen = true"
+        @click="isAddSiteOpen = true"
       >
         {{ $t('content_bases.sites.add_site') }}
       </UnnnicButton>
@@ -38,6 +38,7 @@
 
     <BasesFormGenericList
       v-else
+      :items="items"
       :shape="shape"
       :title="
         shape === 'accordion'
@@ -46,7 +47,6 @@
       "
       :description="$t('content_bases.sites.sidebar_add.description')"
       :addText="$t('content_bases.sites.add_site')"
-      :items.sync="items"
       :filterItem="filterItem"
       @load-more="$emit('load-more')"
       @add="isAddSiteOpen = true"
@@ -57,14 +57,14 @@
 
     <RightSidebar
       v-if="isAddSiteOpen"
-      @close="isAddSiteOpen = false"
       :title="$t('content_bases.sites.sidebar_add.title')"
       :description="$t('content_bases.sites.sidebar_add.description')"
       dividerYSpacing="lg"
+      @close="isAddSiteOpen = false"
     >
       <form
-        @submit.prevent="addSites"
         class="add-form"
+        @submit.prevent="addSites"
       >
         <UnnnicFormElement
           :label="$t('content_bases.sites.sidebar_add.fields.link.label')"
@@ -89,8 +89,8 @@
               type="tertiary"
               size="small"
               iconLeft="add-1"
-              @click.prevent="sites.push({ value: '' })"
               :type.prop="'button'"
+              @click.prevent="sites.push({ value: '' })"
             >
               {{ $t('content_bases.sites.sidebar_add.button_more_one') }}
             </UnnnicButton>
@@ -113,40 +113,41 @@
       class="delete-site-modal"
       persistent
     >
-      <UnnnicIcon
-        slot="icon"
-        icon="error"
-        size="md"
-        scheme="aux-red-500"
-      />
+      <template #icon>
+        <UnnnicIcon
+          icon="error"
+          size="md"
+          scheme="aux-red-500"
+        />
+      </template>
 
-      <div
-        slot="message"
-        v-html="
-          $t('content_bases.sites.delete_site.description', {
-            name: modalDeleteSite.name,
-          })
-        "
-      ></div>
+      <template #message>
+        <div
+          v-html="
+            $t('content_bases.sites.delete_site.description', {
+              name: modalDeleteSite.name,
+            })
+          "
+        ></div>
+      </template>
+      <template #options>
+        <UnnnicButton
+          class="create-repository__container__button"
+          type="tertiary"
+          @click="modalDeleteSite = false"
+        >
+          {{ $t('content_bases.sites.delete_site.cancel') }}
+        </UnnnicButton>
 
-      <UnnnicButton
-        slot="options"
-        class="create-repository__container__button"
-        type="tertiary"
-        @click="modalDeleteSite = false"
-      >
-        {{ $t('content_bases.sites.delete_site.cancel') }}
-      </UnnnicButton>
-
-      <UnnnicButton
-        slot="options"
-        class="create-repository__container__button attention-button"
-        type="warning"
-        @click="remove"
-        :loading="modalDeleteSite.status === 'deleting'"
-      >
-        {{ $t('content_bases.sites.delete_site.delete') }}
-      </UnnnicButton>
+        <UnnnicButton
+          class="create-repository__container__button attention-button"
+          type="warning"
+          :loading="modalDeleteSite.status === 'deleting'"
+          @click="remove"
+        >
+          {{ $t('content_bases.sites.delete_site.delete') }}
+        </UnnnicButton>
+      </template>
     </UnnnicModal>
   </section>
 </template>
@@ -157,15 +158,14 @@ import RightSidebar from '../../../components/RightSidebar.vue';
 import BasesFormGenericList from './BasesFormGenericList.vue';
 
 export default {
+  components: {
+    RightSidebar,
+    BasesFormGenericList,
+  },
   props: {
     items: Object,
     shape: String,
     filterText: String,
-  },
-
-  components: {
-    RightSidebar,
-    BasesFormGenericList,
   },
 
   data() {
@@ -282,24 +282,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
-.delete-site-modal ::v-deep {
-  .unnnic-modal-container-background-body-description-container {
+.delete-site-modal {
+  :deep(.unnnic-modal-container-background-body-description-container) {
     padding-bottom: $unnnic-spacing-xs;
   }
 
-  .unnnic-modal-container-background-body__icon-slot {
+  :deep(.unnnic-modal-container-background-body__icon-slot) {
     display: flex;
     justify-content: center;
     margin-bottom: $unnnic-spacing-sm;
   }
 
-  .unnnic-modal-container-background-body-title {
+  :deep(.unnnic-modal-container-background-body-title) {
     padding-bottom: $unnnic-spacing-sm;
   }
 
-  .unnnic-modal-container-background-body {
+  :deep(.unnnic-modal-container-background-body) {
     padding-top: $unnnic-spacing-giant;
   }
 }

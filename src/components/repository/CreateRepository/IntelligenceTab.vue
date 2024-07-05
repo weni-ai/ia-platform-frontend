@@ -9,9 +9,9 @@
           :placeholder="
             $t('webapp.create_repository.intelligence_name_placeholder')
           "
-          :value="name"
-          @input="$emit('update:name', $event)"
+          :modelValue="name"
           maxlength="64"
+          @update:model-value="$emit('update:name', $event)"
         />
       </UnnnicFormElement>
 
@@ -21,8 +21,8 @@
       >
         <UnnnicInput
           :placeholder="$t('webapp.create_repository.description_placeholder')"
-          :value="description"
-          @input="$emit('update:description', $event)"
+          :modelValue="description"
+          @update:model-value="$emit('update:description', $event)"
         />
       </UnnnicFormElement>
 
@@ -43,7 +43,7 @@
           icon="typing-1"
           class="intelligence-types__item"
           :enabled="repository_type === 'classifier'"
-          @click.native="$emit('update:repository_type', 'classifier')"
+          @click="$emit('update:repository_type', 'classifier')"
         />
 
         <UnnnicCard
@@ -58,7 +58,7 @@
           icon="paginate-filter-text-1"
           class="intelligence-types__item"
           :enabled="repository_type === 'content'"
-          @click.native="$emit('update:repository_type', 'content')"
+          @click="$emit('update:repository_type', 'content')"
         />
       </section>
     </div>
@@ -80,8 +80,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@weni/unnnic-system/src/assets/scss/unnnic.scss';
-
 .create-intelligence__form-element + .create-intelligence__form-element {
   margin-top: $unnnic-spacing-sm;
 }
@@ -93,7 +91,7 @@ export default {
   &__item {
     flex: 1;
 
-    ::v-deep .unnnic-card-content__content__title {
+    :deep(.unnnic-card-content__content__title) {
       font-weight: $unnnic-font-weight-regular;
     }
   }
