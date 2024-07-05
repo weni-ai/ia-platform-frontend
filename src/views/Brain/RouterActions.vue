@@ -44,11 +44,11 @@
 </template>
 
 <script>
-import nexusaiAPI from '../../../../api/nexusaiAPI';
-import BasesFormGenericList from '../BasesFormGenericList.vue';
-import ModalActions from '../../../../components/actions/ModalActions.vue';
-import ModalChangeAction from '../../../../components/actions/ModalChangeAction.vue';
-import ModalRemoveAction from '../../../../components/actions/ModalRemoveAction.vue';
+import nexusaiAPI from '../../api/nexusaiAPI';
+import BasesFormGenericList from '../repository/content/BasesFormGenericList.vue';
+import ModalActions from '../../components/actions/ModalActions.vue';
+import ModalChangeAction from '../../components/actions/ModalChangeAction.vue';
+import ModalRemoveAction from '../../components/actions/ModalRemoveAction.vue';
 
 export default {
   components: {

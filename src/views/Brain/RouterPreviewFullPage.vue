@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Tests from '../Tests.vue';
+import Tests from '../repository/content/Tests.vue';
 
 export default {
   components: {
