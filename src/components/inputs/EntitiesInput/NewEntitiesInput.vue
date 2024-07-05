@@ -121,13 +121,15 @@ import _ from 'lodash';
 import EntityForm from './EntityForm';
 import EntityAccordion from '@/components/shared/accordion/EntityAccordion';
 import WordCard from '@/components/shared/accordion/WordCard';
+import Autocomplete from '../../Autocomplete.vue';
 
 export default {
   name: 'NewEntitiesInput',
   components: {
     EntityForm,
     EntityAccordion,
-    WordCard
+    WordCard,
+    Autocomplete,
   },
   props: {
     value: {
