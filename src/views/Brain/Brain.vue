@@ -18,14 +18,15 @@
 
     <section class="repository-base-edit__wrapper">
       <div class="repository-base-edit__wrapper__left-side">
-        <section :class="'content-base__container'">
+        <section class="content-base__container">
           <UnnnicTab
             :tabs="routerTabs.map((e) => e.page)"
-            :activeTab="routerTabs.find((e) => e.page === $route.name).page"
+            :activeTab="activeTab"
             @change="onTabChange"
           >
             <template
               v-for="tab in routerTabs"
+              :key="tab.page"
               #[`tab-head-${tab.page}`]
             >
               {{ $t(`router.tabs.${tab.title}`) }}
@@ -34,10 +35,10 @@
 
           <RouterContentBase
             v-if="$route.name === 'router-content'"
-            :filterName="filterName"
-            :files="files"
-            :sites="sites"
-            :text="text"
+            :filterNameProp="filterName"
+            :filesProp="files"
+            :sitesProp="sites"
+            :textProp="text"
             @load-files="loadFiles"
             @load-sites="loadSites"
             @removed-file="removedFile"
@@ -138,18 +139,17 @@
 </template>
 
 <script>
+import { ref, computed, watch, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { get } from 'lodash';
-import Tests from '../repository/content/Tests.vue';
-import PageContainer from '../../components/PageContainer.vue';
 import nexusaiAPI from '../../api/nexusaiAPI';
-import BasesFormFiles from '../repository/content/BasesFormFiles.vue';
-import BasesFormSites from '../repository/content/BasesFormSites.vue';
-import BasesFormText from '../repository/content/BasesFormText.vue';
-import BasesFormGenericListHeader from '../repository/content/BasesFormGenericListHeader.vue';
+import PageContainer from '../../components/PageContainer.vue';
+import Tests from '../repository/content/Tests.vue';
 import RouterActions from './RouterActions.vue';
-import RouterTunings from './RouterTunings.vue';
 import RouterContentBase from './RouterContentBase.vue';
 import RouterCustomization from './RouterCustomization.vue';
+import RouterTunings from './RouterTunings.vue';
 import ModalPreviewQRCode from './Preview/ModalPreviewQRCode.vue';
 import ModalSaveChangesError from './ModalSaveChangesError.vue';
 
@@ -158,180 +158,108 @@ export default {
   components: {
     Tests,
     PageContainer,
-    BasesFormFiles,
-    BasesFormSites,
-    BasesFormText,
-    BasesFormGenericListHeader,
     RouterActions,
-    RouterTunings,
     RouterContentBase,
     RouterCustomization,
+    RouterTunings,
     ModalPreviewQRCode,
     ModalSaveChangesError,
   },
-  data() {
-    return {
-      routerTabs: [
-        {
-          title: 'personalization',
-          page: 'router-personalization',
-        },
-        {
-          title: 'content',
-          page: 'router-content',
-        },
-        {
-          title: 'actions',
-          page: 'router-actions',
-        },
-        {
-          title: 'tunings',
-          page: 'router-tunings',
-        },
-      ],
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
+    const store = useStore();
 
-      loadingContentBase: false,
+    const routerTabs = ref([
+      { title: 'personalization', page: 'router-personalization' },
+      { title: 'content', page: 'router-content' },
+      { title: 'actions', page: 'router-actions' },
+      { title: 'tunings', page: 'router-tunings' },
+    ]);
 
-      contentBase: {
-        title: '',
-        description: '',
-        language: '',
-      },
+    const loadingContentBase = ref(false);
+    const dropdownOpen = ref(false);
+    const refreshPreviewValue = ref(0);
+    const isMobilePreviewModalOpen = ref(false);
+    const filterName = ref('');
+    const files = ref({
+      status: null,
+      next: null,
+      data: [],
+    });
+    const sites = ref({
+      status: null,
+      next: null,
+      data: [],
+    });
+    const text = ref({
+      open: true,
+      status: null,
+      uuid: null,
+      oldValue: '',
+      value: '',
+    });
+    const routerActions = ref({
+      status: null,
+      data: [],
+    });
+    const routerTunings = ref({
+      brainOn: true,
+    });
 
-      dropdownOpen: false,
-      refreshPreviewValue: 0,
+    const contentBase = ref({
+      title: '',
+      description: '',
+      language: '',
+    });
 
-      repositoryUUID: null,
+    const activeTab = computed(
+      () => routerTabs.value.find((e) => e.page === route.name)?.page,
+    );
 
-      isMobilePreviewModalOpen: false,
+    const shouldShowSideareaTest = computed(
+      () => files.value.data.length || sites.value.data.length,
+    );
 
-      bases: [],
+    const contentBaseUuid = computed(
+      () => route.params.contentBaseUuid || store.state.router.contentBaseUuid,
+    );
 
-      filterName: '',
+    const intelligenceUuid = computed(
+      () =>
+        route.params.intelligenceUuid || store.state.router.intelligenceUuid,
+    );
 
-      files: {
-        status: null,
-        next: null,
-        data: [],
-      },
-
-      sites: {
-        status: null,
-        next: null,
-        data: [],
-      },
-
-      text: {
-        open: true,
-        status: null,
-        uuid: null,
-        oldValue: '',
-        value: '',
-      },
-
-      routerActions: {
-        status: null,
-        data: [],
-      },
-
-      routerTunings: {
-        brainOn: true,
-      },
+    const onTabChange = (pageName) => {
+      if (route.name !== pageName) {
+        router.push({ name: pageName });
+      }
     };
-  },
-  computed: {
-    shouldShowSideareaTest() {
-      return this.files.data.length || this.sites.data.length;
-    },
 
-    contentBaseUuid() {
-      return (
-        this.$route.params.contentBaseUuid ||
-        this.$store.state.router.contentBaseUuid
+    const refreshPreview = () => {
+      refreshPreviewValue.value += 1;
+    };
+
+    const removedFile = (fileUuid) => {
+      files.value.data = files.value.data.filter(
+        ({ uuid }) => uuid !== fileUuid,
       );
-    },
+    };
 
-    intelligenceUuid() {
-      return (
-        this.$route.params.intelligenceUuid ||
-        this.$store.state.router.intelligenceUuid
+    const removedSite = (siteUuid) => {
+      sites.value.data = sites.value.data.filter(
+        ({ uuid }) => uuid !== siteUuid,
       );
-    },
+    };
 
-    contentStyle() {
-      return 'accordion';
-    },
-  },
-  watch: {
-    '$route.params.intelligenceUuid': {
-      immediate: true,
-
-      async handler() {
-        this.loadingContentBase = true;
-        this.text.status = 'loading';
-
-        const { data: contentBaseData } =
-          await nexusaiAPI.readIntelligenceContentBase({
-            intelligenceUuid: this.intelligenceUuid,
-            contentBaseUuid: this.contentBaseUuid,
-
-            obstructiveErrorProducer: true,
-          });
-
-        this.loadingContentBase = false;
-
-        this.contentBase.title = contentBaseData.title;
-        this.contentBase.description = contentBaseData.description;
-        this.contentBase.language = contentBaseData.language;
-
-        const { data: contentBaseTextsData } =
-          await nexusaiAPI.listIntelligenceContentBaseTexts({
-            contentBaseUuid: this.contentBaseUuid,
-          });
-
-        const text = get(contentBaseTextsData, 'results.0.text', '');
-
-        const uuid = get(contentBaseTextsData, 'results.0.uuid', '');
-
-        this.$store.state.Brain.contentText.uuid = this.text.uuid = uuid;
-
-        const textValue = text === '--empty--' ? '' : text;
-
-        this.$store.state.Brain.contentText.current =
-          this.$store.state.Brain.contentText.old = textValue;
-
-        this.text.value = textValue;
-        this.text.oldValue = textValue;
-
-        this.text.status = null;
-      },
-    },
-  },
-  mounted() {
-    this.loadFiles();
-    this.loadSites();
-
-    this.loadRouterOptions();
-  },
-
-  methods: {
-    removedFile(fileUuid) {
-      this.files.data = this.files.data.filter(({ uuid }) => uuid !== fileUuid);
-    },
-
-    removedSite(siteUuid) {
-      this.sites.data = this.sites.data.filter(({ uuid }) => uuid !== siteUuid);
-    },
-
-    async loadFiles() {
-      this.files.status = 'loading';
-
+    const loadFiles = async () => {
+      files.value.status = 'loading';
       const { data } = await nexusaiAPI.intelligences.contentBases.files.list({
-        contentBaseUuid: this.contentBaseUuid,
-        next: this.files.next,
+        contentBaseUuid: contentBaseUuid.value,
+        next: files.value.next,
       });
 
-      this.files.data = this.files.data.concat(
+      files.value.data = files.value.data.concat(
         data.results
           .map((file) => ({
             ...file,
@@ -343,33 +271,32 @@ export default {
           }))
           .filter(
             ({ uuid }) =>
-              !this.files.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+              !files.value.data.some((alreadyIn) => alreadyIn.uuid === uuid),
           ),
       );
 
-      this.files.status = null;
-      this.files.next = data.next;
+      files.value.status = null;
+      files.value.next = data.next;
 
       if (!data.next) {
-        const status = 'complete';
-        this.files.status = status;
+        files.value.status = 'complete';
       }
-    },
+    };
 
-    async loadSites() {
-      this.sites.status = 'loading';
+    const loadSites = async () => {
+      sites.value.status = 'loading';
 
       try {
         const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
           {
-            contentBaseUuid: this.contentBaseUuid,
-            next: this.sites.next,
+            contentBaseUuid: contentBaseUuid.value,
+            next: sites.value.next,
           },
         );
 
-        this.sites.status = 'complete';
+        sites.value.status = 'complete';
 
-        this.sites.data = this.sites.data.concat(
+        sites.value.data = sites.value.data.concat(
           data
             .map((site) => ({
               ...site,
@@ -383,32 +310,98 @@ export default {
             }))
             .filter(
               ({ uuid }) =>
-                !this.sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+                !sites.value.data.some((alreadyIn) => alreadyIn.uuid === uuid),
             ),
         );
       } finally {
-        if (this.sites.status !== 'complete') {
-          this.sites.status = null;
+        if (sites.value.status !== 'complete') {
+          sites.value.status = null;
         }
       }
-    },
+    };
 
-    async loadRouterOptions() {
+    const loadRouterOptions = async () => {
       const { data } = await nexusaiAPI.router.tunings.advanced.read({
-        projectUuid: this.$store.state.Auth.connectProjectUuid,
+        projectUuid: store.state.Auth.connectProjectUuid,
       });
 
-      this.routerTunings.brainOn = data.brain_on;
-    },
+      routerTunings.value.brainOn = data.brain_on;
+    };
 
-    onTabChange(pageName) {
-      if (this.$route.name !== pageName) {
-        this.$router.push({ name: pageName });
-      }
-    },
-    refreshPreview() {
-      this.refreshPreviewValue += 1;
-    },
+    const loadContentBase = async () => {
+      loadingContentBase.value = true;
+      text.value.status = 'loading';
+
+      const { data: contentBaseData } =
+        await nexusaiAPI.readIntelligenceContentBase({
+          intelligenceUuid: intelligenceUuid.value,
+          contentBaseUuid: contentBaseUuid.value,
+          obstructiveErrorProducer: true,
+        });
+
+      loadingContentBase.value = false;
+      contentBase.value.title = contentBaseData.title;
+      contentBase.value.description = contentBaseData.description;
+      contentBase.value.language = contentBaseData.language;
+
+      const { data: contentBaseTextsData } =
+        await nexusaiAPI.listIntelligenceContentBaseTexts({
+          contentBaseUuid: contentBaseUuid.value,
+        });
+
+      const textData = get(contentBaseTextsData, 'results.0.text', '');
+      const uuid = get(contentBaseTextsData, 'results.0.uuid', '');
+
+      store.state.Brain.contentText.uuid = text.value.uuid = uuid;
+      const textValue = textData === '--empty--' ? '' : textData;
+
+      store.state.Brain.contentText.current =
+        store.state.Brain.contentText.old = textValue;
+
+      text.value.value = textValue;
+      text.value.oldValue = textValue;
+      text.value.status = null;
+    };
+
+    watch(
+      () => route.params.intelligenceUuid,
+      async () => {
+        await loadContentBase();
+      },
+      { immediate: true },
+    );
+
+    onMounted(() => {
+      loadFiles();
+      loadSites();
+      loadRouterOptions();
+    });
+
+    return {
+      routerTabs,
+      loadingContentBase,
+      dropdownOpen,
+      refreshPreviewValue,
+      isMobilePreviewModalOpen,
+      filterName,
+      files,
+      sites,
+      text,
+      routerActions,
+      routerTunings,
+      contentBase,
+      activeTab,
+      shouldShowSideareaTest,
+      contentBaseUuid,
+      intelligenceUuid,
+      onTabChange,
+      refreshPreview,
+      removedFile,
+      removedSite,
+      loadFiles,
+      loadSites,
+      loadRouterOptions,
+    };
   },
 };
 </script>
