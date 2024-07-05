@@ -1,4 +1,4 @@
-import { WENIGPT_OPTIONS } from '../../utils';
+import { WENIGPT_OPTIONS } from '@/utils';
 
 export const models = [
   {

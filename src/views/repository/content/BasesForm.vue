@@ -317,11 +317,11 @@ import BasesFormSites from './BasesFormSites.vue';
 import BasesFormText from './BasesFormText.vue';
 import BaseSettingsForm from '../../../components/BaseSettingsForm.vue';
 import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
-import RouterActions from './router/RouterActions.vue';
-import RouterTunings from './router/RouterTunings.vue';
-import RouterCustomization from './router/RouterCustomization.vue';
-import ModalPreviewQRCode from './router/ModalPreviewQRCode.vue';
-import ModalSaveChangesError from './router/ModalSaveChangesError.vue';
+import RouterActions from '../../Brain/RouterActions.vue';
+import RouterTunings from '../../Brain/RouterTunings.vue';
+import RouterCustomization from '../../Brain/RouterCustomization.vue';
+import ModalPreviewQRCode from '../../Brain/Preview/ModalPreviewQRCode.vue';
+import ModalSaveChangesError from '../../Brain/ModalSaveChangesError.vue';
 
 export default {
   name: 'RepositoryBaseEdit',

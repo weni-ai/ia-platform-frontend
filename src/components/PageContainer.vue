@@ -87,6 +87,7 @@ export default {
     dontShowBack: Boolean,
     brainIsDeactivated: Boolean,
   },
+  emits: ['back'],
 };
 </script>
 

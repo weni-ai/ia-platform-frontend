@@ -114,7 +114,7 @@ import FlowPreview from '../../../utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 import Markdown from '../../../components/Markdown.vue';
 import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
-import PreviewPlaceholder from './router/Preview/Placeholder.vue';
+import PreviewPlaceholder from '../../Brain/Preview/Placeholder.vue';
 import { reactive } from 'vue';
 
 export default {

@@ -205,8 +205,8 @@
 </template>
 
 <script>
-import nexusaiAPI from '../../../../api/nexusaiAPI';
-import LoadingFormElement from '../../../../components/LoadingFormElement.vue';
+import nexusaiAPI from '../../api/nexusaiAPI';
+import LoadingFormElement from '../../components/LoadingFormElement.vue';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
 
 export default {
