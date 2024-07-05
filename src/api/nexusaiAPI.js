@@ -403,6 +403,14 @@ export default {
             content_base_file: fileUuid,
           });
         },
+
+        preview({ projectUuid, contentBaseUuid, fileUuid, page }) {
+          return request.$http.post(`api/${projectUuid}/document-preview/`, {
+            content_base_uuid: contentBaseUuid,
+            content_base_file_uuid: fileUuid,
+            page_number: page,
+          });
+        },
       },
     },
   },

@@ -178,6 +178,10 @@
         "description": "Are you sure you want to delete the file <b>{name}</b>?<br />The contents of this file will be removed from the AI base",
         "cancel": "Cancel",
         "delete": "Delete"
+      },
+      "preview": {
+        "title": "File information",
+        "name": "File:"
       }
     },
     "sites": {
@@ -201,6 +205,9 @@
         "description": "Are you sure you want to delete the website <b>{name}</b>?<br />The contents of this website will be removed from the AI base",
         "cancel": "Cancel",
         "delete": "Delete"
+      },
+      "preview": {
+        "title": "Site information"
       }
     }
   },

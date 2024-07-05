@@ -62,6 +62,15 @@
         />
 
         <UnnnicIcon
+          v-if="file.status === 'uploaded'"
+          icon="visibility"
+          size="sm"
+          class="files-list__content__file__actions__icon"
+          clickable
+          @click.stop="preview"
+        />
+
+        <UnnnicIcon
           v-if="!file.uuid.startsWith('temp-') || isFailed"
           icon="delete"
           size="sm"
@@ -86,12 +95,23 @@
       </section>
     </section>
   </UnnnicToolTip>
+
+  <FilePreview
+    v-if="modalPreview"
+    v-bind="modalPreview"
+    @close="modalPreview = null"
+  />
 </template>
 
 <script>
 import nexusaiAPI from '../../../api/nexusaiAPI';
+import FilePreview from '@/views/ContentBases/components/FilePreview.vue';
 
 export default {
+  components: {
+    FilePreview,
+  },
+
   props: {
     file: Object,
     compressed: Boolean,
@@ -100,6 +120,8 @@ export default {
   data() {
     return {
       downloading: false,
+
+      modalPreview: null,
     };
   },
 
@@ -191,6 +213,16 @@ export default {
       } finally {
         this.downloading = false;
       }
+    },
+
+    async preview() {
+      this.modalPreview = {
+        type: this.extension === 'site' ? 'site' : 'file',
+        projectUuid: this.$store.state.Auth.connectProjectUuid,
+        contentBaseUuid: this.$store.state.router.contentBaseUuid,
+        fileUuid: this.file.uuid,
+        name: this.fileName,
+      };
     },
   },
 };

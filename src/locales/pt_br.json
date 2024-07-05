@@ -178,6 +178,10 @@
         "description": "Tem certeza que deseja excluir o arquivo <b>{name}</b>?<br />O conteúdo desse arquivo será removido da base da IA",
         "cancel": "Cancelar",
         "delete": "Excluir"
+      },
+      "preview": {
+        "title": "Informações do arquivo",
+        "name": "Arquivo:"
       }
     },
     "sites": {
@@ -201,6 +205,9 @@
         "description": "Tem certeza que deseja excluir o site <b>{name}</b>?<br />O conteúdo desse site será removido da base da IA",
         "cancel": "Cancelar",
         "delete": "Excluir"
+      },
+      "preview": {
+        "title": "Informações do site"
       }
     }
   },

@@ -156,6 +156,8 @@ export default {
 <style lang="scss" scoped>
 .unnnic-modal {
   &__background {
+    z-index: 1;
+
     background-color: transparentize($unnnic-color-neutral-darkest, 0.5);
 
     width: 100vw;
