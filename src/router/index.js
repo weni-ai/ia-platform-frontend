@@ -2,8 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import RepositoryContentBases from '../views/repository/content/Bases.vue';
 import RepositoryContentBasesForm from '../views/repository/content/BasesForm.vue';
+import Brain from '../views/Brain/Brain.vue';
 import RepositoryContentAdjustment from '../views/repository/content/ContentAdjustments.vue';
-import RouterPreviewFullPage from '../views/repository/content/router/RouterPreviewFullPage.vue';
+import RouterPreviewFullPage from '../views/Brain/RouterPreviewFullPage.vue';
 import NotFound from '../views/NotFound.vue';
 
 import store from '../store';
@@ -71,7 +72,7 @@ const router = createRouter({
     {
       path: '/router',
       name: 'router',
-      component: RepositoryContentBasesForm,
+      component: Brain,
       redirect: () => {
         return { name: 'router-personalization' };
       },
@@ -90,30 +91,22 @@ const router = createRouter({
         {
           path: 'personalization',
           name: 'router-personalization',
-          component: () =>
-            import(
-              '../views/repository/content/router/RouterCustomization.vue'
-            ),
+          component: () => import('../views/Brain/RouterCustomization.vue'),
         },
         {
           path: 'content',
           name: 'router-content',
-          component: () =>
-            import(
-              '../views/repository/content/router/RouterCustomization.vue'
-            ),
+          component: () => import('../views/Brain/RouterCustomization.vue'),
         },
         {
           path: 'actions',
           name: 'router-actions',
-          component: () =>
-            import('../views/repository/content/router/RouterActions.vue'),
+          component: () => import('../views/Brain/RouterActions.vue'),
         },
         {
           path: 'tunings',
           name: 'router-tunings',
-          component: () =>
-            import('../views/repository/content/router/RouterTunings.vue'),
+          component: () => import('../views/Brain/RouterTunings.vue'),
         },
       ],
     },
