@@ -36,6 +36,7 @@ import store from './store';
 import ModalDependingOnFlowsLength from './components/ModalDependingOnFlowsLength.vue';
 import ModalWarn from './components/ModalWarn.vue';
 import ObstructiveError from './views/ObstructiveError.vue';
+import { isEmpty } from 'lodash';
 
 export default {
   name: 'App',
@@ -63,6 +64,19 @@ export default {
       return 'Weni Inteligencia Artificial';
     },
   },
+  watch: {
+    '$route.name': {
+      handler() {
+        if (
+          this.$route.name !== undefined &&
+          isEmpty(this.$store.state.User.me)
+        ) {
+          this.profileInfo();
+        }
+      },
+      immediate: true,
+    },
+  },
   created() {
     window.addEventListener('message', (event) => {
       const prefix = 'connect:';
@@ -84,7 +98,6 @@ export default {
     document.title = this.dynamicTitle;
     hotjar.addHotjar();
     this.safariDetected();
-    this.profileInfo();
     window.parent.postMessage(
       {
         event: 'getConnectBaseURL',
