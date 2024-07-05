@@ -37,43 +37,5 @@ describe('ExampleTextWithHighlightedEntitiesInput.vue', () => {
         expect(wrapper).toMatchSnapshot();
       });
     });
-
-    /* describe('select text', () => {
-      let wrapper;
-
-      beforeEach(() => {
-        wrapper = shallowMount(ExampleTextWithHighlightedEntitiesInput, {
-          localVue,
-          mocks: {
-            $t: () => 'some specific text',
-          },
-          stubs: {
-            'self-adjust-input': {
-              template: '<input ref="input" @select="$listeners.select">',
-            },
-          },
-        });
-      });
-
-      test('textSelected event emitted', async () => {
-        const input = wrapper.findComponent({ ref: 'input' });
-
-        // Simulando o método setSelectionRange no elemento
-        input.element.setSelectionRange = jest.fn();
-
-        // Definindo o intervalo de seleção
-        input.element.selectionStart = 0;
-        input.element.selectionEnd = 2;
-
-        // Disparando o evento select para simular a seleção de texto
-        await input.trigger('select');
-
-        // Verificando se o evento textSelected foi emitido
-        expect(wrapper.emitted('textSelected')).toBeDefined();
-        expect(wrapper.emitted('textSelected')[0]).toEqual([
-          { start: 0, end: 2 },
-        ]);
-      });
-    });*/
   });
 });

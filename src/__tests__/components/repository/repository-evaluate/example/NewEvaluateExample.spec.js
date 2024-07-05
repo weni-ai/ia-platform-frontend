@@ -122,13 +122,13 @@ describe('NewEvaluateExample.vue', () => {
     });
 
     describe('on submit', () => {
-      let r;
+      let onSubmit;
       beforeEach(async () => {
-        r = await wrapper.vm.submitSentence();
+        onSubmit = await wrapper.vm.submitSentence();
       });
 
       test('return is false', () => {
-        expect(r).toBeFalsy();
+        expect(onSubmit).toBeFalsy();
       });
     });
   });

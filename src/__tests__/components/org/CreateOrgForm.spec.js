@@ -1,6 +1,5 @@
 import Buefy from 'buefy';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-// import store from '@/store';
 import CreateOrgForm from '@/components/org/CreateOrgForm';
 
 const localVue = createLocalVue();

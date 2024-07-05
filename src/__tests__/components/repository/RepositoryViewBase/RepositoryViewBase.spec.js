@@ -80,41 +80,4 @@ describe('RepositoryViewBase.vue', () => {
       expect(wrapper).toMatchSnapshot();
     });
   });
-
-  // describe('requirementsCount', () => {
-  //   test('equal 1', () => {
-  //     expect(wrapper.vm.requirementsCount).toEqual(1);
-  //   });
-
-  //   describe('empty requirements_to_train', () => {
-  //     beforeEach(() => {
-  //       repository.set('requirements_to_train', {});
-  //     });
-
-  //     test('equal 0', () => {
-  //       expect(wrapper.vm.requirementsCount).toEqual(0);
-  //     });
-  //   });
-  // });
-
-  // describe('warningsCount', () => {
-  //   test('equal 0', () => {
-  //     expect(wrapper.vm.warningsCount).toEqual(0);
-  //   });
-
-  //   describe('languages_warnings with values', () => {
-  //     beforeEach(async () => {
-  //       repository.set(
-  //         'languages_warnings',
-  //         {
-  //           en: ['warning 1'],
-  //         },
-  //       );
-  //     });
-
-  //     test('equal 1', () => {
-  //       expect(wrapper.vm.requirementsCount).toEqual(1);
-  //     });
-  //   });
-  // });
 });

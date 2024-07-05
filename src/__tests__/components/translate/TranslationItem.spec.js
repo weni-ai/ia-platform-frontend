@@ -36,33 +36,4 @@ describe('TranslationItem.vue', () => {
   test('renders correctly', () => {
     expect(wrapper).toMatchSnapshot();
   });
-
-  /*describe('click to show original', () => {
-    beforeEach(async () => {
-      const showOriginal = wrapper.find({ ref: 'showOriginal' });
-      showOriginal.trigger('click');
-      await localVue.nextTick();
-    });
-
-    // test('has original data', () => {
-    //   expect(wrapper.vm.original).not.toBe(null);
-    // });
-
-    // test('showing original', () => {
-    //   expect(wrapper.vm.showingOriginal).toBe(true);
-    // });
-  });*/
-
-  // describe('delete', () => {
-  //   beforeEach(async () => {
-  //     const deletePromise = wrapper.vm.deleteThisTranslation();
-  //     await localVue.nextTick();
-  //     wrapper.vm.deleteDialog.confirm();
-  //     await deletePromise;
-  //   });
-
-  //   test('emit deleted', () => {
-  //     expect(wrapper.emitted('deleted')).toBeDefined();
-  //   });
-  // });
 });

@@ -1,5 +1,3 @@
-// jest.setup.js
-//import MockDate from 'mockdate';
 import Vue from 'vue';
 import Buefy from 'buefy';
 
@@ -7,7 +5,6 @@ Vue.use(Buefy);
 
 Vue.config.productionTip = false;
 
-//MockDate.set(1534341842684);
 global.runtimeVariables = {
   VUE_APP_SUPPORTED_LANGUAGES: 'en|pt',
   VUE_APP_VERSION: '0.0.0',

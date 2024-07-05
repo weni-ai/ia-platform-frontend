@@ -32,7 +32,6 @@ describe('EntitiesInput.vue', () => {
   const findAddEntityButton = () =>
     wrapper.findComponent({ ref: 'addEntityBtn' });
   const addEntity = () => findAddEntityButton().find('button').trigger('click');
-  // const findEntityForm = index => wrapper.findAllComponents(EntityForm);
 
   it('add entity button is disabled when nothing is selected', () => {
     const btn = findAddEntityButton();
@@ -74,8 +73,6 @@ describe('EntitiesInput.vue', () => {
 
     addEntity();
     expect(getEntitiesStub.called).toBeDefined();
-    // expect(wrapper.vm.entities.length).toBe(1);
-    // expect(wrapper.emitted('entityAdded').length).toBe(1);
   });
 
   it('removes an entity', async () => {
@@ -105,12 +102,5 @@ describe('EntitiesInput.vue', () => {
 
     await localVue.nextTick();
     await localVue.nextTick();
-
-    // findEntityForm(0).vm.$emit('removeEntity');
-
-    // expect(wrapper.vm.entities.length).toBe(0);
   });
-
-  // TODO: implement these cases.
-  // it('renames an entity');
 });

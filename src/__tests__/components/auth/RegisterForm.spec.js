@@ -38,20 +38,5 @@ describe('RegisterForm.spec.js', () => {
       expect(wrapper.vm.data.nickname).toBe('new');
       expect(wrapper.vm.data.password).toBe('n123456');
     });
-
-    // describe('submit form', () => {
-    //   let r;
-    //   beforeEach(async () => {
-    //     r = await wrapper.vm.onSubmit();
-    //   });
-
-    //   test('return true', () => {
-    //     expect(r).toBeTruthy();
-    //   });
-
-    //   test('emit registered event', () => {
-    //     expect(wrapper.emitted('registered')).toBeDefined();
-    //   });
-    // });
   });
 });

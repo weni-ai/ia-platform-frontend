@@ -27,31 +27,4 @@ describe('SelectUsersInput.vue', () => {
   test('mount', () => {
     expect(wrapper.vm).toBeDefined();
   });
-
-  /*describe('search', () => {
-    let taginput;
-    beforeEach(async () => {
-      taginput = wrapper.find({ ref: 'taginput' });
-      taginput.setData({ newTag: 'd' });
-
-      await new Promise((resolve) => {
-        setTimeout(resolve, debounceTime + 200);
-      });
-    });
-
-    // test('has data', () => {
-    //   expect(wrapper.vm.data).not.toBeNull();
-    //   expect(wrapper.vm.data).not.toHaveLength(0);
-    // });
-
-    describe('add first', () => {
-      beforeEach(() => {
-        taginput.vm.addTag(wrapper.vm.data[0]);
-      });
-
-      // test('emit input', () => {
-      //   expect(wrapper.emitted('input')).toBeDefined();
-      // });
-    });
-  });*/
 });

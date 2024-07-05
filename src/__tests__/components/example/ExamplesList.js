@@ -55,7 +55,7 @@ describe('ExamplesList.vue', () => {
           },
         }),
       ),
-      loadSelectedRepository: jest.fn(() => Promise.resolve()), // Mock da ação loadSelectedRepository
+      loadSelectedRepository: jest.fn(() => Promise.resolve()),
     };
 
     store = new Vuex.Store({
@@ -90,7 +90,7 @@ describe('ExamplesList.vue', () => {
   });
 
   test('calls updateExamples on mount', async () => {
-    await wrapper.vm.$nextTick(); // Wait for any pending updates
+    await wrapper.vm.$nextTick();
     expect(actions.getRepositoryStatusTraining).toHaveBeenCalled();
     expect(actions.searchExamples).toHaveBeenCalledWith({
       repositoryUuid: state.selectedRepository.uuid,
@@ -100,15 +100,4 @@ describe('ExamplesList.vue', () => {
       endCreatedAt: '2021-01-01 00:00:00',
     });
   });
-
-  // describe('update list', () => {
-  //   beforeEach(async () => {
-  //     wrapper.vm.updateExamples();
-  //     await wrapper.vm.examplesList.updateItems(0);
-  //   });
-
-  //   test('have items', () => {
-  //     expect(wrapper.vm.examplesList.items.length).toBeGreaterThan(0);
-  //   });
-  // });
 });

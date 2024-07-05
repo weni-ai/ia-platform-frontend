@@ -32,13 +32,13 @@ describe('ForgotPasswordForm.vue', () => {
     });
 
     describe('submit form', () => {
-      let r;
+      let submitResult;
       beforeEach(async () => {
-        r = await wrapper.vm.onSubmit();
+        submitResult = await wrapper.vm.onSubmit();
       });
 
       test('return is false', () => {
-        expect(r).toBeFalsy();
+        expect(submitResult).toBeFalsy();
       });
     });
   });

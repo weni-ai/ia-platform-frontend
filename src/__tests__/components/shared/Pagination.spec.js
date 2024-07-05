@@ -46,16 +46,6 @@ describe('Pagination.vue', () => {
     test('no items', () => {
       expect(wrapper.vm.list.items.length).toBe(0);
     });
-
-    /* describe('next', () => {
-      beforeEach(async () => {
-        await wrapper.vm.next();
-      });
-
-      test('has items', () => {
-        expect(wrapper.vm.list.items.length).toBeGreaterThan(0);
-      });
-    });*/
   });
 
   describe('on dispatch event', () => {

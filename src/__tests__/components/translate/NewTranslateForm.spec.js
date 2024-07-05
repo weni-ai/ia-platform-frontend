@@ -47,40 +47,7 @@ describe('NewTranslateForm.vue', () => {
     test('isValid is true', () => {
       expect(wrapper.vm.isValid).toBeTruthy();
     });
-
-    // describe('on submit', () => {
-    //   let r;
-    //   beforeEach(async () => {
-    //     r = await wrapper.vm.onSubmit();
-    //   });
-
-    //   test('return is true', () => {
-    //     expect(r).toBeTruthy();
-    //   });
-
-    //   test('created event emitted', () => {
-    //     expect(wrapper.emitted('translated')).toBeDefined();
-    //   });
-    // });
   });
-
-  /*describe('fill with invalid data', () => {
-    beforeEach(() => {
-      wrapper.vm.text = 'meu nome é douglas';
-      wrapper.vm.entities = [];
-    });
-
-    // describe('on submit', () => {
-    //   let r;
-    //   beforeEach(async () => {
-    //     r = await wrapper.vm.onSubmit();
-    //   });
-
-    //   test('return is false', () => {
-    //     expect(r).toBeFalsy();
-    //   });
-    // });
-  });*/
 
   describe('entitiesInput emit entityAdded', () => {
     let entitiesInput;

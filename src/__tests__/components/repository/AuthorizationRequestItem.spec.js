@@ -40,43 +40,4 @@ describe('AuthorizationRequestItem.vue', () => {
   test('mount', () => {
     expect(wrapper.vm).toBeDefined();
   });
-
-  // describe('approve', () => {
-  //   test('deleted emitted', async () => {
-  //     wrapper.setMethods({
-  //       approveRequestAuthorization() {
-  //         return new Promise((resolve) => {
-  //           resolve();
-  //         });
-  //       },
-  //     });
-  //     Promise.resolve(wrapper.vm.approve());
-  //     await localVue.nextTick();
-  //     expect(wrapper.emitted('deleted')).toBeDefined();
-  //   });
-  // });
-
-  // describe('reject', () => {
-  //   test('deleted emitted', async () => {
-  //     wrapper = mountComponent({
-  //       mocks: {
-  //         $dialog: {
-  //           confirm(options) {
-  //             Promise.resolve(options.onConfirm());
-  //           },
-  //         },
-  //       },
-  //     });
-  //     wrapper.setMethods({
-  //       rejectRequestAuthorization() {
-  //         return new Promise((resolve) => {
-  //           resolve();
-  //         });
-  //       },
-  //     });
-  //     Promise.resolve(wrapper.vm.reject());
-  //     await localVue.nextTick();
-  //     expect(wrapper.emitted('deleted')).toBeDefined();
-  //   });
-  // });
 });

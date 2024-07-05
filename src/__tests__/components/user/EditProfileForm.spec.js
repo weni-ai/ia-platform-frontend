@@ -54,23 +54,13 @@ describe('EditProfileForm.vue', () => {
     });
 
     describe('submit', () => {
-      // let r;
       beforeEach(async () => {
-        // r = await wrapper.vm.onSubmit();
         await wrapper.vm.onSubmit();
       });
 
       test('no errors', () => {
         expect(Object.keys(wrapper.vm.errors)).toHaveLength(0);
       });
-
-      // test('return true', () => {
-      //   expect(r).toBeTruthy();
-      // });
-
-      // test('emit edited', () => {
-      //   expect(wrapper.emitted('edited')).toHaveLength(1);
-      // });
     });
   });
 
@@ -93,17 +83,13 @@ describe('EditProfileForm.vue', () => {
     });
 
     describe('submit', () => {
-      let r;
+      let submit;
       beforeEach(async () => {
-        r = await wrapper.vm.onSubmit();
+        submit = await wrapper.vm.onSubmit();
       });
 
-      // test('error on nickname field', () => {
-      //   expect(wrapper.vm.errors.nickname).toBeDefined();
-      // });
-
       test('return false', () => {
-        expect(r).toBeFalsy();
+        expect(submit).toBeFalsy();
       });
     });
   });

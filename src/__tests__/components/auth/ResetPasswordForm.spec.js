@@ -32,13 +32,12 @@ describe('ResetPasswordForm.vue', () => {
     });
 
     describe('submit form', () => {
-      let r;
+      let submitResult;
       beforeEach(async () => {
-        r = await wrapper.vm.onSubmit();
+        submitResult = await wrapper.vm.onSubmit();
       });
 
       test('submit form with valid data', () => {
-        // Adicione suas expectativas para submissão do formulário com dados válidos
         expect(wrapper.vm.data.password).toBe('n123456');
       });
     });
@@ -49,13 +48,13 @@ describe('ResetPasswordForm.vue', () => {
       });
 
       describe('submit form', () => {
-        let r;
+        let submitResult;
         beforeEach(async () => {
-          r = await wrapper.vm.onSubmit();
+          submitResult = await wrapper.vm.onSubmit();
         });
 
         test('return false', () => {
-          expect(r).toBeFalsy();
+          expect(submitResult).toBeFalsy();
         });
       });
     });
@@ -67,13 +66,13 @@ describe('ResetPasswordForm.vue', () => {
     });
 
     describe('submit form', () => {
-      let r;
+      let submitResult;
       beforeEach(async () => {
-        r = await wrapper.vm.onSubmit();
+        submitResult = await wrapper.vm.onSubmit();
       });
 
       test('return false', () => {
-        expect(r).toBeFalsy();
+        expect(submitResult).toBeFalsy();
       });
     });
   });
