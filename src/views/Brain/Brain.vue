@@ -42,6 +42,9 @@
             @load-sites="loadSites"
             @removed-file="removedFile"
             @removed-site="removedSite"
+            @update:files="(v) => (files = v)"
+            @update:sites="(v) => (sites = v)"
+            @update:filterName="(v) => (filterName = v)"
           />
           <RouterActions
             v-else-if="$route.name === 'router-actions'"
