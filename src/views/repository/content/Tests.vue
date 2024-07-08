@@ -117,6 +117,20 @@ import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
 import PreviewPlaceholder from '../../Brain/Preview/Placeholder.vue';
 import { reactive } from 'vue';
 
+function isEventCardBrain(event) {
+  if (event.type !== 'webhook_called' || !event.url) {
+    return false;
+  }
+
+  const url = new URL(event.url);
+
+  return (
+    url.origin === new URL(runtimeVariables.get('NEXUS_API_BASE_URL')).origin &&
+    url.pathname === '/messages' &&
+    url.searchParams.has('token')
+  );
+}
+
 export default {
   name: 'RepositoryContentTests',
 
@@ -170,6 +184,25 @@ export default {
   watch: {
     'preview.session.status'(value, previous) {
       if (previous === 'waiting' && value === 'completed') {
+        const lastEvent =
+          this.preview.events
+            .filter(({ type }) => !['info'].includes(type))
+            .at(-1) || {};
+
+        const shouldForwardToBrain = isEventCardBrain(lastEvent);
+
+        if (shouldForwardToBrain) {
+          this.messages.push({
+            type: 'message_forwarded_to_brain',
+            name: '',
+            question_uuid: null,
+            feedback: {
+              value: null,
+              reason: null,
+            },
+          });
+        }
+
         this.messages.push({
           type: 'flowsend',
           name: '',
@@ -179,6 +212,14 @@ export default {
             reason: null,
           },
         });
+
+        if (shouldForwardToBrain) {
+          const { text: lastQuestion } = this.messages.findLast(
+            ({ type }) => type === 'question',
+          );
+
+          this.answer(lastQuestion);
+        }
       }
     },
   },
@@ -212,7 +253,12 @@ export default {
     },
 
     isStatus(message) {
-      return ['change', 'flowstart', 'flowsend'].includes(message.type);
+      return [
+        'change',
+        'flowstart',
+        'flowsend',
+        'message_forwarded_to_brain',
+      ].includes(message.type);
     },
 
     statusDescription(message) {
@@ -229,6 +275,10 @@ export default {
 
       if (message.type === 'flowsend') {
         return this.$t('router.preview.flow_finished');
+      }
+
+      if (message.type === 'message_forwarded_to_brain') {
+        return this.$t('router.preview.message_forwarded_to_brain');
       }
     },
 
@@ -309,85 +359,87 @@ export default {
 
       this.scrollToLastMessage();
 
-      setTimeout(() => {
-        const answer = reactive({
-          type: 'answer',
-          text: '',
-          status: 'loading',
-          question_uuid: null,
-          feedback: {
-            value: null,
-            reason: null,
-          },
-        });
+      setTimeout(() => this.answer(message), 400);
+    },
 
-        this.messages.push(answer);
+    answer(question) {
+      const answer = reactive({
+        type: 'answer',
+        text: '',
+        status: 'loading',
+        question_uuid: null,
+        feedback: {
+          value: null,
+          reason: null,
+        },
+      });
 
-        this.scrollToLastMessage();
+      this.messages.push(answer);
 
-        if (this.usePreview) {
-          if (this.preview.session?.status === 'waiting') {
-            this.flowResume(answer, { text: message });
-            return;
-          }
+      this.scrollToLastMessage();
 
-          nexusaiAPI.router.preview
-            .create({
-              projectUuid: this.$store.state.Auth.connectProjectUuid,
-              text: message,
-              contact_urn: this.preview.contact.urns[0],
-            })
-            .then(({ data }) => {
-              if (data.type === 'broadcast') {
-                answer.status = 'loaded';
-                answer.text = get(
-                  data,
-                  'message',
-                  this.$t('quick_test.unable_to_find_an_answer', this.language),
-                );
-                answer.sources = get(data, 'fonts', []);
+      if (this.usePreview) {
+        if (this.preview.session?.status === 'waiting') {
+          this.flowResume(answer, { text: question });
+          return;
+        }
 
-                this.scrollToLastMessage();
-              } else if (data.type === 'flowstart') {
-                this.messages.splice(this.messages.indexOf(answer), 0, {
-                  type: 'flowstart',
-                  name: data.name,
-                  question_uuid: null,
-                  feedback: {
-                    value: null,
-                    reason: null,
-                  },
-                });
-
-                this.flowStart(answer, { name: data.name, uuid: data.uuid });
-              }
-            })
-            .catch(() => {
-              this.messages.splice(this.messages.indexOf(answer), 1);
-            });
-        } else {
-          nexusaiAPI.question
-            .create({
-              contentBaseUuid: this.contentBaseUuid,
-              text: message,
-              language: (this.language || '').toLowerCase(),
-            })
-            .then(({ data }) => {
+        nexusaiAPI.router.preview
+          .create({
+            projectUuid: this.$store.state.Auth.connectProjectUuid,
+            text: question,
+            contact_urn: this.preview.contact.urns[0],
+          })
+          .then(({ data }) => {
+            if (data.type === 'broadcast') {
               answer.status = 'loaded';
-              answer.question_uuid = get(data, 'question_uuid', null);
               answer.text = get(
                 data,
-                'answers.0.text',
+                'message',
                 this.$t('quick_test.unable_to_find_an_answer', this.language),
               );
+              answer.sources = get(data, 'fonts', []);
 
               this.scrollToLastMessage();
-            })
-            .catch(() => {
-              this.messages.splice(this.messages.indexOf(answer), 1);
-            });
-        }
-      }, 400);
+            } else if (data.type === 'flowstart') {
+              this.messages.splice(this.messages.indexOf(answer), 0, {
+                type: 'flowstart',
+                name: data.name,
+                question_uuid: null,
+                feedback: {
+                  value: null,
+                  reason: null,
+                },
+              });
+
+              this.flowStart(answer, { name: data.name, uuid: data.uuid });
+            }
+          })
+          .catch(() => {
+            this.messages.splice(this.messages.indexOf(answer), 1);
+          });
+      } else {
+        nexusaiAPI.question
+          .create({
+            contentBaseUuid: this.contentBaseUuid,
+            text: question,
+            language: (this.language || '').toLowerCase(),
+          })
+          .then(({ data }) => {
+            answer.status = 'loaded';
+            answer.question_uuid = get(data, 'question_uuid', null);
+            answer.text = get(
+              data,
+              'answers.0.text',
+              this.$t('quick_test.unable_to_find_an_answer', this.language),
+            );
+
+            this.scrollToLastMessage();
+          })
+          .catch(() => {
+            this.messages.splice(this.messages.indexOf(answer), 1);
+          });
+      }
     },
 
     scrollToLastMessage() {
@@ -559,7 +611,8 @@ export default {
 
     &__change,
     &__flowstart,
-    &__flowsend {
+    &__flowsend,
+    &__message_forwarded_to_brain {
       text-align: center;
 
       + .messages__change {
