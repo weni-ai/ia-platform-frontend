@@ -62,7 +62,6 @@
       </div>
 
       <div
-        v-if="shouldShowSideareaTest"
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container',
@@ -215,10 +214,6 @@ export default {
 
     const activeTab = computed(
       () => routerTabs.value.find((e) => e.page === route.name)?.page,
-    );
-
-    const shouldShowSideareaTest = computed(
-      () => files.value.data.length || sites.value.data.length,
     );
 
     const contentBaseUuid = computed(
@@ -391,7 +386,6 @@ export default {
       routerTunings,
       contentBase,
       activeTab,
-      shouldShowSideareaTest,
       contentBaseUuid,
       intelligenceUuid,
       onTabChange,
