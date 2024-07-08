@@ -184,6 +184,16 @@ export default {
   watch: {
     'preview.session.status'(value, previous) {
       if (previous === 'waiting' && value === 'completed') {
+        this.messages.push({
+          type: 'flowsend',
+          name: '',
+          question_uuid: null,
+          feedback: {
+            value: null,
+            reason: null,
+          },
+        });
+
         const lastEvent =
           this.preview.events
             .filter(({ type }) => !['info'].includes(type))
@@ -201,19 +211,7 @@ export default {
               reason: null,
             },
           });
-        }
 
-        this.messages.push({
-          type: 'flowsend',
-          name: '',
-          question_uuid: null,
-          feedback: {
-            value: null,
-            reason: null,
-          },
-        });
-
-        if (shouldForwardToBrain) {
           const { text: lastQuestion } = this.messages.findLast(
             ({ type }) => type === 'question',
           );
