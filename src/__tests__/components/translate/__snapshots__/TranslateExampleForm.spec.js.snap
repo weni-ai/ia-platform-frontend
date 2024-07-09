@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TranslateExampleForm.vue renders correctly 1`] = `
+VueWrapper {
+  "_emitted": Object {
+    "input": Array [
+      Array [
+        Object {
+          "entities": Array [],
+          "text": "",
+        },
+      ],
+    ],
+  },
+  "_emittedByOrder": Array [
+    Object {
+      "args": Array [
+        Object {
+          "entities": Array [],
+          "text": "",
+        },
+      ],
+      "name": "input",
+    },
+  ],
+  "isFunctionalComponent": undefined,
+}
+`;
