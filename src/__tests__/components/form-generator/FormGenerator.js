@@ -6,7 +6,7 @@ const localVue = createLocalVue();
 localVue.use(Buefy);
 
 describe('FormGenerator', () => {
-  it('deve renderizar o componente', () => {
+  it('renders correctly', () => {
     const schema = {
       name: {
         type: 'string',
