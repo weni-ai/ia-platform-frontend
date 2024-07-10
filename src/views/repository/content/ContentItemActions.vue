@@ -1,18 +1,18 @@
 <template>
-  <UnnnicIcon
-    ref="selector"
-    v-popover.trigger="{
-      onClick($event) {
-        isClickActivated = $event;
-      },
-    }"
-    icon="more_vert"
-    :scheme="isClickActivated ? 'neutral-darkest' : 'neutral-cloudy'"
-    size="avatar-nano"
-    class="button-menu"
-  />
+  <UnnnicDropdown
+    v-model:open="isClickActivated"
+    position="bottom-left"
+  >
+    <template #trigger>
+      <UnnnicIcon
+        ref="selector"
+        icon="more_vert"
+        :scheme="isClickActivated ? 'neutral-darkest' : 'neutral-cloudy'"
+        size="avatar-nano"
+        class="button-menu"
+      />
+    </template>
 
-  <Teleport to="body">
     <section
       v-popover.detached
       activator="click"
@@ -45,12 +45,11 @@
         </UnnnicIntelligenceText>
       </section>
     </section>
-  </Teleport>
+  </UnnnicDropdown>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import vPopover from '@/utils/vPopover.js';
 
 defineProps({
   actions: {
@@ -60,10 +59,6 @@ defineProps({
 });
 
 const isClickActivated = ref(false);
-
-function close(el) {
-  el.dispatchEvent(new Event('closeclick'));
-}
 </script>
 
 <style lang="scss" scoped>
@@ -73,9 +68,10 @@ function close(el) {
 }
 
 .options {
+  margin-inline: -$unnnic-spacing-sm;
+  margin-block: -$unnnic-spacing-ant;
   border-radius: $unnnic-border-radius-sm;
   background-color: $unnnic-color-background-snow;
-  box-shadow: $unnnic-shadow-level-near;
   min-width: 10.625 * $unnnic-font-size;
 
   &__option {
