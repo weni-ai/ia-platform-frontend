@@ -1,9 +1,9 @@
 <template>
-  <Transition
-    v-if="showModal"
-    name="modal-transition"
-  >
-    <div class="modal-container">
+  <Transition name="modal-transition">
+    <div
+      v-if="showModal"
+      class="modal-container"
+    >
       <div class="modal-container__content">
         <div class="modal-container__content__background">
           <section class="modal-container__content__background__header">
@@ -60,7 +60,7 @@
                 v-for="language in infoModal.languages"
                 :key="language"
               >
-                {{ language | languageVerbose }}
+                {{ languageVerbose(language) }}
               </span>
             </div>
           </section>
@@ -91,6 +91,9 @@ export default {
       this.$router.push(
         `/${this.infoModal.ownerNickname}/${this.infoModal.slug}/intentlist/${intent}`,
       );
+    },
+    languageVerbose(language) {
+      return language | this.languageVerbose;
     },
   },
 };
