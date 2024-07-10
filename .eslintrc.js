@@ -11,5 +11,6 @@ module.exports = {
     'vue/valid-next-tick': 'off',
     'no-unused-vars': 'off',
     'no-undef': 'off',
+    'vue/valid-attribute-name': 'off',
   },
 };

@@ -141,7 +141,8 @@
       "save_changes_to_test_the_agent": "Guarde los cambios para probar el agente",
       "field_changed_to_value": "Parámetro {field} cambiada a {value}",
       "flow_started": "Flujo {name} iniciado",
-      "flow_finished": "Flujo finalizado"
+      "flow_finished": "Flujo finalizado",
+      "message_forwarded_to_brain": "Mensaje transmitido a Brain"
     }
   },
   "content_bases": {
