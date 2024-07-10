@@ -159,6 +159,12 @@
     },
     "file_with_error": "Arquivo com erro. Exclua e adicione-o novamente.",
     "site_with_error": "Site com erro. Exclua e adicione-o novamente.",
+    "actions": {
+      "see_details": "Ver detalhes",
+      "download_file": "Baixar arquivo",
+      "remove_site": "Remover site",
+      "remove_file": "Remover arquivo"
+    },
     "files": {
       "upload_content": "Carregar conteúdo de arquivos",
       "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",

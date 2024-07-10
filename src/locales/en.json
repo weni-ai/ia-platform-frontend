@@ -159,6 +159,12 @@
     },
     "file_with_error": "File with error. Delete and add it again.",
     "site_with_error": "Site with error. Delete and add it again.",
+    "actions": {
+      "see_details": "See details",
+      "download_file": "Download file",
+      "remove_site": "Remove site",
+      "remove_file": "Remove file"
+    },
     "files": {
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",

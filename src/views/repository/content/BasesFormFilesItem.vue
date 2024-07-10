@@ -51,32 +51,17 @@
         />
 
         <UnnnicIcon
-          v-else-if="
-            file.status === 'uploaded' && file.extension_file !== 'site'
-          "
-          icon="download"
-          size="sm"
-          class="files-list__content__file__actions__icon"
-          clickable
-          @click.stop="download"
-        />
-
-        <UnnnicIcon
-          v-if="file.status === 'uploaded'"
-          icon="visibility"
-          size="sm"
-          class="files-list__content__file__actions__icon"
-          clickable
-          @click.stop="preview"
-        />
-
-        <UnnnicIcon
-          v-if="!file.uuid.startsWith('temp-') || isFailed"
+          v-if="extension === 'action'"
           icon="delete"
           size="sm"
           class="files-list__content__file__actions__icon"
           clickable
           @click.stop="$emit('remove')"
+        />
+
+        <ContentItemActions
+          v-else-if="actions.length"
+          :actions="actions"
         />
       </section>
 
@@ -99,17 +84,20 @@
   <FilePreview
     v-if="modalPreview"
     v-bind="modalPreview"
-    @close="modalPreview = null"
+    modelValue
+    @update:modelValue="modalPreview = null"
   />
 </template>
 
 <script>
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import FilePreview from '@/views/ContentBases/components/FilePreview.vue';
+import ContentItemActions from '@/views/repository/content/ContentItemActions.vue';
 
 export default {
   components: {
     FilePreview,
+    ContentItemActions,
   },
 
   props: {
@@ -126,6 +114,49 @@ export default {
   },
 
   computed: {
+    actions() {
+      const actions = [];
+
+      if (this.extension === 'action') {
+        return actions;
+      }
+
+      if (this.file.status === 'uploaded') {
+        actions.push({
+          scheme: 'neutral-dark',
+          icon: 'info',
+          text: this.$t('content_bases.actions.see_details'),
+          onClick: this.preview,
+        });
+      }
+
+      if (
+        this.file.status === 'uploaded' &&
+        this.file.extension_file !== 'site'
+      ) {
+        actions.push({
+          scheme: 'neutral-dark',
+          icon: 'download',
+          text: this.$t('content_bases.actions.download_file'),
+          onClick: this.download,
+        });
+      }
+
+      if (!this.file.uuid.startsWith('temp-')) {
+        actions.push({
+          scheme: 'aux-red-500',
+          icon: 'delete',
+          text:
+            this.extension === 'site'
+              ? this.$t('content_bases.actions.remove_site')
+              : this.$t('content_bases.actions.remove_file'),
+          onClick: () => this.$emit('remove'),
+        });
+      }
+
+      return actions;
+    },
+
     fileHref() {
       return this.file?.file || '';
     },
@@ -222,6 +253,7 @@ export default {
         contentBaseUuid: this.$store.state.router.contentBaseUuid,
         fileUuid: this.file.uuid,
         name: this.fileName,
+        createdAt: this.file.created_at,
       };
     },
   },
@@ -325,12 +357,12 @@ export default {
     display: flex;
     column-gap: $unnnic-spacing-xs;
     margin-left: auto;
-    margin-right: $unnnic-spacing-xs;
 
     &__icon {
       cursor: pointer;
       color: $unnnic-color-neutral-cloudy;
       user-select: none;
+      margin-right: $unnnic-spacing-xs;
     }
 
     &__loading {
