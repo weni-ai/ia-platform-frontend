@@ -181,7 +181,13 @@
       },
       "preview": {
         "title": "Información de archivo",
-        "name": "Archivo:"
+        "name": "Archivo:",
+        "date": "Fecha de contenido:",
+        "content_added_to_the_agent": "Contenido del archivo añadido al agente:",
+        "not_found": {
+          "title": "No se ha podido visualizar el contenido del fichero",
+          "description": "No se ha encontrado el contenido del archivo.<br />Por favor, elimine el archivo e intente añadirlo de nuevo."
+        }
       }
     },
     "sites": {
@@ -207,7 +213,9 @@
         "delete": "Eliminar"
       },
       "preview": {
-        "title": "Información del sitio"
+        "title": "Información del sitio",
+        "name": "Sitio:",
+        "content_added_to_the_agent": "Contenido del sitio añadido al agente:"
       }
     }
   },

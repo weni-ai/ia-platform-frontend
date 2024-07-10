@@ -3,26 +3,31 @@
     :title="$t(`content_bases.${translationType}.preview.title`)"
     size="lg"
   >
-    <section>
-      <UnnnicIntelligenceText
-        color="neutral-dark"
-        family="secondary"
-        weight="bold"
-        size="body-gt"
-        tag="p"
-        marginBottom="xs"
+    <header class="details">
+      <section
+        v-for="(detail, index) in details"
+        :key="index"
       >
-        {{ $t(`content_bases.files.preview.name`) }}
-      </UnnnicIntelligenceText>
+        <UnnnicIntelligenceText
+          color="neutral-dark"
+          family="secondary"
+          weight="bold"
+          size="body-gt"
+          tag="p"
+          marginBottom="xs"
+        >
+          {{ detail.title }}
+        </UnnnicIntelligenceText>
 
-      <UnnnicIntelligenceText
-        color="neutral-cloudy"
-        family="secondary"
-        size="body-gt"
-      >
-        {{ name }}
-      </UnnnicIntelligenceText>
-    </section>
+        <UnnnicIntelligenceText
+          color="neutral-cloudy"
+          family="secondary"
+          size="body-gt"
+        >
+          {{ detail.value }}
+        </UnnnicIntelligenceText>
+      </section>
+    </header>
 
     <UnnnicDivider ySpacing="md" />
 
@@ -36,29 +41,49 @@
       />
     </template>
 
-    <p
-      v-for="(paragraph, index) in content.text.split(/\n+/)"
-      v-else
-      :key="index"
-      class="content-paragraph"
-    >
-      {{ paragraph }}
-    </p>
+    <NotFound v-else-if="contentNotFound" />
 
-    <UnnnicPagination
-      v-if="content.totalPages >= 2"
-      v-model="content.page"
-      class="pagination"
-      :disabled="content.loading"
-      :max="content.totalPages"
-    ></UnnnicPagination>
+    <template v-else>
+      <UnnnicIntelligenceText
+        tag="p"
+        color="neutral-dark"
+        family="secondary"
+        weight="bold"
+        size="body-gt"
+        marginBottom="xs"
+      >
+        {{
+          $t(
+            `content_bases.${translationType}.preview.content_added_to_the_agent`,
+          )
+        }}
+      </UnnnicIntelligenceText>
+
+      <p
+        v-for="(paragraph, index) in content.text.split(/\n+/)"
+        :key="index"
+        class="content-paragraph"
+      >
+        {{ paragraph }}
+      </p>
+
+      <UnnnicPagination
+        v-if="content.totalPages >= 2"
+        v-model="content.page"
+        class="pagination"
+        :disabled="content.loading"
+        :max="content.totalPages"
+      ></UnnnicPagination>
+    </template>
   </UnnnicModal>
 </template>
 
 <script setup>
 import UnnnicModal from '@/components/LocalUnnnic/UnnnicModal.vue';
+import NotFound from './FilePreviewNotFound.vue';
 import nexusaiAPI from '@/api/nexusaiAPI.js';
 import { onMounted, reactive, watch, computed } from 'vue';
+import i18n from '@/utils/plugins/i18n.js';
 
 const props = defineProps({
   type: {
@@ -69,10 +94,12 @@ const props = defineProps({
   projectUuid: String,
   contentBaseUuid: String,
   fileUuid: String,
+  createdAt: String,
 });
 
 const content = reactive({
   loading: false,
+  status: null,
   text: '',
   page: 1,
   totalPages: null,
@@ -81,6 +108,42 @@ const content = reactive({
 const translationType = computed(
   () => ({ file: 'files', site: 'sites' })[props.type],
 );
+
+const contentNotFound = computed(() => {
+  return content.status === 404;
+});
+
+const formattedCreatedAt = computed(() => {
+  if (!props.createdAt) {
+    return null;
+  }
+
+  const { locale } = i18n.global;
+
+  const date = new Date(props.createdAt);
+
+  return (
+    date.toLocaleDateString(locale) + '     ' + date.toLocaleTimeString(locale)
+  );
+});
+
+const details = computed(() => {
+  const details = [];
+
+  details.push({
+    title: i18n.global.t(`content_bases.${translationType.value}.preview.name`),
+    value: props.name,
+  });
+
+  if (formattedCreatedAt.value) {
+    details.push({
+      title: i18n.global.t('content_bases.files.preview.date'),
+      value: formattedCreatedAt.value,
+    });
+  }
+
+  return details;
+});
 
 onMounted(async () => {
   loadContent();
@@ -103,7 +166,9 @@ async function loadContent() {
   const { status } = data;
   const { content: text, page_number, total_pages } = data.data;
 
-  if (status === 200) {
+  content.status = status;
+
+  if (content.status === 200) {
     content.text = text;
     content.page = page_number;
     content.totalPages = total_pages;
@@ -112,6 +177,17 @@ async function loadContent() {
 </script>
 
 <style lang="scss" scoped>
+.details {
+  display: flex;
+  column-gap: $unnnic-spacing-sm;
+  white-space: pre-wrap;
+  word-break: break-word;
+
+  > section {
+    flex: 1;
+  }
+}
+
 .content-paragraph + .content-paragraph {
   margin-top: $unnnic-spacing-xs;
 }
