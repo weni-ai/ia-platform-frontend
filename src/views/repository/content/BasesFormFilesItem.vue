@@ -3,6 +3,7 @@
     side="top"
     :text="failureMessage"
     :enabled="isFailed"
+    @click="$emit('click')"
   >
     <section
       :class="[
@@ -10,7 +11,10 @@
         `files-list__content__file--status-${
           file.status === 'fail-upload' ? 'fail' : file.status
         }`,
-        { 'files-list__content__file--compressed': compressed },
+        {
+          'files-list__content__file--compressed': compressed,
+          'files-list__content__file--clickable': clickable,
+        },
       ]"
     >
       <section class="files-list__content__file__icon">
@@ -103,6 +107,7 @@ export default {
   props: {
     file: Object,
     compressed: Boolean,
+    clickable: Boolean,
   },
 
   data() {
@@ -297,6 +302,10 @@ export default {
       font-size: $unnnic-font-size-body-sm;
       line-height: $unnnic-font-size-body-sm + $unnnic-line-height-md;
     }
+  }
+
+  &--clickable {
+    cursor: pointer;
   }
 
   &--status-fail {
