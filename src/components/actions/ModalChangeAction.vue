@@ -75,10 +75,21 @@
 <script>
 export default {
   props: {
-    description: String,
-    item: String,
-    editing: Boolean,
+    description: {
+      type: String,
+      default: '',
+      required: false,
+    },
+    item: {
+      type: String,
+      default: '',
+      required: false,
+    },
+    editing: {
+      type: Boolean,
+    },
   },
+  emits: ['closeModal', 'edit'],
   data() {
     return {};
   },
