@@ -1,5 +1,6 @@
 <template>
-  <UnnnicModal
+  <UnnnicModalDialog
+    showCloseIcon
     :title="$t(`content_bases.${translationType}.preview.title`)"
     size="lg"
   >
@@ -59,13 +60,17 @@
         }}
       </UnnnicIntelligenceText>
 
-      <p
+      <UnnnicIntelligenceText
         v-for="(paragraph, index) in content.text.split(/\n+/)"
         :key="index"
+        tag="p"
+        color="neutral-cloudy"
+        family="secondary"
+        size="body-gt"
         class="content-paragraph"
       >
         {{ paragraph }}
-      </p>
+      </UnnnicIntelligenceText>
 
       <UnnnicPagination
         v-if="content.totalPages >= 2"
@@ -75,11 +80,10 @@
         :max="content.totalPages"
       ></UnnnicPagination>
     </template>
-  </UnnnicModal>
+  </UnnnicModalDialog>
 </template>
 
 <script setup>
-import UnnnicModal from '@/components/LocalUnnnic/UnnnicModal.vue';
 import NotFound from './FilePreviewNotFound.vue';
 import nexusaiAPI from '@/api/nexusaiAPI.js';
 import { onMounted, reactive, watch, computed } from 'vue';

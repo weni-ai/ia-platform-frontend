@@ -28,7 +28,7 @@
 
 <style lang="scss" scoped>
 .not-found {
-  $skeleton-loading-height: 30.75 * $unnnic-font-size;
+  $skeleton-loading-height: 30.125 * $unnnic-font-size;
 
   display: flex;
   flex-direction: column;
