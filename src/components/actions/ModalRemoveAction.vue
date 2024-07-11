@@ -36,9 +36,14 @@ export default {
     ModalNext,
   },
   props: {
-    name: String,
+    name: {
+      type: String,
+      default: '',
+      required: false,
+    },
     removing: Boolean,
   },
+  emits: ['closeModal', 'remove'],
   data() {
     return {};
   },
