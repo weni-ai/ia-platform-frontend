@@ -350,6 +350,7 @@ export default {
           if (data.status === 'success') {
             fileItem.status = 'uploaded';
             fileItem.file_name = data.file_name;
+            fileItem.created_at = data.created_at;
             this.successMessage();
           } else if (data.status === 'fail') {
             fileItem.status = data.status;

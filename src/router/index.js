@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import RepositoryContentBases from '../views/repository/content/Bases.vue';
 import RepositoryContentBasesForm from '../views/repository/content/BasesForm.vue';
+import ContentBasesForm from '@/views/ContentBases/Form.vue';
 import Brain from '../views/Brain/Brain.vue';
 import RepositoryContentAdjustment from '../views/repository/content/ContentAdjustments.vue';
 import RouterPreviewFullPage from '../views/Brain/RouterPreviewFullPage.vue';
@@ -123,7 +124,7 @@ const router = createRouter({
     {
       path: '/intelligences/:intelligenceUuid/bases/:contentBaseUuid/edit',
       name: 'intelligence-content-base-edit',
-      component: RepositoryContentBasesForm,
+      component: ContentBasesForm,
     },
     {
       path: '/:pathMatch(.*)*',

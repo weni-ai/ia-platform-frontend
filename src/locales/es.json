@@ -160,6 +160,12 @@
     },
     "file_with_error": "Archivo con error. Bórrelo y añádalo de nuevo.",
     "site_with_error": "Sitio con error. Borrar y añadir de nuevo.",
+    "actions": {
+      "see_details": "Ver detalles",
+      "download_file": "Descargar archivo",
+      "remove_site": "Eliminar sitio",
+      "remove_file": "Eliminar archivo"
+    },
     "files": {
       "upload_content": "Cargar contenido a partir de archivos",
       "drag_and_drop_your_file_here": "Arrastre y suelte su archivo aquí para añadir el contenido a la base de conocimientos de IA.",
@@ -179,6 +185,16 @@
         "description": "¿Estás seguro de que quieres eliminar el archivo <b>{name}</b>?<br />El contenido de este archivo se eliminará de la base de datos de AI",
         "cancel": "Cancelar",
         "delete": "Eliminar"
+      },
+      "preview": {
+        "title": "Información de archivo",
+        "name": "Archivo:",
+        "date": "Fecha de contenido:",
+        "content_added_to_the_agent": "Contenido del archivo añadido al agente:",
+        "not_found": {
+          "title": "No se ha podido visualizar el contenido del fichero",
+          "description": "No se ha encontrado el contenido del archivo.<br />Por favor, elimine el archivo e intente añadirlo de nuevo."
+        }
       }
     },
     "sites": {
@@ -202,6 +218,11 @@
         "description": "¿Estás seguro de que quieres eliminar el sitio <b>{name}</b>?<br />El contenido de este sitio se eliminará de la base de datos de AI",
         "cancel": "Cancelar",
         "delete": "Eliminar"
+      },
+      "preview": {
+        "title": "Información del sitio",
+        "name": "Sitio:",
+        "content_added_to_the_agent": "Contenido del sitio añadido al agente:"
       }
     }
   },

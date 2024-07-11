@@ -160,6 +160,12 @@
     },
     "file_with_error": "File with error. Delete and add it again.",
     "site_with_error": "Site with error. Delete and add it again.",
+    "actions": {
+      "see_details": "See details",
+      "download_file": "Download file",
+      "remove_site": "Remove site",
+      "remove_file": "Remove file"
+    },
     "files": {
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
@@ -179,6 +185,16 @@
         "description": "Are you sure you want to delete the file <b>{name}</b>?<br />The contents of this file will be removed from the AI base",
         "cancel": "Cancel",
         "delete": "Delete"
+      },
+      "preview": {
+        "title": "File information",
+        "name": "File:",
+        "date": "Content date:",
+        "content_added_to_the_agent": "Content of the file added to the agent:",
+        "not_found": {
+          "title": "The contents of the file could not be viewed",
+          "description": "The contents of the file could not be found.<br />Please delete the file and try adding it again."
+        }
       }
     },
     "sites": {
@@ -202,6 +218,11 @@
         "description": "Are you sure you want to delete the website <b>{name}</b>?<br />The contents of this website will be removed from the AI base",
         "cancel": "Cancel",
         "delete": "Delete"
+      },
+      "preview": {
+        "title": "Site information",
+        "name": "Site:",
+        "content_added_to_the_agent": "Content of the site added to the agent:"
       }
     }
   },

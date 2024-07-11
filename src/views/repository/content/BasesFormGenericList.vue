@@ -30,7 +30,7 @@
           :key="file.uuid"
           :file="file"
           :compressed="shape === 'accordion'"
-          :class="[{ 'files-list__item--can-edit': canEditItem }]"
+          :clickable="canEditItem"
           @remove="$emit('remove', file)"
           @click="$emit('edit', file)"
         />
@@ -172,12 +172,6 @@ export default {
     &--shape-accordion {
       column-gap: $unnnic-spacing-ant;
       row-gap: $unnnic-spacing-xs;
-    }
-  }
-
-  &__item {
-    &--can-edit {
-      cursor: pointer;
     }
   }
 }
