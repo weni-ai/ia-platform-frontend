@@ -1,6 +1,6 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import ModalActions from '@/components/actions/ModalActions.vue';
-import nexusaiAPI from '../../../api/nexusaiAPI';
+import nexusaiAPI from '@/api/nexusaiAPI';
 import { createStore } from 'vuex';
 
 const store = createStore({
