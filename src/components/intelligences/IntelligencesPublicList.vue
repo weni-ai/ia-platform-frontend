@@ -21,7 +21,7 @@
           v-for="i in 3"
           :key="i"
           tag="div"
-          height="230px"
+          height="206px"
         />
       </template>
 
