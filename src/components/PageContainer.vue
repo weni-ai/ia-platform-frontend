@@ -81,13 +81,21 @@
 export default {
   props: {
     loadingTitle: Boolean,
-    title: String,
+    title: {
+      type: String,
+      default: '',
+      required: false,
+    },
     canEditTitle: Boolean,
-    description: String,
+    description: {
+      type: String,
+      default: '',
+      required: false,
+    },
     dontShowBack: Boolean,
     brainIsDeactivated: Boolean,
   },
-  emits: ['back'],
+  emits: ['back', 'update:title'],
 };
 </script>
 
