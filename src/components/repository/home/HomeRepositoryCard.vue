@@ -31,6 +31,7 @@
             "
           >
             <UnnnicToolTip
+              v-if="type === 'repository'"
               side="top"
               :text="
                 hasIntegration
