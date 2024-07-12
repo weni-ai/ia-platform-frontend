@@ -11,6 +11,11 @@ export default mergeConfig(
       root: fileURLToPath(new URL('./', import.meta.url)),
       globals: true,
       setupFiles: './src/components/__tests__/setup.js',
+      coverage: {
+        reporter: ['text', 'json'],
+        reportsDirectory: './coverage',
+        include: ['src/**/*.vue'],
+      },
     },
   }),
 );
