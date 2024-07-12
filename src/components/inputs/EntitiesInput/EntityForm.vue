@@ -10,17 +10,13 @@
           </span>
           {{ $t('webapp.result.is') }}
         </p>
-        <unnnic-autocomplete
-            id="tour-training-step-3"
-            ref="entityInputField"
-            v-model="entity"
-            :data="filteredData"
-            @icon-right-click="removeEntity()"
-            open-with-focus
-            :iconRight="entity ? 'delete-1-1' : ''"
-            :class="{ hidden: filteredData.length === 0 }"
-            highlight
-          />
+        <Autocomplete
+          v-model="entity"
+          ref="entityInputField"
+          id="tour-training-step-3"
+          :options="filteredData"
+          entityFormat
+        />
       </div>
     </div>
   </div>
@@ -29,11 +25,15 @@
 <script>
 import { mapGetters } from 'vuex';
 import { formatters } from '@/utils';
+import Autocomplete from '../../Autocomplete.vue';
 
 export default {
   name: 'EntityForm',
   model: {
     prop: 'entity',
+  },
+  components: {
+    Autocomplete,
   },
   props: {
     entityClass: {
@@ -76,13 +76,7 @@ export default {
       ];
     },
     filteredData() {
-      return (this.availableEntities || []).filter(
-        entity => entity.length === 0
-          || (
-            entity.includes(this.entity.toLowerCase())
-            && entity !== this.entity.toLowerCase()
-          )
-      );
+      return this.availableEntities || [];
     },
     selectedText() {
       return this.text.substring(this.selectedTextStart, this.selectedTextEnd);

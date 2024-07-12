@@ -5,16 +5,14 @@
     :label-placeholder="labelPlaceholder"
     v-model="value"
     @input="update()"/>
-  <unnnic-autocomplete
+  <Autocomplete
     v-else-if="compact"
-    v-model="value"
+    :value="value"
     :placeholder="labelPlaceholder"
-    :custom-formatter="formatter"
     :data="filteredChoices"
-    dropdown-position="bottom"
-    openWithFocus
-    @input="updateInput"
-    @choose="selectOption"/>
+    @input="update($event)"
+    entityFormat
+    />
   <unnnic-select-smart
     v-else
     :value="choicesSelectSmart.value"
@@ -26,10 +24,12 @@
 <script>
 import { formatters, useSelectSmart } from '@/utils';
 import FetchChoiceInput from './FetchChoiceInput';
+import Autocomplete from '../../Autocomplete.vue';
 
 export default {
   components: {
     FetchChoiceInput,
+    Autocomplete,
   },
   props: {
     choices: {
@@ -61,12 +61,9 @@ export default {
   },
   computed: {
     filteredChoices() {
-      if (!this.value || this.value.length === 0) { return this.choices; }
-      const search = new RegExp(formatters.bothubItemKey()(this.value.toLowerCase()));
-      return this.choices
-        .filter(
-          choice => search.test(formatters.bothubItemKey()(choice.display_name.toLowerCase())),
-        );
+      return this.choices.map((choice) =>
+        formatters.bothubItemKey()(choice.display_name.toLowerCase()),
+      );
     },
 
     choicesSelectSmart() {
@@ -83,25 +80,6 @@ export default {
     this.update();
   },
   methods: {
-    updateInput() {
-      const search = formatters.bothubItemKey()(this.value.toLowerCase());
-      const option = this.choices.find(
-        choice => formatters.bothubItemKey()(choice.display_name.toLowerCase())
-                    === search,
-      );
-      if (option) {
-        this.$emit('input', option.value);
-      } else {
-        this.$emit('input', '');
-      }
-    },
-    selectOption(option) {
-      if (option) {
-        this.$emit('input', option.value);
-      } else {
-        this.$emit('input', '');
-      }
-    },
     update(value) {
       this.value = value;
       this.$emit('input', this.value);
