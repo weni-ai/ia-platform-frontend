@@ -10,225 +10,68 @@
       :class="['unnnic-card-intelligence', `unnnic-card-intelligence--${type}`]"
       @click.prevent.stop="repositoryDetailsRouterParams()"
     >
-      <section class="unnnic-card-intelligence__header">
-        <div class="unnnic-card-intelligence__header__detail">
-          <div class="unnnic-card-intelligence__header__detail__title">
-            {{ repositoryDetail.name || repositoryDetail.title }}
-          </div>
-
-          <!-- <div class="unnnic-card-intelligence__header__detail__subtitle">
-            {{ $t("webapp.intelligences_lib.created_by") }}
-            <strong>{{ repositoryDetail.owner__nickname }}</strong>
-          </div> -->
+      <header class="unnnic-card-intelligence__header">
+        <div class="unnnic-card-intelligence__header__title">
+          {{ repositoryDetail.name || repositoryDetail.title }}
         </div>
 
         <div class="unnnic-card-intelligence__header__buttons">
-          <div
+          <template
             v-if="
-              type !== 'base' &&
               hasIntegrationDefined &&
-              !hasIntegrationCheckError
+              !hasIntegrationCheckError &&
+              repositoryDetail.repository_type === 'classifier'
             "
           >
-            <UnnnicToolTip
-              side="top"
-              :text="
-                hasIntegration
-                  ? $t('webapp.home.remove_integrate')
-                  : $t('webapp.home.integrate')
-              "
-              enabled
-            >
-              <UnnnicButton
-                v-if="!hasIntegration"
-                iconCenter="add-1"
-                size="small"
-                icon="add-1"
-                class="mr-2"
-                type="alternative"
-                @click.prevent.stop="changeIntegrateModalState(true)"
-              />
-            </UnnnicToolTip>
-          </div>
+            <UnnnicIcon
+              v-if="hasIntegration"
+              icon="check"
+              scheme="weni-600"
+              class="unnnic-card-intelligence__header__buttons__icon-integrated"
+            />
 
-          <div v-else-if="type !== 'intelligence'">
-            <UnnnicToolTip
-              side="top"
-              :text="$t('content_bases.quick_test')"
-              enabled
-            >
-              <UnnnicButton
-                iconCenter="mode_comment"
-                size="small"
-                class="button-quick-test"
-                type="alternative"
-                @click.stop="isQuickTestOpen = true"
-              />
-            </UnnnicToolTip>
-          </div>
+            <IntegrateButton
+              v-else
+              @click="changeIntegrateModalState(true)"
+            />
+          </template>
 
-          <UnnnicDropdown
-            v-if="(type === 'base' && canContribute) || type !== 'base'"
-            v-model:open="dropdownOpen"
-            position="bottom-left"
+          <UnnnicToolTip
+            v-else-if="type === 'base'"
+            side="top"
+            :text="$t('content_bases.quick_test')"
+            enabled
           >
-            <template #trigger>
-              <UnnnicIconSvg
-                icon="navigation-menu-vertical-1"
-                class="unnnic-card-intelligence__header__buttons__icon"
-                scheme="neutral-clean"
-                size="sm"
-                clickable
-              />
-            </template>
+            <UnnnicButton
+              iconCenter="mode_comment"
+              size="small"
+              class="button-quick-test"
+              type="alternative"
+              @click.stop="isQuickTestOpen = true"
+            />
+          </UnnnicToolTip>
 
-            <div v-if="repositoryDetail.repository_type === 'classifier'">
-              <UnnnicDropdownItem @click="showDetailModal(intentModal)">
-                <div
-                  class="unnnic-card-intelligence__header__buttons__dropdown"
-                >
-                  <UnnnicIconSvg
-                    size="sm"
-                    icon="graph-stats-1"
-                  />
-                  <div>
-                    {{
-                      $tc(
-                        'webapp.intelligences_lib.show_intents',
-                        repositoryDetail.intents.length,
-                      )
-                    }}
-                  </div>
-                </div>
-              </UnnnicDropdownItem>
-
-              <UnnnicDropdownItem @click="showDetailModal(laguagueModal)">
-                <div
-                  class="unnnic-card-intelligence__header__buttons__dropdown"
-                >
-                  <UnnnicIconSvg
-                    size="sm"
-                    icon="translate-1"
-                  />
-                  <div>
-                    {{
-                      $tc(
-                        'webapp.intelligences_lib.show_languages',
-                        repositoryDetail.available_languages.length,
-                      )
-                    }}
-                  </div>
-                </div>
-              </UnnnicDropdownItem>
-
-              <UnnnicDropdownItem
-                v-if="!repositoryDetail.is_private"
-                @click="openCopyConfirm(repositoryDetail.name)"
-              >
-                <div
-                  class="unnnic-card-intelligence__header__buttons__dropdown"
-                >
-                  <UnnnicIconSvg
-                    size="sm"
-                    icon="copy-paste-1"
-                  />
-                  <div>{{ $t('webapp.home.copy-intelligence') }}</div>
-                </div>
-              </UnnnicDropdownItem>
-            </div>
-
-            <div
-              v-else-if="
-                (type === 'base' && canContribute) || type === 'intelligences'
-              "
-            >
-              <UnnnicDropdownItem @click="deleteBase(repositoryDetail)">
-                <div
-                  class="unnnic-card-intelligence__header__buttons__dropdown"
-                >
-                  <UnnnicIconSvg
-                    size="sm"
-                    icon="delete"
-                    scheme="feedback-red"
-                  />
-                  <div :style="{ color: '#E53E3E' }">Excluir base</div>
-                </div>
-              </UnnnicDropdownItem>
-            </div>
-
-            <div v-else-if="type === 'repository' || type === 'intelligence'">
-              <UnnnicDropdownItem @click="viewContentBases">
-                <div
-                  class="unnnic-card-intelligence__header__buttons__dropdown"
-                >
-                  <UnnnicIconSvg
-                    size="sm"
-                    icon="article"
-                  />
-
-                  <div>
-                    {{ $t('intelligences.view_bases') }}
-                  </div>
-                </div>
-              </UnnnicDropdownItem>
-
-              <UnnnicDropdownItem
-                @click="isDeleteIntelligenceConfirmationOpen = true"
-              >
-                <div
-                  class="unnnic-card-intelligence__header__buttons__dropdown"
-                >
-                  <UnnnicIconSvg
-                    size="sm"
-                    icon="delete"
-                    scheme="feedback-red"
-                  />
-
-                  <div :style="{ color: '#E53E3E' }">
-                    {{ $t('intelligences.delete_intelligence') }}
-                  </div>
-                </div>
-              </UnnnicDropdownItem>
-            </div>
-          </UnnnicDropdown>
+          <DropdownActions
+            v-if="actions.length"
+            :actions="actions"
+          />
         </div>
-      </section>
+      </header>
 
-      <section class="unnnic-card-intelligence__description">
+      <UnnnicIntelligenceText
+        tag="p"
+        color="neutral-dark"
+        family="secondary"
+        size="body-gt"
+        class="unnnic-card-intelligence__description"
+      >
         {{ repositoryDetail.description }}
-      </section>
+      </UnnnicIntelligenceText>
 
-      <!-- <section v-if="type === 'repository'" class="unnnic-card-intelligence__type">
-        <div class="unnnic-card-intelligence__type__text">
-          {{ $t(`webapp.intelligences_lib.repository_type.${repositoryDetail.repository_type}`) }}
-        </div>
-        <unnnic-tool-tip
-          v-if="repositoryDetail.repository_type === 'classifier'"
-          :text="$t('webapp.intelligences_lib.intelligence_tooltip')"
-          enabled
-          side="bottom"
-          max-width="17rem"
-        >
-          <unnnic-icon-svg
-            icon="information-circle-4"
-            scheme="neutral-soft"
-            size="sm"
-          />
-        </unnnic-tool-tip>
-        <unnnic-tool-tip
-          v-else-if="repositoryDetail.repository_type === 'content'"
-          :text="$t('webapp.intelligences_lib.intelligence_tooltip_content')"
-          enabled
-          side="bottom"
-          max-width="17rem"
-        >
-          <unnnic-icon-svg
-            icon="information-circle-4"
-            scheme="neutral-soft"
-            size="sm"
-          />
-        </unnnic-tool-tip>
-      </section> -->
+      <UnnnicDivider
+        ySpacing="xs"
+        scheme="neutral-lightest"
+      />
 
       <footer
         v-if="type === 'base'"
@@ -236,8 +79,6 @@
       >
         {{ language }}
       </footer>
-
-      <div class="unnnic-card-intelligence__divider"></div>
 
       <section class="unnnic-card-intelligence__detail">
         <div
@@ -494,14 +335,22 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import IntegrationModal from '@/components/shared/IntegrationModal.vue';
+import IntegrateButton from '@/components/repository/IntegrateButton.vue';
 import SideBarContentBases from './SideBarContentBases.vue';
 import SideBarQuickTest from './SideBarQuickTest.vue';
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
+import DropdownActions from '@/views/repository/content/ContentItemActions.vue';
 
 export default {
   name: 'HomeRepositoryCard',
-  components: { IntegrationModal, SideBarContentBases, SideBarQuickTest },
+  components: {
+    IntegrationModal,
+    SideBarContentBases,
+    SideBarQuickTest,
+    IntegrateButton,
+    DropdownActions,
+  },
   props: {
     type: {
       type: String,
@@ -534,10 +383,69 @@ export default {
       deletingIntelligence: false,
     };
   },
-  mounted() {
-    this.checkIfHasIntegration();
-  },
+
   computed: {
+    actions() {
+      const actions = [];
+
+      if (this.repositoryDetail.repository_type === 'classifier') {
+        actions.push({
+          scheme: 'neutral-dark',
+          icon: 'graph-stats-1',
+          text: this.$tc(
+            'webapp.intelligences_lib.show_intents',
+            this.repositoryDetail.intents.length,
+          ),
+          onClick: () => this.showDetailModal(this.intentModal),
+        });
+
+        actions.push({
+          scheme: 'neutral-dark',
+          icon: 'translate-1',
+          text: this.$tc(
+            'webapp.intelligences_lib.show_languages',
+            this.repositoryDetail.available_languages.length,
+          ),
+          onClick: () => this.showDetailModal(this.laguagueModal),
+        });
+
+        if (!this.repositoryDetail.is_private) {
+          actions.push({
+            scheme: 'neutral-dark',
+            icon: 'copy-paste-1',
+            text: this.$t('webapp.home.copy-intelligence'),
+            onClick: () => this.openCopyConfirm(this.repositoryDetail.name),
+          });
+        }
+      } else if (
+        (this.type === 'base' && this.canContribute) ||
+        this.type === 'intelligences'
+      ) {
+        actions.push({
+          scheme: 'aux-red-500',
+          icon: 'delete',
+          text: this.$t('bases.actions.delete'),
+          onClick: () => this.deleteBase(this.repositoryDetail),
+        });
+      } else if (['repository', 'intelligence'].includes(this.type)) {
+        actions.push({
+          scheme: 'neutral-dark',
+          icon: 'article',
+          text: this.$t('intelligences.view_bases'),
+          onClick: () => this.viewContentBases(),
+        });
+
+        actions.push({
+          scheme: 'aux-red-500',
+          icon: 'delete',
+          text: this.$t('intelligences.delete_intelligence'),
+          onClick: () => (this.isDeleteIntelligenceConfirmationOpen = true),
+        });
+      }
+
+      return actions;
+    },
+
     ...mapGetters(['getProjectSelected', 'getOrgSelected']),
 
     language() {
@@ -595,6 +503,11 @@ export default {
       return scoreResult.toFixed(0);
     },
   },
+
+  mounted() {
+    this.checkIfHasIntegration();
+  },
+
   methods: {
     ...mapActions([
       'setIntegrationRepository',
@@ -742,89 +655,46 @@ export default {
 
 <style lang="scss" scoped>
 .button-quick-test {
-  margin-right: $unnnic-spacing-xs;
-
   :deep(.material-symbols-rounded) {
     color: $unnnic-color-weni-600;
   }
 }
 </style>
 
-<style lang="scss">
-.base__footer {
-  margin-top: 0.625 * $unnnic-font-size - $unnnic-border-width-thinner;
-  padding-top: 0.625 * $unnnic-font-size;
-  border-top: $unnnic-border-width-thinner solid $unnnic-color-neutral-light;
-
-  color: $unnnic-color-neutral-cloudy;
-  font-family: $unnnic-font-family-secondary;
-  font-size: $unnnic-font-size-body-md;
-  line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
-  font-weight: $unnnic-font-weight-bold;
-}
-
+<style lang="scss" scoped>
 .unnnic-card-intelligence {
-  display: flex;
-  flex-direction: column;
-  background-color: $unnnic-color-background-snow;
-  border-radius: $unnnic-border-radius-md;
-  padding: $unnnic-inset-md;
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-  // margin-bottom: $unnnic-inline-sm;
-  cursor: pointer;
-  flex: 1;
-
-  &--base {
-    .unnnic-card-intelligence__description {
-      margin: 0;
-    }
-  }
-
-  &:hover {
-    box-shadow: 0 0.25rem 8px lightgrey;
-  }
-
-  &__clickable {
-    cursor: pointer;
-  }
-
   &__header {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    column-gap: $unnnic-spacing-xs;
 
-    &__detail {
-      &__title {
-        font-family: $unnnic-font-family-secondary;
-        font-weight: $unnnic-font-weight-bold;
-        font-size: $unnnic-font-size-body-lg;
-        line-height: $unnnic-font-size-body-lg + $unnnic-line-height-medium;
-        color: $unnnic-color-neutral-darkest;
+    &__title {
+      color: $unnnic-color-neutral-darkest;
+      font-size: $unnnic-font-size-body-lg;
+      line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-bold;
 
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: block;
-        max-width: 13rem;
-      }
-
-      &__subtitle {
-        font-family: $unnnic-font-family-secondary;
-        font-weight: $unnnic-font-weight-regular;
-        font-size: $unnnic-font-size-body-md;
-        line-height: $unnnic-font-size-body-md + $unnnic-line-height-medium;
-        color: $unnnic-color-neutral-cloudy;
-
-        strong {
-          color: $unnnic-color-brand-weni;
-        }
-      }
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     &__buttons {
       display: flex;
       align-items: center;
+      column-gap: $unnnic-spacing-xs;
+
+      &__icon-integrated {
+        $button-size: 2.375 * $unnnic-font-size;
+
+        width: $button-size;
+        height: $button-size;
+        text-align: center;
+        line-height: $button-size;
+      }
 
       &__tag {
         margin-left: $unnnic-inline-xs;
@@ -873,80 +743,92 @@ export default {
   }
 
   &__description {
-    font-family: $unnnic-font-family-secondary;
-    font-weight: $unnnic-font-weight-regular;
-    font-size: $unnnic-font-size-body-lg;
-    color: $unnnic-color-neutral-cloudy;
-    line-height: $unnnic-font-size-body-lg + $unnnic-line-height-medium;
-    margin: $unnnic-spacing-stack-sm 0;
-    min-height: 3.125rem;
-    padding-top: $unnnic-inline-xs;
-
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
 
-  &__type {
-    display: flex;
-    align-items: center;
-    font-family: $unnnic-font-family-secondary;
-    font-weight: $unnnic-font-weight-bold;
-    font-size: $unnnic-font-size-body-md;
-    color: $unnnic-color-neutral-cloudy;
-    line-height: $unnnic-font-size-body-md + $unnnic-line-height-medium;
-
-    &__text {
-      margin-right: 10px;
-    }
-
-    &__icon {
-      margin-left: 10px;
-    }
-  }
-
-  &__divider {
-    border-bottom: $unnnic-border-width-thinner solid
-      $unnnic-color-neutral-lightest;
-    margin: $unnnic-spacing-stack-xs 0;
-  }
-
   &__detail {
     display: flex;
     align-items: center;
+    column-gap: $unnnic-spacing-xs;
 
     &__content {
-      width: 50%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      row-gap: $unnnic-spacing-nano;
 
       &__data {
-        font-family: $unnnic-font-family-secondary;
-        font-weight: $unnnic-font-weight-regular;
-        font-size: $unnnic-font-size-body-gt;
         color: $unnnic-color-neutral-dark;
-        line-height: $unnnic-font-size-body-gt + $unnnic-line-height-medium;
-        padding-right: $unnnic-inline-xs;
-        padding-bottom: $unnnic-spacing-stack-nano;
+        font-size: $unnnic-font-size-body-gt;
+        line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+        font-weight: $unnnic-font-weight-regular;
+        font-family: $unnnic-font-family-secondary;
 
         &__info {
           display: flex;
           align-items: center;
-
-          &__icon {
-            margin-right: $unnnic-inline-xs;
-          }
+          column-gap: $unnnic-spacing-xs;
 
           &__number {
-            font-family: $unnnic-font-family-secondary;
-            font-weight: $unnnic-font-weight-black;
-            font-size: $unnnic-font-size-body-gt;
-            line-height: $unnnic-font-size-body-gt + $unnnic-line-height-medium;
             color: $unnnic-color-neutral-darkest;
-            padding-right: $unnnic-inline-xs;
+            font-size: $unnnic-font-size-body-gt;
+            line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+            font-weight: $unnnic-font-weight-bold;
+            font-family: $unnnic-font-family-secondary;
           }
         }
       }
     }
+  }
+
+  &__type__icon {
+    margin-left: $unnnic-spacing-nano;
+  }
+
+  &--intelligence,
+  &--repository {
+    .unnnic-card-intelligence__description {
+      margin-top: $unnnic-spacing-sm;
+      margin-bottom: $unnnic-spacing-xs;
+    }
+  }
+
+  &--base {
+    .unnnic-card-intelligence__description {
+      margin-top: $unnnic-spacing-xs;
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.base__footer {
+  color: $unnnic-color-neutral-cloudy;
+  font-family: $unnnic-font-family-secondary;
+  font-size: $unnnic-font-size-body-md;
+  line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
+  font-weight: $unnnic-font-weight-bold;
+}
+
+.unnnic-card-intelligence {
+  display: flex;
+  flex-direction: column;
+  background-color: $unnnic-color-background-snow;
+  border-radius: $unnnic-border-radius-md;
+  padding: $unnnic-spacing-md - $unnnic-border-width-thinner;
+  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+  cursor: pointer;
+  flex: 1;
+
+  &:hover {
+    box-shadow: 0 0.25rem 8px lightgrey;
+  }
+
+  &__clickable {
+    cursor: pointer;
   }
 }
 </style>

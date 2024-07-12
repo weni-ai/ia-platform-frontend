@@ -14,7 +14,6 @@
     </template>
 
     <section
-      v-popover.detached
       activator="click"
       class="options"
       horizontal="right-right"

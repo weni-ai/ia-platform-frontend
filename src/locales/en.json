@@ -43,6 +43,9 @@
           "placeholder": "Description"
         }
       }
+    },
+    "actions": {
+      "delete": "Delete base"
     }
   },
   "router": {
