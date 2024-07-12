@@ -41,7 +41,6 @@
           shape="accordion"
           @load-more="loadSites"
           @removed="removedSite"
-          @update:items="updateSites"
         />
         <section>
           <BasesFormGenericListHeader
@@ -102,7 +101,6 @@ export default defineComponent({
     'removed-site',
     'update:filterName',
     'update:files',
-    'update:sites',
   ],
   setup(props, { emit }) {
     const { filterNameProp, filesProp, sitesProp, textProp } = toRefs(props);
@@ -132,10 +130,6 @@ export default defineComponent({
       emit('update:files', updatedItems);
     };
 
-    const updateSites = (updatedItems) => {
-      emit('update:sites', updatedItems);
-    };
-
     return {
       filterName: filterNameProp,
       files: filesProp,
@@ -148,7 +142,6 @@ export default defineComponent({
       removedFile,
       removedSite,
       updateFiles,
-      updateSites,
     };
   },
 });

@@ -44,7 +44,6 @@
             @removed-file="removedFile"
             @removed-site="removedSite"
             @update:files="(v) => (files = v)"
-            @update:sites="(v) => (sites = v)"
             @update:filterName="(v) => (filterName = v)"
           />
           <RouterActions
@@ -138,7 +137,7 @@
 </template>
 
 <script>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { get } from 'lodash';
@@ -151,6 +150,7 @@ import RouterCustomization from './RouterCustomization.vue';
 import RouterTunings from './RouterTunings.vue';
 import ModalPreviewQRCode from './Preview/ModalPreviewQRCode.vue';
 import ModalSaveChangesError from './ModalSaveChangesError.vue';
+import i18n from '@/utils/plugins/i18n.js';
 
 export default {
   name: 'Brain',
@@ -181,12 +181,12 @@ export default {
     const refreshPreviewValue = ref(0);
     const isMobilePreviewModalOpen = ref(false);
     const filterName = ref('');
-    const files = ref({
+    const files = reactive({
       status: null,
       next: null,
       data: [],
     });
-    const sites = ref({
+    const sites = reactive({
       status: null,
       next: null,
       data: [],
@@ -236,25 +236,21 @@ export default {
     };
 
     const removedFile = (fileUuid) => {
-      files.value.data = files.value.data.filter(
-        ({ uuid }) => uuid !== fileUuid,
-      );
+      files.data = files.data.filter(({ uuid }) => uuid !== fileUuid);
     };
 
     const removedSite = (siteUuid) => {
-      sites.value.data = sites.value.data.filter(
-        ({ uuid }) => uuid !== siteUuid,
-      );
+      sites.data = sites.data.filter(({ uuid }) => uuid !== siteUuid);
     };
 
     const loadFiles = async () => {
-      files.value.status = 'loading';
+      files.status = 'loading';
       const { data } = await nexusaiAPI.intelligences.contentBases.files.list({
         contentBaseUuid: contentBaseUuid.value,
-        next: files.value.next,
+        next: files.next,
       });
 
-      files.value.data = files.value.data.concat(
+      files.data = files.data.concat(
         data.results
           .map((file) => ({
             ...file,
@@ -266,32 +262,32 @@ export default {
           }))
           .filter(
             ({ uuid }) =>
-              !files.value.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+              !files.data.some((alreadyIn) => alreadyIn.uuid === uuid),
           ),
       );
 
-      files.value.status = null;
-      files.value.next = data.next;
+      files.status = null;
+      files.next = data.next;
 
       if (!data.next) {
-        files.value.status = 'complete';
+        files.status = 'complete';
       }
     };
 
     const loadSites = async () => {
-      sites.value.status = 'loading';
+      sites.status = 'loading';
 
       try {
         const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
           {
             contentBaseUuid: contentBaseUuid.value,
-            next: sites.value.next,
+            next: sites.next,
           },
         );
 
-        sites.value.status = 'complete';
+        sites.status = 'complete';
 
-        sites.value.data = sites.value.data.concat(
+        sites.data = sites.data.concat(
           data
             .map((site) => ({
               ...site,
@@ -305,12 +301,12 @@ export default {
             }))
             .filter(
               ({ uuid }) =>
-                !sites.value.data.some((alreadyIn) => alreadyIn.uuid === uuid),
+                !sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
             ),
         );
       } finally {
-        if (sites.value.status !== 'complete') {
-          sites.value.status = null;
+        if (sites.status !== 'complete') {
+          sites.status = null;
         }
       }
     };
@@ -371,6 +367,108 @@ export default {
       loadSites();
       loadRouterOptions();
     });
+
+    function successMessage() {
+      store.state.alert = {
+        type: 'success',
+        text: i18n.global.t(
+          'content_bases.files.content_of_the_files_has_been_added',
+        ),
+      };
+    }
+
+    const itemsBeingProcessed = ref([]);
+
+    function addItemBeingProcessed(type, itemUuid) {
+      const alreadyIn = itemsBeingProcessed.value.find(
+        ({ uuid }) => uuid === itemUuid,
+      );
+
+      if (!alreadyIn) {
+        itemsBeingProcessed.value.push({
+          type,
+          uuid: itemUuid,
+        });
+      }
+    }
+
+    watch(
+      [() => files.data, () => sites.data],
+      ([files, sites]) => {
+        files
+          .filter(({ status }) => status === 'processing')
+          .forEach((site) => {
+            addItemBeingProcessed('files', site.uuid);
+          });
+
+        sites
+          .filter(({ status }) => status === 'processing')
+          .forEach((site) => {
+            addItemBeingProcessed('sites', site.uuid);
+          });
+      },
+      { deep: true },
+    );
+
+    function removeFirstItemBeingProcessed() {
+      return itemsBeingProcessed.value.shift();
+    }
+
+    function moveFirstItemBeingProcessedToTheEnd() {
+      const firstItem = removeFirstItemBeingProcessed();
+      itemsBeingProcessed.value.push(firstItem);
+    }
+
+    async function checkIfItemHasAlreadyBeenProcessed() {
+      const { type, uuid } = itemsBeingProcessed.value.at(0);
+
+      const item = { files, sites }[type].data.find(
+        (item) => item.uuid === uuid,
+      );
+
+      await nexusaiAPI.intelligences.contentBases[type]
+        .read({
+          contentBaseUuid: contentBaseUuid.value,
+          uuid,
+        })
+        .then(({ data }) => {
+          if (data.status === 'success') {
+            removeFirstItemBeingProcessed();
+
+            item.status = 'uploaded';
+            item.file_name = data.file_name;
+            item.created_at = data.created_at;
+
+            if (type === 'files') {
+              successMessage();
+            }
+          } else if (data.status === 'fail') {
+            removeFirstItemBeingProcessed();
+
+            item.status = data.status;
+          } else {
+            moveFirstItemBeingProcessedToTheEnd();
+          }
+        })
+        .catch((error) => {
+          moveFirstItemBeingProcessedToTheEnd();
+        });
+
+      if (itemsBeingProcessed.value.length >= 1) {
+        setTimeout(checkIfItemHasAlreadyBeenProcessed, 3000);
+      }
+    }
+
+    watch(
+      () => itemsBeingProcessed.value.length,
+      (current, previous) => {
+        const hasBeenAddedSomeItem = previous === 0 && current >= 1;
+
+        if (hasBeenAddedSomeItem) {
+          setTimeout(checkIfItemHasAlreadyBeenProcessed, 3000);
+        }
+      },
+    );
 
     return {
       routerTabs,
