@@ -55,56 +55,12 @@
       "
     />
 
-    <RightSidebar
+    <BarAddSite
       v-if="isAddSiteOpen"
-      :title="$t('content_bases.sites.sidebar_add.title')"
-      :description="$t('content_bases.sites.sidebar_add.description')"
-      dividerYSpacing="lg"
+      :contentBaseUuid="contentBaseUuid"
       @close="isAddSiteOpen = false"
-    >
-      <form
-        class="add-form"
-        @submit.prevent="addSites"
-      >
-        <UnnnicFormElement
-          :label="$t('content_bases.sites.sidebar_add.fields.link.label')"
-        >
-          <section class="add-form__links">
-            <UnnnicInput
-              v-for="(site, index) in sites"
-              :key="index"
-              v-model="site.value"
-              :type="
-                !site.value.trim() || validURL(site.value) ? 'normal' : 'error'
-              "
-              :placeholder="
-                $t('content_bases.sites.sidebar_add.fields.link.placeholder')
-              "
-              :iconRight="sites.length > 1 ? 'bin-1-1' : null"
-              iconRightClickable
-              @icon-right-click="sites.splice(index, 1)"
-            ></UnnnicInput>
-
-            <UnnnicButton
-              type="tertiary"
-              size="small"
-              iconLeft="add-1"
-              :type.prop="'button'"
-              @click.prevent="sites.push({ value: '' })"
-            >
-              {{ $t('content_bases.sites.sidebar_add.button_more_one') }}
-            </UnnnicButton>
-          </section>
-        </UnnnicFormElement>
-
-        <UnnnicButton
-          class="add-form__button-submit"
-          :disabled="submitDisabled"
-        >
-          {{ $t('content_bases.sites.sidebar_add.button_load_content') }}
-        </UnnnicButton>
-      </form>
-    </RightSidebar>
+      @addedSites="addedSites"
+    />
 
     <UnnnicModal
       v-if="modalDeleteSite"
@@ -154,12 +110,12 @@
 
 <script>
 import nexusaiAPI from '../../../api/nexusaiAPI';
-import RightSidebar from '../../../components/RightSidebar.vue';
+import BarAddSite from './BarAddSite.vue';
 import BasesFormGenericList from './BasesFormGenericList.vue';
 
 export default {
   components: {
-    RightSidebar,
+    BarAddSite,
     BasesFormGenericList,
   },
   props: {
@@ -172,8 +128,6 @@ export default {
     return {
       isAddSiteOpen: false,
 
-      sites: [{ value: '' }],
-
       modalDeleteSite: null,
     };
   },
@@ -185,59 +139,19 @@ export default {
         this.$store.state.router.contentBaseUuid
       );
     },
-
-    submitDisabled() {
-      return !this.sites.filter(({ value }) => this.validURL(value)).length;
-    },
   },
 
   methods: {
+    addedSites(sites) {
+      this.isAddSiteOpen = false;
+
+      this.items.data = this.items.data.concat(sites);
+    },
+
     filterItem(item) {
       return item.created_file_name
         ?.toLowerCase()
         .includes(this.filterText?.toLowerCase());
-    },
-
-    addSites() {
-      const sites = this.sites
-        .filter((site) => this.validURL(site.value))
-        .map((site) => ({
-          file: null,
-          file_name: null,
-          extension_file: 'site',
-          uuid: `temp-${Math.random() * 1000}`,
-          created_file_name: site.value,
-          status: 'uploading',
-        }));
-
-      this.$emit('update:items', {
-        ...this.items,
-        data: this.items.data.concat(sites),
-      });
-
-      Promise.all(
-        sites.map(async (site) => {
-          const { data } =
-            await nexusaiAPI.intelligences.contentBases.sites.create({
-              contentBaseUuid: this.contentBaseUuid,
-              link: site.created_file_name,
-            });
-
-          site.uuid = data.uuid;
-          site.status = 'uploaded';
-        }),
-      ).then(() => {
-        this.$store.state.alert = {
-          type: 'success',
-          text: this.$t(
-            'content_bases.sites.content_of_the_sites_has_been_added',
-          ),
-        };
-      });
-
-      this.sites = [{ value: '' }];
-
-      this.isAddSiteOpen = false;
     },
 
     openDeleteSite(siteUuid, siteURL) {
@@ -325,19 +239,6 @@ export default {
     &__button-add-site {
       width: 12.5 * $unnnic-font-size;
     }
-  }
-}
-
-.add-form {
-  &__links {
-    display: flex;
-    flex-direction: column;
-    row-gap: $unnnic-spacing-xs;
-  }
-
-  &__button-submit {
-    width: 100%;
-    margin-top: $unnnic-spacing-sm;
   }
 }
 </style>
