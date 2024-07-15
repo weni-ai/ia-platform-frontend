@@ -110,6 +110,8 @@ export default {
     clickable: Boolean,
   },
 
+  emits: ['click', 'remove'],
+
   data() {
     return {
       downloading: false,
