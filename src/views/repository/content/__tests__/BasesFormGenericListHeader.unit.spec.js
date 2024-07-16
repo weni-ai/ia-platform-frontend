@@ -144,12 +144,12 @@ describe('BasesFormGenericListHeader.vue', () => {
     });
 
     it('hides accordion expand button', () => {
-      const title = wrapper.find('[data-test="accordion-expand-button"]');
+      const title = wrapper.find(buttons['accordion expand']);
       expect(title.exists()).toBe(false);
     });
 
     it('hides add more button', () => {
-      const title = wrapper.find('[data-test="add-more-button"]');
+      const title = wrapper.find(buttons['add more']);
       expect(title.exists()).toBe(false);
     });
   });
