@@ -11,6 +11,7 @@
       family="secondary"
       weight="bold"
       :size="shape === 'accordion' ? 'body-gt' : 'body-lg'"
+      data-test="title"
     >
       {{ title }}
       <template v-if="counter">({{ counter }})</template>
@@ -22,6 +23,7 @@
       :icon="open ? 'expand_less' : 'expand_more'"
       size="ant"
       clickable
+      data-test="accordion-expand-button"
     />
 
     <UnnnicButton
@@ -29,6 +31,7 @@
       size="small"
       type="primary"
       class="files-list__header__button"
+      data-test="add-more-button"
       @click="$emit('add')"
     >
       {{ addText }}
