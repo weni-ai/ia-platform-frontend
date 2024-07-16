@@ -6,7 +6,7 @@ nexusaiAPI.intelligences.contentBases.files.download = vi
   .fn()
   .mockResolvedValue({
     data: {
-      file: 'https://weni-production-nexus.s3.amazonaws.com/Name%20of%20the%20Text-1618c0f6-60f7-4540-8a9a-77fd77c6c8c3.txt?AWSAccessKeyId=AKIA2YNUJICY3V4O3E46&Signature=X40xMj20eoNaJK%2BODEqCYUHKVOE%3D&Expires=1721140060',
+      file: 'https://link.api/link-to-the-file',
     },
   });
 
@@ -229,7 +229,7 @@ describe('BasesFormFilesItem.vue', () => {
           });
 
           expect(clickedAnchorHTML).toBe(
-            '<a download="Name of the Text.txt" href="https://weni-production-nexus.s3.amazonaws.com/Name%20of%20the%20Text-1618c0f6-60f7-4540-8a9a-77fd77c6c8c3.txt?AWSAccessKeyId=AKIA2YNUJICY3V4O3E46&amp;Signature=X40xMj20eoNaJK%2BODEqCYUHKVOE%3D&amp;Expires=1721140060"></a>',
+            '<a download="Name of the Text.txt" href="https://link.api/link-to-the-file"></a>',
           );
         });
       });
