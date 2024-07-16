@@ -14,7 +14,7 @@ export default mergeConfig(
       coverage: {
         reporter: ['text', 'json'],
         reportsDirectory: './coverage',
-        include: ['src/**/*.vue'],
+        include: ['src/**/*.{vue,js,ts}'],
       },
     },
   }),
