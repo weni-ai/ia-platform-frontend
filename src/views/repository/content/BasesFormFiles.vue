@@ -154,7 +154,6 @@ export default {
 
       modalDeleteFile: null,
       filesBeingProcessedIndex: 0,
-      listOfFilesBeingProcessedTimeOut: null,
 
       events: {
         dragover: (event) => {
@@ -191,28 +190,7 @@ export default {
     counter() {
       return this.files.next ? '10+' : this.files.data.length;
     },
-
-    listOfFilesBeingProcessed() {
-      return this.files.data.filter(({ status }) => status === 'processing');
-    },
   },
-
-  watch: {
-    listOfFilesBeingProcessed: {
-      deep: true,
-      immediate: true,
-
-      handler() {
-        if (this.listOfFilesBeingProcessed.length) {
-          this.listOfFilesBeingProcessedTimeOut = setTimeout(
-            this.waitTillURLBeCreated,
-            6000,
-          );
-        }
-      },
-    },
-  },
-
   mounted() {
     Object.keys(this.events).forEach((eventName) => {
       window.addEventListener(eventName, this.events[eventName]);
@@ -223,8 +201,6 @@ export default {
     Object.keys(this.events).forEach((eventName) => {
       window.removeEventListener(eventName, this.events[eventName]);
     });
-
-    clearTimeout(this.listOfFilesBeingProcessedTimeOut);
   },
 
   methods: {
@@ -328,42 +304,6 @@ export default {
         .catch(() => {
           fileItem.status = 'fail-upload';
           fileItem.file_name = file.name;
-        });
-    },
-
-    waitTillURLBeCreated() {
-      if (this.listOfFilesBeingProcessed.length === 0) {
-        return;
-      }
-
-      const fileItem =
-        this.listOfFilesBeingProcessed[
-          this.filesBeingProcessedIndex % this.listOfFilesBeingProcessed.length
-        ];
-
-      nexusaiAPI.intelligences.contentBases.files
-        .read({
-          contentBaseUuid: this.contentBaseUuid,
-          fileUuid: fileItem.uuid,
-        })
-        .then(({ data }) => {
-          if (data.status === 'success') {
-            fileItem.status = 'uploaded';
-            fileItem.file_name = data.file_name;
-            fileItem.created_at = data.created_at;
-            this.successMessage();
-          } else if (data.status === 'fail') {
-            fileItem.status = data.status;
-          } else {
-            this.filesBeingProcessedIndex += 1;
-          }
-
-          if (this.listOfFilesBeingProcessed.length) {
-            this.listOfFilesBeingProcessedTimeOut = setTimeout(
-              this.waitTillURLBeCreated,
-              10000,
-            );
-          }
         });
     },
 

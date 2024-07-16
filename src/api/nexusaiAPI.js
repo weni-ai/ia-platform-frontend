@@ -343,6 +343,12 @@ export default {
           );
         },
 
+        read({ contentBaseUuid, uuid }) {
+          return request.$http.get(
+            `api/${contentBaseUuid}/content-bases-link/${uuid}/`,
+          );
+        },
+
         delete({ contentBaseUuid, linkUuid }) {
           return request.$http.delete(
             `api/${contentBaseUuid}/content-bases-link/${linkUuid}/`,
@@ -385,9 +391,9 @@ export default {
           );
         },
 
-        read({ contentBaseUuid, fileUuid }) {
+        read({ contentBaseUuid, uuid }) {
           return request.$http.get(
-            `api/${contentBaseUuid}/content-bases-file/${fileUuid}/`,
+            `api/${contentBaseUuid}/content-bases-file/${uuid}/`,
           );
         },
 
