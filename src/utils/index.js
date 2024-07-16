@@ -149,3 +149,12 @@ export const entityEquals = (entities1, entities2) => {
     );
   });
 };
+
+export const createDownloadAnchor = ({ name, href }) => {
+  const a = document.createElement('a');
+
+  a.setAttribute('download', name);
+  a.setAttribute('href', href);
+
+  return a;
+};

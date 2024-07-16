@@ -118,7 +118,7 @@ describe('RouterActions', () => {
     wrapper.vm.openEditAction(actionToEdit);
     await flushPromises();
     await wrapper.vm.$nextTick();
-    console.log('vm ModalEditCation', wrapper.vm.modalEditAction, actionToEdit);
+
     expect(wrapper.vm.modalEditAction).toEqual({
       uuid: actionToEdit.uuid,
       name: actionToEdit.created_file_name,
