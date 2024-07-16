@@ -201,13 +201,6 @@ describe('BasesFormFilesItem.vue', () => {
 
       describe('when user clicks to download file', () => {
         it('downloads the file', async () => {
-          const mockAnchor = {
-            href: '',
-            download: '',
-            click: vi.fn(),
-            setAttribute: vi.fn(),
-          };
-
           let clickedAnchorHTML = '';
 
           vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(
