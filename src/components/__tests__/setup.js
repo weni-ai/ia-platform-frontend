@@ -8,6 +8,8 @@ import UnnnicIntelligenceText from '@/components/unnnic-intelligence/Text.vue';
 class IntersectionObserverMock {
   observe() {}
 
+  unobserve() {}
+
   disconnect() {}
 }
 
