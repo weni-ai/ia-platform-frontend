@@ -20,7 +20,7 @@
     <ModalActions
       v-if="isAddActionOpen"
       :saving="isAdding"
-      @closeModal="isAddActionOpen = false"
+      @close-modal="isAddActionOpen = false"
       @save="saveAction"
     />
 
@@ -29,7 +29,7 @@
       v-model:description="modalEditAction.description"
       :editing="modalEditAction.status === 'editing'"
       :item="modalEditAction.name"
-      @closeModal="modalEditAction = null"
+      @close-modal="modalEditAction = null"
       @edit="editAction"
     />
 
@@ -37,7 +37,7 @@
       v-if="modalDeleteAction"
       :name="modalDeleteAction.name"
       :removing="modalDeleteAction.status === 'removing'"
-      @closeModal="modalDeleteAction = null"
+      @close-modal="modalDeleteAction = null"
       @remove="removeAction"
     />
   </section>
@@ -58,7 +58,13 @@ export default {
     ModalRemoveAction,
   },
   props: {
-    items: Object,
+    items: {
+      type: Object,
+      default() {
+        return {};
+      },
+      required: false,
+    },
   },
 
   data() {
