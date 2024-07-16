@@ -136,7 +136,6 @@ export default {
         return actions;
       }
 
-      /* temporarily hidden on July 15th
       if (this.file.status === 'uploaded') {
         actions.push({
           scheme: 'neutral-dark',
@@ -145,7 +144,6 @@ export default {
           onClick: this.preview,
         });
       }
-      */
 
       if (
         this.file.status === 'uploaded' &&

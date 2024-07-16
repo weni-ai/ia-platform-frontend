@@ -117,7 +117,7 @@ describe('BasesFormFilesItem.vue', () => {
         await dropdownAction.trigger('click');
       });
 
-      describe.skip('when user clicks to see details', () => {
+      describe('when user clicks to see details', () => {
         it('displays FilePreview component', async () => {
           const action = wrapper.find('[data-test="See details"]');
 
@@ -187,7 +187,7 @@ describe('BasesFormFilesItem.vue', () => {
         await dropdownAction.trigger('click');
       });
 
-      describe.skip('when user clicks to see details', () => {
+      describe('when user clicks to see details', () => {
         it('displays FilePreview component', async () => {
           const action = wrapper.find('[data-test="See details"]');
 
