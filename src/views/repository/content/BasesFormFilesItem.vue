@@ -89,7 +89,7 @@
     v-if="modalPreview"
     v-bind="modalPreview"
     modelValue
-    @update:modelValue="modalPreview = null"
+    @update:model-value="modalPreview = null"
   />
 </template>
 
@@ -128,8 +128,11 @@ export default {
         return actions;
       }
 
-      /* temporarily hidden on July 15th
-      if (this.file.status === 'uploaded') {
+      if (
+        this.file.status === 'uploaded' &&
+        this.$store?.state?.Auth?.connectOrgUuid ===
+          'c825e5d1-7111-4d63-9bb0-b3dbb21ae798'
+      ) {
         actions.push({
           scheme: 'neutral-dark',
           icon: 'info',
@@ -137,7 +140,6 @@ export default {
           onClick: this.preview,
         });
       }
-      */
 
       if (
         this.file.status === 'uploaded' &&
