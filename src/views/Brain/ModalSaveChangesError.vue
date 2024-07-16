@@ -22,6 +22,7 @@
 
 <script>
 export default {
+  emits: ['close'],
   computed: {
     tabs() {
       const tabs = this.$store.state.Brain.tabsWithError.map(
