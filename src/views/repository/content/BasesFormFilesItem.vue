@@ -136,11 +136,7 @@ export default {
         return actions;
       }
 
-      if (
-        this.file.status === 'uploaded' &&
-        this.$store?.state?.Auth?.connectOrgUuid ===
-          'c825e5d1-7111-4d63-9bb0-b3dbb21ae798'
-      ) {
+      if (this.file.status === 'uploaded') {
         actions.push({
           scheme: 'neutral-dark',
           icon: 'info',
