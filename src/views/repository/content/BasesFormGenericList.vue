@@ -72,14 +72,36 @@ export default {
     BasesFormGenericListHeader,
   },
   props: {
-    title: String,
-    description: String,
-    addText: String,
-    items: Object,
+    title: {
+      type: String,
+      default: '',
+      required: false,
+    },
+    description: {
+      type: String,
+      default: '',
+      required: false,
+    },
+    addText: {
+      type: String,
+      default: '',
+      required: false,
+    },
+    items: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+      required: false,
+    },
     canEditItem: Boolean,
     hideCounter: Boolean,
     hideToggle: Boolean,
-    filterItem: Function,
+    filterItem: {
+      type: Function,
+      default: () => {},
+      required: false,
+    },
 
     shape: {
       type: String,
@@ -89,6 +111,7 @@ export default {
       },
     },
   },
+  emits: ['add', 'remove', 'edit'],
 
   data() {
     return {
