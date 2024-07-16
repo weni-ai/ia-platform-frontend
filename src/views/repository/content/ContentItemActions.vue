@@ -23,10 +23,8 @@
         v-for="(action, index) in actions"
         :key="index"
         class="options__option"
-        @click="
-          action.onClick();
-          close($refs.selector.$el);
-        "
+        :data-test="action.text"
+        @click="action.onClick()"
       >
         <UnnnicIcon
           :icon="action.icon"

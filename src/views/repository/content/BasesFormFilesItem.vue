@@ -23,6 +23,7 @@
           class="files-list__content__file__icon__itself"
           :size="compressed ? 'sm' : 'avatar-nano'"
           :scheme="iconScheme"
+          data-test="item-icon"
         />
       </section>
 
@@ -32,7 +33,10 @@
           :text="fileName"
           :enabled="!isFailed"
         >
-          <p class="files-list__content__file__content__title">
+          <p
+            class="files-list__content__file__content__title"
+            data-test="name"
+          >
             {{ fileName }}
           </p>
         </UnnnicToolTip>
@@ -60,11 +64,13 @@
           size="sm"
           class="files-list__content__file__actions__icon"
           clickable
+          data-test="action-remove"
           @click.stop="$emit('remove')"
         />
 
         <ContentItemActions
           v-else-if="actions.length"
+          data-test="dropdown-actions"
           :actions="actions"
         />
       </section>
@@ -72,6 +78,7 @@
       <section
         v-if="isProcessing"
         :class="['files-list__content__file__status-bar', file.extension_file]"
+        data-test="processing-bar"
       >
         <section
           class="files-list__content__file__status-bar__filled"
@@ -89,7 +96,7 @@
     v-if="modalPreview"
     v-bind="modalPreview"
     modelValue
-    @update:modelValue="modalPreview = null"
+    @update:model-value="modalPreview = null"
   />
 </template>
 
@@ -97,6 +104,7 @@
 import nexusaiAPI from '../../../api/nexusaiAPI';
 import FilePreview from '@/views/ContentBases/components/FilePreview.vue';
 import ContentItemActions from '@/views/repository/content/ContentItemActions.vue';
+import { createDownloadAnchor } from '@/utils';
 
 export default {
   components: {
@@ -164,10 +172,6 @@ export default {
       }
 
       return actions;
-    },
-
-    fileHref() {
-      return this.file?.file || '';
     },
 
     fileName() {
@@ -244,10 +248,10 @@ export default {
             fileUuid: this.file.uuid,
           });
 
-        const a = document.createElement('a');
-
-        a.setAttribute('download', this.fileName);
-        a.setAttribute('href', data.file);
+        const a = createDownloadAnchor({
+          name: this.fileName,
+          href: data.file,
+        });
 
         a.click();
       } finally {
