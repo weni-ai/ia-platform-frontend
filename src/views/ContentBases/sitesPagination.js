@@ -14,9 +14,11 @@ export function useSitesPagination({ contentBaseUuid }) {
   };
 
   return usePagination({
-    loadNextFn: loadSites,
-    params: {
-      contentBaseUuid,
+    load: {
+      request: loadSites,
+      params: {
+        contentBaseUuid,
+      },
     },
     transform: (site) => ({
       ...site,

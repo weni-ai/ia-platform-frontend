@@ -3,9 +3,11 @@ import { usePagination } from './pagination';
 
 export function useFilesPagination({ contentBaseUuid }) {
   return usePagination({
-    loadNextFn: nexusaiAPI.intelligences.contentBases.files.list,
-    params: {
-      contentBaseUuid,
+    load: {
+      request: nexusaiAPI.intelligences.contentBases.files.list,
+      params: {
+        contentBaseUuid,
+      },
     },
     transform: (file) => ({
       ...file,

@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 
-export function usePagination({ loadNextFn, params, transform }) {
+export function usePagination({ load, transform }) {
   const status = ref(null);
   const next = ref(null);
   const data = ref([]);
@@ -8,8 +8,8 @@ export function usePagination({ loadNextFn, params, transform }) {
   async function loadNext() {
     status.value = 'loading';
 
-    const { data: dataContentBases } = await loadNextFn({
-      ...params,
+    const { data: dataContentBases } = await load.request({
+      ...load.params,
       next: next.value,
     });
 
