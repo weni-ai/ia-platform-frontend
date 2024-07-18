@@ -14,7 +14,7 @@
             :iconLeftClickable="true"
             iconLeft="search-1"
             :placeholder="$t('router.content.fields.search_placeholder')"
-            @update:modelValue="updateFilterName"
+            @update:model-value="updateFilterName"
           />
         </section>
         <UnnnicSkeletonLoading
@@ -31,16 +31,11 @@
           :files="filesProp"
           :filterText="filterName"
           shape="accordion"
-          @load-more="loadFiles"
-          @removed="removedFile"
-          @update:items="updateFiles"
         />
         <BasesFormSites
           :items="sitesProp"
           :filterText="filterName"
           shape="accordion"
-          @load-more="loadSites"
-          @removed="removedSite"
         />
         <section>
           <BasesFormGenericListHeader
@@ -94,40 +89,13 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: [
-    'load-files',
-    'load-sites',
-    'removed-file',
-    'removed-site',
-    'update:filterName',
-    'update:files',
-  ],
+  emits: ['update:filterName', 'update:files'],
   setup(props, { emit }) {
     const { filterNameProp, filesProp, sitesProp, textProp } = toRefs(props);
     const contentStyle = ref('accordion');
 
     const updateFilterName = (value) => {
       emit('update:filterName', value);
-    };
-
-    const loadFiles = () => {
-      emit('load-files');
-    };
-
-    const loadSites = () => {
-      emit('load-sites');
-    };
-
-    const removedFile = (fileUuid) => {
-      emit('removed-file', fileUuid);
-    };
-
-    const removedSite = (siteUuid) => {
-      emit('removed-site', siteUuid);
-    };
-
-    const updateFiles = (updatedItems) => {
-      emit('update:files', updatedItems);
     };
 
     return {
@@ -137,11 +105,6 @@ export default defineComponent({
       text: textProp,
       contentStyle,
       updateFilterName,
-      loadFiles,
-      loadSites,
-      removedFile,
-      removedSite,
-      updateFiles,
     };
   },
 });

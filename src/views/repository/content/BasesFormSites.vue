@@ -48,7 +48,6 @@
       :description="$t('content_bases.sites.sidebar_add.description')"
       :addText="$t('content_bases.sites.add_site')"
       :filterItem="filterItem"
-      @load-more="$emit('load-more')"
       @add="isAddSiteOpen = true"
       @remove="
         ($event) => openDeleteSite($event.uuid, $event.created_file_name || '')
@@ -59,7 +58,7 @@
       v-if="isAddSiteOpen"
       :contentBaseUuid="contentBaseUuid"
       @close="isAddSiteOpen = false"
-      @addedSites="addedSites"
+      @added-sites="addedSites"
     />
 
     <UnnnicModal
@@ -145,7 +144,7 @@ export default {
     addedSites(sites) {
       this.isAddSiteOpen = false;
 
-      this.items.data = this.items.data.concat(sites);
+      sites.forEach((site) => this.items.addItem(site));
     },
 
     filterItem(item) {
@@ -178,7 +177,7 @@ export default {
             }),
           };
 
-          this.$emit('removed', this.modalDeleteSite.uuid);
+          this.items.removeItem({ uuid: this.modalDeleteSite.uuid });
         })
         .finally(() => {
           this.modalDeleteSite = null;

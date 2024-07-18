@@ -35,7 +35,7 @@
           @click="$emit('edit', file)"
         />
 
-        <template v-if="items.status === 'loading'">
+        <template v-if="status === 'loading'">
           <UnnnicSkeletonLoading
             v-for="i in 3"
             :key="i"
@@ -54,7 +54,7 @@
         </UnnnicButton>
 
         <div
-          v-show="!['loading', 'complete'].includes(items.status)"
+          v-show="!['loading', 'complete'].includes(status)"
           ref="end-of-list-element"
         ></div>
       </section>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { toValue } from 'vue';
 import BasesFormFilesItem from './BasesFormFilesItem.vue';
 import BasesFormGenericListHeader from './BasesFormGenericListHeader.vue';
 
@@ -107,7 +108,8 @@ export default {
       },
     },
   },
-  emits: ['add', 'remove', 'edit', 'load-more'],
+
+  emits: ['add', 'remove', 'edit'],
 
   data() {
     return {
@@ -118,27 +120,33 @@ export default {
   },
 
   computed: {
+    status() {
+      return toValue(this.items.status);
+    },
+
     counter() {
+      const next = toValue(this.items.next);
+
       return String(
-        this.items.next
-          ? `${this.itemsFiltered.length}+`
-          : this.itemsFiltered.length,
+        next ? `${this.itemsFiltered.length}+` : this.itemsFiltered.length,
       );
     },
 
     itemsFiltered() {
+      const data = toValue(this.items.data);
+
       if (this.filterItem) {
-        return this.items.data.filter(this.filterItem);
+        return data.filter(this.filterItem);
       }
 
-      return this.items.data;
+      return data;
     },
   },
 
   watch: {
     isShowingEndOfList() {
-      if (this.isShowingEndOfList && this.items.status === null) {
-        this.$emit('load-more');
+      if (this.isShowingEndOfList && this.status === null) {
+        this.items.loadNext?.();
       }
     },
   },

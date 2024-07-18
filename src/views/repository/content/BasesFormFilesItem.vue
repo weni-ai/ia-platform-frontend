@@ -261,7 +261,9 @@ export default {
       this.modalPreview = {
         type: this.extension === 'site' ? 'site' : 'file',
         projectUuid: this.$store.state.Auth.connectProjectUuid,
-        contentBaseUuid: this.$store.state.router.contentBaseUuid,
+        contentBaseUuid:
+          this.$store.state.router.contentBaseUuid ||
+          this.$route.params.contentBaseUuid,
         fileUuid: this.file.uuid,
         name: this.fileName,
         createdAt: this.file.created_at,
