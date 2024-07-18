@@ -8,13 +8,13 @@ export function usePagination({ load, transform }) {
   async function loadNext() {
     status.value = 'loading';
 
-    const { data: dataContentBases } = await load.request({
+    const { data: responseData } = await load.request({
       ...load.params,
       next: next.value,
     });
 
     data.value = data.value.concat(
-      dataContentBases.results
+      responseData.results
         .filter(
           ({ uuid }) =>
             !data.value.some((alreadyIn) => alreadyIn.uuid === uuid),
@@ -23,9 +23,9 @@ export function usePagination({ load, transform }) {
     );
 
     status.value = null;
-    next.value = dataContentBases.next;
+    next.value = responseData.next;
 
-    if (!dataContentBases.next) {
+    if (!responseData.next) {
       status.value = 'complete';
     }
   }
