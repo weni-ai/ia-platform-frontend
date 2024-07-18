@@ -89,18 +89,14 @@ export default {
     },
     items: {
       type: Object,
-      default: () => {
-        return {};
-      },
-      required: false,
+      required: true,
     },
     canEditItem: Boolean,
     hideCounter: Boolean,
     hideToggle: Boolean,
     filterItem: {
       type: Function,
-      default: () => {},
-      required: false,
+      default: null,
     },
 
     shape: {
@@ -111,7 +107,7 @@ export default {
       },
     },
   },
-  emits: ['add', 'remove', 'edit'],
+  emits: ['add', 'remove', 'edit', 'load-more'],
 
   data() {
     return {
@@ -159,16 +155,6 @@ export default {
 
   beforeUnmount() {
     this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
-  },
-
-  methods: {
-    toggleAccordionOpen() {
-      if (this.shape !== 'accordion') {
-        return;
-      }
-
-      this.open = !this.open;
-    },
   },
 };
 </script>
