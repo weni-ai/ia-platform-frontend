@@ -56,7 +56,10 @@
             <section class="content-base__content-tab">
               <template v-if="tab === 'files'">
                 <UnnnicSkeletonLoading
-                  v-if="files.status === 'loading' && files.data.length === 0"
+                  v-if="
+                    files.status.value === 'loading' &&
+                    files.data.value.length === 0
+                  "
                   tag="div"
                   height="100%"
                   class="repository-base-edit__wrapper__card-content"
@@ -67,8 +70,6 @@
                     v-model:files="files"
                     :filterText="''"
                     :shape="'normal'"
-                    @load-more="loadFiles"
-                    @removed="removedFile"
                   />
                 </template>
               </template>
@@ -78,8 +79,6 @@
                   v-model:items="sites"
                   :filterText="''"
                   :shape="'normal'"
-                  @load-more="loadSites"
-                  @removed="removedSite"
                 />
               </template>
             </section>
@@ -128,6 +127,8 @@ import BasesFormFiles from '@/views/repository/content/BasesFormFiles.vue';
 import BasesFormSites from '@/views/repository/content/BasesFormSites.vue';
 import BasesFormText from '@/views/repository/content/BasesFormText.vue';
 import Tests from '@/views/repository/content/Tests.vue';
+import { useFilesPagination } from './filesPagination';
+import { useSitesPagination } from './sitesPagination';
 
 const route = useRoute();
 
@@ -147,16 +148,12 @@ const contentBaseText = reactive({
   oldValue: '',
 });
 
-const files = reactive({
-  status: null,
-  next: null,
-  data: [],
+const files = useFilesPagination({
+  contentBaseUuid: route.params.contentBaseUuid,
 });
 
-const sites = reactive({
-  status: null,
-  next: null,
-  data: [],
+const sites = useSitesPagination({
+  contentBaseUuid: route.params.contentBaseUuid,
 });
 
 const tab = ref('files');
@@ -182,7 +179,11 @@ const tabs = computed(() => {
 });
 
 const shouldShowSideareaTest = computed(() => {
-  return files.data.length || sites.data.length || contentBaseText.oldValue;
+  return (
+    files.data.value.length ||
+    sites.data.value.length ||
+    contentBaseText.oldValue
+  );
 });
 
 watch(
@@ -190,8 +191,8 @@ watch(
   async () => {
     loadContentBase();
     loadContentBaseText();
-    loadFiles();
-    loadSites();
+    files.loadNext();
+    sites.loadNext();
   },
   { immediate: true },
 );
@@ -237,81 +238,6 @@ function receiveUpdatedContentBase({ title, language, description }) {
   contentBase.title = title;
   contentBase.language = language;
   contentBase.description = description;
-}
-
-async function loadFiles() {
-  files.status = 'loading';
-
-  const { data } = await nexusaiAPI.intelligences.contentBases.files.list({
-    contentBaseUuid: route.params.contentBaseUuid,
-    next: files.next,
-  });
-
-  files.data = files.data.concat(
-    data.results
-      .map((file) => ({
-        ...file,
-        status:
-          {
-            Processing: 'processing',
-            success: 'uploaded',
-          }[file.status] || file.status,
-      }))
-      .filter(
-        ({ uuid }) => !files.data.some((alreadyIn) => alreadyIn.uuid === uuid),
-      ),
-  );
-
-  files.status = null;
-  files.next = data.next;
-
-  if (!data.next) {
-    const status = 'complete';
-    files.status = status;
-  }
-}
-
-async function loadSites() {
-  sites.status = 'loading';
-
-  try {
-    const { data } = await nexusaiAPI.intelligences.contentBases.sites.list({
-      contentBaseUuid: route.params.contentBaseUuid,
-      next: sites.next,
-    });
-
-    sites.status = 'complete';
-
-    sites.data = sites.data.concat(
-      data
-        .map((site) => ({
-          ...site,
-          extension_file: 'site',
-          created_file_name: site.link,
-          status:
-            {
-              Processing: 'processing',
-              success: 'uploaded',
-            }[site.status] || site.status,
-        }))
-        .filter(
-          ({ uuid }) =>
-            !sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
-        ),
-    );
-  } finally {
-    if (sites.status !== 'complete') {
-      sites.status = null;
-    }
-  }
-}
-
-function removedFile(fileUuid) {
-  files.data = files.data.filter(({ uuid }) => uuid !== fileUuid);
-}
-
-function removedSite(siteUuid) {
-  sites.data = sites.data.filter(({ uuid }) => uuid !== siteUuid);
 }
 </script>
 

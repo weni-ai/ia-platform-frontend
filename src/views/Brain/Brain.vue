@@ -39,12 +39,8 @@
             :filesProp="files"
             :sitesProp="sites"
             :textProp="text"
-            @load-files="loadFiles"
-            @load-sites="loadSites"
-            @removed-file="removedFile"
-            @removed-site="removedSite"
             @update:files="(v) => (files = v)"
-            @update:filterName="(v) => (filterName = v)"
+            @update:filter-name="(v) => (filterName = v)"
           />
           <RouterActions
             v-else-if="$route.name === 'router-actions'"
@@ -137,7 +133,7 @@
 </template>
 
 <script>
-import { ref, computed, watch, onMounted, reactive } from 'vue';
+import { ref, computed, watch, onMounted, toValue } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { get } from 'lodash';
@@ -151,6 +147,8 @@ import RouterTunings from './RouterTunings.vue';
 import ModalPreviewQRCode from './Preview/ModalPreviewQRCode.vue';
 import ModalSaveChangesError from './ModalSaveChangesError.vue';
 import i18n from '@/utils/plugins/i18n.js';
+import { useFilesPagination } from '../ContentBases/filesPagination';
+import { useSitesPagination } from '../ContentBases/sitesPagination';
 
 export default {
   name: 'Brain',
@@ -181,16 +179,7 @@ export default {
     const refreshPreviewValue = ref(0);
     const isMobilePreviewModalOpen = ref(false);
     const filterName = ref('');
-    const files = reactive({
-      status: null,
-      next: null,
-      data: [],
-    });
-    const sites = reactive({
-      status: null,
-      next: null,
-      data: [],
-    });
+
     const text = ref({
       open: true,
       status: null,
@@ -225,6 +214,14 @@ export default {
         route.params.intelligenceUuid || store.state.router.intelligenceUuid,
     );
 
+    const files = useFilesPagination({
+      contentBaseUuid: contentBaseUuid.value,
+    });
+
+    const sites = useSitesPagination({
+      contentBaseUuid: contentBaseUuid.value,
+    });
+
     const onTabChange = (pageName) => {
       if (route.name !== pageName) {
         router.push({ name: pageName });
@@ -233,82 +230,6 @@ export default {
 
     const refreshPreview = () => {
       refreshPreviewValue.value += 1;
-    };
-
-    const removedFile = (fileUuid) => {
-      files.data = files.data.filter(({ uuid }) => uuid !== fileUuid);
-    };
-
-    const removedSite = (siteUuid) => {
-      sites.data = sites.data.filter(({ uuid }) => uuid !== siteUuid);
-    };
-
-    const loadFiles = async () => {
-      files.status = 'loading';
-      const { data } = await nexusaiAPI.intelligences.contentBases.files.list({
-        contentBaseUuid: contentBaseUuid.value,
-        next: files.next,
-      });
-
-      files.data = files.data.concat(
-        data.results
-          .map((file) => ({
-            ...file,
-            status:
-              {
-                Processing: 'processing',
-                success: 'uploaded',
-              }[file.status] || file.status,
-          }))
-          .filter(
-            ({ uuid }) =>
-              !files.data.some((alreadyIn) => alreadyIn.uuid === uuid),
-          ),
-      );
-
-      files.status = null;
-      files.next = data.next;
-
-      if (!data.next) {
-        files.status = 'complete';
-      }
-    };
-
-    const loadSites = async () => {
-      sites.status = 'loading';
-
-      try {
-        const { data } = await nexusaiAPI.intelligences.contentBases.sites.list(
-          {
-            contentBaseUuid: contentBaseUuid.value,
-            next: sites.next,
-          },
-        );
-
-        sites.status = 'complete';
-
-        sites.data = sites.data.concat(
-          data
-            .map((site) => ({
-              ...site,
-              extension_file: 'site',
-              created_file_name: site.link,
-              status:
-                {
-                  Processing: 'processing',
-                  success: 'uploaded',
-                }[site.status] || site.status,
-            }))
-            .filter(
-              ({ uuid }) =>
-                !sites.data.some((alreadyIn) => alreadyIn.uuid === uuid),
-            ),
-        );
-      } finally {
-        if (sites.status !== 'complete') {
-          sites.status = null;
-        }
-      }
     };
 
     const loadRouterOptions = async () => {
@@ -363,8 +284,8 @@ export default {
     );
 
     onMounted(() => {
-      loadFiles();
-      loadSites();
+      files.loadNext();
+      sites.loadNext();
       loadRouterOptions();
     });
 
@@ -395,13 +316,13 @@ export default {
     watch(
       [() => files.data, () => sites.data],
       ([files, sites]) => {
-        files
+        toValue(files)
           .filter(({ status }) => status === 'processing')
           .forEach((site) => {
             addItemBeingProcessed('files', site.uuid);
           });
 
-        sites
+        toValue(sites)
           .filter(({ status }) => status === 'processing')
           .forEach((site) => {
             addItemBeingProcessed('sites', site.uuid);
@@ -422,7 +343,7 @@ export default {
     async function checkIfItemHasAlreadyBeenProcessed() {
       const { type, uuid } = itemsBeingProcessed.value.at(0);
 
-      const item = { files, sites }[type].data.find(
+      const item = toValue({ files, sites }[type].data).find(
         (item) => item.uuid === uuid,
       );
 
@@ -488,10 +409,6 @@ export default {
       intelligenceUuid,
       onTabChange,
       refreshPreview,
-      removedFile,
-      removedSite,
-      loadFiles,
-      loadSites,
       loadRouterOptions,
     };
   },

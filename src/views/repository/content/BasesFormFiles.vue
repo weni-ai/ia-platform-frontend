@@ -4,7 +4,7 @@
       'files-area__container',
       `files-area__container--shape-${shape}`,
       {
-        'files-area__container--active': files.data.length && isClientDragging,
+        'files-area__container--active': filesData.length && isClientDragging,
       },
     ]"
     @dragover.prevent
@@ -19,7 +19,7 @@
     />
 
     <div
-      v-if="!files.data.length && shape !== 'accordion'"
+      v-if="!filesData.length && shape !== 'accordion'"
       :class="['paste-area', { 'paste-area--active': isClientDragging }]"
     >
       <section>
@@ -68,7 +68,6 @@
       :filterItem="filterItem"
       @add="$refs['browser-file-input'].click()"
       @remove="onRemove"
-      @load-more="$emit('load-more')"
     />
 
     <UnnnicAlert
@@ -131,7 +130,7 @@ import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 import BasesFormFilesItem from './BasesFormFilesItem.vue';
 import BasesFormGenericList from './BasesFormGenericList.vue';
-import { reactive } from 'vue';
+import { reactive, toValue } from 'vue';
 
 export default {
   components: {
@@ -180,6 +179,14 @@ export default {
   },
 
   computed: {
+    filesData() {
+      return toValue(this.files.data);
+    },
+
+    filesNext() {
+      return toValue(this.files.next);
+    },
+
     contentBaseUuid() {
       return (
         this.$route.params.contentBaseUuid ||
@@ -188,7 +195,7 @@ export default {
     },
 
     counter() {
-      return this.files.next ? '10+' : this.files.data.length;
+      return this.filesNext ? '10+' : this.filesData.length;
     },
   },
   mounted() {
@@ -231,22 +238,6 @@ export default {
       srcElement.value = '';
     },
 
-    updateFileItem(uuid, key, value) {
-      this.$emit('update:files', {
-        ...this.files,
-        data: this.files.data.map((file) => {
-          if (file.uuid !== uuid) {
-            return file;
-          }
-
-          return {
-            ...file,
-            key: value,
-          };
-        }),
-      });
-    },
-
     addFile(file) {
       const extension =
         file.name.lastIndexOf('.') === -1
@@ -266,7 +257,7 @@ export default {
         file_name: file.name,
       });
 
-      this.files.data.push(fileItem);
+      this.files.addItem(fileItem);
 
       fileItem.status = 'uploading';
 
@@ -298,8 +289,6 @@ export default {
           } else {
             fileItem.status = 'processing';
           }
-
-          this.updateFileItem(data.uuid, undefined, 'uploaded');
         })
         .catch(() => {
           fileItem.status = 'fail-upload';
@@ -327,10 +316,7 @@ export default {
 
     onRemove($event) {
       if ($event.status === 'fail-upload') {
-        this.$emit('update:files', {
-          ...this.files,
-          data: this.files.data.filter((file) => file.status !== 'fail-upload'),
-        });
+        this.files.removeItem({ uuid: $event.uuid });
       } else {
         this.openDeleteFileModal(
           $event.uuid,
@@ -356,7 +342,7 @@ export default {
             }),
           };
 
-          this.$emit('removed', this.modalDeleteFile.uuid);
+          this.files.removeItem({ uuid: this.modalDeleteFile.uuid });
 
           this.modalDeleteFile = null;
         });

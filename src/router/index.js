@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import RepositoryContentBases from '../views/repository/content/Bases.vue';
-import RepositoryContentBasesForm from '../views/repository/content/BasesForm.vue';
 import ContentBasesForm from '@/views/ContentBases/Form.vue';
 import Brain from '../views/Brain/Brain.vue';
 import RepositoryContentAdjustment from '../views/repository/content/ContentAdjustments.vue';
