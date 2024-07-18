@@ -19,6 +19,7 @@
 
     <ModalActions
       v-if="isAddActionOpen"
+      :currentActions="items.data"
       :saving="isAdding"
       @close-modal="isAddActionOpen = false"
       @save="saveAction"
