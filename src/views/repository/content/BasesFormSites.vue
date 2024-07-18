@@ -49,9 +49,7 @@
       :addText="$t('content_bases.sites.add_site')"
       :filterItem="filterItem"
       @add="isAddSiteOpen = true"
-      @remove="
-        ($event) => openDeleteSite($event.uuid, $event.created_file_name || '')
-      "
+      @remove="onRemove"
     />
 
     <BarAddSite
@@ -141,6 +139,14 @@ export default {
   },
 
   methods: {
+    onRemove({ uuid, created_file_name, status }) {
+      if (['fail-upload', 'fail'].includes(status)) {
+        this.items.removeItem({ uuid });
+      } else {
+        this.openDeleteSite(uuid, created_file_name || '');
+      }
+    },
+
     addedSites(sites) {
       this.isAddSiteOpen = false;
 

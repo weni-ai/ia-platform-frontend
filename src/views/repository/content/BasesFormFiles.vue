@@ -315,7 +315,7 @@ export default {
     },
 
     onRemove($event) {
-      if ($event.status === 'fail-upload') {
+      if (['fail-upload', 'fail'].includes($event.status)) {
         this.files.removeItem({ uuid: $event.uuid });
       } else {
         this.openDeleteFileModal(
