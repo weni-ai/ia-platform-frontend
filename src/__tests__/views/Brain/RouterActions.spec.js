@@ -17,17 +17,36 @@ const store = createStore({
   },
 });
 
+const mockResponse = {
+  data: [
+    {
+      uuid: '1',
+      name: 'Action 1',
+      prompt: 'Description 1',
+      content_base: '4',
+    },
+    {
+      uuid: '2',
+      name: 'Action 2',
+      prompt: 'Description 2',
+      content_base: '4',
+    },
+  ],
+};
+
 const mockItems = {
   data: [
     {
       uuid: '1',
       created_file_name: 'Action 1',
       description: 'Description 1',
+      extension_file: 'action',
     },
     {
       uuid: '2',
       created_file_name: 'Action 2',
       description: 'Description 2',
+      extension_file: 'action',
     },
   ],
   status: null,
@@ -39,9 +58,7 @@ describe('RouterActions', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    nexusaiAPI.router.actions.list = vi
-      .fn()
-      .mockResolvedValue({ data: mockItems.data });
+    nexusaiAPI.router.actions.list = vi.fn().mockResolvedValue(mockResponse);
 
     nexusaiAPI.router.actions.create = vi.fn().mockResolvedValue({
       data: { uuid: '3', name: 'New Action', prompt: 'New Description' },
@@ -55,7 +72,10 @@ describe('RouterActions', () => {
 
     wrapper = mount(RouterActions, {
       props: {
-        items: mockItems,
+        items: {
+          status: null,
+          data: [],
+        },
       },
       global: {
         plugins: [store],
@@ -170,7 +190,9 @@ describe('RouterActions', () => {
     expect(wrapper.vm.items.data).not.toContain(actionToDelete);
     expect(store.state.alert).toEqual({
       type: 'default',
-      text: wrapper.vm.$t('router.actions.router_removed'),
+      text: wrapper.vm.$t('router.actions.router_removed', {
+        name: actionToDelete.created_file_name,
+      }),
     });
   });
 
