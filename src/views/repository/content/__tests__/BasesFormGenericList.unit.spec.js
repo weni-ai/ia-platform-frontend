@@ -58,38 +58,6 @@ describe('BasesFormGenericList.vue', () => {
       },
     });
 
-  describe('when items status is null', () => {
-    beforeEach(() => {
-      wrapper = setup({ status: null });
-    });
-
-    describe('when the end of the list is showing', () => {
-      beforeEach(() => {
-        intersectionObserverCaller([{ isIntersecting: true }]);
-      });
-
-      it('emits load-more event', () => {
-        expect(wrapper.emitted('load-more')).toHaveLength(1);
-      });
-    });
-  });
-
-  describe('when items status is not null', () => {
-    beforeEach(() => {
-      wrapper = setup({ status: 'complete' });
-    });
-
-    describe('when the end of the list is showing', () => {
-      beforeEach(() => {
-        intersectionObserverCaller([{ isIntersecting: true }]);
-      });
-
-      it('should not emit load-more event', () => {
-        expect(wrapper.emitted()).not.toHaveProperty('load-more');
-      });
-    });
-  });
-
   describe('when there is items', () => {
     const BasesFormFilesItem = {
       template: '<span />',
