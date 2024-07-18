@@ -66,6 +66,7 @@ export default {
   props: {
     brainOn: Boolean,
   },
+  emits: ['update:brainOn'],
 
   data() {
     return {
