@@ -81,6 +81,14 @@ function validURL(url) {
 }
 
 function addSites() {
+  const normalizeURL = (url) => {
+    if (url.startsWith('https://') || url.startsWith('http://')) {
+      return url;
+    }
+
+    return `https://${url}`;
+  };
+
   const items = sites
     .filter((site) => validURL(site.value))
     .map((site) =>
@@ -89,7 +97,7 @@ function addSites() {
         file_name: null,
         extension_file: 'site',
         uuid: `temp-${Math.random() * 1000}`,
-        created_file_name: site.value,
+        created_file_name: normalizeURL(site.value),
         status: 'uploading',
       }),
     );

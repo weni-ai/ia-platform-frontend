@@ -157,7 +157,10 @@ export default {
         });
       }
 
-      if (!this.file.uuid.startsWith('temp-')) {
+      if (
+        !this.file.uuid.startsWith('temp-') ||
+        ['fail-upload', 'fail'].includes(this.file.status)
+      ) {
         actions.push({
           scheme: 'aux-red-500',
           icon: 'delete',
