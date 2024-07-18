@@ -197,6 +197,13 @@ import nexusaiAPI from '../../api/nexusaiAPI';
 export default {
   props: {
     saving: Boolean,
+    currentActions: {
+      type: Array,
+      default() {
+        return [];
+      },
+      required: false,
+    },
   },
 
   data() {
@@ -283,9 +290,13 @@ export default {
           projectUuid: this.$store.state.Auth.connectProjectUuid,
           name: this.filterName,
         });
+
+        const currentActionsUuid = this.currentActions.map((e) => e.uuid) || [];
+
         this.items.data = this.items.data
           .concat(data.results)
-          .filter((e) => e.name && e.uuid);
+          .filter((e) => e.name && e.uuid)
+          .filter((e) => !currentActionsUuid.includes(e.uuid));
 
         this.items.next = data.next;
 
