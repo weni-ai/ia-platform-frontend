@@ -2,7 +2,7 @@
 
 <img src="https://github.com/Ilhasoft/weni-webapp/raw/main/src/assets/LogoWeniAnimada.svg" height="100" />
 
-[![codecov](https://codecov.io/gh/weni-ai/ia-platform-frontend/branch/main/graph/badge.svg)](https://codecov.io/gh/weni-ai/ia-platform-frontend) [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+[![codecov](https://codecov.io/github/weni-ai/intelligence-webapp/graph/badge.svg?token=CCIUMVG2HW)](https://codecov.io/github/weni-ai/intelligence-webapp) [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
 *This project is a module of [Weni](https://github.com/weni-ai) integrated inside [Weni WebApp (Connect)](https://github.com/weni-ai/weni-webapp)*
 
@@ -21,7 +21,7 @@ Weni - Artificial Intelligence is an open platform for predicting, training and 
 
 # Main Technologies
 
-- [Vue 2](https://v2.vuejs.org/)
+- [Vue 3](https://vuejs.org/)
 - [Sass](https://sass-lang.com/)
 - [i18n](https://www.i18next.com/)
 - [Axios](https://axios-http.com/ptbr/docs/intro)
@@ -31,7 +31,7 @@ Weni - Artificial Intelligence is an open platform for predicting, training and 
 
 Before running the application, make sure you have installed the following tools on your machine:
 
-- [Node.js 14.x](https://nodejs.org/en)
+- [Node.js 18.x](https://nodejs.org/en)
 - [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/) (recommended)
 
 # Set up
@@ -39,13 +39,13 @@ Before running the application, make sure you have installed the following tools
 1. Open the terminal and clone the repository
 
 ```
-  git clone https://github.com/weni-ai/ia-platform-frontend.git
+  git clone https://github.com/weni-ai/intelligence-webapp.git
 ```
 
 2. Enter the created directory
 
 ```
-  cd ia-platform-frontend
+  cd intelligence-webapp
 ```
 
 3. Install the dependencies:
@@ -83,17 +83,17 @@ Before running the application, make sure you have installed the following tools
 Start the server with:
 
 ```
-  yarn start
+  yarn dev
 ```
 
-After that, it will be available at http://localhost:8080.
+After that, it will be available at http://localhost:5173.
 
 # Development Workflow
 
 | Command | Description |
 |--|--|
 | yarn | Install dependencies
-| yarn start | serve with hot reload at localhost:8080
+| yarn dev | serve with hot reload at localhost:5173
 | yarn build | Build for production with minification
 | yarn build --report | Build for production and view the bundle analyzer report
 | yarn lint | Show lint warnings and errors
