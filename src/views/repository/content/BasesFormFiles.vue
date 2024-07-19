@@ -85,6 +85,7 @@
       :closeIcon="false"
       class="delete-file-modal"
       persistent
+      data-test="modal-remove-file"
     >
       <template #icon>
         <UnnnicIcon
@@ -116,6 +117,7 @@
           class="create-repository__container__button attention-button"
           type="warning"
           :loading="modalDeleteFile.status === 'deleting'"
+          data-test="button-remove"
           @click="remove"
         >
           {{ $t('content_bases.files.delete_file.delete') }}
@@ -139,7 +141,10 @@ export default {
   },
 
   props: {
-    files: Object,
+    files: {
+      type: Object,
+      required: true,
+    },
     shape: String,
     filterText: String,
   },
@@ -183,19 +188,11 @@ export default {
       return toValue(this.files.data);
     },
 
-    filesNext() {
-      return toValue(this.files.next);
-    },
-
     contentBaseUuid() {
       return (
         this.$route.params.contentBaseUuid ||
         this.$store.state.router.contentBaseUuid
       );
-    },
-
-    counter() {
-      return this.filesNext ? '10+' : this.filesData.length;
     },
   },
   mounted() {
@@ -275,20 +272,7 @@ export default {
           fileItem.uuid = data.uuid;
           fileItem.extension_file = data.extension_file;
           fileItem.progress = 0;
-
-          if (data.created_file_name) {
-            fileItem.created_file_name = data.created_file_name;
-          }
-
-          if (data.status === 'success') {
-            fileItem.status = 'uploaded';
-            fileItem.file_name = data.file_name;
-            this.successMessage();
-          } else if (data.status === 'fail') {
-            fileItem.status = data.status;
-          } else {
-            fileItem.status = 'processing';
-          }
+          fileItem.status = 'processing';
         })
         .catch(() => {
           fileItem.status = 'fail-upload';
@@ -302,15 +286,6 @@ export default {
       this.modalDeleteFile = {
         uuid: fileUuid,
         name,
-      };
-    },
-
-    successMessage() {
-      this.alert = {
-        type: 'success',
-        text: this.$t(
-          'content_bases.files.content_of_the_files_has_been_added',
-        ),
       };
     },
 
