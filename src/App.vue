@@ -32,7 +32,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import NewsModal from '@/components/NewsModal';
-import hotjar from '@/utils/plugins/hotjar';
 import I18n from '@/utils/plugins/i18n';
 import store from './store';
 import ModalDependingOnFlowsLength from './components/ModalDependingOnFlowsLength';
@@ -84,7 +83,6 @@ export default {
   },
   mounted() {
     document.title = this.dynamicTitle;
-    hotjar.addHotjar();
     this.safariDetected();
     this.profileInfo();
     window.parent.postMessage(
