@@ -5,14 +5,14 @@ VueWrapper {
   "_emitted": Object {
     "input": Array [
       Array [
-        null,
+        undefined,
       ],
     ],
   },
   "_emittedByOrder": Array [
     Object {
       "args": Array [
-        null,
+        undefined,
       ],
       "name": "input",
     },

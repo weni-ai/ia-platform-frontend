@@ -51,9 +51,9 @@ describe('Messages.vue', () => {
       expect(wrapper.findAll('.messages .notification.is-danger').length).toBe(
         1,
       );
-      expect(
-        wrapper.find('.messages .notification.is-danger').element.textContent,
-      ).toBe(text);
+      expect(wrapper.find('.messages .notification.is-danger').text()).toBe(
+        text,
+      );
     });
 
     test('check snapshot', () => {
