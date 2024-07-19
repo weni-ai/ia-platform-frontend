@@ -12,18 +12,6 @@
     </UnnnicIntelligenceText>
 
     <template v-for="(field, index) in fields">
-      <UnnnicIntelligenceText
-        v-if="field.name === 'language'"
-        :key="`language-${index}`"
-        color="neutral-dark"
-        family="secondary"
-        weight="bold"
-        marginTop="md"
-        size="body-gt"
-        tag="p"
-      >
-        {{ $t('router.tunings.fields.select-language') }}
-      </UnnnicIntelligenceText>
       <header
         v-if="['radio', 'select'].includes(field.type) && !loadingData"
         :key="`label-${index}`"
@@ -49,7 +37,7 @@
           :modelValue="option"
           :value="field.value"
           size="md"
-          @update:modelValue="updateField(field.name, option)"
+          @update:model-value="updateField(field.name, option)"
         >
           {{ option }}
         </UnnnicRadio>
@@ -118,7 +106,7 @@
         :type="hasValidate ? 'error' : 'normal'"
         :message="hasValidate ? $t('customization.invalid_field') : ''"
         :nativeType="field.type"
-        @update:modelValue="updateField(field.name, $event)"
+        @update:model-value="updateField(field.name, $event)"
       />
     </template>
 
@@ -179,7 +167,7 @@
           :step="field.step"
           :initialValue="field.value"
           class="tunings__form-element__slider"
-          @valueChange="updateField(field.name, Number($event))"
+          @value-change="updateField(field.name, Number($event))"
         />
         <UnnnicSkeletonLoading
           v-if="field.type === 'slider' && loadingData"
@@ -215,7 +203,13 @@ export default {
     LoadingFormElement,
   },
   props: {
-    data: Object,
+    data: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+      required: false,
+    },
   },
 
   data() {
@@ -246,7 +240,10 @@ export default {
 
   methods: {
     updateField(name, value) {
-      this.$store.commit('updateTuning', { name, value });
+      const validFields = this.fields.map((field) => field.name);
+      if (validFields.includes(name)) {
+        this.$store.commit('updateTuning', { name, value });
+      }
     },
 
     handleUpdateSelect(name, obj) {
@@ -287,16 +284,8 @@ export default {
     },
 
     useSelectSmart(field) {
-      const languageOptions = {
-        por: this.$t('router.tunings.fields.languages.pt_br'),
-        eng: this.$t('router.tunings.fields.languages.en'),
-        spa: this.$t('router.tunings.fields.languages.es'),
-      };
-
       const handleLabel = (v) => {
         if (this.isWeniGpt(field.name)) return v.name;
-
-        if (this.isLanguage(field.name)) return languageOptions[v];
 
         return v;
       };
@@ -320,9 +309,6 @@ export default {
       };
     },
 
-    isLanguage(name = '') {
-      return name === 'language';
-    },
     isWeniGpt(name = '') {
       return name === 'version';
     },
