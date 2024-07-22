@@ -2,7 +2,6 @@ import { createStore } from 'vuex';
 
 import Auth from './auth';
 import User from './user';
-import Org from './org';
 import Repository from './repository';
 import Category from './category';
 import EvaluateExample from './evaluate-example';
@@ -33,7 +32,6 @@ export const store = createStore({
   modules: {
     Auth,
     User,
-    Org,
     Repository,
     Category,
     Translate,
