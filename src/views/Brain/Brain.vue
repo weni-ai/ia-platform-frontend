@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import { ref, computed, watch, onMounted, toValue } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { get } from 'lodash';
@@ -146,7 +146,6 @@ import RouterCustomization from './RouterCustomization.vue';
 import RouterTunings from './RouterTunings.vue';
 import ModalPreviewQRCode from './Preview/ModalPreviewQRCode.vue';
 import ModalSaveChangesError from './ModalSaveChangesError.vue';
-import i18n from '@/utils/plugins/i18n.js';
 import { useFilesPagination } from '../ContentBases/filesPagination';
 import { useSitesPagination } from '../ContentBases/sitesPagination';
 
@@ -288,108 +287,6 @@ export default {
       sites.loadNext();
       loadRouterOptions();
     });
-
-    function successMessage() {
-      store.state.alert = {
-        type: 'success',
-        text: i18n.global.t(
-          'content_bases.files.content_of_the_files_has_been_added',
-        ),
-      };
-    }
-
-    const itemsBeingProcessed = ref([]);
-
-    function addItemBeingProcessed(type, itemUuid) {
-      const alreadyIn = itemsBeingProcessed.value.find(
-        ({ uuid }) => uuid === itemUuid,
-      );
-
-      if (!alreadyIn) {
-        itemsBeingProcessed.value.push({
-          type,
-          uuid: itemUuid,
-        });
-      }
-    }
-
-    watch(
-      [() => files.data, () => sites.data],
-      ([files, sites]) => {
-        toValue(files)
-          .filter(({ status }) => status === 'processing')
-          .forEach((site) => {
-            addItemBeingProcessed('files', site.uuid);
-          });
-
-        toValue(sites)
-          .filter(({ status }) => status === 'processing')
-          .forEach((site) => {
-            addItemBeingProcessed('sites', site.uuid);
-          });
-      },
-      { deep: true },
-    );
-
-    function removeFirstItemBeingProcessed() {
-      return itemsBeingProcessed.value.shift();
-    }
-
-    function moveFirstItemBeingProcessedToTheEnd() {
-      const firstItem = removeFirstItemBeingProcessed();
-      itemsBeingProcessed.value.push(firstItem);
-    }
-
-    async function checkIfItemHasAlreadyBeenProcessed() {
-      const { type, uuid } = itemsBeingProcessed.value.at(0);
-
-      const item = toValue({ files, sites }[type].data).find(
-        (item) => item.uuid === uuid,
-      );
-
-      await nexusaiAPI.intelligences.contentBases[type]
-        .read({
-          contentBaseUuid: contentBaseUuid.value,
-          uuid,
-        })
-        .then(({ data }) => {
-          if (data.status === 'success') {
-            removeFirstItemBeingProcessed();
-
-            item.status = 'uploaded';
-            item.file_name = data.file_name;
-            item.created_at = data.created_at;
-
-            if (type === 'files') {
-              successMessage();
-            }
-          } else if (data.status === 'fail') {
-            removeFirstItemBeingProcessed();
-
-            item.status = data.status;
-          } else {
-            moveFirstItemBeingProcessedToTheEnd();
-          }
-        })
-        .catch((error) => {
-          moveFirstItemBeingProcessedToTheEnd();
-        });
-
-      if (itemsBeingProcessed.value.length >= 1) {
-        setTimeout(checkIfItemHasAlreadyBeenProcessed, 3000);
-      }
-    }
-
-    watch(
-      () => itemsBeingProcessed.value.length,
-      (current, previous) => {
-        const hasBeenAddedSomeItem = previous === 0 && current >= 1;
-
-        if (hasBeenAddedSomeItem) {
-          setTimeout(checkIfItemHasAlreadyBeenProcessed, 3000);
-        }
-      },
-    );
 
     return {
       routerTabs,
