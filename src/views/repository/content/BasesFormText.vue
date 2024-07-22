@@ -21,7 +21,8 @@
         :loading="item.status === 'saving'"
         size="small"
         class="repository-base-edit__wrapper__card-content__header__save-button"
-        :disabled="!item.value.trim() || item.value === item.oldValue"
+        :disabled="!modelValue.trim() || modelValue === item.oldValue"
+        data-test="save-button"
         @click="saveText"
       >
         {{ $t('webapp.settings.save') }}
@@ -30,7 +31,7 @@
 
     <textarea
       id="textId"
-      :value="useBrain ? $store.state.Brain.contentText.current : item.value"
+      :value="modelValue"
       name=""
       cols="30"
       rows="10"
@@ -39,15 +40,11 @@
         'repository-base-edit__textarea--button-on-header': !dontShowSaveButton,
       }"
       :placeholder="$t('content_bases.write_content_placeholder')"
-      @input="
-        useBrain
-          ? ($store.state.Brain.contentText.current = $event.target.value)
-          : (item.value = $event.target.value)
-      "
+      @input="$emit('update:modelValue', $event.target.value)"
     ></textarea>
 
     <section
-      v-if="!item.value.trim() && false"
+      v-if="!modelValue.trim() && false"
       class="repository-base-edit__wrapper__card-content__info"
     >
       <UnnnicIcon
@@ -64,12 +61,19 @@
 <script>
 import Unnnic from '@weni/unnnic-system';
 import nexusaiAPI from '../../../api/nexusaiAPI';
+import { get } from 'lodash';
 
 export default {
   props: {
     dontShowSaveButton: Boolean,
-    useBrain: Boolean,
-    item: Object,
+    item: {
+      type: Object,
+      required: true,
+    },
+    modelValue: {
+      type: String,
+      default: '',
+    },
   },
 
   computed: {
@@ -88,18 +92,18 @@ export default {
 
         if (this.item.uuid) {
           const { data: contentBaseTextData } =
-            await nexusaiAPI.updateIntelligenceContentBaseText({
+            await nexusaiAPI.intelligences.contentBases.texts.edit({
               contentBaseUuid: this.contentBaseUuid,
               contentBaseTextUuid: this.item.uuid,
-              text: this.item.value,
+              text: this.modelValue,
             });
 
           this.item.oldValue = contentBaseTextData.text;
         } else {
           const { data: contentBaseTextData } =
-            await nexusaiAPI.createIntelligenceContentBaseText({
+            await nexusaiAPI.intelligences.contentBases.texts.create({
               contentBaseUuid: this.contentBaseUuid,
-              text: this.item.value,
+              text: this.modelValue,
             });
 
           this.item.uuid = contentBaseTextData.uuid;

@@ -257,7 +257,7 @@ export default {
       contentBase.value.language = contentBaseData.language;
 
       const { data: contentBaseTextsData } =
-        await nexusaiAPI.listIntelligenceContentBaseTexts({
+        await nexusaiAPI.intelligences.contentBases.texts.list({
           contentBaseUuid: contentBaseUuid.value,
         });
 
