@@ -1,5 +1,4 @@
 import example from '@/api/example';
-import entity from '@/api/entity';
 
 export default {
   async newExample(
@@ -90,24 +89,6 @@ export default {
   },
   async getExampleSuggestion(store, { id }) {
     const response = await example.suggestions(id);
-    return response;
-  },
-  async getEntities(store, { repositoryUuid, repositoryVersion, value }) {
-    const response = await entity.search(repositoryUuid, repositoryVersion, {
-      value,
-    });
-    return response;
-  },
-  async editEntityName(store, { entityId, value, repositoryVersion }) {
-    const response = await entity.editEntityName(
-      entityId,
-      value,
-      repositoryVersion,
-    );
-    return response;
-  },
-  getAllEntities(store, { repositoryUuid, repositoryVersion }) {
-    const response = entity.getEntities(repositoryUuid, repositoryVersion);
     return response;
   },
   async getAllExamples(

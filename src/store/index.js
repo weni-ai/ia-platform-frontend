@@ -9,7 +9,6 @@ import Example from './example';
 import EvaluateExample from './evaluate-example';
 import Translate from './translate';
 import CachedFetch from './cached-fetch';
-import Entity from './entity';
 import Intent from './intent';
 import News from './news';
 import Tutorial from './tutorial';
@@ -43,7 +42,6 @@ export const store = createStore({
     Translate,
     CachedFetch,
     EvaluateExample,
-    Entity,
     News,
     Tutorial,
     Intent,
