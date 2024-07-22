@@ -38,6 +38,8 @@ const config = {
     '.*\\.(js)$': 'babel-jest',
   },
   automock: false,
+  coverageReporters: ['text', 'json'],
+  coverageDirectory: '../tests/unit/coverage',
 };
 
 module.exports = config;
