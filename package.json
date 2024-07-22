@@ -8,6 +8,7 @@
     "start": "concurrently \"node --watch mock/server.mjs\" \"vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint\"",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
+    "test:unit:coverage": "vue-cli-service test:unit --coverage",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
