@@ -8,7 +8,6 @@ import Category from './category';
 import EvaluateExample from './evaluate-example';
 import Translate from './translate';
 import CachedFetch from './cached-fetch';
-import Intent from './intent';
 import News from './news';
 import Tutorial from './tutorial';
 import Integration from './integration';
@@ -42,7 +41,6 @@ export const store = createStore({
     EvaluateExample,
     News,
     Tutorial,
-    Intent,
     Integration,
     Suggestions,
     Brain,
