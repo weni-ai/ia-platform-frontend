@@ -10,7 +10,6 @@ import CachedFetch from './cached-fetch';
 import News from './news';
 import Tutorial from './tutorial';
 import Integration from './integration';
-import Suggestions from './suggestions';
 import Brain from './brain';
 
 export const store = createStore({
@@ -40,7 +39,6 @@ export const store = createStore({
     News,
     Tutorial,
     Integration,
-    Suggestions,
     Brain,
   },
 });
