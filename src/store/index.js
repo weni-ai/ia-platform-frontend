@@ -5,7 +5,6 @@ import User from './user';
 import Repository from './repository';
 import Category from './category';
 import EvaluateExample from './evaluate-example';
-import Translate from './translate';
 import CachedFetch from './cached-fetch';
 import News from './news';
 import Tutorial from './tutorial';
@@ -33,7 +32,6 @@ export const store = createStore({
     User,
     Repository,
     Category,
-    Translate,
     CachedFetch,
     EvaluateExample,
     News,
