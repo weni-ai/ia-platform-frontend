@@ -84,6 +84,7 @@
           <UnnnicTextArea
             v-bind="$props"
             v-model="brain.agent.goal.current"
+            data-test="textarea"
             :placeholder="$t('customization.placeholders.goal')"
             :type="errorRequiredFields.goal ? 'error' : 'normal'"
           />
@@ -121,6 +122,7 @@
           <section class="customization__instructions__form_group">
             <UnnnicInput
               v-model="instruction.instruction"
+              :data-test="`instruction-${index}`"
               :placeholder="$t('customization.placeholders.instruction')"
             />
             <UnnnicButtonIcon
@@ -138,6 +140,7 @@
 
       <UnnnicButton
         v-else
+        data-test="btn-add-instruction"
         size="large"
         :text="$t('customization.instructions.add_instruction_btn')"
         type="tertiary"
@@ -304,7 +307,6 @@ export default {
           type: 'success',
           text: this.$t('customization.instructions.modals.success_message'),
         };
-
         if (this.brain.instructions.current.length === 0) {
           this.addInstruction();
         }
