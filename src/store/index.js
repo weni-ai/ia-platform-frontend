@@ -13,7 +13,6 @@ import Entity from './entity';
 import Intent from './intent';
 import News from './news';
 import Tutorial from './tutorial';
-import External from './external';
 import Integration from './integration';
 import Suggestions from './suggestions';
 import Brain from './brain';
@@ -47,7 +46,6 @@ export const store = createStore({
     Entity,
     News,
     Tutorial,
-    External,
     Intent,
     Integration,
     Suggestions,
