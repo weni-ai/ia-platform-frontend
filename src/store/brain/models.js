@@ -47,7 +47,7 @@ export const models = [
         type: 'select',
         name: 'version-gpt',
         default: 'gpt-4o',
-        options: ['gpt-3.5-turbo', 'gpt-4-turbo', 'gpt-4o'],
+        options: ['gpt-3.5-turbo', 'gpt-4-turbo', 'gpt-4o', 'gpt-4o-mini'],
       },
       {
         type: 'password',
