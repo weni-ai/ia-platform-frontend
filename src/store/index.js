@@ -4,7 +4,6 @@ import Auth from './auth';
 import User from './user';
 import Repository from './repository';
 import Category from './category';
-import EvaluateExample from './evaluate-example';
 import CachedFetch from './cached-fetch';
 import News from './news';
 import Tutorial from './tutorial';
@@ -33,7 +32,6 @@ export const store = createStore({
     Repository,
     Category,
     CachedFetch,
-    EvaluateExample,
     News,
     Tutorial,
     Integration,
