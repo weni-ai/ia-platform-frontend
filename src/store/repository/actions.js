@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import repository from '@/api/repository';
-import update from '@/api/update';
 import TYPES from './types';
 
 export default {
@@ -247,9 +246,6 @@ export default {
   },
   rejectRequestAuthorization(store, { id }) {
     return repository.rejectRequestAuthorization(id);
-  },
-  getUpdatesList(store, { repositoryUuid }) {
-    return update.search(repositoryUuid);
   },
   setUpdateVersionsState({ commit }, payload) {
     commit('updateVersionsState', payload);
