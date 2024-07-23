@@ -45,6 +45,7 @@
 
         <BasesFormText
           v-if="tab === 'text'"
+          v-model="contentBaseText.value"
           :item="contentBaseText"
         />
 
@@ -219,13 +220,14 @@ async function loadContentBase() {
 async function loadContentBaseText() {
   contentBaseText.status = 'loading';
 
-  const { data: contentBaseTextsData } = await nexusaiAPI
-    .listIntelligenceContentBaseTexts({
-      contentBaseUuid: route.params.contentBaseUuid,
-    })
-    .finally(() => {
-      contentBaseText.status = 'loaded';
-    });
+  const { data: contentBaseTextsData } =
+    await nexusaiAPI.intelligences.contentBases.texts
+      .list({
+        contentBaseUuid: route.params.contentBaseUuid,
+      })
+      .finally(() => {
+        contentBaseText.status = 'loaded';
+      });
 
   const uuid = get(contentBaseTextsData, 'results.0.uuid', null);
   const text = get(contentBaseTextsData, 'results.0.text', '');

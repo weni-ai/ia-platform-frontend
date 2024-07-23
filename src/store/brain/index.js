@@ -223,7 +223,7 @@ export default {
     async saveBrainContentText({ state, commit, rootState }) {
       if (state.contentText.uuid) {
         const { data: contentBaseTextData } =
-          await nexusaiAPI.updateIntelligenceContentBaseText({
+          await nexusaiAPI.intelligences.contentBases.texts.edit({
             contentBaseUuid: rootState.router.contentBaseUuid,
             contentBaseTextUuid: state.contentText.uuid,
             text: state.contentText.current,
@@ -233,7 +233,7 @@ export default {
         commit('setBrainContentTextInitialValues', contentBaseTextData);
       } else {
         const { data: contentBaseTextData } =
-          await nexusaiAPI.createIntelligenceContentBaseText({
+          await nexusaiAPI.intelligences.contentBases.texts.create({
             contentBaseUuid: rootState.router.contentBaseUuid,
             text: state.contentText.current,
             hideGenericErrorAlert: true,
