@@ -53,7 +53,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['activeMenu']),
     dynamicTitle() {
       if (I18n.locale === 'pt-BR') {
         return 'Weni Inteligência Artificial';

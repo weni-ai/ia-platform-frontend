@@ -6,7 +6,6 @@ import Repository from './repository';
 import Category from './category';
 import CachedFetch from './cached-fetch';
 import News from './news';
-import Tutorial from './tutorial';
 import Integration from './integration';
 import Brain from './brain';
 
@@ -33,7 +32,6 @@ export const store = createStore({
     Category,
     CachedFetch,
     News,
-    Tutorial,
     Integration,
     Brain,
   },
