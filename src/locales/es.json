@@ -166,6 +166,7 @@
     "actions": {
       "see_details": "Ver detalles",
       "download_file": "Descargar archivo",
+      "access_site": "Acceder al sitio",
       "remove_site": "Eliminar sitio",
       "remove_file": "Eliminar archivo"
     },

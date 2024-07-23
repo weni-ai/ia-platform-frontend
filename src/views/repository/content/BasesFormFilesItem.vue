@@ -130,13 +130,29 @@ export default {
 
   computed: {
     actions() {
-      const actions = [];
-
       if (this.extension === 'action') {
-        return actions;
+        return [];
       }
 
-      if (this.file.status === 'uploaded') {
+      const can = {
+        seeDetails: this.file.status === 'uploaded',
+
+        accessSite:
+          this.file.extension_file === 'site' &&
+          this.file.status === 'uploaded',
+
+        downloadFile:
+          this.file.extension_file !== 'site' &&
+          this.file.status === 'uploaded',
+
+        remove:
+          ['fail-upload', 'fail'].includes(this.file.status) ||
+          !this.file.uuid.startsWith('temp-'),
+      };
+
+      const actions = [];
+
+      if (can.seeDetails) {
         actions.push({
           scheme: 'neutral-dark',
           icon: 'info',
@@ -145,10 +161,7 @@ export default {
         });
       }
 
-      if (
-        this.file.status === 'uploaded' &&
-        this.file.extension_file !== 'site'
-      ) {
+      if (can.downloadFile) {
         actions.push({
           scheme: 'neutral-dark',
           icon: 'download',
@@ -157,10 +170,16 @@ export default {
         });
       }
 
-      if (
-        !this.file.uuid.startsWith('temp-') ||
-        ['fail-upload', 'fail'].includes(this.file.status)
-      ) {
+      if (can.accessSite) {
+        actions.push({
+          scheme: 'neutral-dark',
+          icon: 'open_in_new',
+          text: this.$t('content_bases.actions.access_site'),
+          onClick: () => window.open(this.fileName),
+        });
+      }
+
+      if (can.remove) {
         actions.push({
           scheme: 'aux-red-500',
           icon: 'delete',
