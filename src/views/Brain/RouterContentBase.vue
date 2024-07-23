@@ -43,9 +43,10 @@
             :shape="contentStyle"
             :title="$t('content_bases.tabs.text')"
           />
+
           <BasesFormText
             v-if="textProp.open"
-            useBrain
+            v-model="$store.state.Brain.contentText.current"
             dontShowSaveButton
             :item="textProp"
             class="content-base__content-tab__text"

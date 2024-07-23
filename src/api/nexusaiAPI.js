@@ -169,45 +169,6 @@ export default {
     );
   },
 
-  createIntelligenceContentBaseText({
-    contentBaseUuid,
-    text,
-    hideGenericErrorAlert = false,
-  }) {
-    return request.$http.post(
-      `api/${contentBaseUuid}/content-bases-text/`,
-      {
-        text,
-      },
-      {
-        routerName: 'contentBase-text-create',
-        hideGenericErrorAlert,
-      },
-    );
-  },
-
-  listIntelligenceContentBaseTexts({ contentBaseUuid }) {
-    return request.$http.get(`api/${contentBaseUuid}/content-bases-text/`);
-  },
-
-  updateIntelligenceContentBaseText({
-    contentBaseUuid,
-    contentBaseTextUuid,
-    text,
-    hideGenericErrorAlert = false,
-  }) {
-    return request.$http.put(
-      `api/${contentBaseUuid}/content-bases-text/${contentBaseTextUuid}/`,
-      {
-        text,
-      },
-      {
-        routerName: 'contentBase-text-edit',
-        hideGenericErrorAlert,
-      },
-    );
-  },
-
   router: {
     read({ projectUuid, obstructiveErrorProducer }) {
       return request.$http.get(`api/${projectUuid}/router/`, {
@@ -323,6 +284,45 @@ export default {
 
   intelligences: {
     contentBases: {
+      texts: {
+        list({ contentBaseUuid }) {
+          return request.$http.get(
+            `api/${contentBaseUuid}/content-bases-text/`,
+          );
+        },
+
+        create({ contentBaseUuid, text, hideGenericErrorAlert = false }) {
+          return request.$http.post(
+            `api/${contentBaseUuid}/content-bases-text/`,
+            {
+              text,
+            },
+            {
+              routerName: 'contentBase-text-create',
+              hideGenericErrorAlert,
+            },
+          );
+        },
+
+        edit({
+          contentBaseUuid,
+          contentBaseTextUuid,
+          text,
+          hideGenericErrorAlert = false,
+        }) {
+          return request.$http.put(
+            `api/${contentBaseUuid}/content-bases-text/${contentBaseTextUuid}/`,
+            {
+              text,
+            },
+            {
+              routerName: 'contentBase-text-edit',
+              hideGenericErrorAlert,
+            },
+          );
+        },
+      },
+
       sites: {
         create({ contentBaseUuid, link }) {
           return request.$http.post(

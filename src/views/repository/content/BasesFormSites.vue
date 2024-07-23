@@ -65,6 +65,7 @@
       :closeIcon="false"
       class="delete-site-modal"
       persistent
+      data-test="modal-remove-site"
     >
       <template #icon>
         <UnnnicIcon
@@ -96,6 +97,7 @@
           class="create-repository__container__button attention-button"
           type="warning"
           :loading="modalDeleteSite.status === 'deleting'"
+          data-test="button-remove"
           @click="remove"
         >
           {{ $t('content_bases.sites.delete_site.delete') }}
@@ -188,13 +190,6 @@ export default {
         .finally(() => {
           this.modalDeleteSite = null;
         });
-    },
-
-    validURL(url) {
-      // eslint-disable-next-line no-useless-escape
-      return /^[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/i.test(
-        url.trim(),
-      );
     },
   },
 };
