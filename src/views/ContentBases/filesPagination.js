@@ -1,8 +1,9 @@
 import nexusaiAPI from '@/api/nexusaiAPI';
 import { usePagination } from './pagination';
+import { useIndexingProcess } from '@/views/ContentBases/indexingProcess.js';
 
 export function useFilesPagination({ contentBaseUuid }) {
-  return usePagination({
+  const pagination = usePagination({
     load: {
       request: nexusaiAPI.intelligences.contentBases.files.list,
       params: {
@@ -18,4 +19,8 @@ export function useFilesPagination({ contentBaseUuid }) {
         }[file.status] || file.status,
     }),
   });
+
+  useIndexingProcess(pagination.data, 'files', contentBaseUuid);
+
+  return pagination;
 }
