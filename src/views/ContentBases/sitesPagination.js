@@ -1,5 +1,6 @@
 import nexusaiAPI from '@/api/nexusaiAPI';
 import { usePagination } from './pagination';
+import { useIndexingProcess } from '@/views/ContentBases/indexingProcess.js';
 
 export function useSitesPagination({ contentBaseUuid }) {
   const loadSites = async (params) => {
@@ -13,7 +14,7 @@ export function useSitesPagination({ contentBaseUuid }) {
     };
   };
 
-  return usePagination({
+  const pagination = usePagination({
     load: {
       request: loadSites,
       params: {
@@ -31,4 +32,8 @@ export function useSitesPagination({ contentBaseUuid }) {
         }[site.status] || site.status,
     }),
   });
+
+  useIndexingProcess(pagination.data, 'sites', contentBaseUuid);
+
+  return pagination;
 }
