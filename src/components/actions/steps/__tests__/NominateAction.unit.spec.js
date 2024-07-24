@@ -6,7 +6,9 @@ describe('ModalActions.vue', () => {
 
   beforeEach(() => {
     wrapper = mount(NominateAction, {
-      name: 'Name',
+      props: {
+        name: 'Name',
+      },
     });
   });
 
