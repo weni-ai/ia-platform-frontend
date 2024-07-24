@@ -1,202 +1,68 @@
 <template>
-  <UnnnicModal
-    showModal
-    :closeIcon="false"
-    class="flow-modal"
+  <UnnnicModalDialog
+    showCloseIcon
+    showActionsDivider
+    :title="currentStep.title"
+    size="lg"
+    :hideSecondaryButton="currentStep === firstStep"
+    :secondaryButtonProps="{
+      text: $t('back'),
+      'data-test': 'previous-button',
+    }"
+    :primaryButtonProps="{
+      text: currentStep === lastStep ? $t('finish') : $t('next'),
+      disabled: !isPrimaryButtonActive,
+      loading: isAdding,
+      'data-test': 'next-button',
+    }"
+    @secondary-button-click="goToPreviousStep"
+    @primary-button-click="goToNextStep"
+    @update:model-value="$emit('update:modelValue', $event)"
   >
-    <article class="flow-modal__container">
-      <div class="flow-modal__header">
-        <div class="flow-modal__header__fill">
-          <section
-            v-for="({ tabName }, stepIndex) in steps"
-            :key="stepIndex"
-            class="flow-modal__header__fill__container"
-          >
-            <section
-              :class="[
-                'flow-modal__header__fill__bar',
-                {
-                  'flow-modal__header__fill__bar--green': index >= stepIndex,
-                },
-              ]"
-            />
-
-            <UnnnicIntelligenceText
-              :color="index === stepIndex ? 'weni-700' : 'neutral-clean'"
-              family="secondary"
-              size="body-md"
-              marginTop="nano"
-            >
-              {{ $t(tabName) }}
-            </UnnnicIntelligenceText>
-          </section>
-        </div>
-
-        <section>
-          <UnnnicIntelligenceText
-            tag="h3"
-            color="neutral-darkest"
-            family="secondary"
-            size="title-sm"
-            weight="black"
-            marginTop="lg"
-          >
-            {{ $t(steps[index].title) }}
-          </UnnnicIntelligenceText>
-
-          <UnnnicIntelligenceText
-            v-if="steps[index].showSelectedFlowName"
-            tag="h4"
-            color="neutral-dark"
-            family="secondary"
-            size="body-gt"
-            weight="black"
-            marginTop="sm"
-          >
-            {{ flowSelected.name }}
-          </UnnnicIntelligenceText>
-
-          <UnnnicIntelligenceText
-            tag="p"
-            color="neutral-dark"
-            family="secondary"
-            size="body-gt"
-            marginTop="xs"
-          >
-            {{ $t(steps[index].subTitle) }}
-          </UnnnicIntelligenceText>
-        </section>
-      </div>
-      <div class="flow-modal__body">
-        <div
-          v-show="index === 0"
-          class="flow-modal__body__flow"
-        >
-          <div>
-            <UnnnicInput
-              v-model="filterName"
-              size="sm"
-              :iconLeftClickable="true"
-              iconLeft="search-1"
-              :placeholder="$t('modals.actions.flow.placeholder')"
-            />
-          </div>
-          <div class="flow-modal__body__flow__list">
-            <div
-              v-for="(item, index) in items.data"
-              :key="index"
-              :class="[
-                'flow-modal__body__flow__list__item text-truncate',
-                {
-                  'flow-modal__body__flow__list__item--selected':
-                    flowSelected && flowSelected.uuid === item.uuid,
-                },
-              ]"
-              @click="handleFlowSelected(item)"
-            >
-              <UnnnicToolTip
-                side="top"
-                :text="item.name"
-                enabled
-                class="flow-modal__body__flow__list__item__tooltip text-truncate"
-              >
-                <UnnnicIcon
-                  icon="account_tree"
-                  size="sm"
-                  scheme="neutral-cloudy"
-                />
-                <UnnnicIntelligenceText
-                  tag="p"
-                  color="neutral-darkest"
-                  family="secondary"
-                  size="body-gt"
-                  class="text-truncate"
-                >
-                  {{ handleFlowName(item.name) }}
-                </UnnnicIntelligenceText>
-              </UnnnicToolTip>
-            </div>
-            <template v-if="items.status === 'loading'">
-              <UnnnicSkeletonLoading
-                v-for="i in 3"
-                :key="`loading-${i}`"
-                tag="div"
-                height="50px"
-                :style="{ display: 'flex', flexBasis: 'calc(50% - 6px)' }"
-              />
-            </template>
-
-            <div
-              v-show="!['loading', 'complete'].includes(items.status)"
-              ref="end-of-list-element"
-            ></div>
-          </div>
-        </div>
-        <section
-          v-if="items.data.length === 0 && items.status === 'complete'"
-          class="flow-modal__body__not_found_container"
-        >
-          <UnnnicIcon
-            icon="delete-1"
-            size="sm"
-            scheme="neutral-dark"
-          />
-
-          <UnnnicIntelligenceText
-            color="neutral-dark"
-            family="secondary"
-            size="body-gt"
-            marginTop="xs"
-          >
-            {{ $t('modals.actions.flow.not_found_message') }}
-          </UnnnicIntelligenceText>
-        </section>
-        <div
-          v-if="index === 1"
-          class="flow-modal__body_description"
-        >
-          <UnnnicFormElement :label="$t('modals.actions.descriptions.label')">
-            <UnnnicTextArea
-              v-bind="$props"
-              v-model="description"
-            />
-          </UnnnicFormElement>
-        </div>
-      </div>
-    </article>
-
-    <template #options>
-      <UnnnicButton
-        class="create-repository__container__button"
-        type="tertiary"
-        @click="handleBackBtn"
-      >
-        {{ $t('modals.actions.btn_back') }}
-      </UnnnicButton>
-
-      <UnnnicButton
-        size="large"
-        :disabled="isDisableNextBtn()"
-        :loading="saving"
-        @click="handleNextBtn()"
-      >
-        {{
-          index === 0
-            ? $t('modals.actions.btn_next')
-            : $t('modals.actions.btn_create')
-        }}
-      </UnnnicButton>
+    <template #leftSidebar>
+      <LeftSidebar :steps="steps" />
     </template>
-  </UnnnicModal>
+
+    <section class="action-body">
+      <StepDescribe
+        v-if="currentStep.name === 'describe'"
+        v-model:description="description"
+      />
+
+      <StepSelectFlow
+        v-if="currentStep.name === 'select_flow'"
+        v-model:flowUuid="flowUuid"
+        v-model:name="name"
+        :items="items"
+        :currentActions="currentActions"
+      />
+
+      <StepNominateAction
+        v-if="currentStep.name === 'nominate_action'"
+        v-model:name="name"
+      />
+    </section>
+  </UnnnicModalDialog>
 </template>
 
 <script>
-import { debounce } from 'lodash';
+import { useStore } from 'vuex';
+import { usePagination } from '@/views/ContentBases/pagination';
 import nexusaiAPI from '../../api/nexusaiAPI';
+import LeftSidebar from './LeftSidebar.vue';
+import StepSelectFlow from './steps/SelectFlow.vue';
+import StepDescribe from './steps/Describe.vue';
+import StepNominateAction from './steps/NominateAction.vue';
 
 export default {
+  components: {
+    LeftSidebar,
+    StepDescribe,
+    StepSelectFlow,
+    StepNominateAction,
+  },
+
   props: {
-    saving: Boolean,
     currentActions: {
       type: Array,
       default() {
@@ -206,145 +72,145 @@ export default {
     },
   },
 
+  emits: ['update:modelValue', 'added'],
+
+  setup() {
+    const store = useStore();
+
+    const items = usePagination({
+      load: {
+        request: nexusaiAPI.router.actions.flows.list,
+        params: {
+          projectUuid: store.state.Auth.connectProjectUuid,
+          name: '',
+        },
+      },
+    });
+
+    return { items };
+  },
+
   data() {
     return {
-      index: 0,
+      isAdding: false,
 
-      steps: [
-        {
-          tabName: 'modals.actions.flow.fill_name',
-          title: 'modals.actions.flow.title',
-          subTitle: 'modals.actions.flow.sub_title',
-        },
-        {
-          tabName: 'modals.actions.descriptions.fill_name',
-          title: 'modals.actions.descriptions.title',
-          subTitle: 'modals.actions.descriptions.sub_title',
-          showSelectedFlowName: true,
-        },
-      ],
+      currentStepIndex: 0,
 
+      name: '',
       description: '',
-
-      filterName: '',
-
-      flowSelected: {
-        name: '',
-        uuid: '',
-      },
-
-      items: {
-        status: null,
-        next: null,
-        data: [],
-      },
-
-      isShowingEndOfList: false,
-      intersectionObserver: null,
+      flowUuid: '',
     };
   },
 
-  watch: {
-    'items.status'(status) {
-      if (this.isShowingEndOfList && status === null) {
-        this.loadMoreFlows();
-      }
+  computed: {
+    steps() {
+      return [
+        {
+          name: 'describe',
+          title: this.$t('modals.actions.add.steps.describe.title'),
+        },
+        {
+          name: 'select_flow',
+          title: this.$t('modals.actions.add.steps.select_flow.title'),
+        },
+        {
+          name: 'nominate_action',
+          title: this.$t('modals.actions.add.steps.nominate_action.title'),
+        },
+      ].map((step, index) => ({
+        ...step,
+        active: index === this.currentStepIndex,
+      }));
     },
 
-    isShowingEndOfList() {
-      if (this.isShowingEndOfList && this.items.status === null) {
-        this.loadMoreFlows();
-      }
+    firstStep() {
+      return this.steps.at(0);
     },
 
-    filterName: debounce(function () {
-      this.items.status = null;
-      this.items.next = null;
-      this.items.data = [];
+    lastStep() {
+      return this.steps.at(-1);
+    },
 
-      this.loadMoreFlows();
-    }, 300),
-  },
+    currentStep() {
+      return this.steps.find(({ active }) => active);
+    },
 
-  mounted() {
-    this.intersectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        this.isShowingEndOfList = entry.isIntersecting;
-      });
-    });
+    isPrimaryButtonActive() {
+      if (this.currentStep.name === 'describe') {
+        return this.description.trim();
+      }
 
-    this.intersectionObserver.observe(this.$refs['end-of-list-element']);
-  },
+      if (this.currentStep.name === 'select_flow') {
+        return this.flowUuid;
+      }
 
-  beforeUnmount() {
-    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
+      if (this.currentStep.name === 'nominate_action') {
+        return this.name.trim();
+      }
+
+      return true;
+    },
   },
 
   methods: {
-    async loadMoreFlows() {
+    close() {
+      this.$emit('update:modelValue', false);
+    },
+
+    async addAction() {
       try {
-        this.items.status = 'loading';
+        this.isAdding = true;
 
-        const { data } = await nexusaiAPI.router.actions.flows.list({
-          next: this.items.next,
+        const { data } = await nexusaiAPI.router.actions.create({
           projectUuid: this.$store.state.Auth.connectProjectUuid,
-          name: this.filterName,
-        });
-
-        const currentActionsUuid = this.currentActions.map((e) => e.uuid) || [];
-
-        this.items.data = this.items.data
-          .concat(data.results)
-          .filter((e) => e.name && e.uuid)
-          .filter((e) => !currentActionsUuid.includes(e.uuid));
-
-        this.items.next = data.next;
-
-        if (this.items.next) {
-          this.items.status = null;
-        } else {
-          this.items.status = 'complete';
-        }
-      } catch (error) {
-        this.items.status = 'error';
-      }
-    },
-
-    handleNextBtn() {
-      if (this.index === 0) this.index = 1;
-      else if (this.index === 1) {
-        this.$emit('save', {
-          flow: this.flowSelected,
+          name: this.name,
           description: this.description,
+          flowUuid: this.flowUuid,
         });
+
+        const createdAction = {
+          uuid: data.uuid,
+          name: data.name,
+          description: data.prompt,
+        };
+
+        this.$store.state.alert = {
+          type: 'success',
+          text: this.$t('modals.actions.add.messages.success', {
+            name: createdAction.name,
+          }),
+        };
+
+        this.$emit('added', createdAction);
+      } finally {
+        this.isAdding = false;
+
+        this.close();
       }
     },
-    isDisableNextBtn() {
-      return this.flowSelected?.uuid ? false : true;
+
+    goToPreviousStep() {
+      if (this.currentStep !== this.firstStep) {
+        this.currentStepIndex -= 1;
+      }
     },
-    handleBackBtn() {
-      if (this.index === 0) this.$emit('closeModal');
-      this.index = 0;
-    },
-    handleFlowSelected(value) {
-      const flow = {
-        name: value?.name || '',
-        uuid: value?.uuid || '',
-      };
-      this.flowSelected = flow;
-    },
-    handleFlowName(str) {
-      return str.length > 30 ? str.slice(0, 27) + '...' : str;
+
+    goToNextStep() {
+      if (this.currentStep === this.lastStep) {
+        this.addAction();
+      } else {
+        this.currentStepIndex += 1;
+      }
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.text-truncate {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.action-body {
+  height: 22 * $unnnic-font-size;
+  display: flex;
+  flex-direction: column;
 }
 
 .flow-modal {
@@ -388,54 +254,6 @@ export default {
 
         &--green {
           background: $unnnic-color-weni-600;
-        }
-      }
-    }
-  }
-
-  &__body {
-    text-align: left;
-
-    &__not_found_container {
-      text-align: center;
-    }
-    &__flow {
-      display: flex;
-      flex-direction: column;
-      gap: $unnnic-spacing-sm;
-
-      &__list {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: $unnnic-spacing-ant;
-        max-height: 300px;
-        overflow-y: auto;
-
-        &__item {
-          cursor: pointer;
-          display: flex;
-          border-radius: $unnnic-border-radius-sm;
-          padding: $unnnic-spacing-ant;
-          border: 1px solid $unnnic-color-neutral-cleanest;
-          background: $unnnic-color-background-carpet;
-
-          &:hover {
-            border: 1px solid $unnnic-color-weni-500;
-            background: rgba(0, 222, 210, 0.16);
-          }
-
-          &--selected {
-            border: 1px solid $unnnic-color-weni-500;
-            background: rgba(0, 222, 210, 0.16);
-          }
-
-          & &__tooltip {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            align-self: stretch;
-            gap: $unnnic-spacing-ant;
-          }
         }
       }
     }
