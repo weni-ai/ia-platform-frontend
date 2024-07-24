@@ -93,37 +93,29 @@ describe('RouterActions', () => {
     expect(wrapper.vm.items.status).toBe('complete');
   });
 
-  test('opens add action modal and saves a new action', async () => {
+  test('opens add action modal and adds a new action', async () => {
     wrapper.findComponent({ name: 'BasesFormGenericList' }).vm.$emit('add');
     await flushPromises();
 
     expect(wrapper.vm.isAddActionOpen).toBe(true);
 
-    wrapper.findComponent(ModalActions).vm.$emit('save', {
-      flow: { uuid: 'new-flow-uuid', name: 'New Flow' },
+    const modalActions = wrapper.findComponent(ModalActions);
+
+    expect(modalActions.exists()).toBeTruthy();
+
+    modalActions.vm.$emit('added', {
+      uuid: 'new-flow-uuid',
+      name: 'New Action',
       description: 'New Description',
     });
 
     await flushPromises();
 
-    expect(nexusaiAPI.router.actions.create).toHaveBeenCalledWith({
-      projectUuid: store.state.Auth.connectProjectUuid,
-      flowUuid: 'new-flow-uuid',
-      name: 'New Flow',
-      description: 'New Description',
-    });
-
     expect(wrapper.vm.items.data).toContainEqual({
-      uuid: '3',
+      uuid: 'new-flow-uuid',
       extension_file: 'action',
       created_file_name: 'New Action',
       description: 'New Description',
-    });
-    expect(store.state.alert).toEqual({
-      type: 'success',
-      text: wrapper.vm.$t('router.actions.router_activated', {
-        name: 'New Flow',
-      }),
     });
   });
 
