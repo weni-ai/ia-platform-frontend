@@ -8,9 +8,10 @@
     {{ $t('router.preview.modal_qr_code.description') }}
 
     <QRCode
-      size="380"
+      :size="380"
       renderAs="svg"
       level="M"
+      :value="previewFullPageURL"
       :modelValue="previewFullPageURL"
       class="modal-preview-qr-code__qr-code"
     />
@@ -24,6 +25,7 @@ export default {
   components: {
     QRCode,
   },
+  emits: ['close'],
 
   computed: {
     previewFullPageURL() {
