@@ -24,7 +24,8 @@ export default {
   mounted() {
     document.documentElement.style.overscrollBehavior = 'none';
 
-    this.height = window.visualViewport.height;
+    if (window.visualViewport && window.visualViewport.height)
+      this.height = window.visualViewport.height;
 
     window.addEventListener('resize', () => {
       if (!window.visualViewport) {
