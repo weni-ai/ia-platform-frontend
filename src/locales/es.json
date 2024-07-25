@@ -5,6 +5,7 @@
   "back": "Volver",
   "next": "Siguiente",
   "finish": "Finalizar",
+  "save_changes": "Guardar los cambios",
   "announcements": {
     "new_artificial_intelligence_module_is_here": "¡Ya está aquí el nuevo módulo de Inteligencia Artificial! Explora las novedades y aprende a crear chatbots aún más increíbles."
   },
@@ -1424,6 +1425,14 @@
             }
           }
         }
+      },
+      "edit": {
+        "messages": {
+          "success": "Acción {name} editada con éxito"
+        },
+        "assigned_flow": "Flujo asignado",
+        "flow_name_unavailable": "Nombre de flujo no disponible",
+        "go_to_flow": "Ir al flujo"
       },
       "btn_back": "Atrás",
       "btn_next": "Siguiente",

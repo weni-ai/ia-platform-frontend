@@ -186,8 +186,9 @@ export default {
         });
       },
 
-      edit({ projectUuid, actionUuid, description }) {
+      edit({ projectUuid, actionUuid, name, description }) {
         return request.$http.patch(`api/${projectUuid}/flows/${actionUuid}/`, {
+          name,
           prompt: description,
         });
       },
