@@ -138,21 +138,18 @@ describe('RouterActions', () => {
       status: null,
     });
 
-    wrapper.findComponent(ModalChangeAction).vm.$emit('edit');
-    await flushPromises();
-
-    expect(nexusaiAPI.router.actions.edit).toHaveBeenCalledWith({
-      projectUuid: store.state.Auth.connectProjectUuid,
-      actionUuid: actionToEdit.uuid,
-      description: actionToEdit.description,
+    wrapper.findComponent(ModalChangeAction).vm.$emit('edited', '1', {
+      name: 'Action Name Edited',
+      description: 'Action Description Edited',
     });
 
-    expect(actionToEdit.description).toBe('Updated Description');
-    expect(store.state.alert).toEqual({
-      type: 'success',
-      text: wrapper.vm.$t('router.actions.router_edited', {
-        name: actionToEdit.created_file_name,
-      }),
+    await flushPromises();
+
+    expect(wrapper.vm.items.data).toContainEqual({
+      uuid: '1',
+      extension_file: 'action',
+      created_file_name: 'Action Name Edited',
+      description: 'Action Description Edited',
     });
   });
 

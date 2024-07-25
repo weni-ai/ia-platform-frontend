@@ -28,10 +28,10 @@
     <ModalChangeAction
       v-if="modalEditAction"
       v-model:description="modalEditAction.description"
-      :editing="modalEditAction.status === 'editing'"
-      :item="modalEditAction.name"
-      @close-modal="modalEditAction = null"
-      @edit="editAction"
+      :action="modalEditAction"
+      :modelValue="!!modalEditAction"
+      @update:model-value="$event ? null : (modalEditAction = null)"
+      @edited="editAction"
     />
 
     <ModalRemoveAction
@@ -118,31 +118,11 @@ export default {
       };
     },
 
-    async editAction() {
-      try {
-        this.modalEditAction.status = 'editing';
+    editAction(actionUuid, action) {
+      const item = this.items.data.find(({ uuid }) => uuid === actionUuid);
 
-        const { data } = await nexusaiAPI.router.actions.edit({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
-          actionUuid: this.modalEditAction.uuid,
-          description: this.modalEditAction.description,
-        });
-
-        const item = this.items.data.find(
-          ({ uuid }) => uuid === this.modalEditAction.uuid,
-        );
-
-        item.description = data.prompt;
-
-        this.$store.state.alert = {
-          type: 'success',
-          text: this.$t('router.actions.router_edited', {
-            name: this.modalEditAction.name,
-          }),
-        };
-      } finally {
-        this.modalEditAction = null;
-      }
+      item.created_file_name = action.name;
+      item.description = action.description;
     },
 
     openDeleteAction(actionUuid, actionName) {
