@@ -32,8 +32,6 @@ export default {
   logout({ commit, dispatch }) {
     commit(TYPES.SET_TOKEN, null);
     dispatch('updateMyProfile');
-    dispatch('clearTutorial');
-    dispatch('clearFinalizatioMessage');
   },
   async getForgotPasswordSchema() {
     const response = await auth.getForgotPasswordSchema();

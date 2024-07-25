@@ -11,9 +11,6 @@ export const getWordIndex = (word, phrase) => {
   return { start, end };
 };
 
-export const getEntitiesList = (entities = [], extra = []) =>
-  entities.concat(extra || []).map((e) => (e instanceof Object ? e.entity : e));
-
 export const LEVEL_NOTHING = 0;
 export const LEVEL_READER = 1;
 export const LEVEL_CONTRIBUTOR = 2;

@@ -57,10 +57,6 @@ export default {
     /* istanbul ignore next */
     return user.permissionRepositories();
   },
-  getUsingRepositories(store, limit = 20) {
-    /* istanbul ignore next */
-    return user.myRepositories(limit);
-  },
   getUserReports(store, { startDate, endDate, limit = 20 }) {
     return user.getReports(startDate, endDate, limit);
   },
