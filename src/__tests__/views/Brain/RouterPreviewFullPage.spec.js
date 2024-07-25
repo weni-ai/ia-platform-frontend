@@ -1,8 +1,6 @@
 import { mount } from '@vue/test-utils';
 import RouterPreviewFullPage from '@/views/Brain/RouterPreviewFullPage.vue';
 
-global.window.visualViewport.height = 10;
-
 describe('RouterPreviewFullPage.vue', () => {
   let wrapper;
 
