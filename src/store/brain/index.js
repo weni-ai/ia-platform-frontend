@@ -1,16 +1,9 @@
 import { differenceBy, cloneDeep, pick, get } from 'lodash';
 import { WENIGPT_OPTIONS } from '../../utils';
-import { models } from './models.js';
-import nexusaiAPI from '../../api/nexusaiAPI.js';
+import { models } from '@/store/brain/models.js';
+import nexusaiAPI from '@/api/nexusaiAPI.js';
 import i18n from '../../utils/plugins/i18n';
-import store from '../index.js';
-
-function watchOnce(...args) {
-  const unwatch = store.watch(args[0], () => {
-    args[1]();
-    unwatch();
-  });
-}
+import watchOnce from '@/utils/watchOnce';
 
 export default {
   state: () => ({
