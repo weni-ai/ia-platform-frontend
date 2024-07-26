@@ -145,9 +145,21 @@ export default {
   mixins: [FlowPreview],
 
   props: {
-    contentBaseUuid: String,
-    contentBaseLanguage: String,
-    usePreview: Boolean,
+    contentBaseUuid: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    contentBaseLanguage: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    usePreview: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 
   data() {
