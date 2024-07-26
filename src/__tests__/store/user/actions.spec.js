@@ -61,6 +61,20 @@ describe('@/store/user/actions', () => {
     expect(dispatch).toHaveBeenCalledWith('logout');
   });
 
+  it('should handle profile if not autenticated', async () => {
+    await actions.updateMyProfile({
+      commit,
+      dispatch,
+      getters: {
+        authenticated: false,
+      },
+    });
+
+    expect(commit).toHaveBeenCalledWith(TYPES.SET_NICKNAME_AUTHENTICATED, {
+      nickname: null,
+    });
+  });
+
   it('should update profile with new data if profile is outdated or forced', async () => {
     user.profile.mockResolvedValue({ data: { nickname: 'test-nickname' } });
     user.org_profile.mockResolvedValue({ data: { nickname: 'test-nickname' } });
@@ -75,6 +89,35 @@ describe('@/store/user/actions', () => {
       lastUpdate: expect.any(Number),
     });
     expect(user.profile).toHaveBeenCalledWith('test-nickname');
+  });
+
+  it('should update profile with new data if profile is outdated or forced', async () => {
+    user.profile.mockResolvedValue({ data: { nickname: 'test-nickname' } });
+    user.org_profile.mockResolvedValue({ data: { nickname: 'test-nickname' } });
+
+    await actions.updateProfile(
+      { commit, getters },
+      { nickname: 'test-nickname', forced: true, isOrg: false },
+    );
+
+    expect(commit).toHaveBeenCalledWith(TYPES.SET_PROFILE, {
+      nickname: 'test-nickname',
+      lastUpdate: expect.any(Number),
+    });
+
+    expect(user.profile).toHaveBeenCalledWith('test-nickname');
+
+    await actions.updateProfile(
+      { commit, getters },
+      { nickname: 'test-nickname', forced: true, isOrg: true },
+    );
+
+    expect(commit).toHaveBeenCalledWith(TYPES.SET_PROFILE, {
+      nickname: 'test-nickname',
+      lastUpdate: expect.any(Number),
+    });
+
+    expect(user.org_profile).toHaveBeenCalledWith('test-nickname');
   });
 
   it('should set user name correctly', () => {
