@@ -199,8 +199,24 @@ export default {
       if (this.currentStep === this.lastStep) {
         this.addAction();
       } else {
+        if (this.isNeedGenerateName()) this.generateActionName();
         this.currentStepIndex += 1;
       }
+    },
+
+    async generateActionName() {
+      const response = await nexusaiAPI.router.actions.listActionNames({
+        projectUuid: this.$store.state.Auth.connectProjectUuid,
+        chatbot_goal:
+          'Chatbot que sugere nomes para ações baseado na descrição informada',
+        context: `Descrição: ${this.description} Quando o usuário falar algo relacionado a doenças jogue para esta ação`,
+      });
+
+      this.name = response.data.action_name;
+    },
+
+    isNeedGenerateName() {
+      return this.currentStepIndex + 1 === 2;
     },
   },
 };
