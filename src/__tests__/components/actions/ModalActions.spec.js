@@ -25,6 +25,12 @@ vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
   },
 });
 
+vi.spyOn(nexusaiAPI.router.actions, 'listActionNames').mockResolvedValue({
+  data: {
+    action_name: 'Weni Action',
+  },
+});
+
 const createRequest = vi
   .spyOn(nexusaiAPI.router.actions, 'create')
   .mockResolvedValue({
@@ -170,6 +176,50 @@ describe('ModalActions', () => {
           description: 'Action Description',
         },
       ]);
+    });
+  });
+
+  describe('generateActionName', () => {
+    it('should call listActionNames API and update name', async () => {
+      await wrapper.vm.generateActionName();
+      expect(nexusaiAPI.router.actions.listActionNames).toHaveBeenCalledWith({
+        projectUuid: 'test2323test',
+        chatbot_goal:
+          'Chatbot que sugere nomes para ações baseado na descrição informada',
+        context:
+          'Descrição: Action Description Quando o usuário falar algo relacionado a doenças jogue para esta ação',
+      });
+      expect(wrapper.vm.name).toBe('Weni Action');
+    });
+  });
+
+  describe('isNeedGenerateName', () => {
+    it('should return true when currentStepIndex is 1', () => {
+      wrapper.vm.currentStepIndex = 1;
+      expect(wrapper.vm.isNeedGenerateName()).toBe(true);
+    });
+
+    it('should return false when currentStepIndex is not 1', () => {
+      wrapper.vm.currentStepIndex = 0;
+      expect(wrapper.vm.isNeedGenerateName()).toBe(false);
+      wrapper.vm.currentStepIndex = 2;
+      expect(wrapper.vm.isNeedGenerateName()).toBe(false);
+    });
+  });
+
+  describe('goToNextStep', () => {
+    it('should call generateActionName if isNeedGenerateName returns true', async () => {
+      wrapper.vm.currentStepIndex = 1;
+      const generateActionNameSpy = vi.spyOn(wrapper.vm, 'generateActionName');
+      await wrapper.vm.goToNextStep();
+      expect(generateActionNameSpy).toHaveBeenCalled();
+    });
+
+    it('should not call generateActionName if isNeedGenerateName returns false', async () => {
+      wrapper.vm.currentStepIndex = 0;
+      const generateActionNameSpy = vi.spyOn(wrapper.vm, 'generateActionName');
+      await wrapper.vm.goToNextStep();
+      expect(generateActionNameSpy).not.toHaveBeenCalled();
     });
   });
 });
