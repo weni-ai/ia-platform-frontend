@@ -21,17 +21,14 @@
       v-if="isAddActionOpen"
       v-model="isAddActionOpen"
       :currentActions="items.data"
-      :saving="isAdding"
       @added="saveAction"
     />
 
     <ModalChangeAction
-      v-if="modalEditAction"
-      v-model:description="modalEditAction.description"
-      :action="modalEditAction"
-      :modelValue="!!modalEditAction"
-      @update:model-value="$event ? null : (modalEditAction = null)"
-      @edited="editAction"
+      v-if="isEditActionOpen"
+      v-model="isEditActionOpen"
+      :action="currentActionEditing"
+      @edited="editedAction"
     />
 
     <ModalRemoveAction
@@ -73,10 +70,24 @@ export default {
       isAddActionOpen: false,
       isAdding: false,
 
-      modalEditAction: null,
+      currentActionEditing: null,
       modalDeleteAction: null,
       flowName: null,
     };
+  },
+
+  computed: {
+    isEditActionOpen: {
+      get() {
+        return Boolean(this.currentActionEditing);
+      },
+
+      set(value) {
+        if (value === false) {
+          this.currentActionEditing = null;
+        }
+      },
+    },
   },
 
   created() {
@@ -110,7 +121,7 @@ export default {
     },
 
     openEditAction({ uuid, created_file_name, description }) {
-      this.modalEditAction = {
+      this.currentActionEditing = {
         uuid,
         name: created_file_name,
         description,
@@ -118,7 +129,7 @@ export default {
       };
     },
 
-    editAction(actionUuid, action) {
+    editedAction(actionUuid, action) {
       const item = this.items.data.find(({ uuid }) => uuid === actionUuid);
 
       item.created_file_name = action.name;

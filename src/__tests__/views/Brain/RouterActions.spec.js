@@ -52,6 +52,10 @@ const mockItems = {
   status: null,
 };
 
+vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
+  data: {},
+});
+
 describe('RouterActions', () => {
   let wrapper;
 
@@ -131,7 +135,7 @@ describe('RouterActions', () => {
     await flushPromises();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.vm.modalEditAction).toEqual({
+    expect(wrapper.vm.currentActionEditing).toEqual({
       uuid: actionToEdit.uuid,
       name: actionToEdit.created_file_name,
       description: actionToEdit.description,
