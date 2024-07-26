@@ -21,8 +21,9 @@
       family="secondary"
       size="body-gt"
       marginTop="nano"
-      v-html="$t('content_bases.files.preview.not_found.description')"
-    />
+    >
+      <span v-html="$t('content_bases.files.preview.not_found.description')" />
+    </UnnnicIntelligenceText>
   </section>
 </template>
 
