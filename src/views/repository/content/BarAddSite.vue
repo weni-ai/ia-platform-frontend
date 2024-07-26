@@ -7,6 +7,7 @@
   >
     <form
       class="add-form"
+      data-test="add-form"
       @submit.prevent="addSites"
     >
       <UnnnicFormElement
@@ -32,6 +33,7 @@
             type="tertiary"
             size="small"
             iconLeft="add-1"
+            data-test="add-one-more-site-button"
             @click.prevent="sites.push({ value: '' })"
           >
             {{ $t('content_bases.sites.sidebar_add.button_more_one') }}
@@ -42,6 +44,7 @@
       <UnnnicButton
         class="add-form__button-submit"
         :disabled="submitDisabled"
+        data-test="add-button"
       >
         {{ $t('content_bases.sites.sidebar_add.button_load_content') }}
       </UnnnicButton>
