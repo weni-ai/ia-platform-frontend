@@ -1,4 +1,4 @@
-import { mount, flushPromises } from '@vue/test-utils';
+import { mount, RouterLinkStub } from '@vue/test-utils';
 import PageContainer from '@/components/PageContainer.vue';
 import { createStore } from 'vuex';
 import { vi } from 'vitest';
@@ -27,6 +27,9 @@ describe('PageContainer', () => {
       },
       global: {
         plugins: [store],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
       },
     });
   });
