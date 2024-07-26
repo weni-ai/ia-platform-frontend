@@ -371,6 +371,21 @@ describe('@/store/repository/actions', () => {
     );
   });
 
+  it('getTrainingStatus should call repository.getRepositoryInfo and return null', async () => {
+    const params = { repositoryUUID: 'uuid', version: 'version' };
+    const mockResponse = {
+      data: '',
+    };
+    repository.getRepositoryInfo.mockResolvedValue(mockResponse);
+
+    const result = await actions.getTrainingStatus(store, params);
+    expect(result).toEqual(null);
+    expect(repository.getRepositoryInfo).toHaveBeenCalledWith(
+      params.repositoryUUID,
+      params.version,
+    );
+  });
+
   it('editRepository should call repository.edit', () => {
     const params = {
       ownerNickname: 'owner',
