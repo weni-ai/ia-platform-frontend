@@ -41,6 +41,7 @@ const i18n = VueI18n.createI18n({
   fallbackLocale: 'en-US',
   messages,
   numberFormats,
+  warnHtmlInMessage: 'off',
 });
 
 export default i18n;

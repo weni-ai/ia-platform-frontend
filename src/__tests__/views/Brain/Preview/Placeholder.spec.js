@@ -9,7 +9,6 @@ describe('Placeholder', () => {
   });
 
   test('renders the placeholder description correctly', () => {
-    console.log('wrapper.text()', wrapper.text());
     expect(wrapper.text()).toContain(
       wrapper.vm.$t('router.preview.placeholder'),
     );
