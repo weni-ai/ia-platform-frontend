@@ -1443,6 +1443,10 @@
                 "help": "Avoid generic names or names that are the same as other actions, try to be specific"
               }
             }
+          },
+          "generate_action_name": {
+            "chatbot_goal": "Chatbot that suggests names for actions based on the description entered.",
+            "context": "Description: {description}"
           }
         }
       },
