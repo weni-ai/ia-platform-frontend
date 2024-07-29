@@ -212,9 +212,15 @@ export default {
         const response =
           await nexusaiAPI.router.actions.generatedNames.generate({
             projectUuid: this.$store.state.Auth.connectProjectUuid,
-            chatbot_goal:
-              'Chatbot que sugere nomes para ações baseado na descrição informada',
-            context: `Descrição: ${this.description}`,
+            chatbot_goal: this.$t(
+              'modals.actions.add.steps.generate_action_name.chatbot_goal',
+            ),
+            context: this.$t(
+              'modals.actions.add.steps.generate_action_name.context',
+              {
+                description: this.description,
+              },
+            ),
           });
 
         this.name = response.data.action_name;

@@ -189,9 +189,15 @@ describe('ModalActions', () => {
         nexusaiAPI.router.actions.generatedNames.generate,
       ).toHaveBeenCalledWith({
         projectUuid: 'test2323test',
-        chatbot_goal:
-          'Chatbot que sugere nomes para ações baseado na descrição informada',
-        context: 'Descrição: Action Description',
+        chatbot_goal: wrapper.vm.$t(
+          'modals.actions.add.steps.generate_action_name.chatbot_goal',
+        ),
+        context: wrapper.vm.$t(
+          'modals.actions.add.steps.generate_action_name.context',
+          {
+            description: 'Action Description',
+          },
+        ),
       });
       expect(wrapper.vm.name).toBe('Weni Action');
     });

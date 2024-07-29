@@ -1423,6 +1423,10 @@
                 "help": "Evite nombres genéricos o que sean iguales a otras acciones, intente ser específico"
               }
             }
+          },
+          "generate_action_name": {
+            "chatbot_goal": "Chatbot que sugiere nombres para acciones basándose en la descripción dada",
+            "context": "Descripción: {description}"
           }
         }
       },
