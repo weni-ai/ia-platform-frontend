@@ -1436,7 +1436,7 @@
           },
           "nominate_action": {
             "title": "Name action",
-            "explanation": "The name of the action was generated automatically from the description added and used to help classify the action",
+            "explanation": "We automatically generate this name for you",
             "inputs": {
               "name": {
                 "label": "Name of action",

@@ -40,6 +40,7 @@
       <StepNominateAction
         v-if="currentStep.name === 'nominate_action'"
         v-model:name="name"
+        :loading="loadingGenerateName"
       />
     </section>
   </UnnnicModalDialog>
@@ -97,6 +98,7 @@ export default {
       currentStepIndex: 0,
 
       name: '',
+      loadingGenerateName: false,
       description: '',
       flowUuid: '',
     };
@@ -199,8 +201,30 @@ export default {
       if (this.currentStep === this.lastStep) {
         this.addAction();
       } else {
+        if (this.isNeedGenerateName()) this.generateActionName();
         this.currentStepIndex += 1;
       }
+    },
+
+    async generateActionName() {
+      this.loadingGenerateName = true;
+      try {
+        const response =
+          await nexusaiAPI.router.actions.generatedNames.generate({
+            projectUuid: this.$store.state.Auth.connectProjectUuid,
+            chatbot_goal:
+              'Chatbot que sugere nomes para ações baseado na descrição informada',
+            context: `Descrição: ${this.description}`,
+          });
+
+        this.name = response.data.action_name;
+      } finally {
+        this.loadingGenerateName = false;
+      }
+    },
+
+    isNeedGenerateName() {
+      return this.currentStep.name === 'select_flow';
     },
   },
 };
