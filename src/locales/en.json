@@ -2,6 +2,9 @@
   "and": " and ",
   "delete": "Delete",
   "cancel": "Cancel",
+  "back": "Back",
+  "next": "Next",
+  "finish": "Finish",
   "announcements": {
     "new_artificial_intelligence_module_is_here": "The new Artificial Intelligence module is here! Explore what's new and learn how to create even more amazing chatbots!"
   },
@@ -1402,6 +1405,47 @@
   },
   "modals": {
     "actions": {
+      "add": {
+        "title": "Add action",
+        "description": "Create a new action and set when it should start",
+        "messages": {
+          "success": "Action {name} successfully created"
+        },
+        "steps": {
+          "describe": {
+            "title": "Describe action",
+            "explanation": "Describe the action and when the user should enter it. The action will start from this description",
+            "inputs": {
+              "description": {
+                "label": "Describe the action",
+                "placeholder": "When the user...",
+                "help": "Try to be objective"
+              }
+            }
+          },
+          "select_flow": {
+            "title": "Select flow",
+            "explanation": "Select the flow that will be started with this action",
+            "filters": {
+              "flow_name": {
+                "placeholder": "Search flow"
+              }
+            },
+            "flow_already_in_use": "This flow is already linked to an action"
+          },
+          "nominate_action": {
+            "title": "Name action",
+            "explanation": "The name of the action was generated automatically from the description added and used to help classify the action",
+            "inputs": {
+              "name": {
+                "label": "Name of action",
+                "placeholder": "",
+                "help": "Avoid generic names or names that are the same as other actions, try to be specific"
+              }
+            }
+          }
+        }
+      },
       "btn_back": "Back",
       "btn_next": "Next",
       "btn_create": "Add",
@@ -1416,10 +1460,10 @@
         "not_found_message": "Flow not found"
       },
       "descriptions": {
-        "title": "Add action to the flow",
+        "title": "Configure action",
         "fill_name": "Add action",
         "sub_title": "Explain your flow and when the user should enter it. Try to be objective.",
-        "label": "Describe the action",
+        "label": "Description",
         "change_title": "Change action description",
         "change_sub_title": "The description helps the Brain work better"
       },

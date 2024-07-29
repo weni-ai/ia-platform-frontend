@@ -231,7 +231,7 @@ export default {
           doc: 'draft',
           docx: 'draft',
           site: 'globe',
-          action: 'account_tree',
+          action: 'bolt',
         }[this.extension] || 'draft'
       );
     },

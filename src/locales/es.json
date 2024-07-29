@@ -2,6 +2,9 @@
   "and": " y ",
   "delete": "Eliminar",
   "cancel": "Cancelar",
+  "back": "Volver",
+  "next": "Siguiente",
+  "finish": "Finalizar",
   "announcements": {
     "new_artificial_intelligence_module_is_here": "¡Ya está aquí el nuevo módulo de Inteligencia Artificial! Explora las novedades y aprende a crear chatbots aún más increíbles."
   },
@@ -1381,6 +1384,47 @@
   },
   "modals": {
     "actions": {
+      "add": {
+        "title": "Añadir acción",
+        "description": "Crear una nueva acción y establecer cuándo debe iniciarse",
+        "messages": {
+          "success": "Acción {name} creada con éxito"
+        },
+        "steps": {
+          "describe": {
+            "title": "Describir la acción",
+            "explanation": "Describe la acción y cuándo el usuario debe entrar en ella. A partir de esta descripción se iniciará la acción",
+            "inputs": {
+              "description": {
+                "label": "Describa la acción",
+                "placeholder": "Cuando el usuario...",
+                "help": "Intente ser objetivo"
+              }
+            }
+          },
+          "select_flow": {
+            "title": "Seleccionar flujo",
+            "explanation": "Seleccione el flujo que se iniciará con esta acción",
+            "filters": {
+              "flow_name": {
+                "placeholder": "Buscar flujos"
+              }
+            },
+            "flow_already_in_use": "Este flujo ya está vinculado a una acción"
+          },
+          "nominate_action": {
+            "title": "Nombre acción",
+            "explanation": "El nombre de la acción se generó automáticamente a partir de la descripción añadida y se utilizó para ayudar a clasificar la acción",
+            "inputs": {
+              "name": {
+                "label": "Nombre de la acción",
+                "placeholder": "",
+                "help": "Evite nombres genéricos o que sean iguales a otras acciones, intente ser específico"
+              }
+            }
+          }
+        }
+      },
       "btn_back": "Atrás",
       "btn_next": "Siguiente",
       "btn_create": "Añadir",
@@ -1395,10 +1439,10 @@
         "not_found_message": "Flujo no encontrado"
       },
       "descriptions": {
-        "title": "Añadir una acción al flujo",
+        "title": "Configurar acción",
         "fill_name": "Añadir acción",
         "sub_title": "Explique su flujo y cuándo debe entrar en él el usuario. Intente ser objetivo.",
-        "label": "Describa la acción",
+        "label": "Descripción",
         "change_title": "Cambiar la descripción de la acción",
         "change_sub_title": "La descripción ayuda al Brain a funcionar mejor"
       },

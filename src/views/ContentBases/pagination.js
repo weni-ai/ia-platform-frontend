@@ -4,12 +4,25 @@ export function usePagination({ load, transform }) {
   const status = ref(null);
   const next = ref(null);
   const data = ref([]);
+  let overwrittenParams = {};
+
+  function overwriteParams(params) {
+    overwrittenParams = params;
+  }
+
+  function reset() {
+    status.value = null;
+    next.value = null;
+    data.value = [];
+    overwrittenParams = {};
+  }
 
   async function loadNext() {
     status.value = 'loading';
 
     const { data: responseData } = await load.request({
       ...load.params,
+      ...overwrittenParams,
       next: next.value,
     });
 
@@ -42,8 +55,10 @@ export function usePagination({ load, transform }) {
     status,
     next,
     data,
+    reset,
     loadNext,
     addItem,
     removeItem,
+    overwriteParams,
   };
 }

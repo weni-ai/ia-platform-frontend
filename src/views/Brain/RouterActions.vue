@@ -19,10 +19,10 @@
 
     <ModalActions
       v-if="isAddActionOpen"
+      v-model="isAddActionOpen"
       :currentActions="items.data"
       :saving="isAdding"
-      @close-modal="isAddActionOpen = false"
-      @save="saveAction"
+      @added="saveAction"
     />
 
     <ModalChangeAction
@@ -177,35 +177,13 @@ export default {
       }
     },
 
-    async saveAction({
-      flow: { uuid: flowUuid, name: flowName },
-      description,
-    }) {
-      try {
-        this.isAdding = true;
-
-        const { data } = await nexusaiAPI.router.actions.create({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
-          flowUuid,
-          name: flowName,
-          description,
-        });
-
-        this.$store.state.alert = {
-          type: 'success',
-          text: this.$t('router.actions.router_activated', { name: flowName }),
-        };
-
-        this.items.data.push({
-          uuid: data.uuid,
-          extension_file: 'action',
-          created_file_name: data.name,
-          description: data.prompt,
-        });
-      } finally {
-        this.isAddActionOpen = false;
-        this.isAdding = false;
-      }
+    saveAction({ uuid, name, description }) {
+      this.items.data.push({
+        uuid,
+        extension_file: 'action',
+        created_file_name: name,
+        description,
+      });
     },
   },
 };
