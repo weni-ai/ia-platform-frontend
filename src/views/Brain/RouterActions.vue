@@ -21,17 +21,14 @@
       v-if="isAddActionOpen"
       v-model="isAddActionOpen"
       :currentActions="items.data"
-      :saving="isAdding"
       @added="saveAction"
     />
 
     <ModalChangeAction
-      v-if="modalEditAction"
-      v-model:description="modalEditAction.description"
-      :editing="modalEditAction.status === 'editing'"
-      :item="modalEditAction.name"
-      @close-modal="modalEditAction = null"
-      @edit="editAction"
+      v-if="isEditActionOpen"
+      v-model="isEditActionOpen"
+      :action="currentActionEditing"
+      @edited="editedAction"
     />
 
     <ModalRemoveAction
@@ -73,10 +70,24 @@ export default {
       isAddActionOpen: false,
       isAdding: false,
 
-      modalEditAction: null,
+      currentActionEditing: null,
       modalDeleteAction: null,
       flowName: null,
     };
+  },
+
+  computed: {
+    isEditActionOpen: {
+      get() {
+        return Boolean(this.currentActionEditing);
+      },
+
+      set(value) {
+        if (value === false) {
+          this.currentActionEditing = null;
+        }
+      },
+    },
   },
 
   created() {
@@ -110,7 +121,7 @@ export default {
     },
 
     openEditAction({ uuid, created_file_name, description }) {
-      this.modalEditAction = {
+      this.currentActionEditing = {
         uuid,
         name: created_file_name,
         description,
@@ -118,31 +129,11 @@ export default {
       };
     },
 
-    async editAction() {
-      try {
-        this.modalEditAction.status = 'editing';
+    editedAction(actionUuid, action) {
+      const item = this.items.data.find(({ uuid }) => uuid === actionUuid);
 
-        const { data } = await nexusaiAPI.router.actions.edit({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
-          actionUuid: this.modalEditAction.uuid,
-          description: this.modalEditAction.description,
-        });
-
-        const item = this.items.data.find(
-          ({ uuid }) => uuid === this.modalEditAction.uuid,
-        );
-
-        item.description = data.prompt;
-
-        this.$store.state.alert = {
-          type: 'success',
-          text: this.$t('router.actions.router_edited', {
-            name: this.modalEditAction.name,
-          }),
-        };
-      } finally {
-        this.modalEditAction = null;
-      }
+      item.created_file_name = action.name;
+      item.description = action.description;
     },
 
     openDeleteAction(actionUuid, actionName) {

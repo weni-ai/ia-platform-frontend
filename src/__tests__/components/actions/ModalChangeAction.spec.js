@@ -1,88 +1,179 @@
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import ModalChangeAction from '@/components/actions/ModalChangeAction.vue';
+import nexusaiAPI from '@/api/nexusaiAPI';
+import i18n from '@/utils/plugins/i18n';
+
+vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
+  data: {
+    count: 2,
+    next: null,
+    previous: null,
+    results: [
+      {
+        uuid: '1234',
+        name: 'Flow One',
+      },
+      {
+        uuid: '5678',
+        name: 'Flow Two',
+      },
+    ],
+  },
+});
+
+const editRequest = vi
+  .spyOn(nexusaiAPI.router.actions, 'edit')
+  .mockResolvedValue({
+    data: {
+      uuid: '1234',
+      name: 'Action Name Edited',
+      prompt: 'Action Description Edited',
+    },
+  });
+
+const store = createStore({
+  state() {
+    return {
+      Auth: {
+        connectProjectUuid: 'test2323test',
+      },
+    };
+  },
+});
+
+global.runtimeVariables = {
+  get(name) {
+    return {
+      TEMPLATE_LINK_FLOW_EDITOR:
+        'https://floweditor/{dashProjectUuid}/flow/{flowUuid}',
+    }[name];
+  },
+};
 
 describe('ModalChangeAction', () => {
   let wrapper;
 
-  const createComponent = (propsData) => {
-    wrapper = mount(ModalChangeAction, {
-      props: propsData,
-      stubs: {
-        ModalNext: true,
+  const setup = () =>
+    mount(ModalChangeAction, {
+      props: {
+        modelValue: true,
+        action: {
+          uuid: '1234',
+          name: 'Action Name',
+          description: 'Action Description',
+        },
+      },
+
+      global: {
+        plugins: [store],
       },
     });
-  };
 
-  afterEach(() => {
-    wrapper.unmount();
-  });
+  it('should fill the name input and the description textarea', () => {
+    wrapper = setup();
 
-  test('renders correctly with given props', async () => {
-    createComponent({
-      description: 'Test description',
-      item: 'Test item',
-      editing: false,
-    });
+    const name = wrapper.find('[data-test="name-input"]');
+    const description = wrapper.find('[data-test="description-textarea"]');
 
-    await wrapper.vm.$nextTick();
-
-    const title = wrapper.find('.flow-modal__header h3');
-    const item = wrapper.find('.flow-modal__header h4');
-    const subTitle = wrapper.find('.flow-modal__header p');
-
-    expect(title.exists()).toBe(true);
-    expect(title.text()).toBe(
-      wrapper.vm.$t('modals.actions.descriptions.change_title'),
+    expect(name.wrapperElement.querySelector('input').value).toBe(
+      'Action Name',
     );
 
-    expect(item.exists()).toBe(true);
-    expect(item.text()).toBe('Test item');
-
-    expect(subTitle.exists()).toBe(true);
-    expect(subTitle.text()).toBe(
-      wrapper.vm.$t('modals.actions.descriptions.change_sub_title'),
+    expect(description.wrapperElement.querySelector('textarea').value).toBe(
+      'Action Description',
     );
   });
 
-  test('emits closeModal event on cancel button click', async () => {
-    createComponent({
-      description: 'Test description',
-      item: 'Test item',
-      editing: false,
-    });
+  it('displays the flow name', async () => {
+    wrapper = setup();
 
-    const cancelButton = wrapper.findAll('.unnnic-button').at(0);
-    await cancelButton.trigger('click');
+    await flushPromises();
 
-    expect(wrapper.emitted('closeModal')).toBeTruthy();
+    const flowName = wrapper.find('[data-test="flow-name"]');
+
+    expect(flowName.text()).toBe('Flow One');
   });
 
-  test('emits edit event on complete button click', async () => {
-    createComponent({
-      description: 'Test description',
-      item: 'Test item',
-      editing: false,
+  describe('when an error occour on list flows API', () => {
+    it('', async () => {
+      vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockRejectedValueOnce({
+        data: {},
+      });
+
+      wrapper = setup();
+
+      await flushPromises();
+
+      const flowName = wrapper.find('[data-test="flow-name"]');
+
+      expect(flowName.text()).toBe(
+        i18n.global.t('modals.actions.edit.flow_name_unavailable'),
+      );
     });
-
-    const completeButton = wrapper.findAll('.unnnic-button').at(1);
-    await completeButton.trigger('click');
-
-    expect(wrapper.emitted('edit')).toBeTruthy();
   });
 
-  test('disables complete button when editing is true', () => {
-    createComponent({
-      description: 'Test description',
-      item: 'Test item',
-      editing: true,
+  describe('when the user clicks to go to the flow', () => {
+    it('should open the flow editor', () => {
+      wrapper = setup();
+
+      const windowOpen = vi.spyOn(window, 'open').mockImplementation(vi.fn());
+
+      const goToFlowButton = wrapper.find('[data-test="go-to-flow-button"]');
+
+      goToFlowButton.trigger('click');
+
+      expect(windowOpen).toHaveBeenCalledWith(
+        'https://floweditor/test2323test/flow/1234',
+      );
+    });
+  });
+
+  describe('when the user wants to save the changes', () => {
+    beforeEach(() => {
+      wrapper = setup();
+
+      const name = wrapper.findComponent('[data-test="name-input"]');
+      const description = wrapper.findComponent(
+        '[data-test="description-textarea"]',
+      );
+
+      const saveButton = wrapper.find('[data-test="save-button"]');
+
+      name.vm.$emit('update:modelValue', 'Action Name Edited');
+      description.vm.$emit('update:modelValue', 'Action Description Edited');
+
+      saveButton.trigger('click');
     });
 
-    const completeButton = wrapper.findAll('.unnnic-button').at(1);
+    it('should call edit action API', () => {
+      expect(editRequest).toHaveBeenCalledWith(
+        expect.objectContaining({
+          projectUuid: 'test2323test',
+          name: 'Action Name Edited',
+          description: 'Action Description Edited',
+          actionUuid: '1234',
+        }),
+      );
+    });
 
-    // Checks if there are any SVG elements inside the button
-    const svgIcon = completeButton.find('svg');
+    it('should show success alert message', () => {
+      expect(store.state.alert).toEqual({
+        type: 'success',
+        text: wrapper.vm.$t('modals.actions.edit.messages.success', {
+          name: 'Action Name Edited',
+        }),
+      });
+    });
 
-    // Checks if it found any SVGs (indicates that loading is active)
-    expect(svgIcon.exists()).toBe(true);
+    it('emits edited with correct object', () => {
+      expect(wrapper.emitted('edited')).toContainEqual([
+        '1234',
+        {
+          name: 'Action Name Edited',
+          description: 'Action Description Edited',
+        },
+      ]);
+    });
   });
 });

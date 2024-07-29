@@ -52,6 +52,10 @@ const mockItems = {
   status: null,
 };
 
+vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
+  data: {},
+});
+
 describe('RouterActions', () => {
   let wrapper;
 
@@ -131,28 +135,25 @@ describe('RouterActions', () => {
     await flushPromises();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.vm.modalEditAction).toEqual({
+    expect(wrapper.vm.currentActionEditing).toEqual({
       uuid: actionToEdit.uuid,
       name: actionToEdit.created_file_name,
       description: actionToEdit.description,
       status: null,
     });
 
-    wrapper.findComponent(ModalChangeAction).vm.$emit('edit');
-    await flushPromises();
-
-    expect(nexusaiAPI.router.actions.edit).toHaveBeenCalledWith({
-      projectUuid: store.state.Auth.connectProjectUuid,
-      actionUuid: actionToEdit.uuid,
-      description: actionToEdit.description,
+    wrapper.findComponent(ModalChangeAction).vm.$emit('edited', '1', {
+      name: 'Action Name Edited',
+      description: 'Action Description Edited',
     });
 
-    expect(actionToEdit.description).toBe('Updated Description');
-    expect(store.state.alert).toEqual({
-      type: 'success',
-      text: wrapper.vm.$t('router.actions.router_edited', {
-        name: actionToEdit.created_file_name,
-      }),
+    await flushPromises();
+
+    expect(wrapper.vm.items.data).toContainEqual({
+      uuid: '1',
+      extension_file: 'action',
+      created_file_name: 'Action Name Edited',
+      description: 'Action Description Edited',
     });
   });
 

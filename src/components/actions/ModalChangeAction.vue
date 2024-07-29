@@ -1,127 +1,260 @@
 <template>
-  <UnnnicModal
-    showModal
-    :closeIcon="false"
-    class="flow-modal"
+  <UnnnicModalDialog
+    v-model="modelValue"
+    showCloseIcon
+    showActionsDivider
+    size="md"
+    :title="action.name"
+    :secondaryButtonProps="{
+      text: $t('cancel'),
+    }"
+    :primaryButtonProps="{
+      text: $t('save_changes'),
+      disabled: !isSaveButtonActive,
+      loading: isSavingAction,
+      'data-test': 'save-button',
+    }"
+    @secondary-button-click="close"
+    @primary-button-click="saveAction"
   >
-    <article class="flow-modal__container">
-      <header class="flow-modal__header">
-        <section>
-          <UnnnicIntelligenceText
-            tag="h3"
-            color="neutral-darkest"
-            family="secondary"
-            size="title-sm"
-            weight="black"
-          >
-            {{ $t('modals.actions.descriptions.change_title') }}
-          </UnnnicIntelligenceText>
+    <UnnnicFormElement
+      :label="$t('modals.actions.add.steps.describe.inputs.description.label')"
+      :message="$t('modals.actions.add.steps.describe.inputs.description.help')"
+      class="form-element"
+    >
+      <UnnnicTextArea
+        v-model="description"
+        :placeholder="
+          $t('modals.actions.add.steps.describe.inputs.description.placeholder')
+        "
+        data-test="description-textarea"
+      />
+    </UnnnicFormElement>
 
-          <UnnnicIntelligenceText
-            v-if="item"
-            tag="h4"
-            color="neutral-dark"
-            family="secondary"
-            size="body-gt"
-            weight="black"
-            marginTop="sm"
-          >
-            {{ item }}
-          </UnnnicIntelligenceText>
+    <UnnnicFormElement
+      :label="$t('modals.actions.add.steps.nominate_action.inputs.name.label')"
+      :message="$t('modals.actions.add.steps.nominate_action.inputs.name.help')"
+      class="form-element"
+    >
+      <UnnnicInput
+        v-model="name"
+        :placeholder="
+          $t('modals.actions.add.steps.nominate_action.inputs.name.placeholder')
+        "
+        data-test="name-input"
+      />
+    </UnnnicFormElement>
 
-          <UnnnicIntelligenceText
-            tag="p"
-            color="neutral-dark"
-            family="secondary"
-            size="body-gt"
-            marginTop="xs"
-          >
-            {{ $t('modals.actions.descriptions.change_sub_title') }}
-          </UnnnicIntelligenceText>
-        </section>
-      </header>
-      <main class="flow-modal__body">
-        <section class="flow-modal__body_description">
-          <UnnnicFormElement :label="$t('modals.actions.descriptions.label')">
-            <UnnnicTextArea
-              v-bind="$props"
-              :modelValue="description"
-              @update:model-value="$emit('update:description', $event)"
-            />
-          </UnnnicFormElement>
-        </section>
-      </main>
-    </article>
+    <section class="flow-area">
+      <h3 class="flow-area__title">
+        {{ $t('modals.actions.edit.assigned_flow') }}
+      </h3>
 
-    <template #options>
-      <UnnnicButton
-        class="create-repository__container__button"
-        type="tertiary"
-        @click="$emit('closeModal')"
-      >
-        {{ $t('modals.actions.btn_cancel') }}
-      </UnnnicButton>
-      <UnnnicButton
-        size="large"
-        :loading="editing"
-        @click="$emit('edit')"
-      >
-        {{ $t('modals.actions.btn_complete') }}
-      </UnnnicButton>
-    </template>
-  </UnnnicModal>
+      <section class="flow-area__flow">
+        <UnnnicSkeletonLoading
+          v-if="linkedFlow.status === 'loading'"
+          tag="div"
+          width="150px"
+          height="22px"
+        />
+
+        <p
+          v-else
+          class="flow-area__flow__title"
+          data-test="flow-name"
+        >
+          <i v-if="linkedFlow.status === 'error'">
+            {{ $t('modals.actions.edit.flow_name_unavailable') }}
+          </i>
+
+          <template v-else>{{ linkedFlow.name }}</template>
+        </p>
+
+        <UnnnicButton
+          type="secondary"
+          size="small"
+          iconLeft="account_tree"
+          class="flow-area__flow__go-to-flow"
+          data-test="go-to-flow-button"
+          @click="openFlowEditor"
+        >
+          {{ $t('modals.actions.edit.go_to_flow') }}
+        </UnnnicButton>
+      </section>
+    </section>
+  </UnnnicModalDialog>
 </template>
 
-<script>
-export default {
-  props: {
-    description: {
-      type: String,
-      default: '',
-      required: false,
-    },
-    item: {
-      type: String,
-      default: '',
-      required: false,
-    },
-    editing: {
-      type: Boolean,
-    },
+<script setup>
+import { computed, onBeforeMount, reactive, ref } from 'vue';
+import { useStore } from 'vuex';
+import { usePagination } from '@/views/ContentBases/pagination';
+import nexusaiAPI from '@/api/nexusaiAPI';
+import i18n from '@/utils/plugins/i18n.js';
+
+const modelValue = defineModel({
+  type: Boolean,
+});
+
+const props = defineProps({
+  action: {
+    type: Object,
+    required: true,
   },
-  emits: ['closeModal', 'edit'],
-  data() {
-    return {};
-  },
-};
+});
+
+const emit = defineEmits(['edited']);
+
+const store = useStore();
+
+const isSavingAction = ref(false);
+
+const name = ref('');
+const description = ref('');
+
+const linkedFlow = reactive({
+  status: null,
+  name: '',
+});
+
+const isSaveButtonActive = computed(() => {
+  return name.value.trim() && description.value.trim();
+});
+
+onBeforeMount(() => {
+  const { action } = props;
+
+  name.value = action.name;
+  description.value = action.description;
+
+  searchForFlowUuid(action.uuid);
+});
+
+function close() {
+  modelValue.value = false;
+}
+
+function searchForFlowUuid(flowUuid) {
+  const flows = usePagination({
+    load: {
+      request: nexusaiAPI.router.actions.flows.list,
+      params: {
+        projectUuid: store.state.Auth.connectProjectUuid,
+        name: '',
+      },
+    },
+  });
+
+  const tryToFindLinkedFlow = () => {
+    linkedFlow.status = 'loading';
+
+    flows
+      .loadNext()
+      .then(() => {
+        const flow = flows.data.value.find(({ uuid }) => uuid === flowUuid);
+
+        if (flow) {
+          linkedFlow.status = null;
+          linkedFlow.name = flow.name;
+        } else if (flows.status.value !== 'complete') {
+          tryToFindLinkedFlow();
+        }
+      })
+      .catch(() => {
+        linkedFlow.status = 'error';
+      });
+  };
+
+  tryToFindLinkedFlow();
+}
+
+function openFlowEditor() {
+  const templateLinkFlowEditor = String(
+    runtimeVariables.get('TEMPLATE_LINK_FLOW_EDITOR'),
+  );
+
+  const transformedLink = templateLinkFlowEditor
+    .replace('{dashProjectUuid}', store.state.Auth.connectProjectUuid)
+    .replace('{flowUuid}', props.action.uuid);
+
+  window.open(transformedLink);
+}
+
+async function saveAction() {
+  const actionUuid = props.action.uuid;
+
+  try {
+    isSavingAction.value = true;
+
+    const { data } = await nexusaiAPI.router.actions.edit({
+      projectUuid: store.state.Auth.connectProjectUuid,
+      actionUuid,
+      name: name.value,
+      description: description.value,
+    });
+
+    const action = {
+      name: data.name,
+      description: data.prompt,
+    };
+
+    store.state.alert = {
+      type: 'success',
+      text: i18n.global.t('modals.actions.edit.messages.success', {
+        name: action.name,
+      }),
+    };
+
+    emit('edited', actionUuid, action);
+  } finally {
+    isSavingAction.value = false;
+    close();
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-.flow-modal {
-  :deep(.unnnic-modal-container-background) {
-    width: 100%;
-    max-width: 37.75 * $unnnic-font-size;
+.form-element + .form-element {
+  margin-top: $unnnic-spacing-sm;
+}
+
+.flow-area {
+  margin-top: $unnnic-spacing-md;
+
+  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
+  padding: $unnnic-spacing-sm - $unnnic-border-width-thinner;
+  border-radius: $unnnic-border-radius-sm;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: $unnnic-spacing-xs;
+
+  &__title {
+    margin: 0;
+    color: $unnnic-color-neutral-dark;
+    font-family: $unnnic-font-family-secondary;
+    font-weight: $unnnic-font-weight-bold;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
   }
 
-  :deep(.unnnic-modal-container-background-body-description-container) {
-    padding-bottom: 0;
-  }
-
-  &__container {
+  &__flow {
     display: flex;
-    flex-direction: column;
-  }
-
-  &__header {
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    text-align: center;
-    margin-bottom: $unnnic-spacing-md;
-  }
+    column-gap: $unnnic-spacing-xs;
+    justify-content: space-between;
 
-  &__body {
-    text-align: left;
+    &__title {
+      color: $unnnic-color-neutral-cloudy;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-regular;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+    }
+
+    &__go-to-flow {
+      min-width: 12.5 * $unnnic-font-size;
+    }
   }
 }
 </style>
