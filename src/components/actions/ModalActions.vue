@@ -205,18 +205,18 @@ export default {
     },
 
     async generateActionName() {
-      const response = await nexusaiAPI.router.actions.listActionNames({
+      const response = await nexusaiAPI.router.actions.generatedNames.generate({
         projectUuid: this.$store.state.Auth.connectProjectUuid,
         chatbot_goal:
           'Chatbot que sugere nomes para ações baseado na descrição informada',
-        context: `Descrição: ${this.description} Quando o usuário falar algo relacionado a doenças jogue para esta ação`,
+        context: `Descrição: ${this.description}`,
       });
 
       this.name = response.data.action_name;
     },
 
     isNeedGenerateName() {
-      return this.currentStepIndex + 1 === 2;
+      return this.currentStep.name === 'select_flow';
     },
   },
 };
