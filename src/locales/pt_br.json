@@ -1394,7 +1394,7 @@
           },
           "nominate_action": {
             "title": "Nomear ação",
-            "explanation": "O nome da ação foi gerado automaticamente a partir da descrição adicionada e usado para auxiliar na classificação da ação",
+            "explanation": "Geramos automaticamente este nome para você",
             "inputs": {
               "name": {
                 "label": "Nome da ação",

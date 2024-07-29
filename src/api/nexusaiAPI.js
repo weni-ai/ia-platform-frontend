@@ -148,6 +148,18 @@ export default {
         return request.$http.get(`api/${projectUuid}/flows/`);
       },
 
+      generatedNames: {
+        generate({ projectUuid, chatbot_goal, context }) {
+          return request.$http.post(
+            `api/${projectUuid}/generate-action-name/`,
+            {
+              chatbot_goal,
+              context,
+            },
+          );
+        },
+      },
+
       flows: {
         list({ next, projectUuid, name }) {
           if (next) {
