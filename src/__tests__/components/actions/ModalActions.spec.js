@@ -25,7 +25,10 @@ vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
   },
 });
 
-vi.spyOn(nexusaiAPI.router.actions, 'listActionNames').mockResolvedValue({
+vi.spyOn(
+  nexusaiAPI.router.actions.generatedNames,
+  'generate',
+).mockResolvedValue({
   data: {
     action_name: 'Weni Action',
   },
@@ -180,14 +183,15 @@ describe('ModalActions', () => {
   });
 
   describe('generateActionName', () => {
-    it('should call listActionNames API and update name', async () => {
+    it('should call generate API and update name', async () => {
       await wrapper.vm.generateActionName();
-      expect(nexusaiAPI.router.actions.listActionNames).toHaveBeenCalledWith({
+      expect(
+        nexusaiAPI.router.actions.generatedNames.generate,
+      ).toHaveBeenCalledWith({
         projectUuid: 'test2323test',
         chatbot_goal:
           'Chatbot que sugere nomes para ações baseado na descrição informada',
-        context:
-          'Descrição: Action Description Quando o usuário falar algo relacionado a doenças jogue para esta ação',
+        context: 'Descrição: Action Description',
       });
       expect(wrapper.vm.name).toBe('Weni Action');
     });
