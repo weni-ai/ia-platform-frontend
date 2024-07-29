@@ -15,6 +15,7 @@
       <UnnnicButton
         class="create-repository__container__button"
         type="tertiary"
+        data-test="close-button"
         @click="$emit('close')"
       >
         {{ closeText }}
@@ -23,6 +24,7 @@
         class="create-repository__container__button attention-button"
         type="attention"
         :loading="loading"
+        data-test="action-button"
         @click="$emit('action')"
       >
         {{ actionText }}
@@ -36,12 +38,29 @@ export default {
   props: {
     showModal: Boolean,
     loading: Boolean,
-    title: String,
-    description: String,
-    closeText: String,
-    actionText: String,
-    message: String,
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      default: '',
+    },
+    message: {
+      type: String,
+      default: '',
+    },
+    closeText: {
+      type: String,
+      required: true,
+    },
+    actionText: {
+      type: String,
+      required: true,
+    },
   },
+
+  emits: ['action', 'close'],
 };
 </script>
 
