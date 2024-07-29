@@ -4,8 +4,6 @@
 
     <RouterView v-else />
 
-    <ModalDependingOnFlowsLength />
-
     <UnnnicAlert
       v-if="$store.state.alert"
       :key="$store.state.alert.text"
@@ -29,10 +27,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import I18n from '@/utils/plugins/i18n';
 import store from './store';
-import ModalDependingOnFlowsLength from './components/ModalDependingOnFlowsLength.vue';
 import ModalWarn from './components/ModalWarn.vue';
 import ObstructiveError from './views/ObstructiveError.vue';
 import { isEmpty } from 'lodash';
@@ -41,7 +38,6 @@ export default {
   name: 'App',
   components: {
     I18n,
-    ModalDependingOnFlowsLength,
     ModalWarn,
     ObstructiveError,
   },

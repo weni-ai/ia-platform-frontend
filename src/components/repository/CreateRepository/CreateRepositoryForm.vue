@@ -16,8 +16,8 @@
           :disabledSubmit="disabledSubmit"
           :repository_type="data.repository_type"
           :loading="submitting"
-          @createRepository="createRepository($event)"
-          @backModal="onChangeModalState(true)"
+          @create-repository="createRepository($event)"
+          @back-modal="onChangeModalState(true)"
         />
       </section>
 
@@ -62,7 +62,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import IntelligenceTab from '@/components/repository/CreateRepository/IntelligenceTab.vue';
 import DefinitionsTab from '@/components/repository/CreateRepository/DefinitionsTab.vue';
-import Emoji from '@/components/shared/Emoji.vue';
 import repositoryV2 from '../../../api/v2/repository';
 import { get } from 'lodash';
 import nexusaiAPI from '../../../api/nexusaiAPI';
@@ -72,7 +71,6 @@ export default {
   components: {
     IntelligenceTab,
     DefinitionsTab,
-    Emoji,
   },
   data() {
     return {
