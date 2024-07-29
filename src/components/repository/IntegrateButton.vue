@@ -10,6 +10,7 @@
       icon="add-1"
       class="mr-2"
       type="alternative"
+      data-test="integrate-button"
       @click.prevent.stop="$emit('click')"
     />
   </UnnnicToolTip>
