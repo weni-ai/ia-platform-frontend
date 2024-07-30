@@ -1397,9 +1397,9 @@
             "explanation": "Describe la acción y cuándo el usuario debe entrar en ella. A partir de esta descripción se iniciará la acción",
             "inputs": {
               "description": {
-                "label": "Describa la acción",
-                "placeholder": "Cuando el usuario...",
-                "help": "Intente ser objetivo"
+                "label": "Esta acción comenzará cuando...",
+                "placeholder": "el usuario dice que quiere un servicio humano",
+                "help": "Intenta ser objetivo. Es a partir de la descripción que comenzará la acción"
               }
             }
           },

@@ -1418,9 +1418,9 @@
             "explanation": "Describe the action and when the user should enter it. The action will start from this description",
             "inputs": {
               "description": {
-                "label": "Describe the action",
-                "placeholder": "When the user...",
-                "help": "Try to be objective"
+                "label": "This action will begin when...",
+                "placeholder": "the user says they want human service",
+                "help": "Try to be objective. It's from the description that the action will start"
               }
             }
           },
