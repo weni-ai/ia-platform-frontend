@@ -1394,12 +1394,12 @@
           },
           "nominate_action": {
             "title": "Nomear ação",
-            "explanation": "Geramos automaticamente este nome para você",
+            "explanation": "O nome da ação foi gerado automaticamente a partir da descrição adicionada e usado para auxiliar na classificação da ação",
             "inputs": {
               "name": {
                 "label": "Nome da ação",
                 "placeholder": "",
-                "help": "Evite nomes genéricos ou que sejam iguais a outras ações, tente ser específico"
+                "help": "Se o nome gerado não for adequado, é possível editá-lo"
               }
             }
           },
