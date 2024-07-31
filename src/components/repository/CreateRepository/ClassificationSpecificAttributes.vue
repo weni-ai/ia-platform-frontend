@@ -1,10 +1,7 @@
 <template>
   <div class="create-repository__definitions">
     <div class="create-repository__definitions__wrapper">
-      <section
-        v-if="repository_type === 'classifier'"
-        class="create-repository__definitions__wrapper__fields"
-      >
+      <section class="create-repository__definitions__wrapper__fields">
         <UnnnicLabel :label="$t('webapp.create_repository.language_label')" />
 
         <UnnnicSelectSmart
@@ -18,10 +15,7 @@
         />
       </section>
 
-      <div
-        v-if="repository_type === 'classifier'"
-        class="intelligence-private-or-public"
-      >
+      <section class="intelligence-private-or-public">
         <UnnnicCard
           clickable
           :title="$t('webapp.create_repository.privacy_type_public_title')"
@@ -31,8 +25,9 @@
           type="content"
           icon="lock-unlock-1-1"
           class="intelligence-private-or-public__item"
-          :enabled="!is_private"
-          @click="$emit('update:is_private', false)"
+          data-test="set-as-public-card"
+          :enabled="!isPrivate"
+          @click="$emit('update:isPrivate', false)"
         />
 
         <UnnnicCard
@@ -44,15 +39,19 @@
           type="content"
           icon="lock-2-1"
           class="intelligence-private-or-public__item"
-          :enabled="is_private"
-          @click="$emit('update:is_private', true)"
+          data-test="set-as-private-card"
+          :enabled="isPrivate"
+          @click="$emit('update:isPrivate', true)"
         />
-      </div>
+      </section>
 
-      <section v-if="repository_type === 'classifier'">
+      <section>
         <UnnnicLabel :label="$t('webapp.create_repository.category_label')" />
 
-        <div class="categories-list">
+        <div
+          class="categories-list"
+          data-test="categories-list"
+        >
           <template v-if="categoryListLoading">
             <UnnnicSkeletonLoading
               v-for="i in 10"
@@ -71,6 +70,7 @@
             :disabled="categories.includes(category.id)"
             clickable
             type="brand"
+            :data-test="`category-${category.id}`"
             @click="
               $emit(
                 'update:categories',
@@ -82,34 +82,6 @@
           />
         </div>
       </section>
-
-      <section class="create-repository__definitions__buttons">
-        <UnnnicButton
-          type="tertiary"
-          class="create-repository__definitions__buttons__btn"
-          @click="dispatchBackModal()"
-        >
-          {{ $t('webapp.create_repository.cancel_create_intelligence_button') }}
-        </UnnnicButton>
-
-        <UnnnicButton
-          class="create-repository__definitions__buttons__btn"
-          :disabled="disabledSubmit"
-          :loading="loading"
-          @click="dispatchCreateRepository()"
-        >
-          {{ $t('webapp.create_repository.create_intelligence_button') }}
-        </UnnnicButton>
-      </section>
-
-      <!-- <unnnic-card
-      class="create-repository__definitions__info-card"
-      type="default"
-      title="Sobre a WeniGPT - IA Generativa"
-      description="Crie bases de conteúdo e a IA Generativa será capaz de responder perguntas
-       baseada nesse conteúdo sem treinamento. Ideal para textos informativos e FAQs."
-      scheme="feedback-yellow"
-      /> -->
     </div>
   </div>
 </template>
@@ -121,13 +93,23 @@ import { LANGUAGES } from '@/utils/index';
 export default {
   name: 'DefinitionsTab',
   props: {
-    loading: Boolean,
-    disabledSubmit: Boolean,
-    repository_type: String,
-    language: String,
-    is_private: Boolean,
-    categories: Array,
+    repositoryType: {
+      type: String,
+      required: true,
+    },
+    language: {
+      type: String,
+      default: '',
+    },
+    isPrivate: Boolean,
+    categories: {
+      type: Array,
+      required: true,
+    },
   },
+
+  emits: ['update:language', 'update:isPrivate', 'update:categories'],
+
   data() {
     return {
       categoryListLoading: false,
@@ -161,20 +143,9 @@ export default {
         const { data } = await this.getAllCategories();
         const sortedData = data.sort((previous, next) => previous.id - next.id);
         this.categoryList = sortedData;
-      } catch (error) {
-        this.$buefy.toast.open({
-          message: error,
-          type: 'is-danger',
-        });
       } finally {
         this.categoryListLoading = false;
       }
-    },
-    dispatchCreateRepository() {
-      this.$emit('createRepository');
-    },
-    dispatchBackModal() {
-      this.$emit('backModal');
     },
   },
 };
@@ -234,16 +205,6 @@ export default {
         &__content {
           width: 47%;
         }
-      }
-    }
-
-    &__buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: $unnnic-spacing-lg;
-
-      &__btn {
-        width: 47%;
       }
     }
 

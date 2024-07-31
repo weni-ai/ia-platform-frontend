@@ -9,16 +9,35 @@
         />
       </section>
       <section class="create-repository__container__steps">
-        <DefinitionsTab
+        <ClassificationSpecificAttributes
+          v-if="data.repository_type === 'classifier'"
           v-model:language="data.language"
-          v-model:is_private="data.is_private"
+          v-model:isPrivate="data.is_private"
           v-model:categories="data.categories"
-          :disabledSubmit="disabledSubmit"
-          :repository_type="data.repository_type"
-          :loading="submitting"
-          @create-repository="createRepository($event)"
-          @back-modal="onChangeModalState(true)"
+          :repositoryType="data.repository_type"
         />
+
+        <section class="create-repository__definitions__buttons">
+          <UnnnicButton
+            type="tertiary"
+            class="create-repository__definitions__buttons__btn"
+            @click="onChangeModalState(true)"
+          >
+            {{
+              $t('webapp.create_repository.cancel_create_intelligence_button')
+            }}
+          </UnnnicButton>
+
+          <UnnnicButton
+            class="create-repository__definitions__buttons__btn"
+            :disabled="disabledSubmit"
+            :loading="submitting"
+            data-test="cancel-button"
+            @click="createRepository"
+          >
+            {{ $t('webapp.create_repository.create_intelligence_button') }}
+          </UnnnicButton>
+        </section>
       </section>
 
       <UnnnicModal
@@ -61,7 +80,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import IntelligenceTab from '@/components/repository/CreateRepository/IntelligenceTab.vue';
-import DefinitionsTab from '@/components/repository/CreateRepository/DefinitionsTab.vue';
+import ClassificationSpecificAttributes from '@/components/repository/CreateRepository/ClassificationSpecificAttributes.vue';
 import repositoryV2 from '../../../api/v2/repository';
 import { get } from 'lodash';
 import nexusaiAPI from '../../../api/nexusaiAPI';
@@ -70,7 +89,7 @@ export default {
   name: 'CreateRepositoryForm',
   components: {
     IntelligenceTab,
-    DefinitionsTab,
+    ClassificationSpecificAttributes,
   },
   data() {
     return {
@@ -82,7 +101,7 @@ export default {
         categories: [],
         name: '',
         description: '',
-        repository_type: 'content',
+        repository_type: 'classifier',
       },
       submitting: false,
       errors: {},
@@ -107,7 +126,6 @@ export default {
         !this.data.description ||
         !this.data.repository_type ||
         !this.data.language ||
-        !this.data.is_private ||
         !this.data.categories.length
       );
     },
@@ -298,5 +316,15 @@ export default {
 :deep(.text-input.size--sm .icon-right),
 :deep(.text-input.size--sm .icon-left) {
   top: 15px;
+}
+
+.create-repository__definitions__buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $unnnic-spacing-lg;
+
+  &__btn {
+    width: 47%;
+  }
 }
 </style>
