@@ -1436,12 +1436,12 @@
           },
           "nominate_action": {
             "title": "Name action",
-            "explanation": "We automatically generate this name for you",
+            "explanation": "The name of the action was generated automatically from the description added and used to help classify the action",
             "inputs": {
               "name": {
                 "label": "Name of action",
                 "placeholder": "",
-                "help": "Avoid generic names or names that are the same as other actions, try to be specific"
+                "help": "If the name generated is not suitable, you can edit it"
               }
             }
           },

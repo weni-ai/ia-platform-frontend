@@ -1415,12 +1415,12 @@
           },
           "nominate_action": {
             "title": "Nombre acción",
-            "explanation": "Generamos automáticamente este nombre para usted",
+            "explanation": "El nombre de la acción se generó automáticamente a partir de la descripción añadida y se utilizó para ayudar a clasificar la acción",
             "inputs": {
               "name": {
                 "label": "Nombre de la acción",
                 "placeholder": "",
-                "help": "Evite nombres genéricos o que sean iguales a otras acciones, intente ser específico"
+                "help": "Si el nombre generado no es adecuado, puedes editarlo"
               }
             }
           },
