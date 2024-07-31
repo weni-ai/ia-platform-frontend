@@ -42,7 +42,7 @@ export default {
     },
     initialData: {
       type: [Array, String],
-      default: null,
+      default: '',
     },
     compact: {
       type: Boolean,
@@ -77,7 +77,7 @@ export default {
     },
   },
   mounted() {
-    this.update();
+    this.update(this.value);
   },
   methods: {
     update(value) {
