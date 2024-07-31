@@ -2,6 +2,7 @@
   <UnnnicDropdown
     v-model:open="isClickActivated"
     position="bottom-left"
+    class="dropdown"
   >
     <template #trigger>
       <UnnnicIcon
@@ -18,6 +19,7 @@
       class="options"
       horizontal="right-right"
       vertical="top-bottom"
+      :style="{ minWidth }"
     >
       <section
         v-for="(action, index) in actions"
@@ -53,12 +55,21 @@ defineProps({
     type: Array,
     default: () => [],
   },
+
+  minWidth: {
+    type: String,
+    default: '170px',
+  },
 });
 
 const isClickActivated = ref(false);
 </script>
 
 <style lang="scss" scoped>
+.dropdown :deep(.unnnic-dropdown__trigger) {
+  display: flex;
+}
+
 .button-menu {
   user-select: none;
   cursor: pointer;
@@ -69,7 +80,6 @@ const isClickActivated = ref(false);
   margin-block: -$unnnic-spacing-ant;
   border-radius: $unnnic-border-radius-sm;
   background-color: $unnnic-color-background-snow;
-  min-width: 10.625 * $unnnic-font-size;
 
   &__option {
     user-select: none;

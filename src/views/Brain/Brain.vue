@@ -65,50 +65,10 @@
         <div class="repository-base-edit__wrapper__card-test-container__header">
           {{ $t('router.preview.title') }}
 
-          <article>
-            <UnnnicDropdown
-              v-model:open="dropdownOpen"
-              position="bottom-left"
-            >
-              <template #trigger>
-                <section>
-                  <UnnnicIconSvg
-                    icon="navigation-menu-vertical-1"
-                    class="unnnic-card-intelligence__header__buttons__icon"
-                    :scheme="dropdownOpen ? 'neutral-dark' : 'neutral-clean'"
-                    size="sm"
-                    clickable
-                  />
-                </section>
-              </template>
-
-              <UnnnicDropdownItem>
-                <section
-                  class="unnnic-card-intelligence__header__buttons__dropdown"
-                  @click="refreshPreview"
-                >
-                  <UnnnicIconSvg
-                    size="sm"
-                    icon="refresh"
-                  />
-                  <div>{{ $t('router.preview.options.refresh') }}</div>
-                </section>
-              </UnnnicDropdownItem>
-
-              <UnnnicDropdownItem>
-                <section
-                  class="unnnic-card-intelligence__header__buttons__dropdown"
-                  @click="isMobilePreviewModalOpen = true"
-                >
-                  <UnnnicIconSvg
-                    size="sm"
-                    icon="smartphone"
-                  />
-                  <div>{{ $t('router.preview.options.qr_code') }}</div>
-                </section>
-              </UnnnicDropdownItem>
-            </UnnnicDropdown>
-          </article>
+          <ContentItemActions
+            :actions="previewActions"
+            minWidth="175px"
+          />
         </div>
 
         <Tests
@@ -148,6 +108,8 @@ import ModalPreviewQRCode from './Preview/ModalPreviewQRCode.vue';
 import ModalSaveChangesError from './ModalSaveChangesError.vue';
 import { useFilesPagination } from '../ContentBases/filesPagination';
 import { useSitesPagination } from '../ContentBases/sitesPagination';
+import ContentItemActions from '../repository/content/ContentItemActions.vue';
+import i18n from '@/utils/plugins/i18n';
 
 export default {
   name: 'Brain',
@@ -160,6 +122,7 @@ export default {
     RouterTunings,
     ModalPreviewQRCode,
     ModalSaveChangesError,
+    ContentItemActions,
   },
   setup() {
     const route = useRoute();
@@ -288,6 +251,23 @@ export default {
       loadRouterOptions();
     });
 
+    const previewActions = computed(() => {
+      return [
+        {
+          scheme: 'neutral-dark',
+          icon: 'refresh',
+          text: i18n.global.t('router.preview.options.refresh'),
+          onClick: refreshPreview,
+        },
+        {
+          scheme: 'neutral-dark',
+          icon: 'smartphone',
+          text: i18n.global.t('router.preview.options.qr_code'),
+          onClick: () => (isMobilePreviewModalOpen.value = true),
+        },
+      ];
+    });
+
     return {
       routerTabs,
       loadingContentBase,
@@ -307,6 +287,7 @@ export default {
       onTabChange,
       refreshPreview,
       loadRouterOptions,
+      previewActions,
     };
   },
 };
@@ -529,6 +510,7 @@ export default {
 
       &__header {
         display: flex;
+        align-items: center;
         justify-content: space-between;
         color: $unnnic-color-neutral-darkest;
         font-family: $unnnic-font-family-secondary;
