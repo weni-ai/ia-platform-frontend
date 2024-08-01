@@ -32,9 +32,8 @@
               {{ $t(`router.tabs.${tab.title}`) }}
             </template>
           </UnnnicTab>
-
           <RouterContentBase
-            v-if="$route.name === 'router-content'"
+            v-if="route.name === 'router-content'"
             :filterNameProp="filterName"
             :filesProp="files"
             :sitesProp="sites"
@@ -43,14 +42,14 @@
             @update:filter-name="(v) => (filterName = v)"
           />
           <RouterActions
-            v-else-if="$route.name === 'router-actions'"
+            v-else-if="route.name === 'router-actions'"
             :items="routerActions"
           />
           <RouterCustomization
-            v-else-if="$route.name === 'router-personalization'"
+            v-else-if="route.name === 'router-personalization'"
           />
           <RouterTunings
-            v-else-if="$route.name === 'router-tunings'"
+            v-else-if="route.name === 'router-tunings'"
             :data="routerTunings"
           />
         </section>
@@ -84,6 +83,7 @@
 
               <UnnnicDropdownItem>
                 <section
+                  data-test="refresh-option"
                   class="unnnic-card-intelligence__header__buttons__dropdown"
                   @click="refreshPreview"
                 >
@@ -97,6 +97,7 @@
 
               <UnnnicDropdownItem>
                 <section
+                  data-test="qr-code-option"
                   class="unnnic-card-intelligence__header__buttons__dropdown"
                   @click="isMobilePreviewModalOpen = true"
                 >
@@ -289,6 +290,7 @@ export default {
     });
 
     return {
+      route,
       routerTabs,
       loadingContentBase,
       dropdownOpen,
@@ -307,6 +309,7 @@ export default {
       onTabChange,
       refreshPreview,
       loadRouterOptions,
+      loadContentBase,
     };
   },
 };
