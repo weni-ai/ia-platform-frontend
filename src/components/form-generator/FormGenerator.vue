@@ -36,7 +36,10 @@
           @input="update()"
         />
       </b-field>
-      <entity-accordion :open.sync="isOpen">
+      <entity-accordion
+        v-if="shouldShowAdvancedGroup"
+        :open.sync="isOpen"
+      >
         <div slot="header" class="level">
           <div class="badges-card__header">
             <p
@@ -178,6 +181,16 @@ export default {
     };
   },
   computed: {
+    shouldShowAdvancedGroup() {
+      const isDefault =
+        this.initialData.algorithm === 'transformer_network_diet_bert' &&
+        this.initialData.use_competing_intents === false &&
+        this.initialData.use_name_entities === false &&
+        this.initialData.use_analyze_char === false;
+
+      return !isDefault;
+    },
+
     fields() {
       const fields = Object.keys(this.schema)
 
