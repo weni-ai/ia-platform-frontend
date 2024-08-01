@@ -44,10 +44,6 @@ const setup = ({ category, loadingType, showTypes } = {}) =>
 describe('IntelligencesFilter.vue', () => {
   let wrapper;
 
-  it('', () => {
-    wrapper = setup();
-  });
-
   describe('when category is not set', () => {
     it('should not show the category select', () => {
       wrapper = setup({ category: undefined });
