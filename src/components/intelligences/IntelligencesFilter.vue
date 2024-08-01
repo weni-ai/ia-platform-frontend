@@ -7,6 +7,7 @@
     <UnnnicSelectSmart
       v-if="category !== undefined"
       size="sm"
+      data-test="category-select"
       :modelValue="category"
       :options="categories"
       @update:model-value="$emit('update:category', $event)"
@@ -17,25 +18,38 @@
       :modelValue="name"
       size="sm"
       iconLeft="search-1"
+      data-test="name-input"
       :placeholder="$t('intelligences.search_intelligence_placeholder')"
       @update:model-value="$emit('update:name', $event)"
     />
 
-    <UnnnicRadio
-      :modelValue="type"
-      value="generative"
-      @update:modelValue="$emit('update:type', $event)"
-    >
-      {{ $t('intelligences.filter_type_generative_label') }}
-    </UnnnicRadio>
+    <UnnnicSkeletonLoading
+      v-if="loadingType"
+      tag="div"
+      width="310px"
+      height="22px"
+      data-test="types-skeleton-loading"
+    />
 
-    <UnnnicRadio
-      :modelValue="type"
-      value="classification"
-      @update:modelValue="$emit('update:type', $event)"
-    >
-      {{ $t('intelligences.filter_type_classification_label') }}
-    </UnnnicRadio>
+    <template v-else-if="showTypes">
+      <UnnnicRadio
+        :modelValue="type"
+        value="generative"
+        data-test="generative-radio"
+        @update:model-value="$emit('update:type', $event)"
+      >
+        {{ $t('intelligences.filter_type_generative_label') }}
+      </UnnnicRadio>
+
+      <UnnnicRadio
+        :modelValue="type"
+        value="classification"
+        data-test="classification-radio"
+        @update:model-value="$emit('update:type', $event)"
+      >
+        {{ $t('intelligences.filter_type_classification_label') }}
+      </UnnnicRadio>
+    </template>
   </div>
 </template>
 
@@ -44,14 +58,26 @@ import { mapActions } from 'vuex';
 
 export default {
   props: {
-    name: String,
-    type: String,
-    category: Array,
+    category: {
+      type: Array,
+      default: undefined,
+    },
+    name: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: '',
+    },
+    loadingType: Boolean,
+    showTypes: {
+      type: Boolean,
+      default: true,
+    },
   },
 
-  data() {
-    return {};
-  },
+  emits: ['update:category', 'update:name', 'update:type'],
 
   computed: {
     categories() {
@@ -60,16 +86,18 @@ export default {
         label: this.$t('intelligences.categories_placeholder'),
       };
 
+      const options = [placeholder];
+
       if (this.$store.state.Category.allCategories) {
-        return [placeholder].concat(
-          this.$store.state.Category.allCategories.map((category) => ({
+        options.push(
+          ...this.$store.state.Category.allCategories.map((category) => ({
             value: category.id,
             label: category.name,
           })),
         );
       }
 
-      return [placeholder];
+      return options;
     },
   },
 
