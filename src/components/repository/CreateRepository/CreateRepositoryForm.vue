@@ -5,7 +5,7 @@
         <IntelligenceTab
           v-model:name="data.name"
           v-model:description="data.description"
-          v-model:repository_type="data.repository_type"
+          v-model:repositoryType="data.repository_type"
         />
       </section>
       <section class="create-repository__container__steps">
