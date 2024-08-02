@@ -42,8 +42,8 @@
           type="content"
           icon="typing-1"
           class="intelligence-types__item"
-          :enabled="repository_type === 'classifier'"
-          @click="$emit('update:repository_type', 'classifier')"
+          :enabled="repositoryType === 'classifier'"
+          @click="$emit('update:repositoryType', 'classifier')"
         />
 
         <UnnnicCard
@@ -57,8 +57,8 @@
           type="content"
           icon="paginate-filter-text-1"
           class="intelligence-types__item"
-          :enabled="repository_type === 'content'"
-          @click="$emit('update:repository_type', 'content')"
+          :enabled="repositoryType === 'content'"
+          @click="$emit('update:repositoryType', 'content')"
         />
       </section>
     </div>
@@ -69,10 +69,23 @@
 export default {
   name: 'IntelligenceTab',
   props: {
-    name: String,
-    description: String,
-    repository_type: String,
+    name: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    description: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    repositoryType: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
+  emits: ['update:name', 'update:description', 'update:repositoryType'],
   data() {
     return {};
   },
