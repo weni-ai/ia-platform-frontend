@@ -45,6 +45,8 @@
         <IntelligencesFilter
           v-model:name="filterIntelligenceName"
           v-model:type="fitlerIntelligenceType"
+          :loadingType="intelligencesNexusAI.firstLoading"
+          :showTypes="!isGenerativeAIListEmpty"
           class="filters"
         />
 
@@ -122,7 +124,7 @@
       maxWidth="750px"
       class="create-intelligence-modal"
     >
-      <CreateRepositoryForm @cancelCreation="openModal = false" />
+      <CreateRepositoryForm @cancel-creation="openModal = false" />
     </ModalNext>
   </div>
 </template>
@@ -187,6 +189,7 @@ export default {
 
       intelligencesNexusAI: {
         firstLoad: true,
+        firstLoading: true,
         orgUuid: this.$store.state.Auth.connectOrgUuid,
         data: [],
         next: null,
@@ -199,6 +202,13 @@ export default {
   },
 
   computed: {
+    isGenerativeAIListEmpty() {
+      return (
+        this.intelligencesNexusAI.status === 'complete' &&
+        this.intelligencesNexusAI.data.length === 0
+      );
+    },
+
     intelligences() {
       let items;
 
@@ -252,6 +262,16 @@ export default {
   },
 
   watch: {
+    isGenerativeAIListEmpty: {
+      handler() {
+        if (this.isGenerativeAIListEmpty) {
+          this.fitlerIntelligenceType = 'classification';
+        }
+      },
+
+      immediate: true,
+    },
+
     isShowingEndOfList() {
       if (this.isShowingEndOfList) {
         if (
@@ -388,6 +408,8 @@ export default {
           this.intelligencesNexusAI.status = 'complete';
         }
       } finally {
+        this.intelligencesNexusAI.firstLoading = false;
+
         if (this.intelligencesNexusAI.status === 'loading') {
           this.intelligencesNexusAI.status = null;
         }
