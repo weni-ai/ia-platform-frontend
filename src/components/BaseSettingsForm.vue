@@ -1,11 +1,12 @@
 <template>
-  <ModalNext
-    :title="
+  <UnnnicModal
+    :text="
       type === 'create'
         ? $t('bases.create.title')
         : $t('webapp.home.bases.adjustments')
     "
-    maxWidth="600px"
+    :closeIcon="false"
+    class="modal-settings-form"
   >
     <UnnnicFormElement
       :label="$t('bases.create.form.name.label')"
@@ -15,6 +16,7 @@
         v-model="title"
         maxlength="25"
         :placeholder="$t('bases.create.form.name.placeholder')"
+        data-test="name-input"
       />
     </UnnnicFormElement>
 
@@ -26,6 +28,7 @@
         :modelValue="[languages.find(({ value }) => value === language)]"
         :options="languages"
         orderedByIndex
+        data-test="language-select"
         @update:model-value="language = $event[0].value"
       />
     </UnnnicFormElement>
@@ -38,6 +41,7 @@
         v-model="description"
         :maxLength="80"
         class="create-base__description-textarea"
+        data-test="description-textarea"
         :placeholder="$t('bases.create.form.description.placeholder')"
       />
     </UnnnicFormElement>
@@ -47,6 +51,7 @@
         size="large"
         :text="$t('webapp.home.cancel')"
         type="tertiary"
+        data-test="cancel-button"
         @click.prevent.stop="$emit('close')"
       />
 
@@ -58,28 +63,38 @@
             : $t('webapp.home.bases.adjustments_button')
         "
         type="primary"
+        data-test="action-button"
         :disabled="disabledSave"
         :loading="creatingNewBase"
         @click="createNewBase"
       />
     </div>
-  </ModalNext>
+  </UnnnicModal>
 </template>
 
 <script>
 import nexusaiAPI from '../api/nexusaiAPI';
-import ModalNext from './ModalNext.vue';
 import { get } from 'lodash';
 
 export default {
-  components: {
-    ModalNext,
-  },
   props: {
-    intelligenceUuid: String,
-    contentBaseUuid: String,
-    preFilledValues: Object,
+    intelligenceUuid: {
+      type: String,
+      required: true,
+    },
+    contentBaseUuid: {
+      type: String,
+      default: '',
+    },
+    preFilledValues: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
   },
+
+  emits: ['success', 'close'],
 
   data() {
     return {
@@ -134,20 +149,22 @@ export default {
   },
 
   mounted() {
-    const userLanguage = get(
-      this.$store.state.User,
-      'me.language',
-      '',
-    ).toLowerCase();
-
-    this.language = ['pt-br', 'en-us', 'es'].includes(userLanguage)
-      ? userLanguage
-      : 'pt-br';
-
     if (this.preFilledValues) {
       Object.keys(this.preFilledValues).forEach((name) => {
         this[name] = this.preFilledValues[name];
       });
+    }
+
+    if (!get(this.preFilledValues, 'language')) {
+      const userLanguage = get(
+        this.$store.state.User,
+        'me.language',
+        '',
+      ).toLowerCase();
+
+      this.language = ['pt-br', 'en-us', 'es'].includes(userLanguage)
+        ? userLanguage
+        : 'pt-br';
     }
   },
 
@@ -192,6 +209,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.modal-settings-form {
+  $modal-width: 37.5 * $unnnic-font-size;
+
+  :deep(.unnnic-modal-container-background) {
+    width: 100%;
+    max-width: $modal-width;
+
+    .unnnic-modal-container-background-body {
+      padding-top: $unnnic-spacing-giant;
+
+      .unnnic-modal-container-background-body-title {
+        padding-bottom: $unnnic-spacing-sm;
+      }
+    }
+
+    .unnnic-modal-container-background-body-description-container {
+      padding-bottom: $unnnic-spacing-lg;
+
+      .unnnic-modal-container-background-body-description {
+        text-align: initial;
+      }
+    }
+  }
+}
+
 .create-base__form-element + .create-base__form-element {
   margin-top: $unnnic-spacing-sm;
 }
