@@ -71,6 +71,8 @@
 </template>
 
 <script>
+import VERBOSE_LANGUAGES from '@/utils/verbose_languages';
+
 export default {
   name: 'ModalContainer',
   props: {
@@ -93,7 +95,7 @@ export default {
       );
     },
     languageVerbose(language) {
-      return language | this.languageVerbose;
+      return VERBOSE_LANGUAGES[language] || language;
     },
   },
 };

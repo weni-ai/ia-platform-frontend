@@ -96,7 +96,7 @@ describe('ModalChangeAction', () => {
   });
 
   describe('when an error occour on list flows API', () => {
-    it('', async () => {
+    it('should show error', async () => {
       vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockRejectedValueOnce({
         data: {},
       });
