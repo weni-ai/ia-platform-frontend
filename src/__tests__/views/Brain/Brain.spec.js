@@ -196,10 +196,10 @@ describe('Brain Component', () => {
 
     expect(wrapper.findComponent(ModalPreviewQRCode).exists()).toBe(false);
 
-    const dropdown = wrapper.findComponent({ name: 'UnnnicDropdown' });
+    const dropdown = wrapper.findComponent('[data-test="dropdown-actions"]');
     await dropdown.trigger('click');
     await flushPromises();
-    const dropdownItem = dropdown.find('[data-test="qr-code-option"]');
+    const dropdownItem = dropdown.find('[data-test="View from mobile"]');
 
     await dropdownItem.trigger('click');
     expect(wrapper.vm.isMobilePreviewModalOpen).toBe(true);
@@ -208,10 +208,10 @@ describe('Brain Component', () => {
   });
 
   test('toggles RefreshPreview when corresponding dropdown item is clicked', async () => {
-    const dropdown = wrapper.findComponent({ name: 'UnnnicDropdown' });
+    const dropdown = wrapper.findComponent('[data-test="dropdown-actions"]');
     await dropdown.trigger('click');
     await flushPromises();
-    const dropdownItem = dropdown.find('[data-test="refresh-option"]');
+    const dropdownItem = dropdown.find('[data-test="Clear conversations"]');
     await dropdownItem.trigger('click');
     expect(wrapper.vm.refreshPreviewValue).toBe(1);
   });
