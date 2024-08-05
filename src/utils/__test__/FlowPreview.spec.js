@@ -141,5 +141,75 @@ describe('FlowPreview', () => {
         expect(callback).toHaveBeenCalled();
       }, 300);
     });
+
+    it('should update run context with no events', async () => {
+      const runContext = {
+        session: { runs: mockSession.runs },
+      };
+      previewModule.methods.previewUpdateRunContext(runContext, {
+        text: 'Hello',
+      });
+
+      await vm.previewUpdateRunContext(runContext, { text: 'Hello' });
+      console.log('vm.previewUpdateRunContext', vm.preview.events);
+      expect(vm.preview.events.length).toBe(1);
+      expect(vm.preview.events[0].type).toBe('msg_created');
+    });
+
+    it('should resume preview and handle errors', async () => {
+      mockPost.mockResolvedValueOnce({ data: { events: [mockEvent] } });
+
+      await vm.previewResume('Test message');
+
+      expect(mockPost).toHaveBeenCalledWith(
+        `api/v2/flows/${mockFlowUuid}/simulate`,
+        expect.any(Object),
+        {
+          headers: { Authorization: mockAuthToken },
+        },
+      );
+      expect(vm.previewUpdateRunContext).toHaveBeenCalledWith(
+        expect.objectContaining({ events: [mockEvent] }),
+        expect.any(Object),
+      );
+
+      mockPost.mockRejectedValueOnce({
+        response: { status: 500, data: { error: 'Server error' } },
+      });
+
+      await vm.previewResume('Test message');
+      expect(vm.preview.events).toContainEqual({
+        type: 'error',
+        text: 'Server error, try again later',
+      });
+    });
+
+    it('should start preview and update run context', async () => {
+      mockPost.mockResolvedValueOnce({
+        data: { events: [mockEvent], session: { runs: mockSession.runs } },
+      });
+
+      await vm.previewStart({
+        languageId: 'en',
+        flowUuid: mockFlowUuid,
+        flowName: 'Test Flow',
+      });
+
+      expect(vm.preview.flowUuid).toBe(mockFlowUuid);
+      expect(mockPost).toHaveBeenCalledWith(
+        `api/v2/flows/${mockFlowUuid}/simulate`,
+        expect.any(Object),
+        {
+          headers: { Authorization: mockAuthToken },
+        },
+      );
+
+      expect(vm.previewUpdateRunContext).toHaveBeenCalledWith(
+        expect.objectContaining({
+          events: [mockEvent],
+          session: { runs: mockSession.runs },
+        }),
+      );
+    });
   });
 });
