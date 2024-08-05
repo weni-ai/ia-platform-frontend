@@ -1,22 +1,24 @@
 <template>
   <div>
     <HomeRepositoryCard
-      :repositoryDetail="project"
       :type="
         project.hasOwnProperty('content_bases_count')
-          ? 'intelligence'
-          : 'repository'
+          ? 'content-intelligence'
+          : 'classification-intelligence'
       "
-      @dispatchShowModal="showModal($event)"
+      :uuid="project.uuid"
+      :name="project.name"
+      :description="project.description"
+      :contentBasesLength="project.content_bases_count"
+      :intents="project.intents"
+      :languages="project.available_languages"
+      :force="force"
+      :defaultVersionId="project.version_default?.id"
+      :isPrivate="project.is_private"
+      :slug="project.slug"
+      :ownerNickname="project.owner__nickname"
       @removed="$emit('removed')"
     />
-
-    <ModalContainer
-      :infoModal="modalInfo"
-      :showModal="openModal"
-      @closeModal="openModal = false"
-    >
-    </ModalContainer>
   </div>
 </template>
 <script>
@@ -29,16 +31,27 @@ export default {
   props: {
     project: Object,
   },
+
+  emits: ['removed'],
+
   data() {
-    return {
-      modalInfo: {},
-      openModal: false,
-    };
+    return {};
   },
-  methods: {
-    showModal(value) {
-      this.openModal = true;
-      this.modalInfo = { ...value };
+
+  computed: {
+    force() {
+      if (!this.project.repository_score) {
+        return 0;
+      }
+
+      const scoreObject = this.project.repository_score;
+      const scoreResult =
+        (scoreObject.evaluate_size_score +
+          scoreObject.intents_balance_score +
+          scoreObject.intents_size_score) /
+        3;
+
+      return Math.round(scoreResult);
     },
   },
 };

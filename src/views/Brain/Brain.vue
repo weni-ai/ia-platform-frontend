@@ -65,6 +65,7 @@
           {{ $t('router.preview.title') }}
 
           <ContentItemActions
+            data-test="dropdown-actions"
             :actions="previewActions"
             minWidth="175px"
           />

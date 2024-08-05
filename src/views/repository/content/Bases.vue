@@ -126,10 +126,13 @@
           <HomeRepositoryCard
             v-for="base in basesFiltered"
             :key="base.id"
-            type="base"
-            :repositoryDetail="base"
+            type="content-base"
+            :uuid="base.uuid"
+            :name="base.title"
+            :description="base.description"
+            :language="base.language"
             :canContribute="canContribute"
-            @deleteBase="openDeleteModal"
+            @delete-base="openDeleteModal"
           />
 
           <template v-if="bases.status === 'loading'">
@@ -391,7 +394,6 @@ export default {
     openDeleteModal(repository) {
       this.isDeleteModalOpen = {
         name: repository.name,
-        id: repository.id,
         contentBaseUuid: repository.uuid,
         loading: false,
       };

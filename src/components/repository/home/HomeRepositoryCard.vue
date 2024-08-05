@@ -1,346 +1,182 @@
 <template>
-  <div
-    :style="{
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-    }"
+  <section
+    data-test="card"
+    :class="['unnnic-card-intelligence', `unnnic-card-intelligence--${type}`]"
+    @click.prevent.stop="repositoryDetailsRouterParams"
   >
-    <div
-      :class="['unnnic-card-intelligence', `unnnic-card-intelligence--${type}`]"
-      @click.prevent.stop="repositoryDetailsRouterParams()"
-    >
-      <header class="unnnic-card-intelligence__header">
-        <div class="unnnic-card-intelligence__header__title">
-          {{ repositoryDetail.name || repositoryDetail.title }}
-        </div>
-
-        <div class="unnnic-card-intelligence__header__buttons">
-          <template
-            v-if="
-              hasIntegrationDefined &&
-              !hasIntegrationCheckError &&
-              repositoryDetail.repository_type === 'classifier'
-            "
-          >
-            <UnnnicIcon
-              v-if="hasIntegration"
-              icon="check"
-              scheme="weni-600"
-              class="unnnic-card-intelligence__header__buttons__icon-integrated"
-            />
-
-            <IntegrateButton
-              v-else
-              @click="changeIntegrateModalState(true)"
-            />
-          </template>
-
-          <UnnnicToolTip
-            v-else-if="type === 'base'"
-            side="top"
-            :text="$t('content_bases.quick_test')"
-            enabled
-          >
-            <UnnnicButton
-              iconCenter="mode_comment"
-              size="small"
-              class="button-quick-test"
-              type="alternative"
-              @click.stop="isQuickTestOpen = true"
-            />
-          </UnnnicToolTip>
-
-          <DropdownActions
-            v-if="actions.length"
-            :actions="actions"
-          />
-        </div>
-      </header>
-
-      <UnnnicIntelligenceText
-        tag="p"
-        color="neutral-dark"
-        family="secondary"
-        size="body-gt"
-        class="unnnic-card-intelligence__description"
-      >
-        {{ repositoryDetail.description }}
-      </UnnnicIntelligenceText>
-
-      <UnnnicDivider
-        ySpacing="xs"
-        scheme="neutral-lightest"
-      />
-
-      <footer
-        v-if="type === 'base'"
-        class="base__footer"
-      >
-        {{ language }}
-      </footer>
-
-      <section class="unnnic-card-intelligence__detail">
-        <div
-          v-if="type === 'repository'"
-          v-show="repositoryDetail.repository_type === 'classifier'"
-          class="unnnic-card-intelligence__detail__content"
-        >
-          <div class="unnnic-card-intelligence__detail__content__data">
-            {{
-              $tc(
-                'webapp.intelligences_lib.intent',
-                repositoryDetail.intents.length,
-              )
-            }}
-          </div>
-          <div class="unnnic-card-intelligence__detail__content__data__info">
-            <UnnnicAvatarIcon
-              class="unnnic-card-intelligence__detail__content__data__info__icon"
-              size="xs"
-              icon="typing-1"
-              scheme="aux-pink"
-            />
-
-            <div
-              class="unnnic-card-intelligence__detail__content__data__info__number"
-            >
-              {{ repositoryDetail.intents.length }}
-            </div>
-          </div>
-        </div>
-
-        <div
-          v-if="
-            (type === 'repository' &&
-              repositoryDetail.repository_type === 'content') ||
-            type === 'intelligence'
-          "
-          class="unnnic-card-intelligence__detail__content"
-        >
-          <div class="unnnic-card-intelligence__detail__content__data">
-            {{
-              $tc(
-                'webapp.intelligences_lib.knowledge_bases',
-                repositoryDetail.count_knowledge_bases ||
-                  repositoryDetail.content_bases_count,
-              )
-            }}
-          </div>
-          <div class="unnnic-card-intelligence__detail__content__data__info">
-            <UnnnicAvatarIcon
-              class="unnnic-card-intelligence__detail__content__data__info__icon"
-              size="xs"
-              icon="article"
-              scheme="aux-purple"
-            />
-
-            <div
-              class="unnnic-card-intelligence__detail__content__data__info__number"
-            >
-              {{
-                repositoryDetail.count_knowledge_bases ||
-                repositoryDetail.content_bases_count
-              }}
-            </div>
-          </div>
-        </div>
-
-        <div
-          v-if="
-            type === 'repository' &&
-            repositoryDetail.repository_type === 'classifier'
-          "
-          class="unnnic-card-intelligence__detail__content"
-        >
-          <div class="unnnic-card-intelligence__detail__content__data">
-            {{
-              $tc(
-                'webapp.intelligences_lib.language',
-                repositoryDetail.available_languages.length,
-              )
-            }}
-          </div>
-          <div class="unnnic-card-intelligence__detail__content__data__info">
-            <UnnnicAvatarIcon
-              class="unnnic-card-intelligence__detail__content__data__info__icon"
-              size="xs"
-              icon="translate-1"
-              scheme="aux-purple"
-            />
-
-            <div
-              class="unnnic-card-intelligence__detail__content__data__info__number"
-            >
-              {{ repositoryDetail.available_languages.length }}
-            </div>
-          </div>
-        </div>
-
-        <div
-          v-if="type === 'repository'"
-          v-show="repositoryDetail.repository_type === 'classifier'"
-          class="unnnic-card-intelligence__detail__content"
-        >
-          <div class="unnnic-card-intelligence__detail__content__data">
-            {{
-              $tc(
-                'webapp.intelligences_lib.intelligence_force',
-                repositoryDetail.intents.length,
-              )
-            }}
-            <UnnnicToolTip
-              v-if="repositoryDetail.repository_type === 'classifier'"
-              :text="$t('webapp.intelligences_lib.intelligence_force_tooltip')"
-              enabled
-              side="top"
-              maxWidth="17rem"
-              class="unnnic-card-intelligence__type__icon"
-            >
-              <UnnnicIconSvg
-                icon="information-circle-4"
-                scheme="neutral-soft"
-                size="sm"
-              />
-            </UnnnicToolTip>
-          </div>
-          <div class="unnnic-card-intelligence__detail__content__data__info">
-            <UnnnicAvatarIcon
-              class="unnnic-card-intelligence__detail__content__data__info__icon"
-              size="xs"
-              icon="fitness-biceps-1"
-              scheme="feedback-blue"
-            />
-
-            <div
-              class="unnnic-card-intelligence__detail__content__data__info__number"
-            >
-              {{ `${intelligenceForce}%` }}
-            </div>
-          </div>
-        </div>
+    <header class="unnnic-card-intelligence__header">
+      <section class="unnnic-card-intelligence__header__title">
+        {{ name }}
       </section>
-    </div>
-    <IntegrationModal
-      :openModal="integrateModal"
-      :repository="getCurrentRepository"
-      :hasIntegration="hasIntegration"
-      @closeIntegratationModal="changeIntegrateModalState(false)"
-      @dispatchUpdateIntegration="changeIntegrationValue($event)"
-      @dispatchIntegrationNotification="showIntegrationNotification"
-    />
-    <UnnnicModal
-      :showModal="openConfirmModal"
-      :text="
-        $t('webapp.intelligences_lib.clone.confirm_modal_title', {
-          intelligence: selectedIntelligence,
-        })
-      "
-      scheme="feedback-yellow"
-      modalIcon="alert-circle-1"
-      @close="openConfirmModal = false"
-    >
-      <template #message>
-        <span
-          v-html="$t('webapp.intelligences_lib.clone.confirm_modal_message')"
-        />
-      </template>
-      <template #options>
-        <UnnnicButton
-          type="tertiary"
-          @click="openConfirmModal = false"
-        >
-          {{ $t('webapp.home.cancel') }}
-        </UnnnicButton>
-        <UnnnicButton
-          type="secondary"
-          @click="copyIntelligence()"
-        >
-          {{ $t('webapp.intelligences_lib.clone.copy') }}
-        </UnnnicButton>
-      </template>
-    </UnnnicModal>
-    <UnnnicModal
-      :showModal="openNotificationModal"
-      :text="notificationModalTitle"
-      :scheme="
-        notificationModalType === 'success' ? 'feedback-green' : 'feedback-red'
-      "
-      :modalIcon="
-        notificationModalType === 'success'
-          ? 'check-circle-1-1'
-          : 'alert-circle-1'
-      "
-      @close="openNotificationModal = false"
-    >
-      <template #message>
-        <span v-html="notificationModalMessage" />
-      </template>
-    </UnnnicModal>
 
-    <SideBarContentBases
-      v-if="isViewBasesOpen"
-      :name="repositoryDetail.name"
-      :intelligenceUuid="repositoryDetail.uuid"
-      @close="isViewBasesOpen = false"
-    />
-
-    <SideBarQuickTest
-      v-if="isQuickTestOpen"
-      :id="repositoryDetail.id"
-      :name="repositoryDetail.title"
-      :repositoryUuid="repositoryDetail.uuid"
-      :repositoryLanguage="repositoryDetail.language"
-      @close="isQuickTestOpen = false"
-    />
-
-    <UnnnicModal
-      :showModal="isDeleteIntelligenceConfirmationOpen"
-      :text="$t('intelligences.delete_intelligence')"
-      scheme="aux-red-500"
-      modalIcon="error"
-      @close="isDeleteIntelligenceConfirmationOpen = false"
-    >
-      <template #message>
-        <span
-          v-html="
-            $t(
-              'intelligences.delete_intelligence_confirmation_modal_description',
-              {
-                name: repositoryDetail.name,
-              },
-            )
+      <section class="unnnic-card-intelligence__header__buttons">
+        <template
+          v-if="
+            type === 'classification-intelligence' &&
+            hasIntegrationDefined &&
+            !hasIntegrationCheckError
           "
-        ></span>
-      </template>
-      <template #options>
-        <UnnnicButton
-          type="tertiary"
-          @click="isDeleteIntelligenceConfirmationOpen = false"
         >
-          {{ $t('cancel') }}
-        </UnnnicButton>
-        <UnnnicButton
-          type="warning"
-          :loading="deletingIntelligence"
-          @click="deleteIntelligence"
+          <UnnnicIcon
+            v-if="hasIntegration"
+            icon="check"
+            scheme="weni-600"
+            class="unnnic-card-intelligence__header__buttons__icon-integrated"
+          />
+
+          <IntegrateButton
+            v-else
+            @click="changeIntegrateModalState(true)"
+          />
+        </template>
+
+        <UnnnicToolTip
+          v-else-if="type === 'content-base'"
+          side="top"
+          :text="$t('content_bases.quick_test')"
+          enabled
         >
-          {{ $t('delete') }}
-        </UnnnicButton>
-      </template>
-    </UnnnicModal>
-  </div>
+          <UnnnicButton
+            iconCenter="mode_comment"
+            size="small"
+            class="button-quick-test"
+            type="alternative"
+            data-test="quick-test-button"
+            @click.stop="isQuickTestOpen = true"
+          />
+        </UnnnicToolTip>
+
+        <DropdownActions
+          v-if="actions.length"
+          data-test="actions-dropdown"
+          :actions="actions"
+        />
+      </section>
+    </header>
+
+    <UnnnicIntelligenceText
+      tag="p"
+      color="neutral-dark"
+      family="secondary"
+      size="body-gt"
+      class="unnnic-card-intelligence__description"
+    >
+      {{ description }}
+    </UnnnicIntelligenceText>
+
+    <UnnnicDivider
+      ySpacing="xs"
+      scheme="neutral-lightest"
+    />
+
+    <HomeRepositoryCardFooter
+      :type="type"
+      :language="language"
+      :contentBasesLength="contentBasesLength"
+      :intents="intents"
+      :languages="languages"
+      :force="force"
+    />
+  </section>
+
+  <IntegrationModal
+    v-if="integrateModal"
+    :openModal="integrateModal"
+    :repository="getCurrentRepository"
+    :hasIntegration="hasIntegration"
+    @close-integratation-modal="changeIntegrateModalState(false)"
+    @dispatch-update-integration="changeIntegrationValue($event)"
+    @dispatch-integration-notification="showIntegrationNotification"
+  />
+
+  <UnnnicModal
+    v-if="openConfirmModal"
+    data-test="copy-intelligence-modal"
+    :showModal="openConfirmModal"
+    :text="
+      $t('webapp.intelligences_lib.clone.confirm_modal_title', {
+        intelligence: selectedIntelligence,
+      })
+    "
+    scheme="feedback-yellow"
+    modalIcon="alert-circle-1"
+    @close="openConfirmModal = false"
+  >
+    <template #message>
+      <span
+        v-html="$t('webapp.intelligences_lib.clone.confirm_modal_message')"
+      />
+    </template>
+    <template #options>
+      <UnnnicButton
+        type="tertiary"
+        data-test="copy-intelligence-cancel-button"
+        @click="openConfirmModal = false"
+      >
+        {{ $t('webapp.home.cancel') }}
+      </UnnnicButton>
+      <UnnnicButton
+        type="secondary"
+        data-test="copy-intelligence-action-button"
+        @click="copyIntelligence()"
+      >
+        {{ $t('webapp.intelligences_lib.clone.copy') }}
+      </UnnnicButton>
+    </template>
+  </UnnnicModal>
+
+  <IntegrateNotification
+    v-if="openNotificationModal"
+    :title="notificationModalTitle"
+    :type="notificationModalType"
+    :message="notificationModalMessage"
+    @close="openNotificationModal = false"
+  />
+
+  <SideBarContentBases
+    v-if="isViewBasesOpen"
+    :name="name"
+    :intelligenceUuid="uuid"
+    @close="isViewBasesOpen = false"
+  />
+
+  <SideBarQuickTest
+    v-if="isQuickTestOpen"
+    :name="name"
+    :repositoryUuid="uuid"
+    :repositoryLanguage="language"
+    @close="isQuickTestOpen = false"
+  />
+
+  <ModalDeleteContentIntelligence
+    v-if="isDeleteIntelligenceConfirmationOpen"
+    :uuid="uuid"
+    :name="name"
+    @close="isDeleteIntelligenceConfirmationOpen = false"
+    @removed="$emit('removed')"
+  />
+
+  <ModalContainer
+    v-if="openModal"
+    data-test="classification-info-modal"
+    :infoModal="modalInfo"
+    :showModal="openModal"
+    @close-modal="openModal = false"
+  >
+  </ModalContainer>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import IntegrationModal from '@/components/shared/IntegrationModal.vue';
 import IntegrateButton from '@/components/repository/IntegrateButton.vue';
+import IntegrateNotification from '@/components/repository/IntegrateNotification.vue';
 import SideBarContentBases from './SideBarContentBases.vue';
 import SideBarQuickTest from './SideBarQuickTest.vue';
-import nexusaiAPI from '../../../api/nexusaiAPI';
-import { get } from 'lodash';
 import DropdownActions from '@/views/repository/content/ContentItemActions.vue';
+import HomeRepositoryCardFooter from '@/components/repository/home/HomeRepositoryCardFooter.vue';
+import ModalContainer from '@/components/repository/home/ModalContainer.vue';
+import ModalDeleteContentIntelligence from './ModalDeleteContentIntelligence.vue';
 
 export default {
   name: 'HomeRepositoryCard',
@@ -349,24 +185,85 @@ export default {
     SideBarContentBases,
     SideBarQuickTest,
     IntegrateButton,
+    IntegrateNotification,
     DropdownActions,
+    HomeRepositoryCardFooter,
+    ModalContainer,
+    ModalDeleteContentIntelligence,
   },
   props: {
     type: {
       type: String,
-      default: 'repository',
+      required: true,
     },
 
-    repositoryDetail: {
-      type: [Object, Array],
-      default: null,
+    uuid: {
+      type: String,
+      required: true,
     },
 
+    name: {
+      type: String,
+      required: true,
+    },
+
+    description: {
+      type: String,
+      required: true,
+    },
+
+    language: {
+      type: String,
+      default: '',
+    },
+
+    contentBasesLength: {
+      type: Number,
+      default: 0,
+    },
+
+    intents: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+
+    languages: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+
+    force: {
+      type: Number,
+      default: 0,
+    },
+
+    defaultVersionId: {
+      type: Number,
+      default: 0,
+    },
+
+    slug: {
+      type: String,
+      default: '',
+    },
+
+    ownerNickname: {
+      type: String,
+      default: '',
+    },
+
+    isPrivate: Boolean,
     canContribute: Boolean,
   },
+
+  emits: ['removed', 'deleteBase'],
+
   data() {
     return {
-      dropdownOpen: false,
       integrateModal: false,
       hasIntegration: null,
       integrationError: null,
@@ -381,6 +278,9 @@ export default {
       isQuickTestOpen: false,
       isDeleteIntelligenceConfirmationOpen: false,
       deletingIntelligence: false,
+
+      modalInfo: {},
+      openModal: false,
     };
   },
 
@@ -388,13 +288,13 @@ export default {
     actions() {
       const actions = [];
 
-      if (this.repositoryDetail.repository_type === 'classifier') {
+      if (this.type === 'classification-intelligence') {
         actions.push({
           scheme: 'neutral-dark',
           icon: 'graph-stats-1',
           text: this.$tc(
             'webapp.intelligences_lib.show_intents',
-            this.repositoryDetail.intents.length,
+            this.intents.length,
           ),
           onClick: () => this.showDetailModal(this.intentModal),
         });
@@ -404,30 +304,20 @@ export default {
           icon: 'translate-1',
           text: this.$tc(
             'webapp.intelligences_lib.show_languages',
-            this.repositoryDetail.available_languages.length,
+            this.languages.length,
           ),
           onClick: () => this.showDetailModal(this.laguagueModal),
         });
 
-        if (!this.repositoryDetail.is_private) {
+        if (!this.isPrivate) {
           actions.push({
             scheme: 'neutral-dark',
             icon: 'copy-paste-1',
             text: this.$t('webapp.home.copy-intelligence'),
-            onClick: () => this.openCopyConfirm(this.repositoryDetail.name),
+            onClick: () => this.openCopyConfirm(this.name),
           });
         }
-      } else if (
-        (this.type === 'base' && this.canContribute) ||
-        this.type === 'intelligences'
-      ) {
-        actions.push({
-          scheme: 'aux-red-500',
-          icon: 'delete',
-          text: this.$t('bases.actions.delete'),
-          onClick: () => this.deleteBase(this.repositoryDetail),
-        });
-      } else if (['repository', 'intelligence'].includes(this.type)) {
+      } else if (this.type === 'content-intelligence') {
         actions.push({
           scheme: 'neutral-dark',
           icon: 'article',
@@ -441,6 +331,17 @@ export default {
           text: this.$t('intelligences.delete_intelligence'),
           onClick: () => (this.isDeleteIntelligenceConfirmationOpen = true),
         });
+      } else if (this.type === 'content-base' && this.canContribute) {
+        actions.push({
+          scheme: 'aux-red-500',
+          icon: 'delete',
+          text: this.$t('bases.actions.delete'),
+          onClick: () =>
+            this.deleteBase({
+              name: this.name,
+              uuid: this.uuid,
+            }),
+        });
       }
 
       return actions;
@@ -448,15 +349,11 @@ export default {
 
     ...mapGetters(['getProjectSelected', 'getOrgSelected']),
 
-    language() {
-      return get(this.repositoryDetail, 'language', '').toUpperCase();
-    },
-
     getCurrentRepository() {
       return {
-        name: this.repositoryDetail.name,
-        repository_version_id: this.repositoryDetail.version_default?.id,
-        uuid: this.repositoryDetail.uuid,
+        uuid: this.uuid,
+        name: this.name,
+        repository_version_id: this.defaultVersionId,
       };
     },
     hasIntegrationDefined() {
@@ -468,44 +365,37 @@ export default {
     intentModal() {
       return {
         title: this.$tc('webapp.intelligences_lib.intent_modal_title', 1, {
-          nick: this.repositoryDetail.name,
+          nick: this.name,
         }),
         subtitle: this.$tc(
           'webapp.intelligences_lib.intent_modal_subtitle',
           10,
         ),
         type: 0,
-        intents: this.repositoryDetail.intents,
-        ownerNickname: this.repositoryDetail.owner__nickname,
-        slug: this.repositoryDetail.slug,
+        intents: this.intents,
+        ownerNickname: this.ownerNickname,
+        slug: this.slug,
       };
     },
     laguagueModal() {
       return {
         title: this.$tc('webapp.intelligences_lib.language_modal_title', 1, {
-          nick: this.repositoryDetail.name,
+          nick: this.name,
         }),
         subtitle: this.$t(
           'webapp.intelligences_lib.language_modal_subtitle',
           10,
         ),
         type: 1,
-        languages: this.repositoryDetail.available_languages,
+        languages: this.languages,
       };
-    },
-    intelligenceForce() {
-      const scoreObject = this.repositoryDetail?.repository_score;
-      const scoreResult =
-        (scoreObject?.evaluate_size_score +
-          scoreObject?.intents_balance_score +
-          scoreObject?.intents_size_score) /
-        3;
-      return scoreResult.toFixed(0);
     },
   },
 
   mounted() {
     this.checkIfHasIntegration();
+
+    // this.showIntegrationNotification('failure');
   },
 
   methods: {
@@ -531,8 +421,8 @@ export default {
             project_uuid,
             organization,
           }) =>
-            repository_version === this.repositoryDetail.version_default.id &&
-            repository_uuid === this.repositoryDetail.uuid &&
+            repository_version === this.defaultVersionId &&
+            repository_uuid === this.uuid &&
             project_uuid === this.getProjectSelected &&
             organization === this.getOrgSelected,
         );
@@ -564,39 +454,30 @@ export default {
       this.openNotificationModal = true;
     },
     showDetailModal(value) {
-      this.$emit('dispatchShowModal', value);
+      this.openModal = true;
+      this.modalInfo = { ...value };
     },
     changeIntegrateModalState(value) {
       this.integrateModal = value;
     },
     repositoryDetailsRouterParams() {
-      if (
-        this.type === 'intelligence' ||
-        (this.type === 'repository' &&
-          this.repositoryDetail?.repository_type === 'content')
-      ) {
+      if (this.type === 'content-intelligence') {
         this.$router.push({
           name: 'intelligence-home',
           params: {
-            intelligenceUuid: this.repositoryDetail.uuid,
+            intelligenceUuid: this.uuid,
           },
         });
-      } else if (this.type === 'repository') {
-        let path;
-
-        if (this.repositoryDetail.repository_type === 'content') {
-          path = `/dashboard/${this.repositoryDetail.owner__nickname}/${this.repositoryDetail.slug}/content/bases`;
-        } else if (this.repositoryDetail.repository_type === 'classifier') {
-          path = `/dashboard/${this.repositoryDetail.owner__nickname}/${this.repositoryDetail.slug}/`;
-        }
+      } else if (this.type === 'classification-intelligence') {
+        const path = `/dashboard/${this.ownerNickname}/${this.slug}/`;
 
         this.$router.push(path);
-      } else if (this.type === 'base') {
+      } else if (this.type === 'content-base') {
         this.$router.push({
           name: 'intelligence-content-base-edit',
           params: {
             intelligenceUuid: this.$route.params.intelligenceUuid,
-            contentBaseUuid: this.repositoryDetail.uuid,
+            contentBaseUuid: this.uuid,
           },
         });
       }
@@ -604,7 +485,7 @@ export default {
     async copyIntelligence() {
       try {
         await this.cloneRepository({
-          repositoryUUID: this.repositoryDetail.uuid,
+          repositoryUUID: this.uuid,
           ownerId: +this.getOrgSelected,
         });
         this.notificationModalType = 'success';
@@ -623,7 +504,6 @@ export default {
       } finally {
         this.openConfirmModal = false;
         this.openNotificationModal = true;
-        this.$emit('onCopySuccess');
       }
     },
     openCopyConfirm(intelligence) {
@@ -632,22 +512,6 @@ export default {
     },
     deleteBase(repository) {
       this.$emit('deleteBase', repository);
-    },
-    deleteIntelligence() {
-      this.deletingIntelligence = true;
-
-      nexusaiAPI
-        .deleteIntelligence({
-          orgUuid: this.$store.state.Auth.connectOrgUuid,
-          intelligenceUuid: this.repositoryDetail.uuid,
-        })
-        .then(() => {
-          this.isDeleteIntelligenceConfirmationOpen = false;
-          this.$emit('removed');
-        })
-        .finally(() => {
-          this.deletingIntelligence = false;
-        });
     },
   },
 };
@@ -663,6 +527,9 @@ export default {
 
 <style lang="scss" scoped>
 .unnnic-card-intelligence {
+  height: 100%;
+  box-sizing: border-box;
+
   &__header {
     width: 100%;
     display: flex;
@@ -743,60 +610,22 @@ export default {
   }
 
   &__description {
+    flex: 1;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
 
-  &__detail {
-    display: flex;
-    align-items: center;
-    column-gap: $unnnic-spacing-xs;
-
-    &__content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      row-gap: $unnnic-spacing-nano;
-
-      &__data {
-        color: $unnnic-color-neutral-dark;
-        font-size: $unnnic-font-size-body-gt;
-        line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-        font-weight: $unnnic-font-weight-regular;
-        font-family: $unnnic-font-family-secondary;
-
-        &__info {
-          display: flex;
-          align-items: center;
-          column-gap: $unnnic-spacing-xs;
-
-          &__number {
-            color: $unnnic-color-neutral-darkest;
-            font-size: $unnnic-font-size-body-gt;
-            line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-            font-weight: $unnnic-font-weight-bold;
-            font-family: $unnnic-font-family-secondary;
-          }
-        }
-      }
-    }
-  }
-
-  &__type__icon {
-    margin-left: $unnnic-spacing-nano;
-  }
-
-  &--intelligence,
-  &--repository {
+  &--content-intelligence,
+  &--classification-intelligence {
     .unnnic-card-intelligence__description {
       margin-top: $unnnic-spacing-sm;
       margin-bottom: $unnnic-spacing-xs;
     }
   }
 
-  &--base {
+  &--content-base {
     .unnnic-card-intelligence__description {
       margin-top: $unnnic-spacing-xs;
     }
@@ -805,14 +634,6 @@ export default {
 </style>
 
 <style lang="scss">
-.base__footer {
-  color: $unnnic-color-neutral-cloudy;
-  font-family: $unnnic-font-family-secondary;
-  font-size: $unnnic-font-size-body-md;
-  line-height: $unnnic-font-size-body-md + $unnnic-line-height-md;
-  font-weight: $unnnic-font-weight-bold;
-}
-
 .unnnic-card-intelligence {
   display: flex;
   flex-direction: column;
