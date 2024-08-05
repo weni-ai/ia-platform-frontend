@@ -232,6 +232,11 @@
         "name": "Site:",
         "content_added_to_the_agent": "Content of the site added to the agent:"
       }
+    },
+    "brain_use_warning": {
+      "title": "Use Brain to create Content AI",
+      "description": "Brain has enhanced capabilities for creating smarter agents that respond based on content of various formats uploaded by you.",
+      "take_me_there": "Take me there"
     }
   },
   "quick_test": {
@@ -344,19 +349,19 @@
       "community_description": "Integrate ready-made, quality Intelligence into your project"
     },
     "create_repository": {
-      "intelligence": "New intelligence",
+      "intelligence": "Create Artificial Intelligence",
       "definitions": "Intelligence attributes",
       "first_indicator": "Intelligence",
       "second_indicator": "Attributes",
-      "intelligence_name_label": "Name of the Intelligence",
+      "intelligence_name_label": "Name",
       "intelligence_name_placeholder": "Give a name to this intelligence",
       "description_label": "Description",
       "description_placeholder": "Describe briefly the purpose of this intelligence",
-      "intelligence_type": "Type",
-      "intelligence_type_classification_title": "Classifier Intelligence (default)",
-      "intelligence_type_classification_description": "Train sample phrases, attributing them intents and the intelligence will identify such intentions in new received phrases.",
-      "intelligence_type_content_title": "Content Intelligence (new!)",
-      "intelligence_type_content_description": "Upload informational texts and the intelligence will be able to answer questions made by users based on the texts.",
+      "intelligence_type": "Type of Intelligence",
+      "intelligence_type_classification_title": "Classifier Intelligence",
+      "intelligence_type_classification_description": "Train example sentences by assigning intentions and the AI will identify these intentions in new sentences that are sent",
+      "intelligence_type_content_title": "Content Intelligence",
+      "intelligence_type_content_description": "Enter informative texts and the AI will be able to answer questions posed by users based on the text",
       "cancel_create_intelligence_button": "Cancel",
       "navigate_to_next_button": "Next",
       "language_label": "Main language",

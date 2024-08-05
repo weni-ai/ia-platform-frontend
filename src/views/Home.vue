@@ -92,45 +92,17 @@
       </div>
 
       <IntelligencesPublicList v-show="tab === 'public_intelligences'" />
-
-      <!-- <unnnic-tab
-        class="home__intelligences"
-        initialTab="first"
-        :tabs="['first', 'second']"
-      >
-        <template #tab-head-first>
-          {{ $t('webapp.intelligences_lib.tab_org_title') }}
-        </template>
-        <template #tab-panel-first>
-          <home-intelligence-from-org
-            @loading="loading = $event"
-            :key="update"
-          />
-        </template>
-        <template #tab-head-second>
-          {{ $t('webapp.intelligences_lib.tab_community_title') }}
-        </template>
-        <template #tab-panel-second>
-          <home-intelligence-from-community
-            @loading="loading = $event"
-          />
-        </template>
-      </unnnic-tab> -->
     </div>
 
-    <ModalNext
+    <CreateIntelligenceForm
       v-if="openModal"
-      :title="$t('webapp.create_repository.intelligence')"
-      maxWidth="750px"
-      class="create-intelligence-modal"
-    >
-      <CreateRepositoryForm @cancel-creation="openModal = false" />
-    </ModalNext>
+      @close="openModal = false"
+    />
   </div>
 </template>
 
 <script>
-import CreateRepositoryForm from '../components/repository/CreateRepository/CreateRepositoryForm.vue';
+import CreateIntelligenceForm from '../components/repository/CreateRepository/CreateIntelligenceForm.vue';
 import { mapActions } from 'vuex';
 import IntelligenceFromProjectItem from '../components/repository/home/IntelligenceFromProjectItem.vue';
 import IntelligencesPublicList from '../components/intelligences/IntelligencesPublicList.vue';
@@ -141,7 +113,7 @@ import nexusaiAPI from '../api/nexusaiAPI';
 export default {
   name: 'Home',
   components: {
-    CreateRepositoryForm,
+    CreateIntelligenceForm,
     IntelligenceFromProjectItem,
     IntelligencesPublicList,
     IntelligencesFilter,

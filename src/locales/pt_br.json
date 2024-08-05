@@ -232,6 +232,11 @@
         "name": "Site:",
         "content_added_to_the_agent": "Conteúdo do site adicionado ao agente:"
       }
+    },
+    "brain_use_warning": {
+      "title": "Utilize o Brain para criar IA de Conteúdo",
+      "description": "O Brain possui recursos aprimorados para criação de agente mais inteligentes, que respondem com base em conteúdos de diversos formatos carregados por você.",
+      "take_me_there": "Me leve até lá"
     }
   },
   "quick_test": {
@@ -344,19 +349,19 @@
       "community_description": "Integre Inteligências prontas e de qualidade ao seu projeto" 
     },
     "create_repository": {
-      "intelligence": "Nova Inteligência Artificial",
+      "intelligence": "Criar Inteligência Artificial",
       "definitions": "Definições da inteligência",
       "first_indicator":"Inteligência",
       "second_indicator":"Definições",
-      "intelligence_name_label":"Nome da Inteligência",
+      "intelligence_name_label":"Nome",
       "intelligence_name_placeholder":"Defina o nome para a Inteligência",
       "description_label":"Descrição",
       "description_placeholder":"Descreva brevemente o propósito desta inteligência",
-      "intelligence_type": "Tipo",
-      "intelligence_type_classification_title":"Inteligência de Classificação (padrão)",
-      "intelligence_type_classification_description":"Treine frases de exemplo, atribuindo intenções e a inteligência conseguirá identificar essas intenções em novas frases enviadas.", 
-      "intelligence_type_content_title":"Inteligência de Conteúdo (novo!)",
-      "intelligence_type_content_description":"Cadastre textos informativos e a inteligência será capaz de responder perguntas feitas por usuários com base no texto.",
+      "intelligence_type": "Tipo de Inteligência",
+      "intelligence_type_classification_title":"Inteligência de Classificação",
+      "intelligence_type_classification_description":"Treine frases de exemplo atribuindo intenções e a IA identificará essas intenções em novas frases enviadas", 
+      "intelligence_type_content_title":"Inteligência de Conteúdo",
+      "intelligence_type_content_description":"Cadastre textos informativos e a IA será capaz de responder perguntas feitas por usuários com base no texto",
       "cancel_create_intelligence_button": "Cancelar",
       "navigate_to_next_button": "Avançar",
       "language_label":"Idioma principal",
