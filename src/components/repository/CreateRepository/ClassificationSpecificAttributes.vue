@@ -154,7 +154,7 @@ export default {
 <style lang="scss" scoped>
 .intelligence-private-or-public {
   display: flex;
-  gap: $unnnic-spacing-xs;
+  gap: $unnnic-spacing-sm;
 
   &__item {
     flex: 1;
