@@ -177,7 +177,7 @@
     "files": {
       "upload_content": "Cargar contenido a partir de archivos",
       "drag_and_drop_your_file_here": "Arrastre y suelte su archivo aquí para añadir el contenido a la base de conocimientos de IA.",
-      "supported_files": "Formatos admitidos: .pdf, .doc, docx, .txt, .xls y .xlsx.<br /> Límite de 250 MB por archivo.",
+      "supported_files": "Formatos admitidos: {suportedFormats}.<br /> Límite de {limitMB}MB por archivo.",
       "file_error": "Error de archivo. Eliminar y añadir de nuevo",
       "browse_file": "Añadir archivo",
       "uploaded_files": "Archivos cargados",
@@ -188,6 +188,8 @@
       },
       "content_of_the_files_has_been_added": "El contenido de los ficheros se ha añadido a la base",
       "file_removed_from_base": "{name} eliminada de la base de contenidos",
+      "unsupported_format": "El formato de archivo no es compatible",
+      "exceeds_limit": "El tamaño del archivo supera el límite de {limitMB}MB",
       "delete_file": {
         "title": "Eliminar archivo",
         "description": "¿Estás seguro de que quieres eliminar el archivo <b>{name}</b>?<br />El contenido de este archivo se eliminará de la base de datos de AI",

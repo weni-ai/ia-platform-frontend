@@ -1,7 +1,9 @@
 import { mount } from '@vue/test-utils';
 import BasesFormFiles from '../BasesFormFiles.vue';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { createStore } from 'vuex';
 import nexusaiAPI from '@/api/nexusaiAPI';
+import i18n from '@/utils/plugins/i18n';
 
 const deleteRequest = vi
   .spyOn(nexusaiAPI.intelligences.contentBases.files, 'delete')
@@ -66,12 +68,21 @@ const generateFiles = () => ({
   ],
 });
 
+const store = createStore({
+  state() {
+    return {
+      alert: null,
+    };
+  },
+});
+
 const setup = ({ files }) =>
   mount(BasesFormFiles, {
     props: {
       files,
     },
     global: {
+      plugins: [store],
       mocks: {
         $route: {
           params: {
@@ -138,6 +149,56 @@ describe('BasesFormFiles.vue', () => {
 
     it('does not add any file', () => {
       expect(files.addItem).not.toHaveBeenCalled();
+    });
+  });
+
+  describe.each([
+    {
+      type: 'an unsupported file',
+      extension: 'heic',
+      size: null,
+      errorMessage: i18n.global.t('content_bases.files.unsupported_format'),
+    },
+    {
+      type: 'a file that exceeds limit',
+      extension: 'txt',
+      size: 250 * Math.pow(1024, 2) + 1,
+      errorMessage: i18n.global.t('content_bases.files.exceeds_limit', {
+        limitMB: 250,
+      }),
+    },
+  ])('when the user upload $type', ({ extension, size, errorMessage }) => {
+    const textFile = new File(
+      ['Hello World!'],
+      `Name of the File.${extension}`,
+      {
+        type: '',
+      },
+    );
+
+    if (size) {
+      Object.defineProperty(textFile, 'size', {
+        value: size,
+      });
+    }
+
+    let inputFile;
+
+    beforeEach(() => {
+      inputFile = wrapper.find({ ref: 'browser-file-input' });
+
+      vi.spyOn(inputFile.wrapperElement, 'files', 'get').mockReturnValue([
+        textFile,
+      ]);
+    });
+
+    it('should show alert message', () => {
+      inputFile.wrapperElement.dispatchEvent(new Event('change'));
+
+      expect(store.state.alert).toEqual({
+        text: errorMessage,
+        type: 'error',
+      });
     });
   });
 
