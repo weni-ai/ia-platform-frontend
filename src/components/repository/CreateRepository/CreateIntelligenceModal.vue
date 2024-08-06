@@ -156,12 +156,9 @@ export default {
           name: this.data.name,
           description: this.data.description,
           language: this.data.language,
-          repository_type: this.data.repository_type,
+          repository_type: 'classifier',
           categories: this.data.categories,
-          is_private:
-            this.data.repository_type === 'classifier'
-              ? this.data.is_private
-              : true,
+          is_private: this.data.is_private,
         });
 
         const { owner__nickname, slug } = response.data;
@@ -170,14 +167,16 @@ export default {
           path: `/dashboard/${owner__nickname}/${slug}/`,
         });
       } catch (error) {
-        const detail = get(error, 'response.data.detail', '');
+        const text = get(
+          error,
+          'response.data.detail',
+          this.$t('unexpected_error'),
+        );
 
-        if (detail) {
-          this.$store.state.alert = {
-            type: 'error',
-            text: detail,
-          };
-        }
+        this.$store.state.alert = {
+          type: 'error',
+          text,
+        };
       } finally {
         this.submitting = false;
       }

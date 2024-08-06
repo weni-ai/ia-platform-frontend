@@ -94,7 +94,7 @@
       <IntelligencesPublicList v-show="tab === 'public_intelligences'" />
     </div>
 
-    <CreateIntelligenceForm
+    <CreateIntelligenceModal
       v-if="openModal"
       @close="openModal = false"
     />
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import CreateIntelligenceForm from '../components/repository/CreateRepository/CreateIntelligenceForm.vue';
+import CreateIntelligenceModal from '../components/repository/CreateRepository/CreateIntelligenceModal.vue';
 import { mapActions } from 'vuex';
 import IntelligenceFromProjectItem from '../components/repository/home/IntelligenceFromProjectItem.vue';
 import IntelligencesPublicList from '../components/intelligences/IntelligencesPublicList.vue';
@@ -113,7 +113,7 @@ import nexusaiAPI from '../api/nexusaiAPI';
 export default {
   name: 'Home',
   components: {
-    CreateIntelligenceForm,
+    CreateIntelligenceModal,
     IntelligenceFromProjectItem,
     IntelligencesPublicList,
     IntelligencesFilter,
