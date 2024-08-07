@@ -198,61 +198,30 @@
                 : 'sidebar-wrapper__body__element',
             ]"
           />
-          <section class="training-menu">
-            <UnnnicSidebarItem
-              v-if="getCurrentRepository.authorization.can_contribute"
-              :icon="
-                dropSelect === 'isTrainActive'
-                  ? 'graph-status-circle-1-1'
-                  : 'graph-status-circle-1'
-              "
-              :text="$t('webapp.menu.training')"
-              :enableTooltip="!collapse"
-              :active="dropSelect === 'isTrainActive'"
-              :class="{
-                'sidebar-wrapper__body--dropdown-open':
-                  dropSelect === 'isTrainActive',
-                'sidebar-wrapper__body__element': true,
-              }"
-              @click.native="openDropdown('isTrainActive')"
-            >
-            </UnnnicSidebarItem>
-            <div
-              v-show="dropSelect === 'isTrainActive' && collapse"
-              class="sidebar-wrapper__body__item"
-            >
-              <UnnnicSidebarItem
-                :text="$t('webapp.menu.train')"
-                :class="[
-                  checkSelectedMenu('repository-training')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element',
-                ]"
-                @click="
-                  setSelectMenu({
-                    name: 'repository-training',
-                    to: 'repository-training',
-                    closeDrop: false,
-                  })
-                "
-              />
-              <UnnnicSidebarItem
-                :text="$t('webapp.menu.suggestion')"
-                :class="[
-                  checkSelectedMenu('repository-suggestion')
-                    ? 'sidebar-wrapper__body--active'
-                    : 'sidebar-wrapper__body__element',
-                ]"
-                @click="
-                  setSelectMenu({
-                    name: 'repository-suggestion',
-                    to: 'repository-suggestion',
-                    closeDrop: false,
-                  })
-                "
-              />
-            </div>
-          </section>
+
+          <UnnnicSidebarItem
+            v-if="getCurrentRepository.authorization.can_contribute"
+            :icon="
+              checkSelectedMenu('repository-training')
+                ? 'graph-status-circle-1-1'
+                : 'graph-status-circle-1'
+            "
+            :text="$t('webapp.menu.training')"
+            :enableTooltip="!collapse"
+            :active="checkSelectedMenu('repository-training')"
+            :class="[
+              checkSelectedMenu('repository-training')
+                ? 'sidebar-wrapper__body--active'
+                : 'sidebar-wrapper__body__element',
+            ]"
+            @click="
+              setSelectMenu({
+                name: 'repository-training',
+                to: 'repository-training',
+                closeDrop: true,
+              })
+            "
+          />
 
           <UnnnicSidebarItem
             v-if="getCurrentRepository.authorization.can_contribute"
@@ -630,12 +599,6 @@ export default {
         this.$router.currentRoute.name === 'repository-results'
       ) {
         this.dropSelect = 'isTestsActive';
-      }
-      if (
-        this.$router.currentRoute.name === 'repository-training' ||
-        this.$router.currentRoute.name === 'repository-suggestion'
-      ) {
-        this.dropSelect = 'isTrainActive';
       }
     },
     checkSelectedMenu(menu) {
