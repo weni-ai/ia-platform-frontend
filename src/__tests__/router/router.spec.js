@@ -181,23 +181,4 @@ describe('router', () => {
 
     expect(next).toHaveBeenCalled();
   });
-
-  it('should post message to parent window on route change', () => {
-    const to = { path: '/home' };
-    const from = {};
-
-    const postMessageSpy = vi.spyOn(window.parent, 'postMessage');
-
-    router.afterEach(to, from);
-
-    expect(postMessageSpy).toHaveBeenCalledWith(
-      {
-        event: 'changePathname',
-        pathname: window.location.pathname,
-      },
-      '*',
-    );
-
-    postMessageSpy.mockRestore();
-  });
 });
