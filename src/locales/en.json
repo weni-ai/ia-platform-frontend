@@ -778,16 +778,6 @@
       "save_success_title": "Intelligence successfully changed!",
       "save_success_message": "Intelligence information was successfully changed 😉"
     },
-    "roles": {
-      "user": "User",
-      "contributor": "Contributor",
-      "admin": "Admin",
-      "translator": "Translator",
-      "user_description": "Can read and analyze",
-      "contributor_description": "Can read, analyze and contribute with examples and translations",
-      "admin_description": "Can read, analyze, contribute and write repository config",
-      "translator_description": "Can read, analyze and create translations for intelligence"
-    },
     "example": {
       "enter_sentence": "Enter your sentence here",
       "intent": "Intent",
