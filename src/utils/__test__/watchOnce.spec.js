@@ -1,4 +1,3 @@
-// watchOnce.test.js
 import { describe, it, vi, expect } from 'vitest';
 import watchOnce from '@/utils/watchOnce';
 import store from '@/store/index.js';
