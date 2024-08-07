@@ -32,26 +32,29 @@
               {{ $t(`router.tabs.${tab.title}`) }}
             </template>
           </UnnnicTab>
-          <RouterContentBase
-            v-if="route.name === 'router-content'"
-            :filterNameProp="filterName"
-            :filesProp="files"
-            :sitesProp="sites"
-            :textProp="text"
-            @update:files="(v) => (files = v)"
-            @update:filter-name="(v) => (filterName = v)"
-          />
-          <RouterActions
-            v-else-if="route.name === 'router-actions'"
-            :items="routerActions"
-          />
-          <RouterCustomization
-            v-else-if="route.name === 'router-personalization'"
-          />
-          <RouterTunings
-            v-else-if="route.name === 'router-tunings'"
-            :data="routerTunings"
-          />
+
+          <section class="scrollable">
+            <RouterContentBase
+              v-if="route.name === 'router-content'"
+              :filterNameProp="filterName"
+              :filesProp="files"
+              :sitesProp="sites"
+              :textProp="text"
+              @update:files="(v) => (files = v)"
+              @update:filter-name="(v) => (filterName = v)"
+            />
+            <RouterActions
+              v-else-if="route.name === 'router-actions'"
+              :items="routerActions"
+            />
+            <RouterCustomization
+              v-else-if="route.name === 'router-personalization'"
+            />
+            <RouterTunings
+              v-else-if="route.name === 'router-tunings'"
+              :data="routerTunings"
+            />
+          </section>
         </section>
       </div>
 
@@ -296,6 +299,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.scrollable {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  height: 100%;
+
+  overflow: overlay;
+
+  $scroll-size: $unnnic-inline-nano;
+
+  padding-right: $unnnic-inline-nano + $scroll-size;
+  margin-right: -($unnnic-inline-nano + $scroll-size);
+
+  &::-webkit-scrollbar {
+    width: $scroll-size;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $unnnic-color-neutral-clean;
+    border-radius: $unnnic-border-radius-pill;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $unnnic-color-neutral-soft;
+    border-radius: $unnnic-border-radius-pill;
+  }
+
+  > * {
+    height: 0;
+  }
+}
+
 .brain-deactivated-preview {
   flex: 1;
   display: flex;

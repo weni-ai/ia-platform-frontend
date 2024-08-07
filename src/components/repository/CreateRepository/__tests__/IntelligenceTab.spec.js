@@ -26,9 +26,12 @@ describe('IntelligenceTab', () => {
       '.create-intelligence__form-element',
     );
     const inputs = wrapper.findAllComponents({ name: 'UnnnicInput' });
+    const descriptionTextarea = wrapper.findComponent(
+      '[data-test="description-textarea"]',
+    );
 
-    expect(formElements).toHaveLength(2);
-    expect(inputs).toHaveLength(2);
+    expect(formElements).toHaveLength(3);
+    expect(inputs).toHaveLength(1);
 
     expect(formElements[0].text()).toBe(
       wrapper.vm.$t('webapp.create_repository.intelligence_name_label'),
@@ -41,7 +44,7 @@ describe('IntelligenceTab', () => {
     expect(formElements[1].text()).toBe(
       wrapper.vm.$t('webapp.create_repository.description_label'),
     );
-    expect(inputs[1].attributes('placeholder')).toBe(
+    expect(descriptionTextarea.props('placeholder')).toBe(
       wrapper.vm.$t('webapp.create_repository.description_placeholder'),
     );
   });
@@ -88,9 +91,12 @@ describe('IntelligenceTab', () => {
     ]);
   });
 
-  test('emits update:description event when input value changes', async () => {
-    const input = wrapper.findAllComponents({ name: 'UnnnicInput' }).at(1);
-    await input.vm.$emit('update:model-value', 'New Description');
+  test('emits update:description event when textarea value changes', async () => {
+    const textarea = wrapper.findComponent(
+      '[data-test="description-textarea"]',
+    );
+
+    await textarea.vm.$emit('update:model-value', 'New Description');
 
     expect(wrapper.emitted('update:description')).toBeTruthy();
     expect(wrapper.emitted('update:description')[0]).toEqual([

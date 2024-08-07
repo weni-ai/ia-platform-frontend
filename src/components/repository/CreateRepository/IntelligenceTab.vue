@@ -19,48 +19,56 @@
         :label="$t('webapp.create_repository.description_label')"
         class="create-intelligence__form-element"
       >
-        <UnnnicInput
+        <UnnnicTextArea
+          data-test="description-textarea"
           :placeholder="$t('webapp.create_repository.description_placeholder')"
           :modelValue="description"
           @update:model-value="$emit('update:description', $event)"
         />
       </UnnnicFormElement>
 
-      <section class="intelligence-types create-intelligence__form-element">
-        <UnnnicCard
-          clickable
-          :title="
-            $t(
-              'webapp.create_repository.intelligence_type_classification_title',
-            )
-          "
-          :description="
-            $t(
-              'webapp.create_repository.intelligence_type_classification_description',
-            )
-          "
-          type="content"
-          icon="typing-1"
-          class="intelligence-types__item"
-          :enabled="repositoryType === 'classifier'"
-          @click="$emit('update:repositoryType', 'classifier')"
-        />
+      <UnnnicFormElement
+        :label="$t('webapp.create_repository.intelligence_type')"
+        class="create-intelligence__form-element"
+      >
+        <section class="intelligence-types">
+          <UnnnicCard
+            clickable
+            :title="
+              $t(
+                'webapp.create_repository.intelligence_type_classification_title',
+              )
+            "
+            :description="
+              $t(
+                'webapp.create_repository.intelligence_type_classification_description',
+              )
+            "
+            type="content"
+            icon="typing-1"
+            class="intelligence-types__item"
+            :enabled="repositoryType === 'classifier'"
+            @click="$emit('update:repositoryType', 'classifier')"
+          />
 
-        <UnnnicCard
-          clickable
-          :title="
-            $t('webapp.create_repository.intelligence_type_content_title')
-          "
-          :description="
-            $t('webapp.create_repository.intelligence_type_content_description')
-          "
-          type="content"
-          icon="paginate-filter-text-1"
-          class="intelligence-types__item"
-          :enabled="repositoryType === 'content'"
-          @click="$emit('update:repositoryType', 'content')"
-        />
-      </section>
+          <UnnnicCard
+            clickable
+            :title="
+              $t('webapp.create_repository.intelligence_type_content_title')
+            "
+            :description="
+              $t(
+                'webapp.create_repository.intelligence_type_content_description',
+              )
+            "
+            type="content"
+            icon="paginate-filter-text-1"
+            class="intelligence-types__item"
+            :enabled="repositoryType === 'content'"
+            @click="$emit('update:repositoryType', 'content')"
+          />
+        </section>
+      </UnnnicFormElement>
     </div>
   </div>
 </template>
@@ -99,7 +107,7 @@ export default {
 
 .intelligence-types {
   display: flex;
-  gap: $unnnic-spacing-xs;
+  gap: $unnnic-spacing-sm;
 
   &__item {
     flex: 1;

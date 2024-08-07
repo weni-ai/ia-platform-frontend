@@ -1,89 +1,83 @@
 <template>
-  <div class="create-repository__definitions">
-    <div class="create-repository__definitions__wrapper">
-      <section class="create-repository__definitions__wrapper__fields">
-        <UnnnicLabel :label="$t('webapp.create_repository.language_label')" />
+  <UnnnicFormElement
+    :label="$t('webapp.create_repository.language_label')"
+    class="form-element"
+  >
+    <UnnnicSelectSmart
+      :modelValue="[languages.find(({ value }) => value === language)]"
+      :options="languages"
+      orderedByIndex
+      autocomplete
+      autocompleteClearOnFocus
+      @update:model-value="$emit('update:language', $event[0].value)"
+    />
+  </UnnnicFormElement>
 
-        <UnnnicSelectSmart
-          :modelValue="[languages.find(({ value }) => value === language)]"
-          :options="languages"
-          orderedByIndex
-          autocomplete
-          autocompleteClearOnFocus
-          size="sm"
-          @update:model-value="$emit('update:language', $event[0].value)"
+  <section class="intelligence-private-or-public">
+    <UnnnicCard
+      clickable
+      :title="$t('webapp.create_repository.privacy_type_public_title')"
+      :description="
+        $t('webapp.create_repository.privacy_type_public_description')
+      "
+      type="content"
+      icon="lock-unlock-1-1"
+      class="intelligence-private-or-public__item"
+      data-test="set-as-public-card"
+      :enabled="!isPrivate"
+      @click="$emit('update:isPrivate', false)"
+    />
+
+    <UnnnicCard
+      clickable
+      :title="$t('webapp.create_repository.privacy_type_private_title')"
+      :description="
+        $t('webapp.create_repository.privacy_type_private_description')
+      "
+      type="content"
+      icon="lock-2-1"
+      class="intelligence-private-or-public__item"
+      data-test="set-as-private-card"
+      :enabled="isPrivate"
+      @click="$emit('update:isPrivate', true)"
+    />
+  </section>
+
+  <UnnnicFormElement :label="$t('webapp.create_repository.category_label')">
+    <div
+      class="categories-list"
+      data-test="categories-list"
+    >
+      <template v-if="categoryListLoading">
+        <UnnnicSkeletonLoading
+          v-for="i in 10"
+          :key="i"
+          tag="div"
+          :width="80 + Math.floor(Math.random() * 40) + 'px'"
+          height="32px"
         />
-      </section>
+      </template>
 
-      <section class="intelligence-private-or-public">
-        <UnnnicCard
-          clickable
-          :title="$t('webapp.create_repository.privacy_type_public_title')"
-          :description="
-            $t('webapp.create_repository.privacy_type_public_description')
-          "
-          type="content"
-          icon="lock-unlock-1-1"
-          class="intelligence-private-or-public__item"
-          data-test="set-as-public-card"
-          :enabled="!isPrivate"
-          @click="$emit('update:isPrivate', false)"
-        />
-
-        <UnnnicCard
-          clickable
-          :title="$t('webapp.create_repository.privacy_type_private_title')"
-          :description="
-            $t('webapp.create_repository.privacy_type_private_description')
-          "
-          type="content"
-          icon="lock-2-1"
-          class="intelligence-private-or-public__item"
-          data-test="set-as-private-card"
-          :enabled="isPrivate"
-          @click="$emit('update:isPrivate', true)"
-        />
-      </section>
-
-      <section>
-        <UnnnicLabel :label="$t('webapp.create_repository.category_label')" />
-
-        <div
-          class="categories-list"
-          data-test="categories-list"
-        >
-          <template v-if="categoryListLoading">
-            <UnnnicSkeletonLoading
-              v-for="i in 10"
-              :key="i"
-              tag="div"
-              :width="80 + Math.floor(Math.random() * 40) + 'px'"
-              height="32px"
-            />
-          </template>
-
-          <UnnnicTag
-            v-for="category in categoryList"
-            v-else
-            :key="category.id"
-            :text="category.name"
-            :disabled="categories.includes(category.id)"
-            clickable
-            type="brand"
-            :data-test="`category-${category.id}`"
-            @click="
-              $emit(
-                'update:categories',
-                categories.includes(category.id)
-                  ? categories.filter((id) => id !== category.id)
-                  : [...categories, category.id],
-              )
-            "
-          />
-        </div>
-      </section>
+      <UnnnicTag
+        v-for="category in categoryList"
+        v-else
+        :key="category.id"
+        :text="category.name"
+        :disabled="categories.includes(category.id)"
+        clickable
+        type="brand"
+        :data-test="`category-${category.id}`"
+        @click="
+          $emit(
+            'update:categories',
+            categories.includes(category.id)
+              ? categories.filter((id) => id !== category.id)
+              : [...categories, category.id],
+          )
+        "
+      />
     </div>
-  </div>
+  </UnnnicFormElement>
 </template>
 
 <script>
@@ -154,7 +148,7 @@ export default {
 <style lang="scss" scoped>
 .intelligence-private-or-public {
   display: flex;
-  gap: $unnnic-spacing-xs;
+  gap: $unnnic-spacing-sm;
 
   &__item {
     flex: 1;
@@ -171,54 +165,7 @@ export default {
   gap: $unnnic-spacing-xs;
 }
 
-.create-repository {
-  padding: 2rem 4rem;
-  background-color: $unnnic-color-background-snow;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &__definitions {
-    width: 100%;
-
-    &__title {
-      text-align: center;
-      color: $unnnic-color-neutral-darkest;
-      font-family: $unnnic-font-family-primary;
-      font-size: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    &__wrapper {
-      &__fields {
-        margin-bottom: 2rem;
-      }
-    }
-
-    &__intelligence-privacy {
-      margin-bottom: 2rem;
-
-      &__cards {
-        display: flex;
-        justify-content: space-between;
-        &__content {
-          width: 47%;
-        }
-      }
-    }
-
-    &__info-card {
-      border: 1px solid $unnnic-color-weni-200;
-      background: $unnnic-color-weni-100;
-
-      :deep(.unnnic-card-default__description) {
-        white-space: unset;
-        overflow: unset;
-        text-overflow: unset;
-        max-width: unset;
-      }
-    }
-  }
+.form-element {
+  width: 100%;
 }
 </style>
