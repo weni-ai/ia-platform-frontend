@@ -177,7 +177,7 @@
     "files": {
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
-      "supported_files": "Supported formats: .pdf, .doc, docx, .txt, .xls and .xlsx.<br /> 250MB limit per file.",
+      "supported_files": "Supported formats: {suportedFormats}.<br /> {limitMB}MB limit per file.",
       "file_error": "File error. Delete and add again",
       "browse_file": "Add file",
       "uploaded_files": "Uploaded files",
@@ -188,6 +188,8 @@
       },
       "content_of_the_files_has_been_added": "The content of the files has been added to the base",
       "file_removed_from_base": "{name} removed from content base",
+      "unsupported_format": "The file format is not supported",
+      "exceeds_limit": "The file size exceeds the {limitMB}MB limit",
       "delete_file": {
         "title": "Delete file",
         "description": "Are you sure you want to delete the file <b>{name}</b>?<br />The contents of this file will be removed from the AI base",

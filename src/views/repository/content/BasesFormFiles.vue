@@ -40,7 +40,7 @@
           color="neutral-cloudy"
           size="body-gt"
         >
-          <span v-html="$t('content_bases.files.supported_files')"></span>
+          <span v-html="supportedFormats"></span>
         </UnnnicIntelligenceText>
       </section>
 
@@ -63,7 +63,7 @@
           ? $t('content_bases.tabs.files')
           : $t('content_bases.files.uploaded_files')
       "
-      :description="removeHTML($t('content_bases.files.supported_files'))"
+      :description="removeHTML(supportedFormats)"
       :addText="$t('content_bases.files.browse_file')"
       :filterItem="filterItem"
       @add="$refs['browser-file-input'].click()"
@@ -134,6 +134,9 @@ import BasesFormFilesItem from './BasesFormFilesItem.vue';
 import BasesFormGenericList from './BasesFormGenericList.vue';
 import { reactive, toValue } from 'vue';
 
+const allowedFormats = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'];
+const fileSizeLimitInMegabytes = 250;
+
 export default {
   components: {
     BasesFormFilesItem,
@@ -184,6 +187,17 @@ export default {
   },
 
   computed: {
+    supportedFormats() {
+      const formats = allowedFormats.map((format) => `.${format}`);
+
+      return this.$t('content_bases.files.supported_files', {
+        suportedFormats: [formats.slice(0, -1).join(', '), formats.at(-1)].join(
+          this.$t('and'),
+        ),
+        limitMB: fileSizeLimitInMegabytes,
+      });
+    },
+
     filesData() {
       return toValue(this.files.data);
     },
@@ -240,6 +254,28 @@ export default {
         file.name.lastIndexOf('.') === -1
           ? file.name
           : file.name.slice(file.name.lastIndexOf('.') + 1);
+
+      const isNotAllowedFormat = !allowedFormats.includes(
+        extension.toLowerCase(),
+      );
+
+      if (isNotAllowedFormat) {
+        return (this.$store.state.alert = {
+          type: 'error',
+          text: this.$t('content_bases.files.unsupported_format'),
+        });
+      }
+
+      const fileSizeInMegabytes = file.size / Math.pow(1024, 2);
+
+      if (fileSizeInMegabytes > fileSizeLimitInMegabytes) {
+        return (this.$store.state.alert = {
+          type: 'error',
+          text: this.$t('content_bases.files.exceeds_limit', {
+            limitMB: fileSizeLimitInMegabytes,
+          }),
+        });
+      }
 
       const fileItem = reactive({
         uuid: `temp-${Math.floor(Math.random() * 1e9)}`,
