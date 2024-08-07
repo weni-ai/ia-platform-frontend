@@ -173,30 +173,24 @@ describe('FlowPreview', () => {
       expect(vm.previewHasQuickReplies()).toBe(true);
     });
 
-    it('should handle various drawer types based on run context hints', async () => {
-      const cases = [
-        { hintType: 'audio', expectedDrawerType: 'audio' },
-        { hintType: 'video', expectedDrawerType: 'videos' },
-        { hintType: 'image', expectedDrawerType: 'images' },
-        { hintType: 'location', expectedDrawerType: 'location' },
-        { hintType: 'digits', hintCount: 1, expectedDrawerType: 'digit' },
-        { hintType: 'digits', hintCount: 2, expectedDrawerType: 'digits' },
-        {
-          hintType: 'unknown',
-          expectedDrawerType: null,
-          expectedLog: 'Unknown hint',
-        },
-      ];
+    test.each([
+      { hintType: 'audio', expectedDrawerType: 'audio' },
+      { hintType: 'video', expectedDrawerType: 'videos' },
+      { hintType: 'image', expectedDrawerType: 'images' },
+      { hintType: 'location', expectedDrawerType: 'location' },
+      { hintType: 'digits', hintCount: 1, expectedDrawerType: 'digit' },
+      { hintType: 'digits', hintCount: 2, expectedDrawerType: 'digits' },
+      {
+        hintType: 'unknown',
+        expectedDrawerType: null,
+        expectedLog: 'Unknown hint',
+      },
+    ])(
+      'should handle hintType $hintType and expect drawerType $expectedDrawerType',
+      async ({ hintType, hintCount, expectedDrawerType, expectedLog }) => {
+        const originalLog = console.log;
+        const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
-      const originalLog = console.log;
-      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
-      for (const {
-        hintType,
-        hintCount,
-        expectedDrawerType,
-        expectedLog,
-      } of cases) {
         const runContext = {
           session: {
             runs: mockSession.runs,
@@ -221,11 +215,11 @@ describe('FlowPreview', () => {
         } else {
           expect(logSpy).not.toHaveBeenCalled();
         }
-      }
 
-      console.log = originalLog;
-      logSpy.mockRestore();
-    });
+        console.log = originalLog;
+        logSpy.mockRestore();
+      },
+    );
 
     it('should set drawerType to quickReplies and open drawer when quickReplies are present', async () => {
       const runContext = {
