@@ -36,64 +36,6 @@
           @input="update()"
         />
       </b-field>
-      <entity-accordion
-        v-if="shouldShowAdvancedGroup"
-        :open.sync="isOpen"
-      >
-        <div slot="header" class="level">
-          <div class="badges-card__header">
-            <p
-              class="unnnic-form__label my-0"
-            >
-              {{ $t('webapp.settings.settings_accordion') }}
-            </p>
-          </div>
-        </div>
-        <div slot="icon" class="level example-accordion__btns-wrapper">
-          <unnnic-icon-svg
-            :icon="`${isOpen ? 'arrow-button-down-1' : 'arrow-right-1-1'}`"
-            scheme="neutral-cleanest"
-            size="xs"
-          />
-        </div>
-        <div slot="body">
-          <div class="group">
-              <b-field
-              v-for="field in advancedGroup"
-              v-show="field.type !== 'hidden'"
-              :key="field.name"
-              :type="field.errors && 'is-danger'"
-              :class="{[`field-${field.type}`]: true}">
-              <div
-                v-if="showLabels && field.type !== 'boolean'"
-                slot="label"
-                :class="{'field-label': true, [`field-${field.type}__title`]: true}">
-              </div>
-              <div
-                v-if="showLabels && field.type !== 'boolean'"
-                slot="label"
-                :class="{'field-label': true, [`field-${field.type}__title`]: true}">
-                <unnnic-label class="my-0" :label="field.label" />
-              </div>
-              <component
-                :v-if="field.inputComponent"
-                :is="field.inputComponent"
-                v-bind="field.inputProps"
-                :label-placeholder="showLabels ? '' : field.label"
-                :show-max-length="showLabels"
-                v-model="formData[field.name]"
-                :initial-data="initialData[field.name]"
-                :label="field.label"
-                :fetch="field.fetch"
-                :help-text="hideHelp ? '' : field.helpText"
-                :compact="!showLabels"
-                :name="field.name"
-                @input="update()"
-              />
-            </b-field>
-          </div>
-        </div>
-      </entity-accordion>
     </component>
   </div>
 </template>
@@ -181,16 +123,6 @@ export default {
     };
   },
   computed: {
-    shouldShowAdvancedGroup() {
-      const isDefault =
-        this.initialData.algorithm === 'transformer_network_diet_bert' &&
-        this.initialData.use_competing_intents === false &&
-        this.initialData.use_name_entities === false &&
-        this.initialData.use_analyze_char === false;
-
-      return !isDefault;
-    },
-
     fields() {
       const fields = Object.keys(this.schema)
 
@@ -221,10 +153,6 @@ export default {
           };
         })
         .filter(field => !!field)
-    },
-    advancedGroup() {
-      const items = this.fields
-      return items.splice(5)
     },
     generalGroup() {
       const items = this.fields
