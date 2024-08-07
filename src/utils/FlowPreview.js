@@ -58,7 +58,6 @@ export default {
       const instance = axios.create({
         baseURL: runtimeVariables.get('FLOWS_API_BASE_URL'),
       });
-
       return (body) =>
         instance.post(`api/v2/flows/${this.preview.flowUuid}/simulate`, body, {
           headers: {
@@ -368,7 +367,7 @@ export default {
       const msg = {
         text,
         uuid: createUUID(),
-        urn: this.preview.session.contact.urns[0],
+        urn: this.preview.session.contact?.urns[0],
         attachments: [],
       };
 
