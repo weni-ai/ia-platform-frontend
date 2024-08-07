@@ -33,6 +33,7 @@ import store from './store';
 import ModalWarn from './components/ModalWarn.vue';
 import ObstructiveError from './views/ObstructiveError.vue';
 import { isEmpty } from 'lodash';
+import { HotjarIdentifyUser } from '@/utils/HotjarIdentifyUser.js';
 
 export default {
   name: 'App',
@@ -66,6 +67,10 @@ export default {
           isEmpty(this.$store.state.User.me)
         ) {
           this.profileInfo();
+
+          HotjarIdentifyUser({
+            token: localStorage.getItem('authToken'),
+          });
         }
       },
       immediate: true,
