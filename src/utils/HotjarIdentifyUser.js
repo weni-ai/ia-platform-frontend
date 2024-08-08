@@ -19,7 +19,7 @@ export function HotjarIdentifyUser({ token }) {
       `https://${keycloak.server}/auth/realms/${keycloak.realm}/protocol/openid-connect/userinfo`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
         },
       },
     )
