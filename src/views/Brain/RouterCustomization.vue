@@ -19,6 +19,7 @@
           class="customization__form-element"
         >
           <UnnnicInput
+            data-test="input-name"
             v-model="brain.agent.name.current"
             :placeholder="$t('customization.placeholders.name')"
             :type="errorRequiredFields.name ? 'error' : 'normal'"
@@ -40,6 +41,7 @@
         >
           <UnnnicInput
             v-model="brain.agent.role.current"
+            data-test="input-role"
             :placeholder="$t('customization.placeholders.occupation')"
             :type="errorRequiredFields.role ? 'error' : 'normal'"
           />
@@ -58,6 +60,7 @@
           class="customization__form-element"
         >
           <UnnnicSelectSmart
+            data-test="select-personality"
             :modelValue="
               handlePersonalityValue(brain.agent.personality.current)
             "
@@ -128,6 +131,7 @@
             <UnnnicButtonIcon
               v-bind="$props"
               icon="delete-1-1"
+              :data-test="`btn-delete-inst-${index}`"
               class="btn-color"
               size="small"
               @click="handleShowRemoveModal(index)"
@@ -159,6 +163,7 @@
       :description="$t('customization.instructions.modals.description')"
       :closeIcon="false"
       class="modal-remove-instructions"
+      data-test="remove-modal"
     >
       <template #options>
         <UnnnicButton
@@ -172,6 +177,7 @@
           type="warning"
           :loading="removing"
           @click="removeInstruction"
+          data-test="btn-remove-inst"
         >
           {{ $t('customization.instructions.modals.remove_btn') }}
         </UnnnicButton>
