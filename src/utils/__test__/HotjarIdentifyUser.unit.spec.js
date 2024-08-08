@@ -60,7 +60,7 @@ describe('HotjarIdentifyUser.js', () => {
         KEYCLOAK_REALM: 'realm-2',
       };
 
-      HotjarIdentifyUser({ token: '1234' });
+      HotjarIdentifyUser({ token: 'Bearer 1234' });
     });
 
     it('calls keycloak get user info', () => {
