@@ -780,16 +780,6 @@
       "save_success_title": "¡La inteligencia cambió con éxito!",
       "save_success_message": "La información de inteligencia se cambió con éxito 😉"
     },
-    "roles": {
-      "user": "Usuario",
-      "contributor": "Contribuyente",
-      "admin": "Administrador",
-      "translator": "Traductor",
-      "user_description": "Puedes ver y analizar",
-      "contributor_description": "Puedes ver, analizar y contribuir a los ejemplos y traducciones",
-      "admin_description": "Puedes ver, analizar, contribuir y cambiar la configuración",
-      "translator_description": "Puedes ver, analizar y crear traducciones"
-    },
     "example": {
       "enter_sentence": "Ingrese su oración aquí",
       "intent": "Intención",

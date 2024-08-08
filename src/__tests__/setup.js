@@ -18,7 +18,7 @@ global.IntersectionObserver = IntersectionObserverMock;
 global.runtimeVariables = {
   get(name) {
     return {
-      VITE_SUPPORTED_LANGUAGES: 'en|pt',
+      VITE_SUPPORTED_LANGUAGES: 'en:English|fr:French|es:Spanish',
       VITE_OPTIONS_WENIGPT:
         '[{"name": "golfinho-1", "description": "router.tunings.fields.golfinho-1", "model": "golfinho-1"}, {"name": "shark-1", "description": "router.tunings.fields.shark-1", "model": "shark-1"}]',
     }[name];

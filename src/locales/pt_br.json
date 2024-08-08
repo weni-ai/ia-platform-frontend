@@ -749,16 +749,6 @@
       "save_success_title": "Inteligência alterada com sucesso!",
       "save_success_message": "As informações da Inteligência foram alteradas com sucesso 😉"
     },
-    "roles": {
-      "user": "Usuário",
-      "contributor": "Contribuidor",
-      "admin": "Administrador",
-      "translator": "Tradutor",
-      "user_description": "Pode ver e analisar",
-      "contributor_description": "Pode ver, analisar e contribuir com exemplos e traduções",
-      "admin_description": "Pode ver, analisar, contribuir e mudar as configurações",
-      "translator_description": "Pode ver, analisar e criar traduções"
-    },
     "example": {
       "enter_sentence": "Digite sua frase aqui",
       "intent": "Intenção",
