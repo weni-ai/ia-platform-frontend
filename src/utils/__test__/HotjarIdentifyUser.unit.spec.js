@@ -7,8 +7,6 @@ global.runtimeVariables = {
   get: vi.fn((key) => envVariables[key]),
 };
 
-global.hj = vi.fn();
-
 const getRequest = vi.spyOn(axios, 'get').mockResolvedValue({
   data: {
     email: 'user@email.com',
@@ -54,6 +52,7 @@ describe('HotjarIdentifyUser.js', () => {
   describe('when keycloak settings is defined', () => {
     beforeEach(() => {
       vi.clearAllMocks();
+      vi.useFakeTimers();
 
       envVariables = {
         KEYCLOAK_SERVER: 'server-2',
@@ -75,6 +74,10 @@ describe('HotjarIdentifyUser.js', () => {
     });
 
     it('identifies the user to the Hotjar', () => {
+      global.hj = vi.fn();
+
+      vi.runAllTimers();
+
       expect(global.hj).toHaveBeenCalledWith('identify', 'user@email.com', {
         email: 'user@email.com',
         locale: 'en-US',
