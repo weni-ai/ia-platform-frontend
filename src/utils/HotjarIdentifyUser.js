@@ -24,10 +24,18 @@ export function HotjarIdentifyUser({ token }) {
       },
     )
     .then(({ data: { email, name, locale } }) => {
-      window.hj?.('identify', email, {
-        email,
-        name,
-        locale,
-      });
+      tryToIndentifyToHotjar();
+
+      function tryToIndentifyToHotjar() {
+        if (window.hj) {
+          window.hj('identify', email, {
+            email,
+            name,
+            locale,
+          });
+        } else {
+          setTimeout(tryToIndentifyToHotjar, 5000);
+        }
+      }
     });
 }
