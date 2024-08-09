@@ -195,6 +195,27 @@ vi.spyOn(nexusaiAPI.intelligences.contentBases.texts, 'list').mockResolvedValue(
   },
 );
 
+vi.spyOn(
+  nexusaiAPI.router.actions.generatedNames,
+  'generate',
+).mockResolvedValue({
+  data: {
+    action_name: 'Weni Action Generate',
+  },
+});
+
+const createRequest = vi
+  .spyOn(nexusaiAPI.router.actions, 'create')
+  .mockResolvedValue({
+    data: {
+      uuid: '1234',
+      name: 'Weni Action Generate - 123',
+      prompt: 'Action Description',
+      fallback: false,
+      content_base: '5678',
+    },
+  });
+
 describe('Brain integration', () => {
   let wrapper;
   let dispatchSpy;
@@ -377,14 +398,33 @@ describe('Brain integration', () => {
 
     expect(flowItems.length).toBe(3);
 
-    const flowInputFilter = wrapper.findComponent('[data-test="filter-input"]');
+    await flowItems[0].trigger('click');
 
-    await flowInputFilter.setValue('One');
+    expect(flowItems[0].attributes().class).contain('flow-item--selected');
 
-    const newFlowItems = wrapper.findAll('.flow-item');
+    await nextBtn.trigger('click');
 
-    expect(newFlowItems.length).toBe(3);
+    const nameAction = wrapper.findComponent(
+      '[data-test="nominate-action-input"]',
+    );
 
-    console.log('html', wrapper.html());
+    const nameActionInput = nameAction.find('input');
+
+    expect(nameActionInput.element.value).toBe('Weni Action Generate');
+
+    await nameActionInput.setValue('Weni Action Generate - 123');
+
+    expect(nameActionInput.element.value).toBe('Weni Action Generate - 123');
+
+    await nextBtn.trigger('click');
+
+    expect(createRequest).toHaveBeenCalledWith(
+      expect.objectContaining({
+        projectUuid: 'store-connect-uuid',
+        name: 'Weni Action Generate - 123',
+        description: 'Description action test',
+        flowUuid: '123',
+      }),
+    );
   });
 });
