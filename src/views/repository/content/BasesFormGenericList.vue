@@ -48,6 +48,7 @@
           v-if="shape === 'accordion'"
           type="secondary"
           iconLeft="add-1"
+          data-test="add-btn"
           @click="$emit('add')"
         >
           {{ addText }}

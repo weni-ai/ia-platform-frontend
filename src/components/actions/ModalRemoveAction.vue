@@ -20,6 +20,7 @@
       <UnnnicButton
         type="warning"
         :loading="removing"
+        data-test="btn-complete"
         @click="$emit('remove')"
       >
         {{ $t('modals.actions.btn_complete') }}
