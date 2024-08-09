@@ -26,6 +26,7 @@
       :placeholder="
         $t('modals.actions.add.steps.nominate_action.inputs.name.placeholder')
       "
+      data-test="nominate-action-input"
     />
   </UnnnicFormElement>
 </template>
