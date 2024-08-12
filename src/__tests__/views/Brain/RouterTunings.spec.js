@@ -86,14 +86,12 @@ describe('RouterTunings', () => {
       );
     expect(selectModelLabel.length).toBeGreaterThan(0);
 
-    const selectVersionLabel = wrapper
+    const tokenSelectLabel = wrapper
       .findAllComponents({ name: 'UnnnicIntelligenceText' })
       .filter((component) =>
-        component
-          .text()
-          .includes(wrapper.vm.$t('router.tunings.fields.version')),
+        component.text().includes(wrapper.vm.$t('router.tunings.fields.token')),
       );
-    expect(selectVersionLabel.length).toBeGreaterThan(0);
+    expect(tokenSelectLabel.length).toBeGreaterThan(0);
   });
 
   test('renders all default fields correctly', async () => {
@@ -283,5 +281,34 @@ describe('RouterTunings', () => {
   test('handles invalid field update correctly', async () => {
     await wrapper.vm.updateField('invalidField', 'value');
     expect(commitSpy).not.toHaveBeenCalled();
+  });
+
+  test('check that the isOneOption method is correct', async () => {
+    const fieldOneOption = {
+      options: [
+        {
+          name: 'shark-1',
+        },
+      ],
+    };
+
+    const fieldTwoOption = {
+      options: [
+        {
+          name: 'shark-1',
+        },
+        {
+          name: 'golfinho-1',
+        },
+      ],
+    };
+
+    const isOne = await wrapper.vm.isOneOption(fieldOneOption);
+
+    expect(isOne).toBe(true);
+
+    const isTwo = await wrapper.vm.isOneOption(fieldTwoOption);
+
+    expect(isTwo).toBe(false);
   });
 });
