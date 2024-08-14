@@ -43,12 +43,29 @@
 export default {
   props: {
     open: Boolean,
-    title: String,
-    counter: String,
-    addText: String,
-    shape: String,
+    title: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    counter: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    addText: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    shape: {
+      type: String,
+      required: false,
+      default: '',
+    },
     hideToggle: Boolean,
   },
+  emits: ['add', 'update:open'],
 
   methods: {
     toggleAccordionOpen() {
