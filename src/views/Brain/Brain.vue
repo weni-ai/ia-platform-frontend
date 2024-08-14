@@ -1,22 +1,27 @@
 <template>
   <PageContainer
     :loadingTitle="loadingContentBase"
-    :title="contentBase.title"
     :dontShowBack="true"
+    :dontShowBrainIcon="true"
     :brainIsDeactivated="!routerTunings.brainOn"
+    :isPaddingBottomContainer="false"
   >
-    <template #actions>
-      <UnnnicButton
-        class="save-button"
-        :disabled="$store.getters.isBrainSaveButtonDisabled"
-        :loading="$store.state.Brain.isSavingChanges"
-        @click="$store.dispatch('saveBrainChanges')"
-      >
-        {{ $t('router.tunings.save_changes') }}
-      </UnnnicButton>
-    </template>
-
     <section class="repository-base-edit__wrapper">
+      <div class="sidebar">
+        <UnnnicSideBar expanded>
+          <UnnnicSidebarMenu>
+            <UnnnicSidebarItem
+              v-for="tab in routerTabs"
+              :key="tab.page"
+              :text="$t(`router.tabs.${tab.title}`)"
+              :icon="tab.icon"
+              :active="false"
+              @click="onTabChange(tab.page)"
+            />
+          </UnnnicSidebarMenu>
+        </UnnnicSideBar>
+      </div>
+
       <div class="repository-base-edit__wrapper__left-side">
         <section class="content-base__container">
           <UnnnicTab
@@ -32,7 +37,6 @@
               {{ $t(`router.tabs.${tab.title}`) }}
             </template>
           </UnnnicTab>
-
           <section class="scrollable">
             <RouterContentBase
               v-if="route.name === 'router-content'"
@@ -133,10 +137,14 @@ export default {
     const store = useStore();
 
     const routerTabs = ref([
-      { title: 'personalization', page: 'router-personalization' },
-      { title: 'content', page: 'router-content' },
-      { title: 'actions', page: 'router-actions' },
-      { title: 'tunings', page: 'router-tunings' },
+      {
+        title: 'personalization',
+        page: 'router-personalization',
+        icon: 'person',
+      },
+      { title: 'content', page: 'router-content', icon: 'article' },
+      { title: 'actions', page: 'router-actions', icon: 'bolt' },
+      { title: 'tunings', page: 'router-tunings', icon: 'settings' },
     ]);
 
     const loadingContentBase = ref(false);
@@ -299,6 +307,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.sidebar {
+  border-style: solid;
+  border-color: $unnnic-color-neutral-soft;
+  border-width: $unnnic-border-width-thinner 0 0 $unnnic-border-width-thinner;
+  padding: $unnnic-spacing-sm;
+  width: 182px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
 .scrollable {
   flex: 1;
   display: flex;
@@ -346,12 +365,10 @@ export default {
 
 .content-base {
   &__container {
-    outline-style: solid;
-    outline-color: $unnnic-color-neutral-cleanest;
-    outline-width: $unnnic-border-width-thinner;
-    outline-offset: -$unnnic-border-width-thinner;
+    border-style: solid;
+    border-color: $unnnic-color-neutral-soft;
+    border-width: $unnnic-border-width-thinner 0 0 $unnnic-border-width-thinner;
 
-    border-radius: $unnnic-border-radius-sm;
     padding: $unnnic-spacing-sm;
 
     flex: 1;
@@ -526,7 +543,6 @@ export default {
   &__wrapper {
     flex: 1;
     display: flex;
-    gap: $unnnic-spacing-sm;
 
     &__left-side {
       flex: 1;
@@ -536,10 +552,9 @@ export default {
 
     &__card-test-container {
       outline-style: solid;
-      outline-color: $unnnic-color-neutral-cleanest;
+      outline-color: $unnnic-color-neutral-soft;
       outline-width: $unnnic-border-width-thinner;
       outline-offset: -$unnnic-border-width-thinner;
-      border-radius: $unnnic-border-radius-sm;
 
       width: 24.625 * $unnnic-font-size;
       box-sizing: border-box;
@@ -562,7 +577,7 @@ export default {
         margin-top: -$unnnic-spacing-sm;
         margin-bottom: $unnnic-spacing-sm;
         border-bottom: $unnnic-border-width-thinner solid
-          $unnnic-color-neutral-cleanest;
+          $unnnic-color-neutral-soft;
       }
     }
 
