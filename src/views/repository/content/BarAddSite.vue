@@ -13,7 +13,10 @@
       <UnnnicFormElement
         :label="$t('content_bases.sites.sidebar_add.fields.link.label')"
       >
-        <section class="add-form__links">
+        <section
+          class="add-form__links"
+          data-test="add-form__links"
+        >
           <UnnnicInput
             v-for="(site, index) in sites"
             :key="index"
