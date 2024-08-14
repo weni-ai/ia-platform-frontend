@@ -42,6 +42,7 @@
             v-model:open="textProp.open"
             :shape="contentStyle"
             :title="$t('content_bases.tabs.text')"
+            data-test="content-base-text"
           />
 
           <BasesFormText
@@ -50,6 +51,7 @@
             dontShowSaveButton
             :item="textProp"
             class="content-base__content-tab__text"
+            data-test="content-base-text-area"
           />
         </section>
       </section>
