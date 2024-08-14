@@ -1,5 +1,5 @@
 <template>
-  <div class="content-bases-page-container">
+  <div :class="paddingContainerClass">
     <section
       v-if="brainIsDeactivated"
       class="news-bar news-bar--warn"
@@ -25,14 +25,14 @@
     <section class="repository-base-edit">
       <section class="repository-base-edit__header">
         <UnnnicAvatarIcon
-          v-if="dontShowBack"
+          v-if="!dontShowBrainIcon"
           size="sm"
           icon="hub"
           scheme="aux-purple-500"
         />
 
         <UnnnicButton
-          v-else
+          v-if="!dontShowBack"
           size="small"
           type="tertiary"
           iconCenter="arrow_left_alt"
@@ -92,10 +92,33 @@ export default {
       default: '',
       required: false,
     },
-    dontShowBack: Boolean,
+    isPaddingContainer: {
+      type: Boolean,
+      default: true,
+      required: false,
+    },
+    dontShowBrainIcon: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    dontShowBack: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
     brainIsDeactivated: Boolean,
   },
   emits: ['back', 'update:title'],
+  computed: {
+    paddingContainerClass() {
+      return {
+        'content-bases-page-container': true,
+        'page-container-padding': true,
+        'page-container--no-padding': !this.isPaddingBottomContainer,
+      };
+    },
+  },
 };
 </script>
 
@@ -116,9 +139,16 @@ export default {
   }
 }
 
+.page-container-padding {
+  padding: $unnnic-spacing-lg;
+}
+
+.page-container--no-padding {
+  padding: 0;
+}
+
 .content-bases-page-container {
   background-color: $unnnic-color-background-snow;
-  padding: $unnnic-spacing-lg;
   min-height: 100vh;
   box-sizing: border-box;
   display: flex;
