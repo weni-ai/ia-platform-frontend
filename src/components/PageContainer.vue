@@ -24,13 +24,6 @@
 
     <section class="repository-base-edit">
       <section class="repository-base-edit__header">
-        <UnnnicAvatarIcon
-          v-if="!dontShowBrainIcon"
-          size="sm"
-          icon="hub"
-          scheme="aux-purple-500"
-        />
-
         <UnnnicButton
           v-if="!dontShowBack"
           size="small"
@@ -95,11 +88,6 @@ export default {
     isPaddingContainer: {
       type: Boolean,
       default: true,
-      required: false,
-    },
-    dontShowBrainIcon: {
-      type: Boolean,
-      default: false,
       required: false,
     },
     dontShowBack: {
