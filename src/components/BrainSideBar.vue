@@ -50,5 +50,20 @@ const onTabChange = (pageName) => {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+
+  :deep(.unnnic-side-bar-item) {
+    &:hover {
+      background-color: $unnnic-color-background-sky;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  :deep(.unnnic-side-bar-item--active) {
+    background-color: $unnnic-color-background-sky;
+  }
 }
 </style>
