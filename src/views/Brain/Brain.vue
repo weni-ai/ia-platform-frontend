@@ -2,25 +2,11 @@
   <PageContainer
     :loadingTitle="loadingContentBase"
     :dontShowBack="true"
-    :dontShowBrainIcon="true"
     :brainIsDeactivated="!routerTunings.brainOn"
     :isPaddingBottomContainer="false"
   >
     <section class="repository-base-edit__wrapper">
-      <div class="sidebar">
-        <UnnnicSideBar expanded>
-          <UnnnicSidebarMenu>
-            <UnnnicSidebarItem
-              v-for="tab in routerTabs"
-              :key="tab.page"
-              :text="$t(`router.tabs.${tab.title}`)"
-              :icon="tab.icon"
-              :active="false"
-              @click="onTabChange(tab.page)"
-            />
-          </UnnnicSidebarMenu>
-        </UnnnicSideBar>
-      </div>
+      <BrainSideBar />
 
       <div class="repository-base-edit__wrapper__left-side">
         <section class="content-base__container">
@@ -116,6 +102,7 @@ import ModalSaveChangesError from './ModalSaveChangesError.vue';
 import { useFilesPagination } from '../ContentBases/filesPagination';
 import { useSitesPagination } from '../ContentBases/sitesPagination';
 import ContentItemActions from '../repository/content/ContentItemActions.vue';
+import BrainSideBar from '@/components/BrainSideBar.vue';
 import i18n from '@/utils/plugins/i18n';
 
 export default {
@@ -130,6 +117,7 @@ export default {
     ModalPreviewQRCode,
     ModalSaveChangesError,
     ContentItemActions,
+    BrainSideBar,
   },
   setup() {
     const route = useRoute();
@@ -307,17 +295,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sidebar {
-  border-style: solid;
-  border-color: $unnnic-color-neutral-soft;
-  border-width: $unnnic-border-width-thinner 0 0 $unnnic-border-width-thinner;
-  padding: $unnnic-spacing-sm;
-  width: 182px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
 .scrollable {
   flex: 1;
   display: flex;
