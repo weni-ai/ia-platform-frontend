@@ -1,12 +1,12 @@
 <template>
-  <div class="sidebar">
+  <div :class="['sidebar', { collapsed: isCollapsed }]">
     <UnnnicButton
       class="floating-button"
-      iconCenter="arrow_back_ios_new"
+      :iconCenter="isCollapsed ? 'arrow_forward_ios' : 'arrow_back_ios_new'"
       type="secondary"
       @click="handleButtonClick"
     />
-    <UnnnicSideBar expanded>
+    <UnnnicSideBar v-if="!isCollapsed">
       <UnnnicSidebarMenu>
         <UnnnicSidebarItem
           v-for="tab in brainRoutes"
@@ -39,6 +39,8 @@ const activeTab = computed(() => {
   return brainRoutes.value.find((e) => e.page === route.name)?.page;
 });
 
+const isCollapsed = ref(false);
+
 const onTabChange = (pageName) => {
   if (route.name !== pageName) {
     router.push({ name: pageName });
@@ -46,7 +48,7 @@ const onTabChange = (pageName) => {
 };
 
 const handleButtonClick = () => {
-  console.log('Floating button clicked');
+  isCollapsed.value = !isCollapsed.value;
 };
 </script>
 
@@ -61,6 +63,17 @@ const handleButtonClick = () => {
   display: flex;
   flex-direction: column;
   position: relative;
+  transition: padding-left 0.3s ease;
+
+  &.collapsed {
+    padding-left: 18px;
+    padding-right: 0;
+    width: 0;
+
+    .floating-button {
+      opacity: 1;
+    }
+  }
 
   .floating-button {
     position: absolute;
@@ -86,6 +99,18 @@ const handleButtonClick = () => {
 
   &:hover .floating-button {
     opacity: 1;
+  }
+
+  .unnnic-side-bar {
+    transition:
+      opacity 0.3s ease,
+      max-height 0.3s ease;
+  }
+
+  &.collapsed .unnnic-side-bar {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
   }
 
   :deep(.unnnic-button--icon-on-center.unnnic-button--size-large) {
