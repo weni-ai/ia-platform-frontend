@@ -14,7 +14,7 @@
           :key="nav.page"
           :text="$t(`router.tabs.${nav.title}`)"
           :icon="nav.icon"
-          :active="nav.page === activeTab"
+          :active="nav.page === activeNav"
           data-test="nav-router"
           @click="onNavChange(nav.page)"
         />
@@ -33,7 +33,7 @@ const brainRoutes = ref(BRAIN_ROUTES);
 const route = useRoute();
 const router = useRouter();
 
-const activeTab = computed(() => {
+const activeNav = computed(() => {
   return brainRoutes.value.find((e) => e.page === route.name)?.page;
 });
 
