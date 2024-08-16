@@ -4,6 +4,7 @@
       class="floating-button"
       :iconCenter="isCollapsed ? 'arrow_forward_ios' : 'arrow_back_ios_new'"
       type="secondary"
+      data-test="floating-btn"
       @click="handleButtonClick"
     />
     <UnnnicSideBar v-if="!isCollapsed">
@@ -14,8 +15,8 @@
           :text="$t(`router.tabs.${nav.title}`)"
           :icon="nav.icon"
           :active="nav.page === activeTab"
-          :data-test="`nav-router`"
-          @click="onTabChange(nav.page)"
+          data-test="nav-router"
+          @click="onNavChange(nav.page)"
         />
       </UnnnicSidebarMenu>
     </UnnnicSideBar>
@@ -38,7 +39,7 @@ const activeTab = computed(() => {
 
 const isCollapsed = ref(false);
 
-const onTabChange = (pageName) => {
+const onNavChange = (pageName) => {
   if (route.name !== pageName) {
     router.push({ name: pageName });
   }
