@@ -1418,6 +1418,13 @@
                 "label": "This action will begin when...",
                 "placeholder": "the user says they want human service",
                 "help": "Try to be objective. It's from the description that the action will start"
+              },
+              "radio": {
+                "options": {
+                  "normal": "Normal flow",
+                  "cart": "Cart flow"
+                },
+                "label": "Select flow type"
               }
             }
           },

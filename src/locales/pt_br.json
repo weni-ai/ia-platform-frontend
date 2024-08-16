@@ -1376,6 +1376,13 @@
                 "label": "Esta ação será iniciada quando...",
                 "placeholder": "o usuário disser que quer atendimento humano",
                 "help": "Tente ser objetivo. É a partir da descrição que a ação vai ser iniciada"
+              },
+              "radio": {
+                "options": {
+                  "normal": "Fluxo normal",
+                  "cart": "Fluxo de carrinho"
+                },
+                "label": "Selecione o tipo de fluxo"
               }
             }
           },
