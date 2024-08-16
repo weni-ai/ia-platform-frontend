@@ -534,6 +534,7 @@ export default {
       flex-direction: column;
 
       &__header {
+        max-width: 390px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -542,11 +543,7 @@ export default {
         font-size: $unnnic-font-size-body-lg;
         line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
         font-weight: $unnnic-font-weight-bold;
-        padding-inline: $unnnic-spacing-sm;
-        padding-top: $unnnic-spacing-ant;
-        padding-bottom: $unnnic-spacing-ant - $unnnic-border-width-thinner;
-        margin-inline: -$unnnic-spacing-sm;
-        margin-top: -$unnnic-spacing-sm;
+        padding: $unnnic-spacing-ant $unnnic-spacing-sm;
         margin-bottom: $unnnic-spacing-sm;
         border-bottom: $unnnic-border-width-thinner solid
           $unnnic-color-neutral-soft;
@@ -554,8 +551,6 @@ export default {
     }
 
     &__card {
-      padding: $unnnic-spacing-sm;
-
       &__header {
         display: flex;
         align-items: center;

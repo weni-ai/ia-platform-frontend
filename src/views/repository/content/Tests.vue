@@ -90,16 +90,10 @@
         class="write-message__input"
         size="md"
         :placeholder="$t('webapp.home.bases.tests_placeholder')"
+        iconRight="send"
+        iconRightClickable
         @keypress.enter="sendMessage"
-      />
-
-      <UnnnicButton
-        size="large"
-        iconCenter="send"
-        :iconFilled="true"
-        type="alternative"
-        class="button-send-message"
-        @click="sendMessage"
+        @icon-right-click="sendMessage"
       />
     </div>
   </div>
@@ -548,6 +542,7 @@ export default {
 
   .messages {
     flex: 1;
+    padding: 0 $unnnic-spacing-sm;
 
     &__content {
       height: 0;
@@ -559,9 +554,6 @@ export default {
     $scroll-size: $unnnic-inline-nano;
 
     overflow: overlay;
-
-    margin-right: -$unnnic-spacing-xs;
-    padding-right: $unnnic-spacing-xs;
 
     &::-webkit-scrollbar {
       width: $scroll-size;
@@ -637,6 +629,21 @@ export default {
 
     &__input {
       width: 100%;
+      border-style: solid;
+      border-color: $unnnic-color-neutral-soft;
+      border-width: $unnnic-border-width-thinner 0 0 0;
+
+      :deep(input) {
+        outline: none;
+        padding: $unnnic-spacing-sm;
+      }
+
+      :deep(.icon-right) {
+        top: auto;
+        bottom: 75%;
+        font-size: 24px;
+        color: $unnnic-color-weni-600;
+      }
     }
   }
 }
