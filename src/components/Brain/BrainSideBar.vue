@@ -59,7 +59,9 @@ const handleButtonClick = () => {
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: padding-left 0.3s ease;
+  transition:
+    width 0.5s ease,
+    padding 0.5s ease;
 
   &.collapsed {
     padding-left: 18px;
@@ -68,6 +70,7 @@ const handleButtonClick = () => {
 
     .floating-button {
       opacity: 1;
+      transition: opacity 0.3s ease;
     }
   }
 
@@ -99,13 +102,16 @@ const handleButtonClick = () => {
 
   .unnnic-side-bar {
     transition:
-      opacity 0.3s ease,
-      max-height 0.3s ease;
+      opacity 0.5s ease,
+      max-height 0.5s ease,
+      transform 0.5s ease;
+    transform-origin: left center;
   }
 
   &.collapsed .unnnic-side-bar {
     opacity: 0;
     max-height: 0;
+    transform: translateX(-100%);
     overflow: hidden;
   }
 
