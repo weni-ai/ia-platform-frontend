@@ -24,13 +24,9 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { BRAIN_ROUTES } from '@/utils';
 
-const brainRoutes = ref([
-  { title: 'personalization', page: 'router-personalization', icon: 'person' },
-  { title: 'content', page: 'router-content', icon: 'article' },
-  { title: 'actions', page: 'router-actions', icon: 'bolt' },
-  { title: 'tunings', page: 'router-tunings', icon: 'settings' },
-]);
+const brainRoutes = ref(BRAIN_ROUTES);
 
 const route = useRoute();
 const router = useRouter();
