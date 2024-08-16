@@ -31,6 +31,7 @@
             $t('modals.actions.add.steps.describe.inputs.radio.disable_message')
           "
           :enabled="hasCartAction() && option.value === 'cart'"
+          data-test="radio-tooltip"
         >
           {{ option.text }}
         </UnnnicToolTip>
