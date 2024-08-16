@@ -9,7 +9,7 @@ import ModalSaveChangesError from '@/views/Brain/ModalSaveChangesError.vue';
 import Tests from '@/views/repository/content/Tests.vue';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import { expect } from 'vitest';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const store = createStore({
   state() {
