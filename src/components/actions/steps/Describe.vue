@@ -23,6 +23,7 @@
         :value="option.value"
         size="md"
         data-test="radio-option"
+        :disabled="hasCartAction() && option.value === 'cart'"
       >
         {{ option.text }}
       </UnnnicRadio>
@@ -43,6 +44,20 @@ const actionType = defineModel('actionType', {
   type: String,
   required: true,
 });
+
+const props = defineProps({
+  currentActions: {
+    type: Array,
+    default() {
+      return [];
+    },
+    required: false,
+  },
+});
+
+const hasCartAction = () => {
+  return props.currentActions.some((action) => action.actionType === 'cart');
+};
 
 const flowOptions = ref([
   {
