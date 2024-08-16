@@ -1424,7 +1424,8 @@
                   "normal": "Normal flow",
                   "cart": "Cart flow"
                 },
-                "label": "Select flow type"
+                "label": "Select flow type",
+                "disable_message": "There is already an action assigned to a cart flow"
               }
             }
           },

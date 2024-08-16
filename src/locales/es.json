@@ -1403,7 +1403,8 @@
                   "normal": "Flujo normal",
                   "cart": "Flujo de carrito"
                 },
-                "label": "Seleccionar tipo de flujo"
+                "label": "Seleccionar tipo de flujo",
+                "disable_message": "Ya hay una acción asignada a un flujo de carros"
               }
             }
           },

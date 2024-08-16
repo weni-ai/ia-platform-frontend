@@ -1382,7 +1382,8 @@
                   "normal": "Fluxo normal",
                   "cart": "Fluxo de carrinho"
                 },
-                "label": "Selecione o tipo de fluxo"
+                "label": "Selecione o tipo de fluxo",
+                "disable_message": "Já existe uma ação atribuída a um fluxo de carrinho"
               }
             }
           },
