@@ -27,6 +27,8 @@
       <StepDescribe
         v-if="currentStep.name === 'describe'"
         v-model:description="description"
+        v-model:actionType="actionType"
+        :currentActions="currentActions"
       />
 
       <StepSelectFlow
@@ -100,6 +102,7 @@ export default {
       name: '',
       loadingGenerateName: false,
       description: '',
+      actionType: 'normal',
       flowUuid: '',
     };
   },
