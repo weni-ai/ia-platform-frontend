@@ -10,19 +10,6 @@
 
       <div class="repository-base-edit__wrapper__left-side">
         <section class="content-base__container">
-          <UnnnicTab
-            :tabs="routerTabs.map((e) => e.page)"
-            :activeTab="activeTab"
-            @change="onTabChange"
-          >
-            <template
-              v-for="tab in routerTabs"
-              :key="tab.page"
-              #[`tab-head-${tab.page}`]
-            >
-              {{ $t(`router.tabs.${tab.title}`) }}
-            </template>
-          </UnnnicTab>
           <section class="scrollable">
             <RouterContentBase
               v-if="route.name === 'router-content'"
@@ -87,7 +74,7 @@
 
 <script>
 import { ref, computed, watch, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { get } from 'lodash';
 import nexusaiAPI from '../../api/nexusaiAPI';
@@ -121,19 +108,7 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const router = useRouter();
     const store = useStore();
-
-    const routerTabs = ref([
-      {
-        title: 'personalization',
-        page: 'router-personalization',
-        icon: 'person',
-      },
-      { title: 'content', page: 'router-content', icon: 'article' },
-      { title: 'actions', page: 'router-actions', icon: 'bolt' },
-      { title: 'tunings', page: 'router-tunings', icon: 'settings' },
-    ]);
 
     const loadingContentBase = ref(false);
     const dropdownOpen = ref(false);
@@ -162,10 +137,6 @@ export default {
       language: '',
     });
 
-    const activeTab = computed(
-      () => routerTabs.value.find((e) => e.page === route.name)?.page,
-    );
-
     const contentBaseUuid = computed(
       () => route.params.contentBaseUuid || store.state.router.contentBaseUuid,
     );
@@ -182,12 +153,6 @@ export default {
     const sites = useSitesPagination({
       contentBaseUuid: contentBaseUuid.value,
     });
-
-    const onTabChange = (pageName) => {
-      if (route.name !== pageName) {
-        router.push({ name: pageName });
-      }
-    };
 
     const refreshPreview = () => {
       refreshPreviewValue.value += 1;
@@ -269,7 +234,6 @@ export default {
 
     return {
       route,
-      routerTabs,
       loadingContentBase,
       dropdownOpen,
       refreshPreviewValue,
@@ -281,10 +245,8 @@ export default {
       routerActions,
       routerTunings,
       contentBase,
-      activeTab,
       contentBaseUuid,
       intelligenceUuid,
-      onTabChange,
       refreshPreview,
       loadRouterOptions,
       loadContentBase,
