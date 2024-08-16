@@ -8,6 +8,8 @@ import RouterCustomization from '@/views/Brain/RouterCustomization.vue';
 import ModalPreviewQRCode from '@/views/Brain/Preview/ModalPreviewQRCode.vue';
 import ModalSaveChangesError from '@/views/Brain/ModalSaveChangesError.vue';
 import Tests from '@/views/repository/content/Tests.vue';
+import BrainSideBar from '@/components/Brain/BrainSideBar.vue';
+import BrainHeader from '@/components/Brain/BrainHeader.vue';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import { expect } from 'vitest';
 import { createWebHistory, createRouter } from 'vue-router';
@@ -245,6 +247,8 @@ describe('Brain integration', () => {
       global: {
         plugins: [store, router],
         components: {
+          BrainSideBar,
+          BrainHeader,
           RouterContentBase,
           RouterActions,
           RouterTunings,
@@ -261,24 +265,25 @@ describe('Brain integration', () => {
     const customizationComponent = wrapper.findComponent(RouterCustomization);
     expect(customizationComponent.exists()).toBe(true);
 
-    const tabs = wrapper.findAll('.tab-head');
+    const navigation = wrapper.findAll('[data-test="nav-router"]');
 
-    expect(tabs.length).eq(4);
-    await tabs.at(1).trigger('click');
+    expect(navigation.length).eq(4);
+
+    await navigation.at(1).trigger('click');
 
     await flushPromises();
 
     const contentComponent = wrapper.findComponent(RouterContentBase);
     expect(contentComponent.exists()).toBe(true);
 
-    await tabs.at(2).trigger('click');
+    await navigation.at(2).trigger('click');
 
     await flushPromises();
 
     const actionsComponent = wrapper.findComponent(RouterActions);
     expect(actionsComponent.exists()).toBe(true);
 
-    await tabs.at(3).trigger('click');
+    await navigation.at(3).trigger('click');
 
     await flushPromises();
 
@@ -287,9 +292,9 @@ describe('Brain integration', () => {
   });
 
   test('checking that the personalization tab is saving the entries provided and performing the save', async () => {
-    const tabs = wrapper.findAll('.tab-head');
+    const navigation = wrapper.findAll('[data-test="nav-router"]');
 
-    await tabs.at(0).trigger('click');
+    await navigation.at(0).trigger('click');
 
     await flushPromises();
 
@@ -375,9 +380,9 @@ describe('Brain integration', () => {
       contentTextArea: '[data-test="content-base-text-area"]',
     };
 
-    const tabs = wrapper.findAll('.tab-head');
+    const navigation = wrapper.findAll('[data-test="nav-router"]');
 
-    await tabs.at(1).trigger('click');
+    await navigation.at(1).trigger('click');
 
     await flushPromises();
 
@@ -431,9 +436,9 @@ describe('Brain integration', () => {
   });
 
   test('checking that the actions tab is saving the entries provided and performing the save', async () => {
-    const tabs = wrapper.findAll('.tab-head');
+    const navigation = wrapper.findAll('[data-test="nav-router"]');
 
-    await tabs.at(2).trigger('click');
+    await navigation.at(2).trigger('click');
 
     await flushPromises();
 
@@ -532,9 +537,9 @@ describe('Brain integration', () => {
   });
 
   test('checking that the actions tab is remove action', async () => {
-    const tabs = wrapper.findAll('.tab-head');
+    const navigation = wrapper.findAll('[data-test="nav-router"]');
 
-    await tabs.at(2).trigger('click');
+    await navigation.at(2).trigger('click');
 
     await flushPromises();
 
@@ -553,7 +558,7 @@ describe('Brain integration', () => {
       })
       .replace(/<br\s*\/>/g, '<br>');
 
-    const descriptionElement = wrapper.findAll('p').at(2).element.innerHTML;
+    const descriptionElement = wrapper.findAll('p').at(4).element.innerHTML;
 
     expect(descriptionElement).toBe(descriptionText);
 
