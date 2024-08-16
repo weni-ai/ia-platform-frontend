@@ -10,6 +10,7 @@
 
       <div class="repository-base-edit__wrapper__left-side">
         <section class="content-base__container">
+          <BrainHeader />
           <section class="scrollable">
             <RouterContentBase
               v-if="route.name === 'router-content'"
@@ -89,7 +90,8 @@ import ModalSaveChangesError from './ModalSaveChangesError.vue';
 import { useFilesPagination } from '../ContentBases/filesPagination';
 import { useSitesPagination } from '../ContentBases/sitesPagination';
 import ContentItemActions from '../repository/content/ContentItemActions.vue';
-import BrainSideBar from '@/components/BrainSideBar.vue';
+import BrainSideBar from '@/components/Brain/BrainSideBar.vue';
+import BrainHeader from '@/components/Brain/BrainHeader.vue';
 import i18n from '@/utils/plugins/i18n';
 
 export default {
@@ -105,6 +107,7 @@ export default {
     ModalSaveChangesError,
     ContentItemActions,
     BrainSideBar,
+    BrainHeader,
   },
   setup() {
     const route = useRoute();
@@ -359,13 +362,8 @@ export default {
   }
 }
 
-.save-button,
 .settings-button {
   margin-left: auto;
-}
-
-.save-button {
-  width: 18.5 * $unnnic-font-size;
 }
 
 .base-tabs {
