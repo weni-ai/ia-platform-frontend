@@ -92,10 +92,6 @@ const handleButtonClick = () => {
     padding: 0;
     opacity: 0;
     transition: opacity 0.3s ease;
-
-    &:hover {
-      background-color: darken(blue, 10%);
-    }
   }
 
   &:hover .floating-button {
