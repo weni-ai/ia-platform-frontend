@@ -7,14 +7,15 @@
       @click="handleButtonClick"
     />
     <UnnnicSideBar v-if="!isCollapsed">
-      <UnnnicSidebarMenu>
+      <UnnnicSidebarMenu data-test="side-bar-menu">
         <UnnnicSidebarItem
-          v-for="tab in brainRoutes"
-          :key="tab.page"
-          :text="$t(`router.tabs.${tab.title}`)"
-          :icon="tab.icon"
-          :active="tab.page === activeTab"
-          @click="onTabChange(tab.page)"
+          v-for="nav in brainRoutes"
+          :key="nav.page"
+          :text="$t(`router.tabs.${nav.title}`)"
+          :icon="nav.icon"
+          :active="nav.page === activeTab"
+          :data-test="`nav-router`"
+          @click="onTabChange(nav.page)"
         />
       </UnnnicSidebarMenu>
     </UnnnicSideBar>
