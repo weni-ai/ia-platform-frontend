@@ -25,7 +25,15 @@
         data-test="radio-option"
         :disabled="hasCartAction() && option.value === 'cart'"
       >
-        {{ option.text }}
+        <UnnnicToolTip
+          side="top"
+          :text="
+            $t('modals.actions.add.steps.describe.inputs.radio.disable_message')
+          "
+          :enabled="hasCartAction() && option.value === 'cart'"
+        >
+          {{ option.text }}
+        </UnnnicToolTip>
       </UnnnicRadio>
     </UnnnicFormElement>
   </section>
