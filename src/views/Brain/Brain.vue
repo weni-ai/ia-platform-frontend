@@ -344,7 +344,7 @@ export default {
   &__container {
     border-style: solid;
     border-color: $unnnic-color-neutral-soft;
-    border-width: $unnnic-border-width-thinner 0 0 $unnnic-border-width-thinner;
+    border-width: 0 $unnnic-border-width-thinner 0 $unnnic-border-width-thinner;
 
     padding: $unnnic-spacing-sm;
 
@@ -528,11 +528,6 @@ export default {
     }
 
     &__card-test-container {
-      outline-style: solid;
-      outline-color: $unnnic-color-neutral-soft;
-      outline-width: $unnnic-border-width-thinner;
-      outline-offset: -$unnnic-border-width-thinner;
-
       width: 24.625 * $unnnic-font-size;
       box-sizing: border-box;
       display: flex;
