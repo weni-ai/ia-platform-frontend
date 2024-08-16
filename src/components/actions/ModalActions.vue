@@ -171,12 +171,14 @@ export default {
           name: this.name,
           description: this.description,
           flowUuid: this.flowUuid,
+          actionType: this.actionType,
         });
 
         const createdAction = {
           uuid: data.uuid,
           name: data.name,
           description: data.prompt,
+          actionType: data.actionType,
         };
 
         this.$store.state.alert = {
