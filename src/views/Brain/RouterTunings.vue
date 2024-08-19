@@ -1,31 +1,29 @@
 <template>
   <section class="tunings__container">
-    <UnnnicIntelligenceText
-      color="neutral-dark"
-      family="secondary"
-      weight="bold"
-      size="body-gt"
-      marginTop="xs"
-      tag="p"
-    >
+    <UnnnicIntelligenceText v-bind="titleProps">
       {{ $t('router.tunings.model') }}
     </UnnnicIntelligenceText>
 
     <template v-for="(field, index) in fields">
       <header
-        v-if="['radio', 'select'].includes(field.type) && !loadingData"
+        v-if="field.type === 'radio' && !loadingData"
         :key="`label-${index}`"
         class="tunings__form-element__label"
       >
         <UnnnicIntelligenceText
           color="neutral-cloudy"
-          family="secondary"
-          size="body-gt"
-          tag="p"
+          v-bind="labelProps"
         >
           {{ $t(`router.tunings.fields.${field.name}`) }}
         </UnnnicIntelligenceText>
       </header>
+      <UnnnicIntelligenceText
+        v-if="isRenderlabelVersion(field)"
+        :key="index"
+        v-bind="titleProps"
+      >
+        {{ $t(`router.tunings.fields.${field.name}`) }}
+      </UnnnicIntelligenceText>
       <section
         v-if="field.type === 'radio' && !loadingData"
         :key="index"
@@ -53,7 +51,9 @@
       />
 
       <UnnnicSelectSmart
-        v-if="field.type === 'select' && !loadingData"
+        v-if="
+          field.type === 'select' && !isOneOptionOwnModel(field) && !loadingData
+        "
         :key="index"
         class="tunings__container_fields-element"
         :modelValue="useSelectSmart(field).value"
@@ -61,6 +61,17 @@
         orderedByIndex
         @update:model-value="handleUpdateSelect(field.name, $event[0])"
       />
+
+      <UnnnicIntelligenceText
+        v-if="
+          field.type === 'select' && isOneOptionOwnModel(field) && !loadingData
+        "
+        :key="index"
+        color="neutral-cloudy"
+        v-bind="labelProps"
+      >
+        {{ field.default.name || '-' }}
+      </UnnnicIntelligenceText>
 
       <LoadingFormElement
         v-if="field.type === 'select' && loadingData"
@@ -76,9 +87,7 @@
       >
         <UnnnicIntelligenceText
           color="neutral-cloudy"
-          family="secondary"
-          size="body-gt"
-          tag="p"
+          v-bind="labelProps"
         >
           {{ $t(`router.tunings.fields.${field.name}`) }}
         </UnnnicIntelligenceText>
@@ -121,11 +130,9 @@
           v-if="field.type === 'naf-header'"
           :key="index"
           color="neutral-dark"
-          family="secondary"
           weight="bold"
-          size="body-gt"
           marginTop="md"
-          tag="p"
+          v-bind="labelProps"
         >
           {{ $t(`router.tunings.fields.${field.name}`) }}
         </UnnnicIntelligenceText>
@@ -136,9 +143,7 @@
         >
           <UnnnicIntelligenceText
             color="neutral-cloudy"
-            family="secondary"
-            size="body-gt"
-            tag="p"
+            v-bind="labelProps"
           >
             {{ $t(`router.tunings.fields.${field.name}`) }}
           </UnnnicIntelligenceText>
@@ -218,6 +223,19 @@ export default {
     return {
       restoring: false,
       isDisableAdvancedOptions: true,
+      titleProps: {
+        color: 'neutral-dark',
+        family: 'secondary',
+        weight: 'bold',
+        size: 'body-gt',
+        marginTop: 'xs',
+        tag: 'p',
+      },
+      labelProps: {
+        family: 'secondary',
+        size: 'body-gt',
+        tag: 'p',
+      },
     };
   },
 
@@ -242,6 +260,20 @@ export default {
   },
 
   methods: {
+    isOneOptionOwnModel(field) {
+      return field?.options && field?.options?.length === 1;
+    },
+
+    isRenderlabelVersion(field) {
+      if (this.isWeniGpt(field.name))
+        return (
+          field.type === 'select' &&
+          this.isOneOptionOwnModel(field) &&
+          !this.loadingData
+        );
+      return field.type === 'select' && !this.loadingData;
+    },
+
     updateField(name, value) {
       const validFields = this.fields.map((field) => field.name);
       if (validFields.includes(name)) {
