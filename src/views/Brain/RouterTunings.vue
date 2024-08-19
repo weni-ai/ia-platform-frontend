@@ -18,7 +18,7 @@
         </UnnnicIntelligenceText>
       </header>
       <UnnnicIntelligenceText
-        v-if="field.type === 'select' && isOneOption(field) && !loadingData"
+        v-if="isRenderlabelVersion(field)"
         :key="index"
         v-bind="titleProps"
       >
@@ -51,7 +51,9 @@
       />
 
       <UnnnicSelectSmart
-        v-if="field.type === 'select' && !isOneOption(field) && !loadingData"
+        v-if="
+          field.type === 'select' && !isOneOptionOwnModel(field) && !loadingData
+        "
         :key="index"
         class="tunings__container_fields-element"
         :modelValue="useSelectSmart(field).value"
@@ -61,7 +63,9 @@
       />
 
       <UnnnicIntelligenceText
-        v-if="field.type === 'select' && isOneOption(field) && !loadingData"
+        v-if="
+          field.type === 'select' && isOneOptionOwnModel(field) && !loadingData
+        "
         :key="index"
         color="neutral-cloudy"
         v-bind="labelProps"
@@ -253,8 +257,18 @@ export default {
   },
 
   methods: {
-    isOneOption(field) {
+    isOneOptionOwnModel(field) {
       return field?.options && field?.options?.length === 1;
+    },
+
+    isRenderlabelVersion(field) {
+      if (this.isWeniGpt(field.name))
+        return (
+          field.type === 'select' &&
+          this.isOneOptionOwnModel(field) &&
+          !this.loadingData
+        );
+      return field.type === 'select' && !this.loadingData;
     },
 
     updateField(name, value) {
