@@ -303,11 +303,11 @@ describe('RouterTunings', () => {
       ],
     };
 
-    const isOne = await wrapper.vm.isOneOption(fieldOneOption);
+    const isOne = await wrapper.vm.isOneOptionOwnModel(fieldOneOption);
 
     expect(isOne).toBe(true);
 
-    const isTwo = await wrapper.vm.isOneOption(fieldTwoOption);
+    const isTwo = await wrapper.vm.isOneOptionOwnModel(fieldTwoOption);
 
     expect(isTwo).toBe(false);
   });
