@@ -102,7 +102,7 @@ describe('RouterTunings', () => {
       .findAll('.label');
 
     expect(RadioModel[0].text()).toContain(
-      brainTuningsFields.find((e) => e.name === 'model').options[0],
+      wrapper.vm.$t('router.tunings.model_name'),
     );
     expect(RadioModel[1].text()).toContain(
       brainTuningsFields.find((e) => e.name === 'model').options[1],
@@ -115,14 +115,17 @@ describe('RouterTunings', () => {
       brainTuningsFields.find((e) => e.name === 'version').default.name,
     );
 
-    const UnnnicSliders = wrapper.findAllComponents({ name: 'UnnnicSlider' });
+    if (!wrapper.vm.isDisableAdvancedOptions) {
+      const UnnnicSliders = wrapper.findAllComponents({ name: 'UnnnicSlider' });
 
-    expect(UnnnicSliders[0].vm.initialValue).toEqual(
-      brainTuningsFields.find((e) => e.name === 'temperature').value,
-    );
+      expect(UnnnicSliders[0].vm.initialValue).toEqual(
+        brainTuningsFields.find((e) => e.name === 'temperature').value,
+      );
+    }
   });
 
-  test('updates a field value correctly', async () => {
+  // these tests are disabled because we have removed a configuration feature if it comes back the test will come back together
+  /* test('updates a field value correctly', async () => {
     const slider = wrapper.findComponent({ name: 'UnnnicSlider' });
     await slider.vm.$emit('valueChange', 0.7);
 
@@ -131,6 +134,28 @@ describe('RouterTunings', () => {
       value: 0.7,
     });
   });
+
+    test('renders advanced fields correctly', async () => {
+    await flushPromises();
+    const advancedFields = wrapper.findComponent({
+      name: 'RouterTuningsAdvanced',
+    });
+
+    expect(advancedFields.exists()).toBe(true);
+
+    const nafHeader = advancedFields
+      .findAll('.unnnic-text')
+      .filter((component) =>
+        component
+          .text()
+          .includes(wrapper.vm.$t('router.tunings.fields.parameter')),
+      );
+    expect(nafHeader.length).toBeGreaterThan(0);
+
+    const sliders = advancedFields.findAllComponents({ name: 'UnnnicSlider' });
+    expect(sliders.length).toBeGreaterThan(0);
+  });
+  */
 
   test('handles select field update correctly', async () => {
     const select = wrapper.findComponent({ name: 'UnnnicSelectSmart' });
@@ -249,27 +274,6 @@ describe('RouterTunings', () => {
     const field = brainTuningsFields.find((e) => e.name === 'version');
     const selectSmart = wrapper.vm.useSelectSmart(field);
     expect(selectSmart.value[0].value).toBe(field.default.name);
-  });
-
-  test('renders advanced fields correctly', async () => {
-    await flushPromises();
-    const advancedFields = wrapper.findComponent({
-      name: 'RouterTuningsAdvanced',
-    });
-
-    expect(advancedFields.exists()).toBe(true);
-
-    const nafHeader = advancedFields
-      .findAll('.unnnic-text')
-      .filter((component) =>
-        component
-          .text()
-          .includes(wrapper.vm.$t('router.tunings.fields.parameter')),
-      );
-    expect(nafHeader.length).toBeGreaterThan(0);
-
-    const sliders = advancedFields.findAllComponents({ name: 'UnnnicSlider' });
-    expect(sliders.length).toBeGreaterThan(0);
   });
 
   test('initializes correctly with different tuningsStatus', async () => {
