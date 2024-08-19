@@ -39,7 +39,7 @@
           size="md"
           @update:model-value="updateField(field.name, option)"
         >
-          {{ option }}
+          {{ handleModelOptionName(option) }}
         </UnnnicRadio>
       </section>
 
@@ -114,7 +114,9 @@
       v-model:brainOn="data.brainOn"
       class="tunings__advanced"
     >
-      <template v-for="(field, index) in fields">
+      <template
+        v-for="(field, index) in isDisableAdvancedOptions ? [] : fields"
+      >
         <UnnnicIntelligenceText
           v-if="field.type === 'naf-header'"
           :key="index"
@@ -215,6 +217,7 @@ export default {
   data() {
     return {
       restoring: false,
+      isDisableAdvancedOptions: true,
     };
   },
 
@@ -247,8 +250,14 @@ export default {
     },
 
     handleUpdateSelect(name, obj) {
-      if (this.isWeniGpt()) return this.updateField(name, obj);
+      if (this.isOwnModel()) return this.updateField(name, obj);
       return this.updateField(name, obj.value);
+    },
+
+    handleModelOptionName(option) {
+      return option === 'WeniGPT'
+        ? this.$t('router.tunings.model_name')
+        : option;
     },
 
     openRestoreDefaultModal() {
@@ -285,15 +294,15 @@ export default {
 
     useSelectSmart(field) {
       const handleLabel = (v) => {
-        if (this.isWeniGpt(field.name)) return v.name;
+        if (this.isOwnModel(field.name)) return v.name;
 
         return v;
       };
 
       const options = field.options.map((option) => ({
-        value: this.isWeniGpt(field.name) ? option.name : option,
+        value: this.isOwnModel(field.name) ? option.name : option,
         label: handleLabel(option),
-        description: this.isWeniGpt(field.name)
+        description: this.isOwnModel(field.name)
           ? this.$t(option.description)
           : null,
       }));
@@ -309,7 +318,7 @@ export default {
       };
     },
 
-    isWeniGpt(name = '') {
+    isOwnModel(name = '') {
       return name === 'version';
     },
   },
