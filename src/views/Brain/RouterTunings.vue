@@ -203,6 +203,7 @@
 import nexusaiAPI from '../../api/nexusaiAPI';
 import LoadingFormElement from '../../components/LoadingFormElement.vue';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
+import { WENIGPT_OPTIONS } from '@/utils';
 
 export default {
   components: {
@@ -275,9 +276,12 @@ export default {
     },
 
     updateField(name, value) {
-      const validFields = this.fields.map((field) => field.name);
-      if (validFields.includes(name)) {
-        this.$store.commit('updateTuning', { name, value });
+      this.$store.commit('updateTuning', { name, value });
+      if (name === 'model' && value === 'WeniGPT') {
+        this.$store.commit('updateTuning', {
+          name: 'version',
+          value: WENIGPT_OPTIONS[0].model,
+        });
       }
     },
 
