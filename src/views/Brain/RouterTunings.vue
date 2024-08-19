@@ -265,7 +265,7 @@ export default {
     },
 
     isRenderlabelVersion(field) {
-      if (this.isWeniGpt(field.name))
+      if (this.isOwnModel(field.name))
         return (
           field.type === 'select' &&
           this.isOneOptionOwnModel(field) &&
