@@ -282,9 +282,9 @@ describe('RouterTunings', () => {
     expect(wrapper.vm.loadingData).toBe(false);
   });
 
-  test('handles invalid field update correctly', async () => {
-    await wrapper.vm.updateField('invalidField', 'value');
-    expect(commitSpy).not.toHaveBeenCalled();
+  test('handles double field update correctly', async () => {
+    await wrapper.vm.updateField('model', 'WeniGPT');
+    expect(commitSpy).toHaveBeenCalledTimes(2);
   });
 
   test('check that the isOneOption method is correct', async () => {
