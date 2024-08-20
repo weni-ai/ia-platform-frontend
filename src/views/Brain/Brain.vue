@@ -2,12 +2,11 @@
   <PageContainer
     :loadingTitle="loadingContentBase"
     :dontShowBack="true"
-    :brainIsDeactivated="!routerTunings.brainOn"
-    :isPaddingBottomContainer="false"
+    :isNoSpaceContainer="true"
   >
+    <BrainWarningBar v-if="!routerTunings.brainOn" />
     <section class="repository-base-edit__wrapper">
       <BrainSideBar />
-
       <div class="repository-base-edit__wrapper__left-side">
         <section class="content-base__container">
           <BrainHeader />
@@ -92,6 +91,7 @@ import { useSitesPagination } from '../ContentBases/sitesPagination';
 import ContentItemActions from '../repository/content/ContentItemActions.vue';
 import BrainSideBar from '@/components/Brain/BrainSideBar.vue';
 import BrainHeader from '@/components/Brain/BrainHeader.vue';
+import BrainWarningBar from '@/components/Brain/BrainWarningBar.vue';
 import i18n from '@/utils/plugins/i18n';
 
 export default {
@@ -108,6 +108,7 @@ export default {
     ContentItemActions,
     BrainSideBar,
     BrainHeader,
+    BrainWarningBar,
   },
   setup() {
     const route = useRoute();
