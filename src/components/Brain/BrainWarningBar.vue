@@ -5,15 +5,11 @@
       family="secondary"
       weight="bold"
       size="body-lg"
+      data-test="news-bar-text"
     >
       {{ $t('router.warn.brain_is_deactivated') }}
 
-      <RouterLink
-        :to="{
-          name: 'router-tunings',
-          query: { activate_brain: true },
-        }"
-      >
+      <RouterLink :to="routerLinkTo">
         {{ $t('router.warn.click_here') }}
       </RouterLink>
 
@@ -21,6 +17,15 @@
     </UnnnicIntelligenceText>
   </section>
 </template>
+
+<script setup>
+import { computed } from 'vue';
+
+const routerLinkTo = computed(() => ({
+  name: 'router-tunings',
+  query: { activate_brain: true },
+}));
+</script>
 
 <style lang="scss" scoped>
 .news-bar {
