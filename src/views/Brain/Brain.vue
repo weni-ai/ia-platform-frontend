@@ -504,7 +504,7 @@ export default {
         font-size: $unnnic-font-size-body-lg;
         line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
         font-weight: $unnnic-font-weight-bold;
-        padding: $unnnic-spacing-ant $unnnic-spacing-sm;
+        padding: $unnnic-spacing-sm $unnnic-spacing-md;
         margin-bottom: $unnnic-spacing-sm;
         border-bottom: $unnnic-border-width-thinner solid
           $unnnic-color-neutral-soft;

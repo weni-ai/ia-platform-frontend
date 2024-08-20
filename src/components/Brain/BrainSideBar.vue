@@ -114,8 +114,8 @@ const handleButtonClick = () => {
   }
 
   :deep(.unnnic-button--icon-on-center.unnnic-button--size-large) {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     padding: 0;
     border: 1px solid $unnnic-color-neutral-clean;
   }
@@ -126,6 +126,8 @@ const handleButtonClick = () => {
   }
 
   :deep(.unnnic-side-bar-item) {
+    color: $unnnic-color-neutral-cloudy;
+
     &:hover {
       background-color: $unnnic-color-background-sky;
     }
@@ -138,6 +140,10 @@ const handleButtonClick = () => {
 
   :deep(.unnnic-side-bar-item--active) {
     background-color: $unnnic-color-background-sky;
+  }
+
+  :deep(.unnnic-icon-size--sm) {
+    font-size: $unnnic-font-size-title-sm;
   }
 }
 </style>
