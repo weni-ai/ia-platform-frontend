@@ -1,31 +1,29 @@
 <template>
   <section class="tunings__container">
-    <UnnnicIntelligenceText
-      color="neutral-dark"
-      family="secondary"
-      weight="bold"
-      size="body-gt"
-      marginTop="xs"
-      tag="p"
-    >
+    <UnnnicIntelligenceText v-bind="titleProps">
       {{ $t('router.tunings.model') }}
     </UnnnicIntelligenceText>
 
     <template v-for="(field, index) in fields">
       <header
-        v-if="['radio', 'select'].includes(field.type) && !loadingData"
+        v-if="field.type === 'radio' && !loadingData"
         :key="`label-${index}`"
         class="tunings__form-element__label"
       >
         <UnnnicIntelligenceText
           color="neutral-cloudy"
-          family="secondary"
-          size="body-gt"
-          tag="p"
+          v-bind="labelProps"
         >
           {{ $t(`router.tunings.fields.${field.name}`) }}
         </UnnnicIntelligenceText>
       </header>
+      <UnnnicIntelligenceText
+        v-if="isRenderlabelVersion(field)"
+        :key="index"
+        v-bind="titleProps"
+      >
+        {{ $t(`router.tunings.fields.${field.name}`) }}
+      </UnnnicIntelligenceText>
       <section
         v-if="field.type === 'radio' && !loadingData"
         :key="index"
@@ -39,7 +37,7 @@
           size="md"
           @update:model-value="updateField(field.name, option)"
         >
-          {{ option }}
+          {{ handleModelOptionName(option) }}
         </UnnnicRadio>
       </section>
 
@@ -53,7 +51,9 @@
       />
 
       <UnnnicSelectSmart
-        v-if="field.type === 'select' && !loadingData"
+        v-if="
+          field.type === 'select' && !isOneOptionOwnModel(field) && !loadingData
+        "
         :key="index"
         class="tunings__container_fields-element"
         :modelValue="useSelectSmart(field).value"
@@ -61,6 +61,17 @@
         orderedByIndex
         @update:model-value="handleUpdateSelect(field.name, $event[0])"
       />
+
+      <UnnnicIntelligenceText
+        v-if="
+          field.type === 'select' && isOneOptionOwnModel(field) && !loadingData
+        "
+        :key="index"
+        color="neutral-cloudy"
+        v-bind="labelProps"
+      >
+        {{ field.default.name || '-' }}
+      </UnnnicIntelligenceText>
 
       <LoadingFormElement
         v-if="field.type === 'select' && loadingData"
@@ -76,9 +87,7 @@
       >
         <UnnnicIntelligenceText
           color="neutral-cloudy"
-          family="secondary"
-          size="body-gt"
-          tag="p"
+          v-bind="labelProps"
         >
           {{ $t(`router.tunings.fields.${field.name}`) }}
         </UnnnicIntelligenceText>
@@ -114,16 +123,16 @@
       v-model:brainOn="data.brainOn"
       class="tunings__advanced"
     >
-      <template v-for="(field, index) in fields">
+      <template
+        v-for="(field, index) in isDisableAdvancedOptions ? [] : fields"
+      >
         <UnnnicIntelligenceText
           v-if="field.type === 'naf-header'"
           :key="index"
           color="neutral-dark"
-          family="secondary"
           weight="bold"
-          size="body-gt"
           marginTop="md"
-          tag="p"
+          v-bind="labelProps"
         >
           {{ $t(`router.tunings.fields.${field.name}`) }}
         </UnnnicIntelligenceText>
@@ -134,9 +143,7 @@
         >
           <UnnnicIntelligenceText
             color="neutral-cloudy"
-            family="secondary"
-            size="body-gt"
-            tag="p"
+            v-bind="labelProps"
           >
             {{ $t(`router.tunings.fields.${field.name}`) }}
           </UnnnicIntelligenceText>
@@ -196,6 +203,7 @@
 import nexusaiAPI from '../../api/nexusaiAPI';
 import LoadingFormElement from '../../components/LoadingFormElement.vue';
 import RouterTuningsAdvanced from './RouterTuningsAdvanced.vue';
+import { WENIGPT_OPTIONS } from '@/utils';
 
 export default {
   components: {
@@ -215,6 +223,20 @@ export default {
   data() {
     return {
       restoring: false,
+      isDisableAdvancedOptions: true,
+      titleProps: {
+        color: 'neutral-dark',
+        family: 'secondary',
+        weight: 'bold',
+        size: 'body-gt',
+        marginTop: 'xs',
+        tag: 'p',
+      },
+      labelProps: {
+        family: 'secondary',
+        size: 'body-gt',
+        tag: 'p',
+      },
     };
   },
 
@@ -239,16 +261,39 @@ export default {
   },
 
   methods: {
+    isOneOptionOwnModel(field) {
+      return field?.options && field?.options?.length === 1;
+    },
+
+    isRenderlabelVersion(field) {
+      if (this.isOwnModel(field.name))
+        return (
+          field.type === 'select' &&
+          this.isOneOptionOwnModel(field) &&
+          !this.loadingData
+        );
+      return field.type === 'select' && !this.loadingData;
+    },
+
     updateField(name, value) {
-      const validFields = this.fields.map((field) => field.name);
-      if (validFields.includes(name)) {
-        this.$store.commit('updateTuning', { name, value });
+      this.$store.commit('updateTuning', { name, value });
+      if (name === 'model' && value === 'WeniGPT') {
+        this.$store.commit('updateTuning', {
+          name: 'version',
+          value: WENIGPT_OPTIONS[0].model,
+        });
       }
     },
 
     handleUpdateSelect(name, obj) {
-      if (this.isWeniGpt()) return this.updateField(name, obj);
+      if (this.isOwnModel()) return this.updateField(name, obj);
       return this.updateField(name, obj.value);
+    },
+
+    handleModelOptionName(option) {
+      return option === 'WeniGPT'
+        ? this.$t('router.tunings.model_name')
+        : option;
     },
 
     openRestoreDefaultModal() {
@@ -285,15 +330,15 @@ export default {
 
     useSelectSmart(field) {
       const handleLabel = (v) => {
-        if (this.isWeniGpt(field.name)) return v.name;
+        if (this.isOwnModel(field.name)) return v.name;
 
         return v;
       };
 
       const options = field.options.map((option) => ({
-        value: this.isWeniGpt(field.name) ? option.name : option,
+        value: this.isOwnModel(field.name) ? option.name : option,
         label: handleLabel(option),
-        description: this.isWeniGpt(field.name)
+        description: this.isOwnModel(field.name)
           ? this.$t(option.description)
           : null,
       }));
@@ -309,7 +354,7 @@ export default {
       };
     },
 
-    isWeniGpt(name = '') {
+    isOwnModel(name = '') {
       return name === 'version';
     },
   },

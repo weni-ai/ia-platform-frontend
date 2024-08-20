@@ -86,14 +86,12 @@ describe('RouterTunings', () => {
       );
     expect(selectModelLabel.length).toBeGreaterThan(0);
 
-    const selectVersionLabel = wrapper
+    const tokenSelectLabel = wrapper
       .findAllComponents({ name: 'UnnnicIntelligenceText' })
       .filter((component) =>
-        component
-          .text()
-          .includes(wrapper.vm.$t('router.tunings.fields.version')),
+        component.text().includes(wrapper.vm.$t('router.tunings.fields.token')),
       );
-    expect(selectVersionLabel.length).toBeGreaterThan(0);
+    expect(tokenSelectLabel.length).toBeGreaterThan(0);
   });
 
   test('renders all default fields correctly', async () => {
@@ -104,7 +102,7 @@ describe('RouterTunings', () => {
       .findAll('.label');
 
     expect(RadioModel[0].text()).toContain(
-      brainTuningsFields.find((e) => e.name === 'model').options[0],
+      wrapper.vm.$t('router.tunings.model_name'),
     );
     expect(RadioModel[1].text()).toContain(
       brainTuningsFields.find((e) => e.name === 'model').options[1],
@@ -117,14 +115,17 @@ describe('RouterTunings', () => {
       brainTuningsFields.find((e) => e.name === 'version').default.name,
     );
 
-    const UnnnicSliders = wrapper.findAllComponents({ name: 'UnnnicSlider' });
+    if (!wrapper.vm.isDisableAdvancedOptions) {
+      const UnnnicSliders = wrapper.findAllComponents({ name: 'UnnnicSlider' });
 
-    expect(UnnnicSliders[0].vm.initialValue).toEqual(
-      brainTuningsFields.find((e) => e.name === 'temperature').value,
-    );
+      expect(UnnnicSliders[0].vm.initialValue).toEqual(
+        brainTuningsFields.find((e) => e.name === 'temperature').value,
+      );
+    }
   });
 
-  test('updates a field value correctly', async () => {
+  // these tests are disabled because we have removed a configuration feature if it comes back the test will come back together
+  /* test('updates a field value correctly', async () => {
     const slider = wrapper.findComponent({ name: 'UnnnicSlider' });
     await slider.vm.$emit('valueChange', 0.7);
 
@@ -133,6 +134,28 @@ describe('RouterTunings', () => {
       value: 0.7,
     });
   });
+
+    test('renders advanced fields correctly', async () => {
+    await flushPromises();
+    const advancedFields = wrapper.findComponent({
+      name: 'RouterTuningsAdvanced',
+    });
+
+    expect(advancedFields.exists()).toBe(true);
+
+    const nafHeader = advancedFields
+      .findAll('.unnnic-text')
+      .filter((component) =>
+        component
+          .text()
+          .includes(wrapper.vm.$t('router.tunings.fields.parameter')),
+      );
+    expect(nafHeader.length).toBeGreaterThan(0);
+
+    const sliders = advancedFields.findAllComponents({ name: 'UnnnicSlider' });
+    expect(sliders.length).toBeGreaterThan(0);
+  });
+  */
 
   test('handles select field update correctly', async () => {
     const select = wrapper.findComponent({ name: 'UnnnicSelectSmart' });
@@ -253,35 +276,43 @@ describe('RouterTunings', () => {
     expect(selectSmart.value[0].value).toBe(field.default.name);
   });
 
-  test('renders advanced fields correctly', async () => {
-    await flushPromises();
-    const advancedFields = wrapper.findComponent({
-      name: 'RouterTuningsAdvanced',
-    });
-
-    expect(advancedFields.exists()).toBe(true);
-
-    const nafHeader = advancedFields
-      .findAll('.unnnic-text')
-      .filter((component) =>
-        component
-          .text()
-          .includes(wrapper.vm.$t('router.tunings.fields.parameter')),
-      );
-    expect(nafHeader.length).toBeGreaterThan(0);
-
-    const sliders = advancedFields.findAllComponents({ name: 'UnnnicSlider' });
-    expect(sliders.length).toBeGreaterThan(0);
-  });
-
   test('initializes correctly with different tuningsStatus', async () => {
     wrapper.vm.$store.state.Brain.tuningsStatus = 'error';
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.loadingData).toBe(false);
   });
 
-  test('handles invalid field update correctly', async () => {
-    await wrapper.vm.updateField('invalidField', 'value');
-    expect(commitSpy).not.toHaveBeenCalled();
+  test('handles double field update correctly', async () => {
+    await wrapper.vm.updateField('model', 'WeniGPT');
+    expect(commitSpy).toHaveBeenCalledTimes(2);
+  });
+
+  test('check that the isOneOption method is correct', async () => {
+    const fieldOneOption = {
+      options: [
+        {
+          name: 'shark-1',
+        },
+      ],
+    };
+
+    const fieldTwoOption = {
+      options: [
+        {
+          name: 'shark-1',
+        },
+        {
+          name: 'golfinho-1',
+        },
+      ],
+    };
+
+    const isOne = await wrapper.vm.isOneOptionOwnModel(fieldOneOption);
+
+    expect(isOne).toBe(true);
+
+    const isTwo = await wrapper.vm.isOneOptionOwnModel(fieldTwoOption);
+
+    expect(isTwo).toBe(false);
   });
 });
