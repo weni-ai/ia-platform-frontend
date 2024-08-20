@@ -1,28 +1,6 @@
 <template>
-  <div :class="paddingContainerClass">
-    <section
-      v-if="brainIsDeactivated"
-      class="news-bar news-bar--warn"
-    >
-      <UnnnicIntelligenceText
-        color="neutral-white"
-        family="secondary"
-        weight="bold"
-        size="body-lg"
-      >
-        {{ $t('router.warn.brain_is_deactivated') }}
-
-        <RouterLink
-          :to="{ name: 'router-tunings', query: { activate_brain: true } }"
-        >
-          {{ $t('router.warn.click_here') }}
-        </RouterLink>
-
-        {{ $t('router.warn.activate_it') }}
-      </UnnnicIntelligenceText>
-    </section>
-
-    <section class="repository-base-edit">
+  <div :class="containerClass">
+    <section :class="repositoryBaseEditClass">
       <section class="repository-base-edit__header">
         <UnnnicButton
           v-if="!dontShowBack"
@@ -30,6 +8,7 @@
           type="tertiary"
           iconCenter="arrow_left_alt"
           scheme="neutral-dark"
+          data-test="back-btn"
           @click="$emit('back')"
         />
 
@@ -85,9 +64,9 @@ export default {
       default: '',
       required: false,
     },
-    isPaddingContainer: {
+    isNoSpaceContainer: {
       type: Boolean,
-      default: true,
+      default: false,
       required: false,
     },
     dontShowBack: {
@@ -95,15 +74,21 @@ export default {
       default: false,
       required: false,
     },
-    brainIsDeactivated: Boolean,
   },
   emits: ['back', 'update:title'],
   computed: {
-    paddingContainerClass() {
+    containerClass() {
       return {
         'content-bases-page-container': true,
-        'page-container-padding': true,
-        'page-container--no-padding': !this.isPaddingBottomContainer,
+        'page-container-padding': !this.isNoSpaceContainer,
+        'page-container--no-padding': this.isNoSpaceContainer,
+      };
+    },
+    repositoryBaseEditClass() {
+      return {
+        'repository-base-edit': true,
+        'repo-margin-bottom': !this.isNoSpaceContainer,
+        'no-margin-bottom': this.isNoSpaceContainer,
       };
     },
   },
@@ -111,28 +96,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.news-bar {
-  margin: -$unnnic-spacing-lg;
-  margin-bottom: $unnnic-spacing-md;
-  padding: $unnnic-spacing-ant $unnnic-spacing-lg;
-
-  &--warn {
-    background-color: $unnnic-color-aux-yellow-500;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: underline;
-    text-underline-offset: $unnnic-spacing-nano;
-  }
-}
-
 .page-container-padding {
   padding: $unnnic-spacing-lg;
 }
 
 .page-container--no-padding {
   padding: 0;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0;
+}
+
+.repo-margin-bottom {
+  margin-bottom: $unnnic-spacing-md;
 }
 
 .content-bases-page-container {
@@ -146,7 +123,6 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-bottom: $unnnic-spacing-md;
 
     &__description {
       margin-top: $unnnic-spacing-sm;
