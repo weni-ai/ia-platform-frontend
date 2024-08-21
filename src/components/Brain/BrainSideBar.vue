@@ -53,10 +53,10 @@ const handleButtonClick = () => {
     setTimeout(() => {
       isSideBarVisible.value = true;
     }, 300);
-  } else {
-    isCollapsed.value = true;
-    isSideBarVisible.value = false;
   }
+
+  isCollapsed.value = true;
+  isSideBarVisible.value = false;
 };
 </script>
 
