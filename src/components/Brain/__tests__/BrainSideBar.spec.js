@@ -44,10 +44,29 @@ describe('BrainSideBar', () => {
     expect(wrapper.classes()).not.toContain('collapsed');
 
     await button.trigger('click');
+
     expect(wrapper.classes()).toContain('collapsed');
 
     await button.trigger('click');
-    expect(wrapper.classes()).not.toContain('collapsed');
+
+    setTimeout(() => {
+      expect(wrapper.classes()).not.toContain('collapsed');
+    }, 300);
+  });
+
+  test('verifies the state changes when handleButtonClick is called', async () => {
+    expect(wrapper.vm.isCollapsed).toBe(false);
+    expect(wrapper.vm.isSideBarVisible).toBe(true);
+
+    await wrapper.vm.handleButtonClick();
+
+    expect(wrapper.vm.isCollapsed).toBe(true);
+    expect(wrapper.vm.isSideBarVisible).toBe(false);
+
+    expect(wrapper.vm.isCollapsed).toBe(true);
+    setTimeout(() => {
+      expect(wrapper.vm.isSideBarVisible).toBe(true);
+    }, 300);
   });
 
   test('navigates to the correct tab when clicking on a sidebar item', async () => {
@@ -72,6 +91,36 @@ describe('BrainSideBar', () => {
       expect.anything(),
       expect.anything(),
       expect.anything(),
+    );
+  });
+
+  test('renders UnnnicSideBar only when isSideBarVisible is true', async () => {
+    const wrapper = mount(BrainSideBar, {
+      global: {
+        plugins: [router, store],
+      },
+    });
+
+    expect(wrapper.vm.isSideBarVisible).toBe(true);
+    expect(wrapper.findComponent('[data-test="side-bar-menu"]').exists()).toBe(
+      true,
+    );
+
+    await wrapper.vm.handleButtonClick();
+
+    expect(wrapper.vm.isSideBarVisible).toBe(false);
+    expect(wrapper.findComponent('[data-test="side-bar-menu"]').exists()).toBe(
+      false,
+    );
+
+    await wrapper.vm.handleButtonClick();
+
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    await flushPromises();
+
+    expect(wrapper.vm.isSideBarVisible).toBe(true);
+    expect(wrapper.findComponent('[data-test="side-bar-menu"]').exists()).toBe(
+      true,
     );
   });
 });
