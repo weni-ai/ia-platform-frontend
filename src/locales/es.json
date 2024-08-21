@@ -154,6 +154,7 @@
     }
   },
   "content_bases": {
+    "description": "Introduzca el contenido que su agente utilizará para responder a las preguntas. Incluya toda la información, archivos y sitios web necesarios para que el agente proporcione respuestas precisas y útiles.",
     "quick_test": "Prueba rápida",
     "sidebar_quick_test_title": "Prueba rápida de la base {name}",
     "sidebar_quick_test_description": "Envíe un mensaje para probar esta base de contenidos y averiguar qué preguntas puede responder",

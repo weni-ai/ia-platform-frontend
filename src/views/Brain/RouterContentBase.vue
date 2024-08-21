@@ -7,6 +7,17 @@
           `content-base__content-tab--shape-${contentStyle}`,
         ]"
       >
+        <section>
+          <UnnnicIntelligenceText
+            tag="p"
+            family="secondary"
+            size="body-gt"
+            marginBottom="sm"
+            weight="400"
+          >
+            {{ $t('content_bases.description') }}
+          </UnnnicIntelligenceText>
+        </section>
         <section class="search-container">
           <UnnnicInput
             :modelValue="filterName"

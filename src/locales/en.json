@@ -154,6 +154,7 @@
     }
   },
   "content_bases": {
+    "description": "Enter the content that your agent will use to answer the questions. Include all the information, files and websites necessary for the agent to provide accurate and useful answers.",
     "quick_test": "Quick test",
     "sidebar_quick_test_title": "Quick test of the {name} base",
     "sidebar_quick_test_description": "Send a message to test this content base and find out what questions it can answer",
