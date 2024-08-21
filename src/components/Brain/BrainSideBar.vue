@@ -7,7 +7,7 @@
       data-test="floating-btn"
       @click="handleButtonClick"
     />
-    <UnnnicSideBar v-if="!isCollapsed">
+    <UnnnicSideBar v-if="isSideBarVisible">
       <UnnnicSidebarMenu data-test="side-bar-menu">
         <UnnnicSidebarItem
           v-for="nav in brainRoutes"
@@ -39,6 +39,7 @@ const activeNav = computed(() => {
 });
 
 const isCollapsed = ref(false);
+const isSideBarVisible = ref(true);
 
 const onNavChange = (pageName) => {
   if (route.name !== pageName) {
@@ -47,7 +48,15 @@ const onNavChange = (pageName) => {
 };
 
 const handleButtonClick = () => {
-  isCollapsed.value = !isCollapsed.value;
+  if (isCollapsed.value) {
+    isCollapsed.value = false;
+    setTimeout(() => {
+      isSideBarVisible.value = true;
+    }, 300);
+  } else {
+    isCollapsed.value = true;
+    isSideBarVisible.value = false;
+  }
 };
 </script>
 
@@ -70,11 +79,6 @@ const handleButtonClick = () => {
     padding-left: 18px;
     padding-right: 0;
     width: 0;
-
-    .floating-button {
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
   }
 
   .floating-button {
@@ -91,27 +95,23 @@ const handleButtonClick = () => {
     cursor: pointer;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     padding: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  &:hover .floating-button {
     opacity: 1;
+    transition: opacity 0.3s ease;
   }
 
   .unnnic-side-bar {
     transition:
       opacity 0.5s ease,
-      max-height 0.5s ease,
       transform 0.5s ease;
     transform-origin: left center;
+    opacity: 1;
+    transform: translateX(0);
   }
 
   &.collapsed .unnnic-side-bar {
     opacity: 0;
-    max-height: 0;
     transform: translateX(-100%);
-    overflow: hidden;
+    pointer-events: none;
   }
 
   :deep(.unnnic-button--icon-on-center.unnnic-button--size-large) {
