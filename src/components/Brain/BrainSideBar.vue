@@ -15,6 +15,7 @@
           :text="$t(`router.tabs.${nav.title}`)"
           :icon="nav.icon"
           :active="nav.page === activeNav"
+          :iconFilled="true"
           data-test="nav-router"
           @click="onNavChange(nav.page)"
         />
