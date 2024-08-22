@@ -33,7 +33,10 @@
             </template>
           </UnnnicTab>
         </section>
-        <section class="search-container">
+        <section
+          v-if="['files', 'sites'].includes(activeTab)"
+          class="search-container"
+        >
           <UnnnicInput
             :modelValue="filterName"
             size="md"
@@ -66,18 +69,9 @@
           shape="accordion"
         />
         <section v-if="activeTab === 'text'">
-          <BasesFormGenericListHeader
-            v-model:open="text.open"
-            :shape="contentStyle"
-            :title="$t('content_bases.tabs.text')"
-            data-test="content-base-text"
-          />
-
-          <BasesFormText
-            v-if="text.open"
+          <ContentText
             v-model="$store.state.Brain.contentText.current"
-            dontShowSaveButton
-            :item="text"
+            :isLoading="item?.status === 'loading'"
             class="content-base__content-tab__text"
             data-test="content-base-text-area"
           />
@@ -92,7 +86,7 @@ import { defineComponent, ref, toRefs } from 'vue';
 import BasesFormFiles from '../repository/content/BasesFormFiles.vue';
 import BasesFormSites from '../repository/content/BasesFormSites.vue';
 import BasesFormGenericListHeader from '../repository/content/BasesFormGenericListHeader.vue';
-import BasesFormText from '../repository/content/BasesFormText.vue';
+import ContentText from '@/components/Brain/ContentText.vue';
 
 export default defineComponent({
   name: 'RouterContentBase',
@@ -100,7 +94,7 @@ export default defineComponent({
     BasesFormFiles,
     BasesFormSites,
     BasesFormGenericListHeader,
-    BasesFormText,
+    ContentText,
   },
   props: {
     filterNameProp: {
@@ -210,8 +204,8 @@ export default defineComponent({
       height: 100%;
     }
 
-    &__text {
-      margin-top: $unnnic-spacing-sm;
+    :deep(.tab-header) {
+      margin-bottom: 0;
     }
   }
 }
