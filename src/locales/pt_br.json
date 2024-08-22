@@ -83,6 +83,7 @@
     },
     "tunings": {
       "model": "Modelo",
+      "model_name": "Modelo próprio",
       "restore_default": "Restaurar padrão",
       "save_changes": "Salvar alterações",
       "changes_saved": "Alterações salvas",
