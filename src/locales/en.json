@@ -167,6 +167,9 @@
       "sites": "Websites",
       "text": "Text"
     },
+    "text": {
+      "description": "Manually type in the content that the agent will use to answer the questions"
+    },
     "file_with_error": "File with error. Delete and add it again.",
     "site_with_error": "Site with error. Delete and add it again.",
     "actions": {
