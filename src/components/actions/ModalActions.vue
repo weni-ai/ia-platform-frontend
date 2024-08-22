@@ -102,7 +102,7 @@ export default {
       name: '',
       loadingGenerateName: false,
       description: '',
-      actionType: 'normal',
+      actionType: 'custom',
       flowUuid: '',
     };
   },
@@ -169,16 +169,16 @@ export default {
         const { data } = await nexusaiAPI.router.actions.create({
           projectUuid: this.$store.state.Auth.connectProjectUuid,
           name: this.name,
-          description: this.description,
+          description: this.actionType === 'custom' ? this.description : '',
           flowUuid: this.flowUuid,
-          actionType: this.actionType,
+          action_type: this.actionType,
         });
 
         const createdAction = {
           uuid: data.uuid,
           name: data.name,
           description: data.prompt,
-          actionType: data.actionType,
+          actionType: data.action_type,
         };
 
         this.$store.state.alert = {
@@ -213,6 +213,15 @@ export default {
 
     async generateActionName() {
       this.loadingGenerateName = true;
+
+      if (this.actionType === 'whatsapp_cart') {
+        this.name = this.$t(
+          'modals.actions.add.steps.generate_action_name.whatsapp_cart',
+        );
+        this.loadingGenerateName = false;
+        return;
+      }
+
       try {
         const response =
           await nexusaiAPI.router.actions.generatedNames.generate({

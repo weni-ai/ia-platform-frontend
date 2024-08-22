@@ -1418,7 +1418,8 @@
               "description": {
                 "label": "This action will begin when...",
                 "placeholder": "the user says they want human service",
-                "help": "Try to be objective. It's from the description that the action will start"
+                "help": "Try to be objective. It's from the description that the action will start",
+                "aux_text_whatsapp_cart": "When the user sends a product on WhatsApp"
               },
               "radio": {
                 "options": {
@@ -1453,7 +1454,8 @@
           },
           "generate_action_name": {
             "chatbot_goal": "Chatbot that suggests names for actions based on the description entered.",
-            "context": "Description: {description}"
+            "context": "Description: {description}",
+            "whatsapp_cart": "Shopping cart"
           }
         }
       },

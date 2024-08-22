@@ -1397,7 +1397,8 @@
               "description": {
                 "label": "Esta acción comenzará cuando...",
                 "placeholder": "el usuario dice que quiere un servicio humano",
-                "help": "Intenta ser objetivo. Es a partir de la descripción que comenzará la acción"
+                "help": "Intenta ser objetivo. Es a partir de la descripción que comenzará la acción",
+                "aux_text_whatsapp_cart": "Cuando el usuario envía un producto por WhatsApp"
               },
               "radio": {
                 "options": {
@@ -1432,7 +1433,8 @@
           },
           "generate_action_name": {
             "chatbot_goal": "Chatbot que sugiere nombres para acciones basándose en la descripción dada",
-            "context": "Descripción: {description}"
+            "context": "Descripción: {description}",
+            "whatsapp_cart": "Cesta de la compra"
           }
         }
       },

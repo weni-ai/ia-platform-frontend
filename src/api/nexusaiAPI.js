@@ -124,11 +124,12 @@ export default {
     },
 
     actions: {
-      create({ projectUuid, flowUuid, name, description }) {
+      create({ projectUuid, flowUuid, name, description, action_type }) {
         return request.$http.post(`api/${projectUuid}/flows/`, {
           uuid: flowUuid,
           name: name,
           prompt: description,
+          action_type,
           fallback: false,
         });
       },
