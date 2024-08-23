@@ -67,6 +67,7 @@
 
     <section>
       <UnnnicInput
+        class="search-input"
         size="sm"
         :iconLeftClickable="true"
         iconLeft="search-1"
@@ -295,6 +296,11 @@ export default {
       min-width: $unnnic-icon-size-ant;
       min-height: $unnnic-icon-size-ant;
     }
+  }
+}
+.search-input {
+  :deep(.input) {
+    outline-color: $unnnic-color-neutral-cleanest;
   }
 }
 </style>
