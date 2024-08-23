@@ -19,7 +19,7 @@ jobs:
         run: yarn vitest run --coverage
       - name: Check Coverage Threshold
         run: |
-          grep -q '"total": [8-9][0-9]' coverage/coverage-summary.json || { echo "Coverage is below 80%"; exit 1; }
+          grep -q '"total": [8-9][0-9]' coverage/coverage-final.json || { echo "Coverage is below 80%"; exit 1; }
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
