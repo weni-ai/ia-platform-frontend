@@ -56,7 +56,7 @@
           height="100%"
           class="repository-base-edit__wrapper__card-content"
         />
-        <BasesFormFiles
+        <ContentFiles
           v-if="activeTab === 'files'"
           :files="files"
           :filterText="filterName"
@@ -83,7 +83,7 @@
 
 <script>
 import { defineComponent, ref, toRefs } from 'vue';
-import BasesFormFiles from '../repository/content/BasesFormFiles.vue';
+import ContentFiles from '@/components/Brain/ContentFiles.vue';
 import BasesFormSites from '../repository/content/BasesFormSites.vue';
 import BasesFormGenericListHeader from '../repository/content/BasesFormGenericListHeader.vue';
 import ContentText from '@/components/Brain/ContentText.vue';
@@ -91,7 +91,7 @@ import ContentText from '@/components/Brain/ContentText.vue';
 export default defineComponent({
   name: 'RouterContentBase',
   components: {
-    BasesFormFiles,
+    ContentFiles,
     BasesFormSites,
     BasesFormGenericListHeader,
     ContentText,
