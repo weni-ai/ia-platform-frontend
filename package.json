@@ -10,7 +10,7 @@
     "build": "vite build",
     "preview": "vite preview --port 4173",
     "test:unit": "vitest --environment jsdom",
-    "test:unit:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@sentry/browser": "^5.29.2",
