@@ -63,7 +63,8 @@
           ? $t('content_bases.tabs.files')
           : $t('content_bases.files.uploaded_files')
       "
-      :description="removeHTML(supportedFormats)"
+      :description="$t('content_bases.files.description')"
+      :subDescription="removeHTML(supportedFormats)"
       :addText="$t('content_bases.files.browse_file')"
       :filterItem="filterItem"
       @add="$refs['browser-file-input'].click()"
@@ -190,7 +191,7 @@ export default {
     supportedFormats() {
       const formats = allowedFormats.map((format) => `.${format}`);
 
-      return this.$t('content_bases.files.supported_files', {
+      return this.$t('content_bases.files.sup_files', {
         suportedFormats: [formats.slice(0, -1).join(', '), formats.at(-1)].join(
           this.$t('and'),
         ),

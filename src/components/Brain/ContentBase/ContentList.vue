@@ -3,7 +3,7 @@
     <section class="files-header">
       <UnnnicIcon
         class="text-icon"
-        icon="text_snippet"
+        :icon="defaultIcon"
         :filled="true"
         size="xl"
       />
@@ -17,10 +17,41 @@
       >
         {{ description }}
       </UnnnicIntelligenceText>
+      <UnnnicIntelligenceText
+        v-if="shape === 'accordion'"
+        class="text-sub-description"
+        color="neutral-clean"
+        family="secondary"
+        size="body-md"
+        marginTop="xs"
+        tag="p"
+      >
+        {{ subDescription }}
+      </UnnnicIntelligenceText>
+
+      <section class="container-add-btn">
+        <UnnnicButton
+          v-if="shape === 'accordion'"
+          type="secondary"
+          iconLeft="add-1"
+          class="add-btn"
+          data-test="add-btn"
+          @click="$emit('add')"
+        >
+          {{ addText }}
+        </UnnnicButton>
+      </section>
 
       <section
         :class="['files-list__content', `files-list__content--shape-${shape}`]"
       >
+        <UnnnicInput
+          v-if="items.data.length > 0"
+          size="md"
+          :iconLeftClickable="true"
+          iconLeft="search-1"
+          :placeholder="$t('router.content.fields.search_placeholder')"
+        />
         <BasesFormFilesItem
           v-for="file in itemsFiltered"
           :key="file.uuid"
@@ -39,19 +70,6 @@
             :height="shape === 'accordion' ? '46px' : '56px'"
           />
         </template>
-
-        <section class="container-add-btn">
-          <UnnnicButton
-            v-if="shape === 'accordion'"
-            type="secondary"
-            iconLeft="add-1"
-            class="add-btn"
-            data-test="add-btn"
-            @click="$emit('add')"
-          >
-            {{ addText }}
-          </UnnnicButton>
-        </section>
 
         <div
           v-show="!['loading', 'complete'].includes(status)"
@@ -81,6 +99,16 @@ export default {
     description: {
       type: String,
       default: '',
+      required: false,
+    },
+    subDescription: {
+      type: String,
+      default: '',
+      required: false,
+    },
+    defaultIcon: {
+      type: String,
+      default: 'text_snippet',
       required: false,
     },
     addText: {
@@ -181,6 +209,10 @@ export default {
       .text-icon {
         font-size: 54px;
         color: $unnnic-color-neutral-soft;
+      }
+
+      .text-sub-description {
+        margin-top: 0;
       }
     }
   }

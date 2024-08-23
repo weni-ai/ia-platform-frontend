@@ -34,8 +34,8 @@
           </UnnnicTab>
         </section>
         <section
-          v-if="['files', 'sites'].includes(activeTab)"
-          class="search-container"
+          v-if="[''].includes(activeTab)"
+          class=" "
         >
           <UnnnicInput
             :modelValue="filterName"

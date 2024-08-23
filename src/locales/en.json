@@ -183,6 +183,8 @@
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
       "supported_files": "Supported formats: {suportedFormats}.<br /> {limitMB}MB limit per file.",
+      "sup_files": "{suportedFormats}.<br /> {limitMB}MB limit per file.",
+      "description": "Upload documents and files that the agent will use to provide answers",
       "file_error": "File error. Delete and add again",
       "browse_file": "Add file",
       "uploaded_files": "Uploaded files",

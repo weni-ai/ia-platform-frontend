@@ -183,6 +183,8 @@
       "upload_content": "Cargar contenido a partir de archivos",
       "drag_and_drop_your_file_here": "Arrastre y suelte su archivo aquí para añadir el contenido a la base de conocimientos de IA.",
       "supported_files": "Formatos admitidos: {suportedFormats}.<br /> Límite de {limitMB}MB por archivo.",
+      "sup_files": "{suportedFormats}.<br /> Límite de {limitMB}MB por archivo.",
+      "description": "Cargar documentos y archivos que el agente utilizará para dar respuestas",
       "file_error": "Error de archivo. Eliminar y añadir de nuevo",
       "browse_file": "Añadir archivo",
       "uploaded_files": "Archivos cargados",
