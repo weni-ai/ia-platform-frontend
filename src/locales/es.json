@@ -78,7 +78,7 @@
     },
     "content": {
       "fields": {
-        "search_placeholder": "Buscar contenido"
+        "search_placeholder": "Buscar"
       }
     },
     "tunings": {
