@@ -19,9 +19,14 @@ jobs:
         run: yarn vitest run --coverage
       - name: Check Coverage Threshold
         run: |
-          grep -q '"total": [8-9][0-9]' coverage/coverage-final.json || { echo "Coverage is below 80%"; exit 1; }
+          COVERAGE=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+          COVERAGE=${COVERAGE//\"/}
+          if [ $(echo "$COVERAGE < 80" | bc) -eq 1 ]; then
+            echo "Coverage is below 80%: $COVERAGE%"
+            exit 1
+          fi
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
           file: ./coverage/coverage-final.json
-          token: ${{secrets.CODECOV_TOKEN}}
+          token: ${{ secrets.CODECOV_TOKEN }}

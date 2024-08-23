@@ -12,7 +12,8 @@ export default mergeConfig(
       globals: true,
       setupFiles: './src/__tests__/setup.js',
       coverage: {
-        reporter: ['text', 'json'],
+        provider: 'v8',
+        reporter: ['text', 'json-summary'],
         reportsDirectory: './coverage',
         include: ['src/**/*.{vue,js,ts}'],
         statements: 80,
