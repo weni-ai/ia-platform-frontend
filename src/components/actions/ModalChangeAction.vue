@@ -14,19 +14,27 @@
       loading: isSavingAction,
       'data-test': 'save-button',
     }"
+    class="modal-dialog"
+    :class="{ is_text_area_disabled: isTextAreaDisabled }"
     @secondary-button-click="close"
     @primary-button-click="saveAction"
   >
     <UnnnicFormElement
       :label="$t('modals.actions.add.steps.describe.inputs.description.label')"
       :message="$t('modals.actions.add.steps.describe.inputs.description.help')"
-      class="form-element"
+      class="form-element labels-textarea"
     >
       <UnnnicTextArea
         v-model="description"
+        class="text-area"
         :placeholder="
-          $t('modals.actions.add.steps.describe.inputs.description.placeholder')
+          isTextAreaDisabled
+            ? ''
+            : $t(
+                'modals.actions.add.steps.describe.inputs.description.placeholder',
+              )
         "
+        :disabled="isTextAreaDisabled"
         data-test="description-textarea"
       />
     </UnnnicFormElement>
@@ -118,12 +126,17 @@ const linkedFlow = reactive({
 });
 
 const isSaveButtonActive = computed(() => {
+  const { action } = props;
+  if (action.actionType === 'whatsapp_cart') return name.value !== action.name;
   return name.value.trim() && description.value.trim();
+});
+
+const isTextAreaDisabled = computed(() => {
+  return props.action.actionType === 'whatsapp_cart';
 });
 
 onBeforeMount(() => {
   const { action } = props;
-
   name.value = action.name;
   description.value = action.description;
 
@@ -254,6 +267,21 @@ async function saveAction() {
 
     &__go-to-flow {
       min-width: 12.5 * $unnnic-font-size;
+    }
+  }
+}
+.modal-dialog {
+  &.is_text_area_disabled {
+    .labels-textarea {
+      :deep(.label),
+      :deep(.message) {
+        color: $unnnic-color-neutral-cleanest;
+      }
+    }
+
+    :deep(.unnnic-text-area textarea) {
+      color: $unnnic-color-neutral-cleanest;
+      background-color: $unnnic-color-neutral-lightest;
     }
   }
 }

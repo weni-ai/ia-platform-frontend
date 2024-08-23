@@ -112,6 +112,7 @@ export default {
           extension_file: 'action',
           created_file_name: item.name,
           description: item.prompt,
+          actionType: item.action_type,
         }));
 
         this.items.status = 'complete';
@@ -120,9 +121,10 @@ export default {
       }
     },
 
-    openEditAction({ uuid, created_file_name, description }) {
+    openEditAction({ uuid, created_file_name, description, actionType }) {
       this.currentActionEditing = {
         uuid,
+        actionType,
         name: created_file_name,
         description,
         status: null,
