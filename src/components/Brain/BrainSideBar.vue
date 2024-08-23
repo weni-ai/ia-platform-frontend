@@ -21,7 +21,7 @@
           :text="$t(`router.tabs.${nav.title}`)"
           :icon="nav.icon"
           :active="nav.page === activeNav"
-          :iconFilled="true"
+          :iconFilled="nav.page === activeNav"
           data-test="nav-router"
           @click="onNavChange(nav.page)"
         />
@@ -114,6 +114,10 @@ const handleMouseLeave = () => {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     padding: 0;
     transition: opacity 0.3s ease;
+
+    &:hover:enabled {
+      background: none;
+    }
   }
 
   .unnnic-side-bar {
@@ -129,6 +133,10 @@ const handleMouseLeave = () => {
     opacity: 0;
     transform: translateX(-100%);
     pointer-events: none;
+  }
+
+  :deep(.unnnic-side-bar-menu__title) {
+    margin: 0 0 $unnnic-spacing-nano;
   }
 
   :deep(.unnnic-button--icon-on-center.unnnic-button--size-large) {
