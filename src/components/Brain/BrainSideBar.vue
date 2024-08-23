@@ -1,12 +1,18 @@
 <template>
-  <div :class="['sidebar', { collapsed: isCollapsed }]">
+  <div
+    :class="['sidebar', { collapsed: isCollapsed }]"
+    @mouseover="handleMouseOver"
+    @mouseleave="handleMouseLeave"
+  >
     <UnnnicButton
+      v-if="isCollapsed || isHoveringSidebar"
       class="floating-button"
       :iconCenter="isCollapsed ? 'arrow_forward_ios' : 'arrow_back_ios_new'"
       type="secondary"
       data-test="floating-btn"
       @click="handleButtonClick"
     />
+
     <UnnnicSideBar v-if="isSideBarVisible">
       <UnnnicSidebarMenu data-test="side-bar-menu">
         <UnnnicSidebarItem
@@ -15,7 +21,7 @@
           :text="$t(`router.tabs.${nav.title}`)"
           :icon="nav.icon"
           :active="nav.page === activeNav"
-          :iconFilled="true"
+          :iconFilled="nav.page === activeNav"
           data-test="nav-router"
           @click="onNavChange(nav.page)"
         />
@@ -40,6 +46,7 @@ const activeNav = computed(() => {
 
 const isCollapsed = ref(false);
 const isSideBarVisible = ref(true);
+const isHoveringSidebar = ref(false);
 
 const onNavChange = (pageName) => {
   if (route.name !== pageName) {
@@ -58,6 +65,16 @@ const handleButtonClick = () => {
 
   isCollapsed.value = true;
   isSideBarVisible.value = false;
+};
+
+const handleMouseOver = () => {
+  if (!isCollapsed.value) {
+    isHoveringSidebar.value = true;
+  }
+};
+
+const handleMouseLeave = () => {
+  isHoveringSidebar.value = false;
 };
 </script>
 
@@ -96,8 +113,11 @@ const handleButtonClick = () => {
     cursor: pointer;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     padding: 0;
-    opacity: 1;
     transition: opacity 0.3s ease;
+
+    &:hover:enabled {
+      background: none;
+    }
   }
 
   .unnnic-side-bar {
@@ -113,6 +133,10 @@ const handleButtonClick = () => {
     opacity: 0;
     transform: translateX(-100%);
     pointer-events: none;
+  }
+
+  :deep(.unnnic-side-bar-menu__title) {
+    margin: 0 0 $unnnic-spacing-nano;
   }
 
   :deep(.unnnic-button--icon-on-center.unnnic-button--size-large) {
