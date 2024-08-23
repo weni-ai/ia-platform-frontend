@@ -32,26 +32,51 @@ describe('BrainSideBar', () => {
     });
   });
 
-  test('renders correctly with props and initial state', () => {
+  test('renders correctly with props and initial state', async () => {
     expect(wrapper.exists()).toBe(true);
+    expect(wrapper.classes()).not.toContain('collapsed');
+    expect(wrapper.findComponent('[data-test="floating-btn"]').exists()).toBe(
+      false,
+    );
+
+    await wrapper.trigger('mouseover');
+
     expect(wrapper.findComponent('[data-test="floating-btn"]').exists()).toBe(
       true,
+    );
+
+    await wrapper.trigger('mouseleave');
+
+    expect(wrapper.findComponent('[data-test="floating-btn"]').exists()).toBe(
+      false,
     );
   });
 
   test('toggles the collapsing of the sidebar by clicking on the button', async () => {
-    const button = wrapper.findComponent('[data-test="floating-btn"]');
     expect(wrapper.classes()).not.toContain('collapsed');
+
+    await wrapper.trigger('mouseover');
+
+    const button = wrapper.findComponent('[data-test="floating-btn"]');
+
+    expect(button.exists()).toBe(true);
 
     await button.trigger('click');
 
     expect(wrapper.classes()).toContain('collapsed');
+    expect(button.exists()).toBe(true);
 
     await button.trigger('click');
 
-    setTimeout(() => {
-      expect(wrapper.classes()).not.toContain('collapsed');
-    }, 300);
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    expect(wrapper.classes()).not.toContain('collapsed');
+
+    await wrapper.trigger('mouseleave');
+
+    expect(wrapper.findComponent('[data-test="floating-btn"]').exists()).toBe(
+      false,
+    );
   });
 
   test('verifies the state changes when handleButtonClick is called', async () => {
