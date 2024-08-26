@@ -122,10 +122,6 @@ const props = defineProps({
     type: String,
     default: 'accordion',
   },
-  filterText: {
-    type: String,
-    default: '',
-  },
 });
 
 const isAddSiteOpen = ref(false);
@@ -146,7 +142,7 @@ const closeAddSite = () => {
 };
 
 const onRemove = ({ uuid, created_file_name, status }) => {
-  if (['fail-upload', 'fail'].includes(status)) {
+  if (['fail-upload'].includes(status)) {
     props.items.removeItem({ uuid });
   } else {
     openDeleteSite(uuid, created_file_name || '');

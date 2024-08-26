@@ -61,7 +61,6 @@
       :description="$t('content_bases.files.description')"
       :subDescription="removeHTML(supportedFormats)"
       :addText="$t('content_bases.files.browse_file')"
-      :filterItem="filterItem"
       @add="$refs['browser-file-input'].click()"
       @remove="onRemove"
     />
@@ -144,8 +143,10 @@ export default {
       type: Object,
       required: true,
     },
-    shape: String,
-    filterText: String,
+    shape: {
+      type: String,
+      default: 'accordion',
+    },
   },
 
   data() {
@@ -218,12 +219,6 @@ export default {
   },
 
   methods: {
-    filterItem(item) {
-      return item.file_name
-        ?.toLowerCase()
-        .includes(this.filterText?.toLowerCase());
-    },
-
     removeHTML(string) {
       const span = document.createElement('span');
       span.innerHTML = string;

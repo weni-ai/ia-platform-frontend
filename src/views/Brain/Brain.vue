@@ -13,12 +13,10 @@
           <section class="scrollable">
             <RouterContentBase
               v-if="route.name === 'router-content'"
-              :filterNameProp="filterName"
               :filesProp="files"
               :sitesProp="sites"
               :textProp="text"
               @update:files="(v) => (files = v)"
-              @update:filter-name="(v) => (filterName = v)"
             />
             <RouterActions
               v-else-if="route.name === 'router-actions'"
@@ -118,7 +116,6 @@ export default {
     const dropdownOpen = ref(false);
     const refreshPreviewValue = ref(0);
     const isMobilePreviewModalOpen = ref(false);
-    const filterName = ref('');
 
     const text = ref({
       open: true,
@@ -242,7 +239,6 @@ export default {
       dropdownOpen,
       refreshPreviewValue,
       isMobilePreviewModalOpen,
-      filterName,
       files,
       sites,
       text,

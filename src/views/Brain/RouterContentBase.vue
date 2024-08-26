@@ -33,19 +33,6 @@
             </template>
           </UnnnicTab>
         </section>
-        <section
-          v-if="[''].includes(activeTab)"
-          class=" "
-        >
-          <UnnnicInput
-            :modelValue="filterName"
-            size="md"
-            :iconLeftClickable="true"
-            iconLeft="search-1"
-            :placeholder="$t('router.content.fields.search_placeholder')"
-            @update:model-value="updateFilterName"
-          />
-        </section>
         <UnnnicSkeletonLoading
           v-if="
             files.status === 'loading' &&
@@ -59,13 +46,11 @@
         <ContentFiles
           v-if="activeTab === 'files'"
           :files="files"
-          :filterText="filterName"
           shape="accordion"
         />
         <ContentSites
           v-if="activeTab === 'sites'"
           :items="sites"
-          :filterText="filterName"
           shape="accordion"
         />
         <section v-if="activeTab === 'text'">
@@ -85,7 +70,6 @@
 import { defineComponent, ref, toRefs } from 'vue';
 import ContentFiles from '@/components/Brain/ContentFiles.vue';
 import ContentSites from '@/components/Brain/ContentSites.vue';
-import BasesFormGenericListHeader from '../repository/content/BasesFormGenericListHeader.vue';
 import ContentText from '@/components/Brain/ContentText.vue';
 
 export default defineComponent({
@@ -93,14 +77,9 @@ export default defineComponent({
   components: {
     ContentFiles,
     ContentSites,
-    BasesFormGenericListHeader,
     ContentText,
   },
   props: {
-    filterNameProp: {
-      type: String,
-      default: '',
-    },
     filesProp: {
       type: Object,
       required: true,
@@ -114,9 +93,9 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['update:filterName', 'update:files'],
+  emits: ['update:files'],
   setup(props, { emit }) {
-    const { filterNameProp, filesProp, sitesProp, textProp } = toRefs(props);
+    const { filesProp, sitesProp, textProp } = toRefs(props);
     const contentStyle = ref('accordion');
 
     const routerTabs = ref([
@@ -127,23 +106,17 @@ export default defineComponent({
 
     const activeTab = ref(routerTabs.value[0].page);
 
-    const updateFilterName = (value) => {
-      emit('update:filterName', value);
-    };
-
     const onTabChange = (newTab) => {
       activeTab.value = newTab;
     };
 
     return {
-      filterName: filterNameProp,
       files: filesProp,
       sites: sitesProp,
       text: textProp,
       contentStyle,
       routerTabs,
       activeTab,
-      updateFilterName,
       onTabChange,
     };
   },
