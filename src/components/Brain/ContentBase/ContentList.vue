@@ -150,7 +150,11 @@ export default {
       type: Function,
       default: null,
     },
-
+    columns: {
+      type: Number,
+      default: 2,
+      required: false,
+    },
     shape: {
       type: String,
       default: 'normal',
@@ -201,6 +205,7 @@ export default {
     },
 
     itemsFiltered() {
+      console.log('shape', this.shape);
       const data = toValue(this.items.data);
       console.log('this.items.data', this.items.data._value.length);
       if (this.filterItem) {
@@ -276,7 +281,7 @@ export default {
     margin-top: $unnnic-spacing-sm;
     display: grid;
     gap: $unnnic-spacing-sm;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(v-bind(columns), 1fr);
 
     &--shape-accordion {
       column-gap: $unnnic-spacing-ant;
