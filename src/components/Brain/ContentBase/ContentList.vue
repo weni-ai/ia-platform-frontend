@@ -1,6 +1,6 @@
 <template>
   <section
-    v-if="counter === 0 && status?.value === 'complete'"
+    v-if="counter === 0 && status === 'complete'"
     :class="['files-list__no_list_container', `files-list--shape-${shape}`]"
   >
     <section class="files-header">
@@ -89,17 +89,17 @@
         @click="$emit('edit', file)"
       />
 
-      <template v-if="status?.value === 'loading'">
+      <template v-if="status === 'loading'">
         <UnnnicSkeletonLoading
           v-for="i in 3"
           :key="i"
           tag="div"
-          :height="shape === 'accordion' ? '46px' : '56px'"
+          :height="shape === 'accordion' ? '64px' : '56px'"
         />
       </template>
 
       <div
-        v-show="!['loading', 'complete'].includes(status?.value)"
+        v-show="!['loading', 'complete'].includes(status)"
         ref="endOfListElement"
       ></div>
     </section>
@@ -185,7 +185,9 @@ export default {
 
     const status = computed(() => toValue(props.items.status));
 
-    const counter = computed(() => props.items?.data?.length || 0);
+    const counter = computed(() => {
+      return props.items?.data?.value?.length || 0;
+    });
 
     const itemsFiltered = computed(() => {
       const data = props.items?.data || [];
@@ -202,6 +204,7 @@ export default {
     watch(
       [isShowingEndOfList, status],
       ([newIsShowingEndOfList, newStatusValue]) => {
+        console.log('newStatusValue', newStatusValue);
         if (newIsShowingEndOfList && newStatusValue === null) {
           props.items.loadNext?.();
         }
