@@ -44,7 +44,6 @@
       :addText="$t('content_bases.sites.add_site')"
       defaultIcon="globe"
       :columns="1"
-      :filterItem="filterItem"
       @add="openAddSite"
       @remove="onRemove"
     />
@@ -54,7 +53,7 @@
       v-model="isAddSiteOpen"
       :contentBaseUuid="contentBaseUuid"
       @close="closeAddSite"
-      @added-sites="addedSites"
+      @added-site="addedSites"
     />
 
     <UnnnicModal
@@ -138,12 +137,6 @@ const contentBaseUuid = computed(
   () => route.params.contentBaseUuid || store.state.router.contentBaseUuid,
 );
 
-const shapeTitle = computed(() =>
-  props.shape === 'accordion'
-    ? i18n.global.t('content_bases.tabs.sites')
-    : i18n.global.t('content_bases.sites.uploaded_sites'),
-);
-
 const openAddSite = () => {
   isAddSiteOpen.value = true;
 };
@@ -154,21 +147,14 @@ const closeAddSite = () => {
 
 const onRemove = ({ uuid, created_file_name, status }) => {
   if (['fail-upload', 'fail'].includes(status)) {
-    items.removeItem({ uuid });
+    props.items.removeItem({ uuid });
   } else {
     openDeleteSite(uuid, created_file_name || '');
   }
 };
 
-const addedSites = (sites) => {
-  isAddSiteOpen.value = false;
-  sites.forEach((site) => items.addItem(site));
-};
-
-const filterItem = (item) => {
-  return item.created_file_name
-    ?.toLowerCase()
-    .includes(props.filterText?.toLowerCase());
+const addedSites = (site) => {
+  props.items.addItem(site);
 };
 
 const openDeleteSite = (siteUuid, siteURL) => {
@@ -194,12 +180,12 @@ const remove = () => {
     .then(() => {
       store.state.alert = {
         type: 'default',
-        text: $t('content_bases.files.file_removed_from_base', {
+        text: i18n.global.t('content_bases.files.file_removed_from_base', {
           name: modalDeleteSite.value.name,
         }),
       };
 
-      items.removeItem({ uuid: modalDeleteSite.value.uuid });
+      props.items.removeItem({ uuid: modalDeleteSite.value.uuid });
     })
     .finally(() => {
       closeModal();
