@@ -218,6 +218,20 @@
       }
     },
     "sites": {
+      "title": "Insira URLs de sites dos quais o agente pode extrair informações",
+      "description": "Certifique-se de que os sites sejam confiáveis e contenham dados relevantes",
+      "modal": {
+        "description": "Insira a URL do site para extrair o conteúdo",
+        "fields": {
+          "link": {
+            "label": "URL do site"
+          }
+        },
+        "buttons": {
+          "cancel": "Cancelar",
+          "finish": "Concluir"
+        }
+      },
       "uploaded_sites": "Sites carregados",
       "content_of_the_sites_has_been_added": "O conteúdo dos sites foi adicionado à base",
       "sidebar_add": {

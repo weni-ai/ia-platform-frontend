@@ -12,7 +12,7 @@
         weight="bold"
         marginBottom="sm"
       >
-        {{ $t('content_bases.sites.sidebar_add.title') }}
+        {{ $t('content_bases.sites.title') }}
       </UnnnicIntelligenceText>
 
       <UnnnicIntelligenceText
@@ -22,7 +22,7 @@
         size="body-gt"
         marginBottom="sm"
       >
-        {{ $t('content_bases.sites.sidebar_add.description') }}
+        {{ $t('content_bases.sites.description') }}
       </UnnnicIntelligenceText>
 
       <UnnnicButton
@@ -39,17 +39,19 @@
       v-else
       :items="$props.items"
       :shape="$props.shape"
-      :title="shapeTitle"
-      :description="$t('content_bases.sites.sidebar_add.description')"
+      :subDescription="$t('content_bases.sites.description')"
+      :description="$t('content_bases.sites.title')"
       :addText="$t('content_bases.sites.add_site')"
+      defaultIcon="globe"
       :columns="1"
       :filterItem="filterItem"
       @add="openAddSite"
       @remove="onRemove"
     />
 
-    <BarAddSite
+    <ModalAddSite
       v-if="isAddSiteOpen"
+      v-model="isAddSiteOpen"
       :contentBaseUuid="contentBaseUuid"
       @close="closeAddSite"
       @added-sites="addedSites"
@@ -108,7 +110,7 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import nexusaiAPI from '@/api/nexusaiAPI';
-import BarAddSite from '@/views/repository/content/BarAddSite.vue';
+import ModalAddSite from '@/components/Brain/ContentBase/ModalAddSite.vue';
 import ContentList from '@/components/Brain/ContentBase/ContentList.vue';
 import i18n from '@/utils/plugins/i18n.js';
 

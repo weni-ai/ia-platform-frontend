@@ -58,11 +58,6 @@
       v-else
       :items="files"
       :shape="shape"
-      :title="
-        shape === 'accordion'
-          ? $t('content_bases.tabs.files')
-          : $t('content_bases.files.uploaded_files')
-      "
       :description="$t('content_bases.files.description')"
       :subDescription="removeHTML(supportedFormats)"
       :addText="$t('content_bases.files.browse_file')"

@@ -218,6 +218,20 @@
       }
     },
     "sites": {
+      "title": "Enter URLs of websites from which the agent can extract information",
+      "description": "Make sure the sites are trustworthy and contain relevant data",
+      "modal": {
+        "description": "Enter the URL of the site to extract the content from.",
+        "fields": {
+          "link": {
+            "label": "Website URL"
+          }
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "finish": "Finish"
+        }
+      },
       "uploaded_sites": "Uploaded websites",
       "content_of_the_sites_has_been_added": "The content of the websites has been added to the base",
       "sidebar_add": {

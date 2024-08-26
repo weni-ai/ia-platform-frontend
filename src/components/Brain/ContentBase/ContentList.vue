@@ -124,11 +124,6 @@ export default {
     BasesFormGenericListHeader,
   },
   props: {
-    title: {
-      type: String,
-      default: '',
-      required: false,
-    },
     description: {
       type: String,
       default: '',
