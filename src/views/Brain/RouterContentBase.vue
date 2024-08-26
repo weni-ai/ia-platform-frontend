@@ -62,7 +62,7 @@
           :filterText="filterName"
           shape="accordion"
         />
-        <BasesFormSites
+        <ContentSites
           v-if="activeTab === 'sites'"
           :items="sites"
           :filterText="filterName"
@@ -84,7 +84,7 @@
 <script>
 import { defineComponent, ref, toRefs } from 'vue';
 import ContentFiles from '@/components/Brain/ContentFiles.vue';
-import BasesFormSites from '../repository/content/BasesFormSites.vue';
+import ContentSites from '@/components/Brain/ContentSites.vue';
 import BasesFormGenericListHeader from '../repository/content/BasesFormGenericListHeader.vue';
 import ContentText from '@/components/Brain/ContentText.vue';
 
@@ -92,7 +92,7 @@ export default defineComponent({
   name: 'RouterContentBase',
   components: {
     ContentFiles,
-    BasesFormSites,
+    ContentSites,
     BasesFormGenericListHeader,
     ContentText,
   },
