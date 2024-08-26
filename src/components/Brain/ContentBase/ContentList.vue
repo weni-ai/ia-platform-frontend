@@ -67,6 +67,7 @@
 
     <section>
       <UnnnicInput
+        v-model="filterText"
         class="search-input"
         size="sm"
         :iconLeftClickable="true"
@@ -99,14 +100,21 @@
 
       <div
         v-show="!['loading', 'complete'].includes(status)"
-        ref="end-of-list-element"
+        ref="setEndOfListElement"
       ></div>
     </section>
   </section>
 </template>
 
 <script>
-import { toValue } from 'vue';
+import {
+  toValue,
+  ref,
+  shallowRef,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+} from 'vue';
 import ContentItem from '@/components/Brain/ContentBase/ContentItem.vue';
 import BasesFormGenericListHeader from '@/views/repository/content/BasesFormGenericListHeader.vue';
 
@@ -146,10 +154,6 @@ export default {
       required: true,
     },
     canEditItem: Boolean,
-    filterItem: {
-      type: Function,
-      default: null,
-    },
     columns: {
       type: Number,
       default: 2,
@@ -166,76 +170,86 @@ export default {
 
   emits: ['add', 'remove', 'edit'],
 
-  data() {
-    return {
-      open: true,
-      isShowingEndOfList: false,
-      intersectionObserver: null,
-      descriptionAttributes: {
-        color: 'neutral-cloudy',
-        family: 'secondary',
-        size: 'body-gt',
-        marginTop: 'xs',
-        tag: 'p',
-      },
-      subDescriptionAttributes: {
-        class: 'text-sub-description',
-        color: 'neutral-clean',
-        family: 'secondary',
-        size: 'body-md',
-        marginTop: 'xs',
-        tag: 'p',
-      },
-      btnAttributes: {
-        type: 'secondary',
-        iconLeft: 'add-1',
-        class: 'add-btn',
-        'data-test': 'add-btn',
-      },
+  setup(props, { emit }) {
+    const filterText = ref('');
+    const isShowingEndOfList = ref(false);
+    const intersectionObserver = shallowRef(null);
+    const endOfListElement = shallowRef(null);
+
+    const descriptionAttributes = {
+      color: 'neutral-cloudy',
+      family: 'secondary',
+      size: 'body-gt',
+      marginTop: 'xs',
+      tag: 'p',
     };
-  },
 
-  computed: {
-    status() {
-      return toValue(this.items.status);
-    },
+    const subDescriptionAttributes = {
+      class: 'text-sub-description',
+      color: 'neutral-clean',
+      family: 'secondary',
+      size: 'body-md',
+      marginTop: 'xs',
+      tag: 'p',
+    };
 
-    counter() {
-      return toValue(this.items?.data)?.length;
-    },
+    const btnAttributes = {
+      type: 'secondary',
+      iconLeft: 'add-1',
+      class: 'add-btn',
+      'data-test': 'add-btn',
+    };
 
-    itemsFiltered() {
-      console.log('shape', this.shape);
-      const data = toValue(this.items.data);
-      console.log('this.items.data', this.items.data._value.length);
-      if (this.filterItem) {
-        return data.filter(this.filterItem);
+    const status = computed(() => toValue(props.items.status));
+
+    const counter = computed(() => toValue(props.items?.data)?.length);
+
+    const itemsFiltered = computed(() => {
+      const data = toValue(props.items.data);
+      if (filterText.value) {
+        return data.filter((item) =>
+          item.created_file_name
+            ?.toLowerCase()
+            .includes(filterText.value.toLowerCase()),
+        );
       }
-
       return data;
-    },
-  },
-
-  watch: {
-    isShowingEndOfList() {
-      if (this.isShowingEndOfList && this.status === null) {
-        this.items.loadNext?.();
-      }
-    },
-  },
-
-  mounted() {
-    this.intersectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        this.isShowingEndOfList = entry.isIntersecting;
-      });
     });
 
-    this.intersectionObserver.observe(this.$refs['end-of-list-element']);
-  },
+    const setEndOfListElement = (el) => {
+      endOfListElement.value = el;
+    };
 
-  beforeUnmount() {
-    this.intersectionObserver.unobserve(this.$refs['end-of-list-element']);
+    const handleIntersection = (entries) => {
+      entries.forEach((entry) => {
+        isShowingEndOfList.value = entry.isIntersecting;
+      });
+    };
+
+    onMounted(() => {
+      intersectionObserver.value = new IntersectionObserver(handleIntersection);
+      if (endOfListElement.value) {
+        intersectionObserver.value.observe(endOfListElement.value);
+      }
+    });
+
+    onBeforeUnmount(() => {
+      if (intersectionObserver.value && endOfListElement.value) {
+        intersectionObserver.value.unobserve(endOfListElement.value);
+      }
+    });
+
+    return {
+      filterText,
+      descriptionAttributes,
+      subDescriptionAttributes,
+      btnAttributes,
+      status,
+      counter,
+      itemsFiltered,
+      isShowingEndOfList,
+      setEndOfListElement,
+    };
   },
 };
 </script>
