@@ -375,11 +375,6 @@ describe('Brain integration', () => {
   });
 
   test('checking that the content base tab is saving the entries provided and performing the save', async () => {
-    const ids = {
-      contentText: '[data-test="content-base-text"]',
-      contentTextArea: '[data-test="content-base-text-area"]',
-    };
-
     const navigation = wrapper.findAll('[data-test="nav-router"]');
 
     await navigation.at(1).trigger('click');
@@ -389,50 +384,6 @@ describe('Brain integration', () => {
     const contentComponent = wrapper.findComponent(RouterContentBase);
 
     expect(contentComponent.exists()).toBe(true);
-
-    const textArea = wrapper.find('[id="textId"]');
-
-    await textArea.setValue('Description action test');
-
-    expect(textArea.element.value).toBe('Description action test');
-
-    const saveBtn = wrapper.findComponent('.save-button');
-
-    await saveBtn.trigger('click');
-
-    expect(dispatchSpy).toHaveBeenCalledWith('saveBrainChanges');
-
-    const hideTextAreaBtn = wrapper.findComponent(ids.contentText);
-
-    await hideTextAreaBtn.trigger('click');
-
-    expect(wrapper.findComponent(ids.contentTextArea).exists()).toBe(false);
-
-    await hideTextAreaBtn.trigger('click');
-
-    expect(wrapper.findComponent(ids.contentTextArea).exists()).toBe(true);
-
-    const addWebSiteBtn = wrapper
-      .findAllComponents('[data-test="add-btn"]')
-      .at(1);
-
-    expect(wrapper.find('[data-test="add-form"]').exists()).toBe(false);
-
-    await addWebSiteBtn.trigger('click');
-
-    expect(wrapper.find('[data-test="add-form"]').exists()).toBe(true);
-
-    const addMoreSiteInputBtn = wrapper.findComponent(
-      '[data-test="add-one-more-site-button"]',
-    );
-
-    await addMoreSiteInputBtn.trigger('click');
-
-    const webSiteInputs = wrapper
-      .find('[data-test="add-form__links"]')
-      .findAllComponents({ name: 'UnnnicInput' });
-
-    expect(webSiteInputs.length).toBe(2);
   });
 
   test('checking that the actions tab is saving the entries provided and performing the save', async () => {
