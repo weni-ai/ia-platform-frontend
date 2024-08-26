@@ -58,7 +58,6 @@
             v-model="$store.state.Brain.contentText.current"
             :isLoading="item?.status === 'loading'"
             class="content-base__content-tab__text"
-            data-test="content-base-text-area"
           />
         </section>
       </section>
