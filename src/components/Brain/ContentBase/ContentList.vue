@@ -1,6 +1,6 @@
 <template>
   <section
-    v-if="counter === 0 && status === 'complete'"
+    v-if="counter === 0 && status?.value === 'complete'"
     :class="['files-list__no_list_container', `files-list--shape-${shape}`]"
   >
     <section class="files-header">
@@ -80,7 +80,7 @@
       :class="['files-list__content', `files-list__content--shape-${shape}`]"
     >
       <ContentItem
-        v-for="file in itemsFiltered"
+        v-for="file in itemsFiltered.value"
         :key="file.uuid"
         :file="file"
         :compressed="shape === 'accordion'"
@@ -89,7 +89,7 @@
         @click="$emit('edit', file)"
       />
 
-      <template v-if="status === 'loading'">
+      <template v-if="status?.value === 'loading'">
         <UnnnicSkeletonLoading
           v-for="i in 3"
           :key="i"
@@ -99,22 +99,15 @@
       </template>
 
       <div
-        v-show="!['loading', 'complete'].includes(status)"
-        ref="setEndOfListElement"
+        v-show="!['loading', 'complete'].includes(status?.value)"
+        ref="endOfListElement"
       ></div>
     </section>
   </section>
 </template>
 
 <script>
-import {
-  toValue,
-  ref,
-  shallowRef,
-  computed,
-  onMounted,
-  onBeforeUnmount,
-} from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch, toValue } from 'vue';
 import ContentItem from '@/components/Brain/ContentBase/ContentItem.vue';
 import BasesFormGenericListHeader from '@/views/repository/content/BasesFormGenericListHeader.vue';
 
@@ -127,22 +120,18 @@ export default {
     description: {
       type: String,
       default: '',
-      required: false,
     },
     subDescription: {
       type: String,
       default: '',
-      required: false,
     },
     defaultIcon: {
       type: String,
       default: 'text_snippet',
-      required: false,
     },
     addText: {
       type: String,
       default: '',
-      required: false,
     },
     items: {
       type: Object,
@@ -152,7 +141,6 @@ export default {
     columns: {
       type: Number,
       default: 2,
-      required: false,
     },
     shape: {
       type: String,
@@ -167,9 +155,9 @@ export default {
 
   setup(props, { emit }) {
     const filterText = ref('');
+    const endOfListElement = ref(null);
     const isShowingEndOfList = ref(false);
-    const intersectionObserver = shallowRef(null);
-    const endOfListElement = shallowRef(null);
+    const intersectionObserver = ref(null);
 
     const descriptionAttributes = {
       color: 'neutral-cloudy',
@@ -197,10 +185,10 @@ export default {
 
     const status = computed(() => toValue(props.items.status));
 
-    const counter = computed(() => toValue(props.items?.data)?.length);
+    const counter = computed(() => props.items?.data?.length || 0);
 
     const itemsFiltered = computed(() => {
-      const data = toValue(props.items.data);
+      const data = props.items?.data || [];
       if (filterText.value) {
         return data.filter((item) =>
           item.created_file_name
@@ -211,18 +199,23 @@ export default {
       return data;
     });
 
-    const setEndOfListElement = (el) => {
-      endOfListElement.value = el;
-    };
-
-    const handleIntersection = (entries) => {
-      entries.forEach((entry) => {
-        isShowingEndOfList.value = entry.isIntersecting;
-      });
-    };
+    watch(
+      [isShowingEndOfList, status],
+      ([newIsShowingEndOfList, newStatusValue]) => {
+        if (newIsShowingEndOfList && newStatusValue === null) {
+          props.items.loadNext?.();
+        }
+      },
+    );
 
     onMounted(() => {
-      intersectionObserver.value = new IntersectionObserver(handleIntersection);
+      intersectionObserver.value = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          console.log('entry', entry);
+          isShowingEndOfList.value = entry.isIntersecting;
+        });
+      });
+
       if (endOfListElement.value) {
         intersectionObserver.value.observe(endOfListElement.value);
       }
@@ -243,7 +236,7 @@ export default {
       counter,
       itemsFiltered,
       isShowingEndOfList,
-      setEndOfListElement,
+      endOfListElement,
     };
   },
 };
