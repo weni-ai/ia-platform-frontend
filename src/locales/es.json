@@ -162,6 +162,9 @@
     "write_content_placeholder": "Escriba aquí el contenido",
     "write_content_help": "¿No está seguro de cómo añadir contenidos a la base de conocimientos de IA? <a href=\"#\" target=\"_blank\">Consulte la documentación</a>",
     "changes_saved": "Cambios guardados",
+    "time_ago_minutes": "Añadido hace {minutes} minutos",
+    "time_ago_hours": "Añadido hace {hours} horas",
+    "time_ago_days": "Añadido hace {days} días",
     "tabs": {
       "files": "Archivos",
       "sites": "Sitios",

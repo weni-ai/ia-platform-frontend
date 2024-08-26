@@ -43,7 +43,7 @@
             {{
               file.status === 'uploading'
                 ? $t('content_bases.files.status.uploading')
-                : file.created_at
+                : timeAgo
             }}
           </p>
         </UnnnicToolTip>
@@ -90,6 +90,7 @@ import nexusaiAPI from '@/api/nexusaiAPI';
 import FilePreview from '@/views/ContentBases/components/FilePreview.vue';
 import ContentItemActions from '@/views/repository/content/ContentItemActions.vue';
 import { createDownloadAnchor } from '@/utils';
+import i18n from '@/utils/plugins/i18n.js';
 
 export default {
   components: {
@@ -190,6 +191,10 @@ export default {
       }`;
     },
 
+    timeAgo() {
+      return this.formatTimeAgo(this.file.created_at);
+    },
+
     extension() {
       if (['site', 'action'].includes(this.file.extension_file)) {
         return this.file.extension_file;
@@ -259,6 +264,39 @@ export default {
       } finally {
         this.downloading = false;
       }
+    },
+
+    formatTimeAgo(dateString) {
+      if (!dateString) {
+        return i18n.global.t('content_bases.files.status.uploading');
+      }
+
+      const now = new Date();
+      const createdAt = new Date(dateString);
+
+      if (isNaN(createdAt.getTime())) {
+        return i18n.global.t('content_bases.files.status.uploading');
+      }
+
+      const diffInMinutes = Math.floor((now - createdAt) / 1000 / 60);
+
+      if (diffInMinutes < 60) {
+        return i18n.global.t('content_bases.time_ago_minutes', {
+          minutes: diffInMinutes,
+        });
+      }
+
+      const diffInHours = Math.floor(diffInMinutes / 60);
+      if (diffInHours < 24) {
+        return i18n.global.t('content_bases.time_ago_hours', {
+          hours: diffInHours,
+        });
+      }
+
+      const diffInDays = Math.floor(diffInHours / 24);
+      return i18n.global.t('content_bases.time_ago_days', {
+        days: diffInDays,
+      });
     },
 
     async preview() {

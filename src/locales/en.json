@@ -162,6 +162,9 @@
     "write_content_placeholder": "Write the content here",
     "write_content_help": "Not sure how to add content to the AI knowledge base? <a href=\"#\" target=\"_blank\">Check out the documentation</a>",
     "changes_saved": "Changes saved",
+    "time_ago_minutes": "Added {minutes} minutes ago",
+    "time_ago_hours": "Added {hours} hours ago",
+    "time_ago_days": "Added {days} days ago",
     "tabs": {
       "files": "Files",
       "sites": "Websites",
