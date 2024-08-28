@@ -1,38 +1,15 @@
 <template>
   <PageContainer
     :loadingTitle="loadingContentBase"
-    :title="contentBase.title"
     :dontShowBack="true"
-    :brainIsDeactivated="!routerTunings.brainOn"
+    :isNoSpaceContainer="true"
   >
-    <template #actions>
-      <UnnnicButton
-        class="save-button"
-        :disabled="$store.getters.isBrainSaveButtonDisabled"
-        :loading="$store.state.Brain.isSavingChanges"
-        @click="$store.dispatch('saveBrainChanges')"
-      >
-        {{ $t('router.tunings.save_changes') }}
-      </UnnnicButton>
-    </template>
-
+    <BrainWarningBar v-if="!routerTunings.brainOn" />
     <section class="repository-base-edit__wrapper">
+      <BrainSideBar />
       <div class="repository-base-edit__wrapper__left-side">
         <section class="content-base__container">
-          <UnnnicTab
-            :tabs="routerTabs.map((e) => e.page)"
-            :activeTab="activeTab"
-            @change="onTabChange"
-          >
-            <template
-              v-for="tab in routerTabs"
-              :key="tab.page"
-              #[`tab-head-${tab.page}`]
-            >
-              {{ $t(`router.tabs.${tab.title}`) }}
-            </template>
-          </UnnnicTab>
-
+          <BrainHeader />
           <section class="scrollable">
             <RouterContentBase
               v-if="route.name === 'router-content'"
@@ -97,7 +74,7 @@
 
 <script>
 import { ref, computed, watch, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { get } from 'lodash';
 import nexusaiAPI from '../../api/nexusaiAPI';
@@ -112,6 +89,9 @@ import ModalSaveChangesError from './ModalSaveChangesError.vue';
 import { useFilesPagination } from '../ContentBases/filesPagination';
 import { useSitesPagination } from '../ContentBases/sitesPagination';
 import ContentItemActions from '../repository/content/ContentItemActions.vue';
+import BrainSideBar from '@/components/Brain/BrainSideBar.vue';
+import BrainHeader from '@/components/Brain/BrainHeader.vue';
+import BrainWarningBar from '@/components/Brain/BrainWarningBar.vue';
 import i18n from '@/utils/plugins/i18n';
 
 export default {
@@ -126,18 +106,13 @@ export default {
     ModalPreviewQRCode,
     ModalSaveChangesError,
     ContentItemActions,
+    BrainSideBar,
+    BrainHeader,
+    BrainWarningBar,
   },
   setup() {
     const route = useRoute();
-    const router = useRouter();
     const store = useStore();
-
-    const routerTabs = ref([
-      { title: 'personalization', page: 'router-personalization' },
-      { title: 'content', page: 'router-content' },
-      { title: 'actions', page: 'router-actions' },
-      { title: 'tunings', page: 'router-tunings' },
-    ]);
 
     const loadingContentBase = ref(false);
     const dropdownOpen = ref(false);
@@ -166,10 +141,6 @@ export default {
       language: '',
     });
 
-    const activeTab = computed(
-      () => routerTabs.value.find((e) => e.page === route.name)?.page,
-    );
-
     const contentBaseUuid = computed(
       () => route.params.contentBaseUuid || store.state.router.contentBaseUuid,
     );
@@ -186,12 +157,6 @@ export default {
     const sites = useSitesPagination({
       contentBaseUuid: contentBaseUuid.value,
     });
-
-    const onTabChange = (pageName) => {
-      if (route.name !== pageName) {
-        router.push({ name: pageName });
-      }
-    };
 
     const refreshPreview = () => {
       refreshPreviewValue.value += 1;
@@ -273,7 +238,6 @@ export default {
 
     return {
       route,
-      routerTabs,
       loadingContentBase,
       dropdownOpen,
       refreshPreviewValue,
@@ -285,10 +249,8 @@ export default {
       routerActions,
       routerTunings,
       contentBase,
-      activeTab,
       contentBaseUuid,
       intelligenceUuid,
-      onTabChange,
       refreshPreview,
       loadRouterOptions,
       loadContentBase,
@@ -346,12 +308,10 @@ export default {
 
 .content-base {
   &__container {
-    outline-style: solid;
-    outline-color: $unnnic-color-neutral-cleanest;
-    outline-width: $unnnic-border-width-thinner;
-    outline-offset: -$unnnic-border-width-thinner;
+    border-style: solid;
+    border-color: $unnnic-color-neutral-soft;
+    border-width: 0 $unnnic-border-width-thinner 0 $unnnic-border-width-thinner;
 
-    border-radius: $unnnic-border-radius-sm;
     padding: $unnnic-spacing-sm;
 
     flex: 1;
@@ -403,13 +363,8 @@ export default {
   }
 }
 
-.save-button,
 .settings-button {
   margin-left: auto;
-}
-
-.save-button {
-  width: 18.5 * $unnnic-font-size;
 }
 
 .base-tabs {
@@ -526,7 +481,6 @@ export default {
   &__wrapper {
     flex: 1;
     display: flex;
-    gap: $unnnic-spacing-sm;
 
     &__left-side {
       flex: 1;
@@ -535,18 +489,13 @@ export default {
     }
 
     &__card-test-container {
-      outline-style: solid;
-      outline-color: $unnnic-color-neutral-cleanest;
-      outline-width: $unnnic-border-width-thinner;
-      outline-offset: -$unnnic-border-width-thinner;
-      border-radius: $unnnic-border-radius-sm;
-
       width: 24.625 * $unnnic-font-size;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
 
       &__header {
+        max-width: 390px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -555,20 +504,14 @@ export default {
         font-size: $unnnic-font-size-body-lg;
         line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
         font-weight: $unnnic-font-weight-bold;
-        padding-inline: $unnnic-spacing-sm;
-        padding-top: $unnnic-spacing-ant;
-        padding-bottom: $unnnic-spacing-ant - $unnnic-border-width-thinner;
-        margin-inline: -$unnnic-spacing-sm;
-        margin-top: -$unnnic-spacing-sm;
+        padding: $unnnic-spacing-sm $unnnic-spacing-md;
         margin-bottom: $unnnic-spacing-sm;
         border-bottom: $unnnic-border-width-thinner solid
-          $unnnic-color-neutral-cleanest;
+          $unnnic-color-neutral-soft;
       }
     }
 
     &__card {
-      padding: $unnnic-spacing-sm;
-
       &__header {
         display: flex;
         align-items: center;

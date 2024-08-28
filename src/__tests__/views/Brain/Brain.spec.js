@@ -9,7 +9,7 @@ import ModalSaveChangesError from '@/views/Brain/ModalSaveChangesError.vue';
 import Tests from '@/views/repository/content/Tests.vue';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import { expect } from 'vitest';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const store = createStore({
   state() {
@@ -38,13 +38,6 @@ const store = createStore({
     saveBrainChanges: vi.fn(),
   },
 });
-
-vi.mock('vue-router', () => ({
-  useRoute: vi.fn(),
-  useRouter: vi.fn(() => ({
-    push: () => {},
-  })),
-}));
 
 vi.mock('@/views/ContentBases/filesPagination', () => ({
   useFilesPagination: vi.fn().mockReturnValue({
@@ -102,7 +95,7 @@ vi.spyOn(nexusaiAPI.intelligences.contentBases.texts, 'list').mockResolvedValue(
 
 describe('Brain Component', () => {
   let wrapper;
-  let dispatchSpy;
+
   let pushMock;
   beforeEach(() => {
     useRoute.mockImplementationOnce(() => ({
@@ -111,14 +104,6 @@ describe('Brain Component', () => {
         contentBaseUuid: 'uuuid-01',
       },
     }));
-
-    pushMock = vi.fn();
-
-    useRouter.mockImplementationOnce(() => ({
-      push: pushMock,
-    }));
-
-    dispatchSpy = vi.spyOn(store, 'dispatch');
 
     wrapper = mount(Brain, {
       global: {
@@ -135,14 +120,11 @@ describe('Brain Component', () => {
           RouterView: true,
           RouterCustomization: true,
           ModalPreviewQRCode: true,
+          BrainSideBar: true,
+          BrainHeader: true,
         },
       },
     });
-  });
-
-  test('renders correctly with initial props and store state', () => {
-    expect(wrapper.exists()).toBe(true);
-    expect(wrapper.findComponent('.save-button').exists()).toBe(true);
   });
 
   test('loads content base data correctly', async () => {
@@ -176,12 +158,6 @@ describe('Brain Component', () => {
     expect(wrapper.vm.text.value).toBe(mockTextData);
     expect(wrapper.vm.text.oldValue).toBe(mockTextData);
     expect(wrapper.vm.text.uuid).toBe(mockUuid);
-  });
-
-  test('dispatches Vuex action on save button click', async () => {
-    const button = wrapper.find('.save-button');
-    await button.trigger('click');
-    expect(dispatchSpy).toHaveBeenCalledWith('saveBrainChanges');
   });
 
   test('displays ModalSaveChangesError when tabsWithError is not null', async () => {
@@ -227,45 +203,6 @@ describe('Brain Component', () => {
     await flushPromises();
 
     expect(wrapper.vm.routerTunings.brainOn).toBe(true);
-  });
-
-  test('does not call router.push if the active tab is the same', async () => {
-    const currentRouteName = 'router-content';
-    useRoute.mockImplementation(() => ({
-      name: currentRouteName,
-      params: {
-        contentBaseUuid: 'uuuid-01',
-      },
-    }));
-
-    wrapper = mount(Brain, {
-      global: {
-        plugins: [store],
-        stubs: {
-          RouterLink: true,
-          RouterView: true,
-        },
-      },
-    });
-
-    const onTabChange = wrapper.vm.onTabChange;
-    const activeTab = wrapper.vm.activeTab;
-
-    onTabChange(currentRouteName);
-    expect(pushMock).not.toHaveBeenCalled();
-    expect(activeTab).eq(currentRouteName);
-  });
-
-  test('calls router.push with the correct route name when onTabChange is triggered', async () => {
-    const tabs = wrapper.vm.routerTabs;
-    const onTabChange = wrapper.vm.onTabChange;
-
-    for (const tab of tabs) {
-      if (wrapper.vm.route.name !== tab.page) {
-        onTabChange(tab.page);
-        expect(pushMock).toHaveBeenCalledWith({ name: tab.page });
-      }
-    }
   });
 
   test('contentBaseUuid returns route param value if available', () => {
