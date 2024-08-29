@@ -80,7 +80,7 @@
       :class="['files-list__content', `files-list__content--shape-${shape}`]"
     >
       <ContentItem
-        v-for="file in itemsFiltered.value"
+        v-for="file in itemsFiltered"
         :key="file.uuid"
         :file="file"
         :compressed="shape === 'accordion'"
@@ -190,7 +190,8 @@ export default {
     });
 
     const itemsFiltered = computed(() => {
-      const data = props.items?.data || [];
+      const data = props.items?.data?.value || [];
+
       if (filterText.value) {
         return data.filter((item) =>
           item.created_file_name
