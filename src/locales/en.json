@@ -78,7 +78,7 @@
     },
     "content": {
       "fields": {
-        "search_placeholder": "Search Content"
+        "search_placeholder": "Search"
       }
     },
     "tunings": {
@@ -154,6 +154,7 @@
     }
   },
   "content_bases": {
+    "description": "Enter the content that your agent will use to answer the questions. Include all the information, files and websites necessary for the agent to provide accurate and useful answers.",
     "quick_test": "Quick test",
     "sidebar_quick_test_title": "Quick test of the {name} base",
     "sidebar_quick_test_description": "Send a message to test this content base and find out what questions it can answer",
@@ -161,10 +162,16 @@
     "write_content_placeholder": "Write the content here",
     "write_content_help": "Not sure how to add content to the AI knowledge base? <a href=\"#\" target=\"_blank\">Check out the documentation</a>",
     "changes_saved": "Changes saved",
+    "time_ago_minutes": "Added {minutes} minutes ago",
+    "time_ago_hours": "Added {hours} hours ago",
+    "time_ago_days": "Added {days} days ago",
     "tabs": {
       "files": "Files",
       "sites": "Websites",
       "text": "Text"
+    },
+    "text": {
+      "description": "Manually type in the content that the agent will use to answer the questions"
     },
     "file_with_error": "File with error. Delete and add it again.",
     "site_with_error": "Site with error. Delete and add it again.",
@@ -179,6 +186,8 @@
       "upload_content": "Upload content from files",
       "drag_and_drop_your_file_here": "Drag and drop your file here to add the content to the AI knowledge base.",
       "supported_files": "Supported formats: {suportedFormats}.<br /> {limitMB}MB limit per file.",
+      "sup_files": "{suportedFormats}.<br /> {limitMB}MB limit per file.",
+      "description": "Upload documents and files that the agent will use to provide answers",
       "file_error": "File error. Delete and add again",
       "browse_file": "Add file",
       "uploaded_files": "Uploaded files",
@@ -209,6 +218,20 @@
       }
     },
     "sites": {
+      "title": "Enter URLs of websites from which the agent can extract information",
+      "description": "Make sure the sites are trustworthy and contain relevant data",
+      "modal": {
+        "description": "Enter the URL of the site to extract the content from.",
+        "fields": {
+          "link": {
+            "label": "Website URL"
+          }
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "finish": "Finish"
+        }
+      },
       "uploaded_sites": "Uploaded websites",
       "content_of_the_sites_has_been_added": "The content of the websites has been added to the base",
       "sidebar_add": {

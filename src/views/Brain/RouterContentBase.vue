@@ -7,51 +7,57 @@
           `content-base__content-tab--shape-${contentStyle}`,
         ]"
       >
-        <section class="search-container">
-          <UnnnicInput
-            :modelValue="filterName"
-            size="md"
-            :iconLeftClickable="true"
-            iconLeft="search-1"
-            :placeholder="$t('router.content.fields.search_placeholder')"
-            @update:model-value="updateFilterName"
-          />
+        <section>
+          <UnnnicIntelligenceText
+            tag="p"
+            family="secondary"
+            size="body-gt"
+            marginBottom="sm"
+            weight="400"
+          >
+            {{ $t('content_bases.description') }}
+          </UnnnicIntelligenceText>
+        </section>
+        <section>
+          <UnnnicTab
+            :tabs="routerTabs.map((e) => e.page)"
+            :activeTab="activeTab"
+            @change="onTabChange"
+          >
+            <template
+              v-for="tab in routerTabs"
+              :key="tab.page"
+              #[`tab-head-${tab.page}`]
+            >
+              {{ $t(`content_bases.tabs.${tab.title}`) }}
+            </template>
+          </UnnnicTab>
         </section>
         <UnnnicSkeletonLoading
           v-if="
-            filesProp.status === 'loading' &&
-            filesProp.data.length === 0 &&
+            files.status === 'loading' &&
+            files.data.length === 0 &&
             contentStyle !== 'accordion'
           "
           tag="div"
           height="100%"
           class="repository-base-edit__wrapper__card-content"
         />
-        <BasesFormFiles
-          :files="filesProp"
-          :filterText="filterName"
+        <ContentFiles
+          v-if="activeTab === 'files'"
+          :files="files"
           shape="accordion"
         />
-        <BasesFormSites
-          :items="sitesProp"
-          :filterText="filterName"
+        <ContentSites
+          v-if="activeTab === 'sites'"
+          :items="sites"
           shape="accordion"
         />
-        <section>
-          <BasesFormGenericListHeader
-            v-model:open="textProp.open"
-            :shape="contentStyle"
-            :title="$t('content_bases.tabs.text')"
-            data-test="content-base-text"
-          />
-
-          <BasesFormText
-            v-if="textProp.open"
+        <section v-if="activeTab === 'text'">
+          <ContentText
             v-model="$store.state.Brain.contentText.current"
-            dontShowSaveButton
-            :item="textProp"
+            :isLoading="item?.status === 'loading'"
             class="content-base__content-tab__text"
-            data-test="content-base-text-area"
           />
         </section>
       </section>
@@ -61,24 +67,18 @@
 
 <script>
 import { defineComponent, ref, toRefs } from 'vue';
-import BasesFormFiles from '../repository/content/BasesFormFiles.vue';
-import BasesFormSites from '../repository/content/BasesFormSites.vue';
-import BasesFormGenericListHeader from '../repository/content/BasesFormGenericListHeader.vue';
-import BasesFormText from '../repository/content/BasesFormText.vue';
+import ContentFiles from '@/components/Brain/ContentFiles.vue';
+import ContentSites from '@/components/Brain/ContentSites.vue';
+import ContentText from '@/components/Brain/ContentText.vue';
 
 export default defineComponent({
   name: 'RouterContentBase',
   components: {
-    BasesFormFiles,
-    BasesFormSites,
-    BasesFormGenericListHeader,
-    BasesFormText,
+    ContentFiles,
+    ContentSites,
+    ContentText,
   },
   props: {
-    filterNameProp: {
-      type: String,
-      default: '',
-    },
     filesProp: {
       type: Object,
       required: true,
@@ -92,22 +92,31 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['update:filterName', 'update:files'],
+  emits: ['update:files'],
   setup(props, { emit }) {
-    const { filterNameProp, filesProp, sitesProp, textProp } = toRefs(props);
+    const { filesProp, sitesProp, textProp } = toRefs(props);
     const contentStyle = ref('accordion');
 
-    const updateFilterName = (value) => {
-      emit('update:filterName', value);
+    const routerTabs = ref([
+      { title: 'files', page: 'files' },
+      { title: 'sites', page: 'sites' },
+      { title: 'text', page: 'text' },
+    ]);
+
+    const activeTab = ref(routerTabs.value[0].page);
+
+    const onTabChange = (newTab) => {
+      activeTab.value = newTab;
     };
 
     return {
-      filterName: filterNameProp,
       files: filesProp,
       sites: sitesProp,
       text: textProp,
       contentStyle,
-      updateFilterName,
+      routerTabs,
+      activeTab,
+      onTabChange,
     };
   },
 });
@@ -167,8 +176,8 @@ export default defineComponent({
       height: 100%;
     }
 
-    &__text {
-      margin-top: $unnnic-spacing-sm;
+    :deep(.tab-header) {
+      margin-bottom: 0;
     }
   }
 }

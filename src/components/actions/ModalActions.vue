@@ -208,6 +208,7 @@ export default {
 
     async generateActionName() {
       this.loadingGenerateName = true;
+
       try {
         const response =
           await nexusaiAPI.router.actions.generatedNames.generate({
