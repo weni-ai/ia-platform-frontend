@@ -260,14 +260,6 @@ export default {
     async generateActionName() {
       this.loadingGenerateName = true;
 
-      if (this.actionType === 'whatsapp_cart') {
-        this.name = this.$t(
-          'modals.actions.add.steps.generate_action_name.whatsapp_cart',
-        );
-        this.loadingGenerateName = false;
-        return;
-      }
-
       try {
         const response =
           await nexusaiAPI.router.actions.generatedNames.generate({
