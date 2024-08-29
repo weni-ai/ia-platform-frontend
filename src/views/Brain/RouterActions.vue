@@ -9,7 +9,7 @@
       :description="$t('router.actions.description')"
       :addText="$t('router.actions.add')"
       canEditItem
-      @add="isAddActionOpen = true"
+      @add="isActionTypeSelectorOpen = true"
       @edit="openEditAction"
       @remove="
         ($event) =>
@@ -17,9 +17,16 @@
       "
     />
 
+    <ModalActionTypeSelector
+      v-if="isActionTypeSelectorOpen"
+      v-model="isActionTypeSelectorOpen"
+      @selected="openAddAction($event)"
+    />
+
     <ModalActions
       v-if="isAddActionOpen"
       v-model="isAddActionOpen"
+      :actionGroup="actionGroup"
       :currentActions="items.data"
       @added="saveAction"
     />
@@ -44,6 +51,7 @@
 <script>
 import nexusaiAPI from '../../api/nexusaiAPI';
 import BasesFormGenericList from '../repository/content/BasesFormGenericList.vue';
+import ModalActionTypeSelector from '@/components/actions/ModalActionTypeSelector.vue';
 import ModalActions from '../../components/actions/ModalActions.vue';
 import ModalChangeAction from '../../components/actions/ModalChangeAction.vue';
 import ModalRemoveAction from '../../components/actions/ModalRemoveAction.vue';
@@ -51,6 +59,7 @@ import ModalRemoveAction from '../../components/actions/ModalRemoveAction.vue';
 export default {
   components: {
     BasesFormGenericList,
+    ModalActionTypeSelector,
     ModalActions,
     ModalChangeAction,
     ModalRemoveAction,
@@ -67,6 +76,9 @@ export default {
 
   data() {
     return {
+      isActionTypeSelectorOpen: false,
+      actionGroup: null,
+
       isAddActionOpen: false,
       isAdding: false,
 
@@ -119,6 +131,12 @@ export default {
       } catch (error) {
         this.items.status = 'error';
       }
+    },
+
+    openAddAction(actionGroup) {
+      this.actionGroup = actionGroup;
+
+      this.isAddActionOpen = true;
     },
 
     openEditAction({ uuid, created_file_name, description, actionType }) {

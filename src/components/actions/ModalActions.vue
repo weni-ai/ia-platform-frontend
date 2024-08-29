@@ -20,10 +20,31 @@
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <template #leftSidebar>
-      <LeftSidebar :steps="steps" />
+      <LeftSidebar
+        v-bind="
+          isCustom
+            ? {
+                title: $t('modals.actions.add.title'),
+                description: $t('modals.actions.add.description'),
+              }
+            : {
+                title: $t('modals.actions.add.custom_title', {
+                  name: $t(`action_type_selector.types.${actionGroup}.title`),
+                }),
+                description: $t('modals.actions.add.custom_description'),
+              }
+        "
+        :steps="steps"
+      />
     </template>
 
     <section class="action-body">
+      <StepSelectActionType
+        v-if="currentStep.name === 'select_action_type'"
+        v-model:actionType="actionType"
+        v-model:name="name"
+      />
+
       <StepDescribe
         v-if="currentStep.name === 'describe'"
         v-model:description="description"
@@ -34,9 +55,10 @@
       <StepSelectFlow
         v-if="currentStep.name === 'select_flow'"
         v-model:flowUuid="flowUuid"
-        v-model:name="name"
+        :name="name"
         :items="items"
         :currentActions="currentActions"
+        @update:name="isCustom ? (name = $event) : null"
       />
 
       <StepNominateAction
@@ -56,16 +78,23 @@ import LeftSidebar from './LeftSidebar.vue';
 import StepSelectFlow from './steps/SelectFlow.vue';
 import StepDescribe from './steps/Describe.vue';
 import StepNominateAction from './steps/NominateAction.vue';
+import StepSelectActionType from './steps/SelectActionType.vue';
 
 export default {
   components: {
     LeftSidebar,
+    StepSelectActionType,
     StepDescribe,
     StepSelectFlow,
     StepNominateAction,
   },
 
   props: {
+    actionGroup: {
+      type: String,
+      required: true,
+    },
+
     currentActions: {
       type: Array,
       default() {
@@ -108,21 +137,38 @@ export default {
   },
 
   computed: {
+    isCustom() {
+      return this.actionGroup === 'custom';
+    },
+
     steps() {
-      return [
-        {
+      const steps = [];
+
+      if (this.isCustom) {
+        steps.push({
           name: 'describe',
           title: this.$t('modals.actions.add.steps.describe.title'),
-        },
-        {
-          name: 'select_flow',
-          title: this.$t('modals.actions.add.steps.select_flow.title'),
-        },
-        {
+        });
+      } else {
+        steps.push({
+          name: 'select_action_type',
+          title: this.$t('modals.actions.add.steps.describe.title'),
+        });
+      }
+
+      steps.push({
+        name: 'select_flow',
+        title: this.$t('modals.actions.add.steps.select_flow.title'),
+      });
+
+      if (this.isCustom) {
+        steps.push({
           name: 'nominate_action',
           title: this.$t('modals.actions.add.steps.nominate_action.title'),
-        },
-      ].map((step, index) => ({
+        });
+      }
+
+      return steps.map((step, index) => ({
         ...step,
         active: index === this.currentStepIndex,
       }));

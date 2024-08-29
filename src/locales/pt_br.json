@@ -1360,17 +1360,48 @@
   "import_card": {
     "importing": "Importando.."
   },
+  "action_type_selector": {
+    "title": "Selecione o tipo de ação",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+    "types": {
+      "interactions": {
+        "title": "Interações gerais",
+        "description": "Ações para saudar, se despedir e navegar no sistema"
+      },
+      "shopping": {
+        "title": "Compras e produtos",
+        "description": "Ações para comprar, acompanhar pedidos e acessar benefícios"
+      },
+      "support": {
+        "title": "Assistência e suporte",
+        "description": "Ações para suporte ao cliente e ajustes de comunicação"
+      },
+      "custom": {
+        "title": "Personalizada",
+        "description": "Ações para atender necessidades específicas"
+      }
+    }
+  },
   "modals": {
     "actions": {
       "add": {
-        "title": "Adicionar ação",
+        "title": "Adicionar ação personalizada",
         "description": "Crie uma nova ação e configure quando ela deve ser iniciada",
+        "custom_title": "Adicionar ação de {name}",
+        "custom_description": "Selecione a ação e o fluxo que será iniciado",
         "messages": {
-          "success": "Ação {name} criada com sucesso"
+          "success": "Ação {name} adicionada com sucesso"
         },
         "steps": {
+          "select_action_type": {
+            "inputs": {
+              "select_action_type": {
+                "label": "Selecione a ação"
+              }
+            }
+          },
           "describe": {
-            "title": "Descrever ação",
+            "title": "Configurar ação",
             "explanation": "Descreva a ação e quando o usuário deve entrar nela. É partir dessa descrição que a ação vai ser iniciada",
             "inputs": {
               "description": {
@@ -1378,14 +1409,6 @@
                 "placeholder": "o usuário disser que quer atendimento humano",
                 "help": "Tente ser objetivo. É a partir da descrição que a ação vai ser iniciada",
                 "aux_text_whatsapp_cart": "Quando o usuário enviar um produto no WhatsApp"
-              },
-              "radio": {
-                "options": {
-                  "normal": "Fluxo normal",
-                  "cart": "Fluxo de carrinho"
-                },
-                "label": "Selecione o tipo de fluxo",
-                "disable_message": "Já existe uma ação atribuída a um fluxo de carrinho"
               }
             }
           },

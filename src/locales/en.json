@@ -1402,17 +1402,48 @@
   "import_card": {
     "importing": "Importing.."
   },
+  "action_type_selector": {
+    "title": "Select the type of action",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+    "types": {
+      "interactions": {
+        "title": "General interactions",
+        "description": "Actions for greeting, saying goodbye and navigating the system"
+      },
+      "shopping": {
+        "title": "Shopping and products",
+        "description": "Actions to buy, track orders and access benefits"
+      },
+      "support": {
+        "title": "Service and support",
+        "description": "Actions for customer support and communication adjustments"
+      },
+      "custom": {
+        "title": "Customized",
+        "description": "Actions to meet specific needs"
+      }
+    }
+  },
   "modals": {
     "actions": {
       "add": {
-        "title": "Add action",
+        "title": "Add custom action",
         "description": "Create a new action and set when it should start",
+        "custom_title": "Add {name} action",
+        "custom_description": "Select the action and the flow to be started",
         "messages": {
-          "success": "Action {name} successfully created"
+          "success": "Action {name} added successfully"
         },
         "steps": {
+          "select_action_type": {
+            "inputs": {
+              "select_action_type": {
+                "label": "Select the action"
+              }
+            }
+          },
           "describe": {
-            "title": "Describe action",
+            "title": "Configure action",
             "explanation": "Describe the action and when the user should enter it. The action will start from this description",
             "inputs": {
               "description": {
@@ -1420,14 +1451,6 @@
                 "placeholder": "the user says they want human service",
                 "help": "Try to be objective. It's from the description that the action will start",
                 "aux_text_whatsapp_cart": "When the user sends a product on WhatsApp"
-              },
-              "radio": {
-                "options": {
-                  "normal": "Normal flow",
-                  "cart": "Cart flow"
-                },
-                "label": "Select flow type",
-                "disable_message": "There is already an action assigned to a cart flow"
               }
             }
           },
