@@ -1,5 +1,6 @@
 <template>
   <UnnnicModalDialog
+    :modelValue="true"
     showCloseIcon
     size="md"
     :title="$t('content_bases.sites.add_site')"
@@ -14,6 +15,7 @@
     }"
     @secondary-button-click="$emit('close')"
     @primary-button-click="addSite"
+    @update:model-value="$emit('update:modelValue', $event)"
   >
     <section class="add-site-container">
       <UnnnicIntelligenceText
@@ -31,6 +33,7 @@
       >
         <UnnnicInput
           v-model="site"
+          data-test="site-input"
           :type="!site.trim() || validURL(site) ? 'normal' : 'error'"
           :placeholder="
             $t('content_bases.sites.sidebar_add.fields.link.placeholder')
@@ -49,7 +52,7 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 
-const emit = defineEmits(['close', 'addedSite']);
+const emit = defineEmits(['close', 'addedSite', 'update:modelValue']);
 
 const props = defineProps({
   contentBaseUuid: {
@@ -69,14 +72,14 @@ function validURL(url) {
   );
 }
 
-function addSite() {
-  const normalizeURL = (url) => {
-    if (url.startsWith('https://') || url.startsWith('http://')) {
-      return url;
-    }
-    return `https://${url}`;
-  };
+function normalizeURL(url) {
+  if (url.startsWith('https://') || url.startsWith('http://')) {
+    return url;
+  }
+  return `https://${url}`;
+}
 
+function addSite() {
   if (validURL(site.value)) {
     const newSite = reactive({
       file: null,
