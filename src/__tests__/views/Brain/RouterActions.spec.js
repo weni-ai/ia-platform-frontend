@@ -101,6 +101,12 @@ describe('RouterActions', () => {
     wrapper.findComponent({ name: 'BasesFormGenericList' }).vm.$emit('add');
     await flushPromises();
 
+    expect(wrapper.vm.isActionTypeSelectorOpen).toBe(true);
+
+    await wrapper
+      .findComponent({ name: 'ModalActionTypeSelector' })
+      .vm.$emit('selected', 'custom');
+
     expect(wrapper.vm.isAddActionOpen).toBe(true);
 
     const modalActions = wrapper.findComponent(ModalActions);

@@ -26,6 +26,7 @@
         :key="index"
         class="group"
         :class="[{ 'group--selected': groupSelected === group.id }]"
+        :data-test="group.id"
         @click="groupSelected = group.id"
       >
         <section class="group__icon__container">

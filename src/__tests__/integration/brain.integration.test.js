@@ -444,6 +444,16 @@ describe('Brain integration', () => {
 
     await addActionBtn.trigger('click');
 
+    await wrapper
+      .findComponent({ name: 'ModalActionTypeSelector' })
+      .find('[data-test="custom"]')
+      .trigger('click');
+
+    await wrapper
+      .findComponent({ name: 'ModalActionTypeSelector' })
+      .find('[data-test="next-button"]')
+      .trigger('click');
+
     const textAreaInput = wrapper.findComponent(
       '[data-test="description-textarea"]',
     );

@@ -64,6 +64,7 @@ describe('ModalActions', () => {
 
     wrapper = mount(ModalActions, {
       props: {
+        actionGroup: 'custom',
         modelValue: true,
       },
 
