@@ -181,7 +181,6 @@ export default {
     },
 
     fileName() {
-      console.log('this.file', this.file);
       if (['site', 'action'].includes(this.file.extension_file)) {
         return this.file?.created_file_name;
       }

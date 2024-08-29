@@ -89,7 +89,12 @@
         @click="$emit('edit', file)"
       />
 
-      <template v-if="status === 'loading'">
+      <div
+        v-show="!['loading', 'complete'].includes(status)"
+        ref="endOfListElement"
+      />
+
+      <template v-if="status !== 'complete'">
         <UnnnicSkeletonLoading
           v-for="i in 3"
           :key="i"
@@ -97,11 +102,6 @@
           :height="shape === 'accordion' ? '64px' : '56px'"
         />
       </template>
-
-      <div
-        v-show="!['loading', 'complete'].includes(status)"
-        ref="endOfListElement"
-      ></div>
     </section>
   </section>
 </template>
@@ -205,7 +205,6 @@ export default {
     watch(
       [isShowingEndOfList, status],
       ([newIsShowingEndOfList, newStatusValue]) => {
-        console.log('newStatusValue', newStatusValue);
         if (newIsShowingEndOfList && newStatusValue === null) {
           props.items.loadNext?.();
         }
@@ -215,7 +214,6 @@ export default {
     onMounted(() => {
       intersectionObserver.value = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          console.log('entry', entry);
           isShowingEndOfList.value = entry.isIntersecting;
         });
       });

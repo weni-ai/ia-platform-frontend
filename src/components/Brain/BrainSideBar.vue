@@ -13,7 +13,7 @@
       @click="handleButtonClick"
     />
 
-    <UnnnicSideBar v-if="isSideBarVisible">
+    <section v-if="isSideBarVisible">
       <UnnnicSidebarMenu data-test="side-bar-menu">
         <UnnnicSidebarItem
           v-for="nav in brainRoutes"
@@ -26,7 +26,7 @@
           @click="onNavChange(nav.page)"
         />
       </UnnnicSidebarMenu>
-    </UnnnicSideBar>
+    </section>
   </div>
 </template>
 
