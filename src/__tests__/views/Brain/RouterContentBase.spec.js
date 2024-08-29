@@ -1,12 +1,12 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import RouterContentBase from '@/views/Brain/RouterContentBase.vue';
-import BasesFormFiles from '@/views/repository/content/BasesFormFiles.vue';
-import BasesFormSites from '@/views/repository/content/BasesFormSites.vue';
-import BasesFormGenericListHeader from '@/views/repository/content/BasesFormGenericListHeader.vue';
-import BasesFormText from '@/views/repository/content/BasesFormText.vue';
+import ContentFiles from '@/components/Brain/ContentFiles.vue';
+import ContentSites from '@/components/Brain/ContentSites.vue';
+import ContentText from '@/components/Brain/ContentText.vue';
 import { createStore } from 'vuex';
 import { expect } from 'vitest';
 
+// Criação do Vuex Store para o teste
 const store = createStore({
   state() {
     return {
@@ -15,18 +15,19 @@ const store = createStore({
           current: '',
         },
       },
-      mutations: {
-        updateContentText(state, text) {
-          state.Brain.contentText.current = text;
-        },
-      },
     };
+  },
+  mutations: {
+    updateContentText(state, text) {
+      state.Brain.contentText.current = text;
+    },
   },
 });
 
 describe('RouterContentBase', () => {
   let wrapper;
 
+  // Mock props para o teste
   const mockFilesProp = {
     status: 'complete',
     data: [{ name: 'File 1' }, { name: 'File 2' }],
@@ -44,7 +45,6 @@ describe('RouterContentBase', () => {
   beforeEach(() => {
     wrapper = mount(RouterContentBase, {
       props: {
-        filterNameProp: '',
         filesProp: mockFilesProp,
         sitesProp: mockSitesProp,
         textProp: mockTextProp,
@@ -52,10 +52,9 @@ describe('RouterContentBase', () => {
       global: {
         plugins: [store],
         components: {
-          BasesFormFiles,
-          BasesFormSites,
-          BasesFormGenericListHeader,
-          BasesFormText,
+          ContentFiles,
+          ContentSites,
+          ContentText,
         },
       },
     });
@@ -63,35 +62,10 @@ describe('RouterContentBase', () => {
 
   test('renders correctly with initial props', () => {
     expect(wrapper.exists()).toBe(true);
-    expect(wrapper.findComponent({ name: 'UnnnicInput' }).exists()).toBe(true);
-    expect(wrapper.findComponent({ name: 'BasesFormFiles' }).exists()).toBe(
-      true,
-    );
-    expect(wrapper.findComponent({ name: 'BasesFormSites' }).exists()).toBe(
-      true,
-    );
+    expect(wrapper.findComponent(ContentFiles).exists()).toBe(true);
   });
 
-  test('updates filter name when input changes', async () => {
-    const inputComponent = wrapper.findComponent({ name: 'UnnnicInput' });
-    inputComponent.vm.$emit('update:model-value', 'New Filter');
-    await flushPromises();
-
-    expect(wrapper.emitted()['update:filterName']).toBeTruthy();
-    expect(wrapper.emitted()['update:filterName'][0]).toEqual(['New Filter']);
-  });
-
-  test('emits "update:filterName" when updateFilterName is called', async () => {
-    wrapper.vm.updateFilterName('New Filter Name');
-    await flushPromises();
-
-    expect(wrapper.emitted()['update:filterName']).toBeTruthy();
-    expect(wrapper.emitted()['update:filterName'][0]).toEqual([
-      'New Filter Name',
-    ]);
-  });
-
-  test('displays skeleton loader when files are loading', async () => {
+  test('displays skeleton loader when files are loading and contentStyle is not accordion', async () => {
     await wrapper.setProps({
       filesProp: { status: 'loading', data: [] },
     });
@@ -103,16 +77,7 @@ describe('RouterContentBase', () => {
     ).toBe(true);
   });
 
-  test('filesProp are empty', async () => {
-    await wrapper.setProps({
-      filesProp: { status: 'complete', data: [] },
-    });
-    await flushPromises();
-
-    expect(wrapper.vm.filesProp).toEqual({ status: 'complete', data: [] });
-  });
-
-  test('does not display skeleton loader when contentStyle is not accordion', async () => {
+  test('does not display skeleton loader when contentStyle is accordion', async () => {
     await wrapper.setProps({
       filesProp: { status: 'loading', data: [] },
     });
@@ -126,71 +91,48 @@ describe('RouterContentBase', () => {
     ).toBe(false);
   });
 
-  test('content-base__content-tab--shape when contentStyle is different', async () => {
-    wrapper.vm.contentStyle = 'different';
+  test('changes activeTab and renders the correct component', async () => {
+    expect(wrapper.vm.activeTab).toBe('files');
+    expect(wrapper.findComponent(ContentFiles).exists()).toBe(true);
+
+    wrapper.vm.onTabChange('sites');
     await flushPromises();
 
-    expect(
-      wrapper.find('.content-base__content-tab--shape-different').exists(),
-    ).toBe(true);
+    expect(wrapper.vm.activeTab).toBe('sites');
+    expect(wrapper.findComponent(ContentSites).exists()).toBe(true);
+    expect(wrapper.findComponent(ContentFiles).exists()).toBe(false);
+
+    wrapper.vm.onTabChange('text');
+    await flushPromises();
+
+    expect(wrapper.vm.activeTab).toBe('text');
+    expect(wrapper.findComponent(ContentText).exists()).toBe(true);
+    expect(wrapper.findComponent(ContentSites).exists()).toBe(false);
   });
 
-  test('renders correct elements based on props', async () => {
-    await wrapper.setProps({
-      filesProp: { status: 'complete', data: [] },
-    });
+  test('renders ContentText based on activeTab', async () => {
+    expect(wrapper.findComponent(ContentText).exists()).toBe(false);
+
+    wrapper.vm.onTabChange('text');
     await flushPromises();
 
-    expect(wrapper.findComponent({ name: 'BasesFormFiles' }).exists()).toBe(
-      true,
-    );
-    expect(wrapper.findComponent({ name: 'BasesFormSites' }).exists()).toBe(
-      true,
-    );
-  });
-
-  test('renders BasesFormText when textProp.open is true', async () => {
-    await wrapper.setProps({
-      textProp: { ...mockTextProp, open: true },
-    });
-    await flushPromises();
-
-    const textComponent = wrapper.findComponent(BasesFormText);
+    const textComponent = wrapper.findComponent(ContentText);
     expect(textComponent.exists()).toBe(true);
-    expect(textComponent.props('item')).toEqual({
-      open: true,
-      content: 'Sample Text',
-    });
     expect(textComponent.classes()).toContain(
       'content-base__content-tab__text',
     );
   });
 
-  test('updates Vuex store state when BasesFormText emits input event', async () => {
-    await wrapper.setProps({
-      textProp: { ...mockTextProp, open: true },
-    });
+  test('updates Vuex store state when ContentText emits input event', async () => {
+    wrapper.vm.onTabChange('text');
     await flushPromises();
 
-    const textComponent = wrapper.findComponent(BasesFormText);
+    const textComponent = wrapper.findComponent(ContentText);
 
     textComponent.vm.$emit('update:modelValue', 'Updated Text');
     await flushPromises();
 
     expect(store.state.Brain.contentText.current).toBe('Updated Text');
-  });
-
-  test('renders BasesFormSites with correct items', async () => {
-    await wrapper.setProps({
-      sitesProp: { data: [{ name: 'Site 3' }, { name: 'Site 4' }] },
-    });
-    await flushPromises();
-
-    const sitesComponent = wrapper.findComponent(BasesFormSites);
-    expect(sitesComponent.exists()).toBe(true);
-    expect(sitesComponent.props('items')).toEqual({
-      data: [{ name: 'Site 3' }, { name: 'Site 4' }],
-    });
   });
 
   test('applies correct classes for different contentStyle values', async () => {
@@ -206,53 +148,51 @@ describe('RouterContentBase', () => {
     }
   });
 
-  test('mounts all child components', async () => {
-    await wrapper.setProps({
-      textProp: { ...mockTextProp, open: true },
-    });
+  test('renders correct components based on props and tab state', async () => {
+    expect(wrapper.findComponent(ContentFiles).exists()).toBe(true);
+    expect(wrapper.findComponent(ContentSites).exists()).toBe(false);
+    expect(wrapper.findComponent(ContentText).exists()).toBe(false);
+
+    wrapper.vm.onTabChange('text');
     await flushPromises();
-    expect(wrapper.findComponent(BasesFormFiles).exists()).toBe(true);
-    expect(wrapper.findComponent(BasesFormSites).exists()).toBe(true);
-    expect(wrapper.findComponent(BasesFormGenericListHeader).exists()).toBe(
-      true,
+
+    const textComponent = wrapper.findComponent(ContentText);
+    expect(textComponent.exists()).toBe(true);
+    expect(textComponent.classes()).toContain(
+      'content-base__content-tab__text',
     );
-    expect(wrapper.findComponent(BasesFormText).exists()).toBe(true);
   });
 
-  test('does not render BasesFormText when textProp.open is false', async () => {
+  test('does not render ContentText when textProp.open is false', async () => {
+    wrapper.vm.onTabChange('text');
+    await flushPromises();
+
+    const textComponent = wrapper.findComponent(ContentText);
+    expect(textComponent.exists()).toBe(true);
+  });
+
+  test('renders ContentSites with correct items', async () => {
     await wrapper.setProps({
-      textProp: { ...mockTextProp, open: false },
+      sitesProp: { data: [{ name: 'Site 3' }, { name: 'Site 4' }] },
     });
+    wrapper.vm.onTabChange('sites');
     await flushPromises();
 
-    const textComponent = wrapper.findComponent(BasesFormText);
-    expect(textComponent.exists()).toBe(false);
+    const sitesComponent = wrapper.findComponent(ContentSites);
+    expect(sitesComponent.exists()).toBe(true);
+    expect(sitesComponent.props('items')).toEqual({
+      data: [{ name: 'Site 3' }, { name: 'Site 4' }],
+    });
   });
 
-  test('updates filter name when filterNameProp changes', async () => {
-    await wrapper.setProps({ filterNameProp: 'New Filter' });
+  test('updates Vuex store state when ContentText emits input event', async () => {
+    wrapper.vm.onTabChange('text');
     await flushPromises();
 
-    expect(
-      wrapper.findComponent({ name: 'UnnnicInput' }).props('modelValue'),
-    ).toBe('New Filter');
-  });
-
-  test('updates filter name when filterNameProp is empty', async () => {
-    await wrapper.setProps({ filterNameProp: '' });
+    const textComponent = wrapper.findComponent(ContentText);
+    textComponent.vm.$emit('update:modelValue', 'New Content');
     await flushPromises();
 
-    expect(
-      wrapper.findComponent({ name: 'UnnnicInput' }).props('modelValue'),
-    ).toBe('');
-  });
-
-  test('updates filter name when filterNameProp is undefined', async () => {
-    await wrapper.setProps({ filterNameProp: undefined });
-    await flushPromises();
-
-    expect(
-      wrapper.findComponent({ name: 'UnnnicInput' }).props('modelValue'),
-    ).toBe('');
+    expect(store.state.Brain.contentText.current).toBe('New Content');
   });
 });

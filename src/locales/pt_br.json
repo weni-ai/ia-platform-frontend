@@ -78,7 +78,7 @@
     },
     "content": {
       "fields": {
-        "search_placeholder": "Pesquisar Contéudo"
+        "search_placeholder": "Pesquisar"
       }
     },
     "tunings": {
@@ -154,6 +154,7 @@
     }
   },
   "content_bases": {
+    "description": "Insira o conteúdo que seu agente usará para responder às perguntas. Inclua todas as informações, arquivos e sites necessários para que o agente forneça respostas precisas e úteis.",
     "quick_test": "Teste rápido",
     "sidebar_quick_test_title": "Teste rápido da base {name}",
     "sidebar_quick_test_description": "Envie uma mensagem para testar essa base de conteúdo e saiba quais perguntas ela é capaz de responder",
@@ -161,10 +162,16 @@
     "write_content_placeholder": "Escreva aqui o conteúdo",
     "write_content_help": "Não sabe como adicionar conteúdo à base de conhecimento da IA? <a href=\"#\" target=\"_blank\">Veja a documentação</a>",
     "changes_saved": "Alterações salvas",
+    "time_ago_minutes": "Adicionado a {minutes} minutos",
+    "time_ago_hours": "Adicionado a {hours} horas",
+    "time_ago_days": "Adicionado a {days} dias",
     "tabs": {
       "files": "Arquivos",
       "sites": "Sites",
       "text": "Texto"
+    },
+    "text": {
+      "description": "Escreva manualmente o conteúdo que o agente usará para responder às perguntas"
     },
     "file_with_error": "Arquivo com erro. Exclua e adicione-o novamente.",
     "site_with_error": "Site com erro. Exclua e adicione-o novamente.",
@@ -179,6 +186,8 @@
       "upload_content": "Carregar conteúdo de arquivos",
       "drag_and_drop_your_file_here": "Arraste e solte seu arquivo aqui para adicionar o conteúdo à base de conhecimento da IA.",
       "supported_files": "Formatos suportados: {suportedFormats}.<br /> Limite de {limitMB}MB por arquivo.",
+      "sup_files": "{suportedFormats}.<br /> Limite de {limitMB}MB por arquivo.",
+      "description": "Carregue documentos e arquivos que o agente usará para fornecer respostas",
       "file_error": "Arquivo com erro. Exclua e adicione-o novamente.",
       "browse_file": "Adicionar arquivo",
       "uploaded_files": "Arquivos carregados",
@@ -209,6 +218,20 @@
       }
     },
     "sites": {
+      "title": "Insira URLs de sites dos quais o agente pode extrair informações",
+      "description": "Certifique-se de que os sites sejam confiáveis e contenham dados relevantes",
+      "modal": {
+        "description": "Insira a URL do site para extrair o conteúdo",
+        "fields": {
+          "link": {
+            "label": "URL do site"
+          }
+        },
+        "buttons": {
+          "cancel": "Cancelar",
+          "finish": "Concluir"
+        }
+      },
       "uploaded_sites": "Sites carregados",
       "content_of_the_sites_has_been_added": "O conteúdo dos sites foi adicionado à base",
       "sidebar_add": {

@@ -44,7 +44,7 @@ export function usePagination({ load, transform }) {
   }
 
   function addItem(item) {
-    data.value.push(item);
+    data.value.unshift(item);
   }
 
   function removeItem({ uuid }) {
