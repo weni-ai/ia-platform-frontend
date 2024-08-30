@@ -32,3 +32,26 @@ export const createDownloadAnchor = ({ name, href }) => {
 
   return a;
 };
+
+export const actionGroupIcon = (groupId) => {
+  return {
+    interactions: 'chat',
+    shopping: 'shopping_cart',
+    support: 'contact_support',
+    custom: 'edit_square',
+  }[groupId];
+};
+
+export const actionInfo = (actionsTypes, { name, prompt, type }) => {
+  const actionType = actionsTypes.find(
+    (item) =>
+      item.name === name && item.prompt === prompt && item.type === type,
+  );
+
+  const group = actionType?.group || 'custom';
+
+  return {
+    icon: actionGroupIcon(group),
+    group,
+  };
+};

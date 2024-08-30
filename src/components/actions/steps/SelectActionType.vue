@@ -57,12 +57,13 @@ const actionType = defineModel('actionType', {
 const type = ref(null);
 
 const types = computed(() => {
-  return store?.state.Actions.types.data
+  return store.getters.actionsTypesAvailable
     .filter(({ group }) => group === props.group)
-    .map(({ name, prompt }) => ({
+    .map(({ name, prompt, type }) => ({
       label: name,
-      description: prompt,
       value: prompt,
+      description: prompt,
+      type,
     }));
 });
 
@@ -79,13 +80,13 @@ const actionTypeDescription = computed(
 );
 
 function updateModel($event) {
-  const { label, value } = $event[0];
+  const { label, value, type: optionType } = $event[0];
 
   type.value = value;
 
   name.value = label;
   description.value = value;
-  actionType.value = 'custom';
+  actionType.value = optionType;
 }
 </script>
 

@@ -105,6 +105,7 @@ import {
   ref,
   watch,
 } from 'vue';
+import { useStore } from 'vuex';
 
 const filterName = ref('');
 const intersectionObserver = ref(null);
@@ -126,14 +127,9 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-
-  currentActions: {
-    type: Array,
-    default() {
-      return [];
-    },
-  },
 });
+
+const store = useStore();
 
 const emit = defineEmits(['update:flowUuid', 'update:name']);
 
@@ -192,7 +188,7 @@ function isFlowSelected(flow) {
 }
 
 function isFlowAlreadyAdded(flow) {
-  return props.currentActions.some(({ uuid }) => flow.uuid === uuid);
+  return store.state.Actions.data.some(({ uuid }) => flow.uuid === uuid);
 }
 
 function isFlowDisabled(flow) {

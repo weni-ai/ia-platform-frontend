@@ -45,7 +45,6 @@
       v-if="isAddActionOpen"
       v-model="isAddActionOpen"
       :actionGroup="actionGroup"
-      :currentActions="items.data"
       @added="saveAction"
     />
 
@@ -82,15 +81,6 @@ export default {
     ModalChangeAction,
     ModalRemoveAction,
   },
-  props: {
-    items: {
-      type: Object,
-      default() {
-        return {};
-      },
-      required: false,
-    },
-  },
 
   data() {
     return {
@@ -107,6 +97,10 @@ export default {
   },
 
   computed: {
+    items() {
+      return this.$store.state.Actions;
+    },
+
     isEditActionOpen: {
       get() {
         return Boolean(this.currentActionEditing);
@@ -121,36 +115,10 @@ export default {
   },
 
   created() {
-    this.loadActions();
+    this.$store.dispatch('loadActions');
   },
 
   methods: {
-    async loadActions() {
-      if (this.items.status !== null) {
-        return;
-      }
-
-      try {
-        this.items.status = 'loading';
-
-        const { data } = await nexusaiAPI.router.actions.list({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
-        });
-
-        this.items.data = data.map((item) => ({
-          uuid: item.uuid,
-          extension_file: 'action',
-          created_file_name: item.name,
-          description: item.prompt,
-          actionType: item.action_type,
-        }));
-
-        this.items.status = 'complete';
-      } catch (error) {
-        this.items.status = 'error';
-      }
-    },
-
     openAddAction(actionGroup) {
       this.actionGroup = actionGroup;
 
@@ -206,12 +174,13 @@ export default {
       }
     },
 
-    saveAction({ uuid, name, description }) {
+    saveAction({ uuid, name, description, actionType }) {
       this.items.data.push({
         uuid,
         extension_file: 'action',
         created_file_name: name,
         description,
+        actionType,
       });
     },
   },

@@ -23,15 +23,7 @@ const description = defineModel('description', {
   required: true,
 });
 
-const props = defineProps({
-  currentActions: {
-    type: Array,
-    default() {
-      return [];
-    },
-    required: false,
-  },
-});
+const props = defineProps({});
 </script>
 
 <style lang="scss" scoped>

@@ -39,7 +39,18 @@
           >
             {{ fileName }}
           </p>
-          <p class="files-list__content__file__content__sub_title">
+
+          <p
+            v-if="extension === 'action'"
+            class="files-list__content__file__content__sub_title"
+          >
+            {{ $t(`action_type_selector.types.${actionDetails.group}.title`) }}
+          </p>
+
+          <p
+            v-else
+            class="files-list__content__file__content__sub_title"
+          >
             {{
               file.status === 'uploading'
                 ? $t('content_bases.files.status.uploading')
@@ -89,7 +100,7 @@
 import nexusaiAPI from '@/api/nexusaiAPI';
 import FilePreview from '@/views/ContentBases/components/FilePreview.vue';
 import ContentItemActions from '@/views/repository/content/ContentItemActions.vue';
-import { createDownloadAnchor } from '@/utils';
+import { actionInfo, createDownloadAnchor } from '@/utils';
 import i18n from '@/utils/plugins/i18n.js';
 
 export default {
@@ -211,7 +222,19 @@ export default {
       return this.$t(`content_bases.${message}`);
     },
 
+    actionDetails() {
+      return actionInfo(this.$store.state.Actions.types.data, {
+        name: this.file.created_file_name,
+        prompt: this.file.description,
+        type: this.file.actionType,
+      });
+    },
+
     icon() {
+      if (this.extension === 'action') {
+        return this.actionDetails?.icon;
+      }
+
       return (
         {
           pdf: 'picture_as_pdf',
@@ -221,7 +244,6 @@ export default {
           doc: 'draft',
           docx: 'draft',
           site: 'globe',
-          action: 'bolt',
         }[this.extension] || 'draft'
       );
     },

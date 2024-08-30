@@ -144,6 +144,7 @@ export default {
               uuid,
               name,
               prompt,
+              type: action_type,
               group: groups[group],
             }))
             .filter(({ group }) => group);

@@ -51,7 +51,6 @@
         v-if="currentStep.name === 'describe'"
         v-model:description="description"
         v-model:actionType="actionType"
-        :currentActions="currentActions"
       />
 
       <StepSelectFlow
@@ -59,7 +58,6 @@
         v-model:flowUuid="flowUuid"
         :name="name"
         :items="items"
-        :currentActions="currentActions"
         @update:name="isCustom ? (name = $event) : null"
       />
 
@@ -95,14 +93,6 @@ export default {
     actionGroup: {
       type: String,
       required: true,
-    },
-
-    currentActions: {
-      type: Array,
-      default() {
-        return [];
-      },
-      required: false,
     },
   },
 

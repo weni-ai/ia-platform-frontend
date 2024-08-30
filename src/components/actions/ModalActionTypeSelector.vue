@@ -25,9 +25,14 @@
         v-for="(group, index) in groups"
         :key="index"
         class="group"
-        :class="[{ 'group--selected': groupSelected === group.id }]"
+        :class="[
+          {
+            'group--selected': groupSelected === group.id,
+            'group--disabled': isGroupDisabled(group.id),
+          },
+        ]"
         :data-test="group.id"
-        @click="groupSelected = group.id"
+        @click="isGroupDisabled(group.id) ? null : (groupSelected = group.id)"
       >
         <section class="group__icon__container">
           <UnnnicIcon
@@ -47,48 +52,75 @@
 </template>
 
 <script setup>
+import { actionGroupIcon } from '@/utils';
 import i18n from '@/utils/plugins/i18n';
-import { computed } from 'vue';
+import { computed, getCurrentInstance, onMounted } from 'vue';
 import { ref } from 'vue';
+
+const props = defineProps({});
+
+const instance = getCurrentInstance();
+
+function getByGroup(group) {
+  return instance.proxy['$store'].getters.actionsTypesAvailable.filter(
+    (type) => type.group === group,
+  );
+}
+
+function isGroupDisabled(groupId) {
+  if (groupId === 'custom') {
+    return false;
+  }
+
+  return getByGroup(groupId).length === 0;
+}
 
 const emit = defineEmits(['update:modelValue', 'selected']);
 
 const groupSelected = ref(null);
 
-const groups = computed(() => [
-  {
-    id: 'interactions',
-    icon: 'chat',
-    title: i18n.global.t('action_type_selector.types.interactions.title'),
-    description: i18n.global.t(
-      'action_type_selector.types.interactions.description',
-    ),
-  },
-  {
-    id: 'shopping',
-    icon: 'shopping_cart',
-    title: i18n.global.t('action_type_selector.types.shopping.title'),
-    description: i18n.global.t(
-      'action_type_selector.types.shopping.description',
-    ),
-  },
-  {
-    id: 'support',
-    icon: 'contact_support',
-    title: i18n.global.t('action_type_selector.types.support.title'),
-    description: i18n.global.t(
-      'action_type_selector.types.support.description',
-    ),
-  },
-  {
-    id: 'custom',
-    icon: 'edit_square',
-    title: i18n.global.t('action_type_selector.types.custom.title'),
-    description: i18n.global.t('action_type_selector.types.custom.description'),
-  },
-]);
+const groups = computed(() =>
+  [
+    {
+      id: 'interactions',
+      title: i18n.global.t('action_type_selector.types.interactions.title'),
+      description: i18n.global.t(
+        'action_type_selector.types.interactions.description',
+      ),
+    },
+    {
+      id: 'shopping',
+      title: i18n.global.t('action_type_selector.types.shopping.title'),
+      description: i18n.global.t(
+        'action_type_selector.types.shopping.description',
+      ),
+    },
+    {
+      id: 'support',
+      title: i18n.global.t('action_type_selector.types.support.title'),
+      description: i18n.global.t(
+        'action_type_selector.types.support.description',
+      ),
+    },
+    {
+      id: 'custom',
+      title: i18n.global.t('action_type_selector.types.custom.title'),
+      description: i18n.global.t(
+        'action_type_selector.types.custom.description',
+      ),
+    },
+  ].map((group) => ({ ...group, icon: actionGroupIcon(group.id) })),
+);
 
-groupSelected.value = groups.value[0].id;
+function selectTheFirstGroupEnabled() {
+  groupSelected.value = groups.value.find(
+    (group) => !isGroupDisabled(group.id),
+  ).id;
+}
+
+onMounted(() => {
+  selectTheFirstGroupEnabled();
+});
 
 function close() {
   emit('update:modelValue', false);
@@ -114,6 +146,7 @@ function next() {
 
   .group {
     cursor: pointer;
+    user-select: none;
     border-radius: $unnnic-border-radius-sm;
     padding: $unnnic-spacing-ant - $unnnic-border-width-thinner;
     border: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
@@ -184,6 +217,26 @@ function next() {
             $unnnic-color-weni-900,
             $unnnic-opacity-level-extra-light
           );
+        }
+      }
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+
+      border-color: $unnnic-color-neutral-light;
+      background-color: $unnnic-color-neutral-light;
+
+      h3,
+      p {
+        color: $unnnic-color-neutral-cleanest;
+      }
+
+      .group__icon {
+        color: $unnnic-color-neutral-cleanest;
+
+        &__container {
+          background-color: transparent;
         }
       }
     }

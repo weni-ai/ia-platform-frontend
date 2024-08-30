@@ -18,10 +18,7 @@
               :textProp="text"
               @update:files="(v) => (files = v)"
             />
-            <RouterActions
-              v-else-if="route.name === 'router-actions'"
-              :items="routerActions"
-            />
+            <RouterActions v-else-if="route.name === 'router-actions'" />
             <RouterCustomization
               v-else-if="route.name === 'router-personalization'"
             />
@@ -124,10 +121,7 @@ export default {
       oldValue: '',
       value: '',
     });
-    const routerActions = ref({
-      status: null,
-      data: [],
-    });
+
     const routerTunings = ref({
       brainOn: true,
     });
@@ -242,7 +236,6 @@ export default {
       files,
       sites,
       text,
-      routerActions,
       routerTunings,
       contentBase,
       contentBaseUuid,
