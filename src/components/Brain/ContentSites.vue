@@ -11,6 +11,7 @@
         size="body-lg"
         weight="bold"
         marginBottom="sm"
+        data-test="label-title"
       >
         {{ $t('content_bases.sites.title') }}
       </UnnnicIntelligenceText>
@@ -21,6 +22,7 @@
         color="neutral-cloudy"
         size="body-gt"
         marginBottom="sm"
+        data-test="label-description"
       >
         {{ $t('content_bases.sites.description') }}
       </UnnnicIntelligenceText>
@@ -85,6 +87,7 @@
         <UnnnicButton
           class="create-repository__container__button"
           type="tertiary"
+          data-test="button-cancel"
           @click="closeModal"
         >
           {{ $t('content_bases.sites.delete_site.cancel') }}
@@ -129,6 +132,7 @@ const modalDeleteSite = ref(null);
 
 const route = useRoute();
 const store = useStore();
+
 const contentBaseUuid = computed(
   () => route.params.contentBaseUuid || store.state.router.contentBaseUuid,
 );
