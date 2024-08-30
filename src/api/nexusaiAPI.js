@@ -124,6 +124,32 @@ export default {
     },
 
     actions: {
+      types: {
+        async list({ projectUuid }) {
+          const { data } = await request.$http.get(
+            `api/${projectUuid}/template-action/`,
+            {
+              hideGenericErrorAlert: true,
+            },
+          );
+
+          const groups = {
+            'Interações gerais': 'interactions',
+            'Compras de Produtos': 'shopping',
+            'Assistência e Suporte': 'support',
+          };
+
+          return data
+            .map(({ uuid, name, prompt, action_type, group }) => ({
+              uuid,
+              name,
+              prompt,
+              group: groups[group],
+            }))
+            .filter(({ group }) => group);
+        },
+      },
+
       create({ projectUuid, flowUuid, name, description, action_type }) {
         return request.$http.post(`api/${projectUuid}/flows/`, {
           uuid: flowUuid,

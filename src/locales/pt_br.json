@@ -70,7 +70,10 @@
     },
     "actions": {
       "title": "Ações",
-      "description": "Configure quando seu fluxo deve ser iniciado.",
+      "description": "Ao receber uma mensagem, seu agente verificará se ela corresponde a uma ação criada. Se sim, o fluxo será iniciado e todas as mensagens seguintes serão direcionadas para esse fluxo até sua conclusão.",
+      "create_new_action": "Crie uma nova ação e selecione o fluxo que será iniciado",
+      "create_action": "Crie ações atribuindo o fluxo que será iniciado",
+      "pre_defined_or_customized_actions": "Ações pré-definidas ou personalizadas",
       "add": "Adicionar ação",
       "router_activated": "Brain ativado em {name}",
       "router_removed": "Brain removido de {name}",

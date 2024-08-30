@@ -43,6 +43,8 @@
         v-if="currentStep.name === 'select_action_type'"
         v-model:actionType="actionType"
         v-model:name="name"
+        v-model:description="description"
+        :group="actionGroup"
       />
 
       <StepDescribe

@@ -209,7 +209,7 @@ function selectFlow(flow) {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .text-truncate {
   flex: 1;
   width: 0;
@@ -243,6 +243,11 @@ function selectFlow(flow) {
     padding-right: $unnnic-inline-nano + $scroll-size;
     margin-right: -($unnnic-inline-nano + $scroll-size);
 
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: max-content;
+    gap: $unnnic-spacing-xs;
+
     &::-webkit-scrollbar {
       width: $scroll-size;
     }
@@ -256,11 +261,6 @@ function selectFlow(flow) {
       background: $unnnic-color-neutral-soft;
       border-radius: $unnnic-border-radius-pill;
     }
-
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: max-content;
-    gap: $unnnic-spacing-xs;
   }
 }
 

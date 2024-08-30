@@ -26,9 +26,25 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, getCurrentInstance, ref } from 'vue';
+
+const props = defineProps({
+  group: {
+    type: String,
+    required: true,
+  },
+});
+
+const instance = getCurrentInstance();
+
+const store = instance.proxy['$store'];
 
 const name = defineModel('name', {
+  type: String,
+  required: true,
+});
+
+const description = defineModel('description', {
   type: String,
   required: true,
 });
@@ -38,23 +54,20 @@ const actionType = defineModel('actionType', {
   required: true,
 });
 
+const type = ref(null);
+
 const types = computed(() => {
-  return [
-    {
-      value: '6',
-      label: 'Option 2',
-      description: 'This is the first option',
-    },
-    {
-      value: '5',
-      label: 'Option 3',
-      description: 'This is the second option',
-    },
-  ];
+  return store?.state.Actions.types.data
+    .filter(({ group }) => group === props.group)
+    .map(({ name, prompt }) => ({
+      label: name,
+      description: prompt,
+      value: prompt,
+    }));
 });
 
 const currentActionType = computed(() =>
-  types.value.find(({ value }) => value === actionType.value),
+  types.value.find(({ value }) => value === type.value),
 );
 
 const actionTypeModelValue = computed(() =>
@@ -68,8 +81,11 @@ const actionTypeDescription = computed(
 function updateModel($event) {
   const { label, value } = $event[0];
 
+  type.value = value;
+
   name.value = label;
-  actionType.value = value;
+  description.value = value;
+  actionType.value = 'custom';
 }
 </script>
 

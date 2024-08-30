@@ -254,10 +254,6 @@ export default {
   padding: $unnnic-spacing-sm;
   padding-top: 3.375 * $unnnic-font-size;
 
-  &--button-on-header {
-    padding-top: 4.375 * $unnnic-font-size;
-  }
-
   margin: 0;
   font-family: $unnnic-font-family-primary;
   font-weight: $unnnic-font-weight-regular;
@@ -269,14 +265,6 @@ export default {
   line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
   font-weight: $unnnic-font-weight-regular;
 
-  &::placeholder {
-    color: $unnnic-color-neutral-cloudy;
-    font-family: $unnnic-font-family-secondary;
-    font-size: $unnnic-font-size-body-gt;
-    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-    font-weight: $unnnic-font-weight-regular;
-  }
-
   color: $unnnic-color-neutral-dark;
   border: none;
 
@@ -286,6 +274,18 @@ export default {
   outline-color: $unnnic-color-neutral-cleanest;
   outline-width: $unnnic-border-width-thinner;
   outline-offset: -$unnnic-border-width-thinner;
+
+  &--button-on-header {
+    padding-top: 4.375 * $unnnic-font-size;
+  }
+
+  &::placeholder {
+    color: $unnnic-color-neutral-cloudy;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+    font-weight: $unnnic-font-weight-regular;
+  }
 
   &:focus {
     outline-color: $unnnic-color-neutral-clean;

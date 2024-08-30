@@ -70,7 +70,10 @@
     },
     "actions": {
       "title": "Actions",
-      "description": "Configure when your flow should be started.",
+      "description": "When you receive a message, your agent will check whether it corresponds to an action you have created. If so, the flow will be started and all subsequent messages will be directed to that flow until it is completed.",
+      "create_new_action": "Create a new action and select the flow that will be started",
+      "create_action": "Create actions by assigning the flow that will be started",
+      "pre_defined_or_customized_actions": "Pre-defined or customized actions",
       "add": "Add action",
       "router_activated": "Brain activated in {name}",
       "router_removed": "Brain removed from {name}",

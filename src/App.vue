@@ -92,6 +92,8 @@ export default {
         }
       }
     });
+
+    this.$store.dispatch('loadActionsTypes');
   },
   mounted() {
     document.title = this.dynamicTitle;

@@ -1,16 +1,34 @@
 <template>
-  <section class="actions__container">
-    <BasesFormGenericList
+  <section
+    :style="{
+      minHeight: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+    }"
+  >
+    <UnnnicIntelligenceText
+      tag="p"
+      family="secondary"
+      size="body-gt"
+    >
+      {{ $t('router.actions.description') }}
+    </UnnnicIntelligenceText>
+
+    <UnnnicDivider ySpacing="md" />
+
+    <ContentList
       :items="items"
       shape="accordion"
-      hideCounter
-      hideToggle
-      :title="$t('router.actions.title')"
-      :description="$t('router.actions.description')"
+      defaultIcon="bolt"
+      hideSearchInput
+      :description="
+        items.data.length === 0
+          ? $t('router.actions.create_new_action')
+          : $t('router.actions.create_action')
+      "
+      :subDescription="$t('router.actions.pre_defined_or_customized_actions')"
       :addText="$t('router.actions.add')"
-      canEditItem
       @add="isActionTypeSelectorOpen = true"
-      @edit="openEditAction"
       @remove="
         ($event) =>
           openDeleteAction($event.uuid, $event.created_file_name || '')
@@ -50,7 +68,7 @@
 
 <script>
 import nexusaiAPI from '../../api/nexusaiAPI';
-import BasesFormGenericList from '../repository/content/BasesFormGenericList.vue';
+import ContentList from '@/components/Brain/ContentBase/ContentList.vue';
 import ModalActionTypeSelector from '@/components/actions/ModalActionTypeSelector.vue';
 import ModalActions from '../../components/actions/ModalActions.vue';
 import ModalChangeAction from '../../components/actions/ModalChangeAction.vue';
@@ -58,7 +76,7 @@ import ModalRemoveAction from '../../components/actions/ModalRemoveAction.vue';
 
 export default {
   components: {
-    BasesFormGenericList,
+    ContentList,
     ModalActionTypeSelector,
     ModalActions,
     ModalChangeAction,

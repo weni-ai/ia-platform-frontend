@@ -70,7 +70,10 @@
     },
     "actions": {
       "title": "Acciones",
-      "description": "Configura cuándo debe iniciarse tu flujo.",
+      "description": "Cuando reciba un mensaje, su agente comprobará si corresponde a una acción que haya creado. En caso afirmativo, se iniciará el flujo y todos los mensajes posteriores se dirigirán a ese flujo hasta que se complete.",
+      "create_new_action": "Cree una nueva acción y seleccione el flujo que se iniciará",
+      "create_action": "Crear acciones asignando el flujo que se iniciará",
+      "pre_defined_or_customized_actions": "Acciones predefinidas o personalizadas",
       "add": "Añadir acción",
       "router_activated": "Brain activado en {name}",
       "router_removed": "Brain eliminado de {name}",
