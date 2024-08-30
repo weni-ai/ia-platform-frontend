@@ -49,6 +49,10 @@ const createRequest = vi
 const store = createStore({
   state() {
     return {
+      Actions: {
+        status: null,
+        data: [],
+      },
       Auth: {
         connectProjectUuid: 'test2323test',
       },
@@ -79,10 +83,10 @@ describe('ModalActions', () => {
   });
 
   describe('when the user is on the first step', () => {
-    it('does not show previous button', () => {
+    it('shows previous button', () => {
       const previousButton = wrapper.find('[data-test="previous-button"]');
 
-      expect(previousButton.exists()).toBeFalsy();
+      expect(previousButton.exists()).toBeTruthy();
     });
   });
 

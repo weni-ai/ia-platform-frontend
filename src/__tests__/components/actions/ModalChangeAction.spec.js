@@ -35,6 +35,15 @@ const editRequest = vi
 const store = createStore({
   state() {
     return {
+      Actions: {
+        status: null,
+        data: [],
+
+        types: {
+          status: null,
+          data: [],
+        },
+      },
       Auth: {
         connectProjectUuid: 'test2323test',
       },
@@ -130,7 +139,7 @@ describe('ModalChangeAction', () => {
   });
 
   describe('when the user wants to save the changes', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       wrapper = setup();
 
       const name = wrapper.findComponent('[data-test="name-input"]');
@@ -140,8 +149,11 @@ describe('ModalChangeAction', () => {
 
       const saveButton = wrapper.find('[data-test="save-button"]');
 
-      name.vm.$emit('update:modelValue', 'Action Name Edited');
-      description.vm.$emit('update:modelValue', 'Action Description Edited');
+      await name.vm.$emit('update:modelValue', 'Action Name Edited');
+      await description.vm.$emit(
+        'update:modelValue',
+        'Action Description Edited',
+      );
 
       saveButton.trigger('click');
     });

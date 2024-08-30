@@ -132,7 +132,7 @@ export default {
 
         remove:
           ['fail-upload', 'fail'].includes(this.file.status) ||
-          !this.file.uuid.startsWith('temp-'),
+          !this.file.uuid?.startsWith('temp-'),
       };
 
       const actions = [];

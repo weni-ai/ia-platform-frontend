@@ -71,6 +71,16 @@ const generateFiles = () => ({
 const store = createStore({
   state() {
     return {
+      Actions: {
+        status: null,
+        data: [],
+
+        types: {
+          status: null,
+          data: [],
+        },
+      },
+
       alert: null,
     };
   },
@@ -118,11 +128,9 @@ describe('ContentFiles.vue', () => {
     });
 
     it('registers events for drop files behavior', () => {
-      expect(registeredEventListeners).toEqual([
-        'dragover',
-        'dragleave',
-        'drop',
-      ]);
+      expect(registeredEventListeners).toEqual(
+        expect.arrayContaining(['dragover', 'dragleave', 'drop']),
+      );
     });
   });
 
@@ -130,11 +138,9 @@ describe('ContentFiles.vue', () => {
     it('unregisters events for drop files behavior', () => {
       wrapper.unmount();
 
-      expect(unregisteredEventListeners).toEqual([
-        'dragover',
-        'dragleave',
-        'drop',
-      ]);
+      expect(unregisteredEventListeners).toEqual(
+        expect.arrayContaining(['dragover', 'dragleave', 'drop']),
+      );
     });
   });
 

@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils';
 import { ref } from 'vue';
 import SelectFlow from '../SelectFlow.vue';
 import lodash from 'lodash';
+import { createStore } from 'vuex';
 
 vi.spyOn(lodash, 'debounce').mockImplementation((fn) => fn);
 
@@ -37,16 +38,32 @@ const items = {
   loadNext: vi.fn(),
 };
 
+const alreadyAddedAction = {
+  uuid: '123',
+  extension_file: 'action',
+  created_file_name: 'Action One',
+  description: 'Action One Description',
+};
+
+const store = createStore({
+  state() {
+    return {
+      Actions: {
+        status: null,
+        data: [alreadyAddedAction],
+
+        types: {
+          status: null,
+          data: [],
+        },
+      },
+    };
+  },
+});
+
 describe('SelectFlow.vue', () => {
   let wrapper;
   let flows;
-
-  const alreadyAddedAction = {
-    uuid: '123',
-    extension_file: 'action',
-    created_file_name: 'Action One',
-    description: 'Action One Description',
-  };
 
   beforeEach(() => {
     wrapper = mount(SelectFlow, {
@@ -54,7 +71,10 @@ describe('SelectFlow.vue', () => {
         flowUuid: '',
         name: '',
         items,
-        currentActions: [alreadyAddedAction],
+      },
+
+      global: {
+        plugins: [store],
       },
     });
 
