@@ -28,7 +28,8 @@
       "
       :subDescription="$t('router.actions.pre_defined_or_customized_actions')"
       :addText="$t('router.actions.add')"
-      @add="isActionTypeSelectorOpen = true"
+      @add="openActionGroupSelector"
+      @edit="openEditAction"
       @remove="
         ($event) =>
           openDeleteAction($event.uuid, $event.created_file_name || '')
@@ -38,6 +39,7 @@
     <ModalActionTypeSelector
       v-if="isActionTypeSelectorOpen"
       v-model="isActionTypeSelectorOpen"
+      v-model:actionGroup="actionGroup"
       @selected="openAddAction($event)"
     />
 
@@ -46,6 +48,7 @@
       v-model="isAddActionOpen"
       :actionGroup="actionGroup"
       @added="saveAction"
+      @previous-step="isActionTypeSelectorOpen = true"
     />
 
     <ModalChangeAction
@@ -85,7 +88,7 @@ export default {
   data() {
     return {
       isActionTypeSelectorOpen: false,
-      actionGroup: null,
+      actionGroup: '',
 
       isAddActionOpen: false,
       isAdding: false,
@@ -119,9 +122,13 @@ export default {
   },
 
   methods: {
-    openAddAction(actionGroup) {
-      this.actionGroup = actionGroup;
+    openActionGroupSelector() {
+      this.actionGroup = '';
 
+      this.isActionTypeSelectorOpen = true;
+    },
+
+    openAddAction() {
       this.isAddActionOpen = true;
     },
 

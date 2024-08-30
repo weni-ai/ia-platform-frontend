@@ -1,66 +1,62 @@
 <template>
-  <section class="content-base__scrollable">
-    <section :style="{ height: 0 }">
-      <section
-        :class="[
-          'content-base__content-tab',
-          `content-base__content-tab--shape-${contentStyle}`,
-        ]"
+  <section
+    :class="[
+      'content-base__content-tab',
+      `content-base__content-tab--shape-${contentStyle}`,
+    ]"
+  >
+    <section>
+      <UnnnicIntelligenceText
+        tag="p"
+        family="secondary"
+        size="body-gt"
+        marginBottom="sm"
+        weight="400"
       >
-        <section>
-          <UnnnicIntelligenceText
-            tag="p"
-            family="secondary"
-            size="body-gt"
-            marginBottom="sm"
-            weight="400"
-          >
-            {{ $t('content_bases.description') }}
-          </UnnnicIntelligenceText>
-        </section>
-        <section>
-          <UnnnicTab
-            :tabs="routerTabs.map((e) => e.page)"
-            :activeTab="activeTab"
-            @change="onTabChange"
-          >
-            <template
-              v-for="tab in routerTabs"
-              :key="tab.page"
-              #[`tab-head-${tab.page}`]
-            >
-              {{ $t(`content_bases.tabs.${tab.title}`) }}
-            </template>
-          </UnnnicTab>
-        </section>
-        <UnnnicSkeletonLoading
-          v-if="
-            files.status === 'loading' &&
-            files.data.length === 0 &&
-            contentStyle !== 'accordion'
-          "
-          tag="div"
-          height="100%"
-          class="repository-base-edit__wrapper__card-content"
-        />
-        <ContentFiles
-          v-if="activeTab === 'files'"
-          :files="files"
-          shape="accordion"
-        />
-        <ContentSites
-          v-if="activeTab === 'sites'"
-          :items="sites"
-          shape="accordion"
-        />
-        <section v-if="activeTab === 'text'">
-          <ContentText
-            v-model="$store.state.Brain.contentText.current"
-            :isLoading="item?.status === 'loading'"
-            class="content-base__content-tab__text"
-          />
-        </section>
-      </section>
+        {{ $t('content_bases.description') }}
+      </UnnnicIntelligenceText>
+    </section>
+    <section>
+      <UnnnicTab
+        :tabs="routerTabs.map((e) => e.page)"
+        :activeTab="activeTab"
+        @change="onTabChange"
+      >
+        <template
+          v-for="tab in routerTabs"
+          :key="tab.page"
+          #[`tab-head-${tab.page}`]
+        >
+          {{ $t(`content_bases.tabs.${tab.title}`) }}
+        </template>
+      </UnnnicTab>
+    </section>
+    <UnnnicSkeletonLoading
+      v-if="
+        files.status === 'loading' &&
+        files.data.length === 0 &&
+        contentStyle !== 'accordion'
+      "
+      tag="div"
+      height="100%"
+      class="repository-base-edit__wrapper__card-content"
+    />
+    <ContentFiles
+      v-if="activeTab === 'files'"
+      :files="files"
+      shape="accordion"
+    />
+    <ContentSites
+      v-if="activeTab === 'sites'"
+      :items="sites"
+      shape="accordion"
+    />
+    <section v-if="activeTab === 'text'">
+      <ContentText
+        v-model="$store.state.Brain.contentText.current"
+        :isLoading="item?.status === 'loading'"
+        class="content-base__content-tab__text"
+      />
     </section>
   </section>
 </template>
@@ -136,35 +132,6 @@ export default defineComponent({
     flex: 1;
     display: flex;
     flex-direction: column;
-  }
-
-  &__scrollable {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-    height: 100%;
-
-    overflow: overlay;
-
-    $scroll-size: $unnnic-inline-nano;
-
-    padding-right: $unnnic-inline-nano + $scroll-size;
-    margin-right: -($unnnic-inline-nano + $scroll-size);
-
-    &::-webkit-scrollbar {
-      width: $scroll-size;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: $unnnic-color-neutral-clean;
-      border-radius: $unnnic-border-radius-pill;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: $unnnic-color-neutral-soft;
-      border-radius: $unnnic-border-radius-pill;
-    }
   }
 
   &__content-tab {

@@ -69,16 +69,6 @@
           class="files-list__content__file__actions__loading"
         />
 
-        <UnnnicIcon
-          v-if="extension === 'action'"
-          icon="delete"
-          size="sm"
-          class="files-list__content__file__actions__icon"
-          clickable
-          data-test="action-remove"
-          @click.stop="$emit('remove')"
-        />
-
         <ContentItemActions
           v-else-if="actions.length"
           data-test="dropdown-actions"
@@ -115,7 +105,7 @@ export default {
     clickable: Boolean,
   },
 
-  emits: ['click', 'remove'],
+  emits: ['click', 'remove', 'edit'],
 
   data() {
     return {
@@ -127,12 +117,10 @@ export default {
 
   computed: {
     actions() {
-      if (this.extension === 'action') {
-        return [];
-      }
-
       const can = {
         seeDetails: this.file.status === 'uploaded',
+
+        edit: this.extension === 'action',
 
         accessSite:
           this.file.extension_file === 'site' &&
@@ -176,14 +164,28 @@ export default {
         });
       }
 
+      if (can.edit) {
+        const isCustom = this.actionDetails.group === 'custom';
+
+        actions.push({
+          scheme: 'neutral-dark',
+          icon: isCustom ? 'edit' : 'info',
+          text: isCustom
+            ? this.$t('content_bases.actions.edit_action')
+            : this.$t('content_bases.actions.see_details'),
+          onClick: () => this.$emit('edit'),
+        });
+      }
+
       if (can.remove) {
         actions.push({
           scheme: 'aux-red-500',
           icon: 'delete',
           text:
-            this.extension === 'site'
-              ? this.$t('content_bases.actions.remove_site')
-              : this.$t('content_bases.actions.remove_file'),
+            {
+              site: this.$t('content_bases.actions.remove_site'),
+              action: this.$t('content_bases.actions.remove_action'),
+            }[this.extension] || this.$t('content_bases.actions.remove_file'),
           onClick: () => this.$emit('remove'),
         });
       }

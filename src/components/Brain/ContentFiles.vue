@@ -388,10 +388,6 @@ export default {
     &--shape-normal {
       height: 100%;
     }
-
-    &--shape-accordion {
-      flex: initial;
-    }
   }
 }
 

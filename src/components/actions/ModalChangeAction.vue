@@ -2,56 +2,80 @@
   <UnnnicModalDialog
     v-model="modelValue"
     showCloseIcon
-    showActionsDivider
+    :showActionsDivider="isCustom"
     size="md"
     :title="action.name"
-    :secondaryButtonProps="{
-      text: $t('cancel'),
-    }"
-    :primaryButtonProps="{
-      text: $t('save_changes'),
-      disabled: !isSaveButtonActive,
-      loading: isSavingAction,
-      'data-test': 'save-button',
-    }"
+    v-bind="
+      isCustom
+        ? {
+            secondaryButtonProps: {
+              text: $t('cancel'),
+            },
+            primaryButtonProps: {
+              text: $t('save_changes'),
+              disabled: !isSaveButtonActive,
+              loading: isSavingAction,
+              'data-test': 'save-button',
+            },
+          }
+        : {}
+    "
     class="modal-dialog"
-    :class="{ is_text_area_disabled: isTextAreaDisabled }"
     @secondary-button-click="close"
     @primary-button-click="saveAction"
   >
-    <UnnnicFormElement
-      :label="$t('modals.actions.add.steps.describe.inputs.description.label')"
-      :message="$t('modals.actions.add.steps.describe.inputs.description.help')"
-      class="form-element labels-textarea"
-    >
-      <UnnnicTextArea
-        v-model="description"
-        class="text-area"
-        :placeholder="
-          isTextAreaDisabled
-            ? ''
-            : $t(
-                'modals.actions.add.steps.describe.inputs.description.placeholder',
-              )
+    <template v-if="isCustom">
+      <UnnnicFormElement
+        :label="
+          $t('modals.actions.add.steps.describe.inputs.description.label')
         "
-        :disabled="isTextAreaDisabled"
-        data-test="description-textarea"
-      />
-    </UnnnicFormElement>
+        :message="
+          $t('modals.actions.add.steps.describe.inputs.description.help')
+        "
+        class="form-element labels-textarea"
+      >
+        <UnnnicTextArea
+          v-model="description"
+          class="text-area"
+          :placeholder="
+            $t(
+              'modals.actions.add.steps.describe.inputs.description.placeholder',
+            )
+          "
+          data-test="description-textarea"
+        />
+      </UnnnicFormElement>
 
-    <UnnnicFormElement
-      :label="$t('modals.actions.add.steps.nominate_action.inputs.name.label')"
-      :message="$t('modals.actions.add.steps.nominate_action.inputs.name.help')"
-      class="form-element"
-    >
-      <UnnnicInput
-        v-model="name"
-        :placeholder="
-          $t('modals.actions.add.steps.nominate_action.inputs.name.placeholder')
+      <UnnnicFormElement
+        :label="
+          $t('modals.actions.add.steps.nominate_action.inputs.name.label')
         "
-        data-test="name-input"
-      />
-    </UnnnicFormElement>
+        :message="
+          $t('modals.actions.add.steps.nominate_action.inputs.name.help')
+        "
+        class="form-element"
+      >
+        <UnnnicInput
+          v-model="name"
+          :placeholder="
+            $t(
+              'modals.actions.add.steps.nominate_action.inputs.name.placeholder',
+            )
+          "
+          data-test="name-input"
+        />
+      </UnnnicFormElement>
+    </template>
+
+    <template v-else>
+      <section class="explanation">
+        <h3 class="explanation__title">
+          {{ $t('modals.actions.add.steps.describe.inputs.description.label') }}
+        </h3>
+
+        <p class="explanation__description">{{ description }}</p>
+      </section>
+    </template>
 
     <section class="flow-area">
       <h3 class="flow-area__title">
@@ -99,6 +123,7 @@ import { useStore } from 'vuex';
 import { usePagination } from '@/views/ContentBases/pagination';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import i18n from '@/utils/plugins/i18n.js';
+import { actionInfo } from '@/utils';
 
 const modelValue = defineModel({
   type: Boolean,
@@ -125,14 +150,32 @@ const linkedFlow = reactive({
   name: '',
 });
 
+const actionDetails = computed(() =>
+  actionInfo(store.state.Actions.types.data, {
+    name: props.action.name,
+    prompt: props.action.description,
+    type: props.action.actionType,
+  }),
+);
+
+const isCustom = computed(() => actionDetails.value.group === 'custom');
+
 const isSaveButtonActive = computed(() => {
   const { action } = props;
   if (action.actionType === 'whatsapp_cart') return name.value !== action.name;
-  return name.value.trim() && description.value.trim();
-});
 
-const isTextAreaDisabled = computed(() => {
-  return props.action.actionType === 'whatsapp_cart';
+  const fields = {
+    name: name.value.trim(),
+    description: description.value.trim(),
+  };
+
+  return (
+    !Object.values(fields).some((value) => !value) &&
+    !(
+      props.action.name.trim() === fields.name &&
+      props.action.description.trim() === fields.description
+    )
+  );
 });
 
 onBeforeMount(() => {
@@ -169,7 +212,9 @@ function searchForFlowUuid(flowUuid) {
         if (flow) {
           linkedFlow.status = null;
           linkedFlow.name = flow.name;
-        } else if (flows.status.value !== 'complete') {
+        } else if (flows.status.value === 'complete') {
+          linkedFlow.status = 'error';
+        } else {
           tryToFindLinkedFlow();
         }
       })
@@ -227,6 +272,31 @@ async function saveAction() {
 </script>
 
 <style lang="scss" scoped>
+.explanation {
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h3 {
+    color: $unnnic-color-neutral-cloudy;
+    font-family: $unnnic-font-family-secondary;
+    font-weight: $unnnic-font-weight-regular;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+
+    margin-bottom: $unnnic-spacing-nano;
+  }
+
+  p {
+    color: $unnnic-color-neutral-darkest;
+    font-family: $unnnic-font-family-secondary;
+    font-weight: $unnnic-font-weight-regular;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+  }
+}
+
 .form-element + .form-element {
   margin-top: $unnnic-spacing-sm;
 }
@@ -267,21 +337,6 @@ async function saveAction() {
 
     &__go-to-flow {
       min-width: 12.5 * $unnnic-font-size;
-    }
-  }
-}
-.modal-dialog {
-  &.is_text_area_disabled {
-    .labels-textarea {
-      :deep(.label),
-      :deep(.message) {
-        color: $unnnic-color-neutral-cleanest;
-      }
-    }
-
-    :deep(.unnnic-text-area textarea) {
-      color: $unnnic-color-neutral-cleanest;
-      background-color: $unnnic-color-neutral-lightest;
     }
   }
 }

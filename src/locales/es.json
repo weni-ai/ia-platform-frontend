@@ -183,7 +183,9 @@
       "download_file": "Descargar archivo",
       "access_site": "Acceder al sitio",
       "remove_site": "Eliminar sitio",
-      "remove_file": "Eliminar archivo"
+      "remove_file": "Eliminar archivo",
+      "edit_action": "Edit action",
+      "remove_action": "Eliminar acción"
     },
     "files": {
       "upload_content": "Cargar contenido a partir de archivos",

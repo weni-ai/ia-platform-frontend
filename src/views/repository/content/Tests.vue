@@ -544,16 +544,16 @@ export default {
     flex: 1;
     padding: 0 $unnnic-spacing-sm;
 
+    $scroll-size: $unnnic-inline-nano;
+
+    overflow: overlay;
+
     &__content {
       height: 0;
       display: flex;
       flex-direction: column;
       row-gap: $unnnic-spacing-xs;
     }
-
-    $scroll-size: $unnnic-inline-nano;
-
-    overflow: overlay;
 
     &::-webkit-scrollbar {
       width: $scroll-size;
@@ -582,15 +582,15 @@ export default {
       max-width: 75%;
       color: $unnnic-color-neutral-dark;
 
+      border-radius: $unnnic-border-radius-md;
+      padding: $unnnic-spacing-ant;
+
       &__content {
         font-family: $unnnic-font-family-secondary;
         font-size: $unnnic-font-size-body-gt;
         line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
         font-weight: $unnnic-font-weight-regular;
       }
-
-      border-radius: $unnnic-border-radius-md;
-      padding: $unnnic-spacing-ant;
 
       :deep(p) {
         margin: 0;

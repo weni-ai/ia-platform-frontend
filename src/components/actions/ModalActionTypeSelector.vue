@@ -27,12 +27,12 @@
         class="group"
         :class="[
           {
-            'group--selected': groupSelected === group.id,
+            'group--selected': actionGroup === group.id,
             'group--disabled': isGroupDisabled(group.id),
           },
         ]"
         :data-test="group.id"
-        @click="isGroupDisabled(group.id) ? null : (groupSelected = group.id)"
+        @click="isGroupDisabled(group.id) ? null : (actionGroup = group.id)"
       >
         <section class="group__icon__container">
           <UnnnicIcon
@@ -61,6 +61,11 @@ const props = defineProps({});
 
 const instance = getCurrentInstance();
 
+const actionGroup = defineModel('actionGroup', {
+  type: String,
+  required: true,
+});
+
 function getByGroup(group) {
   return instance.proxy['$store'].getters.actionsTypesAvailable.filter(
     (type) => type.group === group,
@@ -76,8 +81,6 @@ function isGroupDisabled(groupId) {
 }
 
 const emit = defineEmits(['update:modelValue', 'selected']);
-
-const groupSelected = ref(null);
 
 const groups = computed(() =>
   [
@@ -113,13 +116,15 @@ const groups = computed(() =>
 );
 
 function selectTheFirstGroupEnabled() {
-  groupSelected.value = groups.value.find(
+  actionGroup.value = groups.value.find(
     (group) => !isGroupDisabled(group.id),
   ).id;
 }
 
 onMounted(() => {
-  selectTheFirstGroupEnabled();
+  if (!actionGroup.value) {
+    selectTheFirstGroupEnabled();
+  }
 });
 
 function close() {
@@ -127,7 +132,7 @@ function close() {
 }
 
 function next() {
-  emit('selected', groupSelected.value);
+  emit('selected');
   close();
 }
 </script>

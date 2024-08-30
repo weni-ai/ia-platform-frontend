@@ -19,8 +19,8 @@
           class="customization__form-element"
         >
           <UnnnicInput
-            data-test="input-name"
             v-model="brain.agent.name.current"
+            data-test="input-name"
             :placeholder="$t('customization.placeholders.name')"
             :type="errorRequiredFields.name ? 'error' : 'normal'"
           />
@@ -176,8 +176,8 @@
         <UnnnicButton
           type="warning"
           :loading="removing"
-          @click="removeInstruction"
           data-test="btn-remove-inst"
+          @click="removeInstruction"
         >
           {{ $t('customization.instructions.modals.remove_btn') }}
         </UnnnicButton>
@@ -364,7 +364,6 @@ export default {
     align-items: flex-start;
     align-self: stretch;
     gap: $unnnic-spacing-md;
-    margin: $unnnic-spacing-xs 0 $unnnic-spacing-sm 0;
 
     &__persona {
       width: 100%;

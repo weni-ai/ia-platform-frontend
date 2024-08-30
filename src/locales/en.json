@@ -183,7 +183,9 @@
       "download_file": "Download file",
       "access_site": "Access site",
       "remove_site": "Remove site",
-      "remove_file": "Remove file"
+      "remove_file": "Remove file",
+      "edit_action": "Editar acción",
+      "remove_action": "Remove action"
     },
     "files": {
       "upload_content": "Upload content from files",

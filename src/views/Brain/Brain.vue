@@ -280,6 +280,9 @@ export default {
 
   > * {
     height: 0;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 }
 

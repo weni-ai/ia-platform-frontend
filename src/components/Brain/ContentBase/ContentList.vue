@@ -86,7 +86,7 @@
         :compressed="shape === 'accordion'"
         :clickable="canEditItem"
         @remove="$emit('remove', file)"
-        @click="$emit('edit', file)"
+        @edit="$emit('edit', file)"
       />
 
       <div

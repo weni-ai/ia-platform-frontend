@@ -4,7 +4,6 @@
     showActionsDivider
     :title="currentStep.title"
     size="lg"
-    :hideSecondaryButton="currentStep === firstStep"
     :secondaryButtonProps="{
       text: $t('back'),
       'data-test': 'previous-button',
@@ -96,7 +95,7 @@ export default {
     },
   },
 
-  emits: ['update:modelValue', 'added'],
+  emits: ['update:modelValue', 'added', 'previousStep'],
 
   setup() {
     const store = useStore();
@@ -235,7 +234,10 @@ export default {
     },
 
     goToPreviousStep() {
-      if (this.currentStep !== this.firstStep) {
+      if (this.currentStep === this.firstStep) {
+        this.close();
+        this.$emit('previousStep');
+      } else {
         this.currentStepIndex -= 1;
       }
     },
