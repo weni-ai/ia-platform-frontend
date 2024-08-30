@@ -16,9 +16,17 @@ jobs:
       - name: Run lint
         run: yarn lint --fix
       - name: Run Unit Tests with Coverage
-        run: yarn test:unit:coverage
+        run: yarn vitest run --coverage
+      - name: Check Coverage Threshold
+        run: |
+          COVERAGE=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+          COVERAGE=${COVERAGE//\"/}
+          if [ $(echo "$COVERAGE < 80" | bc) -eq 1 ]; then
+            echo "Coverage is below 80%: $COVERAGE%"
+            exit 1
+          fi
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
           file: ./coverage/coverage-final.json
-          token: ${{secrets.CODECOV_TOKEN}}
+          token: ${{ secrets.CODECOV_TOKEN }}
