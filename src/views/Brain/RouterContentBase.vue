@@ -10,7 +10,6 @@
         tag="p"
         family="secondary"
         size="body-gt"
-        marginBottom="sm"
         weight="400"
       >
         {{ $t('content_bases.description') }}
