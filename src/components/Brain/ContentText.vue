@@ -23,7 +23,6 @@
     <textarea
       id="contentTextArea"
       cols="30"
-      rows="22"
       :value="modelValue"
       class="content-text__textarea"
       :placeholder="$t('content_bases.write_content_placeholder')"
@@ -57,11 +56,12 @@ const updateModelValue = (event) => {
 
 <style lang="scss" scoped>
 .content-text__container {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: $unnnic-spacing-md;
   padding: 0 $unnnic-spacing-sm $unnnic-spacing-sm $unnnic-spacing-sm;
+  height: 100%;
 }
 
 .content-text__loading {
@@ -70,7 +70,7 @@ const updateModelValue = (event) => {
 
 .content-text__textarea {
   resize: none;
-  flex: 1;
+  flex-grow: 1;
   padding: $unnnic-spacing-sm;
   font-family: $unnnic-font-family-secondary;
   font-size: $unnnic-font-size-body-gt;

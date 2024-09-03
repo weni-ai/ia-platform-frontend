@@ -1,6 +1,6 @@
 <template>
   <section
-    v-if="counter > 0 && status === 'complete'"
+    v-if="counter === 0 && status === 'complete'"
     :class="['files-list__no_list_container', `files-list--shape-${shape}`]"
   >
     <section class="files-header">
