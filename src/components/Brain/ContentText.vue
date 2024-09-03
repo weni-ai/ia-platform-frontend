@@ -60,7 +60,7 @@ const updateModelValue = (event) => {
   flex-direction: column;
   flex: 1;
   gap: $unnnic-spacing-md;
-  padding: 0 $unnnic-spacing-sm $unnnic-spacing-sm $unnnic-spacing-sm;
+  padding: 0 0 $unnnic-spacing-sm 0;
   height: 100%;
 }
 
