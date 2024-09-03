@@ -1390,10 +1390,9 @@
   },
   "action_type_selector": {
     "title": "Selecione o tipo de ação",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
     "types": {
       "interactions": {
-        "title": "Interações gerais",
+        "title": "Cumprimento",
         "description": "Ações para saudar, se despedir e navegar no sistema"
       },
       "shopping": {
@@ -1425,6 +1424,9 @@
             "inputs": {
               "select_action_type": {
                 "label": "Selecione a ação"
+              },
+              "description": {
+                "label": "Descrição da ação:"
               }
             }
           },

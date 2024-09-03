@@ -17,10 +17,6 @@
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <section class="groups">
-      <p class="groups__description">
-        {{ $t('action_type_selector.description') }}
-      </p>
-
       <section
         v-for="(group, index) in groups"
         :key="index"
@@ -139,16 +135,6 @@ function next() {
 
 <style lang="scss" scoped>
 .groups {
-  &__description {
-    margin-bottom: $unnnic-spacing-sm;
-
-    color: $unnnic-color-neutral-cloudy;
-    font-family: $unnnic-font-family-secondary;
-    font-weight: $unnnic-font-weight-regular;
-    font-size: $unnnic-font-size-body-gt;
-    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-  }
-
   .group {
     cursor: pointer;
     user-select: none;

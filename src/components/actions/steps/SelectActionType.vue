@@ -11,13 +11,18 @@
       <UnnnicSelectSmart
         :modelValue="actionTypeModelValue"
         :options="types"
+        class="action-selector"
         @update:model-value="updateModel"
       />
     </UnnnicFormElement>
 
     <section class="explanation">
       <h3 class="explanation__title">
-        {{ $t('modals.actions.add.steps.describe.inputs.description.label') }}
+        {{
+          $t(
+            'modals.actions.add.steps.select_action_type.inputs.description.label',
+          )
+        }}
       </h3>
 
       <p class="explanation__description">{{ actionTypeDescription }}</p>
@@ -91,6 +96,12 @@ function updateModel($event) {
 </script>
 
 <style lang="scss" scoped>
+.action-selector {
+  :deep(.unnnic-select-smart-option__description) {
+    white-space: normal;
+  }
+}
+
 .explanation {
   margin-top: $unnnic-spacing-md;
 

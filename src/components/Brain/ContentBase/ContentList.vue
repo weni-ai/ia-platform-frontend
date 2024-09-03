@@ -261,6 +261,7 @@ export default {
       .text-icon {
         font-size: 54px;
         color: $unnnic-color-neutral-soft;
+        margin-bottom: $unnnic-spacing-xs;
       }
 
       .text-sub-description {

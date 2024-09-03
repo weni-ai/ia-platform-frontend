@@ -70,7 +70,11 @@
     <template v-else>
       <section class="explanation">
         <h3 class="explanation__title">
-          {{ $t('modals.actions.add.steps.describe.inputs.description.label') }}
+          {{
+            $t(
+              'modals.actions.add.steps.select_action_type.inputs.description.label',
+            )
+          }}
         </h3>
 
         <p class="explanation__description">{{ description }}</p>
