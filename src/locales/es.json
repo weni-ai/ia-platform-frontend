@@ -174,7 +174,8 @@
       "text": "Texto"
     },
     "text": {
-      "description": "Escriba manualmente el contenido que el agente utilizará para responder a las preguntas"
+      "description": "Escriba manualmente el contenido que el agente utilizará para responder a las preguntas",
+      "error": "Error al subir el archivo"
     },
     "file_with_error": "Archivo con error. Bórrelo y añádalo de nuevo.",
     "site_with_error": "Sitio con error. Borrar y añadir de nuevo.",
