@@ -13,11 +13,14 @@ export default {
 
   getters: {
     actionsTypesAvailable(state) {
-      return state.types.data.filter(
-        ({ name, prompt }) =>
-          !state.data.some(
-            ({ created_file_name, description }) =>
-              created_file_name === name && prompt === description,
+      const types = state.types.data;
+      const actions = state.data;
+
+      return types.filter(
+        (type) =>
+          !actions.some(
+            (action) =>
+              action.name === type.name && action.prompt === type.prompt,
           ),
       );
     },
@@ -32,22 +35,55 @@ export default {
       try {
         state.status = 'loading';
 
-        const { data } = await nexusaiAPI.router.actions.list({
+        const actions = await nexusaiAPI.router.actions.list({
           projectUuid: rootState.Auth.connectProjectUuid,
         });
 
-        state.data = data.map((item) => ({
-          uuid: item.uuid,
-          extension_file: 'action',
-          created_file_name: item.name,
-          description: item.prompt,
-          actionType: item.action_type,
-        }));
+        state.data = actions;
 
         state.status = 'complete';
       } catch (error) {
         state.status = 'error';
       }
+    },
+
+    async addAction({ state, rootState }, { name, prompt, flowUuid, type }) {
+      const action = await nexusaiAPI.router.actions.create({
+        projectUuid: rootState.Auth.connectProjectUuid,
+        name,
+        prompt,
+        flowUuid,
+        type,
+      });
+
+      state.data.push(action);
+
+      return action;
+    },
+
+    async editAction({ state, rootState }, { uuid, name, prompt }) {
+      const action = await nexusaiAPI.router.actions.edit({
+        projectUuid: rootState.Auth.connectProjectUuid,
+        actionUuid: uuid,
+        name,
+        prompt,
+      });
+
+      const item = state.data.find((action) => action.uuid === uuid);
+
+      item.name = action.name;
+      item.prompt = action.prompt;
+
+      return action;
+    },
+
+    async removeAction({ state, rootState }, { uuid }) {
+      await nexusaiAPI.router.actions.delete({
+        projectUuid: rootState.Auth.connectProjectUuid,
+        actionUuid: uuid,
+      });
+
+      state.data = state.data.filter((action) => action.uuid !== uuid);
     },
 
     async loadActionsTypes({ state, rootState }) {

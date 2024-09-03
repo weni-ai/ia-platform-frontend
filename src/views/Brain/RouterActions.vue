@@ -17,7 +17,14 @@
     <UnnnicDivider ySpacing="md" />
 
     <ContentList
-      :items="items"
+      :items="{
+        status: items.status,
+        data: items.data.map((action) => ({
+          ...action,
+          extension_file: 'action',
+          created_file_name: action.name,
+        })),
+      }"
       shape="accordion"
       defaultIcon="bolt"
       hideSearchInput
@@ -47,7 +54,6 @@
       v-if="isAddActionOpen"
       v-model="isAddActionOpen"
       :actionGroup="actionGroup"
-      @added="saveAction"
       @previous-step="isActionTypeSelectorOpen = true"
     />
 
@@ -55,7 +61,6 @@
       v-if="isEditActionOpen"
       v-model="isEditActionOpen"
       :action="currentActionEditing"
-      @edited="editedAction"
     />
 
     <ModalRemoveAction
@@ -69,7 +74,6 @@
 </template>
 
 <script>
-import nexusaiAPI from '../../api/nexusaiAPI';
 import ContentList from '@/components/Brain/ContentBase/ContentList.vue';
 import ModalActionTypeSelector from '@/components/actions/ModalActionTypeSelector.vue';
 import ModalActions from '../../components/actions/ModalActions.vue';
@@ -132,21 +136,16 @@ export default {
       this.isAddActionOpen = true;
     },
 
-    openEditAction({ uuid, created_file_name, description, actionType }) {
+    openEditAction({ uuid }) {
+      const action = this.items.data.find((action) => action.uuid === uuid);
+
       this.currentActionEditing = {
         uuid,
-        actionType,
-        name: created_file_name,
-        description,
+        type: action.type,
+        name: action.name,
+        description: action.prompt,
         status: null,
       };
-    },
-
-    editedAction(actionUuid, action) {
-      const item = this.items.data.find(({ uuid }) => uuid === actionUuid);
-
-      item.created_file_name = action.name;
-      item.description = action.description;
     },
 
     openDeleteAction(actionUuid, actionName) {
@@ -161,14 +160,9 @@ export default {
       try {
         this.modalDeleteAction.status = 'removing';
 
-        await nexusaiAPI.router.actions.delete({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
-          actionUuid: this.modalDeleteAction.uuid,
+        await this.$store.dispatch('removeAction', {
+          uuid: this.modalDeleteAction.uuid,
         });
-
-        this.items.data = this.items.data.filter(
-          ({ uuid }) => uuid !== this.modalDeleteAction.uuid,
-        );
 
         this.$store.state.alert = {
           type: 'default',
@@ -179,16 +173,6 @@ export default {
       } finally {
         this.modalDeleteAction = null;
       }
-    },
-
-    saveAction({ uuid, name, description, actionType }) {
-      this.items.data.push({
-        uuid,
-        extension_file: 'action',
-        created_file_name: name,
-        description,
-        actionType,
-      });
     },
   },
 };

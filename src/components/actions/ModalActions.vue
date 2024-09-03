@@ -203,29 +203,19 @@ export default {
       try {
         this.isAdding = true;
 
-        const { data } = await nexusaiAPI.router.actions.create({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
+        const { name } = await this.$store.dispatch('addAction', {
           name: this.name,
-          description: this.actionType === 'custom' ? this.description : '',
+          prompt: this.description,
           flowUuid: this.flowUuid,
-          action_type: this.actionType,
+          type: this.actionType,
         });
-
-        const createdAction = {
-          uuid: data.uuid,
-          name: data.name,
-          description: data.prompt,
-          actionType: data.action_type,
-        };
 
         this.$store.state.alert = {
           type: 'success',
           text: this.$t('modals.actions.add.messages.success', {
-            name: createdAction.name,
+            name,
           }),
         };
-
-        this.$emit('added', createdAction);
       } finally {
         this.isAdding = false;
 

@@ -158,7 +158,7 @@ const actionDetails = computed(() =>
   actionInfo(store.state.Actions.types.data, {
     name: props.action.name,
     prompt: props.action.description,
-    type: props.action.actionType,
+    type: props.action.type,
   }),
 );
 
@@ -248,17 +248,11 @@ async function saveAction() {
   try {
     isSavingAction.value = true;
 
-    const { data } = await nexusaiAPI.router.actions.edit({
-      projectUuid: store.state.Auth.connectProjectUuid,
-      actionUuid,
+    const action = await store.dispatch('editAction', {
+      uuid: actionUuid,
       name: name.value,
-      description: description.value,
+      prompt: description.value,
     });
-
-    const action = {
-      name: data.name,
-      description: data.prompt,
-    };
 
     store.state.alert = {
       type: 'success',
@@ -266,8 +260,6 @@ async function saveAction() {
         name: action.name,
       }),
     };
-
-    emit('edited', actionUuid, action);
   } finally {
     isSavingAction.value = false;
     close();
