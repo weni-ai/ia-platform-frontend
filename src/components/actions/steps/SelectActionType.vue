@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { computed, getCurrentInstance, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
   group: {
@@ -40,9 +40,9 @@ const props = defineProps({
   },
 });
 
-const instance = getCurrentInstance();
+import { useActionsStore } from '@/store/Actions.js';
 
-const store = instance.proxy['$store'];
+const actionsStore = useActionsStore();
 
 const name = defineModel('name', {
   type: String,
@@ -62,7 +62,7 @@ const actionType = defineModel('actionType', {
 const type = ref(null);
 
 const types = computed(() => {
-  return store.getters.actionsTypesAvailable
+  return actionsStore.typesAvailable
     .filter(({ group }) => group === props.group)
     .map(({ name, prompt, type }) => ({
       label: name,

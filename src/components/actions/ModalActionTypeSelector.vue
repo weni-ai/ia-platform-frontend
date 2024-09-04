@@ -55,6 +55,10 @@ import { ref } from 'vue';
 
 const props = defineProps({});
 
+import { useActionsStore } from '@/store/Actions.js';
+
+const actionsStore = useActionsStore();
+
 const instance = getCurrentInstance();
 
 const actionGroup = defineModel('actionGroup', {
@@ -63,9 +67,7 @@ const actionGroup = defineModel('actionGroup', {
 });
 
 function getByGroup(group) {
-  return instance.proxy['$store'].getters.actionsTypesAvailable.filter(
-    (type) => type.group === group,
-  );
+  return actionsStore.typesAvailable.filter((type) => type.group === group);
 }
 
 function isGroupDisabled(groupId) {

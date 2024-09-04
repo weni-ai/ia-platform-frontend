@@ -72,6 +72,7 @@
 <script>
 import { useStore } from 'vuex';
 import { usePagination } from '@/views/ContentBases/pagination';
+import { useActionsStore } from '@/store/Actions.js';
 import nexusaiAPI from '../../api/nexusaiAPI';
 import LeftSidebar from './LeftSidebar.vue';
 import StepSelectFlow from './steps/SelectFlow.vue';
@@ -110,7 +111,12 @@ export default {
       },
     });
 
-    return { items };
+    const actionsStore = useActionsStore();
+
+    return {
+      items,
+      actionsStore,
+    };
   },
 
   data() {
@@ -203,7 +209,7 @@ export default {
       try {
         this.isAdding = true;
 
-        const { name } = await this.$store.dispatch('addAction', {
+        const { name } = await this.actionsStore.add({
           name: this.name,
           prompt: this.description,
           flowUuid: this.flowUuid,

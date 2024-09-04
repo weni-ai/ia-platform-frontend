@@ -124,6 +124,7 @@
 <script setup>
 import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useActionsStore } from '@/store/Actions.js';
 import { usePagination } from '@/views/ContentBases/pagination';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import i18n from '@/utils/plugins/i18n.js';
@@ -144,6 +145,8 @@ const emit = defineEmits(['edited']);
 
 const store = useStore();
 
+const actionsStore = useActionsStore();
+
 const isSavingAction = ref(false);
 
 const name = ref('');
@@ -155,7 +158,7 @@ const linkedFlow = reactive({
 });
 
 const actionDetails = computed(() =>
-  actionInfo(store.state.Actions.types.data, {
+  actionInfo({
     name: props.action.name,
     prompt: props.action.description,
     type: props.action.type,
@@ -248,7 +251,7 @@ async function saveAction() {
   try {
     isSavingAction.value = true;
 
-    const action = await store.dispatch('editAction', {
+    const action = await actionsStore.edit({
       uuid: actionUuid,
       name: name.value,
       prompt: description.value,

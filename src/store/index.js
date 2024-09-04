@@ -8,7 +8,6 @@ import CachedFetch from './cached-fetch';
 import News from './news';
 import Integration from './integration';
 import Brain from './brain';
-import Actions from './Actions';
 
 export const store = createStore({
   state() {
@@ -35,7 +34,6 @@ export const store = createStore({
     News,
     Integration,
     Brain,
-    Actions,
   },
 });
 

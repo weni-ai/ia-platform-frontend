@@ -79,6 +79,9 @@ import ModalActionTypeSelector from '@/components/actions/ModalActionTypeSelecto
 import ModalActions from '../../components/actions/ModalActions.vue';
 import ModalChangeAction from '../../components/actions/ModalChangeAction.vue';
 import ModalRemoveAction from '../../components/actions/ModalRemoveAction.vue';
+import { storeToRefs } from 'pinia';
+import { useActionsStore } from '@/store/Actions.js';
+import { onMounted, toRef, reactive } from 'vue';
 
 export default {
   components: {
@@ -87,6 +90,20 @@ export default {
     ModalActions,
     ModalChangeAction,
     ModalRemoveAction,
+  },
+
+  setup() {
+    const actionsStore = useActionsStore();
+
+    onMounted(() => {
+      actionsStore.load();
+    });
+
+    return {
+      items: actionsStore.actions,
+
+      actionsStore,
+    };
   },
 
   data() {
@@ -104,10 +121,6 @@ export default {
   },
 
   computed: {
-    items() {
-      return this.$store.state.Actions;
-    },
-
     isEditActionOpen: {
       get() {
         return Boolean(this.currentActionEditing);
@@ -119,10 +132,6 @@ export default {
         }
       },
     },
-  },
-
-  created() {
-    this.$store.dispatch('loadActions');
   },
 
   methods: {
@@ -160,7 +169,7 @@ export default {
       try {
         this.modalDeleteAction.status = 'removing';
 
-        await this.$store.dispatch('removeAction', {
+        await this.actionsStore.remove({
           uuid: this.modalDeleteAction.uuid,
         });
 

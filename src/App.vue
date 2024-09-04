@@ -34,6 +34,7 @@ import ModalWarn from './components/ModalWarn.vue';
 import ObstructiveError from './views/ObstructiveError.vue';
 import { isEmpty } from 'lodash';
 import { HotjarIdentifyUser } from '@/utils/HotjarIdentifyUser.js';
+import { useActionsStore } from '@/store/Actions.js';
 
 export default {
   name: 'App',
@@ -41,6 +42,12 @@ export default {
     I18n,
     ModalWarn,
     ObstructiveError,
+  },
+
+  setup() {
+    const actionsStore = useActionsStore();
+
+    actionsStore.loadTypes();
   },
 
   data() {
@@ -76,6 +83,7 @@ export default {
       immediate: true,
     },
   },
+
   created() {
     window.addEventListener('message', (event) => {
       const prefix = 'connect:';
@@ -92,8 +100,6 @@ export default {
         }
       }
     });
-
-    this.$store.dispatch('loadActionsTypes');
   },
   mounted() {
     document.title = this.dynamicTitle;

@@ -1,111 +1,123 @@
 import nexusaiAPI from '@/api/nexusaiAPI.js';
+import { defineStore } from 'pinia';
+import { computed, reactive } from 'vue';
+import globalStore from '.';
 
-export default {
-  state: () => ({
+export const useActionsStore = defineStore('actions', () => {
+  const connectProjectUuid = computed(
+    () => globalStore.state.Auth.connectProjectUuid,
+  );
+
+  const actions = reactive({
     status: null,
     data: [],
+  });
 
-    types: {
-      status: null,
-      data: [],
-    },
-  }),
+  async function loadActions() {
+    if (actions.status !== null) {
+      return;
+    }
 
-  getters: {
-    actionsTypesAvailable(state) {
-      const types = state.types.data;
-      const actions = state.data;
+    try {
+      actions.status = 'loading';
 
-      return types.filter(
-        (type) =>
-          !actions.some(
-            (action) =>
-              action.name === type.name && action.prompt === type.prompt,
-          ),
-      );
-    },
-  },
-
-  actions: {
-    async loadActions({ state, rootState }) {
-      if (state.status !== null) {
-        return;
-      }
-
-      try {
-        state.status = 'loading';
-
-        const actions = await nexusaiAPI.router.actions.list({
-          projectUuid: rootState.Auth.connectProjectUuid,
-        });
-
-        state.data = actions;
-
-        state.status = 'complete';
-      } catch (error) {
-        state.status = 'error';
-      }
-    },
-
-    async addAction({ state, rootState }, { name, prompt, flowUuid, type }) {
-      const action = await nexusaiAPI.router.actions.create({
-        projectUuid: rootState.Auth.connectProjectUuid,
-        name,
-        prompt,
-        flowUuid,
-        type,
+      const data = await nexusaiAPI.router.actions.list({
+        projectUuid: connectProjectUuid.value,
       });
 
-      state.data.push(action);
+      actions.data = data;
 
-      return action;
-    },
+      actions.status = 'complete';
+    } catch (error) {
+      actions.status = 'error';
+    }
+  }
 
-    async editAction({ state, rootState }, { uuid, name, prompt }) {
-      const action = await nexusaiAPI.router.actions.edit({
-        projectUuid: rootState.Auth.connectProjectUuid,
-        actionUuid: uuid,
-        name,
-        prompt,
+  async function addAction({ name, prompt, flowUuid, type }) {
+    const action = await nexusaiAPI.router.actions.create({
+      projectUuid: connectProjectUuid.value,
+      name,
+      prompt,
+      flowUuid,
+      type,
+    });
+
+    actions.data.push(action);
+
+    return action;
+  }
+
+  async function editAction({ uuid, name, prompt }) {
+    const editedAction = await nexusaiAPI.router.actions.edit({
+      projectUuid: connectProjectUuid.value,
+      actionUuid: uuid,
+      name,
+      prompt,
+    });
+
+    const item = actions.data.find(
+      (action) => action.uuid === editedAction.uuid,
+    );
+
+    item.name = editedAction.name;
+    item.prompt = editedAction.prompt;
+
+    return editedAction;
+  }
+
+  async function removeAction({ uuid }) {
+    await nexusaiAPI.router.actions.delete({
+      projectUuid: connectProjectUuid.value,
+      actionUuid: uuid,
+    });
+
+    actions.data = actions.data.filter((action) => action.uuid !== uuid);
+  }
+
+  const types = reactive({
+    status: null,
+    data: [],
+  });
+
+  const typesAvailable = computed(() => {
+    return types.data.filter(
+      (type) =>
+        !actions.data.some(
+          (action) =>
+            action.name === type.name && action.prompt === type.prompt,
+        ),
+    );
+  });
+
+  async function loadTypes() {
+    if (types.status !== null) {
+      return;
+    }
+
+    try {
+      types.status = 'loading';
+
+      const data = await nexusaiAPI.router.actions.types.list({
+        projectUuid: connectProjectUuid.value,
       });
 
-      const item = state.data.find((action) => action.uuid === uuid);
+      types.data = data;
 
-      item.name = action.name;
-      item.prompt = action.prompt;
+      types.status = 'complete';
+    } catch {
+      types.status = 'error';
+    }
+  }
 
-      return action;
-    },
+  return {
+    actions,
+    load: loadActions,
+    add: addAction,
+    edit: editAction,
+    remove: removeAction,
 
-    async removeAction({ state, rootState }, { uuid }) {
-      await nexusaiAPI.router.actions.delete({
-        projectUuid: rootState.Auth.connectProjectUuid,
-        actionUuid: uuid,
-      });
-
-      state.data = state.data.filter((action) => action.uuid !== uuid);
-    },
-
-    async loadActionsTypes({ state, rootState }) {
-      if (state.types.status !== null) {
-        return;
-      }
-
-      try {
-        state.types.status = 'loading';
-
-        const types = await nexusaiAPI.router.actions.types.list({
-          projectUuid: rootState.Auth.connectProjectUuid,
-        });
-
-        state.types.data = types;
-
-        state.types.status = 'complete';
-      } catch {
-        state.types.status = 'error';
-      }
-    },
-  },
-
-  mutations: {},
-};
+    types,
+    typesAvailable,
+    loadTypes,
+  };
+});
