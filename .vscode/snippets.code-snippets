@@ -8,10 +8,224 @@
 			"const alertStore = useAlertStore();",
 			"",
 			"alertStore.add({",
-			"  type: '${1:default|success|error}',",
+			"  type: '${1|success,error,default|}',",
 			"  text: '${2}',",
 			"});"
 		],
 		"description": "Add Unnnic Alert"
-	}
+	},
+
+	"Unnnic Font": {
+		"scope": "scss",
+		"prefix": "unnnic-font",
+		"body": [
+			"color: ${1|$unnnic-color-background-solo,$unnnic-color-background-sky,$unnnic-color-background-grass,$unnnic-color-background-carpet,$unnnic-color-background-snow,$unnnic-color-background-lightest,$unnnic-color-background-white,$unnnic-color-neutral-black,$unnnic-color-neutral-darkest,$unnnic-color-neutral-dark,$unnnic-color-neutral-cloudy,$unnnic-color-neutral-cleanest,$unnnic-color-neutral-clean,$unnnic-color-neutral-soft,$unnnic-color-neutral-lightest,$unnnic-color-neutral-light,$unnnic-color-neutral-white,$unnnic-color-neutral-snow,$unnnic-color-feedback-red,$unnnic-color-feedback-green,$unnnic-color-feedback-yellow,$unnnic-color-feedback-blue,$unnnic-color-feedback-grey,$unnnic-color-aux-blue,$unnnic-color-aux-purple,$unnnic-color-aux-orange,$unnnic-color-aux-lemon,$unnnic-color-aux-pink,$unnnic-color-aux-baby-blue,$unnnic-color-aux-baby-yellow,$unnnic-color-aux-baby-red,$unnnic-color-aux-baby-green,$unnnic-color-aux-baby-pink,$unnnic-color-aux-green-100,$unnnic-color-aux-green-300,$unnnic-color-aux-green-500,$unnnic-color-aux-green-700,$unnnic-color-aux-green-900,$unnnic-color-aux-blue-100,$unnnic-color-aux-blue-300,$unnnic-color-aux-blue-500,$unnnic-color-aux-blue-700,$unnnic-color-aux-blue-900,$unnnic-color-aux-purple-100,$unnnic-color-aux-purple-300,$unnnic-color-aux-purple-500,$unnnic-color-aux-purple-700,$unnnic-color-aux-purple-900,$unnnic-color-aux-red-100,$unnnic-color-aux-red-300,$unnnic-color-aux-red-500,$unnnic-color-aux-red-700,$unnnic-color-aux-red-900,$unnnic-color-aux-orange-100,$unnnic-color-aux-orange-300,$unnnic-color-aux-orange-500,$unnnic-color-aux-orange-700,$unnnic-color-aux-orange-900,$unnnic-color-aux-yellow-100,$unnnic-color-aux-yellow-300,$unnnic-color-aux-yellow-500,$unnnic-color-aux-yellow-700,$unnnic-color-aux-yellow-900,$unnnic-color-floweditor-blue,$unnnic-color-floweditor-purple,$unnnic-color-floweditor-wine,$unnnic-color-floweditor-orange,$unnnic-color-floweditor-pink,$unnnic-color-floweditor-turquoise,$unnnic-color-floweditor-green,$unnnic-color-weni-50,$unnnic-color-weni-100,$unnnic-color-weni-200,$unnnic-color-weni-300,$unnnic-color-weni-400,$unnnic-color-weni-500,$unnnic-color-weni-600,$unnnic-color-weni-700,$unnnic-color-weni-800,$unnnic-color-weni-900,$unnnic-color-weni-950,$unnnic-color-brand-weni,$unnnic-color-brand-weni-dark,$unnnic-color-brand-weni-soft,$unnnic-color-brand-sec-dark,$unnnic-color-brand-sec-soft,$unnnic-color-brand-sec|};",
+			"font-family: ${2|$unnnic-font-family-secondary,$unnnic-font-family-primary|};",
+			"font-weight: ${3|$unnnic-font-weight-regular,$unnnic-font-weight-black,$unnnic-font-weight-bold,$unnnic-font-weight-light|};",
+			"font-size: ${4|$unnnic-font-size-body-gt,$unnnic-font-size-body-sm,$unnnic-font-size-body-md,$unnnic-font-size-body-lg,$unnnic-font-size-title-sm,$unnnic-font-size-title-md,$unnnic-font-size-title-lg,$unnnic-font-size-h4,$unnnic-font-size-h3,$unnnic-font-size-h2,$unnnic-font-size-h1|};",
+			"line-height: $4 + \\$unnnic-line-height-md;",
+		],
+	},
+
+	"Unnnic Spacing 4px": {
+		"scope": "scss",
+		"prefix": "$unnnic-spacing-nano",
+		"body": "\\$unnnic-spacing-nano",
+	},
+	"Unnnic Spacing 8px": {
+		"scope": "scss",
+		"prefix": "$unnnic-spacing-xs",
+		"body": "\\$unnnic-spacing-xs",
+	},
+	"Unnnic Spacing 12px": {
+		"scope": "scss",
+		"prefix": "$unnnic-spacing-ant",
+		"body": "\\$unnnic-spacing-ant",
+	},
+	"Unnnic Spacing 16px": {
+		"scope": "scss",
+		"prefix": "$unnnic-spacing-sm",
+		"body": "\\$unnnic-spacing-sm",
+	},
+	"Unnnic Spacing 24px": {
+		"scope": "scss",
+		"prefix": "$unnnic-spacing-md",
+		"body": "\\$unnnic-spacing-md",
+	},
+	"Unnnic Spacing 32px": {
+		"scope": "scss",
+		"prefix": "$unnnic-spacing-lg",
+		"body": "\\$unnnic-spacing-lg",
+	},
+	"Unnnic Spacing 40px": {
+		"scope": "scss",
+		"prefix": "$unnnic-spacing-xl",
+		"body": "\\$unnnic-spacing-xl",
+	},
+	"Unnnic Spacing 48px": {
+		"scope": "scss",
+		"prefix": "$unnnic-spacing-giant",
+		"body": "\\$unnnic-spacing-giant",
+	},
+	"Unnnic Spacing 64px": {
+		"scope": "scss",
+		"prefix": "$unnnic-spacing-xgiant",
+		"body": "\\$unnnic-spacing-xgiant",
+	},
+	"Unnnic Spacing 80px": {
+		"scope": "scss",
+		"prefix": "$unnnic-spacing-awesome",
+		"body": "\\$unnnic-spacing-awesome",
+	},
+
+	"Unnnic Icon Size 40px": {
+		"scope": "scss",
+		"prefix": "$unnnic-icon-size-xl",
+		"body": "\\$unnnic-icon-size-xl",
+	},
+	"Unnnic Icon Size 32px": {
+		"scope": "scss",
+		"prefix": "$unnnic-icon-size-lg",
+		"body": "\\$unnnic-icon-size-lg",
+	},
+	"Unnnic Icon Size 24px": {
+		"scope": "scss",
+		"prefix": "$unnnic-icon-size-md",
+		"body": "\\$unnnic-icon-size-md",
+	},
+	"Unnnic Icon Size 20px": {
+		"scope": "scss",
+		"prefix": "$unnnic-icon-size-ant",
+		"body": "\\$unnnic-icon-size-ant",
+	},
+	"Unnnic Icon Size 16px": {
+		"scope": "scss",
+		"prefix": "$unnnic-icon-size-sm",
+		"body": "\\$unnnic-icon-size-sm",
+	},
+	"Unnnic Icon Size 12px": {
+		"scope": "scss",
+		"prefix": "$unnnic-icon-size-xs",
+		"body": "\\$unnnic-icon-size-xs",
+	},
+
+	"Unnnic Avatar Size 104px": {
+		"scope": "scss",
+		"prefix": "$unnnic-avatar-size-lg",
+		"body": "\\$unnnic-avatar-size-lg",
+	},
+	"Unnnic Avatar Size 72px": {
+		"scope": "scss",
+		"prefix": "$unnnic-avatar-size-md",
+		"body": "\\$unnnic-avatar-size-md",
+	},
+	"Unnnic Avatar Size 40px": {
+		"scope": "scss",
+		"prefix": "$unnnic-avatar-size-sm",
+		"body": "\\$unnnic-avatar-size-sm",
+	},
+	"Unnnic Avatar Size 32px": {
+		"scope": "scss",
+		"prefix": "$unnnic-avatar-size-xs",
+		"body": "\\$unnnic-avatar-size-xs",
+	},
+	"Unnnic Avatar Size 20px": {
+		"scope": "scss",
+		"prefix": "$unnnic-avatar-size-nano",
+		"body": "\\$unnnic-avatar-size-nano",
+	},
+
+	"Unnnic Border Radius 4px": {
+		"scope": "scss",
+		"prefix": "$unnnic-border-radius-sm",
+		"body": "\\$unnnic-border-radius-sm",
+	},
+	"Unnnic Border Radius 8px": {
+		"scope": "scss",
+		"prefix": "$unnnic-border-radius-md",
+		"body": "\\$unnnic-border-radius-md",
+	},
+	"Unnnic Border Radius 16px": {
+		"scope": "scss",
+		"prefix": "$unnnic-border-radius-lg",
+		"body": "\\$unnnic-border-radius-lg",
+	},
+	"Unnnic Border Radius 600px": {
+		"scope": "scss",
+		"prefix": "$unnnic-border-radius-pill",
+		"body": "\\$unnnic-border-radius-pill",
+	},
+
+	"Unnnic Border Width 1px": {
+		"scope": "scss",
+		"prefix": "$unnnic-border-width-thinner",
+		"body": "\\$unnnic-border-width-thinner",
+	},
+	"Unnnic Border Width 2px": {
+		"scope": "scss",
+		"prefix": "$unnnic-border-width-thin",
+		"body": "\\$unnnic-border-width-thin",
+	},
+	"Unnnic Border Width 4px": {
+		"scope": "scss",
+		"prefix": "$unnnic-border-width-thick",
+		"body": "\\$unnnic-border-width-thick",
+	},
+
+	"Unnnic Shadow Level 0px 4px 8px rgba(0, 0, 0, .12)": {
+		"scope": "scss",
+		"prefix": "$unnnic-shadow-level-near",
+		"body": "\\$unnnic-shadow-level-near",
+	},
+	"Unnnic Shadow Level 0px 8px 16px rgba(0, 0, 0, .08)": {
+		"scope": "scss",
+		"prefix": "$unnnic-shadow-level-separated",
+		"body": "\\$unnnic-shadow-level-separated",
+	},
+	"Unnnic Shadow Level 0px 12px 32px rgba(0, 0, 0, .04)": {
+		"scope": "scss",
+		"prefix": "$unnnic-shadow-level-far",
+		"body": "\\$unnnic-shadow-level-far",
+	},
+	"Unnnic Shadow Level 0px 20px 40px rgba(0, 0, 0, .06)": {
+		"scope": "scss",
+		"prefix": "$unnnic-shadow-level-distant",
+		"body": "\\$unnnic-shadow-level-distant",
+	},
+
+	"Unnnic Opacity Level 0.8": {
+		"scope": "scss",
+		"prefix": "$unnnic-opacity-level-darkest",
+		"body": "\\$unnnic-opacity-level-darkest",
+	},
+	"Unnnic Opacity Level 0.64": {
+		"scope": "scss",
+		"prefix": "$unnnic-opacity-level-dark",
+		"body": "\\$unnnic-opacity-level-dark",
+	},
+	"Unnnic Opacity Level 0.48": {
+		"scope": "scss",
+		"prefix": "$unnnic-opacity-level-clarifying",
+		"body": "\\$unnnic-opacity-level-clarifying",
+	},
+	"Unnnic Opacity Level 0.4": {
+		"scope": "scss",
+		"prefix": "$unnnic-opacity-level-overlay",
+		"body": "\\$unnnic-opacity-level-overlay",
+	},
+	"Unnnic Opacity Level 0.32": {
+		"scope": "scss",
+		"prefix": "$unnnic-opacity-level-clear",
+		"body": "\\$unnnic-opacity-level-clear",
+	},
+	"Unnnic Opacity Level 0.16": {
+		"scope": "scss",
+		"prefix": "$unnnic-opacity-level-light",
+		"body": "\\$unnnic-opacity-level-light",
+	},
+	"Unnnic Opacity Level 0.08": {
+		"scope": "scss",
+		"prefix": "$unnnic-opacity-level-extra-light",
+		"body": "\\$unnnic-opacity-level-extra-light",
+	},
 }
