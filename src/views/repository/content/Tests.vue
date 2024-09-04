@@ -85,15 +85,15 @@
     />
 
     <div class="write-message">
-      <UnnnicInput
+      <MessageInput
         v-model="message"
-        class="write-message__input"
-        size="md"
-        :placeholder="$t('webapp.home.bases.tests_placeholder')"
-        iconRight="send"
-        iconRightClickable
-        @keypress.enter="sendMessage"
-        @icon-right-click="sendMessage"
+        class="write-message__message-input"
+        :placeholder="
+          usePreview
+            ? $t('webapp.home.bases.preview_tests_placeholder')
+            : $t('webapp.home.bases.tests_placeholder')
+        "
+        @send="sendMessage"
       />
     </div>
   </div>
@@ -110,6 +110,7 @@ import Markdown from '../../../components/Markdown.vue';
 import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
 import PreviewPlaceholder from '../../Brain/Preview/Placeholder.vue';
 import { reactive } from 'vue';
+import MessageInput from './MessageInput.vue';
 
 function isEventCardBrain(event) {
   if (event.type !== 'webhook_called' || !event.url) {
@@ -134,6 +135,7 @@ export default {
     AnswerFeedback,
     QuickTestWarn,
     PreviewPlaceholder,
+    MessageInput,
   },
 
   mixins: [FlowPreview],
@@ -485,7 +487,6 @@ export default {
   height: $dot-size;
   margin: 0 $dot-size * 1.75;
   margin-top: $unnnic-font-size-body-md + $unnnic-line-height-md - $dot-size;
-  // margin-bottom: ($unnnic-font-size-body-md + $unnnic-line-height-md) * 0.25;
 
   border-radius: calc($dot-size / 2);
   background-color: transparent;
@@ -599,15 +600,14 @@ export default {
 
     &__question {
       align-self: self-end;
-      background-color: $unnnic-color-weni-200;
-      border-bottom-right-radius: $unnnic-border-radius-sm;
+      color: $unnnic-color-neutral-white;
+      background-color: $unnnic-color-weni-600;
       margin-left: 1.875 * $unnnic-font-size;
     }
 
     &__answer {
       align-self: self-start;
       background-color: $unnnic-color-neutral-light;
-      border-bottom-left-radius: $unnnic-border-radius-sm;
       margin-right: 1.875 * $unnnic-font-size;
     }
 
@@ -627,23 +627,11 @@ export default {
     display: flex;
     column-gap: $unnnic-spacing-nano;
 
-    &__input {
+    padding: $unnnic-spacing-sm;
+    padding-top: $unnnic-spacing-sm - $unnnic-spacing-xs;
+
+    &__message-input {
       width: 100%;
-      border-style: solid;
-      border-color: $unnnic-color-neutral-soft;
-      border-width: $unnnic-border-width-thinner 0 0 0;
-
-      :deep(input) {
-        outline: none;
-        padding: $unnnic-spacing-sm;
-      }
-
-      :deep(.icon-right) {
-        top: auto;
-        bottom: 75%;
-        font-size: 24px;
-        color: $unnnic-color-weni-600;
-      }
     }
   }
 }

@@ -660,6 +660,7 @@
         "adjustments_modal_alert_discard": "Descartar los cambios",
         "tests": "Prueba de bases de conocimiento",
         "tests_subtitle": "Pruebe la base de conocimientos haciendo preguntas y observando las respuestas.",
+        "preview_tests_placeholder": "Escriba un mensaje",
         "tests_placeholder": "Haz una pregunta para la base de conocimientos...",
         "api": "Integrar esta inteligencia",
         "api_subtitle": "Nuestra API es compatible con varias plataformas mediante la integración a través de APIs REST. Para obtener más información, vaya a <a href='https://docs.ilhasoft.mobi/l/pt/inteligencia-conteudo/integrando-uma-intelig-ncia-de-conte-do' target='_blank' class='repository-api__header__subtitle--link'>documentation</a> y <a href='https://api.bothub.it/#tag/repository' target='_blank' class='repository-api__header__subtitle--link'>API explorer</a>.",
