@@ -56,10 +56,9 @@ export default {
     const alertStore = useAlertStore();
     const actionsStore = useActionsStore();
 
-    actionsStore.loadTypes();
-
     return {
       alertStore,
+      actionsStore,
     };
   },
 
@@ -87,6 +86,8 @@ export default {
           isEmpty(this.$store.state.User.me)
         ) {
           this.profileInfo();
+
+          this.actionsStore.loadTypes();
 
           HotjarIdentifyUser({
             token: localStorage.getItem('authToken'),
