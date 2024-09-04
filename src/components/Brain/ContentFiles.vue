@@ -4,7 +4,7 @@
       'files-area__container',
       `files-area__container--shape-${shape}`,
       {
-        'files-area__container--active': filesData.length && isClientDragging,
+        'files-area__container--active': isClientDragging,
       },
     ]"
     @dragover.prevent
@@ -61,6 +61,7 @@
       :description="$t('content_bases.files.description')"
       :subDescription="removeHTML(supportedFormats)"
       :addText="$t('content_bases.files.browse_file')"
+      :isOverLap="isClientDragging"
       @add="$refs['browser-file-input'].click()"
       @remove="onRemove"
     />
@@ -381,8 +382,12 @@ export default {
     flex-direction: column;
 
     &--active {
-      outline-color: $unnnic-color-weni-500;
-      background-color: $unnnic-color-weni-50;
+      outline-style: dashed;
+      outline-color: $unnnic-color-neutral-cleanest;
+      outline-width: $unnnic-border-width-thinner;
+      outline-offset: -$unnnic-border-width-thinner;
+
+      border-radius: $unnnic-border-radius-md;
     }
 
     &--shape-normal {

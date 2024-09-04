@@ -1,6 +1,6 @@
 <template>
   <section
-    v-if="counter === 0 && status === 'complete'"
+    v-if="(counter === 0 && status === 'complete') || isOverLap"
     :class="['files-list__no_list_container', `files-list--shape-${shape}`]"
   >
     <section class="files-header">
@@ -144,6 +144,10 @@ export default {
     columns: {
       type: Number,
       default: 2,
+    },
+    isOverLap: {
+      type: Boolean,
+      default: false,
     },
     shape: {
       type: String,
