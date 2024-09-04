@@ -1,0 +1,17 @@
+{
+	"Alert Store": {
+		"scope": "javascript",
+		"prefix": "alertStore",
+		"body": [
+			"import { useAlertStore } from '@/store/Alert.js';",
+			"",
+			"const alertStore = useAlertStore();",
+			"",
+			"alertStore.add({",
+			"  type: '${1:default|success|error}',",
+			"  text: '${2}',",
+			"});"
+		],
+		"description": "Add Unnnic Alert"
+	}
+}
