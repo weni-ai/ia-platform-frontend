@@ -79,7 +79,7 @@ import ModalActionTypeSelector from '@/components/actions/ModalActionTypeSelecto
 import ModalActions from '../../components/actions/ModalActions.vue';
 import ModalChangeAction from '../../components/actions/ModalChangeAction.vue';
 import ModalRemoveAction from '../../components/actions/ModalRemoveAction.vue';
-import { storeToRefs } from 'pinia';
+import { useAlertStore } from '@/store/Alert.js';
 import { useActionsStore } from '@/store/Actions.js';
 import { onMounted, toRef, reactive } from 'vue';
 
@@ -93,6 +93,7 @@ export default {
   },
 
   setup() {
+    const alertStore = useAlertStore();
     const actionsStore = useActionsStore();
 
     onMounted(() => {
@@ -102,6 +103,7 @@ export default {
     return {
       items: actionsStore.actions,
 
+      alertStore,
       actionsStore,
     };
   },
@@ -173,12 +175,12 @@ export default {
           uuid: this.modalDeleteAction.uuid,
         });
 
-        this.$store.state.alert = {
+        this.alertStore.add({
           type: 'default',
           text: this.$t('router.actions.router_removed', {
             name: this.modalDeleteAction.name,
           }),
-        };
+        });
       } finally {
         this.modalDeleteAction = null;
       }

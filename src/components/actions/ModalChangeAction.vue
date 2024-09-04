@@ -124,6 +124,7 @@
 <script setup>
 import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useAlertStore } from '@/store/Alert.js';
 import { useActionsStore } from '@/store/Actions.js';
 import { usePagination } from '@/views/ContentBases/pagination';
 import nexusaiAPI from '@/api/nexusaiAPI';
@@ -145,6 +146,7 @@ const emit = defineEmits(['edited']);
 
 const store = useStore();
 
+const alertStore = useAlertStore();
 const actionsStore = useActionsStore();
 
 const isSavingAction = ref(false);
@@ -257,12 +259,12 @@ async function saveAction() {
       prompt: description.value,
     });
 
-    store.state.alert = {
+    alertStore.add({
       type: 'success',
       text: i18n.global.t('modals.actions.edit.messages.success', {
         name: action.name,
       }),
-    };
+    });
   } finally {
     isSavingAction.value = false;
     close();

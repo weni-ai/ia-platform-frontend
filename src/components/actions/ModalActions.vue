@@ -72,6 +72,7 @@
 <script>
 import { useStore } from 'vuex';
 import { usePagination } from '@/views/ContentBases/pagination';
+import { useAlertStore } from '@/store/Alert.js';
 import { useActionsStore } from '@/store/Actions.js';
 import nexusaiAPI from '../../api/nexusaiAPI';
 import LeftSidebar from './LeftSidebar.vue';
@@ -99,6 +100,7 @@ export default {
   emits: ['update:modelValue', 'added', 'previousStep'],
 
   setup() {
+    const alertStore = useAlertStore();
     const store = useStore();
 
     const items = usePagination({
@@ -114,6 +116,8 @@ export default {
     const actionsStore = useActionsStore();
 
     return {
+      alertStore,
+
       items,
       actionsStore,
     };
@@ -216,12 +220,12 @@ export default {
           type: this.actionType,
         });
 
-        this.$store.state.alert = {
+        this.alertStore.add({
           type: 'success',
           text: this.$t('modals.actions.add.messages.success', {
             name,
           }),
-        };
+        });
       } finally {
         this.isAdding = false;
 

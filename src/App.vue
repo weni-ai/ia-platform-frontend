@@ -5,7 +5,14 @@
     <RouterView v-else />
 
     <UnnnicAlert
-      v-if="$store.state.alert"
+      v-if="alertStore.data.text"
+      :key="alertStore.id"
+      v-bind="alertStore.data"
+      @close="alertStore.close"
+    ></UnnnicAlert>
+
+    <UnnnicAlert
+      v-else-if="$store.state.alert"
       :key="$store.state.alert.text"
       v-bind="$store.state.alert"
       @close="$store.state.alert = null"
@@ -34,6 +41,7 @@ import ModalWarn from './components/ModalWarn.vue';
 import ObstructiveError from './views/ObstructiveError.vue';
 import { isEmpty } from 'lodash';
 import { HotjarIdentifyUser } from '@/utils/HotjarIdentifyUser.js';
+import { useAlertStore } from '@/store/Alert.js';
 import { useActionsStore } from '@/store/Actions.js';
 
 export default {
@@ -45,9 +53,14 @@ export default {
   },
 
   setup() {
+    const alertStore = useAlertStore();
     const actionsStore = useActionsStore();
 
     actionsStore.loadTypes();
+
+    return {
+      alertStore,
+    };
   },
 
   data() {
