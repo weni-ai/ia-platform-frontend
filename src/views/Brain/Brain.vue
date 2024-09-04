@@ -165,17 +165,20 @@ export default {
       loadingContentBase.value = true;
       text.value.status = 'loading';
 
-      const { data: contentBaseData } =
-        await nexusaiAPI.readIntelligenceContentBase({
-          intelligenceUuid: intelligenceUuid.value,
-          contentBaseUuid: contentBaseUuid.value,
-          obstructiveErrorProducer: true,
-        });
+      try {
+        const { data: contentBaseData } =
+          await nexusaiAPI.readIntelligenceContentBase({
+            intelligenceUuid: intelligenceUuid.value,
+            contentBaseUuid: contentBaseUuid.value,
+            obstructiveErrorProducer: true,
+          });
 
-      loadingContentBase.value = false;
-      contentBase.value.title = contentBaseData.title;
-      contentBase.value.description = contentBaseData.description;
-      contentBase.value.language = contentBaseData.language;
+        contentBase.value.title = contentBaseData.title;
+        contentBase.value.description = contentBaseData.description;
+        contentBase.value.language = contentBaseData.language;
+      } finally {
+        loadingContentBase.value = false;
+      }
 
       const { data: contentBaseTextsData } =
         await nexusaiAPI.intelligences.contentBases.texts.list({
