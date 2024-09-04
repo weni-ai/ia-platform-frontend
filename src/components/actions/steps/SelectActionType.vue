@@ -11,13 +11,18 @@
       <UnnnicSelectSmart
         :modelValue="actionTypeModelValue"
         :options="types"
+        class="action-selector"
         @update:model-value="updateModel"
       />
     </UnnnicFormElement>
 
     <section class="explanation">
       <h3 class="explanation__title">
-        {{ $t('modals.actions.add.steps.describe.inputs.description.label') }}
+        {{
+          $t(
+            'modals.actions.add.steps.select_action_type.inputs.description.label',
+          )
+        }}
       </h3>
 
       <p class="explanation__description">{{ actionTypeDescription }}</p>
@@ -26,7 +31,7 @@
 </template>
 
 <script setup>
-import { computed, getCurrentInstance, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
   group: {
@@ -35,9 +40,9 @@ const props = defineProps({
   },
 });
 
-const instance = getCurrentInstance();
+import { useActionsStore } from '@/store/Actions.js';
 
-const store = instance.proxy['$store'];
+const actionsStore = useActionsStore();
 
 const name = defineModel('name', {
   type: String,
@@ -57,7 +62,7 @@ const actionType = defineModel('actionType', {
 const type = ref(null);
 
 const types = computed(() => {
-  return store.getters.actionsTypesAvailable
+  return actionsStore.typesAvailable
     .filter(({ group }) => group === props.group)
     .map(({ name, prompt, type }) => ({
       label: name,
@@ -91,6 +96,12 @@ function updateModel($event) {
 </script>
 
 <style lang="scss" scoped>
+.action-selector {
+  :deep(.unnnic-select-smart-option__description) {
+    white-space: normal;
+  }
+}
+
 .explanation {
   margin-top: $unnnic-spacing-md;
 

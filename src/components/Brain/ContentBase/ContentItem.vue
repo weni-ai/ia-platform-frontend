@@ -236,10 +236,10 @@ export default {
     },
 
     actionDetails() {
-      return actionInfo(this.$store.state.Actions.types.data, {
+      return actionInfo({
         name: this.file.created_file_name,
-        prompt: this.file.description,
-        type: this.file.actionType,
+        prompt: this.file.prompt,
+        type: this.file.type,
       });
     },
 

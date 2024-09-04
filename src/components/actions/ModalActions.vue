@@ -72,6 +72,8 @@
 <script>
 import { useStore } from 'vuex';
 import { usePagination } from '@/views/ContentBases/pagination';
+import { useAlertStore } from '@/store/Alert.js';
+import { useActionsStore } from '@/store/Actions.js';
 import nexusaiAPI from '../../api/nexusaiAPI';
 import LeftSidebar from './LeftSidebar.vue';
 import StepSelectFlow from './steps/SelectFlow.vue';
@@ -98,6 +100,7 @@ export default {
   emits: ['update:modelValue', 'added', 'previousStep'],
 
   setup() {
+    const alertStore = useAlertStore();
     const store = useStore();
 
     const items = usePagination({
@@ -110,7 +113,14 @@ export default {
       },
     });
 
-    return { items };
+    const actionsStore = useActionsStore();
+
+    return {
+      alertStore,
+
+      items,
+      actionsStore,
+    };
   },
 
   data() {
@@ -203,29 +213,19 @@ export default {
       try {
         this.isAdding = true;
 
-        const { data } = await nexusaiAPI.router.actions.create({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
+        const { name } = await this.actionsStore.add({
           name: this.name,
-          description: this.actionType === 'custom' ? this.description : '',
+          prompt: this.description,
           flowUuid: this.flowUuid,
-          action_type: this.actionType,
+          type: this.actionType,
         });
 
-        const createdAction = {
-          uuid: data.uuid,
-          name: data.name,
-          description: data.prompt,
-          actionType: data.action_type,
-        };
-
-        this.$store.state.alert = {
+        this.alertStore.add({
           type: 'success',
           text: this.$t('modals.actions.add.messages.success', {
-            name: createdAction.name,
+            name,
           }),
-        };
-
-        this.$emit('added', createdAction);
+        });
       } finally {
         this.isAdding = false;
 

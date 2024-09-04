@@ -1,53 +1,57 @@
 <template>
-  <UnnnicDropdown
-    v-model:open="isClickActivated"
-    position="bottom-left"
-    class="dropdown"
+  <Popover
+    ref="popover"
+    v-model:isActivatedByClick="isActivatedByClick"
   >
-    <template #trigger>
+    <template #default>
       <UnnnicIcon
         ref="selector"
         icon="more_vert"
-        :scheme="isClickActivated ? 'neutral-darkest' : 'neutral-cloudy'"
+        :scheme="isActivatedByClick ? 'neutral-darkest' : 'neutral-cloudy'"
         size="avatar-nano"
         class="button-menu"
+        v-bind="$attrs"
       />
     </template>
 
-    <section
-      activator="click"
-      class="options"
-      horizontal="right-right"
-      vertical="top-bottom"
-      :style="{ minWidth }"
-    >
+    <template #children="{ popoverId }">
       <section
-        v-for="(action, index) in actions"
-        :key="index"
-        class="options__option"
-        :data-test="action.text"
-        @click="action.onClick()"
+        :popoverId
+        trigger="click"
+        horizontal="right-right"
+        vertical="top-bottom"
+        class="options"
+        :style="{ minWidth }"
       >
-        <UnnnicIcon
-          :icon="action.icon"
-          size="sm"
-          :scheme="action.scheme"
-        />
-
-        <UnnnicIntelligenceText
-          tag="p"
-          :color="action.scheme"
-          family="secondary"
-          size="body-md"
+        <section
+          v-for="(action, index) in actions"
+          :key="index"
+          class="options__option"
+          :data-test="action.text"
+          @click="onClick(action)"
         >
-          {{ action.text }}
-        </UnnnicIntelligenceText>
+          <UnnnicIcon
+            :icon="action.icon"
+            size="sm"
+            :scheme="action.scheme"
+          />
+
+          <UnnnicIntelligenceText
+            tag="p"
+            :color="action.scheme"
+            family="secondary"
+            size="body-md"
+          >
+            {{ action.text }}
+          </UnnnicIntelligenceText>
+        </section>
       </section>
-    </section>
-  </UnnnicDropdown>
+    </template>
+  </Popover>
 </template>
 
 <script setup>
+import Popover from '@/views/Brain/Popover.vue';
 import { ref } from 'vue';
 
 defineProps({
@@ -62,7 +66,12 @@ defineProps({
   },
 });
 
-const isClickActivated = ref(false);
+const isActivatedByClick = ref(false);
+
+function onClick(action) {
+  isActivatedByClick.value = false;
+  action.onClick();
+}
 </script>
 
 <style lang="scss" scoped>
@@ -76,10 +85,10 @@ const isClickActivated = ref(false);
 }
 
 .options {
-  margin-inline: -$unnnic-spacing-sm;
-  margin-block: -$unnnic-spacing-ant;
+  margin-block: $unnnic-spacing-nano;
   border-radius: $unnnic-border-radius-sm;
   background-color: $unnnic-color-background-snow;
+  box-shadow: $unnnic-shadow-level-near;
 
   &__option {
     user-select: none;

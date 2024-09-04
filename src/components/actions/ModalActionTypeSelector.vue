@@ -17,10 +17,6 @@
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <section class="groups">
-      <p class="groups__description">
-        {{ $t('action_type_selector.description') }}
-      </p>
-
       <section
         v-for="(group, index) in groups"
         :key="index"
@@ -59,6 +55,10 @@ import { ref } from 'vue';
 
 const props = defineProps({});
 
+import { useActionsStore } from '@/store/Actions.js';
+
+const actionsStore = useActionsStore();
+
 const instance = getCurrentInstance();
 
 const actionGroup = defineModel('actionGroup', {
@@ -67,9 +67,7 @@ const actionGroup = defineModel('actionGroup', {
 });
 
 function getByGroup(group) {
-  return instance.proxy['$store'].getters.actionsTypesAvailable.filter(
-    (type) => type.group === group,
-  );
+  return actionsStore.typesAvailable.filter((type) => type.group === group);
 }
 
 function isGroupDisabled(groupId) {
@@ -139,16 +137,6 @@ function next() {
 
 <style lang="scss" scoped>
 .groups {
-  &__description {
-    margin-bottom: $unnnic-spacing-sm;
-
-    color: $unnnic-color-neutral-cloudy;
-    font-family: $unnnic-font-family-secondary;
-    font-weight: $unnnic-font-weight-regular;
-    font-size: $unnnic-font-size-body-gt;
-    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-  }
-
   .group {
     cursor: pointer;
     user-select: none;

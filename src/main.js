@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import * as Sentry from '@sentry/vue';
 
 import App from './App.vue';
@@ -15,9 +16,10 @@ import './utils/HandlerObstructiveError.js';
 
 iframessa.register('ai');
 
+const pinia = createPinia();
 const app = createApp(App);
 
-app.use(store).use(router).use(UnnnicSystemPlugin).use(i18n);
+app.use(store).use(pinia).use(router).use(UnnnicSystemPlugin).use(i18n);
 
 if (runtimeVariables.get('VITE_BOTHUB_WEBAPP_SENTRY')) {
   Sentry.init({

@@ -70,7 +70,11 @@
     <template v-else>
       <section class="explanation">
         <h3 class="explanation__title">
-          {{ $t('modals.actions.add.steps.describe.inputs.description.label') }}
+          {{
+            $t(
+              'modals.actions.add.steps.select_action_type.inputs.description.label',
+            )
+          }}
         </h3>
 
         <p class="explanation__description">{{ description }}</p>
@@ -120,6 +124,8 @@
 <script setup>
 import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useAlertStore } from '@/store/Alert.js';
+import { useActionsStore } from '@/store/Actions.js';
 import { usePagination } from '@/views/ContentBases/pagination';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import i18n from '@/utils/plugins/i18n.js';
@@ -140,6 +146,9 @@ const emit = defineEmits(['edited']);
 
 const store = useStore();
 
+const alertStore = useAlertStore();
+const actionsStore = useActionsStore();
+
 const isSavingAction = ref(false);
 
 const name = ref('');
@@ -151,10 +160,10 @@ const linkedFlow = reactive({
 });
 
 const actionDetails = computed(() =>
-  actionInfo(store.state.Actions.types.data, {
+  actionInfo({
     name: props.action.name,
     prompt: props.action.description,
-    type: props.action.actionType,
+    type: props.action.type,
   }),
 );
 
@@ -244,26 +253,18 @@ async function saveAction() {
   try {
     isSavingAction.value = true;
 
-    const { data } = await nexusaiAPI.router.actions.edit({
-      projectUuid: store.state.Auth.connectProjectUuid,
-      actionUuid,
+    const action = await actionsStore.edit({
+      uuid: actionUuid,
       name: name.value,
-      description: description.value,
+      prompt: description.value,
     });
 
-    const action = {
-      name: data.name,
-      description: data.prompt,
-    };
-
-    store.state.alert = {
+    alertStore.add({
       type: 'success',
       text: i18n.global.t('modals.actions.edit.messages.success', {
         name: action.name,
       }),
-    };
-
-    emit('edited', actionUuid, action);
+    });
   } finally {
     isSavingAction.value = false;
     close();

@@ -1,75 +1,123 @@
 import nexusaiAPI from '@/api/nexusaiAPI.js';
+import { defineStore } from 'pinia';
+import { computed, reactive } from 'vue';
+import globalStore from '.';
 
-export default {
-  state: () => ({
+export const useActionsStore = defineStore('actions', () => {
+  const connectProjectUuid = computed(
+    () => globalStore.state.Auth.connectProjectUuid,
+  );
+
+  const actions = reactive({
     status: null,
     data: [],
+  });
 
-    types: {
-      status: null,
-      data: [],
-    },
-  }),
+  async function loadActions() {
+    if (actions.status !== null) {
+      return;
+    }
 
-  getters: {
-    actionsTypesAvailable(state) {
-      return state.types.data.filter(
-        ({ name, prompt }) =>
-          !state.data.some(
-            ({ created_file_name, description }) =>
-              created_file_name === name && prompt === description,
-          ),
-      );
-    },
-  },
+    try {
+      actions.status = 'loading';
 
-  actions: {
-    async loadActions({ state, rootState }) {
-      if (state.status !== null) {
-        return;
-      }
+      const data = await nexusaiAPI.router.actions.list({
+        projectUuid: connectProjectUuid.value,
+      });
 
-      try {
-        state.status = 'loading';
+      actions.data = data;
 
-        const { data } = await nexusaiAPI.router.actions.list({
-          projectUuid: rootState.Auth.connectProjectUuid,
-        });
+      actions.status = 'complete';
+    } catch (error) {
+      actions.status = 'error';
+    }
+  }
 
-        state.data = data.map((item) => ({
-          uuid: item.uuid,
-          extension_file: 'action',
-          created_file_name: item.name,
-          description: item.prompt,
-          actionType: item.action_type,
-        }));
+  async function addAction({ name, prompt, flowUuid, type }) {
+    const action = await nexusaiAPI.router.actions.create({
+      projectUuid: connectProjectUuid.value,
+      name,
+      prompt,
+      flowUuid,
+      type,
+    });
 
-        state.status = 'complete';
-      } catch (error) {
-        state.status = 'error';
-      }
-    },
+    actions.data.push(action);
 
-    async loadActionsTypes({ state, rootState }) {
-      if (state.types.status !== null) {
-        return;
-      }
+    return action;
+  }
 
-      try {
-        state.types.status = 'loading';
+  async function editAction({ uuid, name, prompt }) {
+    const editedAction = await nexusaiAPI.router.actions.edit({
+      projectUuid: connectProjectUuid.value,
+      actionUuid: uuid,
+      name,
+      prompt,
+    });
 
-        const types = await nexusaiAPI.router.actions.types.list({
-          projectUuid: rootState.Auth.connectProjectUuid,
-        });
+    const item = actions.data.find(
+      (action) => action.uuid === editedAction.uuid,
+    );
 
-        state.types.data = types;
+    item.name = editedAction.name;
+    item.prompt = editedAction.prompt;
 
-        state.types.status = 'complete';
-      } catch {
-        state.types.status = 'error';
-      }
-    },
-  },
+    return editedAction;
+  }
 
-  mutations: {},
-};
+  async function removeAction({ uuid }) {
+    await nexusaiAPI.router.actions.delete({
+      projectUuid: connectProjectUuid.value,
+      actionUuid: uuid,
+    });
+
+    actions.data = actions.data.filter((action) => action.uuid !== uuid);
+  }
+
+  const types = reactive({
+    status: null,
+    data: [],
+  });
+
+  const typesAvailable = computed(() => {
+    return types.data.filter(
+      (type) =>
+        !actions.data.some(
+          (action) =>
+            action.name === type.name && action.prompt === type.prompt,
+        ),
+    );
+  });
+
+  async function loadTypes() {
+    if (types.status !== null) {
+      return;
+    }
+
+    try {
+      types.status = 'loading';
+
+      const data = await nexusaiAPI.router.actions.types.list({
+        projectUuid: connectProjectUuid.value,
+      });
+
+      types.data = data;
+
+      types.status = 'complete';
+    } catch {
+      types.status = 'error';
+    }
+  }
+
+  return {
+    actions,
+    load: loadActions,
+    add: addAction,
+    edit: editAction,
+    remove: removeAction,
+
+    types,
+    typesAvailable,
+    loadTypes,
+  };
+});

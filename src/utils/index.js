@@ -1,3 +1,4 @@
+import { useActionsStore } from '@/store/Actions';
 import VERBOSE_LANGUAGES from './verbose_languages';
 
 export const languageListToDict = (list) =>
@@ -42,8 +43,10 @@ export const actionGroupIcon = (groupId) => {
   }[groupId];
 };
 
-export const actionInfo = (actionsTypes, { name, prompt, type }) => {
-  const actionType = actionsTypes.find(
+export const actionInfo = ({ name, prompt, type }) => {
+  const actionsStore = useActionsStore();
+
+  const actionType = actionsStore.types.data.find(
     (item) =>
       item.name === name && item.prompt === prompt && item.type === type,
   );
