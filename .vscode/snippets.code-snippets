@@ -8,8 +8,8 @@
 			"const alertStore = useAlertStore();",
 			"",
 			"alertStore.add({",
-			"  type: '${1|success,error,default|}',",
-			"  text: '${2}',",
+			"\ttype: '${1|success,error,default|}',",
+			"\ttext: '${2}',",
 			"});"
 		],
 		"description": "Add Unnnic Alert"

@@ -18,9 +18,6 @@ dist-ssr
 /coverage/
 
 # Editor directories and files
-.vscode
-!.vscode/extensions.json
-!.vscode/snippets.code-snippets
 .idea
 *.suo
 *.ntvs*
