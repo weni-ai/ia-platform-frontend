@@ -203,7 +203,12 @@ export default {
       showRemoveModal: false,
       saving: false,
       removing: false,
-      personalities: [
+    };
+  },
+
+  computed: {
+    personalities() {
+      return [
         {
           label: this.$t('customization.fields.personality'),
           value: '',
@@ -248,11 +253,9 @@ export default {
           label: this.$t('customization.fields.personalities.intellectual'),
           value: 'Intelectual',
         },
-      ],
-    };
-  },
+      ];
+    },
 
-  computed: {
     loading() {
       return this.brain.customizationStatus === 'loading';
     },
