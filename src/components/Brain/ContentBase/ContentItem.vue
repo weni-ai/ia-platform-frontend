@@ -44,7 +44,7 @@
             v-if="extension === 'action'"
             class="files-list__content__file__content__sub_title"
           >
-            {{ $t(`action_type_selector.types.${actionDetails.group}.title`) }}
+            {{ $t(`action_type_selector.types.${file.group}.title`) }}
           </p>
 
           <p
@@ -90,7 +90,7 @@
 import nexusaiAPI from '@/api/nexusaiAPI';
 import FilePreview from '@/views/ContentBases/components/FilePreview.vue';
 import ContentItemActions from '@/views/repository/content/ContentItemActions.vue';
-import { actionInfo, createDownloadAnchor } from '@/utils';
+import { actionGroupIcon, createDownloadAnchor } from '@/utils';
 import i18n from '@/utils/plugins/i18n.js';
 
 export default {
@@ -165,7 +165,7 @@ export default {
       }
 
       if (can.edit) {
-        const isCustom = this.actionDetails.group === 'custom';
+        const isCustom = this.file.group === 'custom';
 
         actions.push({
           scheme: 'neutral-dark',
@@ -224,17 +224,9 @@ export default {
       return this.$t(`content_bases.${message}`);
     },
 
-    actionDetails() {
-      return actionInfo({
-        name: this.file.created_file_name,
-        prompt: this.file.prompt,
-        type: this.file.type,
-      });
-    },
-
     icon() {
       if (this.extension === 'action') {
-        return this.actionDetails?.icon;
+        return actionGroupIcon(this.file.group);
       }
 
       return (

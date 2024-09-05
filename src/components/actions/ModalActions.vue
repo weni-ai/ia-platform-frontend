@@ -40,9 +40,7 @@
     <section class="action-body">
       <StepSelectActionType
         v-if="currentStep.name === 'select_action_type'"
-        v-model:actionType="actionType"
-        v-model:name="name"
-        v-model:description="description"
+        v-model:templateUuid="templateUuid"
         :group="actionGroup"
       />
 
@@ -134,6 +132,7 @@ export default {
       description: '',
       actionType: 'custom',
       flowUuid: '',
+      templateUuid: '',
     };
   },
 
@@ -213,12 +212,19 @@ export default {
       try {
         this.isAdding = true;
 
-        const { name } = await this.actionsStore.add({
-          name: this.name,
-          prompt: this.description,
-          flowUuid: this.flowUuid,
-          type: this.actionType,
-        });
+        const data = this.templateUuid
+          ? {
+              flowUuid: this.flowUuid,
+              templateUuid: this.templateUuid,
+            }
+          : {
+              name: this.name,
+              prompt: this.description,
+              flowUuid: this.flowUuid,
+              type: this.actionType,
+            };
+
+        const { name } = await this.actionsStore.add(data);
 
         this.alertStore.add({
           type: 'success',

@@ -8,6 +8,8 @@ export const useActionsStore = defineStore('actions', () => {
     () => globalStore.state.Auth.connectProjectUuid,
   );
 
+  const userLanguage = computed(() => globalStore.state.User.me.language);
+
   const actions = reactive({
     status: null,
     data: [],
@@ -33,12 +35,13 @@ export const useActionsStore = defineStore('actions', () => {
     }
   }
 
-  async function addAction({ name, prompt, flowUuid, type }) {
+  async function addAction({ name, prompt, flowUuid, templateUuid, type }) {
     const action = await nexusaiAPI.router.actions.create({
       projectUuid: connectProjectUuid.value,
       name,
       prompt,
       flowUuid,
+      templateUuid,
       type,
     });
 
@@ -98,6 +101,7 @@ export const useActionsStore = defineStore('actions', () => {
       types.status = 'loading';
 
       const data = await nexusaiAPI.router.actions.types.list({
+        language: userLanguage.value,
         projectUuid: connectProjectUuid.value,
       });
 

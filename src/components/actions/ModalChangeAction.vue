@@ -129,7 +129,6 @@ import { useActionsStore } from '@/store/Actions.js';
 import { usePagination } from '@/views/ContentBases/pagination';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import i18n from '@/utils/plugins/i18n.js';
-import { actionInfo } from '@/utils';
 
 const modelValue = defineModel({
   type: Boolean,
@@ -159,15 +158,7 @@ const linkedFlow = reactive({
   name: '',
 });
 
-const actionDetails = computed(() =>
-  actionInfo({
-    name: props.action.name,
-    prompt: props.action.description,
-    type: props.action.type,
-  }),
-);
-
-const isCustom = computed(() => actionDetails.value.group === 'custom');
+const isCustom = computed(() => props.action.group === 'custom');
 
 const isSaveButtonActive = computed(() => {
   const { action } = props;

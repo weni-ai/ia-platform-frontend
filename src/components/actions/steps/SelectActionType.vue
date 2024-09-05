@@ -44,17 +44,7 @@ import { useActionsStore } from '@/store/Actions.js';
 
 const actionsStore = useActionsStore();
 
-const name = defineModel('name', {
-  type: String,
-  required: true,
-});
-
-const description = defineModel('description', {
-  type: String,
-  required: true,
-});
-
-const actionType = defineModel('actionType', {
+const templateUuid = defineModel('templateUuid', {
   type: String,
   required: true,
 });
@@ -64,11 +54,12 @@ const type = ref(null);
 const types = computed(() => {
   return actionsStore.typesAvailable
     .filter(({ group }) => group === props.group)
-    .map(({ name, prompt, type }) => ({
+    .map(({ name, prompt, type, uuid }) => ({
       label: name,
-      value: prompt,
+      value: uuid,
       description: prompt,
       type,
+      uuid,
     }));
 });
 
@@ -85,13 +76,10 @@ const actionTypeDescription = computed(
 );
 
 function updateModel($event) {
-  const { label, value, type: optionType } = $event[0];
+  const { value } = $event[0];
 
   type.value = value;
-
-  name.value = label;
-  description.value = value;
-  actionType.value = optionType;
+  templateUuid.value = value;
 }
 </script>
 

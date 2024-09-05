@@ -1,36 +1,42 @@
 import request from '@/api/nexusaiRequest';
 
+const groups = {
+  'Interações gerais': 'interactions',
+  'Compras de Produtos': 'shopping',
+  'Assistência e Suporte': 'support',
+};
+
 export const Actions = {
   types: {
-    async list({ projectUuid }) {
+    async list({ projectUuid, language }) {
       const { data } = await request.$http.get(
         `api/${projectUuid}/template-action/`,
         {
+          params: {
+            language,
+          },
           hideGenericErrorAlert: true,
         },
       );
 
-      const groups = {
-        'Interações gerais': 'interactions',
-        'Compras de Produtos': 'shopping',
-        'Assistência e Suporte': 'support',
-      };
-
       return data
-        .map(({ uuid, name, prompt, action_type, group }) => ({
-          uuid,
-          name,
-          prompt,
-          type: action_type,
-          group: groups[group],
-        }))
+        .map(
+          ({ uuid, name, display_prompt, action_type, group, language }) => ({
+            uuid,
+            name,
+            prompt: display_prompt,
+            type: action_type,
+            group: groups[group],
+          }),
+        )
         .filter(({ group }) => group);
     },
   },
 
-  async create({ projectUuid, flowUuid, name, prompt, type }) {
+  async create({ projectUuid, flowUuid, templateUuid, name, prompt, type }) {
     const { data } = await request.$http.post(`api/${projectUuid}/flows/`, {
       uuid: flowUuid,
+      action_template_uuid: templateUuid,
       name,
       prompt,
       action_type: type,
@@ -42,6 +48,7 @@ export const Actions = {
       name: data.name,
       prompt: data.prompt,
       type: data.action_type,
+      group: templateUuid ? groups[data.group] || 'custom' : 'custom',
     };
   },
 
@@ -69,11 +76,12 @@ export const Actions = {
     const { data } = await request.$http.get(`api/${projectUuid}/flows/`);
 
     return data.map(
-      ({ uuid, name, prompt, action_type, content_base, fallback }) => ({
+      ({ uuid, name, prompt, action_type, content_base, fallback, group }) => ({
         uuid,
         name,
         prompt,
         type: action_type,
+        group: groups[group] || 'custom',
       }),
     );
   },

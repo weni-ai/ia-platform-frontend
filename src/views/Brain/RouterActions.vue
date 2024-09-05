@@ -155,6 +155,7 @@ export default {
         type: action.type,
         name: action.name,
         description: action.prompt,
+        group: action.group,
         status: null,
       };
     },

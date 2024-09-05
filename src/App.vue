@@ -87,8 +87,6 @@ export default {
         ) {
           this.profileInfo();
 
-          this.actionsStore.loadTypes();
-
           HotjarIdentifyUser({
             token: localStorage.getItem('authToken'),
           });
@@ -140,6 +138,8 @@ export default {
       const { data } = await this.getMyProfileInfo();
       if (data) {
         this.$store.state.User.me = data;
+
+        this.actionsStore.loadTypes();
 
         this.setUserName(data.name);
         if (data.language?.includes?.('-')) {
