@@ -55,7 +55,7 @@ defineEmits(['send']);
   outline: none;
 
   border-radius: $unnnic-border-radius-md;
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
+  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-clean;
 
   &::placeholder {
     color: $unnnic-color-neutral-clean;
