@@ -3,6 +3,10 @@ import { createStore } from 'vuex';
 import ModalChangeAction from '@/components/actions/ModalChangeAction.vue';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import i18n from '@/utils/plugins/i18n';
+import { Actions as ActionsAPI } from '@/api/nexus/Actions';
+import { useAlertStore } from '@/store/Alert';
+import { useActionsStore } from '@/store/Actions';
+import { createTestingPinia } from '@pinia/testing';
 
 vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
   data: {
@@ -25,12 +29,28 @@ vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
 const editRequest = vi
   .spyOn(nexusaiAPI.router.actions, 'edit')
   .mockResolvedValue({
-    data: {
-      uuid: '1234',
-      name: 'Action Name Edited',
-      prompt: 'Action Description Edited',
-    },
+    uuid: '1234',
+    name: 'Action Name Edited',
+    prompt: 'Action Description Edited',
   });
+
+vi.spyOn(ActionsAPI, 'list').mockResolvedValue([
+  {
+    uuid: '1234',
+    name: 'Action Name',
+    prompt: 'Action Description',
+  },
+]);
+
+vi.mock('@/store', () => ({
+  default: {
+    state: {
+      Auth: {
+        connectProjectUuid: 'test2323test',
+      },
+    },
+  },
+}));
 
 const store = createStore({
   state() {
@@ -60,6 +80,8 @@ global.runtimeVariables = {
   },
 };
 
+const pinia = createTestingPinia({ stubActions: false });
+
 describe('ModalChangeAction', () => {
   let wrapper;
 
@@ -75,7 +97,7 @@ describe('ModalChangeAction', () => {
       },
 
       global: {
-        plugins: [store],
+        plugins: [store, pinia],
       },
     });
 
@@ -142,6 +164,9 @@ describe('ModalChangeAction', () => {
     beforeEach(async () => {
       wrapper = setup();
 
+      const actionsStore = useActionsStore();
+      await actionsStore.load();
+
       const name = wrapper.findComponent('[data-test="name-input"]');
       const description = wrapper.findComponent(
         '[data-test="description-textarea"]',
@@ -163,29 +188,21 @@ describe('ModalChangeAction', () => {
         expect.objectContaining({
           projectUuid: 'test2323test',
           name: 'Action Name Edited',
-          description: 'Action Description Edited',
+          prompt: 'Action Description Edited',
           actionUuid: '1234',
         }),
       );
     });
 
     it('should show success alert message', () => {
-      expect(store.state.alert).toEqual({
+      const alertStore = useAlertStore();
+
+      expect(alertStore.add).toHaveBeenCalledWith({
         type: 'success',
         text: wrapper.vm.$t('modals.actions.edit.messages.success', {
           name: 'Action Name Edited',
         }),
       });
-    });
-
-    it('emits edited with correct object', () => {
-      expect(wrapper.emitted('edited')).toContainEqual([
-        '1234',
-        {
-          name: 'Action Name Edited',
-          description: 'Action Description Edited',
-        },
-      ]);
     });
   });
 });

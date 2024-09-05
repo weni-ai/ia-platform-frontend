@@ -2,7 +2,9 @@ import { mount } from '@vue/test-utils';
 import { ref } from 'vue';
 import SelectFlow from '../SelectFlow.vue';
 import lodash from 'lodash';
-import { createStore } from 'vuex';
+import { createPinia, setActivePinia } from 'pinia';
+import { Actions } from '@/api/nexus/Actions';
+import { useActionsStore } from '@/store/Actions';
 
 vi.spyOn(lodash, 'debounce').mockImplementation((fn) => fn);
 
@@ -40,32 +42,18 @@ const items = {
 
 const alreadyAddedAction = {
   uuid: '123',
-  extension_file: 'action',
-  created_file_name: 'Action One',
-  description: 'Action One Description',
+  name: 'Action One',
+  prompt: 'Action One Description',
+  type: 'custom',
 };
-
-const store = createStore({
-  state() {
-    return {
-      Actions: {
-        status: null,
-        data: [alreadyAddedAction],
-
-        types: {
-          status: null,
-          data: [],
-        },
-      },
-    };
-  },
-});
 
 describe('SelectFlow.vue', () => {
   let wrapper;
   let flows;
 
   beforeEach(() => {
+    setActivePinia(createPinia());
+
     wrapper = mount(SelectFlow, {
       props: {
         flowUuid: '',
@@ -73,9 +61,7 @@ describe('SelectFlow.vue', () => {
         items,
       },
 
-      global: {
-        plugins: [store],
-      },
+      global: {},
     });
 
     flows = wrapper.findAll('[data-test^="flow-"]');
@@ -135,7 +121,12 @@ describe('SelectFlow.vue', () => {
   });
 
   describe('when the user wants to select an already added flow', () => {
-    it('should not emit update:flowUuid and update:name', () => {
+    it('should not emit update:flowUuid and update:name', async () => {
+      vi.spyOn(Actions, 'list').mockResolvedValue([alreadyAddedAction]);
+
+      const actionsStore = useActionsStore();
+      await actionsStore.load();
+
       const nonSelectableFlow = flows.find((flow) => {
         return flow.attributes('data-test').endsWith(alreadyAddedAction.uuid);
       });
