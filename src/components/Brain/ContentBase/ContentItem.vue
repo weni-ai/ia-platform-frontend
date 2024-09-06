@@ -49,13 +49,15 @@
 
           <p
             v-else
-            class="files-list__content__file__content__sub_title"
+            :class="[
+              'files-list__content__file__content__sub_title',
+              {
+                'files-list__content__file__content__sub_title-fail':
+                  file.status === 'fail',
+              },
+            ]"
           >
-            {{
-              file.status === 'uploading'
-                ? $t('content_bases.files.status.uploading')
-                : timeAgo
-            }}
+            {{ subTitle }}
           </p>
         </UnnnicToolTip>
       </header>
@@ -205,6 +207,15 @@ export default {
 
     timeAgo() {
       return this.formatTimeAgo(this.file.created_at);
+    },
+
+    subTitle() {
+      if (this.file.status === 'fail')
+        return i18n.global.t('content_bases.text.error');
+
+      return this.file.status === 'uploading'
+        ? i18n.global.t('content_bases.files.status.uploading')
+        : this.timeAgo;
     },
 
     extension() {
@@ -384,6 +395,10 @@ export default {
 
     .files-list__content__file__icon {
       background-color: inherit;
+
+      :deep(.unnnic-avatar-icon) {
+        background-color: inherit;
+      }
     }
 
     .files-list__content__file__icon__itself,
@@ -429,6 +444,10 @@ export default {
       font-family: $unnnic-font-family-secondary;
       font-size: $unnnic-font-size-body-md;
       font-weight: $unnnic-font-weight-regular;
+
+      &-fail {
+        color: $unnnic-color-aux-red-300;
+      }
     }
   }
 

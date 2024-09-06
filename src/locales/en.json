@@ -174,7 +174,8 @@
       "text": "Text"
     },
     "text": {
-      "description": "Manually type in the content that the agent will use to answer the questions"
+      "description": "Manually type in the content that the agent will use to answer the questions",
+      "error": "Error uploading file"
     },
     "file_with_error": "File with error. Delete and add it again.",
     "site_with_error": "Site with error. Delete and add it again.",

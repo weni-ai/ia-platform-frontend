@@ -10,7 +10,6 @@
         tag="p"
         family="secondary"
         size="body-gt"
-        marginBottom="sm"
         weight="400"
       >
         {{ $t('content_bases.description') }}
@@ -51,13 +50,12 @@
       :items="sites"
       shape="accordion"
     />
-    <section v-if="activeTab === 'text'">
-      <ContentText
-        v-model="$store.state.Brain.contentText.current"
-        :isLoading="item?.status === 'loading'"
-        class="content-base__content-tab__text"
-      />
-    </section>
+    <ContentText
+      v-if="activeTab === 'text'"
+      v-model="$store.state.Brain.contentText.current"
+      :isLoading="item?.status === 'loading'"
+      class="content-base__content-tab__text"
+    />
   </section>
 </template>
 

@@ -174,7 +174,8 @@
       "text": "Texto"
     },
     "text": {
-      "description": "Escreva manualmente o conteúdo que o agente usará para responder às perguntas"
+      "description": "Escreva manualmente o conteúdo que o agente usará para responder às perguntas",
+      "error": "Erro ao carregar o arquivo"
     },
     "file_with_error": "Arquivo com erro. Exclua e adicione-o novamente.",
     "site_with_error": "Site com erro. Exclua e adicione-o novamente.",
