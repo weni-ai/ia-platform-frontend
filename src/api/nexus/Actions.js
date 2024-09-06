@@ -26,7 +26,7 @@ export const Actions = {
             name,
             prompt: display_prompt,
             type: action_type,
-            group: groups[group],
+            group: Object.values(groups).includes(group) ? group : 'custom',
           }),
         )
         .filter(({ group }) => group);
@@ -48,7 +48,10 @@ export const Actions = {
       name: data.name,
       prompt: data.prompt,
       type: data.action_type,
-      group: templateUuid ? groups[data.group] || 'custom' : 'custom',
+      group:
+        templateUuid && Object.values(groups).includes(data.group)
+          ? data.group
+          : 'custom',
     };
   },
 
@@ -81,7 +84,7 @@ export const Actions = {
         name,
         prompt,
         type: action_type,
-        group: groups[group] || 'custom',
+        group: Object.values(groups).includes(group) ? group : 'custom',
       }),
     );
   },

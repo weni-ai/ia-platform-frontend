@@ -45,7 +45,7 @@
       :description="$t('content_bases.sites.title')"
       :addText="$t('content_bases.sites.add_site')"
       defaultIcon="globe"
-      :columns="1"
+      columns="1, 1fr"
       @add="openAddSite"
       @remove="onRemove"
     />
