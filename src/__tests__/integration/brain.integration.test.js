@@ -14,6 +14,10 @@ import nexusaiAPI from '@/api/nexusaiAPI';
 import { expect } from 'vitest';
 import { createWebHistory, createRouter } from 'vue-router';
 import Home from '@/views/Home.vue';
+import { createTestingPinia } from '@pinia/testing';
+import { Actions as ActionsAPI } from '@/api/nexus/Actions';
+
+const pinia = createTestingPinia({ stubActions: false });
 
 const store = createStore({
   state() {
@@ -183,18 +187,15 @@ vi.spyOn(nexusaiAPI.router, 'read').mockResolvedValue({
   },
 });
 
-vi.spyOn(nexusaiAPI.router.actions, 'list').mockResolvedValue({
-  data: [
-    {
-      uuid: '1',
-      name: 'Action 1',
-      prompt: 'Description 1',
-      content_base: '4',
-    },
-  ],
-});
+vi.spyOn(ActionsAPI, 'list').mockResolvedValue([
+  {
+    uuid: '1',
+    name: 'Action 1',
+    prompt: 'Description 1',
+  },
+]);
 
-vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
+vi.spyOn(ActionsAPI.flows, 'list').mockResolvedValue({
   data: {
     count: 3,
     next: null,
@@ -277,7 +278,7 @@ describe('Brain integration', () => {
 
     wrapper = mount(Brain, {
       global: {
-        plugins: [store, router],
+        plugins: [store, router, pinia],
         components: {
           BrainSideBar,
           BrainHeader,
@@ -484,9 +485,8 @@ describe('Brain integration', () => {
 
     expect(createRequest).toHaveBeenCalledWith(
       expect.objectContaining({
-        projectUuid: 'store-connect-uuid',
         name: 'Weni Action Generate - 123',
-        description: 'Description action test',
+        prompt: 'Description action test',
         flowUuid: '123',
       }),
     );
