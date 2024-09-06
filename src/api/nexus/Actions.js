@@ -13,7 +13,7 @@ export const Actions = {
         `api/${projectUuid}/template-action/`,
         {
           params: {
-            language,
+            language: language === 'en-us' ? 'en' : language,
           },
           hideGenericErrorAlert: true,
         },
