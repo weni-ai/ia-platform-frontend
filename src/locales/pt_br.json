@@ -70,7 +70,10 @@
     },
     "actions": {
       "title": "Ações",
-      "description": "Configure quando seu fluxo deve ser iniciado.",
+      "description": "Ao receber uma mensagem, seu agente verificará se ela corresponde a uma ação criada. Se sim, o fluxo será iniciado e todas as mensagens seguintes serão direcionadas para esse fluxo até sua conclusão.",
+      "create_new_action": "Crie uma nova ação e selecione o fluxo que será iniciado",
+      "create_action": "Crie ações atribuindo o fluxo que será iniciado",
+      "pre_defined_or_customized_actions": "Ações pré-definidas ou personalizadas",
       "add": "Adicionar ação",
       "router_activated": "Brain ativado em {name}",
       "router_removed": "Brain removido de {name}",
@@ -180,7 +183,9 @@
       "download_file": "Baixar arquivo",
       "access_site": "Acessar site",
       "remove_site": "Remover site",
-      "remove_file": "Remover arquivo"
+      "remove_file": "Remover arquivo",
+      "edit_action": "Editar ação",
+      "remove_action": "Remover ação"
     },
     "files": {
       "upload_content": "Carregar conteúdo de arquivos",
@@ -627,6 +632,7 @@
         "adjustments_modal_alert_discard": "Descartar alterações",
         "tests": "Teste bases de conhecimento",
         "tests_subtitle": "Teste a base de conhecimento fazendo perguntas e observando as respostas.",
+        "preview_tests_placeholder": "Digite uma mensagem",
         "tests_placeholder": "Mensagem",
         "api": "Integrar esta inteligência",
         "api_subtitle": "Nossa API é compatível com diversas plataformas via integração por APIs REST. Para saber mais, acesse a <a href='https://docs.ilhasoft.mobi/l/pt/inteligencia-conteudo/integrando-uma-intelig-ncia-de-conte-do' target='_blank' class='repository-api__header__subtitle--link'>documentação</a> e a <a href='https://api.bothub.it/#tag/repository' target='_blank' class='repository-api__header__subtitle--link'>API explorer</a>.",
@@ -1383,23 +1389,57 @@
   "import_card": {
     "importing": "Importando.."
   },
+  "action_type_selector": {
+    "title": "Selecione o tipo de ação",
+    "types": {
+      "interactions": {
+        "title": "Cumprimento",
+        "description": "Ações para saudar, se despedir e navegar no sistema"
+      },
+      "shopping": {
+        "title": "Compras e produtos",
+        "description": "Ações para comprar, acompanhar pedidos e acessar benefícios"
+      },
+      "support": {
+        "title": "Assistência e suporte",
+        "description": "Ações para suporte ao cliente e ajustes de comunicação"
+      },
+      "custom": {
+        "title": "Personalizada",
+        "description": "Ações para atender necessidades específicas"
+      }
+    }
+  },
   "modals": {
     "actions": {
       "add": {
-        "title": "Adicionar ação",
+        "title": "Adicionar ação personalizada",
         "description": "Crie uma nova ação e configure quando ela deve ser iniciada",
+        "custom_title": "Adicionar ação de {name}",
+        "custom_description": "Selecione a ação e o fluxo que será iniciado",
         "messages": {
-          "success": "Ação {name} criada com sucesso"
+          "success": "Ação {name} adicionada com sucesso"
         },
         "steps": {
+          "select_action_type": {
+            "inputs": {
+              "select_action_type": {
+                "label": "Selecione a ação"
+              },
+              "description": {
+                "label": "Descrição da ação:"
+              }
+            }
+          },
           "describe": {
-            "title": "Descrever ação",
+            "title": "Configurar ação",
             "explanation": "Descreva a ação e quando o usuário deve entrar nela. É partir dessa descrição que a ação vai ser iniciada",
             "inputs": {
               "description": {
                 "label": "Esta ação será iniciada quando...",
                 "placeholder": "o usuário disser que quer atendimento humano",
-                "help": "Tente ser objetivo. É a partir da descrição que a ação vai ser iniciada"
+                "help": "Tente ser objetivo. É a partir da descrição que a ação vai ser iniciada",
+                "aux_text_whatsapp_cart": "Quando o usuário enviar um produto no WhatsApp"
               }
             }
           },
@@ -1426,7 +1466,8 @@
           },
           "generate_action_name": {
             "chatbot_goal": "Chatbot que sugere nomes para ações baseado na descrição informada",
-            "context": "Descrição: {description}"
+            "context": "Descrição: {description}",
+            "whatsapp_cart": "Carrinho de compras"
           }
         }
       },

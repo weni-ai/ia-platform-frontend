@@ -39,7 +39,18 @@
           >
             {{ fileName }}
           </p>
-          <p class="files-list__content__file__content__sub_title">
+
+          <p
+            v-if="extension === 'action'"
+            class="files-list__content__file__content__sub_title"
+          >
+            {{ $t(`action_type_selector.types.${file.group}.title`) }}
+          </p>
+
+          <p
+            v-else
+            class="files-list__content__file__content__sub_title"
+          >
             {{
               file.status === 'uploading'
                 ? $t('content_bases.files.status.uploading')
@@ -56,16 +67,6 @@
           size="sm"
           scheme="neutral-cloudy"
           class="files-list__content__file__actions__loading"
-        />
-
-        <UnnnicIcon
-          v-if="extension === 'action'"
-          icon="delete"
-          size="sm"
-          class="files-list__content__file__actions__icon"
-          clickable
-          data-test="action-remove"
-          @click.stop="$emit('remove')"
         />
 
         <ContentItemActions
@@ -89,7 +90,7 @@
 import nexusaiAPI from '@/api/nexusaiAPI';
 import FilePreview from '@/views/ContentBases/components/FilePreview.vue';
 import ContentItemActions from '@/views/repository/content/ContentItemActions.vue';
-import { createDownloadAnchor } from '@/utils';
+import { actionGroupIcon, createDownloadAnchor } from '@/utils';
 import i18n from '@/utils/plugins/i18n.js';
 
 export default {
@@ -104,7 +105,7 @@ export default {
     clickable: Boolean,
   },
 
-  emits: ['click', 'remove'],
+  emits: ['click', 'remove', 'edit'],
 
   data() {
     return {
@@ -116,12 +117,10 @@ export default {
 
   computed: {
     actions() {
-      if (this.extension === 'action') {
-        return [];
-      }
-
       const can = {
         seeDetails: this.file.status === 'uploaded',
+
+        edit: this.extension === 'action',
 
         accessSite:
           this.file.extension_file === 'site' &&
@@ -133,7 +132,7 @@ export default {
 
         remove:
           ['fail-upload', 'fail'].includes(this.file.status) ||
-          !this.file.uuid.startsWith('temp-'),
+          !this.file.uuid?.startsWith('temp-'),
       };
 
       const actions = [];
@@ -165,14 +164,28 @@ export default {
         });
       }
 
+      if (can.edit) {
+        const isCustom = this.file.group === 'custom';
+
+        actions.push({
+          scheme: 'neutral-dark',
+          icon: isCustom ? 'edit' : 'info',
+          text: isCustom
+            ? this.$t('content_bases.actions.edit_action')
+            : this.$t('content_bases.actions.see_details'),
+          onClick: () => this.$emit('edit'),
+        });
+      }
+
       if (can.remove) {
         actions.push({
           scheme: 'aux-red-500',
           icon: 'delete',
           text:
-            this.extension === 'site'
-              ? this.$t('content_bases.actions.remove_site')
-              : this.$t('content_bases.actions.remove_file'),
+            {
+              site: this.$t('content_bases.actions.remove_site'),
+              action: this.$t('content_bases.actions.remove_action'),
+            }[this.extension] || this.$t('content_bases.actions.remove_file'),
           onClick: () => this.$emit('remove'),
         });
       }
@@ -212,6 +225,10 @@ export default {
     },
 
     icon() {
+      if (this.extension === 'action') {
+        return actionGroupIcon(this.file.group);
+      }
+
       return (
         {
           pdf: 'picture_as_pdf',
@@ -221,7 +238,6 @@ export default {
           doc: 'draft',
           docx: 'draft',
           site: 'globe',
-          action: 'bolt',
         }[this.extension] || 'draft'
       );
     },

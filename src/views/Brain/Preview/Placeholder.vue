@@ -1,9 +1,10 @@
 <template>
   <section class="preview-placeholder">
-    <img
+    <UnnnicIcon
+      icon="chat"
+      filled
+      scheme="inherit"
       class="preview-placeholder__icon-chat"
-      src="@/assets/icons/chat.svg"
-      alt="chat"
     />
 
     <p class="preview-placeholder__description">
@@ -19,8 +20,12 @@
   align-items: center;
   justify-content: center;
 
-  &__icon-chat {
+  & &__icon-chat {
+    $icon-size: 3.5 * $unnnic-font-size;
+
+    color: $unnnic-color-neutral-soft;
     margin-bottom: $unnnic-spacing-nano;
+    font-size: $icon-size;
   }
 
   &__description {

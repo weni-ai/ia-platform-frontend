@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import ContentItem from '@/components/Brain/ContentBase/ContentItem.vue';
 import nexusaiAPI from '@/api/nexusaiAPI';
+import { createStore } from 'vuex';
 
 nexusaiAPI.intelligences.contentBases.files.download = vi
   .fn()
@@ -45,6 +46,30 @@ function createFileObject(
   }[type];
 }
 
+const store = createStore({
+  state() {
+    return {
+      Actions: {
+        status: null,
+        data: [],
+
+        types: {
+          status: null,
+          data: [],
+        },
+      },
+
+      Auth: {
+        connectProjectUuid: '5678',
+      },
+
+      router: {
+        contentBaseUuid: '4321',
+      },
+    };
+  },
+});
+
 describe('ContentItem.vue', () => {
   let wrapper;
 
@@ -56,6 +81,10 @@ describe('ContentItem.vue', () => {
           clickable: true,
           compressed: true,
         },
+
+        global: {
+          plugins: [store],
+        },
       });
     });
 
@@ -65,28 +94,12 @@ describe('ContentItem.vue', () => {
       expect(name.text()).toBe('Name of the Action');
     });
 
-    it('can be removed', async () => {
-      const buttonRemove = wrapper.find('[data-test="action-remove"]');
-
-      expect(buttonRemove.exists()).toBe(true);
-
-      await buttonRemove.trigger('click');
-
-      expect(wrapper.emitted('remove')).toHaveLength(1);
-    });
-
     describe('when user clicks inside the component', () => {
       it('emits click event', async () => {
         await wrapper.element.firstElementChild.click();
 
         expect(wrapper.emitted('click')).toHaveLength(1);
       });
-    });
-
-    // Test for `actions` method
-    it('returns an empty actions array', () => {
-      const actions = wrapper.vm.actions;
-      expect(actions).toEqual([]);
     });
   });
 
@@ -99,19 +112,8 @@ describe('ContentItem.vue', () => {
           compressed: true,
         },
         global: {
+          plugins: [store],
           stubs: ['FilePreview'],
-          mocks: {
-            $store: {
-              state: {
-                Auth: {
-                  connectProjectUuid: '5678',
-                },
-                router: {
-                  contentBaseUuid: '4321',
-                },
-              },
-            },
-          },
         },
       });
     });
@@ -161,19 +163,8 @@ describe('ContentItem.vue', () => {
           compressed: true,
         },
         global: {
+          plugins: [store],
           stubs: ['FilePreview'],
-          mocks: {
-            $store: {
-              state: {
-                Auth: {
-                  connectProjectUuid: '5678',
-                },
-                router: {
-                  contentBaseUuid: '4321',
-                },
-              },
-            },
-          },
         },
       });
     });
@@ -250,6 +241,10 @@ describe('ContentItem.vue', () => {
                 clickable: false,
                 compressed: true,
               },
+
+              global: {
+                plugins: [store],
+              },
             });
           });
 
@@ -279,6 +274,10 @@ describe('ContentItem.vue', () => {
                 clickable: false,
                 compressed: true,
               },
+
+              global: {
+                plugins: [store],
+              },
             });
           });
 
@@ -299,6 +298,10 @@ describe('ContentItem.vue', () => {
                 }), // 5 hours ago
                 clickable: false,
                 compressed: true,
+              },
+
+              global: {
+                plugins: [store],
               },
             });
           });
@@ -321,6 +324,10 @@ describe('ContentItem.vue', () => {
                 clickable: false,
                 compressed: true,
               },
+
+              global: {
+                plugins: [store],
+              },
             });
           });
 
@@ -340,6 +347,10 @@ describe('ContentItem.vue', () => {
           file: createFileObject('file', { status: 'fail' }),
           clickable: false,
           compressed: true,
+        },
+
+        global: {
+          plugins: [store],
         },
       });
     });

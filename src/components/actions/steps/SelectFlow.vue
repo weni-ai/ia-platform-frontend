@@ -105,6 +105,7 @@ import {
   ref,
   watch,
 } from 'vue';
+import { useActionsStore } from '@/store/Actions.js';
 
 const filterName = ref('');
 const intersectionObserver = ref(null);
@@ -126,14 +127,9 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-
-  currentActions: {
-    type: Array,
-    default() {
-      return [];
-    },
-  },
 });
+
+const actionsStore = useActionsStore();
 
 const emit = defineEmits(['update:flowUuid', 'update:name']);
 
@@ -192,7 +188,7 @@ function isFlowSelected(flow) {
 }
 
 function isFlowAlreadyAdded(flow) {
-  return props.currentActions.some(({ uuid }) => flow.uuid === uuid);
+  return actionsStore.actions.data.some(({ uuid }) => flow.uuid === uuid);
 }
 
 function isFlowDisabled(flow) {
@@ -209,7 +205,7 @@ function selectFlow(flow) {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .text-truncate {
   flex: 1;
   width: 0;
@@ -243,6 +239,11 @@ function selectFlow(flow) {
     padding-right: $unnnic-inline-nano + $scroll-size;
     margin-right: -($unnnic-inline-nano + $scroll-size);
 
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: max-content;
+    gap: $unnnic-spacing-xs;
+
     &::-webkit-scrollbar {
       width: $scroll-size;
     }
@@ -256,11 +257,6 @@ function selectFlow(flow) {
       background: $unnnic-color-neutral-soft;
       border-radius: $unnnic-border-radius-pill;
     }
-
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: max-content;
-    gap: $unnnic-spacing-xs;
   }
 }
 

@@ -8,7 +8,7 @@
       marginBottom="sm"
       weight="black"
     >
-      {{ $t('modals.actions.add.title') }}
+      {{ title }}
     </UnnnicIntelligenceText>
 
     <UnnnicIntelligenceText
@@ -18,7 +18,7 @@
       size="body-gt"
       marginBottom="sm"
     >
-      {{ $t('modals.actions.add.description') }}
+      {{ description }}
     </UnnnicIntelligenceText>
 
     <footer class="left-sidebar__footer">
@@ -35,6 +35,16 @@
 
 <script setup>
 defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+
+  description: {
+    type: String,
+    required: true,
+  },
+
   steps: {
     type: Array,
     default() {

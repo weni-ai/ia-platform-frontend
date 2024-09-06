@@ -15,10 +15,11 @@ describe('Placeholder', () => {
   });
 
   test('renders the chat icon correctly', () => {
-    const icon = wrapper.find('.preview-placeholder__icon-chat');
+    const icon = wrapper.findComponent('.preview-placeholder__icon-chat');
     expect(icon.exists()).toBe(true);
-    expect(icon.attributes('src')).toBe('/src/assets/icons/chat.svg');
-    expect(icon.attributes('alt')).toBe('chat');
+
+    expect(icon.props('icon')).toBe('chat');
+    expect(icon.props('filled')).toBeTruthy();
   });
 
   test('has the correct CSS classes', () => {

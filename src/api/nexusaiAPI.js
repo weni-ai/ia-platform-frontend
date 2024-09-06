@@ -1,5 +1,6 @@
 import request from '@/api/nexusaiRequest';
 import forceHttps from '@/api/utils/forceHttps';
+import { Actions } from './nexus/Actions';
 
 export default {
   question: {
@@ -123,57 +124,7 @@ export default {
       });
     },
 
-    actions: {
-      create({ projectUuid, flowUuid, name, description }) {
-        return request.$http.post(`api/${projectUuid}/flows/`, {
-          uuid: flowUuid,
-          name: name,
-          prompt: description,
-          fallback: false,
-        });
-      },
-
-      edit({ projectUuid, actionUuid, name, description }) {
-        return request.$http.patch(`api/${projectUuid}/flows/${actionUuid}/`, {
-          name,
-          prompt: description,
-        });
-      },
-
-      delete({ projectUuid, actionUuid }) {
-        return request.$http.delete(`api/${projectUuid}/flows/${actionUuid}/`);
-      },
-
-      list({ projectUuid }) {
-        return request.$http.get(`api/${projectUuid}/flows/`);
-      },
-
-      generatedNames: {
-        generate({ projectUuid, chatbot_goal, context }) {
-          return request.$http.post(
-            `api/${projectUuid}/generate-action-name/`,
-            {
-              chatbot_goal,
-              context,
-            },
-          );
-        },
-      },
-
-      flows: {
-        list({ next, projectUuid, name }) {
-          if (next) {
-            return request.$http.get(`api/${projectUuid}/search-flows/${next}`);
-          }
-
-          return request.$http.get(`api/${projectUuid}/search-flows/`, {
-            params: {
-              name: name ? name : undefined,
-            },
-          });
-        },
-      },
-    },
+    actions: Actions,
 
     tunings: {
       read({ projectUuid }) {

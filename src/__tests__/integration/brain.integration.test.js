@@ -14,10 +14,24 @@ import nexusaiAPI from '@/api/nexusaiAPI';
 import { expect } from 'vitest';
 import { createWebHistory, createRouter } from 'vue-router';
 import Home from '@/views/Home.vue';
+import { createTestingPinia } from '@pinia/testing';
+import { Actions as ActionsAPI } from '@/api/nexus/Actions';
+
+const pinia = createTestingPinia({ stubActions: false });
 
 const store = createStore({
   state() {
     return {
+      Actions: {
+        status: null,
+        data: [],
+
+        types: {
+          status: null,
+          data: [],
+        },
+      },
+
       Brain: {
         isSavingChanges: false,
         tabsWithError: null,
@@ -53,11 +67,33 @@ const store = createStore({
   },
   getters: {
     isBrainSaveButtonDisabled: () => false,
+
+    actionsTypesAvailable() {
+      return [];
+    },
   },
   actions: {
     saveBrainChanges: vi.fn(),
     loadBrainCustomization: vi.fn(),
     loadBrainTunings: vi.fn(),
+
+    async loadActions({ state: { Actions: state } }) {
+      if (state.status !== null) {
+        return;
+      }
+
+      try {
+        state.status = 'loading';
+
+        const { data } = { data: [] };
+
+        state.data = data;
+
+        state.status = 'complete';
+      } catch (error) {
+        state.status = 'error';
+      }
+    },
   },
 });
 
@@ -151,18 +187,15 @@ vi.spyOn(nexusaiAPI.router, 'read').mockResolvedValue({
   },
 });
 
-vi.spyOn(nexusaiAPI.router.actions, 'list').mockResolvedValue({
-  data: [
-    {
-      uuid: '1',
-      name: 'Action 1',
-      prompt: 'Description 1',
-      content_base: '4',
-    },
-  ],
-});
+vi.spyOn(ActionsAPI, 'list').mockResolvedValue([
+  {
+    uuid: '1',
+    name: 'Action 1',
+    prompt: 'Description 1',
+  },
+]);
 
-vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
+vi.spyOn(ActionsAPI.flows, 'list').mockResolvedValue({
   data: {
     count: 3,
     next: null,
@@ -245,7 +278,7 @@ describe('Brain integration', () => {
 
     wrapper = mount(Brain, {
       global: {
-        plugins: [store, router],
+        plugins: [store, router, pinia],
         components: {
           BrainSideBar,
           BrainHeader,
@@ -400,6 +433,16 @@ describe('Brain integration', () => {
 
     await addActionBtn.trigger('click');
 
+    await wrapper
+      .findComponent({ name: 'ModalActionTypeSelector' })
+      .find('[data-test="custom"]')
+      .trigger('click');
+
+    await wrapper
+      .findComponent({ name: 'ModalActionTypeSelector' })
+      .find('[data-test="next-button"]')
+      .trigger('click');
+
     const textAreaInput = wrapper.findComponent(
       '[data-test="description-textarea"]',
     );
@@ -442,81 +485,10 @@ describe('Brain integration', () => {
 
     expect(createRequest).toHaveBeenCalledWith(
       expect.objectContaining({
-        projectUuid: 'store-connect-uuid',
         name: 'Weni Action Generate - 123',
-        description: 'Description action test',
+        prompt: 'Description action test',
         flowUuid: '123',
       }),
     );
-  });
-
-  test('checking that the actions tab is edit action', async () => {
-    const action = wrapper.find('.files-list__content__file--clickable');
-
-    await action.trigger('click');
-
-    const editTextArea = wrapper
-      .findComponent('[data-test="description-textarea"]')
-      .find('textarea');
-
-    expect(editTextArea.element.value).toBe('Description 1');
-
-    await editTextArea.setValue('Description updated');
-
-    expect(editTextArea.element.value).toBe('Description updated');
-
-    const inputAction = wrapper.findAll('[data-test="name-input"]')[2];
-
-    expect(inputAction.element.value).toBe('Action 1');
-
-    await inputAction.setValue('Action updated');
-
-    expect(inputAction.element.value).toBe('Action updated');
-
-    const saveBtn = wrapper.findComponent('[data-test="save-button"]');
-
-    await saveBtn.trigger('click');
-
-    expect(updatedRequest).toHaveBeenCalledWith(
-      expect.objectContaining({
-        actionUuid: '1',
-        name: 'Action updated',
-        description: 'Description updated',
-        projectUuid: 'store-connect-uuid',
-      }),
-    );
-  });
-
-  test('checking that the actions tab is remove action', async () => {
-    const navigation = wrapper.findAll('[data-test="nav-router"]');
-
-    await navigation.at(2).trigger('click');
-
-    await flushPromises();
-
-    const actionsComponent = wrapper.findComponent(RouterActions);
-    expect(actionsComponent.exists()).toBe(true);
-
-    const deleteActionBtn = wrapper.findComponent(
-      '[data-test="action-remove"]',
-    );
-
-    await deleteActionBtn.trigger('click');
-
-    const descriptionText = wrapper.vm
-      .$t('modals.actions.remove.description', {
-        name: 'Action 1',
-      })
-      .replace(/<br\s*\/>/g, '<br>');
-
-    const descriptionElement = wrapper.findAll('p').at(4).element.innerHTML;
-
-    expect(descriptionElement).toBe(descriptionText);
-
-    const btnFinish = wrapper.findComponent('[data-test="btn-complete"]');
-
-    await btnFinish.trigger('click');
-
-    expect(removedRequest).toHaveBeenCalled();
   });
 });

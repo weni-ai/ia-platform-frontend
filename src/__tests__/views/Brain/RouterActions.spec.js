@@ -6,17 +6,6 @@ import ModalActions from '@/components/actions/ModalActions.vue';
 import ModalChangeAction from '@/components/actions/ModalChangeAction.vue';
 import ModalRemoveAction from '@/components/actions/ModalRemoveAction.vue';
 
-const store = createStore({
-  state() {
-    return {
-      Auth: {
-        connectProjectUuid: 'test2323test',
-      },
-      alert: null,
-    };
-  },
-});
-
 const mockResponse = {
   data: [
     {
@@ -52,6 +41,54 @@ const mockItems = {
   status: null,
 };
 
+const store = createStore({
+  state() {
+    return {
+      Actions: {
+        status: null,
+        data: [],
+
+        types: {
+          status: null,
+          data: [],
+        },
+      },
+
+      Auth: {
+        connectProjectUuid: 'test2323test',
+      },
+
+      alert: null,
+    };
+  },
+
+  getters: {
+    actionsTypesAvailable() {
+      return [];
+    },
+  },
+
+  actions: {
+    async loadActions({ state: { Actions: state } }) {
+      if (state.status !== null) {
+        return;
+      }
+
+      try {
+        state.status = 'loading';
+
+        const { data } = mockItems;
+
+        state.data = data;
+
+        state.status = 'complete';
+      } catch (error) {
+        state.status = 'error';
+      }
+    },
+  },
+});
+
 vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
   data: {},
 });
@@ -85,21 +122,19 @@ describe('RouterActions', () => {
         plugins: [store],
       },
     });
-  });
 
-  test('loads actions on created hook', async () => {
-    await flushPromises();
-
-    expect(nexusaiAPI.router.actions.list).toHaveBeenCalledWith({
-      projectUuid: store.state.Auth.connectProjectUuid,
-    });
-    expect(wrapper.vm.items.data).toEqual(mockItems.data);
-    expect(wrapper.vm.items.status).toBe('complete');
+    wrapper.vm.$store.dispatch('loadActions');
   });
 
   test('opens add action modal and adds a new action', async () => {
-    wrapper.findComponent({ name: 'BasesFormGenericList' }).vm.$emit('add');
+    wrapper.findComponent({ name: 'ContentList' }).vm.$emit('add');
     await flushPromises();
+
+    expect(wrapper.vm.isActionTypeSelectorOpen).toBe(true);
+
+    await wrapper
+      .findComponent({ name: 'ModalActionTypeSelector' })
+      .vm.$emit('selected', 'custom');
 
     expect(wrapper.vm.isAddActionOpen).toBe(true);
 
@@ -187,17 +222,5 @@ describe('RouterActions', () => {
         name: actionToDelete.created_file_name,
       }),
     });
-  });
-
-  test('renders correctly when no items are found', async () => {
-    nexusaiAPI.router.actions.list = vi.fn().mockResolvedValue({ data: [] });
-    wrapper.vm.items.status = null;
-
-    await wrapper.vm.loadActions();
-    await flushPromises();
-    await wrapper.vm.$nextTick();
-
-    expect(wrapper.vm.items.data).toEqual([]);
-    expect(wrapper.vm.items.status).toBe('complete');
   });
 });

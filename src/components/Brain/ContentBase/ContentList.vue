@@ -65,7 +65,7 @@
       </section>
     </section>
 
-    <section>
+    <section v-if="!hideSearchInput">
       <UnnnicInput
         v-model="filterText"
         class="search-input"
@@ -86,7 +86,7 @@
         :compressed="shape === 'accordion'"
         :clickable="canEditItem"
         @remove="$emit('remove', file)"
-        @click="$emit('edit', file)"
+        @edit="$emit('edit', file)"
       />
 
       <div
@@ -117,6 +117,9 @@ export default {
     BasesFormGenericListHeader,
   },
   props: {
+    hideSearchInput: {
+      type: Boolean,
+    },
     description: {
       type: String,
       default: '',
@@ -139,8 +142,8 @@ export default {
     },
     canEditItem: Boolean,
     columns: {
-      type: Number,
-      default: 2,
+      type: String,
+      default: 'auto-fill, minmax(18rem, 1fr)',
     },
     shape: {
       type: String,
@@ -163,7 +166,6 @@ export default {
       color: 'neutral-cloudy',
       family: 'secondary',
       size: 'body-gt',
-      marginTop: 'xs',
       tag: 'p',
     };
 
@@ -172,7 +174,6 @@ export default {
       color: 'neutral-clean',
       family: 'secondary',
       size: 'body-md',
-      marginTop: 'xs',
       tag: 'p',
     };
 
@@ -186,11 +187,11 @@ export default {
     const status = computed(() => toValue(props.items.status));
 
     const counter = computed(() => {
-      return props.items?.data?.value?.length || 0;
+      return toValue(props.items?.data)?.length || 0;
     });
 
     const itemsFiltered = computed(() => {
-      const data = props.items?.data?.value || [];
+      const data = toValue(props.items?.data) || [];
 
       if (filterText.value) {
         return data.filter((item) =>
@@ -250,6 +251,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex: 1;
 
     .files-header {
       display: flex;
@@ -259,6 +261,7 @@ export default {
       .text-icon {
         font-size: 54px;
         color: $unnnic-color-neutral-soft;
+        margin-bottom: $unnnic-spacing-xs;
       }
 
       .text-sub-description {
@@ -274,6 +277,7 @@ export default {
       align-items: center;
       justify-content: space-between;
       margin-bottom: $unnnic-spacing-md;
+      column-gap: $unnnic-spacing-sm;
     }
   }
 
@@ -285,7 +289,7 @@ export default {
     margin-top: $unnnic-spacing-sm;
     display: grid;
     gap: $unnnic-spacing-sm;
-    grid-template-columns: repeat(v-bind(columns), 1fr);
+    grid-template-columns: repeat(v-bind(columns));
 
     &--shape-accordion {
       column-gap: $unnnic-spacing-ant;
@@ -298,6 +302,8 @@ export default {
   justify-content: center;
 
   .add-btn {
+    width: 12.5 * $unnnic-font-size;
+
     padding: $unnnic-spacing-ant $unnnic-spacing-sm + $unnnic-spacing-xs;
     :deep(.unnnic-icon__size--md) {
       height: $unnnic-icon-size-ant;

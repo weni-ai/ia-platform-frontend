@@ -7,7 +7,7 @@ export const models = [
       {
         type: 'select',
         name: 'version',
-        default: WENIGPT_OPTIONS[0],
+        default: WENIGPT_OPTIONS?.[0],
         options: WENIGPT_OPTIONS,
       },
       {

@@ -1,3 +1,4 @@
+import { useActionsStore } from '@/store/Actions';
 import VERBOSE_LANGUAGES from './verbose_languages';
 
 export const languageListToDict = (list) =>
@@ -31,4 +32,29 @@ export const createDownloadAnchor = ({ name, href }) => {
   a.setAttribute('href', href);
 
   return a;
+};
+
+export const actionGroupIcon = (groupId) => {
+  return {
+    interactions: 'chat',
+    shopping: 'shopping_cart',
+    support: 'contact_support',
+    custom: 'edit_square',
+  }[groupId];
+};
+
+export const actionInfo = ({ name, prompt, type }) => {
+  const actionsStore = useActionsStore();
+
+  const actionType = actionsStore.types.data.find(
+    (item) =>
+      item.name === name && item.prompt === prompt && item.type === type,
+  );
+
+  const group = actionType?.group || 'custom';
+
+  return {
+    icon: actionGroupIcon(group),
+    group,
+  };
 };

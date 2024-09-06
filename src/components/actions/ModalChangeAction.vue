@@ -2,48 +2,84 @@
   <UnnnicModalDialog
     v-model="modelValue"
     showCloseIcon
-    showActionsDivider
+    :showActionsDivider="isCustom"
     size="md"
     :title="action.name"
-    :secondaryButtonProps="{
-      text: $t('cancel'),
-    }"
-    :primaryButtonProps="{
-      text: $t('save_changes'),
-      disabled: !isSaveButtonActive,
-      loading: isSavingAction,
-      'data-test': 'save-button',
-    }"
+    v-bind="
+      isCustom
+        ? {
+            secondaryButtonProps: {
+              text: $t('cancel'),
+            },
+            primaryButtonProps: {
+              text: $t('save_changes'),
+              disabled: !isSaveButtonActive,
+              loading: isSavingAction,
+              'data-test': 'save-button',
+            },
+          }
+        : {}
+    "
+    class="modal-dialog"
     @secondary-button-click="close"
     @primary-button-click="saveAction"
   >
-    <UnnnicFormElement
-      :label="$t('modals.actions.add.steps.describe.inputs.description.label')"
-      :message="$t('modals.actions.add.steps.describe.inputs.description.help')"
-      class="form-element"
-    >
-      <UnnnicTextArea
-        v-model="description"
-        :placeholder="
-          $t('modals.actions.add.steps.describe.inputs.description.placeholder')
+    <template v-if="isCustom">
+      <UnnnicFormElement
+        :label="
+          $t('modals.actions.add.steps.describe.inputs.description.label')
         "
-        data-test="description-textarea"
-      />
-    </UnnnicFormElement>
+        :message="
+          $t('modals.actions.add.steps.describe.inputs.description.help')
+        "
+        class="form-element labels-textarea"
+      >
+        <UnnnicTextArea
+          v-model="description"
+          class="text-area"
+          :placeholder="
+            $t(
+              'modals.actions.add.steps.describe.inputs.description.placeholder',
+            )
+          "
+          data-test="description-textarea"
+        />
+      </UnnnicFormElement>
 
-    <UnnnicFormElement
-      :label="$t('modals.actions.add.steps.nominate_action.inputs.name.label')"
-      :message="$t('modals.actions.add.steps.nominate_action.inputs.name.help')"
-      class="form-element"
-    >
-      <UnnnicInput
-        v-model="name"
-        :placeholder="
-          $t('modals.actions.add.steps.nominate_action.inputs.name.placeholder')
+      <UnnnicFormElement
+        :label="
+          $t('modals.actions.add.steps.nominate_action.inputs.name.label')
         "
-        data-test="name-input"
-      />
-    </UnnnicFormElement>
+        :message="
+          $t('modals.actions.add.steps.nominate_action.inputs.name.help')
+        "
+        class="form-element"
+      >
+        <UnnnicInput
+          v-model="name"
+          :placeholder="
+            $t(
+              'modals.actions.add.steps.nominate_action.inputs.name.placeholder',
+            )
+          "
+          data-test="name-input"
+        />
+      </UnnnicFormElement>
+    </template>
+
+    <template v-else>
+      <section class="explanation">
+        <h3 class="explanation__title">
+          {{
+            $t(
+              'modals.actions.add.steps.select_action_type.inputs.description.label',
+            )
+          }}
+        </h3>
+
+        <p class="explanation__description">{{ description }}</p>
+      </section>
+    </template>
 
     <section class="flow-area">
       <h3 class="flow-area__title">
@@ -88,6 +124,8 @@
 <script setup>
 import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useAlertStore } from '@/store/Alert.js';
+import { useActionsStore } from '@/store/Actions.js';
 import { usePagination } from '@/views/ContentBases/pagination';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import i18n from '@/utils/plugins/i18n.js';
@@ -107,6 +145,9 @@ const emit = defineEmits(['edited']);
 
 const store = useStore();
 
+const alertStore = useAlertStore();
+const actionsStore = useActionsStore();
+
 const isSavingAction = ref(false);
 
 const name = ref('');
@@ -117,13 +158,28 @@ const linkedFlow = reactive({
   name: '',
 });
 
+const isCustom = computed(() => props.action.group === 'custom');
+
 const isSaveButtonActive = computed(() => {
-  return name.value.trim() && description.value.trim();
+  const { action } = props;
+  if (action.actionType === 'whatsapp_cart') return name.value !== action.name;
+
+  const fields = {
+    name: name.value.trim(),
+    description: description.value.trim(),
+  };
+
+  return (
+    !Object.values(fields).some((value) => !value) &&
+    !(
+      props.action.name.trim() === fields.name &&
+      props.action.description.trim() === fields.description
+    )
+  );
 });
 
 onBeforeMount(() => {
   const { action } = props;
-
   name.value = action.name;
   description.value = action.description;
 
@@ -156,7 +212,9 @@ function searchForFlowUuid(flowUuid) {
         if (flow) {
           linkedFlow.status = null;
           linkedFlow.name = flow.name;
-        } else if (flows.status.value !== 'complete') {
+        } else if (flows.status.value === 'complete') {
+          linkedFlow.status = 'error';
+        } else {
           tryToFindLinkedFlow();
         }
       })
@@ -186,26 +244,18 @@ async function saveAction() {
   try {
     isSavingAction.value = true;
 
-    const { data } = await nexusaiAPI.router.actions.edit({
-      projectUuid: store.state.Auth.connectProjectUuid,
-      actionUuid,
+    const action = await actionsStore.edit({
+      uuid: actionUuid,
       name: name.value,
-      description: description.value,
+      prompt: description.value,
     });
 
-    const action = {
-      name: data.name,
-      description: data.prompt,
-    };
-
-    store.state.alert = {
+    alertStore.add({
       type: 'success',
       text: i18n.global.t('modals.actions.edit.messages.success', {
         name: action.name,
       }),
-    };
-
-    emit('edited', actionUuid, action);
+    });
   } finally {
     isSavingAction.value = false;
     close();
@@ -214,6 +264,31 @@ async function saveAction() {
 </script>
 
 <style lang="scss" scoped>
+.explanation {
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h3 {
+    color: $unnnic-color-neutral-cloudy;
+    font-family: $unnnic-font-family-secondary;
+    font-weight: $unnnic-font-weight-regular;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+
+    margin-bottom: $unnnic-spacing-nano;
+  }
+
+  p {
+    color: $unnnic-color-neutral-darkest;
+    font-family: $unnnic-font-family-secondary;
+    font-weight: $unnnic-font-weight-regular;
+    font-size: $unnnic-font-size-body-gt;
+    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+  }
+}
+
 .form-element + .form-element {
   margin-top: $unnnic-spacing-sm;
 }

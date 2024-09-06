@@ -4,7 +4,6 @@
     showActionsDivider
     :title="currentStep.title"
     size="lg"
-    :hideSecondaryButton="currentStep === firstStep"
     :secondaryButtonProps="{
       text: $t('back'),
       'data-test': 'previous-button',
@@ -20,21 +19,43 @@
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <template #leftSidebar>
-      <LeftSidebar :steps="steps" />
+      <LeftSidebar
+        v-bind="
+          isCustom
+            ? {
+                title: $t('modals.actions.add.title'),
+                description: $t('modals.actions.add.description'),
+              }
+            : {
+                title: $t('modals.actions.add.custom_title', {
+                  name: $t(`action_type_selector.types.${actionGroup}.title`),
+                }),
+                description: $t('modals.actions.add.custom_description'),
+              }
+        "
+        :steps="steps"
+      />
     </template>
 
     <section class="action-body">
+      <StepSelectActionType
+        v-if="currentStep.name === 'select_action_type'"
+        v-model:templateUuid="templateUuid"
+        :group="actionGroup"
+      />
+
       <StepDescribe
         v-if="currentStep.name === 'describe'"
         v-model:description="description"
+        v-model:actionType="actionType"
       />
 
       <StepSelectFlow
         v-if="currentStep.name === 'select_flow'"
         v-model:flowUuid="flowUuid"
-        v-model:name="name"
+        :name="name"
         :items="items"
-        :currentActions="currentActions"
+        @update:name="isCustom ? (name = $event) : null"
       />
 
       <StepNominateAction
@@ -49,33 +70,35 @@
 <script>
 import { useStore } from 'vuex';
 import { usePagination } from '@/views/ContentBases/pagination';
+import { useAlertStore } from '@/store/Alert.js';
+import { useActionsStore } from '@/store/Actions.js';
 import nexusaiAPI from '../../api/nexusaiAPI';
 import LeftSidebar from './LeftSidebar.vue';
 import StepSelectFlow from './steps/SelectFlow.vue';
 import StepDescribe from './steps/Describe.vue';
 import StepNominateAction from './steps/NominateAction.vue';
+import StepSelectActionType from './steps/SelectActionType.vue';
 
 export default {
   components: {
     LeftSidebar,
+    StepSelectActionType,
     StepDescribe,
     StepSelectFlow,
     StepNominateAction,
   },
 
   props: {
-    currentActions: {
-      type: Array,
-      default() {
-        return [];
-      },
-      required: false,
+    actionGroup: {
+      type: String,
+      required: true,
     },
   },
 
-  emits: ['update:modelValue', 'added'],
+  emits: ['update:modelValue', 'added', 'previousStep'],
 
   setup() {
+    const alertStore = useAlertStore();
     const store = useStore();
 
     const items = usePagination({
@@ -88,7 +111,14 @@ export default {
       },
     });
 
-    return { items };
+    const actionsStore = useActionsStore();
+
+    return {
+      alertStore,
+
+      items,
+      actionsStore,
+    };
   },
 
   data() {
@@ -100,26 +130,45 @@ export default {
       name: '',
       loadingGenerateName: false,
       description: '',
+      actionType: 'custom',
       flowUuid: '',
+      templateUuid: '',
     };
   },
 
   computed: {
+    isCustom() {
+      return this.actionGroup === 'custom';
+    },
+
     steps() {
-      return [
-        {
+      const steps = [];
+
+      if (this.isCustom) {
+        steps.push({
           name: 'describe',
           title: this.$t('modals.actions.add.steps.describe.title'),
-        },
-        {
-          name: 'select_flow',
-          title: this.$t('modals.actions.add.steps.select_flow.title'),
-        },
-        {
+        });
+      } else {
+        steps.push({
+          name: 'select_action_type',
+          title: this.$t('modals.actions.add.steps.describe.title'),
+        });
+      }
+
+      steps.push({
+        name: 'select_flow',
+        title: this.$t('modals.actions.add.steps.select_flow.title'),
+      });
+
+      if (this.isCustom) {
+        steps.push({
           name: 'nominate_action',
           title: this.$t('modals.actions.add.steps.nominate_action.title'),
-        },
-      ].map((step, index) => ({
+        });
+      }
+
+      return steps.map((step, index) => ({
         ...step,
         active: index === this.currentStepIndex,
       }));
@@ -163,27 +212,26 @@ export default {
       try {
         this.isAdding = true;
 
-        const { data } = await nexusaiAPI.router.actions.create({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
-          name: this.name,
-          description: this.description,
-          flowUuid: this.flowUuid,
-        });
+        const data = this.templateUuid
+          ? {
+              flowUuid: this.flowUuid,
+              templateUuid: this.templateUuid,
+            }
+          : {
+              name: this.name,
+              prompt: this.description,
+              flowUuid: this.flowUuid,
+              type: this.actionType,
+            };
 
-        const createdAction = {
-          uuid: data.uuid,
-          name: data.name,
-          description: data.prompt,
-        };
+        const { name } = await this.actionsStore.add(data);
 
-        this.$store.state.alert = {
+        this.alertStore.add({
           type: 'success',
           text: this.$t('modals.actions.add.messages.success', {
-            name: createdAction.name,
+            name,
           }),
-        };
-
-        this.$emit('added', createdAction);
+        });
       } finally {
         this.isAdding = false;
 
@@ -192,7 +240,10 @@ export default {
     },
 
     goToPreviousStep() {
-      if (this.currentStep !== this.firstStep) {
+      if (this.currentStep === this.firstStep) {
+        this.close();
+        this.$emit('previousStep');
+      } else {
         this.currentStepIndex -= 1;
       }
     },

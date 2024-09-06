@@ -18,10 +18,7 @@
               :textProp="text"
               @update:files="(v) => (files = v)"
             />
-            <RouterActions
-              v-else-if="route.name === 'router-actions'"
-              :items="routerActions"
-            />
+            <RouterActions v-else-if="route.name === 'router-actions'" />
             <RouterCustomization
               v-else-if="route.name === 'router-personalization'"
             />
@@ -124,10 +121,7 @@ export default {
       oldValue: '',
       value: '',
     });
-    const routerActions = ref({
-      status: null,
-      data: [],
-    });
+
     const routerTunings = ref({
       brainOn: true,
     });
@@ -171,17 +165,20 @@ export default {
       loadingContentBase.value = true;
       text.value.status = 'loading';
 
-      const { data: contentBaseData } =
-        await nexusaiAPI.readIntelligenceContentBase({
-          intelligenceUuid: intelligenceUuid.value,
-          contentBaseUuid: contentBaseUuid.value,
-          obstructiveErrorProducer: true,
-        });
+      try {
+        const { data: contentBaseData } =
+          await nexusaiAPI.readIntelligenceContentBase({
+            intelligenceUuid: intelligenceUuid.value,
+            contentBaseUuid: contentBaseUuid.value,
+            obstructiveErrorProducer: true,
+          });
 
-      loadingContentBase.value = false;
-      contentBase.value.title = contentBaseData.title;
-      contentBase.value.description = contentBaseData.description;
-      contentBase.value.language = contentBaseData.language;
+        contentBase.value.title = contentBaseData.title;
+        contentBase.value.description = contentBaseData.description;
+        contentBase.value.language = contentBaseData.language;
+      } finally {
+        loadingContentBase.value = false;
+      }
 
       const { data: contentBaseTextsData } =
         await nexusaiAPI.intelligences.contentBases.texts.list({
@@ -242,7 +239,6 @@ export default {
       files,
       sites,
       text,
-      routerActions,
       routerTunings,
       contentBase,
       contentBaseUuid,
@@ -287,6 +283,9 @@ export default {
 
   > * {
     height: 0;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -500,7 +499,7 @@ export default {
         font-size: $unnnic-font-size-body-lg;
         line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
         font-weight: $unnnic-font-weight-bold;
-        padding: $unnnic-spacing-sm $unnnic-spacing-md;
+        padding: $unnnic-spacing-md $unnnic-spacing-sm;
         margin-bottom: $unnnic-spacing-sm;
         border-bottom: $unnnic-border-width-thinner solid
           $unnnic-color-neutral-soft;

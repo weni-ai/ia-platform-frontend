@@ -1,15 +1,41 @@
 <template>
-  <section class="actions__container">
-    <BasesFormGenericList
-      :items="items"
+  <section
+    :style="{
+      minHeight: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+    }"
+  >
+    <UnnnicIntelligenceText
+      tag="p"
+      family="secondary"
+      size="body-gt"
+    >
+      {{ $t('router.actions.description') }}
+    </UnnnicIntelligenceText>
+
+    <UnnnicDivider ySpacing="md" />
+
+    <ContentList
+      :items="{
+        status: items.status,
+        data: items.data.map((action) => ({
+          ...action,
+          extension_file: 'action',
+          created_file_name: action.name,
+        })),
+      }"
       shape="accordion"
-      hideCounter
-      hideToggle
-      :title="$t('router.actions.title')"
-      :description="$t('router.actions.description')"
+      defaultIcon="bolt"
+      hideSearchInput
+      :description="
+        items.data.length === 0
+          ? $t('router.actions.create_new_action')
+          : $t('router.actions.create_action')
+      "
+      :subDescription="$t('router.actions.pre_defined_or_customized_actions')"
       :addText="$t('router.actions.add')"
-      canEditItem
-      @add="isAddActionOpen = true"
+      @add="openActionGroupSelector"
       @edit="openEditAction"
       @remove="
         ($event) =>
@@ -17,18 +43,24 @@
       "
     />
 
+    <ModalActionTypeSelector
+      v-if="isActionTypeSelectorOpen"
+      v-model="isActionTypeSelectorOpen"
+      v-model:actionGroup="actionGroup"
+      @selected="openAddAction($event)"
+    />
+
     <ModalActions
       v-if="isAddActionOpen"
       v-model="isAddActionOpen"
-      :currentActions="items.data"
-      @added="saveAction"
+      :actionGroup="actionGroup"
+      @previous-step="isActionTypeSelectorOpen = true"
     />
 
     <ModalChangeAction
       v-if="isEditActionOpen"
       v-model="isEditActionOpen"
       :action="currentActionEditing"
-      @edited="editedAction"
     />
 
     <ModalRemoveAction
@@ -42,31 +74,45 @@
 </template>
 
 <script>
-import nexusaiAPI from '../../api/nexusaiAPI';
-import BasesFormGenericList from '../repository/content/BasesFormGenericList.vue';
+import ContentList from '@/components/Brain/ContentBase/ContentList.vue';
+import ModalActionTypeSelector from '@/components/actions/ModalActionTypeSelector.vue';
 import ModalActions from '../../components/actions/ModalActions.vue';
 import ModalChangeAction from '../../components/actions/ModalChangeAction.vue';
 import ModalRemoveAction from '../../components/actions/ModalRemoveAction.vue';
+import { useAlertStore } from '@/store/Alert.js';
+import { useActionsStore } from '@/store/Actions.js';
+import { onMounted, toRef, reactive } from 'vue';
 
 export default {
   components: {
-    BasesFormGenericList,
+    ContentList,
+    ModalActionTypeSelector,
     ModalActions,
     ModalChangeAction,
     ModalRemoveAction,
   },
-  props: {
-    items: {
-      type: Object,
-      default() {
-        return {};
-      },
-      required: false,
-    },
+
+  setup() {
+    const alertStore = useAlertStore();
+    const actionsStore = useActionsStore();
+
+    onMounted(() => {
+      actionsStore.load();
+    });
+
+    return {
+      items: actionsStore.actions,
+
+      alertStore,
+      actionsStore,
+    };
   },
 
   data() {
     return {
+      isActionTypeSelectorOpen: false,
+      actionGroup: '',
+
       isAddActionOpen: false,
       isAdding: false,
 
@@ -90,50 +136,28 @@ export default {
     },
   },
 
-  created() {
-    this.loadActions();
-  },
-
   methods: {
-    async loadActions() {
-      if (this.items.status !== null) {
-        return;
-      }
+    openActionGroupSelector() {
+      this.actionGroup = '';
 
-      try {
-        this.items.status = 'loading';
-
-        const { data } = await nexusaiAPI.router.actions.list({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
-        });
-
-        this.items.data = data.map((item) => ({
-          uuid: item.uuid,
-          extension_file: 'action',
-          created_file_name: item.name,
-          description: item.prompt,
-        }));
-
-        this.items.status = 'complete';
-      } catch (error) {
-        this.items.status = 'error';
-      }
+      this.isActionTypeSelectorOpen = true;
     },
 
-    openEditAction({ uuid, created_file_name, description }) {
+    openAddAction() {
+      this.isAddActionOpen = true;
+    },
+
+    openEditAction({ uuid }) {
+      const action = this.items.data.find((action) => action.uuid === uuid);
+
       this.currentActionEditing = {
         uuid,
-        name: created_file_name,
-        description,
+        type: action.type,
+        name: action.name,
+        description: action.prompt,
+        group: action.group,
         status: null,
       };
-    },
-
-    editedAction(actionUuid, action) {
-      const item = this.items.data.find(({ uuid }) => uuid === actionUuid);
-
-      item.created_file_name = action.name;
-      item.description = action.description;
     },
 
     openDeleteAction(actionUuid, actionName) {
@@ -148,33 +172,19 @@ export default {
       try {
         this.modalDeleteAction.status = 'removing';
 
-        await nexusaiAPI.router.actions.delete({
-          projectUuid: this.$store.state.Auth.connectProjectUuid,
-          actionUuid: this.modalDeleteAction.uuid,
+        await this.actionsStore.remove({
+          uuid: this.modalDeleteAction.uuid,
         });
 
-        this.items.data = this.items.data.filter(
-          ({ uuid }) => uuid !== this.modalDeleteAction.uuid,
-        );
-
-        this.$store.state.alert = {
+        this.alertStore.add({
           type: 'default',
           text: this.$t('router.actions.router_removed', {
             name: this.modalDeleteAction.name,
           }),
-        };
+        });
       } finally {
         this.modalDeleteAction = null;
       }
-    },
-
-    saveAction({ uuid, name, description }) {
-      this.items.data.push({
-        uuid,
-        extension_file: 'action',
-        created_file_name: name,
-        description,
-      });
     },
   },
 };

@@ -10,6 +10,16 @@ import { expect } from 'vitest';
 const store = createStore({
   state() {
     return {
+      Actions: {
+        status: null,
+        data: [],
+
+        types: {
+          status: null,
+          data: [],
+        },
+      },
+
       Brain: {
         contentText: {
           current: '',
