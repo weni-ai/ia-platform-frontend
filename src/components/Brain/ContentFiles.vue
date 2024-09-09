@@ -62,6 +62,7 @@
       :subDescription="removeHTML(supportedFormats)"
       :addText="$t('content_bases.files.browse_file')"
       :isOverLap="isClientDragging"
+      columns="2, 2fr"
       @add="$refs['browser-file-input'].click()"
       @remove="onRemove"
     />
@@ -318,7 +319,7 @@ export default {
     },
 
     onRemove($event) {
-      if (['fail-upload', 'fail'].includes($event.status)) {
+      if (['fail-upload'].includes($event.status)) {
         this.files.removeItem({ uuid: $event.uuid });
       } else {
         this.openDeleteFileModal(
