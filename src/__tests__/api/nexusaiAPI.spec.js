@@ -473,14 +473,20 @@ describe('nexusaiAPI.js', () => {
     expect(result).toEqual(mockResponse);
   });
   it('should create a router', async () => {
-    const mockResponse = { data: 'mockData' };
+    const mockResponse = {
+      data: {
+        uuid: '1234',
+        name: 'Name',
+        prompt: 'Prompt',
+      },
+    };
     request.$http.post.mockResolvedValue(mockResponse);
 
     const result = await nexusaiAPI.router.actions.create({
       projectUuid: 'project1',
       flowUuid: 'flow1',
       name: 'Flow Name',
-      description: 'Flow Description',
+      prompt: 'Flow Description',
     });
 
     expect(request.$http.post).toHaveBeenCalledWith('api/project1/flows/', {
@@ -489,17 +495,28 @@ describe('nexusaiAPI.js', () => {
       prompt: 'Flow Description',
       fallback: false,
     });
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual({
+      uuid: '1234',
+      name: 'Name',
+      prompt: 'Prompt',
+      group: 'custom',
+    });
   });
 
   it('should edit a router', async () => {
-    const mockResponse = { data: 'mockData' };
+    const mockResponse = {
+      data: {
+        uuid: '1234',
+        name: 'Name',
+        prompt: 'Prompt',
+      },
+    };
     request.$http.patch.mockResolvedValue(mockResponse);
 
     const result = await nexusaiAPI.router.actions.edit({
       projectUuid: 'project1',
       actionUuid: 'action1',
-      description: 'Updated Description',
+      prompt: 'Updated Description',
     });
 
     expect(request.$http.patch).toHaveBeenCalledWith(
@@ -508,7 +525,11 @@ describe('nexusaiAPI.js', () => {
         prompt: 'Updated Description',
       },
     );
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual({
+      uuid: '1234',
+      name: 'Name',
+      prompt: 'Prompt',
+    });
   });
 
   it('should delete a router', async () => {

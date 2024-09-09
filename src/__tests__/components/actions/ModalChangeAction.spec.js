@@ -93,6 +93,7 @@ describe('ModalChangeAction', () => {
           uuid: '1234',
           name: 'Action Name',
           description: 'Action Description',
+          group: 'custom',
         },
       },
 
