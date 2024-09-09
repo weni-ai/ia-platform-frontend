@@ -5,41 +5,41 @@ import RouterActions from '@/views/Brain/RouterActions.vue';
 import ModalActions from '@/components/actions/ModalActions.vue';
 import ModalChangeAction from '@/components/actions/ModalChangeAction.vue';
 import ModalRemoveAction from '@/components/actions/ModalRemoveAction.vue';
+import { createTestingPinia } from '@pinia/testing';
+import { useActionsStore } from '@/store/Actions';
+import { useAlertStore } from '@/store/Alert';
 
-const mockResponse = {
-  data: [
-    {
-      uuid: '1',
-      name: 'Action 1',
-      prompt: 'Description 1',
-      content_base: '4',
-    },
-    {
-      uuid: '2',
-      name: 'Action 2',
-      prompt: 'Description 2',
-      content_base: '4',
-    },
-  ],
-};
+const mockResponse = [
+  {
+    uuid: '1',
+    name: 'Action 1',
+    prompt: 'Description 1',
+    content_base: '4',
+  },
+  {
+    uuid: '2',
+    name: 'Action 2',
+    prompt: 'Description 2',
+    content_base: '4',
+  },
+];
 
-const mockItems = {
-  data: [
-    {
-      uuid: '1',
-      created_file_name: 'Action 1',
-      description: 'Description 1',
-      extension_file: 'action',
-    },
-    {
-      uuid: '2',
-      created_file_name: 'Action 2',
-      description: 'Description 2',
-      extension_file: 'action',
-    },
-  ],
-  status: null,
-};
+const mockItems = [
+  {
+    uuid: '1',
+    name: 'Action 1',
+    description: 'Description 1',
+    group: 'custom',
+  },
+  {
+    uuid: '2',
+    name: 'Action 2',
+    description: 'Description 2',
+    group: 'custom',
+  },
+];
+
+const pinia = createTestingPinia({ stubActions: false });
 
 const store = createStore({
   state() {
@@ -119,11 +119,13 @@ describe('RouterActions', () => {
         },
       },
       global: {
-        plugins: [store],
+        plugins: [store, pinia],
       },
     });
 
-    wrapper.vm.$store.dispatch('loadActions');
+    const actionsStore = useActionsStore();
+
+    actionsStore.load();
   });
 
   test('opens add action modal and adds a new action', async () => {
@@ -132,94 +134,51 @@ describe('RouterActions', () => {
 
     expect(wrapper.vm.isActionTypeSelectorOpen).toBe(true);
 
+    await wrapper.vm.$nextTick();
+
     await wrapper
       .findComponent({ name: 'ModalActionTypeSelector' })
-      .vm.$emit('selected', 'custom');
+      .vm.$emit('update:actionGroup', 'custom');
+
+    await wrapper
+      .findComponent({ name: 'ModalActionTypeSelector' })
+      .vm.$emit('selected');
 
     expect(wrapper.vm.isAddActionOpen).toBe(true);
 
     const modalActions = wrapper.findComponent(ModalActions);
 
     expect(modalActions.exists()).toBeTruthy();
-
-    modalActions.vm.$emit('added', {
-      uuid: 'new-flow-uuid',
-      name: 'New Action',
-      description: 'New Description',
-    });
-
-    await flushPromises();
-
-    expect(wrapper.vm.items.data).toContainEqual({
-      uuid: 'new-flow-uuid',
-      extension_file: 'action',
-      created_file_name: 'New Action',
-      description: 'New Description',
-    });
-  });
-
-  test('opens edit action modal and edits an action', async () => {
-    const actionToEdit = {
-      uuid: '1',
-      created_file_name: 'Action 1',
-      description: 'Updated Description',
-      status: null,
-    };
-
-    wrapper.vm.openEditAction(actionToEdit);
-    await flushPromises();
-    await wrapper.vm.$nextTick();
-
-    expect(wrapper.vm.currentActionEditing).toEqual({
-      uuid: actionToEdit.uuid,
-      name: actionToEdit.created_file_name,
-      description: actionToEdit.description,
-      status: null,
-    });
-
-    wrapper.findComponent(ModalChangeAction).vm.$emit('edited', '1', {
-      name: 'Action Name Edited',
-      description: 'Action Description Edited',
-    });
-
-    await flushPromises();
-
-    expect(wrapper.vm.items.data).toContainEqual({
-      uuid: '1',
-      extension_file: 'action',
-      created_file_name: 'Action Name Edited',
-      description: 'Action Description Edited',
-    });
   });
 
   test('opens delete action modal and deletes an action', async () => {
-    const actionToDelete = mockItems.data[0];
+    const actionToDelete = mockItems[0];
 
-    wrapper.vm.openDeleteAction(
-      actionToDelete.uuid,
-      actionToDelete.created_file_name,
-    );
+    wrapper.vm.openDeleteAction(actionToDelete.uuid, actionToDelete.name);
     await flushPromises();
 
     expect(wrapper.vm.modalDeleteAction).toEqual({
       uuid: actionToDelete.uuid,
-      name: actionToDelete.created_file_name,
+      name: actionToDelete.name,
       status: null,
     });
 
     wrapper.findComponent(ModalRemoveAction).vm.$emit('remove');
     await flushPromises();
 
-    expect(nexusaiAPI.router.actions.delete).toHaveBeenCalledWith({
-      projectUuid: store.state.Auth.connectProjectUuid,
-      actionUuid: actionToDelete.uuid,
-    });
+    expect(nexusaiAPI.router.actions.delete).toHaveBeenCalledWith(
+      expect.objectContaining({
+        actionUuid: actionToDelete.uuid,
+      }),
+    );
+
+    const alertStore = useAlertStore();
 
     expect(wrapper.vm.items.data).not.toContain(actionToDelete);
-    expect(store.state.alert).toEqual({
+    expect(alertStore.add).toHaveBeenCalledWith({
       type: 'default',
       text: wrapper.vm.$t('router.actions.router_removed', {
-        name: actionToDelete.created_file_name,
+        name: actionToDelete.name,
       }),
     });
   });

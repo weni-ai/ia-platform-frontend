@@ -87,7 +87,7 @@ describe('BasesFormFilesItem.vue', () => {
         },
 
         global: {
-          stubs: ['FilePreview'],
+          stubs: ['FilePreview', 'teleport'],
 
           mocks: {
             $store: {
@@ -151,7 +151,7 @@ describe('BasesFormFilesItem.vue', () => {
         },
 
         global: {
-          stubs: ['FilePreview'],
+          stubs: ['FilePreview', 'teleport'],
 
           mocks: {
             $store: {

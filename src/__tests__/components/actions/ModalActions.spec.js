@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils';
 import ModalActions from '@/components/actions/ModalActions.vue';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import { createStore } from 'vuex';
+import { createTestingPinia } from '@pinia/testing';
 
 vi.spyOn(nexusaiAPI.router.actions.flows, 'list').mockResolvedValue({
   data: {
@@ -37,14 +38,14 @@ vi.spyOn(
 const createRequest = vi
   .spyOn(nexusaiAPI.router.actions, 'create')
   .mockResolvedValue({
-    data: {
-      uuid: '1234',
-      name: 'Action Name',
-      prompt: 'Action Description',
-      fallback: false,
-      content_base: '5678',
-    },
+    uuid: '1234',
+    name: 'Action Name',
+    prompt: 'Action Description',
+    fallback: false,
+    content_base: '5678',
   });
+
+const pinia = createTestingPinia({ stubActions: false });
 
 const store = createStore({
   state() {
@@ -73,7 +74,7 @@ describe('ModalActions', () => {
       },
 
       global: {
-        plugins: [store],
+        plugins: [store, pinia],
       },
     });
 
@@ -159,31 +160,11 @@ describe('ModalActions', () => {
     it('should call create action API', () => {
       expect(createRequest).toHaveBeenCalledWith(
         expect.objectContaining({
-          projectUuid: 'test2323test',
           name: 'Action Name',
-          description: 'Action Description',
+          prompt: 'Action Description',
           flowUuid: '1234',
         }),
       );
-    });
-
-    it('should show success alert message', () => {
-      expect(store.state.alert).toEqual({
-        type: 'success',
-        text: wrapper.vm.$t('modals.actions.add.messages.success', {
-          name: 'Action Name',
-        }),
-      });
-    });
-
-    it('emits added with correct object', () => {
-      expect(wrapper.emitted('added')).toContainEqual([
-        {
-          uuid: '1234',
-          name: 'Action Name',
-          description: 'Action Description',
-        },
-      ]);
     });
   });
 

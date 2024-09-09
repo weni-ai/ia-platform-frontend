@@ -242,25 +242,21 @@ vi.spyOn(
 const createRequest = vi
   .spyOn(nexusaiAPI.router.actions, 'create')
   .mockResolvedValue({
-    data: {
-      uuid: '1234',
-      name: 'Weni Action Generate - 123',
-      prompt: 'Action Description',
-      fallback: false,
-      content_base: '5678',
-    },
+    uuid: '1234',
+    name: 'Weni Action Generate - 123',
+    prompt: 'Action Description',
+    fallback: false,
+    content_base: '5678',
   });
 
 const updatedRequest = vi
   .spyOn(nexusaiAPI.router.actions, 'edit')
   .mockResolvedValue({
-    data: {
-      uuid: '1234',
-      name: 'Weni Action Generate - 123',
-      prompt: 'Action Description updated',
-      fallback: false,
-      content_base: '5678',
-    },
+    uuid: '1234',
+    name: 'Weni Action Generate - 123',
+    prompt: 'Action Description updated',
+    fallback: false,
+    content_base: '5678',
   });
 
 const removedRequest = vi

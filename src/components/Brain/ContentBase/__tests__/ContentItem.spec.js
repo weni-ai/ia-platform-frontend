@@ -113,7 +113,7 @@ describe('ContentItem.vue', () => {
         },
         global: {
           plugins: [store],
-          stubs: ['FilePreview'],
+          stubs: ['FilePreview', 'teleport'],
         },
       });
     });
@@ -124,32 +124,25 @@ describe('ContentItem.vue', () => {
       expect(link.text()).toBe('https://website.com/pathname/');
     });
 
-    describe('when user clicks to see actions', () => {
-      beforeEach(async () => {
-        const dropdownAction = wrapper.find('[data-test="dropdown-actions"]');
-        await dropdownAction.trigger('click');
+    describe('when user clicks to see details', () => {
+      it('displays FilePreview component', async () => {
+        const action = wrapper.find('[data-test="See details"]');
+
+        expect(wrapper.find('file-preview-stub').exists()).toBe(false);
+
+        await action.trigger('click');
+
+        expect(wrapper.find('file-preview-stub').exists()).toBe(true);
       });
+    });
 
-      describe('when user clicks to see details', () => {
-        it('displays FilePreview component', async () => {
-          const action = wrapper.find('[data-test="See details"]');
+    describe('when user clicks to remove site', () => {
+      it('emits remove event', async () => {
+        const action = wrapper.find('[data-test="Remove site"]');
 
-          expect(wrapper.find('file-preview-stub').exists()).toBe(false);
+        await action.trigger('click');
 
-          await action.trigger('click');
-
-          expect(wrapper.find('file-preview-stub').exists()).toBe(true);
-        });
-      });
-
-      describe('when user clicks to remove site', () => {
-        it('emits remove event', async () => {
-          const action = wrapper.find('[data-test="Remove site"]');
-
-          await action.trigger('click');
-
-          expect(wrapper.emitted('remove')).toHaveLength(1);
-        });
+        expect(wrapper.emitted('remove')).toHaveLength(1);
       });
     });
   });
@@ -164,7 +157,7 @@ describe('ContentItem.vue', () => {
         },
         global: {
           plugins: [store],
-          stubs: ['FilePreview'],
+          stubs: ['FilePreview', 'teleport'],
         },
       });
     });
@@ -175,166 +168,157 @@ describe('ContentItem.vue', () => {
       expect(name.text()).toBe('Name of the Text.txt');
     });
 
-    describe('when user clicks to see actions', () => {
-      beforeEach(async () => {
-        const dropdownAction = wrapper.find('[data-test="dropdown-actions"]');
-        await dropdownAction.trigger('click');
+    describe('when user clicks to see details', () => {
+      it('displays FilePreview component', async () => {
+        const action = wrapper.find('[data-test="See details"]');
+
+        expect(wrapper.find('file-preview-stub').exists()).toBe(false);
+
+        await action.trigger('click');
+
+        expect(wrapper.find('file-preview-stub').exists()).toBe(true);
       });
+    });
 
-      describe('when user clicks to see details', () => {
-        it('displays FilePreview component', async () => {
-          const action = wrapper.find('[data-test="See details"]');
+    describe('when user clicks to download file', () => {
+      it('downloads the file', async () => {
+        let clickedAnchorHTML = '';
 
-          expect(wrapper.find('file-preview-stub').exists()).toBe(false);
+        vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(
+          function () {
+            clickedAnchorHTML = this.outerHTML;
+          },
+        );
 
-          await action.trigger('click');
+        const action = wrapper.find('[data-test="Download file"]');
 
-          expect(wrapper.find('file-preview-stub').exists()).toBe(true);
+        await action.trigger('click');
+
+        expect(
+          nexusaiAPI.intelligences.contentBases.files.download,
+        ).toHaveBeenCalledWith({
+          file_name:
+            'Name of the Text-1618c0f6-60f7-4540-8a9a-77fd77c6c8c3.txt',
+          fileUuid: '00bf7cd5-d6ce-47b8-b982-2b2939765bf8',
         });
+
+        expect(clickedAnchorHTML).toBe(
+          '<a download="Name of the Text.txt" href="https://link.api/link-to-the-file"></a>',
+        );
       });
+    });
 
-      describe('when user clicks to download file', () => {
-        it('downloads the file', async () => {
-          let clickedAnchorHTML = '';
+    describe('when user clicks to remove file', () => {
+      it('emits remove event', async () => {
+        const action = wrapper.find('[data-test="Remove file"]');
 
-          vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(
-            function () {
-              clickedAnchorHTML = this.outerHTML;
+        await action.trigger('click');
+
+        expect(wrapper.emitted('remove')).toHaveLength(1);
+      });
+    });
+
+    // Test for `formatTimeAgo` method
+    describe('formatTimeAgo', () => {
+      describe('when the date is invalid', () => {
+        beforeEach(() => {
+          wrapper = mount(ContentItem, {
+            props: {
+              file: createFileObject('file', { created_at: 'invalid-date' }),
+              clickable: false,
+              compressed: true,
             },
-          );
 
-          const action = wrapper.find('[data-test="Download file"]');
-
-          await action.trigger('click');
-
-          expect(
-            nexusaiAPI.intelligences.contentBases.files.download,
-          ).toHaveBeenCalledWith({
-            file_name:
-              'Name of the Text-1618c0f6-60f7-4540-8a9a-77fd77c6c8c3.txt',
-            fileUuid: '00bf7cd5-d6ce-47b8-b982-2b2939765bf8',
+            global: {
+              plugins: [store],
+            },
           });
+        });
 
-          expect(clickedAnchorHTML).toBe(
-            '<a download="Name of the Text.txt" href="https://link.api/link-to-the-file"></a>',
-          );
+        it('returns uploading status message', () => {
+          const timeAgo = wrapper.vm.timeAgo;
+          expect(timeAgo).toBe('Uploading content');
+        });
+
+        it('returns "Uploading..." when dateString is null or empty', () => {
+          const resultWithNull = wrapper.vm.formatTimeAgo(null);
+          expect(resultWithNull).toBe('Uploading content');
+
+          const resultWithEmptyString = wrapper.vm.formatTimeAgo('');
+          expect(resultWithEmptyString).toBe('Uploading content');
         });
       });
 
-      describe('when user clicks to remove file', () => {
-        it('emits remove event', async () => {
-          const action = wrapper.find('[data-test="Remove file"]');
+      describe('when the difference is less than 60 minutes', () => {
+        beforeEach(() => {
+          wrapper = mount(ContentItem, {
+            props: {
+              file: createFileObject('file', {
+                created_at: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+              }), // 30 minutes ago
+              clickable: false,
+              compressed: true,
+            },
 
-          await action.trigger('click');
+            global: {
+              plugins: [store],
+            },
+          });
+        });
 
-          expect(wrapper.emitted('remove')).toHaveLength(1);
+        it('returns time ago in minutes', () => {
+          const timeAgo = wrapper.vm.timeAgo;
+          expect(timeAgo).toBe('Added 30 minutes ago');
         });
       });
 
-      // Test for `formatTimeAgo` method
-      describe('formatTimeAgo', () => {
-        describe('when the date is invalid', () => {
-          beforeEach(() => {
-            wrapper = mount(ContentItem, {
-              props: {
-                file: createFileObject('file', { created_at: 'invalid-date' }),
-                clickable: false,
-                compressed: true,
-              },
+      describe('when the difference is less than 24 hours', () => {
+        beforeEach(() => {
+          wrapper = mount(ContentItem, {
+            props: {
+              file: createFileObject('file', {
+                created_at: new Date(
+                  Date.now() - 5 * 60 * 60 * 1000,
+                ).toISOString(),
+              }), // 5 hours ago
+              clickable: false,
+              compressed: true,
+            },
 
-              global: {
-                plugins: [store],
-              },
-            });
-          });
-
-          it('returns uploading status message', () => {
-            const timeAgo = wrapper.vm.timeAgo;
-            expect(timeAgo).toBe('Uploading content');
-          });
-
-          it('returns "Uploading..." when dateString is null or empty', () => {
-            const resultWithNull = wrapper.vm.formatTimeAgo(null);
-            expect(resultWithNull).toBe('Uploading content');
-
-            const resultWithEmptyString = wrapper.vm.formatTimeAgo('');
-            expect(resultWithEmptyString).toBe('Uploading content');
+            global: {
+              plugins: [store],
+            },
           });
         });
 
-        describe('when the difference is less than 60 minutes', () => {
-          beforeEach(() => {
-            wrapper = mount(ContentItem, {
-              props: {
-                file: createFileObject('file', {
-                  created_at: new Date(
-                    Date.now() - 30 * 60 * 1000,
-                  ).toISOString(),
-                }), // 30 minutes ago
-                clickable: false,
-                compressed: true,
-              },
+        it('returns time ago in hours', () => {
+          const timeAgo = wrapper.vm.timeAgo;
+          expect(timeAgo).toBe('Added 5 hours ago');
+        });
+      });
 
-              global: {
-                plugins: [store],
-              },
-            });
-          });
+      describe('when the difference is more than 24 hours', () => {
+        beforeEach(async () => {
+          wrapper = mount(ContentItem, {
+            props: {
+              file: createFileObject('file', {
+                created_at: new Date(
+                  Date.now() - 3 * 24 * 60 * 60 * 1000,
+                ).toISOString(),
+              }),
+              clickable: false,
+              compressed: true,
+            },
 
-          it('returns time ago in minutes', () => {
-            const timeAgo = wrapper.vm.timeAgo;
-            expect(timeAgo).toBe('Added 30 minutes ago');
+            global: {
+              plugins: [store],
+            },
           });
         });
 
-        describe('when the difference is less than 24 hours', () => {
-          beforeEach(() => {
-            wrapper = mount(ContentItem, {
-              props: {
-                file: createFileObject('file', {
-                  created_at: new Date(
-                    Date.now() - 5 * 60 * 60 * 1000,
-                  ).toISOString(),
-                }), // 5 hours ago
-                clickable: false,
-                compressed: true,
-              },
-
-              global: {
-                plugins: [store],
-              },
-            });
-          });
-
-          it('returns time ago in hours', () => {
-            const timeAgo = wrapper.vm.timeAgo;
-            expect(timeAgo).toBe('Added 5 hours ago');
-          });
-        });
-
-        describe('when the difference is more than 24 hours', () => {
-          beforeEach(async () => {
-            wrapper = mount(ContentItem, {
-              props: {
-                file: createFileObject('file', {
-                  created_at: new Date(
-                    Date.now() - 3 * 24 * 60 * 60 * 1000,
-                  ).toISOString(),
-                }),
-                clickable: false,
-                compressed: true,
-              },
-
-              global: {
-                plugins: [store],
-              },
-            });
-          });
-
-          it('returns time ago in days', () => {
-            const timeAgo = wrapper.vm.timeAgo;
-            expect(timeAgo).toBe('Added 3 days ago');
-          });
+        it('returns time ago in days', () => {
+          const timeAgo = wrapper.vm.timeAgo;
+          expect(timeAgo).toBe('Added 3 days ago');
         });
       });
     });

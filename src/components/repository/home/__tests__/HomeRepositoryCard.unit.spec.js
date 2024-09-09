@@ -72,6 +72,7 @@ const setup = (props = {}) =>
         ModalDeleteContentIntelligence: true,
         ModalContainer: true,
         IntegrationModal: true,
+        teleport: true,
       },
     },
   });
