@@ -331,7 +331,8 @@ export default {
     useSelectSmart(field) {
       const handleLabel = (v) => {
         if (this.isOwnModel(field.name)) return v.name;
-
+        if (v === 'ft:gpt-4o-2024-08-06:weni:wenigpt:9yfJAg4g')
+          return 'gpt-4o-retail';
         return v;
       };
 
