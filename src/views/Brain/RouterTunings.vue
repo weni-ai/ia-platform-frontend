@@ -348,7 +348,7 @@ export default {
           ? value === field.value
           : value === field.value.name;
       const value = [options.find(({ value }) => conditionValue(value))];
-      console.log('value', value, options);
+
       return {
         value,
         options,
