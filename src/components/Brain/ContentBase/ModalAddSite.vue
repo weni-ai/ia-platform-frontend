@@ -109,7 +109,7 @@ function addSite() {
         store.state.alert = {
           type: 'success',
           text: i18n.global.t(
-            'content_bases.sites.content_of_the_site_has_been_added',
+            'content_bases.sites.content_of_the_sites_has_been_added',
           ),
         };
       });
