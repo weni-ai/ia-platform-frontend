@@ -1,22 +1,54 @@
 <template>
   <section class="tunings__container">
-    <UnnnicIntelligenceText v-bind="titleProps">
+    <section
+      :style="{
+        display: 'flex',
+        flexDirection: 'column',
+      }"
+    >
+      <UnnnicIntelligenceText
+        tag="p"
+        family="secondary"
+        size="body-gt"
+      >
+        Gerencie as configurações e acompanhe as alterações realizadas.
+      </UnnnicIntelligenceText>
+    </section>
+    <section
+      :style="{
+        display: 'flex',
+        margin: '1.5rem 0',
+      }"
+    >
+      <UnnnicTab
+        :tabs="
+          [
+            { title: 'Configurações', page: 'config' },
+            { title: 'Histórico de alterações', page: 'hist' },
+          ].map((e) => e.page)
+        "
+        :activeTab="'Configurações'"
+      >
+        <template
+          v-for="tab in [
+            { title: 'Configurações', page: 'config' },
+            { title: 'Histórico de alterações', page: 'hist' },
+          ]"
+          :key="tab.page"
+          #[`tab-head-${tab.page}`]
+        >
+          {{ tab.title }}
+        </template>
+      </UnnnicTab>
+    </section>
+    <UnnnicIntelligenceText
+      v-bind="titleProps"
+      marginBottom="xs"
+    >
       {{ $t('router.tunings.model') }}
     </UnnnicIntelligenceText>
 
     <template v-for="(field, index) in fields">
-      <header
-        v-if="field.type === 'radio' && !loadingData"
-        :key="`label-${index}`"
-        class="tunings__form-element__label"
-      >
-        <UnnnicIntelligenceText
-          color="neutral-cloudy"
-          v-bind="labelProps"
-        >
-          {{ $t(`router.tunings.fields.${field.name}`) }}
-        </UnnnicIntelligenceText>
-      </header>
       <UnnnicIntelligenceText
         v-if="isRenderlabelVersion(field)"
         :key="index"
