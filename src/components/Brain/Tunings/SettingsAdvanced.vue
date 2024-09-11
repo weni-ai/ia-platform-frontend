@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import nexusaiAPI from '../../api/nexusaiAPI';
+import nexusaiAPI from '@/api/nexusaiAPI';
 
 export default {
   components: {},

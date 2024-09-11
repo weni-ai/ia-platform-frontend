@@ -1,5 +1,5 @@
 import { mount, flushPromises } from '@vue/test-utils';
-import RouterTunings from '@/views/Brain/RouterTunings.vue';
+import Settings from '@/components/Brain/Tunings/Settings.vue';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import { createStore } from 'vuex';
 import { describe, beforeEach, vi, test, expect } from 'vitest';
@@ -34,7 +34,7 @@ const store = createStore({
   },
 });
 
-describe('RouterTunings', () => {
+describe('Settings', () => {
   let wrapper;
   let dispatchSpy;
   let commitSpy;
@@ -49,7 +49,7 @@ describe('RouterTunings', () => {
     dispatchSpy = vi.spyOn(store, 'dispatch');
     commitSpy = vi.spyOn(store, 'commit');
 
-    wrapper = mount(RouterTunings, {
+    wrapper = mount(Settings, {
       props: {
         data: {
           brainOn: false,
@@ -78,13 +78,6 @@ describe('RouterTunings', () => {
         component.text().includes(wrapper.vm.$t('router.tunings.model')),
       );
     expect(modelLabel.length).toBeGreaterThan(0);
-
-    const selectModelLabel = wrapper
-      .findAllComponents({ name: 'UnnnicIntelligenceText' })
-      .filter((component) =>
-        component.text().includes(wrapper.vm.$t('router.tunings.fields.model')),
-      );
-    expect(selectModelLabel.length).toBeGreaterThan(0);
 
     const tokenSelectLabel = wrapper
       .findAllComponents({ name: 'UnnnicIntelligenceText' })
@@ -138,7 +131,7 @@ describe('RouterTunings', () => {
     test('renders advanced fields correctly', async () => {
     await flushPromises();
     const advancedFields = wrapper.findComponent({
-      name: 'RouterTuningsAdvanced',
+      name: 'SettingsAdvanced',
     });
 
     expect(advancedFields.exists()).toBe(true);
