@@ -62,7 +62,6 @@ const onTabChange = (newTab) => {
   }
 
   &_tabs {
-    display: flex;
     margin: $unnnic-spacing-md 0 0 0;
   }
 }
