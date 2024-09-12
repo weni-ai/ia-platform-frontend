@@ -1,5 +1,8 @@
 <template>
-  <section v-html="html" />
+  <section
+    class="content-section"
+    v-html="html"
+  />
 </template>
 
 <script>
@@ -8,7 +11,10 @@ import { marked } from 'marked';
 
 export default {
   props: {
-    content: String,
+    content: {
+      type: String,
+      default: '',
+    },
   },
 
   computed: {
@@ -18,3 +24,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.content-section {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+</style>
