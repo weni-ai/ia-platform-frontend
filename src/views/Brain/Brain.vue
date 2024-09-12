@@ -4,7 +4,6 @@
     :dontShowBack="true"
     :isNoSpaceContainer="true"
   >
-    <BrainWarningBar v-if="!routerTunings.brainOn" />
     <section class="repository-base-edit__wrapper">
       <BrainSideBar />
       <div class="repository-base-edit__wrapper__left-side">
@@ -45,7 +44,7 @@
             minWidth="175px"
           />
         </div>
-
+        <BrainWarningBar v-if="!routerTunings.brainOn" />
         <Tests
           :key="refreshPreviewValue"
           :contentBaseUuid="contentBaseUuid"
@@ -86,8 +85,8 @@ import { useSitesPagination } from '../ContentBases/sitesPagination';
 import ContentItemActions from '../repository/content/ContentItemActions.vue';
 import BrainSideBar from '@/components/Brain/BrainSideBar.vue';
 import BrainHeader from '@/components/Brain/BrainHeader.vue';
-import BrainWarningBar from '@/components/Brain/BrainWarningBar.vue';
 import i18n from '@/utils/plugins/i18n';
+import BrainWarningBar from '@/components/Brain/BrainWarningBar.vue';
 
 export default {
   name: 'Brain',
@@ -500,7 +499,6 @@ export default {
         line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
         font-weight: $unnnic-font-weight-bold;
         padding: $unnnic-spacing-md $unnnic-spacing-sm;
-        margin-bottom: $unnnic-spacing-sm;
         border-bottom: $unnnic-border-width-thinner solid
           $unnnic-color-neutral-soft;
       }
