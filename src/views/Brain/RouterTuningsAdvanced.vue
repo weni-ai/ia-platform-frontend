@@ -93,7 +93,6 @@ export default {
           this.$router.push({ query: {} });
 
           this.open = true;
-          this.openActiveOrDeactivateBrain(true);
 
           this.$nextTick(() => {
             this.$el.scrollIntoView({ behavior: 'smooth' });
