@@ -2,7 +2,7 @@ import nexusaiAPI from '@/api/nexusaiAPI';
 import { defineStore } from 'pinia';
 import { computed, reactive, ref, watch } from 'vue';
 import globalStore from '.';
-import { cloneDeep, differenceBy } from 'lodash';
+import { cloneDeep, differenceBy, get } from 'lodash';
 
 export const useBrainCustomizationStore = defineStore(
   'brainCustomization',
@@ -12,6 +12,7 @@ export const useBrainCustomizationStore = defineStore(
     );
 
     const status = ref(null);
+    const isSaving = ref(false);
 
     const name = reactive({
       current: '',
@@ -52,6 +53,13 @@ export const useBrainCustomizationStore = defineStore(
         !!differenceBy(instructions.current, instructions.old, 'instruction')
           .length
       );
+    });
+
+    const isSaveButtonDisabled = computed(() => {
+      const hasErrorRequiredFields =
+        Object.values(errorRequiredFields).includes(true);
+
+      return !hasChanged.value || hasErrorRequiredFields;
     });
 
     function setInitialValues(data) {
@@ -131,24 +139,42 @@ export const useBrainCustomizationStore = defineStore(
     }
 
     async function save() {
-      const payload = {
-        agent: {
-          name: name.current,
-          role: role.current,
-          personality: personality.current,
-          goal: goal.current,
-        },
-        instructions: instructions.current.filter(
-          ({ instruction }) => instruction,
-        ),
-      };
+      try {
+        validate();
 
-      const { data } = await nexusaiAPI.router.customization.edit({
-        projectUuid: connectProjectUuid.value,
-        data: payload,
-      });
+        isSaving.value = true;
 
-      setInitialValues(data);
+        const payload = {
+          agent: {
+            name: name.current,
+            role: role.current,
+            personality: personality.current,
+            goal: goal.current,
+          },
+          instructions: instructions.current.filter(
+            ({ instruction }) => instruction,
+          ),
+        };
+
+        const { data } = await nexusaiAPI.router.customization.edit({
+          projectUuid: connectProjectUuid.value,
+          data: payload,
+        });
+
+        setInitialValues(data);
+      } catch (error) {
+        const tabWithError =
+          get(error, 'tab') ||
+          {
+            'brain-customization-edit': 'personalization',
+          }[get(error, 'config.routerName')];
+
+        if (tabWithError) {
+          globalStore.state.Brain.tabsWithError = [tabWithError];
+        }
+      } finally {
+        isSaving.value = false;
+      }
     }
 
     async function removeInstruction(instructionIndex) {
@@ -177,6 +203,7 @@ export const useBrainCustomizationStore = defineStore(
 
     return {
       status,
+      isSaving,
       name,
       role,
       personality,
@@ -184,6 +211,7 @@ export const useBrainCustomizationStore = defineStore(
       instructions,
       errorRequiredFields,
       hasChanged,
+      isSaveButtonDisabled,
 
       load,
       validate,
