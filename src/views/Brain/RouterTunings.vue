@@ -6,7 +6,7 @@
         family="secondary"
         size="body-gt"
       >
-        Gerencie as configurações e acompanhe as alterações realizadas.
+        {{ $t('router.tunings.description') }}
       </UnnnicIntelligenceText>
     </header>
     <section class="tunings__container_tabs">
@@ -20,7 +20,7 @@
           :key="tab.page"
           #[`tab-head-${tab.page}`]
         >
-          {{ tab.title }}
+          {{ $t(`router.tunings.tabs.${tab.title}`) }}
         </template>
       </UnnnicTab>
     </section>
@@ -39,8 +39,8 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const tabs = ref([
-  { title: 'Configurações', page: 'config' },
-  { title: 'Histórico de alterações', page: 'hist' },
+  { title: 'config', page: 'config' },
+  { title: 'history', page: 'hist' },
 ]);
 
 const activeTab = ref('config');
