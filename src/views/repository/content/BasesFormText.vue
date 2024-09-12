@@ -1,6 +1,6 @@
 <template>
   <UnnnicSkeletonLoading
-    v-if="item.status === 'loading'"
+    v-if="item.isLoading"
     tag="div"
     height="100%"
     class="repository-base-edit__wrapper__card-content"
@@ -18,7 +18,7 @@
 
       <UnnnicButton
         v-if="!dontShowSaveButton"
-        :loading="item.status === 'saving'"
+        :loading="status === 'saving'"
         size="small"
         class="repository-base-edit__wrapper__card-content__header__save-button"
         :disabled="!modelValue.trim() || modelValue === item.oldValue"
@@ -66,6 +66,7 @@ import { get } from 'lodash';
 export default {
   props: {
     dontShowSaveButton: Boolean,
+    useUpdate: Boolean,
     item: {
       type: Object,
       required: true,
@@ -75,7 +76,13 @@ export default {
       default: '',
     },
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'update:oldValue', 'update:uuid'],
+
+  data() {
+    return {
+      status: null,
+    };
+  },
 
   computed: {
     contentBaseUuid() {
@@ -89,7 +96,7 @@ export default {
   methods: {
     async saveText() {
       try {
-        this.item.status = 'saving';
+        this.status = 'saving';
 
         if (this.item.uuid) {
           const { data: contentBaseTextData } =
@@ -99,7 +106,11 @@ export default {
               text: this.modelValue,
             });
 
-          this.item.oldValue = contentBaseTextData.text;
+          if (this.useUpdate) {
+            this.$emit('update:oldValue', contentBaseTextData.text);
+          } else {
+            this.item.oldValue = contentBaseTextData.text;
+          }
         } else {
           const { data: contentBaseTextData } =
             await nexusaiAPI.intelligences.contentBases.texts.create({
@@ -107,8 +118,13 @@ export default {
               text: this.modelValue,
             });
 
-          this.item.uuid = contentBaseTextData.uuid;
-          this.item.oldValue = contentBaseTextData.text;
+          if (this.useUpdate) {
+            this.$emit('update:uuid', contentBaseTextData.uuid);
+            this.$emit('update:oldValue', contentBaseTextData.text);
+          } else {
+            this.item.uuid = contentBaseTextData.uuid;
+            this.item.oldValue = contentBaseTextData.text;
+          }
         }
 
         this.isAlertOpen = true;
@@ -119,7 +135,7 @@ export default {
           this.alertError(errorMessage);
         }
       } finally {
-        this.item.status = null;
+        this.status = null;
       }
     },
 

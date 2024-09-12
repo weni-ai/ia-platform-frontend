@@ -143,7 +143,7 @@ const contentBase = reactive({
 });
 
 const contentBaseText = reactive({
-  status: false,
+  isLoading: false,
   uuid: null,
   value: '',
   oldValue: '',
@@ -218,7 +218,7 @@ async function loadContentBase() {
 }
 
 async function loadContentBaseText() {
-  contentBaseText.status = 'loading';
+  contentBaseText.isLoading = true;
 
   const { data: contentBaseTextsData } =
     await nexusaiAPI.intelligences.contentBases.texts
@@ -226,7 +226,7 @@ async function loadContentBaseText() {
         contentBaseUuid: route.params.contentBaseUuid,
       })
       .finally(() => {
-        contentBaseText.status = 'loaded';
+        contentBaseText.isLoading = false;
       });
 
   const uuid = get(contentBaseTextsData, 'results.0.uuid', null);
