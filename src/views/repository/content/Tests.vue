@@ -111,6 +111,7 @@ import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
 import PreviewPlaceholder from '../../Brain/Preview/Placeholder.vue';
 import { reactive } from 'vue';
 import MessageInput from './MessageInput.vue';
+import { useBrainCustomizationStore } from '@/store/BrainCustomization';
 
 function isEventCardBrain(event) {
   if (event.type !== 'webhook_called' || !event.url) {
@@ -158,6 +159,14 @@ export default {
     },
   },
 
+  setup() {
+    const brainCustomizationStore = useBrainCustomizationStore();
+
+    return {
+      brainCustomizationStore,
+    };
+  },
+
   data() {
     return {
       message: '',
@@ -172,7 +181,11 @@ export default {
     },
 
     shouldShowRequireSaveWarn() {
-      return this.usePreview && !this.$store.getters.isBrainSaveButtonDisabled;
+      return (
+        this.usePreview &&
+        (!this.$store.getters.isBrainSaveButtonDisabled ||
+          this.brainCustomizationStore.hasChanged)
+      );
     },
 
     language() {

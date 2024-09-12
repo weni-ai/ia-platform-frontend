@@ -1,15 +1,14 @@
-import { differenceBy, cloneDeep, pick, get } from 'lodash';
+import { pick, get } from 'lodash';
 import { WENIGPT_OPTIONS } from '../../utils';
 import { models } from '@/store/brain/models.js';
 import nexusaiAPI from '@/api/nexusaiAPI.js';
 import i18n from '../../utils/plugins/i18n';
-import watchOnce from '@/utils/watchOnce';
+import { useBrainCustomizationStore } from '../BrainCustomization';
 
 export default {
   state: () => ({
     tabsWithError: null,
     isSavingChanges: false,
-    customizationStatus: 'waitingToLoad',
     tuningsStatus: 'waitingToLoad',
 
     contentText: {
@@ -18,55 +17,11 @@ export default {
       old: '',
     },
 
-    agent: {
-      name: {
-        current: '',
-        old: '',
-      },
-      role: {
-        current: '',
-        old: '',
-      },
-      goal: {
-        current: '',
-        old: '',
-      },
-      personality: {
-        current: '',
-        old: '',
-      },
-    },
-
-    instructions: {
-      current: [],
-      old: [],
-    },
-
     tunings: {},
     tuningsOld: {},
-
-    customizationErrorRequiredFields: {
-      name: false,
-      role: false,
-      goal: false,
-    },
   }),
 
   getters: {
-    hasBrainCustomizationChanged(state) {
-      return (
-        Object.keys(state.agent).some((key) => {
-          const { current, old } = state.agent[key];
-          return current !== old;
-        }) ||
-        !!differenceBy(
-          state.instructions.current,
-          state.instructions.old,
-          'instruction',
-        ).length
-      );
-    },
-
     hasBrainTuningsChanged(_state, getters) {
       return getters.brainTuningsFields.some(
         ({ value, previousValue }) => value !== previousValue,
@@ -77,13 +32,15 @@ export default {
       return state.contentText.current !== state.contentText.old;
     },
 
-    isBrainSaveButtonDisabled(state, getters) {
+    isBrainSaveButtonDisabled(_state, getters) {
+      const brainCustomizationStore = useBrainCustomizationStore();
+
       const hasCustomizationErrorRequiredFields = Object.values(
-        state.customizationErrorRequiredFields,
+        brainCustomizationStore.errorRequiredFields,
       ).includes(true);
 
       return (
-        (!getters.hasBrainCustomizationChanged &&
+        (!brainCustomizationStore.hasChanged &&
           !getters.hasBrainTuningsChanged &&
           !getters.hasBrainContentTextChanged) ||
         hasCustomizationErrorRequiredFields
@@ -116,40 +73,6 @@ export default {
   },
 
   actions: {
-    async loadBrainCustomization({ commit, state, rootState }) {
-      if (state.customizationStatus !== 'waitingToLoad') {
-        return;
-      }
-
-      try {
-        state.customizationStatus = 'loading';
-
-        const { data } = await nexusaiAPI.router.customization.read({
-          projectUuid: rootState.Auth.connectProjectUuid,
-        });
-
-        let currentData = data;
-
-        if (currentData.agent === null) {
-          currentData.agent = {
-            name: '',
-            role: '',
-            goal: '',
-            personality: '',
-          };
-        }
-
-        commit('setBrainCustomizationInitialValues', currentData);
-      } catch (error) {
-        rootState.alert = {
-          type: 'error',
-          text: i18n.global.t('customization.invalid_get_data'),
-        };
-      } finally {
-        state.customizationStatus = 'loaded';
-      }
-    },
-
     async loadBrainTunings({ commit, state, rootState }) {
       if (state.tuningsStatus !== 'waitingToLoad') {
         return;
@@ -166,51 +89,6 @@ export default {
       } finally {
         state.tuningsStatus = 'loaded';
       }
-    },
-
-    validateBrainCustomization({ state }) {
-      const unfilledFields = ['name', 'role', 'goal'].filter(
-        (property) => !state.agent[property].current,
-      );
-
-      unfilledFields.forEach((property) => {
-        state.customizationErrorRequiredFields[property] = true;
-
-        watchOnce(
-          ({ Brain }) => Brain.agent[property].current,
-          () => {
-            state.customizationErrorRequiredFields[property] = false;
-          },
-        );
-      });
-
-      if (unfilledFields.length) {
-        throw {
-          tab: 'personalization',
-        };
-      }
-    },
-
-    async saveBrainCustomization({ state, commit, rootState }) {
-      const agent = Object.keys(state.agent).reduce(
-        (obj, key) => ({
-          ...obj,
-          [key]: state.agent[key].current,
-        }),
-        {},
-      );
-
-      const currentValue = {
-        agent,
-        instructions: state.instructions.current.filter((e) => e.instruction),
-      };
-
-      const { data } = await nexusaiAPI.router.customization.edit({
-        projectUuid: rootState.Auth.connectProjectUuid,
-        data: currentValue,
-      });
-
-      commit('setBrainCustomizationInitialValues', data);
     },
 
     async saveBrainContentText({ state, commit, rootState }) {
@@ -284,16 +162,18 @@ export default {
     },
 
     async saveBrainChanges({ state, getters, rootState, dispatch }) {
+      const brainCustomizationStore = useBrainCustomizationStore();
+
       try {
-        getters.hasBrainCustomizationChanged &&
-          (await dispatch('validateBrainCustomization'));
+        brainCustomizationStore.hasChanged &&
+          (await brainCustomizationStore.validate());
 
         state.isSavingChanges = true;
 
         const promises = [];
 
-        if (getters.hasBrainCustomizationChanged) {
-          promises.push(dispatch('saveBrainCustomization'));
+        if (brainCustomizationStore.hasChanged) {
+          promises.push(brainCustomizationStore.save());
         }
 
         if (getters.hasBrainTuningsChanged) {
@@ -339,22 +219,6 @@ export default {
   },
 
   mutations: {
-    setBrainCustomizationInitialValues(state, data) {
-      Object.keys(data.agent).forEach((key) => {
-        state.agent[key].old = state.agent[key].current = data.agent[key] || '';
-      });
-
-      state.instructions.current = data.instructions || [];
-
-      if (state.instructions.current.length === 0) {
-        state.instructions.current.push({
-          instruction: '',
-        });
-      }
-
-      state.instructions.old = cloneDeep(state.instructions.current);
-    },
-
     setBrainTuningsInitialValues(state, data) {
       const handleName = (name) =>
         name === 'version' && data.model === 'ChatGPT' ? 'version-gpt' : name;
