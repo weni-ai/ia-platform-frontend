@@ -97,6 +97,24 @@
         "cancel": "Cancelar",
         "restaurar": "Restaurar"
       },
+      "description": "Gestionar la configuración y realizar un seguimiento de los cambios realizados",
+      "tabs": {
+        "config": "Configuración",
+        "history": "Historial de cambios"
+      },
+      "history": {
+        "description": "Consulta el historial de cambios realizados en Brain",
+        "sub_description": "Consulta todos los cambios y filtra según tus necesidades",
+         "fields": {
+          "change": "Cambio",
+          "date": "Fecha",
+          "all-changes": "Todos los cambios",
+          "customization-changes": "Cambios de personalización",
+          "content-changes": "Cambios de contenido",
+          "actions-changes": "Cambios de acción",
+          "settings-changes": "Cambios de configuración"
+         }
+      },
       "fields": {
         "model": "Seleccionar modelo",
         "token": "Token",
@@ -1599,5 +1617,11 @@
       "title": "No tiene permiso para acceder a este módulo",
       "description": "Si desea acceder a este módulo, póngase en contacto con el administrador de la organización"
     }
+  },
+  "time": {
+    "time_ago_minutes": "Hace {count} minuto | Hace {count} minutos",
+    "time_ago_hours": "Hace {count} hora | Hace {count} horas",
+    "time_ago_days": "Hace {count} día | Hace {count} días",
+    "time_ago_months": "Hace {count} mes | Hace {count} meses"
   }
 }

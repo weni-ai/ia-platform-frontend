@@ -97,6 +97,25 @@
         "cancel": "Cancelar",
         "restore": "Restaurar"
       },
+      "description": "Gerencie as configurações e acompanhe as alterações realizadas.",
+      "tabs": {
+        "config": "Configurações",
+        "history": "Histórico de alterações"
+      },
+      "history": {
+        "description": "Veja o histórico de alterações feitos no Brain",
+        "sub_description": "Verifique todas as mudanças e filtre de acordo com sua necessidade",
+         "fields": {
+          "change": "Alteração",
+          "date": "Data",
+          "all-changes": "Todas Alterações",
+          "customization-changes": "Alterações de personalização",
+          "content-changes": "Alterações de contéudo",
+          "actions-changes": "Alterações de ações",
+          "settings-changes": "Alterações de configurações"
+          
+         }
+      },
       "fields": {
         "model": "Selecione o modelo",
         "token": "Token",
@@ -1578,5 +1597,11 @@
       "title": "Você não tem permissão para acessar esse módulo",
       "description": "Se você deseja acessar esse módulo, entre em contato com o administrador da organização"
     }
+  },
+  "time": {
+    "time_ago_minutes": "Há {count} minuto | Há {count} minutos",
+    "time_ago_hours": "Há {count} hora | Há {count} horas",
+    "time_ago_days": "Há {count} dia | Há {count} dias",
+    "time_ago_months": "Há {count} mês | Há {count} meses"
   }
 }
