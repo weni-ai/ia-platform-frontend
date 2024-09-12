@@ -1435,7 +1435,7 @@
     "title": "Select the type of action",
     "types": {
       "interactions": {
-        "title": "General interactions",
+        "title": "Compliance",
         "description": "Actions for greeting, saying goodbye and navigating the system"
       },
       "shopping": {
