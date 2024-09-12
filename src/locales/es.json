@@ -58,9 +58,8 @@
       "description": "Se ha producido un error al guardar los cambios en la pestaña {tabs}. Intente guardar de nuevo.|Se ha producido un error al guardar los cambios en las pestañas {tabs}. Intente guardar de nuevo."
     },
     "warn": {
-      "brain_is_deactivated": "Brain está desactivado.",
-      "click_here": "haz clic aquí",
-      "activate_it": "para activarlo."
+      "brain_is_deactivated": "Cerebro inactivo, activo encendido",
+      "click_here": "ajustes"
     },
     "tabs": {
       "personalization": "Personalización",

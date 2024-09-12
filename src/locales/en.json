@@ -58,9 +58,8 @@
       "description": "An error occurred while saving changes to the {tabs} tab. Try saving again.|An error occurred while saving changes to the {tabs} tabs. Try saving again."
     },
     "warn": {
-      "brain_is_deactivated": "Brain is deactivated.",
-      "click_here": "click here",
-      "activate_it": "to activate it."
+      "brain_is_deactivated": "Brain inactive, active on",
+      "click_here": "tunings"
     },
     "tabs": {
       "personalization": "Customization",
