@@ -58,9 +58,8 @@
       "description": "Ocorreu um erro ao salvar as alterações na aba {tabs}. Tente salvar novamente.|Ocorreu um erro ao salvar as alterações nas abas {tabs}. Tente salvar novamente."
     },
     "warn": {
-      "brain_is_deactivated": "O Brain está desativado.",
-      "click_here": "clique aqui",
-      "activate_it": "para ativá-lo."
+      "brain_is_deactivated": "Brain inativo, ative em",
+      "click_here": "ajustes"
     },
     "tabs": {
       "personalization": "Personalização",
@@ -140,6 +139,7 @@
     },
     "preview": {
       "title": "Preview do agente",
+      "active": "Brain ativo",
       "options": {
         "refresh": "Limpar conversas",
         "qr_code": "Visualizar pelo celular"
