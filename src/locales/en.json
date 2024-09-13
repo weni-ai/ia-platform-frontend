@@ -139,6 +139,7 @@
     },
     "preview": {
       "title": "Agent preview",
+      "active": "Brain active",
       "options": {
         "refresh": "Clear conversations",
         "qr_code": "View from mobile"

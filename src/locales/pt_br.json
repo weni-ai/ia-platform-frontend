@@ -139,6 +139,7 @@
     },
     "preview": {
       "title": "Preview do agente",
+      "active": "Brain ativo",
       "options": {
         "refresh": "Limpar conversas",
         "qr_code": "Visualizar pelo celular"

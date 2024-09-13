@@ -58,7 +58,7 @@
       "description": "Se ha producido un error al guardar los cambios en la pestaña {tabs}. Intente guardar de nuevo.|Se ha producido un error al guardar los cambios en las pestañas {tabs}. Intente guardar de nuevo."
     },
     "warn": {
-      "brain_is_deactivated": "Cerebro inactivo, activo encendido",
+      "brain_is_deactivated": "Brain inactivo, activo encendido",
       "click_here": "ajustes"
     },
     "tabs": {
@@ -139,6 +139,7 @@
     },
     "preview": {
       "title": "Vista previa del agente",
+      "active": "Brain activo",
       "options": {
         "refresh": "Borrar conversaciones",
         "qr_code": "Ver desde móvil"
