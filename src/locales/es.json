@@ -1414,7 +1414,7 @@
     "title": "Seleccione el tipo de acción",
     "types": {
       "interactions": {
-        "title": "Cumplimiento",
+        "title": "Interacciones generales",
         "description": "Acciones para saludar, despedirse y navegar por el sistema"
       },
       "shopping": {
