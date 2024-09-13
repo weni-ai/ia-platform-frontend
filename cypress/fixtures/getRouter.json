@@ -1,0 +1,13 @@
+{
+  "uuid": "c96a89a8-5919-403f-ae06-5ddc5d15f0cf",
+  "created_at": "2024-04-18T14:59:51.875074Z",
+  "modified_at": null,
+  "is_active": true,
+  "title": "preview",
+  "description": null,
+  "language": "pt-br",
+  "is_router": true,
+  "created_by": 19537,
+  "modified_by": null,
+  "intelligence": "4cff4cc4-db37-4fac-a441-1fc118d9f47b"
+}
