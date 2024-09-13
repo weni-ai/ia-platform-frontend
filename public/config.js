@@ -1,5 +1,6 @@
 const runtimeVariables = (() => ({
   VITE_VERSION: '(packageDict.version)',
+  VITE_API_BASE_URL: 'https://engine-ai.dev.cloud.weni.ai/',
   VITE_BOTHUB_NLP_BASE_URL: 'https://nlp-ai-development.weni.ai/',
   VITE_BOTHUB_WEBAPP_BASE_URL:
     'https://platform-frontend-ai.dev.cloud.weni.ai/',
@@ -28,28 +29,6 @@ const runtimeVariables = (() => ({
   VITE_OPTIONS_WENIGPT:
     '[{"name": "shark-1", "description": "router.tunings.fields.shark-1", "model": "shark-1"}]',
   SENTRY_ENVIRONMENT: 'develop',
-  HOTJAR_ID: '',
-
-  // VITE_API_BASE_URL: 'https://engine-ai.dev.cloud.weni.ai',
-  // NEXUS_API_BASE_URL: 'https://nexus.dev.cloud.weni.ai',
-  // FLOWS_API_BASE_URL: 'https://flows.dev.cloud.weni.ai',
-  // INTELLIGENCE_LEGACY_URL: 'https://intelligence.dev.cloud.weni.ai',
-
-  // VITE_API_BASE_URL: 'https://engine-ai.stg.cloud.weni.ai',
-  // NEXUS_API_BASE_URL: 'https://nexus.stg.cloud.weni.ai',
-  // FLOWS_API_BASE_URL: 'https://flows.stg.cloud.weni.ai',
-  // INTELLIGENCE_LEGACY_URL: 'https://intelligence.stg.cloud.weni.ai',
-
-  VITE_API_BASE_URL: 'https://api.bothub.it',
-  NEXUS_API_BASE_URL: 'https://nexus.weni.ai',
-  FLOWS_API_BASE_URL: 'https://flows.weni.ai',
-  INTELLIGENCE_LEGACY_URL: 'https://intelligence.weni.ai',
-
-  KEYCLOAK_SERVER: 'accounts.weni.ai',
-  KEYCLOAK_REALM: 'weni',
-
-  TEMPLATE_LINK_FLOW_EDITOR:
-    'https://dash.weni.ai/projects/{dashProjectUuid}/push/flow/editor/{flowUuid}',
 
   get(name) {
     return this[name];
