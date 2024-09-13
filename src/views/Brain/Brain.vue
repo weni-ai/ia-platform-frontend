@@ -29,21 +29,16 @@
         </section>
       </div>
 
-      <div
+      <section
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container',
         ]"
       >
-        <div class="repository-base-edit__wrapper__card-test-container__header">
-          {{ $t('router.preview.title') }}
-
-          <ContentItemActions
-            data-test="dropdown-actions"
-            :actions="previewActions"
-            minWidth="175px"
-          />
-        </div>
+        <BrainHeaderPreview
+          :brainOn="routerTunings.brainOn"
+          :previewActions="previewActions"
+        />
         <BrainWarningBar v-if="!routerTunings.brainOn" />
         <Tests
           :key="refreshPreviewValue"
@@ -51,7 +46,7 @@
           :contentBaseLanguage="contentBase.language"
           :usePreview="true"
         />
-      </div>
+      </section>
     </section>
 
     <ModalPreviewQRCode
@@ -82,11 +77,11 @@ import ModalPreviewQRCode from './Preview/ModalPreviewQRCode.vue';
 import ModalSaveChangesError from './ModalSaveChangesError.vue';
 import { useFilesPagination } from '../ContentBases/filesPagination';
 import { useSitesPagination } from '../ContentBases/sitesPagination';
-import ContentItemActions from '../repository/content/ContentItemActions.vue';
 import BrainSideBar from '@/components/Brain/BrainSideBar.vue';
 import BrainHeader from '@/components/Brain/BrainHeader.vue';
 import i18n from '@/utils/plugins/i18n';
 import BrainWarningBar from '@/components/Brain/BrainWarningBar.vue';
+import BrainHeaderPreview from '@/components/Brain/BrainHeaderPreview.vue';
 
 export default {
   name: 'Brain',
@@ -99,10 +94,10 @@ export default {
     RouterTunings,
     ModalPreviewQRCode,
     ModalSaveChangesError,
-    ContentItemActions,
     BrainSideBar,
     BrainHeader,
     BrainWarningBar,
+    BrainHeaderPreview,
   },
   setup() {
     const route = useRoute();
@@ -487,21 +482,6 @@ export default {
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-
-      &__header {
-        max-width: 390px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        color: $unnnic-color-neutral-darkest;
-        font-family: $unnnic-font-family-secondary;
-        font-size: $unnnic-font-size-body-lg;
-        line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
-        font-weight: $unnnic-font-weight-bold;
-        padding: $unnnic-spacing-md $unnnic-spacing-sm;
-        border-bottom: $unnnic-border-width-thinner solid
-          $unnnic-color-neutral-soft;
-      }
     }
 
     &__card {
