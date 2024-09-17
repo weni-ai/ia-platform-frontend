@@ -31,61 +31,31 @@
     <UnnnicTableNext
       v-model:pagination="pagination"
       :headers="table.headers"
-      :rows="
-        table.rows.map((row) => ({
-          ...row,
-          content: [row.content[0], formatTimeSince(row.content[1])],
-        }))
-      "
-      :paginationTotal="125"
-      :paginationInterval="5"
+      :rows="formattedRows"
+      :paginationTotal="paginationTotal"
+      :paginationInterval="paginationInterval"
     />
   </section>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import i18n from '@/utils/plugins/i18n.js';
+import nexusaiAPI from '@/api/nexusaiAPI';
+import { useStore } from 'vuex';
+
+const store = useStore();
 
 const pagination = ref(1);
+const paginationTotal = ref(0);
+const paginationInterval = ref(5);
 
 const table = ref({
   headers: [
     { content: i18n.global.t('router.tunings.history.fields.change'), size: 6 },
     { content: i18n.global.t('router.tunings.history.fields.date') },
   ],
-  rows: [
-    {
-      content: [
-        'Jade Demettino adicionou um conteúdo (lhamas_final_v3.txt)',
-        '2024-09-04T18:39:40.554317Z',
-      ],
-    },
-    {
-      content: [
-        'Jade Demettino removeu um conteúdo (lhamas_final_v2.txt)',
-        '2024-09-04T20:40:19.740924Z',
-      ],
-    },
-    {
-      content: [
-        'Mardone Silva adicionou uma ação (Despedida)',
-        '2024-09-04T20:40:19.740924Z',
-      ],
-    },
-    {
-      content: [
-        'Mardone Silva adicionou uma ação (Cumprimento)',
-        '2024-09-04T20:40:19.740924Z',
-      ],
-    },
-    {
-      content: [
-        'Mardone Silva alterou a personalidade (Generoso)',
-        '2024-09-04T20:40:19.740924Z',
-      ],
-    },
-  ],
+  rows: [],
 });
 
 const filterOptions = [
@@ -111,10 +81,33 @@ const filterOptions = [
   },
 ];
 
-const currentFilterOption = ref([filterOptions[0].value]);
+const currentFilterOption = ref(filterOptions[0].value);
 
-watch(currentFilterOption, (newVal) => {
-  console.log('Filtro alterado para:', newVal);
+const formattedRows = computed(() =>
+  table.value.rows.map((row) => ({
+    ...row,
+    content: ['', formatTimeSince(row.created_at)],
+  })),
+);
+
+const fetchData = async (page = 1) => {
+  try {
+    const { data } = await nexusaiAPI.router.tunings.historyChanges.read({
+      projectUuid: store.state.Auth.connectProjectUuid,
+      pageSize: paginationInterval.value,
+      page,
+    });
+    console.log('data', data);
+    table.value.rows = data.results;
+    paginationTotal.value = data.totalCount;
+    pagination.value = page;
+  } catch (error) {
+    console.error('Failed to fetch data:', error);
+  }
+};
+
+onMounted(() => {
+  fetchData();
 });
 
 function formatTimeSince(dateString) {
