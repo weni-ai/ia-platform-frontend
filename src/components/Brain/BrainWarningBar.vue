@@ -2,7 +2,7 @@
   <section class="news-bar news-bar--warn">
     <UnnnicIcon
       icon="warning"
-      size="sm"
+      size="ant"
       class="icon"
     />
 
@@ -10,7 +10,7 @@
       color="neutral-white"
       family="secondary"
       weight="bold"
-      size="body-lg"
+      size="body-gt"
       data-test="news-bar-text"
     >
       {{ $t('router.warn.brain_is_deactivated') }}
