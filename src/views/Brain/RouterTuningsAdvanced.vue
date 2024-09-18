@@ -167,6 +167,17 @@ export default {
         });
 
         this.$emit('update:brainOn', data.brain_on);
+        window.parent.postMessage(
+          {
+            event: 'change-brain-status',
+            value: JSON.stringify(data.brain_on),
+          },
+          '*',
+        );
+        console.log('Mensagem enviada:', {
+          event: 'change-brain-status',
+          value: JSON.stringify(data.brain_on),
+        });
       } finally {
         this.$store.state.modalWarn = null;
       }
