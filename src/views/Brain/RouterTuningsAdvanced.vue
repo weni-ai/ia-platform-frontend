@@ -174,10 +174,6 @@ export default {
           },
           '*',
         );
-        console.log('Mensagem enviada:', {
-          event: 'change-brain-status',
-          value: JSON.stringify(data.brain_on),
-        });
       } finally {
         this.$store.state.modalWarn = null;
       }
