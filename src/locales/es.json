@@ -58,12 +58,12 @@
       "description": "Se ha producido un error al guardar los cambios en la pestaña {tabs}. Intente guardar de nuevo.|Se ha producido un error al guardar los cambios en las pestañas {tabs}. Intente guardar de nuevo."
     },
     "warn": {
-      "brain_is_deactivated": "Brain inactivo, activo encendido",
+      "brain_is_deactivated": "Agent Builder inactivo, activo encendido",
       "click_here": "ajustes"
     },
     "tabs": {
-      "personalization": "Personalización",
-      "content": "Contenido",
+      "personalization": "Personalidad",
+      "content": "Conocimiento",
       "actions": "Acciones",
       "tunings": "Ajustes"
     },
@@ -74,8 +74,8 @@
       "create_action": "Crear acciones asignando el flujo que se iniciará",
       "pre_defined_or_customized_actions": "Acciones predefinidas o personalizadas",
       "add": "Añadir acción",
-      "router_activated": "Brain activado en {name}",
-      "router_removed": "Brain eliminado de {name}",
+      "router_activated": "Agent Builder activado en {name}",
+      "router_removed": "Agent Builder eliminado de {name}",
       "router_edited": "Descripción de {name} actualizada"
     },
     "content": {
@@ -122,16 +122,16 @@
       "advanced": {
         "title": "Opciones avanzadas",
         "description": "Esta opción puede desactivar o activar tus activadores.",
-        "brain": "Brain",
+        "brain": "Agent Builder",
         "active_brain_modal": {
-          "title": "Activar Brain",
-          "description": "¿Estás seguro de que quieres activar Brain? <br /> Esto hará que tus activadores sean reemplazados por Acciones y esto puede afectar directamente al funcionamiento de tu agente",
+          "title": "Activar Agent Builder",
+          "description": "¿Estás seguro de que quieres activar Agent Builder? <br /> Esto hará que tus activadores sean reemplazados por Acciones y esto puede afectar directamente al funcionamiento de tu agente",
           "cancel": "Cancelar",
           "action": "Activar"
         },
         "deactivate_brain_modal": {
-          "title": "Desactivar Brain",
-          "description": "¿Estás seguro de que quieres desactivar Brain? <br /> Esto hará que tus acciones sean reemplazadas por disparadores y esto puede afectar directamente al funcionamiento de tu bot.",
+          "title": "Desactivar Agent Builder",
+          "description": "¿Estás seguro de que quieres desactivar Agent Builder? <br /> Esto hará que tus acciones sean reemplazadas por disparadores y esto puede afectar directamente al funcionamiento de tu bot.",
           "cancel": "Cancelar",
           "action": "Desactivar"
         }
@@ -139,7 +139,7 @@
     },
     "preview": {
       "title": "Vista previa del agente",
-      "active": "Brain activo",
+      "active": "Agent Builder activo",
       "options": {
         "refresh": "Borrar conversaciones",
         "qr_code": "Ver desde móvil"
@@ -153,7 +153,7 @@
       "field_changed_to_value": "Parámetro {field} cambiada a {value}",
       "flow_started": "Flujo {name} iniciado",
       "flow_finished": "Flujo finalizado",
-      "message_forwarded_to_brain": "Mensaje transmitido a Brain"
+      "message_forwarded_to_brain": "Mensaje transmitido a Agent Builder"
     }
   },
   "content_bases": {
@@ -266,8 +266,8 @@
       }
     },
     "brain_use_warning": {
-      "title": "Utiliza Brain para crear IA de contenidos",
-      "description": "Brain tiene capacidades mejoradas para crear agentes más inteligentes que respondan basándose en contenidos de varios formatos subidos por ti.",
+      "title": "Utiliza Agent Builder para crear IA de contenidos",
+      "description": "Agent Builder tiene capacidades mejoradas para crear agentes más inteligentes que respondan basándose en contenidos de varios formatos subidos por ti.",
       "take_me_there": "Llévame allí"
     }
   },
@@ -1520,7 +1520,7 @@
         "sub_title": "Explique su flujo y cuándo debe entrar en él el usuario. Intente ser objetivo.",
         "label": "Descripción",
         "change_title": "Cambiar la descripción de la acción",
-        "change_sub_title": "La descripción ayuda al Brain a funcionar mejor"
+        "change_sub_title": "La descripción ayuda al Agent Builder a funcionar mejor"
       },
       "remove": {
         "title": "Eliminar acción",
