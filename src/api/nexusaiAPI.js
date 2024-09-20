@@ -151,6 +151,14 @@ export default {
         );
       },
 
+      historyChanges: {
+        read({ projectUuid, pageSize = 10, page = 1 }) {
+          let url = `api/${projectUuid}/activities/?page=${page}&page_size=${pageSize}`;
+
+          return request.$http.get(url);
+        },
+      },
+
       advanced: {
         read({ projectUuid }) {
           return request.$http.get(`api/${projectUuid}/project`);
