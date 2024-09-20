@@ -39,16 +39,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import i18n from '@/utils/plugins/i18n.js';
 import nexusaiAPI from '@/api/nexusaiAPI';
+import HistoryItem from './HistoryItem.vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
 
 const pagination = ref(1);
 const paginationTotal = ref(0);
-const paginationInterval = ref(5);
+const paginationInterval = ref(10);
 
 const table = ref({
   headers: [
@@ -86,7 +87,14 @@ const currentFilterOption = ref(filterOptions[0].value);
 const formattedRows = computed(() =>
   table.value.rows.map((row) => ({
     ...row,
-    content: ['', formatTimeSince(row.created_at)],
+    content: [
+      {
+        component: HistoryItem,
+        props: handleChangeName(row),
+        events: {},
+      },
+      formatTimeSince(row.created_at),
+    ],
   })),
 );
 
@@ -97,10 +105,9 @@ const fetchData = async (page = 1) => {
       pageSize: paginationInterval.value,
       page,
     });
-    console.log('data', data);
     table.value.rows = data.results;
-    paginationTotal.value = data.totalCount;
-    pagination.value = page;
+    paginationTotal.value = data.count;
+    console.log('fetchData', page, data);
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }
@@ -108,6 +115,10 @@ const fetchData = async (page = 1) => {
 
 onMounted(() => {
   fetchData();
+});
+
+watch(pagination, (newPage) => {
+  fetchData(newPage);
 });
 
 function formatTimeSince(dateString) {
@@ -132,6 +143,128 @@ function formatTimeSince(dateString) {
 
   const diffInMonths = Math.floor(diffInDays / 30);
   return i18n.global.t('time.time_ago_months', { count: diffInMonths });
+}
+
+function handleChangeName(row) {
+  if (!row.model_group && row.action_details['brain_on']) {
+    const statusBrain = JSON.parse(
+      row.action_details['brain_on'].new.toLowerCase(),
+    )
+      ? 'on'
+      : 'off';
+
+    return {
+      icon: 'settings',
+      user: row.created_by,
+      text:
+        i18n.global.t(`router.tunings.history.fields.brain-${statusBrain}`) ||
+        '-',
+    };
+  }
+
+  if (!row || !row.model_group || !row.action_type || !row.action_details) {
+    return {
+      icon: 'article',
+      user: 'ViniTest',
+      text: 'Ainda estou elaborando (Elabore)',
+    };
+  }
+
+  const action_details = Object.keys(row.action_details).map((key) => {
+    return {
+      key: key,
+      newValue: row.action_details[key]?.new,
+      oldValue: row.action_details[key]?.old,
+    };
+  });
+
+  const actionUpdateName =
+    action_details[0]?.key === 'name' ? 'name' : 'prompt';
+
+  const groupData = {
+    Action: {
+      C: {
+        icon: 'bolt',
+        user: row.created_by,
+        text:
+          i18n.global.t('router.tunings.history.fields.add-action', {
+            value: row.action_details.new,
+          }) || '-',
+      },
+      U: {
+        icon: 'bolt',
+        user: row.created_by,
+        text:
+          i18n.global.t(
+            `router.tunings.history.fields.update-${actionUpdateName}-action`,
+            {
+              value: action_details[0]?.newValue,
+            },
+          ) || '-',
+        column: action_details[0]?.key || '-',
+      },
+      D: {
+        icon: 'bolt',
+        user: row.created_by,
+        text:
+          i18n.global.t('router.tunings.history.fields.remove-action', {
+            value: row.action_details.old,
+          }) || '-',
+      },
+    },
+    Config: {
+      U: {
+        icon: 'settings',
+        user: row.created_by,
+        text:
+          i18n.global.t('router.tunings.history.fields.update-model') || '-',
+      },
+    },
+    Content: {
+      D: {
+        icon: 'article',
+        user: row.created_by,
+        text:
+          i18n.global.t('router.tunings.history.fields.remove-content', {
+            value: row.action_details.new,
+          }) || '-',
+      },
+      U: {
+        icon: 'article',
+        user: row.created_by,
+        text:
+          i18n.global.t('router.tunings.history.fields.update-content', {
+            value: row.action_details.new,
+          }) || '-',
+      },
+      C: {
+        icon: 'article',
+        user: row.created_by,
+        text:
+          i18n.global.t('router.tunings.history.fields.add-content', {
+            value: row.action_details.new,
+          }) || '-',
+      },
+    },
+    Customization: {
+      U: {
+        icon: 'person',
+        user: row.created_by,
+        text:
+          i18n.global.t('router.tunings.history.fields.update-instruction', {
+            value: action_details[0]?.newValue,
+          }) || '-',
+      },
+    },
+  };
+
+  return (
+    groupData[row.model_group]?.[row.action_type] || {
+      icon: 'article',
+      user: 'ViniTest',
+      text: 'Ainda estou elaborando (Elabore)',
+    }
+  );
 }
 </script>
 
