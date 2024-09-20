@@ -112,8 +112,21 @@
           "customization-changes": "Alterações de personalização",
           "content-changes": "Alterações de contéudo",
           "actions-changes": "Alterações de ações",
-          "settings-changes": "Alterações de configurações"
-          
+          "settings-changes": "Alterações de configurações",
+          "add-action": "adicionou uma ação ({value})",
+          "update-name-action": "alterou uma ação ({value})",
+          "update-prompt-action": "alterou o prompt de uma ação ({value})",
+          "remove-action": "removeu uma ação ({value})",
+          "update-personality": "alterou a personalidade ({value})",
+          "add-instruction": "adicionou uma instrução ({value})",
+          "remove-instruction": "removeu uma instrução ({value})",
+          "update-instruction": "alterou uma instrução ({value})",
+          "add-content": "adicionou um conteudo ({value})",
+          "update-content": "alterou um conteudo ({value})",
+          "remove-content": "removeu um conteudo ({value})",
+          "update-model": "alterou o modelo",
+          "brain-on": "ligou o Agent Builder",
+          "brain-off": "desligou o Agent Builder"
          }
       },
       "fields": {

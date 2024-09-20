@@ -112,7 +112,21 @@
           "customization-changes": "Customization changes",
           "content-changes": "Content changes",
           "actions-changes": "Action changes",
-          "settings-changes": "Settings changes"
+          "settings-changes": "Settings changes",
+          "add-action": "added an action ({value})",
+          "update-name-action": "changed an action ({value})",
+          "update-prompt-action": "changed the prompt of an action ({value})",
+          "remove-action": "removed an action ({value})",
+          "update-personality": "changed the personality ({value})",
+          "add-instruction": "added an instruction ({value})",
+          "remove-instruction": "removed an instruction ({value})",
+          "update-instruction": "changed an instruction ({value})",
+          "add-content": "added a content ({value})",
+          "update-content": "changed a content ({value})",
+          "remove-content": "removed a content ({value})",
+          "update-model": "changed the model",
+          "brain-on": "turned on Agent Builder",
+          "brain-off": "turned off Agent Builder"
          }
       },
       "fields": {
