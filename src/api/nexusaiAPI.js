@@ -152,8 +152,10 @@ export default {
       },
 
       historyChanges: {
-        read({ projectUuid, pageSize = 10, page = 1 }) {
+        read({ projectUuid, pageSize = 10, page = 1, filter = '' }) {
           let url = `api/${projectUuid}/activities/?page=${page}&page_size=${pageSize}`;
+
+          if (filter) url = url + `&model_group=${filter}`;
 
           return request.$http.get(url);
         },
