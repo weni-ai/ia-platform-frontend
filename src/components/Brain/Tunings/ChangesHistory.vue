@@ -67,23 +67,23 @@ const table = ref({
 
 const filterOptions = [
   {
-    value: '1',
+    value: 'all',
     label: i18n.global.t('router.tunings.history.fields.all-changes'),
   },
   {
-    value: '2',
+    value: 'Customization',
     label: i18n.global.t('router.tunings.history.fields.customization-changes'),
   },
   {
-    value: '3',
+    value: 'Content',
     label: i18n.global.t('router.tunings.history.fields.content-changes'),
   },
   {
-    value: '4',
+    value: 'Action',
     label: i18n.global.t('router.tunings.history.fields.actions-changes'),
   },
   {
-    value: '5',
+    value: 'Config',
     label: i18n.global.t('router.tunings.history.fields.settings-changes'),
   },
 ];
@@ -126,17 +126,17 @@ function handleIsRenderIcon(row) {
   return values.length > 1 && values[0] !== 'new';
 }
 
-const fetchData = async (page = 1) => {
+const fetchData = async (page = 1, filter = '') => {
   isLoading.value = true;
   try {
     const { data } = await nexusaiAPI.router.tunings.historyChanges.read({
       projectUuid: store.state.Auth.connectProjectUuid,
       pageSize: paginationInterval.value,
       page,
+      filter: filter === 'all' ? '' : filter,
     });
     table.value.rows = data.results;
     paginationTotal.value = data.count;
-    console.log('fetchData', page, data);
   } catch (error) {
     console.error('Failed to fetch data:', error);
   } finally {
@@ -149,7 +149,12 @@ onMounted(() => {
 });
 
 watch(pagination, (newPage) => {
-  fetchData(newPage);
+  fetchData(newPage, currentFilterOption.value[0].value);
+});
+
+watch(currentFilterOption, (option) => {
+  fetchData(1, option[0].value);
+  pagination.value = 1;
 });
 
 function formatTimeSince(dateString) {
@@ -229,7 +234,9 @@ function handleChangeName(row) {
       ? i18n.global.t(`router.tunings.history.fields.changes`, {
           value: action_details.length,
         })
-      : action_details[0]
+      : ['name', 'goal', 'role', 'personality', 'instruction'].includes(
+            action_details[0],
+          )
         ? i18n.global.t(
             `router.tunings.history.fields.update-${action_details[0]?.key}`,
             {
@@ -256,12 +263,14 @@ function handleChangeName(row) {
           action_details.length > 1 &&
           !['new', 'old'].includes(action_details.map((e) => e.key))
             ? action_details.map((e) =>
-                i18n.global.t(
-                  `router.tunings.history.fields.update-${e.key}-action`,
-                  {
-                    value: e.newValue,
-                  },
-                ),
+                ['name', 'prompt'].includes(e.key)
+                  ? i18n.global.t(
+                      `router.tunings.history.fields.update-${e.key}-action`,
+                      {
+                        value: e.newValue,
+                      },
+                    )
+                  : '',
               )
             : [],
       },
@@ -317,9 +326,16 @@ function handleChangeName(row) {
           action_details.length > 1 &&
           !['new', 'old'].includes(action_details.map((e) => e.key))
             ? action_details.map((e) =>
-                i18n.global.t(`router.tunings.history.fields.update-${e.key}`, {
-                  value: e.newValue,
-                }),
+                ['name', 'goal', 'role', 'personality', 'instruction'].includes(
+                  e.key,
+                )
+                  ? i18n.global.t(
+                      `router.tunings.history.fields.update-${e.key}`,
+                      {
+                        value: e.newValue,
+                      },
+                    )
+                  : '',
               )
             : [],
       },
