@@ -34,6 +34,8 @@
       :rows="formattedRows"
       :paginationTotal="paginationTotal"
       :paginationInterval="paginationInterval"
+      :isLoading="isLoading"
+      class="table"
     />
   </section>
 </template>
@@ -44,16 +46,20 @@ import i18n from '@/utils/plugins/i18n.js';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import HistoryItem from './HistoryItem.vue';
 import { useStore } from 'vuex';
+import HistoryData from './HistoryData.vue';
 
 const store = useStore();
 
 const pagination = ref(1);
 const paginationTotal = ref(0);
 const paginationInterval = ref(10);
+const isLoading = ref(false);
+
+const isCollapsedMap = ref({});
 
 const table = ref({
   headers: [
-    { content: i18n.global.t('router.tunings.history.fields.change'), size: 6 },
+    { content: i18n.global.t('router.tunings.history.fields.change'), size: 5 },
     { content: i18n.global.t('router.tunings.history.fields.date') },
   ],
   rows: [],
@@ -82,23 +88,46 @@ const filterOptions = [
   },
 ];
 
-const currentFilterOption = ref(filterOptions[0].value);
+const currentFilterOption = ref(filterOptions[0].value.value);
 
 const formattedRows = computed(() =>
-  table.value.rows.map((row) => ({
+  table.value.rows.map((row, index) => ({
     ...row,
     content: [
       {
         component: HistoryItem,
-        props: handleChangeName(row),
+        props: {
+          ...handleChangeName(row),
+          isRenderGroupText: isCollapsedMap.value[index] || false,
+        },
         events: {},
       },
-      formatTimeSince(row.created_at),
+      {
+        component: HistoryData,
+        props: {
+          text: formatTimeSince(row.created_at),
+          isRenderIcon: handleIsRenderIcon(row),
+        },
+        events: {
+          'update:isCollapsed': (collapsed) => {
+            isCollapsedMap.value[index] = collapsed;
+          },
+        },
+      },
     ],
   })),
 );
 
+function handleIsRenderIcon(row) {
+  if (row?.model_group === 'Config') return false;
+
+  const values = Object.keys(row?.action_details || []);
+
+  return values.length > 1 && values[0] !== 'new';
+}
+
 const fetchData = async (page = 1) => {
+  isLoading.value = true;
   try {
     const { data } = await nexusaiAPI.router.tunings.historyChanges.read({
       projectUuid: store.state.Auth.connectProjectUuid,
@@ -110,6 +139,8 @@ const fetchData = async (page = 1) => {
     console.log('fetchData', page, data);
   } catch (error) {
     console.error('Failed to fetch data:', error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -165,8 +196,8 @@ function handleChangeName(row) {
   if (!row || !row.model_group || !row.action_type || !row.action_details) {
     return {
       icon: 'article',
-      user: 'ViniTest',
-      text: 'Ainda estou elaborando (Elabore)',
+      user: '-',
+      text: '-',
     };
   }
 
@@ -181,6 +212,32 @@ function handleChangeName(row) {
   const actionUpdateName =
     action_details[0]?.key === 'name' ? 'name' : 'prompt';
 
+  const ActionUpdate =
+    action_details.length > 1 && action_details[0] !== 'new'
+      ? i18n.global.t(`router.tunings.history.fields.changes`, {
+          value: action_details.length,
+        })
+      : i18n.global.t(
+          `router.tunings.history.fields.update-${actionUpdateName}-action`,
+          {
+            value: action_details[0]?.newValue,
+          },
+        ) || '-';
+
+  const CustomizationUpdate =
+    action_details.length > 1 && action_details[0] !== 'new'
+      ? i18n.global.t(`router.tunings.history.fields.changes`, {
+          value: action_details.length,
+        })
+      : action_details[0]
+        ? i18n.global.t(
+            `router.tunings.history.fields.update-${action_details[0]?.key}`,
+            {
+              value: action_details[0]?.newValue,
+            },
+          )
+        : i18n.global.t(`router.tunings.history.fields.changes`);
+
   const groupData = {
     Action: {
       C: {
@@ -194,14 +251,19 @@ function handleChangeName(row) {
       U: {
         icon: 'bolt',
         user: row.created_by,
-        text:
-          i18n.global.t(
-            `router.tunings.history.fields.update-${actionUpdateName}-action`,
-            {
-              value: action_details[0]?.newValue,
-            },
-          ) || '-',
-        column: action_details[0]?.key || '-',
+        text: ActionUpdate,
+        groupText:
+          action_details.length > 1 &&
+          !['new', 'old'].includes(action_details.map((e) => e.key))
+            ? action_details.map((e) =>
+                i18n.global.t(
+                  `router.tunings.history.fields.update-${e.key}-action`,
+                  {
+                    value: e.newValue,
+                  },
+                ),
+              )
+            : [],
       },
       D: {
         icon: 'bolt',
@@ -250,21 +312,21 @@ function handleChangeName(row) {
       U: {
         icon: 'person',
         user: row.created_by,
-        text:
-          i18n.global.t('router.tunings.history.fields.update-instruction', {
-            value: action_details[0]?.newValue,
-          }) || '-',
+        text: CustomizationUpdate,
+        groupText:
+          action_details.length > 1 &&
+          !['new', 'old'].includes(action_details.map((e) => e.key))
+            ? action_details.map((e) =>
+                i18n.global.t(`router.tunings.history.fields.update-${e.key}`, {
+                  value: e.newValue,
+                }),
+              )
+            : [],
       },
     },
   };
 
-  return (
-    groupData[row.model_group]?.[row.action_type] || {
-      icon: 'article',
-      user: 'ViniTest',
-      text: 'Ainda estou elaborando (Elabore)',
-    }
-  );
+  return groupData[row.model_group]?.[row.action_type];
 }
 </script>
 

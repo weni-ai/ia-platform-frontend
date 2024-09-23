@@ -7,6 +7,18 @@
     <p class="history-item__user">{{ user }}</p>
     <p class="history-item__text">{{ text }}</p>
   </section>
+  <section
+    v-if="groupText.length > 0 && isRenderGroupText"
+    class="history-item__description"
+  >
+    <p
+      v-for="(textItem, index) in groupText"
+      :key="index"
+      class="history-item__text"
+    >
+      {{ textItem }}
+    </p>
+  </section>
 </template>
 
 <script setup>
@@ -24,10 +36,16 @@ defineProps({
     type: String,
     required: true,
   },
-  column: {
-    type: String,
+  isRenderGroupText: {
+    type: Boolean,
+    default: false,
+  },
+  groupText: {
+    type: Array,
     required: false,
-    default: '',
+    default() {
+      return [];
+    },
   },
 });
 </script>
@@ -56,6 +74,14 @@ defineProps({
     font-size: $unnnic-font-size-body-gt;
     font-style: normal;
     font-weight: $unnnic-font-weight-regular;
+  }
+
+  &__description {
+    margin-left: $unnnic-spacing-md + $unnnic-spacing-nano;
+    gap: $unnnic-spacing-ant;
+    margin-top: $unnnic-spacing-ant;
+    display: flex;
+    flex-direction: column;
   }
 }
 </style>
