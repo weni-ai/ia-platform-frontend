@@ -538,7 +538,7 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
-
+  padding-top: $unnnic-spacing-sm;
   row-gap: $unnnic-spacing-xs;
 
   .messages {

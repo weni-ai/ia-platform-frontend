@@ -58,13 +58,12 @@
       "description": "An error occurred while saving changes to the {tabs} tab. Try saving again.|An error occurred while saving changes to the {tabs} tabs. Try saving again."
     },
     "warn": {
-      "brain_is_deactivated": "Brain is deactivated.",
-      "click_here": "click here",
-      "activate_it": "to activate it."
+      "brain_is_deactivated": "Agent Builder inactive, active on",
+      "click_here": "tunings"
     },
     "tabs": {
-      "personalization": "Customization",
-      "content": "Content",
+      "personalization": "Personality",
+      "content": "Knowledge",
       "actions": "Actions",
       "tunings": "Tunings"
     },
@@ -75,8 +74,8 @@
       "create_action": "Create actions by assigning the flow that will be started",
       "pre_defined_or_customized_actions": "Pre-defined or customized actions",
       "add": "Add action",
-      "router_activated": "Brain activated in {name}",
-      "router_removed": "Brain removed from {name}",
+      "router_activated": "Agent Builder activated in {name}",
+      "router_removed": "Agent Builder removed from {name}",
       "router_edited": "Description of {name} updated"
     },
     "content": {
@@ -103,7 +102,7 @@
         "history": "History of changes"
       },
       "history": {
-        "description": "View the history of changes made to Brain",
+        "description": "View the history of changes made to Agent Builder",
         "sub_description": "Check all changes and filter according to your needs",
          "fields": {
           "change": "Change",
@@ -159,16 +158,16 @@
       "advanced": {
         "title": "Advanced options",
         "description": "This option can disable or enable your triggers.",
-        "brain": "Brain",
+        "brain": "Agent Builder",
         "active_brain_modal": {
-          "title": "Activate Brain",
-          "description": "Are you sure you want to activate Brain? <br /> This will cause your triggers to be replaced by Actions and this can directly affect the operation of your agent.",
+          "title": "Activate Agent Builder",
+          "description": "Are you sure you want to activate Agent Builder? <br /> This will cause your triggers to be replaced by Actions and this can directly affect the operation of your agent.",
           "cancel": "Cancel",
           "action": "Activate"
         },
         "deactivate_brain_modal": {
-          "title": "Deactivate Brain",
-          "description": "Are you sure you want to deactivate Brain? <br /> This will cause your actions to be replaced by triggers and this can directly affect the functioning of your bot.",
+          "title": "Deactivate Agent Builder",
+          "description": "Are you sure you want to deactivate Agent Builder? <br /> This will cause your actions to be replaced by triggers and this can directly affect the functioning of your bot.",
           "cancel": "Cancel",
           "action": "Deactivate"
         }
@@ -176,6 +175,7 @@
     },
     "preview": {
       "title": "Agent preview",
+      "active": "Agent Builder active",
       "options": {
         "refresh": "Clear conversations",
         "qr_code": "View from mobile"
@@ -189,7 +189,7 @@
       "field_changed_to_value": "Parameter {field} changed to {value}",
       "flow_started": "Flow {name} started",
       "flow_finished": "Flow finished",
-      "message_forwarded_to_brain": "Message forwarded to Brain"
+      "message_forwarded_to_brain": "Message forwarded to Agent Builder"
     }
   },
   "content_bases": {
@@ -302,8 +302,8 @@
       }
     },
     "brain_use_warning": {
-      "title": "Use Brain to create Content AI",
-      "description": "Brain has enhanced capabilities for creating smarter agents that respond based on content of various formats uploaded by you.",
+      "title": "Use Agent Builder to create Content AI",
+      "description": "Agent Builder has enhanced capabilities for creating smarter agents that respond based on content of various formats uploaded by you.",
       "take_me_there": "Take me there"
     }
   },
@@ -1472,7 +1472,7 @@
     "title": "Select the type of action",
     "types": {
       "interactions": {
-        "title": "Compliance",
+        "title": "General interactions",
         "description": "Actions for greeting, saying goodbye and navigating the system"
       },
       "shopping": {
@@ -1577,7 +1577,7 @@
         "sub_title": "Explain your flow and when the user should enter it. Try to be objective.",
         "label": "Description",
         "change_title": "Change action description",
-        "change_sub_title": "The description helps the Brain work better"
+        "change_sub_title": "The description helps the Agent Builder work better"
       },
       "remove": {
         "title": "Remove action",

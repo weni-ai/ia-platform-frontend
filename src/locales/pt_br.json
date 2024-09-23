@@ -58,13 +58,12 @@
       "description": "Ocorreu um erro ao salvar as alterações na aba {tabs}. Tente salvar novamente.|Ocorreu um erro ao salvar as alterações nas abas {tabs}. Tente salvar novamente."
     },
     "warn": {
-      "brain_is_deactivated": "O Brain está desativado.",
-      "click_here": "clique aqui",
-      "activate_it": "para ativá-lo."
+      "brain_is_deactivated": "Agent Builder inativo, ative em",
+      "click_here": "ajustes"
     },
     "tabs": {
-      "personalization": "Personalização",
-      "content": "Conteúdo",
+      "personalization": "Personalidade",
+      "content": "Conhecimento",
       "actions": "Ações",
       "tunings": "Ajustes"
     },
@@ -75,8 +74,8 @@
       "create_action": "Crie ações atribuindo o fluxo que será iniciado",
       "pre_defined_or_customized_actions": "Ações pré-definidas ou personalizadas",
       "add": "Adicionar ação",
-      "router_activated": "Brain ativado em {name}",
-      "router_removed": "Brain removido de {name}",
+      "router_activated": "Agent Builder ativado em {name}",
+      "router_removed": "Agent Builder removido de {name}",
       "router_edited": "Descrição de {name} atualizada"
     },
     "content": {
@@ -103,8 +102,8 @@
         "history": "Histórico de alterações"
       },
       "history": {
-        "description": "Veja o histórico de alterações feitos no Brain",
-        "sub_description": "Verifique todas as mudanças e filtre de acordo com sua necessidade",
+        "description": "Veja o histórico de alterações feitos no Agent Builder",
+        "sub_description": "Veja a lista completa ou filtre pelo tipo de alteração",
          "fields": {
           "change": "Alteração",
           "date": "Data",
@@ -159,16 +158,16 @@
       "advanced": {
         "title": "Opções avançadas",
         "description": "Essa opção pode desativar ou ativar suas triggers.",
-        "brain": "Brain",
+        "brain": "Agent Builder",
         "active_brain_modal": {
-          "title": "Ativar Brain",
-          "description": "Tem certeza que deseja ativar o Brain? <br /> Isso fará com que suas triggers sejam substituídas pelas Ações e isso pode afetar diretamente o funcionamento do seu agente.",
+          "title": "Ativar Agent Builder",
+          "description": "Tem certeza que deseja ativar o Agent Builder? <br /> Isso fará com que suas triggers sejam substituídas pelas Ações e isso pode afetar diretamente o funcionamento do seu agente.",
           "cancel": "Cancelar",
           "action": "Ativar"
         },
         "deactivate_brain_modal": {
-          "title": "Desativar Brain",
-          "description": "Tem certeza que deseja desativar o Brain? <br /> Isso fará com que suas ações sejam substituidas pelas triggers e isso pode afetar diretamente o funcionamento do seu bot.",
+          "title": "Desativar Agent Builder",
+          "description": "Tem certeza que deseja desativar o Agent Builder? <br /> Isso fará com que suas ações sejam substituidas pelas triggers e isso pode afetar diretamente o funcionamento do seu bot.",
           "cancel": "Cancelar",
           "action": "Desativar"
         }
@@ -176,6 +175,7 @@
     },
     "preview": {
       "title": "Preview do agente",
+      "active": "Agent Builder ativo",
       "options": {
         "refresh": "Limpar conversas",
         "qr_code": "Visualizar pelo celular"
@@ -189,7 +189,7 @@
       "field_changed_to_value": "Parâmetro {field} alterado para {value}",
       "flow_started": "Fluxo {name} iniciado",
       "flow_finished": "Fluxo finalizado",
-      "message_forwarded_to_brain": "Mensagem redirecionada para o Brain"
+      "message_forwarded_to_brain": "Mensagem redirecionada para o Agent Builder"
     }
   },
   "content_bases": {
@@ -302,8 +302,8 @@
       }
     },
     "brain_use_warning": {
-      "title": "Utilize o Brain para criar IA de Conteúdo",
-      "description": "O Brain possui recursos aprimorados para criação de agente mais inteligentes, que respondem com base em conteúdos de diversos formatos carregados por você.",
+      "title": "Utilize o Agent Builder para criar IA de Conteúdo",
+      "description": "O Agent Builder possui recursos aprimorados para criação de agente mais inteligentes, que respondem com base em conteúdos de diversos formatos carregados por você.",
       "take_me_there": "Me leve até lá"
     }
   },
@@ -1430,7 +1430,7 @@
     "title": "Selecione o tipo de ação",
     "types": {
       "interactions": {
-        "title": "Cumprimento",
+        "title": "Interações gerais",
         "description": "Ações para saudar, se despedir e navegar no sistema"
       },
       "shopping": {
@@ -1535,7 +1535,7 @@
         "sub_title": "Explique seu fluxo e quando o usuário deve entrar nele. Busque ser objetivo.",
         "label": "Descrição",
         "change_title": "Alterar descrição da ação",
-        "change_sub_title": "A descrição ajuda o Brain funcionar de forma mais adequada"
+        "change_sub_title": "A descrição ajuda o Agent Builder funcionar de forma mais adequada"
       },
       "remove": {
         "title": "Remover ação",

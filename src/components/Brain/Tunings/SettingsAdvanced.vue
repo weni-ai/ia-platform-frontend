@@ -93,7 +93,6 @@ export default {
           this.$router.push({ query: {} });
 
           this.open = true;
-          this.openActiveOrDeactivateBrain(true);
 
           this.$nextTick(() => {
             this.$el.scrollIntoView({ behavior: 'smooth' });
@@ -168,6 +167,13 @@ export default {
         });
 
         this.$emit('update:brainOn', data.brain_on);
+        window.parent.postMessage(
+          {
+            event: 'change-brain-status',
+            value: JSON.stringify(data.brain_on),
+          },
+          '*',
+        );
       } finally {
         this.$store.state.modalWarn = null;
       }
