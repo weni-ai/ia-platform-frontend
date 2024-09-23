@@ -1426,6 +1426,10 @@
         "title": "Servicio y asistencia",
         "description": "Acciones de apoyo al cliente y ajustes en la comunicación"
       },
+      "media": {
+        "title": "Medios y ubicación",
+        "description": "Acciones iniciadas desde imagen, video, audio y ubicación del usuario"
+      },
       "custom": {
         "title": "Personalizada",
         "description": "Acciones para responder a necesidades específicas"
