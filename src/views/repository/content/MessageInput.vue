@@ -1,5 +1,16 @@
 <template>
   <section class="message-input__container">
+    <div :class="['message-input__action', 'message-input__attach_media']">
+      <ContentItemActions
+        data-test="dropdown-actions"
+        :actions="[
+          { scheme: 'neutral-dark', icon: 'image', text: 'Fotos e vídeos' },
+          { scheme: 'neutral-dark', icon: 'attach_file', text: 'Arquivo' },
+          { scheme: 'neutral-dark', icon: 'location_on', text: 'Localização' },
+        ]"
+      />
+    </div>
+
     <input
       v-model="modelValue"
       :placeholder="placeholder"
@@ -9,7 +20,7 @@
     />
 
     <UnnnicIcon
-      class="message-input__send-button"
+      :class="['message-input__action', 'message-input__send-button']"
       icon="send"
       filled
       size="md"
@@ -21,6 +32,8 @@
 </template>
 
 <script setup>
+import ContentItemActions from '@/views/repository/content/ContentItemActions.vue';
+
 const modelValue = defineModel('modelValue', {
   type: String,
   required: true,
@@ -39,11 +52,13 @@ defineEmits(['send']);
 <style lang="scss" scoped>
 .message-input {
   $input-inside-height: $unnnic-icon-size-md;
+  $input-horizontal-padding: $unnnic-spacing-sm + $unnnic-icon-size-md +
+    $unnnic-spacing-xs - $unnnic-border-width-thinner;
 
   flex: 1;
   padding: $unnnic-spacing-sm - $unnnic-border-width-thinner;
-  padding-right: $unnnic-spacing-sm + $unnnic-icon-size-md + $unnnic-spacing-xs -
-    $unnnic-border-width-thinner;
+  padding-right: $input-horizontal-padding;
+  padding-left: $input-horizontal-padding;
 
   height: $input-inside-height;
 
@@ -55,7 +70,7 @@ defineEmits(['send']);
   outline: none;
 
   border-radius: $unnnic-border-radius-md;
-  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-clean;
+  border: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;
 
   &::placeholder {
     color: $unnnic-color-neutral-clean;
@@ -70,11 +85,18 @@ defineEmits(['send']);
     display: flex;
   }
 
-  &__send-button {
+  &__action {
     top: 50%;
     margin-top: - calc($unnnic-icon-size-md / 2);
     user-select: none;
     position: absolute;
+  }
+
+  &__attach_media {
+    left: $unnnic-spacing-sm;
+  }
+
+  &__send-button {
     right: $unnnic-spacing-sm;
   }
 }
