@@ -63,6 +63,10 @@ const onTabChange = (newTab) => {
 
   &_tabs {
     margin: $unnnic-spacing-md 0 0 0;
+
+    :deep(.tab-header) {
+      margin-bottom: $unnnic-spacing-md;
+    }
   }
 }
 </style>

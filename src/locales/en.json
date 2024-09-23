@@ -102,6 +102,7 @@
         "history": "History of changes"
       },
       "history": {
+        "no_changes": "No changes were made to the Agent Builder.",
         "description": "View the history of changes made to Agent Builder",
         "sub_description": "Check all changes and filter according to your needs",
          "fields": {

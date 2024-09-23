@@ -3,6 +3,7 @@
     <UnnnicIcon
       :icon="icon"
       size="ant"
+      scheme="neutral-cloudy"
     />
     <p class="history-item__user">{{ user }}</p>
     <p class="history-item__text">{{ text }}</p>

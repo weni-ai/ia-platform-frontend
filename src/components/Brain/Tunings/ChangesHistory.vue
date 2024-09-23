@@ -1,33 +1,39 @@
 <template>
-  <section class="changes-history__container__header">
-    <section>
-      <UnnnicIntelligenceText
-        color="neutral-cloudy"
-        family="secondary"
-        size="body-gt"
-        tag="p"
-      >
-        {{ $t('router.tunings.history.description') }}
-      </UnnnicIntelligenceText>
-      <UnnnicIntelligenceText
-        class="text-sub-description"
-        color="neutral-clean"
-        family="secondary"
-        size="body-md"
-        tag="p"
-      >
-        {{ $t('router.tunings.history.sub_description') }}
-      </UnnnicIntelligenceText>
-    </section>
+  <p
+    v-if="noChangesDetected"
+    class="changes-history__no-changes"
+  >
+    {{ $t('router.tunings.history.no_changes') }}
+  </p>
+  <template v-else>
+    <section class="changes-history__container__header">
+      <section>
+        <UnnnicIntelligenceText
+          color="neutral-cloudy"
+          family="secondary"
+          size="body-gt"
+          tag="p"
+        >
+          {{ $t('router.tunings.history.description') }}
+        </UnnnicIntelligenceText>
+        <UnnnicIntelligenceText
+          class="text-sub-description"
+          color="neutral-clean"
+          family="secondary"
+          size="body-md"
+          tag="p"
+        >
+          {{ $t('router.tunings.history.sub_description') }}
+        </UnnnicIntelligenceText>
+      </section>
 
-    <UnnnicSelectSmart
-      v-model:modelValue="currentFilterOption"
-      class="select-filter"
-      :options="filterOptions"
-      orderedByIndex
-    />
-  </section>
-  <section>
+      <UnnnicSelectSmart
+        v-model:modelValue="currentFilterOption"
+        class="select-filter"
+        :options="filterOptions"
+        orderedByIndex
+      />
+    </section>
     <UnnnicTableNext
       v-model:pagination="pagination"
       :headers="table.headers"
@@ -35,9 +41,9 @@
       :paginationTotal="paginationTotal"
       :paginationInterval="paginationInterval"
       :isLoading="isLoading"
-      class="table"
+      class="changes-history__table"
     />
-  </section>
+  </template>
 </template>
 
 <script setup>
@@ -59,7 +65,7 @@ const isCollapsedMap = ref({});
 
 const table = ref({
   headers: [
-    { content: i18n.global.t('router.tunings.history.fields.change'), size: 5 },
+    { content: i18n.global.t('router.tunings.history.fields.change'), size: 3 },
     { content: i18n.global.t('router.tunings.history.fields.date') },
   ],
   rows: [],
@@ -89,6 +95,13 @@ const filterOptions = [
 ];
 
 const currentFilterOption = ref(filterOptions[0].value.value);
+
+const noChangesDetected = computed(() => {
+  const noRows = table.value.rows.length === 0;
+  const isAllFilterSelected = currentFilterOption.value?.[0].value === 'all';
+
+  return noRows && isAllFilterSelected && !isLoading.value;
+});
 
 const formattedRows = computed(() =>
   table.value.rows.map((row, index) => ({
@@ -348,6 +361,12 @@ function handleChangeName(row) {
 
 <style scoped lang="scss">
 .changes-history {
+  &__no-changes {
+    color: $unnnic-color-neutral-cloudy;
+    font-family: $unnnic-font-family-secondary;
+    font-size: $unnnic-font-size-body-gt;
+  }
+
   &__container {
     &__header {
       display: flex;
@@ -355,6 +374,12 @@ function handleChangeName(row) {
       justify-content: space-between;
       margin-bottom: $unnnic-spacing-md;
       column-gap: $unnnic-spacing-sm;
+    }
+  }
+
+  &__table {
+    :deep(.unnnic-table-next__body-cell) {
+      align-self: start;
     }
   }
 }
