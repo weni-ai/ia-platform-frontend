@@ -47,12 +47,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 import i18n from '@/utils/plugins/i18n.js';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import HistoryItem from './HistoryItem.vue';
 import { useStore } from 'vuex';
 import HistoryData from './HistoryData.vue';
+import { handleChangeName } from '@/utils/changeNameUtils';
 
 const store = useStore();
 
@@ -139,7 +140,7 @@ function handleIsRenderIcon(row) {
   return values.length > 1 && values[0] !== 'new';
 }
 
-const fetchData = async (page = 1, filter = '') => {
+const getChangesHistoryData = async (page = 1, filter = '') => {
   isLoading.value = true;
   try {
     const { data } = await nexusaiAPI.router.tunings.historyChanges.read({
@@ -157,16 +158,12 @@ const fetchData = async (page = 1, filter = '') => {
   }
 };
 
-onMounted(() => {
-  fetchData();
-});
-
 watch(pagination, (newPage) => {
-  fetchData(newPage, currentFilterOption.value[0].value);
+  getChangesHistoryData(newPage, currentFilterOption.value[0].value);
 });
 
 watch(currentFilterOption, (option) => {
-  fetchData(1, option[0].value);
+  getChangesHistoryData(1, option[0].value);
   pagination.value = 1;
 });
 
@@ -192,170 +189,6 @@ function formatTimeSince(dateString) {
 
   const diffInMonths = Math.floor(diffInDays / 30);
   return i18n.global.t('time.time_ago_months', { count: diffInMonths });
-}
-
-function handleChangeName(row) {
-  if (!row.model_group && row.action_details['brain_on']) {
-    const statusBrain = JSON.parse(
-      row.action_details['brain_on'].new.toLowerCase(),
-    )
-      ? 'on'
-      : 'off';
-
-    return {
-      icon: 'settings',
-      user: row.created_by,
-      text:
-        i18n.global.t(`router.tunings.history.fields.brain-${statusBrain}`) ||
-        '-',
-    };
-  }
-
-  if (!row || !row.model_group || !row.action_type || !row.action_details) {
-    return {
-      icon: 'article',
-      user: '-',
-      text: '-',
-    };
-  }
-
-  const action_details = Object.keys(row.action_details).map((key) => {
-    return {
-      key: key,
-      newValue: row.action_details[key]?.new,
-      oldValue: row.action_details[key]?.old,
-    };
-  });
-
-  const actionUpdateName =
-    action_details[0]?.key === 'name' ? 'name' : 'prompt';
-
-  const ActionUpdate =
-    action_details.length > 1 && action_details[0] !== 'new'
-      ? i18n.global.t(`router.tunings.history.fields.changes`, {
-          value: action_details.length,
-        })
-      : i18n.global.t(
-          `router.tunings.history.fields.update-${actionUpdateName}-action`,
-          {
-            value: action_details[0]?.newValue,
-          },
-        ) || '-';
-
-  const CustomizationUpdate =
-    action_details.length > 1 && action_details[0] !== 'new'
-      ? i18n.global.t(`router.tunings.history.fields.changes`, {
-          value: action_details.length,
-        })
-      : ['name', 'goal', 'role', 'personality', 'instruction'].includes(
-            action_details[0],
-          )
-        ? i18n.global.t(
-            `router.tunings.history.fields.update-${action_details[0]?.key}`,
-            {
-              value: action_details[0]?.newValue,
-            },
-          )
-        : i18n.global.t(`router.tunings.history.fields.changes`);
-
-  const groupData = {
-    Action: {
-      C: {
-        icon: 'bolt',
-        user: row.created_by,
-        text:
-          i18n.global.t('router.tunings.history.fields.add-action', {
-            value: row.action_details.new,
-          }) || '-',
-      },
-      U: {
-        icon: 'bolt',
-        user: row.created_by,
-        text: ActionUpdate,
-        groupText:
-          action_details.length > 1 &&
-          !['new', 'old'].includes(action_details.map((e) => e.key))
-            ? action_details.map((e) =>
-                ['name', 'prompt'].includes(e.key)
-                  ? i18n.global.t(
-                      `router.tunings.history.fields.update-${e.key}-action`,
-                      {
-                        value: e.newValue,
-                      },
-                    )
-                  : '',
-              )
-            : [],
-      },
-      D: {
-        icon: 'bolt',
-        user: row.created_by,
-        text:
-          i18n.global.t('router.tunings.history.fields.remove-action', {
-            value: row.action_details.old,
-          }) || '-',
-      },
-    },
-    Config: {
-      U: {
-        icon: 'settings',
-        user: row.created_by,
-        text:
-          i18n.global.t('router.tunings.history.fields.update-model') || '-',
-      },
-    },
-    Content: {
-      D: {
-        icon: 'article',
-        user: row.created_by,
-        text:
-          i18n.global.t('router.tunings.history.fields.remove-content', {
-            value: row.action_details.new,
-          }) || '-',
-      },
-      U: {
-        icon: 'article',
-        user: row.created_by,
-        text:
-          i18n.global.t('router.tunings.history.fields.update-content', {
-            value: row.action_details.new,
-          }) || '-',
-      },
-      C: {
-        icon: 'article',
-        user: row.created_by,
-        text:
-          i18n.global.t('router.tunings.history.fields.add-content', {
-            value: row.action_details.new,
-          }) || '-',
-      },
-    },
-    Customization: {
-      U: {
-        icon: 'person',
-        user: row.created_by,
-        text: CustomizationUpdate,
-        groupText:
-          action_details.length > 1 &&
-          !['new', 'old'].includes(action_details.map((e) => e.key))
-            ? action_details.map((e) =>
-                ['name', 'goal', 'role', 'personality', 'instruction'].includes(
-                  e.key,
-                )
-                  ? i18n.global.t(
-                      `router.tunings.history.fields.update-${e.key}`,
-                      {
-                        value: e.newValue,
-                      },
-                    )
-                  : '',
-              )
-            : [],
-      },
-    },
-  };
-
-  return groupData[row.model_group]?.[row.action_type];
 }
 </script>
 
