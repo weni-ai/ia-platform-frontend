@@ -4,6 +4,7 @@
       :icon="icon"
       size="ant"
       scheme="neutral-cloudy"
+      data-test="history-icon"
     />
     <p class="history-item__user">{{ user }}</p>
     <p class="history-item__text">{{ text }}</p>
