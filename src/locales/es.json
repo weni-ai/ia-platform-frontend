@@ -179,7 +179,8 @@
       "active": "Agent Builder activo",
       "options": {
         "refresh": "Borrar conversaciones",
-        "qr_code": "Ver desde móvil"
+        "qr_code": "Ver desde móvil",
+        "export": "Exportar conversaciones"
       },
       "modal_qr_code": {
         "title": "Ver vista previa en el teléfono móvil",
