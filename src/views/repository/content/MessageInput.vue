@@ -1,22 +1,29 @@
 <template>
   <section class="message-input__container">
-    <div :class="['message-input__action', 'message-input__attach_media']">
+    <section :class="['message-input__action', 'message-input__attach_media']">
       <ContentItemActions
-        data-test="dropdown-actions"
-        :actions="[
-          { scheme: 'neutral-dark', icon: 'image', text: 'Fotos e vídeos' },
-          { scheme: 'neutral-dark', icon: 'attach_file', text: 'Arquivo' },
-          { scheme: 'neutral-dark', icon: 'location_on', text: 'Localização' },
-        ]"
+        triggerIcon="add"
+        triggerSize="md"
+        popoverPositionHorizontal="left-left"
+        :actions="attachActions"
       />
-    </div>
+
+      <input
+        v-show="false"
+        ref="file"
+        type="file"
+        :accept="allowedFormats[currentTypeOfAttachment]"
+        @change="handleFileChange"
+      />
+    </section>
 
     <input
-      v-model="modelValue"
+      :value="typeof modelValue === 'string' ? modelValue : ''"
       :placeholder="placeholder"
       type="text"
       class="message-input"
-      @keypress.enter="$emit('send')"
+      @input="updateModelValue($event.target.value)"
+      @keypress.enter="emitSend"
     />
 
     <UnnnicIcon
@@ -26,27 +33,95 @@
       size="md"
       scheme="weni-600"
       clickable
-      @click="$emit('send')"
+      @click="emitSend"
     />
   </section>
 </template>
 
 <script setup>
+import { nextTick, ref, useTemplateRef } from 'vue';
+import { useStore } from 'vuex';
+
 import ContentItemActions from '@/views/repository/content/ContentItemActions.vue';
 
-const modelValue = defineModel('modelValue', {
-  type: String,
-  required: true,
-});
+import i18n from '@/utils/plugins/i18n.js';
 
-defineProps({
+const props = defineProps({
   placeholder: {
     type: String,
     default: '',
   },
 });
 
-defineEmits(['send']);
+const modelValue = defineModel('modelValue', {
+  type: [String, File],
+  required: true,
+});
+
+const emit = defineEmits(['send', 'update:model-value']);
+const store = useStore();
+
+const inputFile = useTemplateRef('file');
+const allowedFormats = {
+  photo_and_video: ['.png', '.jpeg', '.jpg', '.mp4'],
+  file: ['.doc', '.docx', '.xls', '.xlsx', '.pdf', '.txt'],
+};
+const currentTypeOfAttachment = ref('');
+
+const attachActions = [
+  {
+    scheme: 'neutral-dark',
+    icon: 'image',
+    text: i18n.global.t(
+      'webapp.home.bases.preview_tests_attachments.photos_or_videos',
+    ),
+    onClick: () => openFileSelection('photo_and_video'),
+  },
+  {
+    scheme: 'neutral-dark',
+    icon: 'attach_file',
+    text: i18n.global.t('webapp.home.bases.preview_tests_attachments.file'),
+    onClick: () => openFileSelection('file'),
+  },
+  {
+    scheme: 'neutral-dark',
+    icon: 'location_on',
+    text: i18n.global.t('webapp.home.bases.preview_tests_attachments.location'),
+    onClick: () => {},
+  },
+];
+
+function openFileSelection(type) {
+  if (allowedFormats[type]?.length) {
+    currentTypeOfAttachment.value = type;
+    nextTick(() => inputFile.value.click());
+  }
+}
+
+function handleFileChange(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const extension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+  if (!allowedFormats[currentTypeOfAttachment.value].includes(extension)) {
+    store.state.alert = {
+      type: 'error',
+      text: i18n.global.t('content_bases.files.unsupported_format'),
+    };
+    return;
+  }
+
+  updateModelValue(file);
+  nextTick(emitSend);
+}
+
+function updateModelValue(value) {
+  emit('update:model-value', value);
+}
+
+function emitSend() {
+  emit('send');
+}
 </script>
 
 <style lang="scss" scoped>

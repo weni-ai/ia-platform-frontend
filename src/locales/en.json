@@ -661,6 +661,11 @@
         "tests": "Test knowledge bases",
         "tests_subtitle": "Test knowledge bases asking them questions and observing their answers.",
         "preview_tests_placeholder": "Type a message",
+        "preview_tests_attachments": {
+          "photos_or_videos": "Photos and videos",
+          "file": "File",
+          "location": "Location"
+        },
         "tests_placeholder": "Ask a question for the knowledge base...",
         "api": "Integrate this intelligence",
         "api_subtitle": "Our API is compatible with many platforms via API REST integration. To know further, access our <a href='https://docs.ilhasoft.mobi/l/en/content-intelligence/integrating-content-intelligence' target='_blank' class='repository-api__header__subtitle--link'>documentation</a> and the <a href='https://api.bothub.it/#tag/repository' target='_blank' class='repository-api__header__subtitle--link'>API explorer</a>.",

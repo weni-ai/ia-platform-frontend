@@ -350,7 +350,8 @@ export default {
     },
 
     sendMessage() {
-      const message = this.message.trim();
+      const isFileMessage = typeof this.message !== 'string';
+      const message = !isFileMessage ? this.message.trim() : this.message;
 
       if (!message) {
         return;
