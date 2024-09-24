@@ -11,6 +11,7 @@
       :enabled="enableTooltip"
       :text="text"
       side="right"
+      data-test="sidebar-item-tooltip"
     >
       <UnnnicIcon
         class="unnnic-side-bar-item__icon"
@@ -18,6 +19,7 @@
         size="sm"
         :icon="icon"
         :filled="iconFilled"
+        data-test="sidebar-item-icon"
       />
       <span class="unnnic-side-bar-item__label">
         {{ text }}
