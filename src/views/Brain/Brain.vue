@@ -45,6 +45,7 @@
           :contentBaseUuid="contentBaseUuid"
           :contentBaseLanguage="contentBase.language"
           :usePreview="true"
+          @messages="getPreviewMessages"
         />
       </section>
     </section>
@@ -108,6 +109,8 @@ export default {
     const refreshPreviewValue = ref(0);
     const isMobilePreviewModalOpen = ref(false);
 
+    const previewMessages = ref('');
+
     const text = ref({
       open: true,
       status: null,
@@ -145,6 +148,39 @@ export default {
 
     const refreshPreview = () => {
       refreshPreviewValue.value += 1;
+    };
+
+    const exportConversations = () => {
+      if (previewMessages.value.length === 0) return;
+
+      const csvData = convertToCSV(previewMessages.value);
+
+      const filename = 'preview-messages.csv';
+      const blob = new Blob([csvData], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+
+      URL.revokeObjectURL(url);
+    };
+
+    const getPreviewMessages = (newMessages) => {
+      previewMessages.value = newMessages;
+    };
+
+    const convertToCSV = (array) => {
+      const headers = ['type', 'text'];
+      const csvRows = [headers.join(',')];
+
+      array.forEach((item) => {
+        const row = [item.type, item.text];
+        csvRows.push(row.join(','));
+      });
+
+      return csvRows.join('\n');
     };
 
     const loadRouterOptions = async () => {
@@ -217,6 +253,12 @@ export default {
         },
         {
           scheme: 'neutral-dark',
+          icon: 'ios_share',
+          text: i18n.global.t('router.preview.options.export'),
+          onClick: exportConversations,
+        },
+        {
+          scheme: 'neutral-dark',
           icon: 'smartphone',
           text: i18n.global.t('router.preview.options.qr_code'),
           onClick: () => (isMobilePreviewModalOpen.value = true),
@@ -240,6 +282,7 @@ export default {
       refreshPreview,
       loadRouterOptions,
       loadContentBase,
+      getPreviewMessages,
       previewActions,
     };
   },
