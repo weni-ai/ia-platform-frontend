@@ -10,34 +10,47 @@ function parseActionDetails(actionDetails) {
 
 function generateActionUpdateText(actionDetails) {
   const actionUpdateName = actionDetails[0]?.key === 'name' ? 'name' : 'prompt';
+  const moreThanOneChange =
+    actionDetails.length > 1 && actionDetails[0] !== 'new';
 
-  return actionDetails.length > 1 && actionDetails[0] !== 'new'
-    ? i18n.global.t(`router.tunings.history.fields.changes`, {
-        value: actionDetails.length,
-      })
-    : i18n.global.t(
-        `router.tunings.history.fields.update-${actionUpdateName}-action`,
-        {
-          value: actionDetails[0]?.newValue,
-        },
-      );
+  if (moreThanOneChange)
+    return i18n.global.t(`router.tunings.history.fields.changes`, {
+      value: actionDetails.length,
+    });
+
+  return i18n.global.t(
+    `router.tunings.history.fields.update-${actionUpdateName}-action`,
+    {
+      value: actionDetails[0]?.newValue,
+    },
+  );
 }
 
 function generateCustomizationUpdateText(actionDetails) {
-  return actionDetails.length > 1 && actionDetails[0] !== 'new'
-    ? i18n.global.t(`router.tunings.history.fields.changes`, {
-        value: actionDetails.length,
-      })
-    : ['name', 'goal', 'role', 'personality', 'instruction'].includes(
-          actionDetails[0]?.key,
-        )
-      ? i18n.global.t(
-          `router.tunings.history.fields.update-${actionDetails[0]?.key}`,
-          {
-            value: actionDetails[0]?.newValue,
-          },
-        )
-      : i18n.global.t(`router.tunings.history.fields.changes`);
+  const moreThanOneChange =
+    actionDetails.length > 1 && actionDetails[0] !== 'new';
+  const isCustomization = [
+    'name',
+    'goal',
+    'role',
+    'personality',
+    'instruction',
+  ].includes(actionDetails[0]?.key);
+
+  if (moreThanOneChange)
+    return i18n.global.t(`router.tunings.history.fields.changes`, {
+      value: actionDetails.length,
+    });
+
+  if (isCustomization)
+    return i18n.global.t(
+      `router.tunings.history.fields.update-${actionDetails[0]?.key}`,
+      {
+        value: actionDetails[0]?.newValue,
+      },
+    );
+
+  return i18n.global.t(`router.tunings.history.fields.changes`);
 }
 
 function handleGroupText(actionDetails, isAction = false) {
@@ -48,16 +61,21 @@ function handleGroupText(actionDetails, isAction = false) {
   const condition = isAction
     ? ['name', 'prompt']
     : ['name', 'goal', 'role', 'personality', 'instruction'];
-  return actionDetails.length > 1 &&
+
+  if (
+    actionDetails.length > 1 &&
     !['new', 'old'].includes(actionDetails.map((e) => e.key))
-    ? actionDetails.map((e) =>
-        condition.includes(e.key)
-          ? i18n.global.t(translationName(e.key), {
-              value: e.newValue,
-            })
-          : '',
-      )
-    : [];
+  )
+    return actionDetails.map((e) => {
+      if (condition.includes(e.key))
+        return i18n.global.t(translationName(e.key), {
+          value: e.newValue,
+        });
+
+      return '';
+    });
+
+  return [];
 }
 
 function handleChangeName(row) {
