@@ -25,7 +25,10 @@
       </UnnnicTab>
     </section>
     <section>
-      <Settings v-if="activeTab === 'config'" />
+      <Settings
+        v-if="activeTab === 'config'"
+        :data="props.data"
+      />
       <ChangesHistory v-if="activeTab === 'hist'" />
     </section>
   </section>
@@ -44,6 +47,16 @@ const tabs = ref([
 ]);
 
 const activeTab = ref('config');
+
+const props = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {};
+    },
+    required: false,
+  },
+});
 
 onMounted(() => {
   store.dispatch('loadBrainTunings');
