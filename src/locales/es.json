@@ -464,7 +464,7 @@
       "historic_title": "Historia de las pruebas manuales",
       "header_title_p2": "Usando nuestra función de prueba, puede evaluar el rendimiento de su inteligencia fácilmente.",
       "header_title_lang": "Seleccione el idioma para ejecutar la prueba.",
-      "run_test": "Prueba prueba",
+      "run_test": "Ejecutar prueba",
       "login": "Inicia sesión en tu cuenta para editar esta inteligencia.",
       "get_examples_test_sentences": "{n} frase de prueba | {n} frases de prueba",
       "add_new_test_sentence": "Añadir una nueva oración de prueba",
