@@ -133,7 +133,8 @@ const formattedRows = computed(() =>
 );
 
 function handleIsRenderIcon(row) {
-  if (row?.model_group === 'Config') return false;
+  if (row?.model_group === 'Config' || row?.action_model === 'ContentBaseText')
+    return false;
 
   const values = Object.keys(row?.action_details || []);
 
