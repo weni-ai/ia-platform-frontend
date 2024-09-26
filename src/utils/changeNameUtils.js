@@ -106,6 +106,7 @@ function handleChangeName(row) {
   }
 
   const actionDetails = parseActionDetails(row.action_details);
+  const isUpdateContentText = actionDetails.find((e) => e.key === 'text');
 
   const groupData = {
     Action: {
@@ -149,7 +150,9 @@ function handleChangeName(row) {
         icon: 'article',
         user: row.created_by,
         text: i18n.global.t('router.tunings.history.fields.update-content', {
-          value: row.action_details.new,
+          value: isUpdateContentText
+            ? row.action_details.text.new
+            : row.action_details.new,
         }),
       },
       C: {
