@@ -164,11 +164,28 @@ function handleChangeName(row) {
       },
     },
     Customization: {
+      C: {
+        icon: 'person',
+        user: row.created_by,
+        text: i18n.global.t('router.tunings.history.fields.add-instruction', {
+          value: row.action_details.new,
+        }),
+      },
       U: {
         icon: 'person',
         user: row.created_by,
         text: generateCustomizationUpdateText(actionDetails),
         groupText: handleGroupText(actionDetails),
+      },
+      D: {
+        icon: 'person',
+        user: row.created_by,
+        text: i18n.global.t(
+          'router.tunings.history.fields.remove-instruction',
+          {
+            value: row.action_details.old,
+          },
+        ),
       },
     },
   };
