@@ -23,7 +23,10 @@
         <section
           v-for="(message, index) in messages"
           :key="index"
-          :class="`messages__${message.type}`"
+          :class="[
+            `messages__${message.type}`,
+            { 'messages__is-media': isMedia(message.content) },
+          ]"
         >
           <div
             v-if="message.status === 'loading'"
@@ -41,9 +44,14 @@
           </UnnnicIntelligenceText>
 
           <template v-else>
+            <PreviewMedia
+              v-if="isMedia(message.content)"
+              :src="message.content"
+            />
             <Markdown
+              v-else
               :class="`messages__${message.type}__content`"
-              :content="message.text"
+              :content="message.content"
             />
 
             <AnswerSources
@@ -107,6 +115,7 @@ import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback.vue';
 import FlowPreview from '../../../utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
 import Markdown from '../../../components/Markdown.vue';
+import PreviewMedia from '../../../components/PreviewMedia.vue';
 import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
 import PreviewPlaceholder from '../../Brain/Preview/Placeholder.vue';
 import { reactive } from 'vue';
@@ -131,6 +140,7 @@ export default {
 
   components: {
     Markdown,
+    PreviewMedia,
     AnswerSources,
     AnswerFeedback,
     QuickTestWarn,
@@ -267,6 +277,10 @@ export default {
       ].includes(message.type);
     },
 
+    isMedia(message) {
+      return typeof message !== 'string';
+    },
+
     statusDescription(message) {
       if (message.type === 'change') {
         return this.$t('router.preview.field_changed_to_value', {
@@ -359,7 +373,7 @@ export default {
 
       this.messages.push({
         type: 'question',
-        text: message,
+        content: message,
       });
 
       this.message = '';
@@ -372,7 +386,7 @@ export default {
     answer(question) {
       const answer = reactive({
         type: 'answer',
-        text: '',
+        content: '',
         status: 'loading',
         question_uuid: null,
         feedback: {
@@ -586,6 +600,10 @@ export default {
 
       border-radius: $unnnic-border-radius-md;
       padding: $unnnic-spacing-ant;
+
+      &.messages__is-media {
+        padding: $unnnic-spacing-nano;
+      }
 
       &__content {
         font-family: $unnnic-font-family-secondary;
