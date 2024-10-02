@@ -295,6 +295,14 @@ async function saveAction() {
   margin-top: $unnnic-spacing-sm;
 }
 
+.text-area :deep(textarea:disabled) {
+  outline-color: $unnnic-color-neutral-cleanest;
+  background-color: $unnnic-color-neutral-lightest;
+  color: $unnnic-color-neutral-cleanest;
+
+  cursor: not-allowed;
+}
+
 .flow-area {
   margin-top: $unnnic-spacing-md;
 
