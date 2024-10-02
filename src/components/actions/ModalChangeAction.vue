@@ -42,6 +42,7 @@
               'modals.actions.add.steps.describe.inputs.description.placeholder',
             )
           "
+          :disabled="action.editable === false"
           data-test="description-textarea"
         />
       </UnnnicFormElement>
@@ -62,6 +63,7 @@
               'modals.actions.add.steps.nominate_action.inputs.name.placeholder',
             )
           "
+          :disabled="action.editable === false"
           data-test="name-input"
         />
       </UnnnicFormElement>

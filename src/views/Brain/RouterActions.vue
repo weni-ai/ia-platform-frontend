@@ -22,6 +22,7 @@
         data: items.data.map((action) => ({
           ...action,
           extension_file: 'action',
+          editable: action.editable ?? true,
           created_file_name: action.name,
         })),
       }"
@@ -154,6 +155,7 @@ export default {
         uuid,
         type: action.type,
         name: action.name,
+        editable: action.editable,
         description: action.prompt,
         group: action.group,
         status: null,
