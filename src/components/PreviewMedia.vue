@@ -4,7 +4,7 @@
     class="preview-media"
     :src="mediaUrl"
   />
-  <UnnnicVideo
+  <UnnnicIntelligenceVideo
     v-else-if="isVideo"
     class="preview-media"
     :src="mediaUrl"
@@ -12,6 +12,8 @@
 </template>
 
 <script setup>
+import UnnnicIntelligenceVideo from '@/components/unnnic-intelligence/Video.vue';
+
 import { computed } from 'vue';
 
 const { src } = defineProps({
