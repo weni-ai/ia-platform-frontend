@@ -168,6 +168,8 @@ export default {
     },
   },
 
+  emits: ['messages'],
+
   data() {
     return {
       message: '',
@@ -200,6 +202,12 @@ export default {
   },
 
   watch: {
+    messages: {
+      deep: true,
+      handler(newMessages) {
+        this.$emit('messages', newMessages);
+      },
+    },
     'preview.session.status'(value, previous) {
       if (previous === 'waiting' && value === 'completed') {
         this.messages.push({

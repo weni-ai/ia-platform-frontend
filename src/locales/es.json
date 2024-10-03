@@ -97,6 +97,43 @@
         "cancel": "Cancelar",
         "restaurar": "Restaurar"
       },
+      "description": "Gestionar la configuración y realizar un seguimiento de los cambios realizados",
+      "tabs": {
+        "config": "Configuración",
+        "history": "Historial de cambios"
+      },
+      "history": {
+        "no_changes": "No se realizaron cambios en Agent Builder.",
+        "description": "Consulta el historial de cambios realizados en Agent builder",
+        "sub_description": "Vea la lista completa o filtre por tipo de cambio",
+         "fields": {
+          "change": "Cambio",
+          "date": "Fecha",
+          "all-changes": "Todos los cambios",
+          "customization-changes": "Cambios de personalización",
+          "content-changes": "Cambios de contenido",
+          "actions-changes": "Cambios de acción",
+          "settings-changes": "Cambios de configuración",
+          "changes": "hecho {value} cambios",
+          "add-action": "añade una acción ({value})",
+          "update-name-action": "cambió una acción ({value})",
+          "update-prompt-action": "cambia el prompt de una acción ({value})",
+          "remove-action": "elimina una acción ({value})",
+          "update-personality": "cambia la personalidad ({value})",
+          "update-goal": "cambiado el objetivo ({value})",
+          "update-name": "cambiado el nombre ({value})",
+          "update-role": "cambio de ocupación ({value})",
+          "add-instruction": "añade una instrucción ({value})",
+          "remove-instruction": "elimina una instrucción ({value})",
+          "update-instruction": "modifica una instrucción ({value})",
+          "add-content": "añadido un contenido ({value})",
+          "update-content": "cambió un contenido ({value})",
+          "remove-content": "elimina un contenido ({value})",
+          "update-model": "cambió el modelo",
+          "brain-on": "encender el Agent Builder",
+          "brain-off": "apagado o Agent Builder"
+         }
+      },
       "fields": {
         "model": "Seleccionar modelo",
         "token": "Token",
@@ -143,7 +180,8 @@
       "active": "Agent Builder activo",
       "options": {
         "refresh": "Borrar conversaciones",
-        "qr_code": "Ver desde móvil"
+        "qr_code": "Ver desde móvil",
+        "export": "Exportar conversaciones"
       },
       "modal_qr_code": {
         "title": "Ver vista previa en el teléfono móvil",
@@ -1605,5 +1643,11 @@
       "title": "No tiene permiso para acceder a este módulo",
       "description": "Si desea acceder a este módulo, póngase en contacto con el administrador de la organización"
     }
+  },
+  "time": {
+    "time_ago_minutes": "Hace {count} minuto | Hace {count} minutos",
+    "time_ago_hours": "Hace {count} hora | Hace {count} horas",
+    "time_ago_days": "Hace {count} día | Hace {count} días",
+    "time_ago_months": "Hace {count} mes | Hace {count} meses"
   }
 }

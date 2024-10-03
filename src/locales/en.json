@@ -97,6 +97,43 @@
         "cancel": "Cancel",
         "restore": "Restore"
       },
+      "description": "Manage settings and track changes made.",
+      "tabs": {
+        "config": "Settings",
+        "history": "History of changes"
+      },
+      "history": {
+        "no_changes": "No changes were made to the Agent Builder.",
+        "description": "View the history of changes made to Agent Builder",
+        "sub_description": "Check all changes and filter according to your needs",
+         "fields": {
+          "change": "Change",
+          "date": "Date",
+          "all-changes": "All Changes",
+          "customization-changes": "Customization changes",
+          "content-changes": "Content changes",
+          "actions-changes": "Action changes",
+          "settings-changes": "Settings changes",
+          "add-action": "added an action ({value})",
+          "changes": "made {value} changes",
+          "update-name-action": "changed an action ({value})",
+          "update-prompt-action": "changed the prompt of an action ({value})",
+          "remove-action": "removed an action ({value})",
+          "update-personality": "changed the personality ({value})",
+          "update-goal": "changed the goal ({value})",
+          "update-name": "changed name ({value})",
+          "update-role": "changed occupation ({value})",
+          "add-instruction": "added an instruction ({value})",
+          "remove-instruction": "removed an instruction ({value})",
+          "update-instruction": "changed an instruction ({value})",
+          "add-content": "added a content ({value})",
+          "update-content": "changed a content ({value})",
+          "remove-content": "removed a content ({value})",
+          "update-model": "changed the model",
+          "brain-on": "turned on Agent Builder",
+          "brain-off": "turned off Agent Builder"
+         }
+      },
       "fields": {
         "model": "Select model",
         "token": "Token",
@@ -143,7 +180,8 @@
       "active": "Agent Builder active",
       "options": {
         "refresh": "Clear conversations",
-        "qr_code": "View from mobile"
+        "qr_code": "View from mobile",
+        "export": "Export conversations"
       },
       "modal_qr_code": {
         "title": "View preview on mobile",
