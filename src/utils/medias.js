@@ -53,3 +53,15 @@ export function getFileType(src) {
 
   return fileType;
 }
+
+export function formatFileSize(size) {
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let unitIndex = 0;
+
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex++;
+  }
+
+  return `${Math.round(size)} ${units[unitIndex]}`;
+}

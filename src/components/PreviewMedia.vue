@@ -11,6 +11,11 @@
     :src="mediaUrl"
   />
 
+  <PreviewDocument
+    v-else-if="mediaType === 'document'"
+    :document="media"
+  />
+
   <MapViewport
     v-else-if="mediaType === 'geolocation'"
     :geolocation="media"
@@ -23,6 +28,7 @@ import { computed } from 'vue';
 import { getFileType } from '@/utils/medias';
 
 import UnnnicIntelligenceVideo from '@/components/unnnic-intelligence/Video.vue';
+import PreviewDocument from './PreviewDocument.vue';
 import MapViewport from './MapViewport.vue';
 
 const { media } = defineProps({
