@@ -46,7 +46,7 @@
           <template v-else>
             <PreviewMedia
               v-if="isMedia(message.content)"
-              :src="message.content"
+              :media="message.content"
             />
             <Markdown
               v-else
@@ -108,18 +108,22 @@
 </template>
 
 <script>
-import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
-import AnswerSources from '../../../components/QuickTest/AnswerSources.vue';
-import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback.vue';
-import FlowPreview from '../../../utils/FlowPreview';
-import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
-import Markdown from '../../../components/Markdown.vue';
-import PreviewMedia from '../../../components/PreviewMedia.vue';
-import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
-import PreviewPlaceholder from '../../Brain/Preview/Placeholder.vue';
 import { reactive } from 'vue';
+
+import AnswerSources from '@/components/QuickTest/AnswerSources.vue';
+import AnswerFeedback from '@/components/QuickTest/AnswerFeedback.vue';
+import Markdown from '@/components/Markdown.vue';
+import PreviewMedia from '@/components/PreviewMedia.vue';
+import QuickTestWarn from '@/components/QuickTest/QuickTestWarn.vue';
+import PreviewPlaceholder from '../../Brain/Preview/Placeholder.vue';
 import MessageInput from './MessageInput.vue';
+
+import FlowPreview from '@/utils/FlowPreview';
+import { lowerFirstCapitalLetter } from '@/utils/handleLetters';
+import { getFileType } from '@/utils/medias';
+
+import nexusaiAPI from '@/api/nexusaiAPI';
 
 function isEventCardBrain(event) {
   if (event.type !== 'webhook_called' || !event.url) {
@@ -286,7 +290,7 @@ export default {
     },
 
     isMedia(message) {
-      return typeof message !== 'string';
+      return !!getFileType(message);
     },
 
     statusDescription(message) {
@@ -610,6 +614,8 @@ export default {
       padding: $unnnic-spacing-ant;
 
       &.messages__is-media {
+        width: 100%;
+
         padding: $unnnic-spacing-nano;
       }
 

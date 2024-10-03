@@ -1,32 +1,39 @@
 <template>
   <img
-    v-if="isImage"
+    v-if="mediaType === 'image'"
     class="preview-media"
     :src="mediaUrl"
   />
+
   <UnnnicIntelligenceVideo
-    v-else-if="isVideo"
+    v-else-if="mediaType === 'video'"
     class="preview-media"
     :src="mediaUrl"
+  />
+
+  <MapViewport
+    v-else-if="mediaType === 'geolocation'"
+    :geolocation="media"
   />
 </template>
 
 <script setup>
-import UnnnicIntelligenceVideo from '@/components/unnnic-intelligence/Video.vue';
-
 import { computed } from 'vue';
 
-const { src } = defineProps({
-  src: {
-    type: File,
+import { getFileType } from '@/utils/medias';
+
+import UnnnicIntelligenceVideo from '@/components/unnnic-intelligence/Video.vue';
+import MapViewport from './MapViewport.vue';
+
+const { media } = defineProps({
+  media: {
+    type: [File, String],
     default: null,
   },
 });
 
-const mediaUrl = computed(() => (src ? URL.createObjectURL(src) : ''));
-
-const isImage = computed(() => src?.type.startsWith('image/'));
-const isVideo = computed(() => src?.type.startsWith('video/'));
+const mediaType = getFileType(media);
+const mediaUrl = computed(() => (media ? URL.createObjectURL(media) : ''));
 </script>
 
 <style scoped lang="scss">

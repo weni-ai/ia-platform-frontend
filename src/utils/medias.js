@@ -1,0 +1,55 @@
+export const allowedMediaFormats = {
+  image: ['.png', '.jpeg', '.jpg', '.gif', '.webp'],
+  video: ['.mp4', '.avi'],
+  document: ['.doc', '.docx', '.xls', '.xlsx', '.pdf', '.txt'],
+};
+
+export function getFileExtension(file) {
+  const getExtension = (name) => {
+    const parts = name.split('.');
+    return parts.length > 1 ? `.${parts.pop().toLowerCase()}` : null;
+  };
+
+  if (file && file.name) {
+    return getExtension(file.name);
+  }
+
+  return null;
+}
+
+export function getFileType(src) {
+  const isImage = () => {
+    const extension = getFileExtension(src);
+    return extension && allowedMediaFormats.image.includes(extension);
+  };
+
+  const isVideo = () => {
+    const extension = getFileExtension(src);
+    return extension && allowedMediaFormats.video.includes(extension);
+  };
+
+  const isGeolocation = () => {
+    const geolocationRegex =
+      /^([-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)),\s*([-+]?((1[0-7]\d(\.\d+)?)|([1-9]?\d(\.\d+)?|180(\.0+)?)))$/;
+
+    return geolocationRegex.test(src);
+  };
+
+  const isDocument = () => {
+    const extension = getFileExtension(src);
+    return extension && allowedMediaFormats.document.includes(extension);
+  };
+
+  const typeMap = {
+    image: isImage,
+    video: isVideo,
+    geolocation: isGeolocation,
+    document: isDocument,
+  };
+
+  const fileType = Object.entries(typeMap).find(([_type, check]) =>
+    check(),
+  )?.[0];
+
+  return fileType;
+}

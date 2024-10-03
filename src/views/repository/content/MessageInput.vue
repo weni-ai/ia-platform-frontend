@@ -12,7 +12,7 @@
         v-show="false"
         ref="file"
         type="file"
-        :accept="allowedFormats[currentTypeOfAttachment]"
+        :accept="currentAllowedMediaFormats"
         @change="handleFileChange"
       />
     </section>
@@ -45,6 +45,7 @@ import { useStore } from 'vuex';
 import ContentItemActions from '@/views/repository/content/ContentItemActions.vue';
 
 import i18n from '@/utils/plugins/i18n.js';
+import { allowedMediaFormats, getFileType } from '@/utils/medias';
 
 const props = defineProps({
   placeholder: {
@@ -62,11 +63,7 @@ const emit = defineEmits(['send', 'update:model-value']);
 const store = useStore();
 
 const inputFile = useTemplateRef('file');
-const allowedFormats = {
-  photo_and_video: ['.png', '.jpeg', '.jpg', '.mp4'],
-  file: ['.doc', '.docx', '.xls', '.xlsx', '.pdf', '.txt'],
-};
-const currentTypeOfAttachment = ref('');
+const currentAllowedMediaFormats = ref('');
 
 const attachActions = [
   {
@@ -81,29 +78,56 @@ const attachActions = [
     scheme: 'neutral-dark',
     icon: 'attach_file',
     text: i18n.global.t('webapp.home.bases.preview_tests_attachments.file'),
-    onClick: () => openFileSelection('file'),
+    onClick: () => openFileSelection('document'),
   },
   {
     scheme: 'neutral-dark',
     icon: 'location_on',
     text: i18n.global.t('webapp.home.bases.preview_tests_attachments.location'),
-    onClick: () => {},
+    onClick: () => getGeolocalization(),
   },
 ];
 
 function openFileSelection(type) {
-  if (allowedFormats[type]?.length) {
-    currentTypeOfAttachment.value = type;
+  const mapTypes = {
+    photo_and_video: allowedMediaFormats.image.concat(
+      allowedMediaFormats.video,
+    ),
+    document: allowedMediaFormats.document,
+  };
+  if (mapTypes[type]?.length) {
+    currentAllowedMediaFormats.value = mapTypes[type];
     nextTick(() => inputFile.value.click());
   }
+}
+
+function getGeolocalization() {
+  if (!('geolocation' in navigator)) {
+    return handleGeolocationError();
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => handleGeolocationSuccess(position),
+    handleGeolocationError,
+  );
+}
+function handleGeolocationSuccess(position) {
+  const coords = `${position.coords.latitude},${position.coords.longitude}`;
+  updateModelValue(coords);
+  nextTick(emitSend);
+}
+function handleGeolocationError() {
+  const mockCoords = '-9.6695958,-35.7209979';
+  updateModelValue(mockCoords);
+  nextTick(emitSend);
 }
 
 function handleFileChange(event) {
   const file = event.target.files[0];
   if (!file) return;
 
-  const extension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
-  if (!allowedFormats[currentTypeOfAttachment.value].includes(extension)) {
+  const fileType = getFileType(file);
+  if (!fileType) {
     store.state.alert = {
       type: 'error',
       text: i18n.global.t('content_bases.files.unsupported_format'),
