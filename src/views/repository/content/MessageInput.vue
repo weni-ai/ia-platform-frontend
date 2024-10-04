@@ -255,6 +255,8 @@ function emitSend() {
   }
 
   &--audio {
+    border-radius: $unnnic-border-radius-md;
+
     justify-content: flex-end;
 
     :deep(.audio-handler) {
