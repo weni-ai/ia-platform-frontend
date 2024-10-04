@@ -1664,5 +1664,8 @@
       "title": "You do not have permission to access this module",
       "description": "If you wish to access this module, please contact the organization's administrator"
     }
+  },
+  "audio_recorder": {
+    "discard_button": "Discard"
   }
 }

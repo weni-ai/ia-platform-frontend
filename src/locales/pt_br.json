@@ -1628,5 +1628,8 @@
     "time_ago_hours": "Há {count} hora | Há {count} horas",
     "time_ago_days": "Há {count} dia | Há {count} dias",
     "time_ago_months": "Há {count} mês | Há {count} meses"
+  },
+  "audio_recorder": {
+    "discard_button": "Descartar"
   }
 }

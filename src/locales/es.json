@@ -1649,5 +1649,8 @@
     "time_ago_hours": "Hace {count} hora | Hace {count} horas",
     "time_ago_days": "Hace {count} día | Hace {count} días",
     "time_ago_months": "Hace {count} mes | Hace {count} meses"
+  },
+  "audio_recorder": {
+    "discard_button": "Descartar"
   }
 }

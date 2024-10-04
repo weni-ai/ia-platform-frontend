@@ -1,6 +1,7 @@
 export const allowedMediaFormats = {
   image: ['.png', '.jpeg', '.jpg', '.gif', '.webp'],
   video: ['.mp4', '.avi'],
+  audio: ['.mp3', '.wav', '.ogg', '.m4a'],
   document: ['.doc', '.docx', '.xls', '.xlsx', '.pdf', '.txt'],
 };
 
@@ -28,6 +29,11 @@ export function getFileType(src) {
     return extension && allowedMediaFormats.video.includes(extension);
   };
 
+  const isAudio = () => {
+    const extension = getFileExtension(src);
+    return extension && allowedMediaFormats.audio.includes(extension);
+  };
+
   const isGeolocation = () => {
     const geolocationRegex =
       /^([-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)),\s*([-+]?((1[0-7]\d(\.\d+)?)|([1-9]?\d(\.\d+)?|180(\.0+)?)))$/;
@@ -43,6 +49,7 @@ export function getFileType(src) {
   const typeMap = {
     image: isImage,
     video: isVideo,
+    audio: isAudio,
     geolocation: isGeolocation,
     document: isDocument,
   };

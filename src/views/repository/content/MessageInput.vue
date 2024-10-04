@@ -1,6 +1,6 @@
 <template>
   <section class="message-input__container">
-    <section :class="['message-input__action', 'message-input__attach_media']">
+    <section :class="['message-input__action', 'message-input__left-button']">
       <ContentItemActions
         triggerIcon="add"
         triggerSize="md"
@@ -18,6 +18,7 @@
     </section>
 
     <input
+      v-show="!isRecordingAudio"
       :value="typeof modelValue === 'string' ? modelValue : ''"
       :placeholder="placeholder"
       type="text"
@@ -25,21 +26,29 @@
       @input="updateModelValue($event.target.value)"
       @keypress.enter="emitSend"
     />
+    <UnnnicAudioRecorder
+      v-show="isRecordingAudio"
+      ref="audioRecorder"
+      :modelValue="audioValue"
+      :class="['message-input', 'message-input--audio']"
+      @update:model-value="updateAudioModelValue"
+      @status="audioRecorderStatus = $event"
+    />
 
     <UnnnicIcon
-      :class="['message-input__action', 'message-input__send-button']"
-      icon="send"
+      :class="['message-input__action', 'message-input__right-button']"
+      :icon="rightButtonType"
       filled
       size="md"
       scheme="weni-600"
       clickable
-      @click="emitSend"
+      @click="handleRightButton"
     />
   </section>
 </template>
 
 <script setup>
-import { nextTick, ref, useTemplateRef } from 'vue';
+import { computed, nextTick, ref, useTemplateRef } from 'vue';
 import { useStore } from 'vuex';
 
 import ContentItemActions from '@/views/repository/content/ContentItemActions.vue';
@@ -139,8 +148,50 @@ function handleFileChange(event) {
   nextTick(emitSend);
 }
 
+const audioRecorder = ref(null);
+const audioRecorderStatus = ref(null);
+
+const isRecordingAudio = computed(() =>
+  ['recording', 'recorded', 'playing', 'paused'].includes(
+    audioRecorderStatus.value,
+  ),
+);
+const audioValue = computed(() =>
+  modelValue.value instanceof HTMLAudioElement ? modelValue.value : null,
+);
+const rightButtonType = computed(() =>
+  isRecordingAudio.value ||
+  (modelValue.value && typeof modelValue.value === 'string')
+    ? 'send'
+    : 'mic',
+);
+
+function handleRightButton() {
+  if (rightButtonType.value === 'send') {
+    if (isRecordingAudio.value) {
+      audioRecorder.value?.stop();
+      audioRecorder.value?.discard();
+    }
+    emitSend();
+  }
+
+  if (rightButtonType.value === 'mic') {
+    audioRecorder.value?.record();
+  }
+}
+
+async function updateAudioModelValue(value) {
+  const response = await fetch(value.src);
+  const blob = await response.blob();
+  const audio = new File([blob], `${Date.now().toString()}.mp3`, {
+    type: 'audio/mpeg3',
+  });
+
+  updateModelValue(audio);
+}
+
 function updateModelValue(value) {
-  emit('update:model-value', value);
+  emit('update:model-value', value || '');
 }
 
 function emitSend() {
@@ -191,12 +242,26 @@ function emitSend() {
     position: absolute;
   }
 
-  &__attach_media {
+  &__left-button {
     left: $unnnic-spacing-sm;
+
+    :deep(.material-symbols-rounded) {
+      color: $unnnic-color-neutral-cloudy;
+    }
   }
 
-  &__send-button {
+  &__right-button {
     right: $unnnic-spacing-sm;
+  }
+
+  &--audio {
+    justify-content: flex-end;
+
+    :deep(.audio-handler) {
+      :last-child {
+        display: none;
+      }
+    }
   }
 }
 </style>

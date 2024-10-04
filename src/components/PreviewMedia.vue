@@ -20,6 +20,13 @@
     v-else-if="mediaType === 'geolocation'"
     :geolocation="media"
   />
+
+  <UnnnicAudioRecorder
+    v-else-if="mediaType === 'audio'"
+    class="preview-media--audio"
+    :src="mediaUrl"
+    :canDiscard="false"
+  />
 </template>
 
 <script setup>
@@ -50,5 +57,32 @@ const mediaUrl = computed(() => (media ? URL.createObjectURL(media) : ''));
   height: 100%;
 
   border-radius: calc($unnnic-border-radius-md - $unnnic-border-radius-sm / 2);
+
+  &--audio.unnnic-audio-recorder {
+    padding: $unnnic-spacing-xs;
+
+    width: auto;
+
+    display: flex;
+
+    :deep(.audio-player) {
+      path {
+        fill: $unnnic-color-background-white;
+      }
+
+      .audio-player__progress-bar {
+        &::before {
+          background: $unnnic-color-neutral-dark;
+        }
+        &::-webkit-slider-runnable-track {
+          background: $unnnic-color-neutral-white;
+        }
+      }
+
+      .audio-player__time {
+        color: $unnnic-color-background-white;
+      }
+    }
+  }
 }
 </style>
