@@ -166,6 +166,38 @@ describe('ChangesHistory.vue', () => {
     expect(wrapper.vm.noChangesDetected).toBe(false);
   });
 
+  test('renders description and filter select when there are changes', async () => {
+    wrapper.vm.currentFilterOption = [{ value: 'Customization' }];
+    wrapper.vm.table.rows = [{ id: 1, content: 'Change 1' }];
+    wrapper.vm.isLoading = false;
+
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.vm.noChangesDetected).toBe(false);
+
+    expect(wrapper.text()).toContain(
+      wrapper.vm.$t('router.tunings.history.description'),
+    );
+    expect(wrapper.text()).toContain(
+      wrapper.vm.$t('router.tunings.history.sub_description'),
+    );
+
+    const selectFilter = wrapper.findComponent('[data-test="select-filter"]');
+    expect(selectFilter.exists()).toBe(true);
+
+    const table = wrapper.findComponent('[data-test="table"]');
+    expect(table.exists()).toBe(true);
+    expect(table.props('pagination')).toBe(wrapper.vm.pagination);
+    expect(table.props('headers')).toBe(wrapper.vm.table.headers);
+    expect(table.props('rows')).toBe(wrapper.vm.formattedRows);
+    expect(table.props('paginationTotal')).toBe(wrapper.vm.paginationTotal);
+    expect(table.props('paginationInterval')).toBe(
+      wrapper.vm.paginationInterval,
+    );
+    expect(table.props('isLoading')).toBe(wrapper.vm.isLoading);
+  });
+
   test('fetches data correctly in getChangesHistoryData', async () => {
     await wrapper.vm.getChangesHistoryData(1, 'all');
     expect(wrapper.vm.table.rows).toHaveLength(1);
