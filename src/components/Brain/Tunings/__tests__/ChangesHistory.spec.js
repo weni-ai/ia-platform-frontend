@@ -141,15 +141,28 @@ describe('ChangesHistory.vue', () => {
     expect(wrapper.vm.handleIsRenderIcon(rowWithSingleValue)).toBe(false);
   });
 
-  test('computes noChangesDetected correctly when no rows are present', () => {
+  test('computes noChangesDetected correctly and renders no changes message when noChangesDetected is true', async () => {
     wrapper.vm.currentFilterOption = [{ value: 'all' }];
+
+    await nextTick();
+
     wrapper.vm.table.rows = [];
+    wrapper.vm.isLoading = false;
+
+    await nextTick();
+
     expect(wrapper.vm.noChangesDetected).toBe(true);
+    expect(wrapper.text()).toBe(
+      wrapper.vm.$t('router.tunings.history.no_changes'),
+    );
   });
 
-  test('computes noChangesDetected correctly when rows are present', () => {
+  test('computes noChangesDetected correctly when rows are present', async () => {
     wrapper.vm.currentFilterOption = [{ value: 'all' }];
     wrapper.vm.table.rows = [{}];
+
+    await nextTick();
+
     expect(wrapper.vm.noChangesDetected).toBe(false);
   });
 
