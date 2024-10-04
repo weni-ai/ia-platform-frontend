@@ -254,7 +254,7 @@ function emitSend() {
     right: $unnnic-spacing-sm;
   }
 
-  &--audio {
+  &--audio.unnnic-audio-recorder {
     border-radius: $unnnic-border-radius-md;
 
     justify-content: flex-end;
