@@ -66,7 +66,7 @@ const documentSize = formatFileSize(document.size);
       display: flex;
       gap: $unnnic-spacing-nano;
 
-      font-size: $unnnic-font-size-body-sm;
+      font-size: $unnnic-font-size-body-md;
       text-transform: uppercase;
     }
   }
