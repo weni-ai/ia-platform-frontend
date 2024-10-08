@@ -169,8 +169,8 @@ const rightButtonType = computed(() =>
 function handleRightButton() {
   if (rightButtonType.value === 'send') {
     if (isRecordingAudio.value) {
-      audioRecorder.value?.stop();
       audioRecorder.value?.discard();
+      return;
     }
     emitSend();
   }
@@ -188,6 +188,7 @@ async function updateAudioModelValue(value) {
   });
 
   updateModelValue(audio);
+  nextTick(emitSend);
 }
 
 function updateModelValue(value) {
