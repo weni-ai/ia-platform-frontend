@@ -183,8 +183,8 @@ function handleRightButton() {
 async function updateAudioModelValue(value) {
   const response = await fetch(value.src);
   const blob = await response.blob();
-  const audio = new File([blob], `${Date.now().toString()}.mp3`, {
-    type: 'audio/mpeg3',
+  const audio = new File([blob], `${Date.now().toString()}.ogg`, {
+    type: 'audio/ogg',
   });
 
   updateModelValue(audio);

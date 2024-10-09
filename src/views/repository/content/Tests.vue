@@ -377,7 +377,7 @@ export default {
 
     sendMessage() {
       const isFileMessage = typeof this.message !== 'string';
-      const message = !isFileMessage ? this.message.trim() : this.message;
+      const message = isFileMessage ? this.message : this.message.trim();
 
       if (!message) {
         return;
@@ -395,7 +395,8 @@ export default {
       setTimeout(() => this.answer(message), 400);
     },
 
-    answer(question) {
+    async answer(question) {
+      const isQuestionFile = typeof question !== 'string';
       const answer = reactive({
         type: 'answer',
         content: '',
@@ -408,8 +409,11 @@ export default {
       });
 
       this.messages.push(answer);
-
       this.scrollToLastMessage();
+
+      const handleError = () => {
+        this.messages.splice(this.messages.indexOf(answer), 1);
+      };
 
       if (this.usePreview) {
         if (this.preview.session?.status === 'waiting') {
@@ -417,61 +421,73 @@ export default {
           return;
         }
 
-        nexusaiAPI.router.preview
-          .create({
+        let questionFileUrl;
+        if (isQuestionFile) {
+          try {
+            const {
+              data: { file_url },
+            } = await nexusaiAPI.router.preview.uploadFile({
+              projectUuid: this.$store.state.Auth.connectProjectUuid,
+              file: question,
+            });
+            questionFileUrl = file_url;
+          } catch {
+            handleError();
+            return;
+          }
+        }
+
+        try {
+          const { data } = await nexusaiAPI.router.preview.create({
             projectUuid: this.$store.state.Auth.connectProjectUuid,
-            text: question,
+            text: isQuestionFile ? '' : question,
+            attachments: questionFileUrl ? [questionFileUrl] : [],
             contact_urn: this.preview.contact.urns[0],
-          })
-          .then(({ data }) => {
-            if (data.type === 'broadcast') {
-              answer.status = 'loaded';
-              answer.text = get(
-                data,
-                'message',
-                this.$t('quick_test.unable_to_find_an_answer', this.language),
-              );
-              answer.sources = get(data, 'fonts', []);
-
-              this.scrollToLastMessage();
-            } else if (data.type === 'flowstart') {
-              this.messages.splice(this.messages.indexOf(answer), 0, {
-                type: 'flowstart',
-                name: data.name,
-                question_uuid: null,
-                feedback: {
-                  value: null,
-                  reason: null,
-                },
-              });
-
-              this.flowStart(answer, { name: data.name, uuid: data.uuid });
-            }
-          })
-          .catch(() => {
-            this.messages.splice(this.messages.indexOf(answer), 1);
           });
+          if (data.type === 'broadcast') {
+            answer.status = 'loaded';
+            answer.text = get(
+              data,
+              'message',
+              this.$t('quick_test.unable_to_find_an_answer', this.language),
+            );
+            answer.sources = get(data, 'fonts', []);
+
+            this.scrollToLastMessage();
+          } else if (data.type === 'flowstart') {
+            this.messages.splice(this.messages.indexOf(answer), 0, {
+              type: 'flowstart',
+              name: data.name,
+              question_uuid: null,
+              feedback: {
+                value: null,
+                reason: null,
+              },
+            });
+          }
+        } catch {
+          handleError();
+        }
       } else {
-        nexusaiAPI.question
-          .create({
+        try {
+          const { data } = await nexusaiAPI.question.create({
             contentBaseUuid: this.contentBaseUuid,
             text: question,
             language: (this.language || '').toLowerCase(),
-          })
-          .then(({ data }) => {
-            answer.status = 'loaded';
-            answer.question_uuid = get(data, 'question_uuid', null);
-            answer.text = get(
-              data,
-              'answers.0.text',
-              this.$t('quick_test.unable_to_find_an_answer', this.language),
-            );
-
-            this.scrollToLastMessage();
-          })
-          .catch(() => {
-            this.messages.splice(this.messages.indexOf(answer), 1);
           });
+
+          answer.status = 'loaded';
+          answer.question_uuid = get(data, 'question_uuid', null);
+          answer.text = get(
+            data,
+            'answers.0.text',
+            this.$t('quick_test.unable_to_find_an_answer', this.language),
+          );
+
+          this.scrollToLastMessage();
+        } catch {
+          handleError();
+        }
       }
     },
 
