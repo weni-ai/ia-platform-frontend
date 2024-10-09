@@ -415,6 +415,13 @@ export default {
         this.messages.splice(this.messages.indexOf(answer), 1);
       };
 
+      const handleAnswerLoaded = (text, sources = []) => {
+        answer.status = 'loaded';
+        answer.text = text;
+        answer.sources = sources;
+        this.scrollToLastMessage();
+      };
+
       if (this.usePreview) {
         if (this.preview.session?.status === 'waiting') {
           this.flowResume(answer, { text: question });
@@ -444,6 +451,7 @@ export default {
             attachments: questionFileUrl ? [questionFileUrl] : [],
             contact_urn: this.preview.contact.urns[0],
           });
+
           if (data.type === 'broadcast') {
             answer.status = 'loaded';
             answer.text = get(
@@ -464,6 +472,8 @@ export default {
                 reason: null,
               },
             });
+
+            this.flowStart(answer, { name: data.name, uuid: data.uuid });
           }
         } catch {
           handleError();
