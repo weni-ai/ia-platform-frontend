@@ -25,7 +25,7 @@
           :key="index"
           :class="[
             `messages__${message.type}`,
-            { 'messages__is-media': isMedia(message.content) },
+            { 'messages__is-media': isMedia(message.text) },
           ]"
         >
           <div
@@ -42,16 +42,15 @@
           >
             {{ statusDescription(message) }}
           </UnnnicIntelligenceText>
-
           <template v-else>
             <PreviewMedia
-              v-if="isMedia(message.content)"
-              :media="message.content"
+              v-if="isMedia(message.text)"
+              :media="message.text"
             />
             <Markdown
               v-else
               :class="`messages__${message.type}__content`"
-              :content="message.content"
+              :content="message.text"
             />
 
             <AnswerSources
@@ -385,7 +384,7 @@ export default {
 
       this.messages.push({
         type: 'question',
-        content: message,
+        text: message,
       });
 
       this.message = '';
@@ -396,10 +395,9 @@ export default {
     },
 
     async answer(question) {
-      const isQuestionFile = typeof question !== 'string';
       const answer = reactive({
         type: 'answer',
-        content: '',
+        text: '',
         status: 'loading',
         question_uuid: null,
         feedback: {
@@ -415,29 +413,28 @@ export default {
         this.messages.splice(this.messages.indexOf(answer), 1);
       };
 
-      const handleAnswerLoaded = (text, sources = []) => {
-        answer.status = 'loaded';
-        answer.text = text;
-        answer.sources = sources;
-        this.scrollToLastMessage();
-      };
-
       if (this.usePreview) {
         if (this.preview.session?.status === 'waiting') {
           this.flowResume(answer, { text: question });
           return;
         }
 
-        let questionFileUrl;
-        if (isQuestionFile) {
+        let questionMediaUrl;
+        const isQuestionMedia = this.isMedia(question);
+        if (isQuestionMedia) {
           try {
-            const {
-              data: { file_url },
-            } = await nexusaiAPI.router.preview.uploadFile({
-              projectUuid: this.$store.state.Auth.connectProjectUuid,
-              file: question,
-            });
-            questionFileUrl = file_url;
+            const isGeolocationMedia = typeof question === 'string';
+            if (isGeolocationMedia) {
+              questionMediaUrl = `geo:${question}`;
+            } else {
+              const {
+                data: { file_url },
+              } = await nexusaiAPI.router.preview.uploadFile({
+                projectUuid: this.$store.state.Auth.connectProjectUuid,
+                file: question,
+              });
+              questionMediaUrl = file_url;
+            }
           } catch {
             handleError();
             return;
@@ -447,8 +444,8 @@ export default {
         try {
           const { data } = await nexusaiAPI.router.preview.create({
             projectUuid: this.$store.state.Auth.connectProjectUuid,
-            text: isQuestionFile ? '' : question,
-            attachments: questionFileUrl ? [questionFileUrl] : [],
+            text: isQuestionMedia ? '' : question,
+            attachments: questionMediaUrl ? [questionMediaUrl] : [],
             contact_urn: this.preview.contact.urns[0],
           });
 
