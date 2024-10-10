@@ -1492,6 +1492,10 @@
         "title": "Service and support",
         "description": "Actions for customer support and communication adjustments"
       },
+      "media": {
+        "title": "Media and location",
+        "description": "Actions initiated from image, video, audio and user location"
+      },
       "custom": {
         "title": "Customized",
         "description": "Actions to meet specific needs"
