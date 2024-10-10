@@ -159,11 +159,13 @@ const isRecordingAudio = computed(() =>
 const audioValue = computed(() =>
   modelValue.value instanceof HTMLAudioElement ? modelValue.value : null,
 );
-const rightButtonType = computed(() =>
-  isRecordingAudio.value ||
-  (modelValue.value && typeof modelValue.value === 'string')
-    ? 'send'
-    : 'mic',
+const rightButtonType = computed(
+  () =>
+    isRecordingAudio.value ||
+    (modelValue.value && typeof modelValue.value === 'string')
+      ? 'send'
+      : 'send',
+  // : 'mic', // Commented to temporaly disable audio option
 );
 
 function handleRightButton() {
