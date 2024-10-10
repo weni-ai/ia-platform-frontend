@@ -1,7 +1,11 @@
 <template>
   <section class="message-input__container">
-    <section :class="['message-input__action', 'message-input__left-button']">
+    <section
+      :class="['message-input__action', 'message-input__left-button']"
+      data-test="message-input-left-button"
+    >
       <ContentItemActions
+        data-test="content-item-actions"
         triggerIcon="add"
         triggerSize="md"
         popoverPositionHorizontal="left-left"
@@ -11,6 +15,7 @@
       <input
         v-show="false"
         ref="file"
+        data-test="file-input"
         type="file"
         :accept="currentAllowedMediaFormats"
         @change="handleFileChange"
@@ -19,6 +24,7 @@
 
     <input
       v-show="!isRecordingAudio"
+      data-test="text-input"
       :value="typeof modelValue === 'string' ? modelValue : ''"
       :placeholder="placeholder"
       type="text"
@@ -29,6 +35,7 @@
     <UnnnicAudioRecorder
       v-show="isRecordingAudio"
       ref="audioRecorder"
+      data-test="audio-recorder"
       :modelValue="audioValue"
       :class="['message-input', 'message-input--audio']"
       @update:model-value="updateAudioModelValue"
@@ -36,6 +43,7 @@
     />
 
     <UnnnicIcon
+      data-test="right-button"
       :class="['message-input__action', 'message-input__right-button']"
       :icon="rightButtonType"
       filled
