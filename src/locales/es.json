@@ -5,6 +5,7 @@
   "back": "Volver",
   "next": "Siguiente",
   "finish": "Finalizar",
+  "speed": "Velocidad",
   "save_changes": "Guardar los cambios",
   "announcements": {
     "new_artificial_intelligence_module_is_here": "¡Ya está aquí el nuevo módulo de Inteligencia Artificial! Explora las novedades y aprende a crear chatbots aún más increíbles."
@@ -191,7 +192,8 @@
       "field_changed_to_value": "Parámetro {field} cambiada a {value}",
       "flow_started": "Flujo {name} iniciado",
       "flow_finished": "Flujo finalizado",
-      "message_forwarded_to_brain": "Mensaje transmitido a Agent Builder"
+      "message_forwarded_to_brain": "Mensaje transmitido a Agent Builder",
+      "media_and_location_unavailable": "No hay ninguna acción de Medios y Ubicación registrada"
     }
   },
   "content_bases": {
@@ -700,6 +702,11 @@
         "tests": "Prueba de bases de conocimiento",
         "tests_subtitle": "Pruebe la base de conocimientos haciendo preguntas y observando las respuestas.",
         "preview_tests_placeholder": "Escriba un mensaje",
+        "preview_tests_attachments": {
+          "photos_or_videos": "Fotos y vídeos",
+          "file": "Archivo",
+          "location": "Ubicación"
+        },
         "tests_placeholder": "Haz una pregunta para la base de conocimientos...",
         "api": "Integrar esta inteligencia",
         "api_subtitle": "Nuestra API es compatible con varias plataformas mediante la integración a través de APIs REST. Para obtener más información, vaya a <a href='https://docs.ilhasoft.mobi/l/pt/inteligencia-conteudo/integrando-uma-intelig-ncia-de-conte-do' target='_blank' class='repository-api__header__subtitle--link'>documentation</a> y <a href='https://api.bothub.it/#tag/repository' target='_blank' class='repository-api__header__subtitle--link'>API explorer</a>.",
@@ -1647,5 +1654,8 @@
     "time_ago_hours": "Hace {count} hora | Hace {count} horas",
     "time_ago_days": "Hace {count} día | Hace {count} días",
     "time_ago_months": "Hace {count} mes | Hace {count} meses"
+  },
+  "audio_recorder": {
+    "discard_button": "Descartar"
   }
 }

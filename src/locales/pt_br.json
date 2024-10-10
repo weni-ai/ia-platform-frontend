@@ -5,6 +5,7 @@
   "back": "Voltar",
   "next": "Avançar",
   "finish": "Concluir",
+  "speed": "Velocidade",
   "save_changes": "Salvar alterações",
   "announcements": {
     "new_artificial_intelligence_module_is_here": "Chegou o novo módulo de Inteligência Artificial! Explore as novidades e saiba como criar chatbots ainda mais incríveis!"
@@ -191,7 +192,8 @@
       "field_changed_to_value": "Parâmetro {field} alterado para {value}",
       "flow_started": "Fluxo {name} iniciado",
       "flow_finished": "Fluxo finalizado",
-      "message_forwarded_to_brain": "Mensagem redirecionada para o Agent Builder"
+      "message_forwarded_to_brain": "Mensagem redirecionada para o Agent Builder",
+            "media_and_location_unavailable": "Não há ação de Mídias e Localização cadastrada"
     }
   },
   "content_bases": {
@@ -672,6 +674,11 @@
         "tests": "Teste bases de conhecimento",
         "tests_subtitle": "Teste a base de conhecimento fazendo perguntas e observando as respostas.",
         "preview_tests_placeholder": "Digite uma mensagem",
+        "preview_tests_attachments": {
+          "photos_or_videos": "Fotos e vídeos",
+          "file": "Arquivo",
+          "location": "Localização"
+        },
         "tests_placeholder": "Mensagem",
         "api": "Integrar esta inteligência",
         "api_subtitle": "Nossa API é compatível com diversas plataformas via integração por APIs REST. Para saber mais, acesse a <a href='https://docs.ilhasoft.mobi/l/pt/inteligencia-conteudo/integrando-uma-intelig-ncia-de-conte-do' target='_blank' class='repository-api__header__subtitle--link'>documentação</a> e a <a href='https://api.bothub.it/#tag/repository' target='_blank' class='repository-api__header__subtitle--link'>API explorer</a>.",
@@ -1626,5 +1633,8 @@
     "time_ago_hours": "Há {count} hora | Há {count} horas",
     "time_ago_days": "Há {count} dia | Há {count} dias",
     "time_ago_months": "Há {count} mês | Há {count} meses"
+  },
+  "audio_recorder": {
+    "discard_button": "Descartar"
   }
 }

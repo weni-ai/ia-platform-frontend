@@ -194,10 +194,21 @@ export default {
     },
 
     preview: {
-      create({ projectUuid, text, contact_urn }) {
+      create({ projectUuid, text, attachments, contact_urn }) {
         return request.$http.post(`api/${projectUuid}/preview/`, {
           text,
+          attachments,
           contact_urn,
+        });
+      },
+      uploadFile({ projectUuid, file }) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        return request.$http.post(`api/${projectUuid}/upload-file`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         });
       },
     },
