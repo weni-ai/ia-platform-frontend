@@ -4,6 +4,7 @@ const groups = {
   'Interações gerais': 'interactions',
   'Compras de Produtos': 'shopping',
   'Assistência e Suporte': 'support',
+  'Mídias e localização': 'media',
 };
 
 export const Actions = {
@@ -79,11 +80,21 @@ export const Actions = {
     const { data } = await request.$http.get(`api/${projectUuid}/flows/`);
 
     return data.map(
-      ({ uuid, name, prompt, action_type, content_base, fallback, group }) => ({
+      ({
+        uuid,
+        name,
+        prompt,
+        action_type,
+        editable,
+        content_base,
+        fallback,
+        group,
+      }) => ({
         uuid,
         name,
         prompt,
         type: action_type,
+        editable,
         group: Object.values(groups).includes(group) ? group : 'custom',
       }),
     );
