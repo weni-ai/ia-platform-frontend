@@ -1443,6 +1443,10 @@
         "title": "Assistência e suporte",
         "description": "Ações para suporte ao cliente e ajustes de comunicação"
       },
+      "media": {
+        "title": "Mídias e localização",
+        "description": "Ações iniciadas a partir de imagem, vídeo, áudio e localização do usuário"
+      },
       "custom": {
         "title": "Personalizada",
         "description": "Ações para atender necessidades específicas"

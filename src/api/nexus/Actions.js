@@ -4,6 +4,7 @@ const groups = {
   'Interações gerais': 'interactions',
   'Compras de Produtos': 'shopping',
   'Assistência e Suporte': 'support',
+  'Mídias e localização': 'media',
 };
 
 export const Actions = {

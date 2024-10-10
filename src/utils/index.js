@@ -39,6 +39,7 @@ export const actionGroupIcon = (groupId) => {
     interactions: 'chat',
     shopping: 'shopping_cart',
     support: 'contact_support',
+    media: 'attach_file',
     custom: 'edit_square',
   }[groupId];
 };
