@@ -192,7 +192,8 @@
       "field_changed_to_value": "Parámetro {field} cambiada a {value}",
       "flow_started": "Flujo {name} iniciado",
       "flow_finished": "Flujo finalizado",
-      "message_forwarded_to_brain": "Mensaje transmitido a Agent Builder"
+      "message_forwarded_to_brain": "Mensaje transmitido a Agent Builder",
+      "media_and_location_unavailable": "No hay ninguna acción de Medios y Ubicación registrada"
     }
   },
   "content_bases": {

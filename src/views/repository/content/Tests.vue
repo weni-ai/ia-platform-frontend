@@ -33,15 +33,22 @@
             class="dot-typing"
           ></div>
 
-          <UnnnicIntelligenceText
-            v-else-if="isStatus(message)"
-            color="neutral-cloudy"
-            family="secondary"
-            weight="regular"
-            size="body-md"
-          >
-            {{ statusDescription(message) }}
-          </UnnnicIntelligenceText>
+          <template v-else-if="isStatus(message)">
+            <UnnnicIcon
+              v-if="message.type === 'media_and_location_unavailable'"
+              icon="warning"
+              scheme="neutral-cloudy"
+              size="sm"
+            />
+            <UnnnicIntelligenceText
+              color="neutral-cloudy"
+              family="secondary"
+              weight="regular"
+              size="body-md"
+            >
+              {{ statusDescription(message) }}
+            </UnnnicIntelligenceText>
+          </template>
           <template v-else>
             <PreviewMedia
               v-if="isMedia(message.text)"
@@ -285,6 +292,7 @@ export default {
         'flowstart',
         'flowsend',
         'message_forwarded_to_brain',
+        'media_and_location_unavailable',
       ].includes(message.type);
     },
 
@@ -310,6 +318,10 @@ export default {
 
       if (message.type === 'message_forwarded_to_brain') {
         return this.$t('router.preview.message_forwarded_to_brain');
+      }
+
+      if (message.type === 'media_and_location_unavailable') {
+        return this.$t('router.preview.media_and_location_unavailable');
       }
     },
 
@@ -471,6 +483,9 @@ export default {
             });
 
             this.flowStart(answer, { name: data.name, uuid: data.uuid });
+          } else if (data.type === 'media_and_location_unavailable') {
+            answer.status = 'loaded';
+            answer.type = data.type;
           }
         } catch {
           handleError();
@@ -670,8 +685,12 @@ export default {
     &__change,
     &__flowstart,
     &__flowsend,
-    &__message_forwarded_to_brain {
-      text-align: center;
+    &__message_forwarded_to_brain,
+    &__media_and_location_unavailable {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $unnnic-spacing-nano;
 
       + .messages__change {
         margin-top: -$unnnic-spacing-nano;

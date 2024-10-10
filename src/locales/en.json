@@ -192,7 +192,8 @@
       "field_changed_to_value": "Parameter {field} changed to {value}",
       "flow_started": "Flow {name} started",
       "flow_finished": "Flow finished",
-      "message_forwarded_to_brain": "Message forwarded to Agent Builder"
+      "message_forwarded_to_brain": "Message forwarded to Agent Builder",
+      "media_and_location_unavailable": "There is no Media and Location action registered"
     }
   },
   "content_bases": {
