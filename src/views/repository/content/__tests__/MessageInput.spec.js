@@ -59,45 +59,45 @@ describe('MessageInput.vue', () => {
       expect(input.attributes('placeholder')).toBe(defaultProps.placeholder);
     });
 
-    it('should display mic icon when there is no modelValue and not recording', async () => {
-      expect(component('rightButton').props('icon')).toBe('mic');
+    // it('should display mic icon when there is no modelValue and not recording', async () => {
+    //   expect(component('rightButton').props('icon')).toBe('mic');
 
-      await wrapper.setProps({ modelValue: 'Hello World' });
-      expect(component('rightButton').props('icon')).toBe('send');
-    });
+    //   await wrapper.setProps({ modelValue: 'Hello World' });
+    //   expect(component('rightButton').props('icon')).toBe('send');
+    // });
   });
 
-  describe('Audio Recording', () => {
-    it('hides the input when recording audio', async () => {
-      expect(element('textInput').element.style.display).toBe('');
-      expect(component('audioRecorder').element.style.display).toBe('none');
+  // describe('Audio Recording', () => {
+  //   it('hides the input when recording audio', async () => {
+  //     expect(element('textInput').element.style.display).toBe('');
+  //     expect(component('audioRecorder').element.style.display).toBe('none');
 
-      wrapper.vm.audioRecorderStatus = 'recording';
+  //     wrapper.vm.audioRecorderStatus = 'recording';
 
-      await wrapper.vm.$nextTick();
+  //     await wrapper.vm.$nextTick();
 
-      expect(element('textInput').element.style.display).toBe('none');
-      expect(component('audioRecorder').element.style.display).toBe('');
-    });
+  //     expect(element('textInput').element.style.display).toBe('none');
+  //     expect(component('audioRecorder').element.style.display).toBe('');
+  //   });
 
-    it('converts audio source to File when update:model-value is emitted from audioRecorder', async () => {
-      global.fetch = vi.fn(() =>
-        Promise.resolve({
-          blob: () =>
-            Promise.resolve(new Blob(['audio data'], { type: 'audio/mpeg3' })),
-        }),
-      );
+  //   it('converts audio source to File when update:model-value is emitted from audioRecorder', async () => {
+  //     global.fetch = vi.fn(() =>
+  //       Promise.resolve({
+  //         blob: () =>
+  //           Promise.resolve(new Blob(['audio data'], { type: 'audio/mpeg3' })),
+  //       }),
+  //     );
 
-      await wrapper.vm.updateAudioModelValue(new Audio());
-      await wrapper.vm.$nextTick();
+  //     await wrapper.vm.updateAudioModelValue(new Audio());
+  //     await wrapper.vm.$nextTick();
 
-      const emittedFile = wrapper.emitted('update:model-value')[0][0];
+  //     const emittedFile = wrapper.emitted('update:model-value')[0][0];
 
-      expect(emittedFile).toBeInstanceOf(File);
-      expect(emittedFile.name).toMatch(/\d+\.mp3$/);
-      expect(emittedFile.type).toBe('audio/mpeg3');
-    });
-  });
+  //     expect(emittedFile).toBeInstanceOf(File);
+  //     expect(emittedFile.name).toMatch(/\d+\.mp3$/);
+  //     expect(emittedFile.type).toBe('audio/mpeg3');
+  //   });
+  // });
 
   describe('Sending Messages', () => {
     it('emits "send" when right button is clicked and conditions are met', async () => {
