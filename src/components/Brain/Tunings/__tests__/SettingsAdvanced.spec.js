@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import RouterTuningsAdvanced from '@/views/Brain/RouterTuningsAdvanced.vue';
+import SettingsAdvanced from '@/components/Brain/Tunings/SettingsAdvanced.vue';
 import { createStore } from 'vuex';
 import nexusaiAPI from '@/api/nexusaiAPI';
 
@@ -27,11 +27,11 @@ const customStore = createStore({
   },
 });
 
-describe('RouterTuningsAdvanced', () => {
+describe('SettingsAdvanced', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(RouterTuningsAdvanced, {
+    wrapper = mount(SettingsAdvanced, {
       props: {
         brainOn: true,
       },
@@ -117,7 +117,7 @@ describe('RouterTuningsAdvanced', () => {
       .fn()
       .mockResolvedValue(mockApiResponse);
 
-    const customWrapper = mount(RouterTuningsAdvanced, {
+    const customWrapper = mount(SettingsAdvanced, {
       props: {
         brainOn: false,
       },

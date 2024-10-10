@@ -1624,5 +1624,11 @@
       "title": "You do not have permission to access this module",
       "description": "If you wish to access this module, please contact the organization's administrator"
     }
+  },
+  "time": {
+    "time_ago_minutes": "{count} minute ago | {count} minutes ago",
+    "time_ago_hours": "{count} hour ago | {count} hours ago",
+    "time_ago_days": "{count} day ago | {count} days ago",
+    "time_ago_months": "{count} month ago | {count} months ago"
   }
 }
