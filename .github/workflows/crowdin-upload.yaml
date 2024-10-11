@@ -3,7 +3,7 @@ name: Crowdin Action
 on:
   push:
     paths: [ 'src/locales/**' ]
-    branches: [ staging ]
+    branches: [ main ]
 
 jobs:
   crowdin-upload:
