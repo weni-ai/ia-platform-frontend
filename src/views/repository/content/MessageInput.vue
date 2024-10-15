@@ -160,9 +160,7 @@ const audioRecorder = ref(null);
 const audioRecorderStatus = ref(null);
 
 const isRecordingAudio = computed(() =>
-  ['recording', 'recorded', 'playing', 'paused'].includes(
-    audioRecorderStatus.value,
-  ),
+  ['recording', 'playing', 'paused'].includes(audioRecorderStatus.value),
 );
 const audioValue = computed(() =>
   modelValue.value instanceof HTMLAudioElement ? modelValue.value : null,
@@ -177,7 +175,7 @@ const rightButtonType = computed(() =>
 function handleRightButton() {
   if (rightButtonType.value === 'send') {
     if (isRecordingAudio.value) {
-      audioRecorder.value?.discard();
+      audioRecorder.value?.stop();
       return;
     }
     emitSend();
@@ -196,7 +194,10 @@ async function updateAudioModelValue(value) {
   });
 
   updateModelValue(audio);
-  nextTick(emitSend);
+  if (audioRecorderStatus.value === 'recorded') {
+    nextTick(emitSend);
+    audioRecorder.value?.discard();
+  }
 }
 
 function updateModelValue(value) {
