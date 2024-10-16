@@ -35,7 +35,7 @@
       />
 
       <section
-        v-if="data.repository_type === 'content'"
+        v-if="!isOrgCanCreateContentAI && data.repository_type === 'content'"
         class="brain-use-warning"
       >
         <UnnnicIcon
@@ -117,6 +117,13 @@ export default {
       return Object.keys(defaultData).some(
         (attr) => get(defaultData, attr) !== get(this.data, attr),
       );
+    },
+
+    isOrgCanCreateContentAI() {
+      return runtimeVariables
+        .get('VITE_ORGS_CAN_CREATE_CONTENT_AI')
+        ?.split(', ')
+        .includes(this.$store.state.Auth.connectOrgUuid);
     },
 
     disabledSubmit() {
