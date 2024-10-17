@@ -127,7 +127,7 @@ export default {
       return runtimeVariables
         .get('VITE_ORGS_CAN_CREATE_CONTENT_AI')
         ?.split(', ')
-        .includes(this.getOrgSelected);
+        .includes(this.$store.state.Auth.connectOrgUuid);
     },
 
     disabledSubmit() {
@@ -164,7 +164,7 @@ export default {
       try {
         if (this.data.repository_type === 'content') {
           const response = await nexusaiAPI.createIntelligence({
-            orgUuid: this.getOrgSelected,
+            orgUuid: this.$store.state.Auth.connectOrgUuid,
             name: this.data.name,
             description: this.data.description,
           });
