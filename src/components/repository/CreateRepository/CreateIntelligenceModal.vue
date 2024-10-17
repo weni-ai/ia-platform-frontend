@@ -134,7 +134,7 @@ export default {
       const { data } = this;
 
       return (
-        !this.isOrgCanCreateContentAI ||
+        (!this.isOrgCanCreateContentAI && data.repository_type === 'content') ||
         !data.name ||
         !data.description ||
         !data.repository_type ||
