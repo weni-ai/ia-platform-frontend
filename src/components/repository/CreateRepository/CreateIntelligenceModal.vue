@@ -127,13 +127,14 @@ export default {
       return runtimeVariables
         .get('VITE_ORGS_CAN_CREATE_CONTENT_AI')
         ?.split(', ')
-        .includes(this.$store.state.Auth.connectOrgUuid);
+        .includes(this.getOrgSelected);
     },
 
     disabledSubmit() {
       const { data } = this;
 
       return (
+        !this.isOrgCanCreateContentAI ||
         !data.name ||
         !data.description ||
         !data.repository_type ||
