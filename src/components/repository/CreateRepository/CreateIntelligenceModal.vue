@@ -71,6 +71,7 @@ import IntelligenceTab from '@/components/repository/CreateRepository/Intelligen
 import ClassificationSpecificAttributes from '@/components/repository/CreateRepository/ClassificationSpecificAttributes.vue';
 import CreateIntelligenceCancelModal from '@/components/repository/CreateRepository//CreateIntelligenceCancelModal.vue';
 import repositoryV2 from '../../../api/v2/repository';
+import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
 
 export default {
@@ -102,7 +103,10 @@ export default {
     ...mapGetters(['getOrgSelected']),
 
     isChanged() {
-      if (this.data.repository_type === 'content') {
+      if (
+        !this.isOrgCanCreateContentAI &&
+        this.data.repository_type === 'content'
+      ) {
         return false;
       }
 
@@ -127,16 +131,15 @@ export default {
     },
 
     disabledSubmit() {
-      if (this.data.repository_type === 'content') {
-        return true;
-      }
+      const { data } = this;
 
       return (
-        !this.data.name ||
-        !this.data.description ||
-        !this.data.repository_type ||
-        !this.data.language ||
-        !this.data.categories.length
+        !data.name ||
+        !data.description ||
+        !data.repository_type ||
+        (data.repository_type === 'classifier'
+          ? !data.language || !data.categories.length
+          : false)
       );
     },
   },
@@ -158,21 +161,33 @@ export default {
       this.submitting = true;
 
       try {
-        const response = await repositoryV2.create({
-          organization: this.getOrgSelected,
-          name: this.data.name,
-          description: this.data.description,
-          language: this.data.language,
-          repository_type: 'classifier',
-          categories: this.data.categories,
-          is_private: this.data.is_private,
-        });
+        if (this.data.repository_type === 'content') {
+          const response = await nexusaiAPI.createIntelligence({
+            orgUuid: this.getOrgSelected,
+            name: this.data.name,
+            description: this.data.description,
+          });
 
-        const { owner__nickname, slug } = response.data;
+          this.$router.push({
+            path: `/intelligences/${response.data.uuid}`,
+          });
+        } else {
+          const response = await repositoryV2.create({
+            organization: this.getOrgSelected,
+            name: this.data.name,
+            description: this.data.description,
+            language: this.data.language,
+            repository_type: 'classifier',
+            categories: this.data.categories,
+            is_private: this.data.is_private,
+          });
 
-        this.$router.push({
-          path: `/dashboard/${owner__nickname}/${slug}/`,
-        });
+          const { owner__nickname, slug } = response.data;
+
+          this.$router.push({
+            path: `/dashboard/${owner__nickname}/${slug}/`,
+          });
+        }
       } catch (error) {
         const text = get(
           error,
