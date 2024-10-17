@@ -129,14 +129,16 @@ describe('ModalChangeAction', () => {
     wrapper = setup();
 
     const name = wrapper.find('[data-test="name-input"]');
-    const description = wrapper.find('[data-test="description-textarea"]');
+    const description = wrapper.findComponent(
+      '[data-test="description-textarea"]',
+    );
 
     await wrapper.setProps({
       action: actionNonEditable,
     });
 
     expect(name.attributes('disabled')).toBe('true');
-    expect(description.classes()).toContain('disabled');
+    expect(description.props().disabled).toBe(true);
   });
 
   it('displays the flow name', async () => {
