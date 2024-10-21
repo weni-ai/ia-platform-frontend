@@ -70,7 +70,20 @@
       "tunings": "Ajustes"
     },
     "monitoring": {
-      "description": "Sigue los mensajes que recibió tu gente y mira cómo respondieron."
+      "description": "Sigue los mensajes que recibió tu gente y mira cómo respondieron.",
+      "performance": "Actuación",
+      "success": {
+        "title": "Respuestas encontradas",
+        "tooltip": "Porcentaje de mensajes que el agente pudo responder según su conocimiento"
+      },
+      "failed": {
+        "title": "Respuestas no encontradas",
+        "tooltip": "Porcentaje de mensajes que estaban fuera del conocimiento del agente y no pudo responder"
+      },
+      "action": {
+        "title": "Mensajes que desencadenaron acciones",
+        "tooltip": "Porcentaje de mensajes que desencadenaron una acción del agente"
+      }
     },
     "actions": {
       "title": "Acciones",

@@ -9,11 +9,19 @@
     </UnnnicIntelligenceText>
 
     <UnnnicDivider ySpacing="md" />
+
+    <RouterMonitoringPerformance />
   </section>
 </template>
 
 <script>
-export default {};
+import RouterMonitoringPerformance from './RouterMonitoringPerformance.vue';
+
+export default {
+  components: {
+    RouterMonitoringPerformance,
+  },
+};
 </script>
 
 <style lang="scss" scoped>

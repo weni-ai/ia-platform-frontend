@@ -70,7 +70,20 @@
       "tunings": "Tunings"
     },
     "monitoring": {
-      "description": "Follow the messages received by your people and see how they responded."
+      "description": "Follow the messages received by your people and see how they responded.",
+      "performance": "Performance",
+      "success": {
+        "title": "Answers found",
+        "tooltip": "Percentage of messages that the agent was able to answer based on their knowledge"
+      },
+      "failed": {
+        "title": "Answers not found",
+        "tooltip": "Percentage of messages that were outside the agent's knowledge and they were unable to answer"
+      },
+      "action": {
+        "title": "Messages that triggered actions",
+        "tooltip": "Percentage of messages that triggered an agent action"
+      }
     },
     "actions": {
       "title": "Actions",
