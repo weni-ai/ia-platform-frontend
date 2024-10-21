@@ -22,6 +22,7 @@
           family="secondary"
           size="body-gt"
           color="neutral-darkest"
+          class="header__title"
         >
           {{ answer[1].title }}
         </UnnnicIntelligenceText>
@@ -89,6 +90,8 @@ const answers = ref({
   }
 
   .performance__card {
+    overflow: hidden;
+
     padding: $unnnic-spacing-md $unnnic-spacing-sm;
 
     border-radius: $unnnic-border-radius-sm;
@@ -110,6 +113,12 @@ const answers = ref({
       display: flex;
       gap: $unnnic-spacing-xs;
       align-items: center;
+
+      .header__title {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
 
       .header__tooltip {
         display: flex;

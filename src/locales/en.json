@@ -72,6 +72,7 @@
     "monitoring": {
       "description": "Follow the messages received by your people and see how they responded.",
       "performance": "Performance",
+      "received_messages": "Received messages",
       "success": {
         "title": "Answers found",
         "tooltip": "Percentage of messages that the agent was able to answer based on their knowledge"
@@ -83,6 +84,13 @@
       "action": {
         "title": "Messages that triggered actions",
         "tooltip": "Percentage of messages that triggered an agent action"
+      },
+      "search_message": "Search message",
+      "filters": {
+        "all_messages": "All messages",
+        "answers_found": "Answers found",
+        "answers_not_found": "Answers not found",
+        "messages_that_trigger_actions": "Messages that triggered actions"
       }
     },
     "actions": {

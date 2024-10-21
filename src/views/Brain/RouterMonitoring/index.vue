@@ -10,21 +10,31 @@
 
     <UnnnicDivider ySpacing="md" />
 
-    <RouterMonitoringPerformance />
+    <section class="router-monitoring__content">
+      <RouterMonitoringPerformance />
+
+      <RouterMonitoringReceivedMessages />
+    </section>
   </section>
 </template>
 
 <script>
 import RouterMonitoringPerformance from './RouterMonitoringPerformance.vue';
+import RouterMonitoringReceivedMessages from './RouterMonitoringReceivedMessages.vue';
 
 export default {
   components: {
     RouterMonitoringPerformance,
+    RouterMonitoringReceivedMessages,
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .router-monitoring {
+  &__content {
+    display: grid;
+    gap: $unnnic-spacing-md;
+  }
 }
 </style>

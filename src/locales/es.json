@@ -72,6 +72,7 @@
     "monitoring": {
       "description": "Sigue los mensajes que recibió tu gente y mira cómo respondieron.",
       "performance": "Actuación",
+      "received_messages": "Mensajes recibidos",
       "success": {
         "title": "Respuestas encontradas",
         "tooltip": "Porcentaje de mensajes que el agente pudo responder según su conocimiento"
@@ -83,6 +84,13 @@
       "action": {
         "title": "Mensajes que desencadenaron acciones",
         "tooltip": "Porcentaje de mensajes que desencadenaron una acción del agente"
+      },
+      "search_message": "Buscar mensaje",
+      "filters": {
+        "all_messages": "Todos los mensajes",
+        "answers_found": "Respuestas encontradas",
+        "answers_not_found": "Respuestas no encontradas",
+        "messages_that_trigger_actions": "Mensajes que desencadenaron acciones"
       }
     },
     "actions": {
