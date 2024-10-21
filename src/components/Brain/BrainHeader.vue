@@ -15,7 +15,7 @@
     </section>
     <section>
       <UnnnicButton
-        v-if="route.name !== 'router-actions'"
+        v-if="!['router-monitoring', 'router-actions'].includes(route.name)"
         class="save-button"
         :disabled="$store.getters.isBrainSaveButtonDisabled"
         :loading="$store.state.Brain.isSavingChanges"

@@ -17,6 +17,7 @@
               :textProp="text"
               @update:files="(v) => (files = v)"
             />
+            <RouterMonitoring v-else-if="route.name === 'router-monitoring'" />
             <RouterActions v-else-if="route.name === 'router-actions'" />
             <RouterCustomization
               v-else-if="route.name === 'router-personalization'"
@@ -30,6 +31,7 @@
       </div>
 
       <section
+        v-if="showPreview"
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container',
@@ -70,6 +72,7 @@ import { get } from 'lodash';
 import nexusaiAPI from '../../api/nexusaiAPI';
 import PageContainer from '../../components/PageContainer.vue';
 import Tests from '../repository/content/Tests.vue';
+import RouterMonitoring from './RouterMonitoring/index.vue';
 import RouterActions from './RouterActions.vue';
 import RouterContentBase from './RouterContentBase.vue';
 import RouterCustomization from './RouterCustomization.vue';
@@ -81,6 +84,7 @@ import { useSitesPagination } from '../ContentBases/sitesPagination';
 import BrainSideBar from '@/components/Brain/BrainSideBar.vue';
 import BrainHeader from '@/components/Brain/BrainHeader.vue';
 import i18n from '@/utils/plugins/i18n';
+import { BRAIN_ROUTES } from '@/utils';
 import BrainWarningBar from '@/components/Brain/BrainWarningBar.vue';
 import BrainHeaderPreview from '@/components/Brain/BrainHeaderPreview.vue';
 
@@ -89,6 +93,7 @@ export default {
   components: {
     Tests,
     PageContainer,
+    RouterMonitoring,
     RouterActions,
     RouterContentBase,
     RouterCustomization,
@@ -145,6 +150,12 @@ export default {
     const sites = useSitesPagination({
       contentBaseUuid: contentBaseUuid.value,
     });
+
+    const showPreview = computed(
+      () =>
+        BRAIN_ROUTES.find((mappedRoute) => mappedRoute.page === route.name)
+          ?.preview,
+    );
 
     const refreshPreview = () => {
       refreshPreviewValue.value += 1;
@@ -275,6 +286,7 @@ export default {
       files,
       sites,
       text,
+      showPreview,
       routerTunings,
       contentBase,
       contentBaseUuid,

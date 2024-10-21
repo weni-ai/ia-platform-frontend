@@ -19,10 +19,26 @@ export const WENIGPT_OPTIONS = JSON.parse(
 );
 
 export const BRAIN_ROUTES = [
-  { title: 'personalization', page: 'router-personalization', icon: 'person' },
-  { title: 'content', page: 'router-content', icon: 'article' },
-  { title: 'actions', page: 'router-actions', icon: 'bolt' },
-  { title: 'tunings', page: 'router-tunings', icon: 'settings' },
+  {
+    title: 'monitoring',
+    page: 'router-monitoring',
+    icon: 'bar_chart',
+    preview: false,
+  },
+  {
+    title: 'personalization',
+    page: 'router-personalization',
+    icon: 'person',
+    preview: true,
+  },
+  { title: 'content', page: 'router-content', icon: 'article', preview: true },
+  { title: 'actions', page: 'router-actions', icon: 'bolt', preview: true },
+  {
+    title: 'tunings',
+    page: 'router-tunings',
+    icon: 'settings',
+    preview: true,
+  },
 ];
 
 export const createDownloadAnchor = ({ name, href }) => {

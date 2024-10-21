@@ -32,15 +32,21 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { BRAIN_ROUTES } from '@/utils';
 import SideBarItem from '../Sidebar/SideBarItem.vue';
 import SidebarMenu from '../Sidebar/SidebarMenu.vue';
 
-const brainRoutes = ref(BRAIN_ROUTES);
-
+const store = useStore();
 const route = useRoute();
 const router = useRouter();
+
+const brainRoutes = computed(() =>
+  store.state.User.me.nickname?.includes('@weni.ai')
+    ? BRAIN_ROUTES
+    : BRAIN_ROUTES.filter((route) => route.title !== 'monitoring'),
+);
 
 const activeNav = computed(() => {
   return brainRoutes.value.find((e) => e.page === route.name)?.page;

@@ -63,10 +63,14 @@
       "click_here": "ajustes"
     },
     "tabs": {
+      "monitoring": "Monitoramento",
       "personalization": "Personalidade",
       "content": "Conhecimento",
       "actions": "Ações",
       "tunings": "Ajustes"
+    },
+    "monitoring": {
+      "description": "Acompanhe as mensagens recebidas pelo seu gente e veja como ele respondeu."
     },
     "actions": {
       "title": "Ações",
