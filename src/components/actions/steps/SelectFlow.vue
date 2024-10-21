@@ -49,11 +49,7 @@
       v-for="(item, index) in itemsData"
       :key="index"
       side="top"
-      :text="
-        isFlowAlreadyAdded(item)
-          ? $t('modals.actions.add.steps.select_flow.flow_already_in_use')
-          : item.name
-      "
+      :text="item.name"
       enabled
     >
       <section
@@ -61,7 +57,6 @@
           'flow-item',
           {
             'flow-item--selected': isFlowSelected(item),
-            'flow-item--disabled': isFlowDisabled(item),
           },
         ]"
         :data-test="`flow-${item.uuid}`"
@@ -187,19 +182,7 @@ function isFlowSelected(flow) {
   return props.flowUuid === flow.uuid;
 }
 
-function isFlowAlreadyAdded(flow) {
-  return actionsStore.actions.data.some(({ uuid }) => flow.uuid === uuid);
-}
-
-function isFlowDisabled(flow) {
-  return isFlowAlreadyAdded(flow);
-}
-
 function selectFlow(flow) {
-  if (isFlowDisabled(flow)) {
-    return;
-  }
-
   emit('update:flowUuid', flow.uuid);
   emit('update:name', flow.name);
 }
@@ -281,26 +264,9 @@ function selectFlow(flow) {
     color: $unnnic-color-weni-600;
   }
 
-  &:hover:not(&--disabled) {
-    border: $unnnic-border-width-thinner solid $unnnic-color-weni-500;
-    background: rgba(0, 222, 210, 0.16);
-  }
-
   &--selected {
     border: $unnnic-border-width-thinner solid $unnnic-color-weni-500;
     background: rgba(0, 222, 210, 0.16);
-  }
-
-  &--disabled {
-    user-select: none;
-    border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
-    background-color: $unnnic-color-neutral-soft;
-    cursor: not-allowed;
-  }
-
-  &--disabled,
-  &--disabled &__icon {
-    color: $unnnic-color-neutral-clean;
   }
 }
 </style>
