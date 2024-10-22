@@ -54,6 +54,15 @@ describe('ModalAddSite', () => {
       await input.setValue('invalid-url');
       expect(wrapper.vm.submitDisabled).toBe(true);
     });
+
+    it('should replace spaces on input site', async () => {
+      const input = wrapper.findComponent('[data-test="site-input"]');
+
+      await input.setValue(' www . valid - url . com ');
+      wrapper.vm.onInput({ target: { value: ' www . valid - url . com ' } });
+
+      expect(wrapper.vm.site).toBe('www.valid-url.com');
+    });
   });
 
   describe('when the user enters a valid URL', () => {
