@@ -38,6 +38,7 @@
           :placeholder="
             $t('content_bases.sites.sidebar_add.fields.link.placeholder')
           "
+          @input="onInput"
         ></UnnnicInput>
       </UnnnicFormElement>
     </section>
@@ -62,6 +63,11 @@ const props = defineProps({
 });
 
 const site = ref('');
+
+const onInput = (event) => {
+  const siteWithoutSpaces = event.target.value.trim().split(/\s+/).join('');
+  site.value = siteWithoutSpaces;
+};
 
 const submitDisabled = computed(() => !validURL(site.value));
 
