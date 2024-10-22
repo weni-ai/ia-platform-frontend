@@ -89,6 +89,7 @@ export const Actions = {
         content_base,
         fallback,
         group,
+        flow_uuid,
       }) => ({
         uuid,
         name,
@@ -96,6 +97,7 @@ export const Actions = {
         type: action_type,
         editable,
         group: Object.values(groups).includes(group) ? group : 'custom',
+        flow_uuid,
       }),
     );
   },

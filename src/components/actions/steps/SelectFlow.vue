@@ -45,33 +45,41 @@
     v-show="!(itemsData.length === 0 && items.status.value === 'complete')"
     class="flow-modal__body__flow__list"
   >
-    <UnnnicToolTip
-      v-for="(item, index) in itemsData"
-      :key="index"
-      side="top"
-      :text="item.name"
-      enabled
+    <section
+      v-for="item in itemsData"
+      :key="item.uuid"
+      :class="[
+        'flow-item',
+        {
+          'flow-item--selected': isFlowSelected(item),
+        },
+      ]"
+      :data-test="`flow-${item.uuid}`"
+      @click="selectFlow(item)"
     >
-      <section
-        :class="[
-          'flow-item',
-          {
-            'flow-item--selected': isFlowSelected(item),
-          },
-        ]"
-        :data-test="`flow-${item.uuid}`"
-        @click="selectFlow(item)"
+      <UnnnicIcon
+        icon="account_tree"
+        size="ant"
+        scheme="weni-600"
+      />
+
+      <p class="text-truncate">{{ item.name }}</p>
+
+      <UnnnicToolTip
+        v-if="item.actions.length"
+        side="top"
+        :text="getTreatedTooltipFlowActions(item)"
+        enabled
+        class="flow-item__actions"
       >
         <UnnnicIcon
-          icon="account_tree"
+          icon="bolt"
           size="sm"
-          class="flow-item__icon"
-          scheme="inherit"
+          scheme="neutral-clean"
         />
-
-        <p class="text-truncate">{{ item.name }}</p>
-      </section>
-    </UnnnicToolTip>
+        {{ item.actions.length }}
+      </UnnnicToolTip>
+    </section>
 
     <template v-if="items.status.value === 'loading'">
       <UnnnicSkeletonLoading
@@ -101,6 +109,7 @@ import {
   watch,
 } from 'vue';
 import { useActionsStore } from '@/store/Actions.js';
+import i18n from '@/utils/plugins/i18n';
 
 const filterName = ref('');
 const intersectionObserver = ref(null);
@@ -128,7 +137,15 @@ const actionsStore = useActionsStore();
 
 const emit = defineEmits(['update:flowUuid', 'update:name']);
 
-const itemsData = computed(() => props.items.data.value);
+const itemsData = computed(() => {
+  const newItemsData = props.items.data.value;
+  return {
+    ...newItemsData?.map((flow) => ({
+      ...flow,
+      actions: getFlowActions(flow.uuid),
+    })),
+  };
+});
 
 watch(
   () => filterName.value,
@@ -177,6 +194,32 @@ watch(
     }
   },
 );
+
+function getFlowActions(flowUuid) {
+  return actionsStore.actions.data
+    .filter((action) => action.flow_uuid === flowUuid)
+    .map((flow) => flow.name);
+}
+
+function getTreatedTooltipFlowActions(flow) {
+  const { actions } = flow;
+
+  if (actions.length === 0) return '';
+
+  const formattedActions =
+    actions.length > 1
+      ? `${actions.slice(0, -1).join(', ')} ${i18n.global.t('and')} ${actions.at(-1)}`
+      : actions[0];
+
+  return i18n.global.t(
+    'modals.actions.add.steps.select_flow.flow_assigned_actions',
+    actions.length,
+    {
+      count: actions.length,
+      actions: formattedActions,
+    },
+  );
+}
 
 function isFlowSelected(flow) {
   return props.flowUuid === flow.uuid;
@@ -260,13 +303,20 @@ function selectFlow(flow) {
   line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
   font-weight: $unnnic-font-weight-regular;
 
-  & &__icon {
-    color: $unnnic-color-weni-600;
+  &:hover {
+    border: $unnnic-border-width-thinner solid $unnnic-color-weni-500;
+    background: rgba(0, 222, 210, 0.16);
   }
 
   &--selected {
     border: $unnnic-border-width-thinner solid $unnnic-color-weni-500;
     background: rgba(0, 222, 210, 0.16);
+  }
+
+  &__actions.unnnic-tooltip {
+    display: flex;
+    align-items: center;
+    color: $unnnic-color-neutral-clean;
   }
 }
 </style>

@@ -1522,7 +1522,7 @@
                 "placeholder": "Buscar flujos"
               }
             },
-            "flow_already_in_use": "Este flujo ya está vinculado a una acción"
+            "flow_assigned_actions": "Este flujo ya ha sido asignado a {count} acción::\n{actions} | Este flujo ya se ha asignado a {count} acciones:\n{actions}"
           },
           "nominate_action": {
             "title": "Nombre acción",
