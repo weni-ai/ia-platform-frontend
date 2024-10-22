@@ -49,6 +49,7 @@ export const Actions = {
       name: data.name,
       prompt: data.prompt,
       type: data.action_type,
+      flow_uuid: data.flow_uuid,
       group:
         templateUuid && Object.values(groups).includes(data.group)
           ? data.group
