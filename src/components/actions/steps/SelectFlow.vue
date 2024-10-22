@@ -71,11 +71,13 @@
         :text="getTreatedTooltipFlowActions(item)"
         enabled
         class="flow-item__actions"
+        data-test="flow-item-actions-tooltip"
       >
         <UnnnicIcon
           icon="bolt"
           size="sm"
           scheme="neutral-clean"
+          data-test="flow-item-actions-icon"
         />
         {{ item.actions.length }}
       </UnnnicToolTip>
