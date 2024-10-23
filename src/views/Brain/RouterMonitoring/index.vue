@@ -32,7 +32,7 @@ export default {
 
 <style lang="scss" scoped>
 section.router-monitoring {
-  display: grid;
+  display: block;
 
   &__content {
     display: grid;

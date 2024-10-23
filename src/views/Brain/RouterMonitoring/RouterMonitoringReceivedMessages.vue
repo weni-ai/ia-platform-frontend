@@ -54,11 +54,6 @@ const MESSAGES_TRIGGER_ACTIONS = i18n.global.t(
 
 const monitoringStore = useMonitoringStore();
 
-const filters = ref({
-  text: '',
-  tag: [tags.value[0]],
-});
-
 const tags = ref([
   {
     value: 'all',
@@ -77,6 +72,10 @@ const tags = ref([
     label: MESSAGES_TRIGGER_ACTIONS,
   },
 ]);
+const filters = ref({
+  text: '',
+  tag: [tags.value[0]],
+});
 
 const table = ref({
   headers: [
@@ -142,17 +141,17 @@ onMounted(() => {
   getReceivedMessages();
 });
 
-watch(pagination, () => getReceivedMessages);
+watch(pagination, () => getReceivedMessages());
 
 watch(
   () => filters.value.tag,
-  () => getReceivedMessages,
+  () => getReceivedMessages(),
 );
 
 watch(
   () => filters.value.text,
   () => {
-    setTimeout(getReceivedMessages, 1000);
+    setTimeout(getReceivedMessages(), 1000);
   },
 );
 </script>
