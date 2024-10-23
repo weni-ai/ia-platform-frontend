@@ -31,7 +31,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.router-monitoring {
+section.router-monitoring {
+  display: grid;
+
   &__content {
     display: grid;
     gap: $unnnic-spacing-md;
