@@ -6,14 +6,6 @@
       flexDirection: 'column',
     }"
   >
-    <UnnnicIntelligenceText
-      tag="p"
-      family="secondary"
-      size="body-gt"
-    >
-      {{ $t('router.actions.description') }}
-    </UnnnicIntelligenceText>
-
     <UnnnicDivider ySpacing="md" />
 
     <ContentList

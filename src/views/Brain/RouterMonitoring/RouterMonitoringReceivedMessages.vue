@@ -158,7 +158,8 @@ watch(
 
 <style lang="scss" scoped>
 .router-monitoring__received-messages {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: $unnnic-spacing-sm;
 
   .received-messages__filters {

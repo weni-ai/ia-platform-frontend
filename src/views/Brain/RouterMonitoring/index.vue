@@ -1,20 +1,13 @@
 <template>
   <section class="router-monitoring">
-    <UnnnicIntelligenceText
-      tag="p"
-      family="secondary"
-      size="body-gt"
-    >
-      {{ $t('router.monitoring.description') }}
-    </UnnnicIntelligenceText>
+    <UnnnicDivider
+      ySpacing="md"
+      class="router-monitoring__divider"
+    />
 
-    <UnnnicDivider ySpacing="md" />
+    <RouterMonitoringPerformance />
 
-    <section class="router-monitoring__content">
-      <RouterMonitoringPerformance />
-
-      <RouterMonitoringReceivedMessages />
-    </section>
+    <RouterMonitoringReceivedMessages />
   </section>
 </template>
 
@@ -32,11 +25,12 @@ export default {
 
 <style lang="scss" scoped>
 section.router-monitoring {
-  display: block;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: $unnnic-spacing-md;
 
-  &__content {
-    display: grid;
-    gap: $unnnic-spacing-md;
+  .router-monitoring__divider {
+    margin: 0;
   }
 }
 </style>

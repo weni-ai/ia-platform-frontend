@@ -55,27 +55,40 @@
     </section>
   </section>
 </template>
-<script setup>
-import i18n from '@/utils/plugins/i18n';
-import { ref } from 'vue';
 
-const answers = ref({
-  success: {
-    title: i18n.global.t('router.monitoring.success.title'),
-    tooltip: i18n.global.t('router.monitoring.success.tooltip'),
-    value: 0,
-  },
-  failed: {
-    title: i18n.global.t('router.monitoring.failed.title'),
-    tooltip: i18n.global.t('router.monitoring.failed.tooltip'),
-    value: 0,
-  },
-  action: {
-    title: i18n.global.t('router.monitoring.action.title'),
-    tooltip: i18n.global.t('router.monitoring.action.tooltip'),
-    value: 0,
-  },
+<script setup>
+import { computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
+import { useMonitoringStore } from '@/store/Monitoring';
+import i18n from '@/utils/plugins/i18n';
+
+const monitoringStore = useMonitoringStore();
+const route = useRoute();
+
+const createAnswer = (key) => ({
+  title: i18n.global.t(`router.monitoring.${key}.title`),
+  tooltip: i18n.global.t(`router.monitoring.${key}.tooltip`),
+  value: monitoringStore.messages.performance[key],
 });
+
+const answers = computed(() => ({
+  success: createAnswer('success'),
+  failed: createAnswer('failed'),
+  action: createAnswer('action'),
+}));
+
+function getMessagesPerformance() {
+  monitoringStore.loadMessagesPerformance({});
+}
+
+watch(
+  () => route.query,
+  () => getMessagesPerformance(),
+  {
+    immediate: true,
+  },
+);
 </script>
 
 <style lang="scss" scoped>

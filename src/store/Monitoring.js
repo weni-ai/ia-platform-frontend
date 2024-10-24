@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, reactive } from 'vue';
+import { useRoute } from 'vue-router';
 
 import nexusaiAPI from '@/api/nexusaiAPI.js';
 import globalStore from '.';
@@ -9,10 +10,18 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     () => globalStore.state.Auth.connectProjectUuid,
   );
 
+  const route = useRoute();
+
   const messages = reactive({
     status: null,
     data: [],
     count: 0,
+    performance: {
+      status: null,
+      action: 0,
+      success: 0,
+      failed: 0,
+    },
   });
 
   async function loadMessages({ page, pageInterval, tag, text, started_day }) {
@@ -36,8 +45,31 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     }
   }
 
+  async function loadMessagesPerformance() {
+    const { started_day, ended_day } = route.query;
+    try {
+      messages.performance.status = 'loading';
+
+      const response = await nexusaiAPI.router.monitoring.messages.performance({
+        projectUuid: connectProjectUuid.value,
+        started_day,
+        ended_day,
+      });
+
+      messages.performance = {
+        action: response.action_answers,
+        success: response.success_answers,
+        failed: response.failed_answers,
+      };
+      messages.performance.status = 'complete';
+    } catch (error) {
+      messages.performance.status = 'error';
+    }
+  }
+
   return {
     messages,
     loadMessages,
+    loadMessagesPerformance,
   };
 });

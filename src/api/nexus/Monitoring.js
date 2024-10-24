@@ -27,5 +27,19 @@ export const Monitoring = {
         })),
       };
     },
+
+    async performance({ projectUuid, started_day, ended_day }) {
+      const params = cleanParams({
+        started_day,
+        ended_day,
+      });
+      const {
+        data: { results },
+      } = await request.$http.get(`api/${projectUuid}/tags-analytics/`, {
+        params,
+      });
+
+      return results;
+    },
   },
 };
