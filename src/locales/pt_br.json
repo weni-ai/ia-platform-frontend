@@ -1543,7 +1543,7 @@
                 "placeholder": "Pesquisar fluxo"
               }
             },
-            "flow_already_in_use": "Esse fluxo já está vinculado à uma ação"
+            "flow_assigned_actions": "Esse fluxo já foi atribuído para {count} ação:\n{actions} | Esse fluxo já foi atribuído para {count} ações:\n{actions}"
           },
           "nominate_action": {
             "title": "Nomear ação",

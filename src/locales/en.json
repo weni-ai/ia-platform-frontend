@@ -1543,7 +1543,7 @@
                 "placeholder": "Search flow"
               }
             },
-            "flow_already_in_use": "This flow is already linked to an action"
+            "flow_assigned_actions": "This flow has already been assigned to {count} action:\n{actions} | This flow has already been assigned to {count} actions:\n{actions}"
           },
           "nominate_action": {
             "title": "Name action",
