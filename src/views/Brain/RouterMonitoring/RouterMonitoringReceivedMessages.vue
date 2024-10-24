@@ -86,7 +86,7 @@ const table = ref({
   rows: [],
 });
 const pagination = ref(1);
-const paginationInterval = ref(5);
+const paginationInterval = ref(15);
 const isTableLoading = computed(
   () => monitoringStore.messages.status === 'loading',
 );

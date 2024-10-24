@@ -8,8 +8,8 @@ export const Monitoring = {
         tag,
         text,
         started_day,
-        limit: pageInterval,
-        offset: page * pageInterval,
+        page_size: pageInterval,
+        page,
       });
       const {
         data: { results, count },
