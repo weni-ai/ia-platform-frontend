@@ -22,7 +22,17 @@
       />
     </section>
 
+    <UnnnicIntelligenceText
+      v-if="showNoMessageReceivedInfo"
+      color="neutral-clean"
+      family="secondary"
+      size="body-gt"
+      tag="p"
+    >
+      {{ $t('router.monitoring.no_message_received') }}
+    </UnnnicIntelligenceText>
     <UnnnicTableNext
+      v-else
       v-model:pagination="pagination"
       hideHeaders
       class="received-messages__table"
@@ -43,6 +53,7 @@ import { format } from 'date-fns';
 import { useMonitoringStore } from '@/store/Monitoring';
 
 import i18n from '@/utils/plugins/i18n';
+import { useRoute } from 'vue-router';
 
 const ANSWERS_FOUND = i18n.global.t('router.monitoring.filters.answers_found');
 const ANSWERS_NOT_FOUND = i18n.global.t(
@@ -52,6 +63,7 @@ const MESSAGES_TRIGGER_ACTIONS = i18n.global.t(
   'router.monitoring.filters.messages_that_trigger_actions',
 );
 
+const route = useRoute();
 const monitoringStore = useMonitoringStore();
 
 const tags = ref([
@@ -68,7 +80,7 @@ const tags = ref([
     label: ANSWERS_NOT_FOUND,
   },
   {
-    value: 'action',
+    value: 'action_started',
     label: MESSAGES_TRIGGER_ACTIONS,
   },
 ]);
@@ -79,9 +91,9 @@ const filters = ref({
 
 const table = ref({
   headers: [
-    { content: '', size: 0.8 },
-    { content: '', size: 8.2 },
-    { content: '', size: 3 },
+    { content: '', size: 'auto' },
+    { content: '' },
+    { content: '', size: 'auto' },
   ],
   rows: [],
 });
@@ -89,6 +101,14 @@ const pagination = ref(1);
 const paginationInterval = ref(15);
 const isTableLoading = computed(
   () => monitoringStore.messages.status === 'loading',
+);
+
+const showNoMessageReceivedInfo = computed(
+  () =>
+    monitoringStore.messages.count === 0 &&
+    filters.value.tag[0].value === 'all' &&
+    !filters.value.text &&
+    !isTableLoading.value,
 );
 
 const formattedMessagesRows = computed(() => {
@@ -103,7 +123,7 @@ const formattedMessagesRows = computed(() => {
       leftIcon: 'cancel',
       text: ANSWERS_NOT_FOUND,
     },
-    action: {
+    action_started: {
       scheme: 'aux-blue-500',
       leftIcon: 'bolt',
       text: MESSAGES_TRIGGER_ACTIONS,
@@ -137,9 +157,13 @@ const getReceivedMessages = ({ started_day = '' } = {}) => {
   });
 };
 
-onMounted(() => {
-  getReceivedMessages();
-});
+watch(
+  () => route.query,
+  () => getReceivedMessages(),
+  {
+    immediate: true,
+  },
+);
 
 watch(pagination, () => getReceivedMessages());
 
@@ -170,13 +194,11 @@ watch(
 
   .received-messages__table {
     :deep(.unnnic-table-next__body-row) {
-      .unnnic-table-next__body-cell {
-        &:first-child {
+      $body-cell: '.unnnic-table-next__body-cell';
+
+      &:has(#{$body-cell} + #{$body-cell}) {
+        #{$body-cell}:first-child {
           color: $unnnic-color-neutral-clean;
-        }
-        &:last-child {
-          display: flex;
-          justify-content: flex-end;
         }
       }
     }

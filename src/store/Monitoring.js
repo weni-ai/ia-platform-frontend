@@ -24,7 +24,8 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     },
   });
 
-  async function loadMessages({ page, pageInterval, tag, text, started_day }) {
+  async function loadMessages({ page, pageInterval, tag, text }) {
+    const { started_day, ended_day } = route.query;
     try {
       messages.status = 'loading';
 
@@ -35,6 +36,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
         tag,
         text,
         started_day,
+        ended_day,
       });
 
       messages.data = data;
@@ -57,9 +59,9 @@ export const useMonitoringStore = defineStore('monitoring', () => {
       });
 
       messages.performance = {
-        action: response.action_answers,
-        success: response.success_answers,
-        failed: response.failed_answers,
+        action: response?.action_percentage || 0,
+        success: response?.succeed_percentage || 0,
+        failed: response?.failed_percentage || 0,
       };
       messages.performance.status = 'complete';
     } catch (error) {

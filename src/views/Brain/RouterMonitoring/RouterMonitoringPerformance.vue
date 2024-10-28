@@ -43,7 +43,14 @@
         </UnnnicToolTip>
       </header>
 
+      <UnnnicSkeletonLoading
+        v-if="isLoadingPerformance"
+        tag="div"
+        width="50px"
+        height="31px"
+      />
       <UnnnicIntelligenceText
+        v-else
         tag="p"
         family="secondary"
         size="title-md"
@@ -77,6 +84,10 @@ const answers = computed(() => ({
   failed: createAnswer('failed'),
   action: createAnswer('action'),
 }));
+
+const isLoadingPerformance = computed(
+  () => monitoringStore.messages.performance.status === 'loading',
+);
 
 function getMessagesPerformance() {
   monitoringStore.loadMessagesPerformance({});

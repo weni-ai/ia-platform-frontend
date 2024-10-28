@@ -16,7 +16,7 @@
     "@sentry/browser": "^5.29.2",
     "@sentry/integrations": "^5.29.2",
     "@sentry/vue": "^8.9.2",
-    "@weni/unnnic-system": "2.16.1-alpha.0",
+    "@weni/unnnic-system": "2.16.1-alpha.1",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",

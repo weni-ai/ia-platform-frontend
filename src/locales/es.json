@@ -91,7 +91,8 @@
         "answers_found": "Respuestas encontradas",
         "answers_not_found": "Respuestas no encontradas",
         "messages_that_trigger_actions": "Mensajes que desencadenaron acciones"
-      }
+      },
+      "no_message_received": "Ningún mensaje recibido"
     },
     "actions": {
       "title": "Acciones",

@@ -3,11 +3,20 @@ import { cleanParams } from '@/utils/http';
 
 export const Monitoring = {
   messages: {
-    async list({ projectUuid, page, pageInterval, tag, text, started_day }) {
+    async list({
+      projectUuid,
+      page,
+      pageInterval,
+      tag,
+      text,
+      started_day,
+      ended_day,
+    }) {
       const params = cleanParams({
         tag,
         text,
         started_day,
+        ended_day,
         page_size: pageInterval,
         page,
       });
@@ -33,13 +42,14 @@ export const Monitoring = {
         started_day,
         ended_day,
       });
-      const {
-        data: { results },
-      } = await request.$http.get(`api/${projectUuid}/tags-analytics/`, {
-        params,
-      });
+      const { data } = await request.$http.get(
+        `api/${projectUuid}/tags-analytics/`,
+        {
+          params,
+        },
+      );
 
-      return results;
+      return data;
     },
   },
 };
