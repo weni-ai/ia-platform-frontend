@@ -42,11 +42,16 @@ const store = useStore();
 const route = useRoute();
 const router = useRouter();
 
-const brainRoutes = computed(() =>
-  store.state.User.me.nickname?.includes('@weni.ai')
+const brainRoutes = computed(() => {
+  const allowedUser = runtimeVariables
+    .get('VITE_USERS_CAN_MONITORING')
+    ?.split(', ')
+    .includes(store.state.User.me.nickname);
+
+  return allowedUser
     ? BRAIN_ROUTES
-    : BRAIN_ROUTES.filter((route) => route.title !== 'monitoring'),
-);
+    : BRAIN_ROUTES.filter((route) => route.title !== 'monitoring');
+});
 
 const activeNav = computed(() => {
   return brainRoutes.value.find((e) => e.page === route.name)?.page;
