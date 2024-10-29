@@ -7,6 +7,7 @@
       color="neutral-darkest"
       weight="bold"
       class="performance__title"
+      data-test="title"
     >
       {{ $t('router.monitoring.performance') }}
     </UnnnicIntelligenceText>
@@ -15,6 +16,7 @@
       v-for="(answer, key) in Object.entries(answers)"
       :key="key"
       :class="['performance__card', `performance__card--${answer[0]}`]"
+      data-test="card"
     >
       <header class="card__header">
         <UnnnicIntelligenceText
@@ -23,6 +25,7 @@
           size="body-gt"
           color="neutral-darkest"
           class="header__title"
+          data-test="card-title"
         >
           {{ answer[1].title }}
         </UnnnicIntelligenceText>
@@ -33,6 +36,7 @@
           enabled
           maxWidth="18rem"
           class="header__tooltip"
+          data-test="card-tooltip"
         >
           <UnnnicIcon
             icon="info"
@@ -45,6 +49,7 @@
 
       <UnnnicSkeletonLoading
         v-if="isLoadingPerformance"
+        data-test="card-value-skeleton"
         tag="div"
         width="50px"
         height="31px"
@@ -56,8 +61,9 @@
         size="title-md"
         color="neutral-darkest"
         weight="bold"
+        data-test="card-value"
       >
-        {{ answer[1].value }}%
+        {{ Math.round(answer[1].value) }}%
       </UnnnicIntelligenceText>
     </section>
   </section>

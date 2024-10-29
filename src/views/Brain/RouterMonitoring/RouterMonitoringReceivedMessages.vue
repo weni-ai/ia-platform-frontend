@@ -19,6 +19,7 @@
       <UnnnicSelectSmart
         v-model="filters.tag"
         :options="tags"
+        orderedByIndex
       />
     </section>
 
@@ -54,6 +55,7 @@ import { useMonitoringStore } from '@/store/Monitoring';
 
 import i18n from '@/utils/plugins/i18n';
 import { useRoute } from 'vue-router';
+import { debounce } from 'lodash';
 
 const ANSWERS_FOUND = i18n.global.t('router.monitoring.filters.answers_found');
 const ANSWERS_NOT_FOUND = i18n.global.t(
@@ -145,7 +147,7 @@ const formattedMessagesRows = computed(() => {
   }));
 });
 
-const getReceivedMessages = ({ started_day = '' } = {}) => {
+function getReceivedMessages() {
   const { tag, text } = filters.value;
   const tagString = tag[0].value;
   monitoringStore.loadMessages({
@@ -153,7 +155,6 @@ const getReceivedMessages = ({ started_day = '' } = {}) => {
     pageInterval: paginationInterval.value,
     tag: tagString === 'all' ? '' : tagString,
     text,
-    started_day,
   });
 };
 
@@ -174,9 +175,9 @@ watch(
 
 watch(
   () => filters.value.text,
-  () => {
-    setTimeout(getReceivedMessages(), 1000);
-  },
+  debounce(() => {
+    getReceivedMessages()
+  }, 300),
 );
 </script>
 
