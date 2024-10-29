@@ -19,7 +19,7 @@
           class="customization__form-element"
         >
           <UnnnicInput
-            v-model="brain.agent.name.current"
+            v-model="brain.name.current"
             data-test="input-name"
             :placeholder="$t('customization.placeholders.name')"
             :type="errorRequiredFields.name ? 'error' : 'normal'"
@@ -40,7 +40,7 @@
           class="customization__form-element"
         >
           <UnnnicInput
-            v-model="brain.agent.role.current"
+            v-model="brain.role.current"
             data-test="input-role"
             :placeholder="$t('customization.placeholders.occupation')"
             :type="errorRequiredFields.role ? 'error' : 'normal'"
@@ -61,14 +61,10 @@
         >
           <UnnnicSelectSmart
             data-test="select-personality"
-            :modelValue="
-              handlePersonalityValue(brain.agent.personality.current)
-            "
+            :modelValue="handlePersonalityValue(brain.personality.current)"
             :options="personalities"
             orderedByIndex
-            @update:model-value="
-              brain.agent.personality.current = $event[0].value
-            "
+            @update:model-value="brain.personality.current = $event[0].value"
           />
         </UnnnicFormElement>
       </div>
@@ -86,7 +82,7 @@
         >
           <UnnnicTextArea
             v-bind="$props"
-            v-model="brain.agent.goal.current"
+            v-model="brain.goal.current"
             data-test="textarea"
             :placeholder="$t('customization.placeholders.goal')"
             :type="errorRequiredFields.goal ? 'error' : 'normal'"
@@ -150,7 +146,7 @@
         type="tertiary"
         iconLeft="add-1"
         :disabled="false"
-        @click="addInstruction"
+        @click="addEmptyInstruction"
       />
     </div>
 
@@ -187,14 +183,38 @@
 </template>
 
 <script>
-import nexusaiAPI from '../../api/nexusaiAPI';
+import { useBrainCustomizationStore } from '@/store/BrainCustomization';
 import LoadingFormElement from '../../components/LoadingFormElement.vue';
 import FieldErrorRequired from './Preview/FieldErrorRequired.vue';
+import { onMounted } from 'vue';
+import { useAlertStore } from '@/store/Alert.js';
+import i18n from '@/utils/plugins/i18n';
 
 export default {
   components: {
     FieldErrorRequired,
     LoadingFormElement,
+  },
+
+  setup() {
+    const brainCustomizationStore = useBrainCustomizationStore();
+    const alertStore = useAlertStore();
+
+    onMounted(() => {
+      brainCustomizationStore.load().then(() => {
+        if (brainCustomizationStore.status === 'error') {
+          alertStore.add({
+            type: 'error',
+            text: i18n.global.t('customization.invalid_get_data'),
+          });
+        }
+      });
+    });
+
+    return {
+      alertStore,
+      brainCustomizationStore,
+    };
   },
 
   data() {
@@ -257,32 +277,23 @@ export default {
     },
 
     loading() {
-      return this.brain.customizationStatus === 'loading';
+      return this.brain.status === 'loading';
     },
 
     brain() {
-      return this.$store.state.Brain;
+      return this.brainCustomizationStore;
     },
 
     errorRequiredFields() {
-      return this.brain.customizationErrorRequiredFields;
+      return this.brain.errorRequiredFields;
     },
-  },
-
-  mounted() {
-    this.$store.dispatch('loadBrainCustomization');
   },
 
   methods: {
-    addInstruction() {
-      this.brain.instructions.current.push({
-        instruction: '',
-      });
-
-      this.brain.instructions.old.push({
-        instruction: '',
-      });
+    addEmptyInstruction() {
+      this.brainCustomizationStore.addEmptyInstruction();
     },
+
     handleShowRemoveModal(index) {
       this.showRemoveModal = true;
       this.currentInstruction = index;
@@ -296,34 +307,26 @@ export default {
       try {
         this.removing = true;
 
-        const { id: removeId } =
-          this.brain.instructions.current[this.currentInstruction];
-
-        if (removeId) {
-          await nexusaiAPI.router.customization.delete({
-            projectUuid: this.$store.state.Auth.connectProjectUuid,
-            id: removeId,
-          });
-        }
-
-        this.brain.instructions.current.splice(this.currentInstruction, 1);
-        this.brain.instructions.old.splice(this.currentInstruction, 1);
+        await this.brainCustomizationStore.removeInstruction(
+          this.currentInstruction,
+        );
 
         this.showRemoveModal = false;
         this.currentInstruction = null;
 
-        this.$store.state.alert = {
+        this.alertStore.add({
           type: 'success',
           text: this.$t('customization.instructions.modals.success_message'),
-        };
+        });
+
         if (this.brain.instructions.current.length === 0) {
-          this.addInstruction();
+          this.addEmptyInstruction();
         }
-      } catch (e) {
-        this.$store.state.alert = {
+      } catch {
+        this.alertStore.add({
           type: 'error',
           text: this.$t('customization.instructions.modals.error_message'),
-        };
+        });
       } finally {
         this.removing = false;
       }

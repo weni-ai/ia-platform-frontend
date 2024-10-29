@@ -4,6 +4,22 @@ import nexusaiAPI from '@/api/nexusaiAPI';
 import FieldErrorRequired from '@/views/Brain/Preview/FieldErrorRequired.vue';
 import { createStore } from 'vuex';
 import { expect } from 'vitest';
+import { createTestingPinia } from '@pinia/testing';
+import { useBrainCustomizationStore } from '@/store/BrainCustomization';
+
+vi.spyOn(nexusaiAPI.router.customization, 'read').mockResolvedValue({
+  data: {
+    agent: {
+      name: '',
+      role: '',
+      personality: '',
+      goal: '',
+    },
+    instructions: [],
+  },
+});
+
+const pinia = createTestingPinia({ stubActions: false });
 
 const store = createStore({
   state() {
@@ -40,6 +56,7 @@ const store = createStore({
 describe('RouterCustomization', () => {
   let wrapper;
   let dispatchSpy;
+  let brainCustomizationStore;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -48,9 +65,11 @@ describe('RouterCustomization', () => {
 
     wrapper = mount(RouterCustomization, {
       global: {
-        plugins: [store],
+        plugins: [store, pinia],
       },
     });
+
+    brainCustomizationStore = useBrainCustomizationStore();
   });
 
   test('renders title and subtitle', () => {
@@ -62,7 +81,7 @@ describe('RouterCustomization', () => {
   });
 
   test('calls loadBrainCustomization on mount', () => {
-    expect(dispatchSpy).toHaveBeenCalledWith('loadBrainCustomization');
+    expect(brainCustomizationStore.load).toHaveBeenCalled();
   });
 
   test('renders input fields and handles input changes', async () => {
@@ -80,15 +99,13 @@ describe('RouterCustomization', () => {
     ]);
     await goalTextArea.setValue('Test Goal');
 
-    expect(wrapper.vm.brain.agent.name.current).toBe('Test Name');
-    expect(wrapper.vm.brain.agent.role.current).toBe('Test Role');
-    expect(wrapper.vm.brain.agent.personality.current).toBe('Amigável');
-    expect(wrapper.vm.brain.agent.goal.current).toBe('Test Goal');
+    expect(wrapper.vm.brain.name.current).toBe('Test Name');
+    expect(wrapper.vm.brain.role.current).toBe('Test Role');
+    expect(wrapper.vm.brain.personality.current).toBe('Amigável');
+    expect(wrapper.vm.brain.goal.current).toBe('Test Goal');
   });
 
   test('adds and removes instructions if instructions length equal 0', async () => {
-    await wrapper.vm.addInstruction();
-
     expect(wrapper.vm.brain.instructions.current.length).toBe(1);
 
     wrapper.vm.handleShowRemoveModal(0);
@@ -113,7 +130,7 @@ describe('RouterCustomization', () => {
       'instruction 01',
     );
 
-    await wrapper.vm.addInstruction();
+    await wrapper.vm.addEmptyInstruction();
 
     const secondInstructionInput = wrapper.findComponent(
       '[data-test="instruction-1"]',
@@ -142,7 +159,7 @@ describe('RouterCustomization', () => {
   });
 
   test('shows loading elements', async () => {
-    store.state.Brain.customizationStatus = 'loading';
+    brainCustomizationStore.status = 'loading';
 
     await wrapper.vm.$nextTick();
 
@@ -154,10 +171,10 @@ describe('RouterCustomization', () => {
   });
 
   test('handles validation errors', async () => {
-    store.state.Brain.customizationStatus = 'idle';
-    store.state.Brain.customizationErrorRequiredFields.name = true;
-    store.state.Brain.customizationErrorRequiredFields.role = true;
-    store.state.Brain.customizationErrorRequiredFields.goal = true;
+    brainCustomizationStore.status = 'idle';
+    brainCustomizationStore.errorRequiredFields.name = true;
+    brainCustomizationStore.errorRequiredFields.role = true;
+    brainCustomizationStore.errorRequiredFields.goal = true;
 
     await wrapper.vm.$nextTick();
     const errorFields = wrapper.findAllComponents(FieldErrorRequired);

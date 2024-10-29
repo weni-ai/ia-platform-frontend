@@ -124,6 +124,7 @@ import PreviewMedia from '@/components/PreviewMedia.vue';
 import QuickTestWarn from '@/components/QuickTest/QuickTestWarn.vue';
 import PreviewPlaceholder from '../../Brain/Preview/Placeholder.vue';
 import MessageInput from './MessageInput.vue';
+import { useBrainCustomizationStore } from '@/store/BrainCustomization';
 
 import FlowPreview from '@/utils/FlowPreview';
 import { lowerFirstCapitalLetter } from '@/utils/handleLetters';
@@ -178,6 +179,14 @@ export default {
     },
   },
 
+  setup() {
+    const brainCustomizationStore = useBrainCustomizationStore();
+
+    return {
+      brainCustomizationStore,
+    };
+  },
+
   emits: ['messages'],
 
   data() {
@@ -194,7 +203,11 @@ export default {
     },
 
     shouldShowRequireSaveWarn() {
-      return this.usePreview && !this.$store.getters.isBrainSaveButtonDisabled;
+      return (
+        this.usePreview &&
+        (!this.$store.getters.isBrainSaveButtonDisabled ||
+          this.brainCustomizationStore.hasChanged)
+      );
     },
 
     language() {
