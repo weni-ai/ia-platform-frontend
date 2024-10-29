@@ -13,7 +13,6 @@ describe('IntelligenceTab', () => {
       },
       global: {
         stubs: {
-          UnnnicFormElement: true,
           UnnnicInput: true,
           UnnnicCard: true,
         },

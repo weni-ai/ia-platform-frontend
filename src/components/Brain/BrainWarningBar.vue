@@ -1,10 +1,16 @@
 <template>
   <section class="news-bar news-bar--warn">
+    <UnnnicIcon
+      icon="warning"
+      size="ant"
+      class="icon"
+    />
+
     <UnnnicIntelligenceText
       color="neutral-white"
       family="secondary"
       weight="bold"
-      size="body-lg"
+      size="body-gt"
       data-test="news-bar-text"
     >
       {{ $t('router.warn.brain_is_deactivated') }}
@@ -12,8 +18,6 @@
       <RouterLink :to="routerLinkTo">
         {{ $t('router.warn.click_here') }}
       </RouterLink>
-
-      {{ $t('router.warn.activate_it') }}
     </UnnnicIntelligenceText>
   </section>
 </template>
@@ -29,10 +33,17 @@ const routerLinkTo = computed(() => ({
 
 <style lang="scss" scoped>
 .news-bar {
+  display: flex;
+  align-items: center;
+  gap: $unnnic-spacing-xs;
   padding: $unnnic-spacing-ant $unnnic-spacing-lg;
 
   &--warn {
-    background-color: $unnnic-color-aux-yellow-500;
+    background-color: $unnnic-color-aux-orange-100;
+  }
+
+  span {
+    color: $unnnic-color-aux-yellow-500;
   }
 
   a {

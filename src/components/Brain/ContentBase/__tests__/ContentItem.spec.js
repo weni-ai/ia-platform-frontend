@@ -13,7 +13,11 @@ nexusaiAPI.intelligences.contentBases.files.download = vi
 
 function createFileObject(
   type,
-  { status = 'uploaded', created_at = '2024-01-01T00:00:00.000Z' } = {},
+  {
+    status = 'uploaded',
+    editable = true,
+    created_at = '2024-01-01T00:00:00.000Z',
+  } = {},
 ) {
   const now = new Date().toISOString();
 
@@ -25,6 +29,7 @@ function createFileObject(
       description: 'When the user wants to go to this action',
       created_at: now,
       status,
+      editable,
     },
     site: {
       uuid: '1234',
@@ -84,6 +89,7 @@ describe('ContentItem.vue', () => {
 
         global: {
           plugins: [store],
+          stubs: ['teleport'],
         },
       });
     });
@@ -99,6 +105,29 @@ describe('ContentItem.vue', () => {
         await wrapper.element.firstElementChild.click();
 
         expect(wrapper.emitted('click')).toHaveLength(1);
+      });
+    });
+
+    describe('when it is an action with editable boolean', () => {
+      const checkRemoveActionVisibility = async (editable, shouldExist) => {
+        await wrapper.setProps({
+          file: createFileObject('action', { editable }),
+        });
+
+        const removeAction = wrapper.find('[data-test="Remove action"]');
+        expect(removeAction.exists()).toBe(shouldExist);
+      };
+
+      describe('is false', () => {
+        it('does not show the remove action', async () => {
+          await checkRemoveActionVisibility(false, false);
+        });
+      });
+
+      describe('is true', () => {
+        it('shows the remove action', async () => {
+          await checkRemoveActionVisibility(true, true);
+        });
       });
     });
   });
