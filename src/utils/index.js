@@ -33,7 +33,13 @@ export const BRAIN_ROUTES = [
     icon: 'person',
     preview: true,
   },
-  { title: 'content', page: 'router-content', icon: 'article', preview: true },
+  {
+    title: 'content',
+    description: i18n.global.t('content_bases.description'),
+    page: 'router-content',
+    icon: 'article',
+    preview: true,
+  },
   {
     title: 'actions',
     description: i18n.global.t('router.actions.description'),

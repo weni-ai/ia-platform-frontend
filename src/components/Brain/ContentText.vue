@@ -1,15 +1,5 @@
 <template>
-  <UnnnicSkeletonLoading
-    v-if="isLoading"
-    tag="div"
-    height="100%"
-    class="content-text__loading"
-  />
-
-  <section
-    v-else
-    class="content-text__container"
-  >
+  <section class="content-text__container">
     <header>
       <UnnnicIntelligenceText
         tag="p"
@@ -20,38 +10,39 @@
         {{ $t('content_bases.text.description') }}
       </UnnnicIntelligenceText>
     </header>
-    <textarea
-      id="contentTextArea"
-      cols="30"
-      :value="modelValue"
-      class="content-text__textarea"
-      :placeholder="$t('content_bases.write_content_placeholder')"
-      @input="updateModelValue"
-    ></textarea>
+
+    <BasesFormText
+      v-model="modelValue.current"
+      useUpdate
+      :item="{
+        isLoading,
+        uuid: store.state.Brain.contentText.uuid,
+        oldValue: store.state.Brain.contentText.old,
+      }"
+      @update:uuid="store.state.Brain.contentText.uuid = $event"
+      @update:old-value="store.state.Brain.contentText.old = $event"
+    />
   </section>
 </template>
 
 <script setup>
-import { ref, toRefs } from 'vue';
+import BasesFormText from '@/views/repository/content/BasesFormText.vue';
+import { useStore } from 'vuex';
 
 const props = defineProps({
+  modelValue: {
+    type: Object,
+    default() {
+      return {};
+    },
+  },
+
   isLoading: {
     type: Boolean,
-    default: false,
-  },
-  modelValue: {
-    type: String,
-    default: '',
   },
 });
 
-const emit = defineEmits(['update:modelValue']);
-
-const { isLoading, modelValue } = toRefs(props);
-
-const updateModelValue = (event) => {
-  emit('update:modelValue', event.target.value);
-};
+const store = useStore();
 </script>
 
 <style lang="scss" scoped>
@@ -60,40 +51,10 @@ const updateModelValue = (event) => {
   flex-direction: column;
   flex: 1;
   gap: $unnnic-spacing-md;
-  padding: 0 0 $unnnic-spacing-sm 0;
   height: 100%;
 }
 
 .content-text__loading {
   height: 100%;
-}
-
-.content-text__textarea {
-  resize: none;
-  flex-grow: 1;
-  padding: $unnnic-spacing-sm;
-  font-family: $unnnic-font-family-secondary;
-  font-size: $unnnic-font-size-body-gt;
-  line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
-  font-weight: $unnnic-font-weight-regular;
-  color: $unnnic-color-neutral-dark;
-  border: none;
-  border-radius: $unnnic-border-radius-sm;
-  outline-style: solid;
-  outline-color: $unnnic-color-neutral-cleanest;
-  outline-width: $unnnic-border-width-thinner;
-  outline-offset: -$unnnic-border-width-thinner;
-
-  &::placeholder {
-    color: $unnnic-color-neutral-cleanest;
-  }
-
-  &:focus {
-    outline-color: $unnnic-color-neutral-clean;
-  }
-
-  &::-webkit-scrollbar {
-    margin-right: $unnnic-inset-sm;
-  }
 }
 </style>

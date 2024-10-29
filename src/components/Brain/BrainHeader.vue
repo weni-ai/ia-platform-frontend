@@ -21,9 +21,17 @@
         {{ currentBrainRoute.description }}
       </UnnnicIntelligenceText>
     </section>
-
     <UnnnicButton
-      v-if="!['router-monitoring', 'router-actions'].includes(route.name)"
+      v-if="route.name === 'router-personalization'"
+      class="save-button"
+      :disabled="brainCustomization.isSaveButtonDisabled"
+      :loading="brainCustomization.isSaving"
+      @click="brainCustomization.save"
+    >
+      {{ $t('router.tunings.save_changes') }}
+    </UnnnicButton>
+    <UnnnicButton
+      v-else-if="route.name === 'router-tunings'"
       class="save-button"
       :disabled="$store.getters.isBrainSaveButtonDisabled"
       :loading="$store.state.Brain.isSavingChanges"
@@ -31,9 +39,8 @@
     >
       {{ $t('router.tunings.save_changes') }}
     </UnnnicButton>
-
     <UnnnicInputDatePicker
-      v-if="showDateFilter"
+      v-else-if="showDateFilter"
       v-model="dateFilter"
       size="sm"
       position="right"
@@ -44,8 +51,9 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { BRAIN_ROUTES } from '@/utils';
 import { format, subDays } from 'date-fns';
+import { BRAIN_ROUTES } from '@/utils';
+import { useBrainCustomizationStore } from '@/store/BrainCustomization';
 
 const brainRoutes = ref(BRAIN_ROUTES);
 const dateFilter = ref({
@@ -55,6 +63,8 @@ const dateFilter = ref({
 
 const route = useRoute();
 const router = useRouter();
+
+const brainCustomization = useBrainCustomizationStore();
 
 const currentBrainRoute = computed(() => {
   return (
@@ -114,7 +124,7 @@ watch(
         color: $unnnic-color-neutral-darkest;
         font-family: $unnnic-font-family-secondary;
         font-size: $unnnic-font-size-title-sm;
-        line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+        line-height: $unnnic-font-size-title-sm * 2.3;
         font-weight: $unnnic-font-weight-bold;
       }
     }

@@ -156,7 +156,7 @@ function getReceivedMessages() {
     tag: tagString === 'all' ? '' : tagString,
     text,
   });
-};
+}
 
 watch(
   () => route.query,
@@ -176,7 +176,7 @@ watch(
 watch(
   () => filters.value.text,
   debounce(() => {
-    getReceivedMessages()
+    getReceivedMessages();
   }, 300),
 );
 </script>

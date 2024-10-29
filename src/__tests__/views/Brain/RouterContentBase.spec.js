@@ -133,18 +133,6 @@ describe('RouterContentBase', () => {
     );
   });
 
-  test('updates Vuex store state when ContentText emits input event', async () => {
-    wrapper.vm.onTabChange('text');
-    await flushPromises();
-
-    const textComponent = wrapper.findComponent(ContentText);
-
-    textComponent.vm.$emit('update:modelValue', 'Updated Text');
-    await flushPromises();
-
-    expect(store.state.Brain.contentText.current).toBe('Updated Text');
-  });
-
   test('applies correct classes for different contentStyle values', async () => {
     const styles = ['accordion', 'list', 'grid'];
 
@@ -193,16 +181,5 @@ describe('RouterContentBase', () => {
     expect(sitesComponent.props('items')).toEqual({
       data: [{ name: 'Site 3' }, { name: 'Site 4' }],
     });
-  });
-
-  test('updates Vuex store state when ContentText emits input event', async () => {
-    wrapper.vm.onTabChange('text');
-    await flushPromises();
-
-    const textComponent = wrapper.findComponent(ContentText);
-    textComponent.vm.$emit('update:modelValue', 'New Content');
-    await flushPromises();
-
-    expect(store.state.Brain.contentText.current).toBe('New Content');
   });
 });

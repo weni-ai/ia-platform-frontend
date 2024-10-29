@@ -1,12 +1,9 @@
 <template>
-  <section
-    :style="{
-      minHeight: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-    }"
-  >
-    <UnnnicDivider ySpacing="md" />
+  <section class="router-actions">
+    <UnnnicDivider
+      ySpacing="md"
+      class="router-actions__divider"
+    />
 
     <ContentList
       :items="{
@@ -185,7 +182,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.actions__container {
-  margin-top: $unnnic-spacing-xs;
+section.router-actions {
+  min-height: '100%';
+  display: 'flex';
+  flex-direction: 'column';
+
+  .router-actions__divider {
+    margin-top: 0;
+  }
 }
 </style>
