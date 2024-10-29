@@ -13,7 +13,7 @@ export default mergeConfig(
       setupFiles: './src/__tests__/setup.js',
       coverage: {
         provider: 'v8',
-        reporter: ['text', 'json-summary'],
+        reporter: ['text', 'json-summary', 'html'],
         reportsDirectory: './coverage',
         include: ['src/**/*.{vue,js,ts}'],
         statements: 80,
