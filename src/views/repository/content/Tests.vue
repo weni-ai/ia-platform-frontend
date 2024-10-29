@@ -23,25 +23,39 @@
         <section
           v-for="(message, index) in messages"
           :key="index"
-          :class="`messages__${message.type}`"
+          :class="[
+            `messages__${message.type}`,
+            { 'messages__is-media': isMedia(message.text) },
+          ]"
         >
           <div
             v-if="message.status === 'loading'"
             class="dot-typing"
           ></div>
 
-          <UnnnicIntelligenceText
-            v-else-if="isStatus(message)"
-            color="neutral-cloudy"
-            family="secondary"
-            weight="regular"
-            size="body-md"
-          >
-            {{ statusDescription(message) }}
-          </UnnnicIntelligenceText>
-
+          <template v-else-if="isStatus(message)">
+            <UnnnicIcon
+              v-if="message.type === 'media_and_location_unavailable'"
+              icon="warning"
+              scheme="neutral-cloudy"
+              size="sm"
+            />
+            <UnnnicIntelligenceText
+              color="neutral-cloudy"
+              family="secondary"
+              weight="regular"
+              size="body-md"
+            >
+              {{ statusDescription(message) }}
+            </UnnnicIntelligenceText>
+          </template>
           <template v-else>
+            <PreviewMedia
+              v-if="isMedia(message.text)"
+              :media="message.text"
+            />
             <Markdown
+              v-else
               :class="`messages__${message.type}__content`"
               :content="message.text"
             />
@@ -100,18 +114,23 @@
 </template>
 
 <script>
-import nexusaiAPI from '../../../api/nexusaiAPI';
 import { get } from 'lodash';
-import AnswerSources from '../../../components/QuickTest/AnswerSources.vue';
-import AnswerFeedback from '../../../components/QuickTest/AnswerFeedback.vue';
-import FlowPreview from '../../../utils/FlowPreview';
-import { lowerFirstCapitalLetter } from '../../../utils/handleLetters';
-import Markdown from '../../../components/Markdown.vue';
-import QuickTestWarn from '../../../components/QuickTest/QuickTestWarn.vue';
-import PreviewPlaceholder from '../../Brain/Preview/Placeholder.vue';
 import { reactive } from 'vue';
+
+import AnswerSources from '@/components/QuickTest/AnswerSources.vue';
+import AnswerFeedback from '@/components/QuickTest/AnswerFeedback.vue';
+import Markdown from '@/components/Markdown.vue';
+import PreviewMedia from '@/components/PreviewMedia.vue';
+import QuickTestWarn from '@/components/QuickTest/QuickTestWarn.vue';
+import PreviewPlaceholder from '../../Brain/Preview/Placeholder.vue';
 import MessageInput from './MessageInput.vue';
 import { useBrainCustomizationStore } from '@/store/BrainCustomization';
+
+import FlowPreview from '@/utils/FlowPreview';
+import { lowerFirstCapitalLetter } from '@/utils/handleLetters';
+import { getFileType } from '@/utils/medias';
+
+import nexusaiAPI from '@/api/nexusaiAPI';
 
 function isEventCardBrain(event) {
   if (event.type !== 'webhook_called' || !event.url) {
@@ -132,6 +151,7 @@ export default {
 
   components: {
     Markdown,
+    PreviewMedia,
     AnswerSources,
     AnswerFeedback,
     QuickTestWarn,
@@ -166,6 +186,8 @@ export default {
       brainCustomizationStore,
     };
   },
+
+  emits: ['messages'],
 
   data() {
     return {
@@ -204,6 +226,12 @@ export default {
   },
 
   watch: {
+    messages: {
+      deep: true,
+      handler(newMessages) {
+        this.$emit('messages', newMessages);
+      },
+    },
     'preview.session.status'(value, previous) {
       if (previous === 'waiting' && value === 'completed') {
         this.messages.push({
@@ -278,7 +306,12 @@ export default {
         'flowstart',
         'flowsend',
         'message_forwarded_to_brain',
+        'media_and_location_unavailable',
       ].includes(message.type);
+    },
+
+    isMedia(message) {
+      return !!getFileType(message);
     },
 
     statusDescription(message) {
@@ -299,6 +332,10 @@ export default {
 
       if (message.type === 'message_forwarded_to_brain') {
         return this.$t('router.preview.message_forwarded_to_brain');
+      }
+
+      if (message.type === 'media_and_location_unavailable') {
+        return this.$t('router.preview.media_and_location_unavailable');
       }
     },
 
@@ -364,7 +401,8 @@ export default {
     },
 
     sendMessage() {
-      const message = this.message.trim();
+      const isFileMessage = typeof this.message !== 'string';
+      const message = isFileMessage ? this.message : this.message.trim();
 
       if (!message) {
         return;
@@ -382,7 +420,7 @@ export default {
       setTimeout(() => this.answer(message), 400);
     },
 
-    answer(question) {
+    async answer(question) {
       const answer = reactive({
         type: 'answer',
         text: '',
@@ -395,8 +433,11 @@ export default {
       });
 
       this.messages.push(answer);
-
       this.scrollToLastMessage();
+
+      const handleError = () => {
+        this.messages.splice(this.messages.indexOf(answer), 1);
+      };
 
       if (this.usePreview) {
         if (this.preview.session?.status === 'waiting') {
@@ -404,61 +445,85 @@ export default {
           return;
         }
 
-        nexusaiAPI.router.preview
-          .create({
-            projectUuid: this.$store.state.Auth.connectProjectUuid,
-            text: question,
-            contact_urn: this.preview.contact.urns[0],
-          })
-          .then(({ data }) => {
-            if (data.type === 'broadcast') {
-              answer.status = 'loaded';
-              answer.text = get(
-                data,
-                'message',
-                this.$t('quick_test.unable_to_find_an_answer', this.language),
-              );
-              answer.sources = get(data, 'fonts', []);
-
-              this.scrollToLastMessage();
-            } else if (data.type === 'flowstart') {
-              this.messages.splice(this.messages.indexOf(answer), 0, {
-                type: 'flowstart',
-                name: data.name,
-                question_uuid: null,
-                feedback: {
-                  value: null,
-                  reason: null,
-                },
+        let questionMediaUrl;
+        const isQuestionMedia = this.isMedia(question);
+        if (isQuestionMedia) {
+          try {
+            const isGeolocationMedia = typeof question === 'string';
+            if (isGeolocationMedia) {
+              questionMediaUrl = `geo:${question}`;
+            } else {
+              const {
+                data: { file_url },
+              } = await nexusaiAPI.router.preview.uploadFile({
+                projectUuid: this.$store.state.Auth.connectProjectUuid,
+                file: question,
               });
-
-              this.flowStart(answer, { name: data.name, uuid: data.uuid });
+              questionMediaUrl = file_url;
             }
-          })
-          .catch(() => {
-            this.messages.splice(this.messages.indexOf(answer), 1);
+          } catch {
+            handleError();
+            return;
+          }
+        }
+
+        try {
+          const { data } = await nexusaiAPI.router.preview.create({
+            projectUuid: this.$store.state.Auth.connectProjectUuid,
+            text: isQuestionMedia ? '' : question,
+            attachments: questionMediaUrl ? [questionMediaUrl] : [],
+            contact_urn: this.preview.contact.urns[0],
           });
+
+          if (data.type === 'broadcast') {
+            answer.status = 'loaded';
+            answer.text = get(
+              data,
+              'message',
+              this.$t('quick_test.unable_to_find_an_answer', this.language),
+            );
+            answer.sources = get(data, 'fonts', []);
+
+            this.scrollToLastMessage();
+          } else if (data.type === 'flowstart') {
+            this.messages.splice(this.messages.indexOf(answer), 0, {
+              type: 'flowstart',
+              name: data.name,
+              question_uuid: null,
+              feedback: {
+                value: null,
+                reason: null,
+              },
+            });
+
+            this.flowStart(answer, { name: data.name, uuid: data.uuid });
+          } else if (data.type === 'media_and_location_unavailable') {
+            answer.status = 'loaded';
+            answer.type = data.type;
+          }
+        } catch {
+          handleError();
+        }
       } else {
-        nexusaiAPI.question
-          .create({
+        try {
+          const { data } = await nexusaiAPI.question.create({
             contentBaseUuid: this.contentBaseUuid,
             text: question,
             language: (this.language || '').toLowerCase(),
-          })
-          .then(({ data }) => {
-            answer.status = 'loaded';
-            answer.question_uuid = get(data, 'question_uuid', null);
-            answer.text = get(
-              data,
-              'answers.0.text',
-              this.$t('quick_test.unable_to_find_an_answer', this.language),
-            );
-
-            this.scrollToLastMessage();
-          })
-          .catch(() => {
-            this.messages.splice(this.messages.indexOf(answer), 1);
           });
+
+          answer.status = 'loaded';
+          answer.question_uuid = get(data, 'question_uuid', null);
+          answer.text = get(
+            data,
+            'answers.0.text',
+            this.$t('quick_test.unable_to_find_an_answer', this.language),
+          );
+
+          this.scrollToLastMessage();
+        } catch {
+          handleError();
+        }
       }
     },
 
@@ -552,7 +617,7 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
-
+  padding-top: $unnnic-spacing-sm;
   row-gap: $unnnic-spacing-xs;
 
   .messages {
@@ -600,6 +665,12 @@ export default {
       border-radius: $unnnic-border-radius-md;
       padding: $unnnic-spacing-ant;
 
+      &.messages__is-media {
+        width: 100%;
+
+        padding: $unnnic-spacing-nano;
+      }
+
       &__content {
         font-family: $unnnic-font-family-secondary;
         font-size: $unnnic-font-size-body-gt;
@@ -628,8 +699,12 @@ export default {
     &__change,
     &__flowstart,
     &__flowsend,
-    &__message_forwarded_to_brain {
-      text-align: center;
+    &__message_forwarded_to_brain,
+    &__media_and_location_unavailable {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $unnnic-spacing-nano;
 
       + .messages__change {
         margin-top: -$unnnic-spacing-nano;

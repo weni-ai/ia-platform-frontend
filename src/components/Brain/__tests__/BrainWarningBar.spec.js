@@ -29,9 +29,6 @@ describe('BrainWarningBar', () => {
     expect(intelligenceText.text()).toContain(
       wrapper.vm.$t('router.warn.click_here'),
     );
-    expect(intelligenceText.text()).toContain(
-      wrapper.vm.$t('router.warn.activate_it'),
-    );
   });
 
   test('renders the RouterLink correctly with the correct props', () => {

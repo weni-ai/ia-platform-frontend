@@ -4,7 +4,6 @@
     :dontShowBack="true"
     :isNoSpaceContainer="true"
   >
-    <BrainWarningBar v-if="!routerTunings.brainOn" />
     <section class="repository-base-edit__wrapper">
       <BrainSideBar />
       <div class="repository-base-edit__wrapper__left-side">
@@ -32,29 +31,25 @@
         </section>
       </div>
 
-      <div
+      <section
         :class="[
           'repository-base-edit__wrapper__card',
           'repository-base-edit__wrapper__card-test-container',
         ]"
       >
-        <div class="repository-base-edit__wrapper__card-test-container__header">
-          {{ $t('router.preview.title') }}
-
-          <ContentItemActions
-            data-test="dropdown-actions"
-            :actions="previewActions"
-            minWidth="175px"
-          />
-        </div>
-
+        <BrainHeaderPreview
+          :brainOn="routerTunings.brainOn"
+          :previewActions="previewActions"
+        />
+        <BrainWarningBar v-if="!routerTunings.brainOn" />
         <Tests
           :key="refreshPreviewValue"
           :contentBaseUuid="contentBaseUuid"
           :contentBaseLanguage="contentBase.language"
           :usePreview="true"
+          @messages="getPreviewMessages"
         />
-      </div>
+      </section>
     </section>
 
     <ModalPreviewQRCode
@@ -85,11 +80,11 @@ import ModalPreviewQRCode from './Preview/ModalPreviewQRCode.vue';
 import ModalSaveChangesError from './ModalSaveChangesError.vue';
 import { useFilesPagination } from '../ContentBases/filesPagination';
 import { useSitesPagination } from '../ContentBases/sitesPagination';
-import ContentItemActions from '../repository/content/ContentItemActions.vue';
 import BrainSideBar from '@/components/Brain/BrainSideBar.vue';
 import BrainHeader from '@/components/Brain/BrainHeader.vue';
-import BrainWarningBar from '@/components/Brain/BrainWarningBar.vue';
 import i18n from '@/utils/plugins/i18n';
+import BrainWarningBar from '@/components/Brain/BrainWarningBar.vue';
+import BrainHeaderPreview from '@/components/Brain/BrainHeaderPreview.vue';
 
 export default {
   name: 'Brain',
@@ -102,10 +97,10 @@ export default {
     RouterTunings,
     ModalPreviewQRCode,
     ModalSaveChangesError,
-    ContentItemActions,
     BrainSideBar,
     BrainHeader,
     BrainWarningBar,
+    BrainHeaderPreview,
   },
   setup() {
     const route = useRoute();
@@ -115,6 +110,8 @@ export default {
     const dropdownOpen = ref(false);
     const refreshPreviewValue = ref(0);
     const isMobilePreviewModalOpen = ref(false);
+
+    const previewMessages = ref('');
 
     const text = ref({
       open: true,
@@ -153,6 +150,39 @@ export default {
 
     const refreshPreview = () => {
       refreshPreviewValue.value += 1;
+    };
+
+    const exportConversations = () => {
+      if (previewMessages.value.length === 0) return;
+
+      const csvData = convertToCSV(previewMessages.value);
+
+      const filename = 'preview-messages.csv';
+      const blob = new Blob([csvData], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+
+      URL.revokeObjectURL(url);
+    };
+
+    const getPreviewMessages = (newMessages) => {
+      previewMessages.value = newMessages;
+    };
+
+    const convertToCSV = (array) => {
+      const headers = ['type', 'text'];
+      const csvRows = [headers.join(',')];
+
+      array.forEach((item) => {
+        const row = [item.type, item.text];
+        csvRows.push(row.join(','));
+      });
+
+      return csvRows.join('\n');
     };
 
     const loadRouterOptions = async () => {
@@ -225,6 +255,12 @@ export default {
         },
         {
           scheme: 'neutral-dark',
+          icon: 'ios_share',
+          text: i18n.global.t('router.preview.options.export'),
+          onClick: exportConversations,
+        },
+        {
+          scheme: 'neutral-dark',
           icon: 'smartphone',
           text: i18n.global.t('router.preview.options.qr_code'),
           onClick: () => (isMobilePreviewModalOpen.value = true),
@@ -248,6 +284,7 @@ export default {
       refreshPreview,
       loadRouterOptions,
       loadContentBase,
+      getPreviewMessages,
       previewActions,
     };
   },
@@ -490,22 +527,6 @@ export default {
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-
-      &__header {
-        max-width: 390px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        color: $unnnic-color-neutral-darkest;
-        font-family: $unnnic-font-family-secondary;
-        font-size: $unnnic-font-size-body-lg;
-        line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
-        font-weight: $unnnic-font-weight-bold;
-        padding: $unnnic-spacing-md $unnnic-spacing-sm;
-        margin-bottom: $unnnic-spacing-sm;
-        border-bottom: $unnnic-border-width-thinner solid
-          $unnnic-color-neutral-soft;
-      }
     }
 
     &__card {

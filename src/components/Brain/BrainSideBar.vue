@@ -14,8 +14,8 @@
     />
 
     <section v-if="isSideBarVisible">
-      <UnnnicSidebarMenu data-test="side-bar-menu">
-        <UnnnicSidebarItem
+      <SidebarMenu data-test="side-bar-menu">
+        <SideBarItem
           v-for="nav in brainRoutes"
           :key="nav.page"
           :text="$t(`router.tabs.${nav.title}`)"
@@ -25,7 +25,7 @@
           data-test="nav-router"
           @click="onNavChange(nav.page)"
         />
-      </UnnnicSidebarMenu>
+      </SidebarMenu>
     </section>
   </div>
 </template>
@@ -34,6 +34,8 @@
 import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { BRAIN_ROUTES } from '@/utils';
+import SideBarItem from '../Sidebar/SideBarItem.vue';
+import SidebarMenu from '../Sidebar/SidebarMenu.vue';
 
 const brainRoutes = ref(BRAIN_ROUTES);
 

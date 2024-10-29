@@ -28,8 +28,8 @@ const runtimeVariables = (() => ({
   VITE_LOGROCKET_PARENT_DOMAIN: 'https://dash-develop.weni.ai/',
   VITE_OPTIONS_WENIGPT:
     '[{"name": "shark-1", "description": "router.tunings.fields.shark-1", "model": "shark-1"}]',
-  SENTRY_ENVIRONMENT: 'develop',
-
+  SENTRY_ENVIRONMENT: 'staging',
+  VITE_ORGS_CAN_CREATE_CONTENT_AI: '',
   get(name) {
     return this[name];
   },

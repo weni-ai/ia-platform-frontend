@@ -42,6 +42,7 @@
               'modals.actions.add.steps.describe.inputs.description.placeholder',
             )
           "
+          :disabled="action.editable === false"
           data-test="description-textarea"
         />
       </UnnnicFormElement>
@@ -62,6 +63,7 @@
               'modals.actions.add.steps.nominate_action.inputs.name.placeholder',
             )
           "
+          :disabled="action.editable === false"
           data-test="name-input"
         />
       </UnnnicFormElement>
@@ -291,6 +293,14 @@ async function saveAction() {
 
 .form-element + .form-element {
   margin-top: $unnnic-spacing-sm;
+}
+
+.text-area :deep(textarea:disabled) {
+  outline-color: $unnnic-color-neutral-cleanest;
+  background-color: $unnnic-color-neutral-lightest;
+  color: $unnnic-color-neutral-cleanest;
+
+  cursor: not-allowed;
 }
 
 .flow-area {

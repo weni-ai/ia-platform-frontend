@@ -151,6 +151,16 @@ export default {
         );
       },
 
+      historyChanges: {
+        read({ projectUuid, pageSize = 10, page = 1, filter = '' }) {
+          let url = `api/${projectUuid}/activities/?page=${page}&page_size=${pageSize}`;
+
+          if (filter) url = url + `&model_group=${filter}`;
+
+          return request.$http.get(url);
+        },
+      },
+
       advanced: {
         read({ projectUuid }) {
           return request.$http.get(`api/${projectUuid}/project`);
@@ -184,10 +194,21 @@ export default {
     },
 
     preview: {
-      create({ projectUuid, text, contact_urn }) {
+      create({ projectUuid, text, attachments, contact_urn }) {
         return request.$http.post(`api/${projectUuid}/preview/`, {
           text,
+          attachments,
           contact_urn,
+        });
+      },
+      uploadFile({ projectUuid, file }) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        return request.$http.post(`api/${projectUuid}/upload-file`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         });
       },
     },
