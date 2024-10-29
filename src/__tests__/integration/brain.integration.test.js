@@ -16,6 +16,19 @@ import { createWebHistory, createRouter } from 'vue-router';
 import Home from '@/views/Home.vue';
 import { createTestingPinia } from '@pinia/testing';
 import { Actions as ActionsAPI } from '@/api/nexus/Actions';
+import { useBrainCustomizationStore } from '@/store/BrainCustomization';
+
+vi.spyOn(nexusaiAPI.router.customization, 'read').mockResolvedValue({
+  data: {
+    agent: {
+      name: '',
+      role: '',
+      personality: '',
+      goal: '',
+    },
+    instructions: [],
+  },
+});
 
 const pinia = createTestingPinia({ stubActions: false });
 
@@ -266,6 +279,7 @@ const removedRequest = vi
 describe('Brain integration', () => {
   let wrapper;
   let dispatchSpy;
+  let brainCustomizationStore;
 
   beforeEach(async () => {
     router.push('/router');
@@ -288,6 +302,8 @@ describe('Brain integration', () => {
         },
       },
     });
+
+    brainCustomizationStore = useBrainCustomizationStore();
   });
 
   test('check if all routes render the correct component when accessed by tabs', async () => {
@@ -345,25 +361,23 @@ describe('Brain integration', () => {
     ]);
     await goalTextArea.setValue('Test Goal');
 
-    expect(store.state.Brain.agent.name.current).toBe('Test Name');
-    expect(store.state.Brain.agent.role.current).toBe('Test Role');
-    expect(store.state.Brain.agent.personality.current).toBe('Amigável');
-    expect(store.state.Brain.agent.goal.current).toBe('Test Goal');
+    expect(brainCustomizationStore.name.current).toBe('Test Name');
+    expect(brainCustomizationStore.role.current).toBe('Test Role');
+    expect(brainCustomizationStore.personality.current).toBe('Amigável');
+    expect(brainCustomizationStore.goal.current).toBe('Test Goal');
 
     const addButton = wrapper.findComponent(
       '[data-test="btn-add-instruction"]',
     );
 
-    await addButton.trigger('click');
-
-    expect(store.state.Brain.instructions.current.length).toBe(1);
+    expect(brainCustomizationStore.instructions.current.length).toBe(1);
 
     const firstInstructionInput = wrapper.findComponent(
       '[data-test="instruction-0"]',
     );
     await firstInstructionInput.setValue('instruction 01');
 
-    expect(store.state.Brain.instructions.current[0].instruction).toBe(
+    expect(brainCustomizationStore.instructions.current[0].instruction).toBe(
       'instruction 01',
     );
 
@@ -383,7 +397,7 @@ describe('Brain integration', () => {
 
     await removeInstructionBtn.trigger('click');
 
-    expect(store.state.Brain.instructions.current.length).toBe(1);
+    expect(brainCustomizationStore.instructions.current.length).toBe(1);
 
     await addButton.trigger('click');
 
@@ -392,7 +406,7 @@ describe('Brain integration', () => {
     );
     await secondInstInput.setValue('instruction 02');
 
-    expect(store.state.Brain.instructions.current[0].instruction).toBe(
+    expect(brainCustomizationStore.instructions.current[0].instruction).toBe(
       'instruction 02',
     );
 

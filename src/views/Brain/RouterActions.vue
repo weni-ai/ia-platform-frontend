@@ -22,6 +22,7 @@
         data: items.data.map((action) => ({
           ...action,
           extension_file: 'action',
+          editable: action.editable ?? true,
           created_file_name: action.name,
         })),
       }"
@@ -151,9 +152,10 @@ export default {
       const action = this.items.data.find((action) => action.uuid === uuid);
 
       this.currentActionEditing = {
-        uuid,
+        uuid: action.flow_uuid,
         type: action.type,
         name: action.name,
+        editable: action.editable,
         description: action.prompt,
         group: action.group,
         status: null,

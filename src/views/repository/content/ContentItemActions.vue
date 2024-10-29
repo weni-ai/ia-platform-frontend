@@ -6,9 +6,9 @@
     <template #default>
       <UnnnicIcon
         ref="selector"
-        icon="more_vert"
+        :icon="triggerIcon"
         :scheme="isActivatedByClick ? 'neutral-darkest' : 'neutral-cloudy'"
-        size="avatar-nano"
+        :size="triggerSize"
         class="button-menu"
         v-bind="$attrs"
       />
@@ -18,8 +18,8 @@
       <section
         :popoverId
         trigger="click"
-        horizontal="right-right"
-        vertical="top-bottom"
+        :horizontal="popoverPositionHorizontal"
+        :vertical="popoverPositionVertical"
         class="options"
         :style="{ minWidth }"
       >
@@ -58,6 +58,24 @@ defineProps({
   actions: {
     type: Array,
     default: () => [],
+  },
+
+  triggerIcon: {
+    type: String,
+    default: 'more_vert',
+  },
+  triggerSize: {
+    type: String,
+    default: 'avatar-nano',
+  },
+
+  popoverPositionHorizontal: {
+    type: String,
+    default: 'right-right',
+  },
+  popoverPositionVertical: {
+    type: String,
+    default: 'top-bottom',
   },
 
   minWidth: {

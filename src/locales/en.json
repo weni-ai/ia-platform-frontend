@@ -5,6 +5,7 @@
   "back": "Back",
   "next": "Next",
   "finish": "Finish",
+  "speed": "Speed",
   "save_changes": "Save changes",
   "announcements": {
     "new_artificial_intelligence_module_is_here": "The new Artificial Intelligence module is here! Explore what's new and learn how to create even more amazing chatbots!"
@@ -58,13 +59,12 @@
       "description": "An error occurred while saving changes to the {tabs} tab. Try saving again.|An error occurred while saving changes to the {tabs} tabs. Try saving again."
     },
     "warn": {
-      "brain_is_deactivated": "Brain is deactivated.",
-      "click_here": "click here",
-      "activate_it": "to activate it."
+      "brain_is_deactivated": "Agent Builder inactive, active on",
+      "click_here": "tunings"
     },
     "tabs": {
-      "personalization": "Customization",
-      "content": "Content",
+      "personalization": "Personality",
+      "content": "Knowledge",
       "actions": "Actions",
       "tunings": "Tunings"
     },
@@ -75,8 +75,8 @@
       "create_action": "Create actions by assigning the flow that will be started",
       "pre_defined_or_customized_actions": "Pre-defined or customized actions",
       "add": "Add action",
-      "router_activated": "Brain activated in {name}",
-      "router_removed": "Brain removed from {name}",
+      "router_activated": "Agent Builder activated in {name}",
+      "router_removed": "Agent Builder removed from {name}",
       "router_edited": "Description of {name} updated"
     },
     "content": {
@@ -96,6 +96,43 @@
         "description": "Are you sure you want to restore the default settings? This action cannot be reversed",
         "cancel": "Cancel",
         "restore": "Restore"
+      },
+      "description": "Manage settings and track changes made.",
+      "tabs": {
+        "config": "Settings",
+        "history": "History of changes"
+      },
+      "history": {
+        "no_changes": "No changes were made to the Agent Builder.",
+        "description": "View the history of changes made to Agent Builder",
+        "sub_description": "Check all changes and filter according to your needs",
+         "fields": {
+          "change": "Change",
+          "date": "Date",
+          "all-changes": "All Changes",
+          "customization-changes": "Customization changes",
+          "content-changes": "Content changes",
+          "actions-changes": "Action changes",
+          "settings-changes": "Settings changes",
+          "add-action": "added an action ({value})",
+          "changes": "made {value} changes",
+          "update-name-action": "changed an action ({value})",
+          "update-prompt-action": "changed the prompt of an action ({value})",
+          "remove-action": "removed an action ({value})",
+          "update-personality": "changed the personality ({value})",
+          "update-goal": "changed the goal ({value})",
+          "update-name": "changed name ({value})",
+          "update-role": "changed occupation ({value})",
+          "add-instruction": "added an instruction ({value})",
+          "remove-instruction": "removed an instruction ({value})",
+          "update-instruction": "changed an instruction ({value})",
+          "add-content": "added a content ({value})",
+          "update-content": "changed a content ({value})",
+          "remove-content": "removed a content ({value})",
+          "update-model": "changed the model",
+          "brain-on": "turned on Agent Builder",
+          "brain-off": "turned off Agent Builder"
+         }
       },
       "fields": {
         "model": "Select model",
@@ -123,16 +160,16 @@
       "advanced": {
         "title": "Advanced options",
         "description": "This option can disable or enable your triggers.",
-        "brain": "Brain",
+        "brain": "Agent Builder",
         "active_brain_modal": {
-          "title": "Activate Brain",
-          "description": "Are you sure you want to activate Brain? <br /> This will cause your triggers to be replaced by Actions and this can directly affect the operation of your agent.",
+          "title": "Activate Agent Builder",
+          "description": "Are you sure you want to activate Agent Builder? <br /> This will cause your triggers to be replaced by Actions and this can directly affect the operation of your agent.",
           "cancel": "Cancel",
           "action": "Activate"
         },
         "deactivate_brain_modal": {
-          "title": "Deactivate Brain",
-          "description": "Are you sure you want to deactivate Brain? <br /> This will cause your actions to be replaced by triggers and this can directly affect the functioning of your bot.",
+          "title": "Deactivate Agent Builder",
+          "description": "Are you sure you want to deactivate Agent Builder? <br /> This will cause your actions to be replaced by triggers and this can directly affect the functioning of your bot.",
           "cancel": "Cancel",
           "action": "Deactivate"
         }
@@ -140,9 +177,11 @@
     },
     "preview": {
       "title": "Agent preview",
+      "active": "Agent Builder active",
       "options": {
         "refresh": "Clear conversations",
-        "qr_code": "View from mobile"
+        "qr_code": "View from mobile",
+        "export": "Export conversations"
       },
       "modal_qr_code": {
         "title": "View preview on mobile",
@@ -153,7 +192,8 @@
       "field_changed_to_value": "Parameter {field} changed to {value}",
       "flow_started": "Flow {name} started",
       "flow_finished": "Flow finished",
-      "message_forwarded_to_brain": "Message forwarded to Brain"
+      "message_forwarded_to_brain": "Message forwarded to Agent Builder",
+      "media_and_location_unavailable": "There is no Media and Location action registered"
     }
   },
   "content_bases": {
@@ -266,8 +306,8 @@
       }
     },
     "brain_use_warning": {
-      "title": "Use Brain to create Content AI",
-      "description": "Brain has enhanced capabilities for creating smarter agents that respond based on content of various formats uploaded by you.",
+      "title": "Use Agent Builder to create Content AI",
+      "description": "Agent Builder has enhanced capabilities for creating smarter agents that respond based on content of various formats uploaded by you.",
       "take_me_there": "Take me there"
     }
   },
@@ -661,6 +701,11 @@
         "tests": "Test knowledge bases",
         "tests_subtitle": "Test knowledge bases asking them questions and observing their answers.",
         "preview_tests_placeholder": "Type a message",
+        "preview_tests_attachments": {
+          "photos_or_videos": "Photos and videos",
+          "file": "File",
+          "location": "Location"
+        },
         "tests_placeholder": "Ask a question for the knowledge base...",
         "api": "Integrate this intelligence",
         "api_subtitle": "Our API is compatible with many platforms via API REST integration. To know further, access our <a href='https://docs.ilhasoft.mobi/l/en/content-intelligence/integrating-content-intelligence' target='_blank' class='repository-api__header__subtitle--link'>documentation</a> and the <a href='https://api.bothub.it/#tag/repository' target='_blank' class='repository-api__header__subtitle--link'>API explorer</a>.",
@@ -1447,6 +1492,10 @@
         "title": "Service and support",
         "description": "Actions for customer support and communication adjustments"
       },
+      "media": {
+        "title": "Media and location",
+        "description": "Actions initiated from image, video, audio and user location"
+      },
       "custom": {
         "title": "Customized",
         "description": "Actions to meet specific needs"
@@ -1494,7 +1543,7 @@
                 "placeholder": "Search flow"
               }
             },
-            "flow_already_in_use": "This flow is already linked to an action"
+            "flow_assigned_actions": "This flow has already been assigned to {count} action:\n{actions} | This flow has already been assigned to {count} actions:\n{actions}"
           },
           "nominate_action": {
             "title": "Name action",
@@ -1541,7 +1590,7 @@
         "sub_title": "Explain your flow and when the user should enter it. Try to be objective.",
         "label": "Description",
         "change_title": "Change action description",
-        "change_sub_title": "The description helps the Brain work better"
+        "change_sub_title": "The description helps the Agent Builder work better"
       },
       "remove": {
         "title": "Remove action",
@@ -1620,5 +1669,14 @@
       "title": "You do not have permission to access this module",
       "description": "If you wish to access this module, please contact the organization's administrator"
     }
+  },
+  "time": {
+    "time_ago_minutes": "{count} minute ago | {count} minutes ago",
+    "time_ago_hours": "{count} hour ago | {count} hours ago",
+    "time_ago_days": "{count} day ago | {count} days ago",
+    "time_ago_months": "{count} month ago | {count} months ago"
+  },
+  "audio_recorder": {
+    "discard_button": "Discard"
   }
 }
