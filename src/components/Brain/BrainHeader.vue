@@ -15,7 +15,17 @@
     </section>
     <section>
       <UnnnicButton
-        v-if="route.name !== 'router-actions'"
+        v-if="route.name === 'router-personalization'"
+        class="save-button"
+        :disabled="brainCustomization.isSaveButtonDisabled"
+        :loading="brainCustomization.isSaving"
+        @click="brainCustomization.save"
+      >
+        {{ $t('router.tunings.save_changes') }}
+      </UnnnicButton>
+
+      <UnnnicButton
+        v-else-if="route.name === 'router-tunings'"
         class="save-button"
         :disabled="$store.getters.isBrainSaveButtonDisabled"
         :loading="$store.state.Brain.isSavingChanges"
@@ -31,10 +41,13 @@
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { BRAIN_ROUTES } from '@/utils';
+import { useBrainCustomizationStore } from '@/store/BrainCustomization';
 
 const brainRoutes = ref(BRAIN_ROUTES);
 
 const route = useRoute();
+
+const brainCustomization = useBrainCustomizationStore();
 
 const currentBrainRoute = computed(() => {
   return (
@@ -49,6 +62,7 @@ const currentBrainRoute = computed(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: $unnnic-spacing-sm;
+  column-gap: $unnnic-spacing-sm;
 
   &__title {
     display: flex;

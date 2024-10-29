@@ -3,7 +3,6 @@ import { WENIGPT_OPTIONS } from '../../utils';
 import { models } from '@/store/brain/models.js';
 import nexusaiAPI from '@/api/nexusaiAPI.js';
 import i18n from '../../utils/plugins/i18n';
-import { useBrainCustomizationStore } from '../BrainCustomization';
 
 export default {
   state: () => ({
@@ -33,18 +32,7 @@ export default {
     },
 
     isBrainSaveButtonDisabled(_state, getters) {
-      const brainCustomizationStore = useBrainCustomizationStore();
-
-      const hasCustomizationErrorRequiredFields = Object.values(
-        brainCustomizationStore.errorRequiredFields,
-      ).includes(true);
-
-      return (
-        (!brainCustomizationStore.hasChanged &&
-          !getters.hasBrainTuningsChanged &&
-          !getters.hasBrainContentTextChanged) ||
-        hasCustomizationErrorRequiredFields
-      );
+      return !getters.hasBrainTuningsChanged;
     },
 
     brainTuningsFields({ tunings, tuningsOld }) {
@@ -162,26 +150,13 @@ export default {
     },
 
     async saveBrainChanges({ state, getters, rootState, dispatch }) {
-      const brainCustomizationStore = useBrainCustomizationStore();
-
       try {
-        brainCustomizationStore.hasChanged &&
-          (await brainCustomizationStore.validate());
-
         state.isSavingChanges = true;
 
         const promises = [];
 
-        if (brainCustomizationStore.hasChanged) {
-          promises.push(brainCustomizationStore.save());
-        }
-
         if (getters.hasBrainTuningsChanged) {
           promises.push(dispatch('saveBrainTunings'));
-        }
-
-        if (getters.hasBrainContentTextChanged) {
-          promises.push(dispatch('saveBrainContentText'));
         }
 
         const tabsWithError = (await Promise.allSettled(promises))
@@ -190,7 +165,6 @@ export default {
           .map(
             (routerName) =>
               ({
-                'brain-customization-edit': 'personalization',
                 'contentBase-text-create': 'content',
                 'contentBase-text-edit': 'content',
                 'brain-tunings-edit': 'tunings',

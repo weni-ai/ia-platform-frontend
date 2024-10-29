@@ -188,7 +188,7 @@ describe('BasesFormText.vue', () => {
           modelValue: 'Hello World!',
           item: {
             open: true,
-            status: 'loading',
+            isLoading: true,
             uuid: '1234',
             oldValue: 'Hello World!',
             value: 'Hello World!',

@@ -32,6 +32,16 @@ vi.mock('@/utils', () => ({
 }));
 
 vi.mock('@/store/index.js', () => ({
+  state: {
+    Brain: {
+      contentText: {
+        uuid: null,
+        current: '',
+        old: '',
+      },
+    },
+  },
+
   default: {
     watch: vi.fn(),
   },
@@ -246,10 +256,7 @@ describe('store/brain/index.js', () => {
         dispatch,
       });
 
-      expect(brainCustomizationStoreValidate).toHaveBeenCalled();
-      expect(brainCustomizationStoreSave).toHaveBeenCalled();
       expect(dispatch).toHaveBeenCalledWith('saveBrainTunings');
-      expect(dispatch).toHaveBeenCalledWith('saveBrainContentText');
     });
   });
 

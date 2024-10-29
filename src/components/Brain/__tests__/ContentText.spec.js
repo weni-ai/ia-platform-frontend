@@ -1,6 +1,47 @@
 import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it } from 'vitest';
 import ContentText from '@/components/Brain/ContentText.vue';
+import { createStore } from 'vuex';
+
+const store = createStore({
+  state() {
+    return {
+      Brain: {
+        contentText: {
+          uuid: null,
+          current: '',
+          old: '',
+        },
+      },
+    };
+  },
+
+  getters: {
+    actionsTypesAvailable() {
+      return [];
+    },
+  },
+
+  actions: {
+    async loadActions({ state: { Actions: state } }) {
+      if (state.status !== null) {
+        return;
+      }
+
+      try {
+        state.status = 'loading';
+
+        const { data } = mockItems;
+
+        state.data = data;
+
+        state.status = 'complete';
+      } catch (error) {
+        state.status = 'error';
+      }
+    },
+  },
+});
 
 describe('ContentText.vue', () => {
   let wrapper;
@@ -8,8 +49,12 @@ describe('ContentText.vue', () => {
   const createWrapper = (props = {}) => {
     wrapper = mount(ContentText, {
       props: {
-        modelValue: 'Initial text',
+        modelValue: { current: 'Initial text' },
         ...props,
+      },
+
+      global: {
+        plugins: [store],
       },
     });
   };
@@ -53,19 +98,6 @@ describe('ContentText.vue', () => {
       expect(headerText.text()).toBe(
         wrapper.vm.$t('content_bases.text.description'),
       );
-    });
-  });
-
-  describe('when user edits the textarea', () => {
-    beforeEach(async () => {
-      const textarea = wrapper.find('textarea');
-
-      await textarea.setValue('Edited text');
-    });
-
-    it('emits update:modelValue with the edited value', () => {
-      expect(wrapper.emitted('update:modelValue')).toBeTruthy();
-      expect(wrapper.emitted('update:modelValue')[0]).toEqual(['Edited text']);
     });
   });
 });

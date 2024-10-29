@@ -9,12 +9,14 @@
       <div class="repository-base-edit__wrapper__left-side">
         <section class="content-base__container">
           <BrainHeader />
+
           <section class="scrollable">
             <RouterContentBase
               v-if="route.name === 'router-content'"
               :filesProp="files"
               :sitesProp="sites"
               :textProp="text"
+              :textLoading="text.status === 'loading'"
               @update:files="(v) => (files = v)"
             />
             <RouterActions v-else-if="route.name === 'router-actions'" />

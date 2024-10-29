@@ -206,7 +206,8 @@ export default {
       return (
         this.usePreview &&
         (!this.$store.getters.isBrainSaveButtonDisabled ||
-          this.brainCustomizationStore.hasChanged)
+          this.brainCustomizationStore.hasChanged ||
+          this.$store.getters.hasBrainContentTextChanged)
       );
     },
 
