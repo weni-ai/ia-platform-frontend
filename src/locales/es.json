@@ -8,7 +8,7 @@
   "speed": "Velocidad",
   "save_changes": "Guardar los cambios",
   "announcements": {
-    "new_artificial_intelligence_module_is_here": "¡Ya está aquí el nuevo módulo de Inteligencia Artificial! Explora las novedades y aprende a crear chatbots aún más increíbles."
+    "new_artificial_intelligence_module_is_here": "¡Ya está aquí el nuevo módulo de Inteligencia Artificial! ¡Explora las novedades y aprende a crear chatbots aún más increíbles!"
   },
   "unauthorized": "No tienes permiso para realizar esta acción",
   "internal_server_error": "Error interno del servidor",
@@ -121,7 +121,7 @@
         "title": "Restaurar valores predeterminados",
         "description": "¿Está seguro de que desea restaurar la configuración predeterminada? Esta acción no se puede revertir",
         "cancel": "Cancelar",
-        "restaurar": "Restaurar"
+        "restore": "Restaurar"
       },
       "description": "Gestionar la configuración y realizar un seguimiento de los cambios realizados",
       "tabs": {
@@ -132,7 +132,7 @@
         "no_changes": "No se realizaron cambios en Agent Builder.",
         "description": "Consulta el historial de cambios realizados en Agent builder",
         "sub_description": "Vea la lista completa o filtre por tipo de cambio",
-         "fields": {
+        "fields": {
           "change": "Cambio",
           "date": "Fecha",
           "all-changes": "Todos los cambios",
@@ -140,8 +140,8 @@
           "content-changes": "Cambios de contenido",
           "actions-changes": "Cambios de acción",
           "settings-changes": "Cambios de configuración",
-          "changes": "hecho {value} cambios",
           "add-action": "añade una acción ({value})",
+          "changes": "hecho {value} cambios",
           "update-name-action": "cambió una acción ({value})",
           "update-prompt-action": "cambia el prompt de una acción ({value})",
           "remove-action": "elimina una acción ({value})",
@@ -158,16 +158,13 @@
           "update-model": "cambió el modelo",
           "brain-on": "encender el Agent Builder",
           "brain-off": "apagado o Agent Builder"
-         }
+        }
       },
       "fields": {
         "model": "Seleccionar modelo",
         "token": "Token",
         "token_info": "Código necesario para acceder a los servicios de OpenAI. Obtén tu token creando una cuenta OpenAI y generando una clave API en el panel de control.",
         "version": "Versión",
-        "golfinho-1": "Utilícelo cuando necesite un equilibrio entre calidad y velocidad. Ideal para la mayoría de aplicaciones con respuestas rápidas y precisas.",
-        "shark-1": "Utilícelo cuando sea esencial la máxima precisión en la respuesta, aunque sea más lenta.",
-        "version-gpt": "Versión",
         "select-language": "Idioma",
         "language": "Selecciona el idioma por defecto",
         "languages": {
@@ -175,6 +172,9 @@
           "en": "Inglés",
           "es": "Español"
         },
+        "golfinho-1": "Utilícelo cuando necesite un equilibrio entre calidad y velocidad. Ideal para la mayoría de aplicaciones con respuestas rápidas y precisas.",
+        "shark-1": "Utilícelo cuando sea esencial la máxima precisión en la respuesta, aunque sea más lenta.",
+        "version-gpt": "Versión",
         "parameter": "Parámetros",
         "temperature": "Temperatura",
         "temperature_info": "Ajustar la Temperatura para controlar la diversidad de las respuestas generadas",
@@ -438,8 +438,8 @@
         "confirm_modal_message": "Al hacer una copia de la inteligencia, puedes usarla en tu organización y también hacer los cambios que quieras.",
         "copy": "Copiar"
       },
-      "intelligence_force":"Fuerza",
-      "intelligence_force_tooltip":"La fuerza de la inteligencia es una forma sencilla de medir qué tan bien está diseñada la inteligencia. Se recomienda que la fuerza esté por encima del 80%",
+      "intelligence_force": "Fuerza",
+      "intelligence_force_tooltip": "La fuerza de la inteligencia es una forma sencilla de medir qué tan bien está diseñada la inteligencia. Se recomienda que la fuerza esté por encima del 80%",
       "integration_success_title": "Inteligencia integrada",
       "integration_success_description": "La inteligencia se integró conéxito 😉",
       "integration_error_title": "No se puede integrar la inteligencia",
@@ -576,7 +576,6 @@
       "login": "Inicia sesión en tu cuenta para editar esta inteligencia.",
       "all_intents": "Todas las Intenciones",
       "all_entities": "Todas las entidades",
-      "all_labels": "Todas las Categorias",
       "all_languages": "Todos los idiomas",
       "intent": "Intención",
       "no_versions": "No hay resultados para esta versión",
@@ -741,11 +740,11 @@
         "api_tabs_subtitle": "Ingrese los siguientes datos donde se le solicite en la plataforma:",
         "api_tabs_intelligence_id": "ID de la base de inteligencia",
         "api_guide": "Cómo integrarse y ejemplo de la respuesta de API",
+        "api_integrate": "Cómo integrar los flujos de Weni o Rapidpro",
         "api_body": "cuerpo",
         "api_tabs_post_lang": "Código de lenguaje",
         "api_tabs_post_text": "Su pregunta",
         "api_response": "Ejemplo de respuesta de API",
-        "api_integrate": "Cómo integrar los flujos de Weni o Rapidpro",
         "api_integrate_step_one": "Paso 1",
         "api_integrate_step_one_text": "En los flujos de Weni, abre el flujo deseado o cree un nuevo flujo.",
         "api_integrate_step_two": "Paso 2",
@@ -770,13 +769,12 @@
         "edit-base_modal_delete_placeholder": "Confirme el nombre de la base de conocimientos para eliminarla.",
         "edit-base_modal_delete_button_confirm": "Excluir la base",
         "edit-base_modal_delete_button_cancel": "Cancelar",
-        "edit-base_modal_delete_button_validation": "Escriba ${this.knowledgeBase.title} para confirmar la eliminación",
+        "see-all_bases": "Ver todas las bases",
+        "add_base": "+ Añadir base",
         "edit-base_modal_alert_title": "Salir de la base de contenidos",
         "edit-base_modal_alert_description": "¿Estás seguro de que quieres salir de la base de contenidos ahora? El contenido que no se guarde se descartará",
         "edit-base_modal_alert_save": "Salir",
-        "edit-base_modal_alert_discard": "Cancelar",
-        "see-all_bases": "Ver todas las bases",
-        "add_base": "+ Añadir base"
+        "edit-base_modal_alert_discard": "Cancelar"
       },
       "copy-intelligence": "Copiar inteligencia",
       "intelligence_filter": {
@@ -800,7 +798,7 @@
       "intent_question": "La INTENCIÓN es el deseo de que la inteligencia se dé cuenta de que el usuario tiene al enviar un mensaje específico. Por ejemplo: al enviar un \"gracias\", la intención del usuario es agradecer. Por lo tanto, la intención de la frase podría ser \"gracias\".",
       "entity_question": "La ENTIDAD es el sustantivo relacionado con el deseo que fue detectado por la inteligencia. Por ejemplo: si el usuario envió \"generar nuevo informe\", la entidad puede ser \"informe\" o \"nuevo informe\".",
       "entity_groups_info": "sustantivo relacionado con el deseo que fue detectado por la inteligencia. Por ejemplo: si la frase enviada por el usuario es “generar un nuevo informe”, la entidad puede ser “informe” o “nuevo informe”.",
-       "intents_list_info": "El deseo de que la inteligencia perciba que el usuario tiene al enviar un mensaje. Por ejemplo: al enviar “gracias” la intención del usuario es mostrar gratitud. Por lo tanto, la intención podría ser “gracias”.",
+      "intents_list_info": "El deseo de que la inteligencia perciba que el usuario tiene al enviar un mensaje. Por ejemplo: al enviar “gracias” la intención del usuario es mostrar gratitud. Por lo tanto, la intención podría ser “gracias”.",
       "intelligence_force": "Fuerza de inteligencia",
       "intelligence_force_low": "Débil",
       "intelligence_force_regular": "Regular",
@@ -932,9 +930,9 @@
       "delete_button": "Borrar",
       "cancel_button": "Cancelar",
       "save_button": "Ahorrar",
-      "error_caracter_type": "La frase debe contener letras o números. Incluirlos para continuar.",
       "train_progress": "Entrenamiento en progreso",
       "empty_text_error": "Introduzca una oración",
+      "error_caracter_type": "La frase debe contener letras o números. Incluirlos para continuar.",
       "intent_error": "Entrar en una intención",
       "default_error": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
       "more_than_200_words": "Límite de 200 palabras por frase alcanzado. Ajuste el texto si es necesario o divídalo en frases más pequeñas.",
@@ -1021,7 +1019,7 @@
       "import_button_cancel": "Cancelar",
       "export_all_sentences": "Todas las oraciones",
       "export_only_translated": "Oraciones no traducidas",
-      "traductores": "Traductores | Traductor | Traductores",
+      "translators": "Traductores | Traductor | Traductores",
       "completed": "Traducciones completas | Traducción completa | Traducciones completas",
       "more_than_half": "Más del 50% traducido",
       "less_than_half": "Menos del 50% traducido",
@@ -1051,8 +1049,8 @@
       "create_new_token": "Generar enlace",
       "delete_confirm": "¿Realmente desea eliminar la traducción seleccionada? Una vez realizada la acción, no será posible revertirla.",
       "default_error": "Algo salió mal.",
-      "ok": "Ok",
-      "cancelar": "Cancelar",
+      "okay": "ok",
+      "cancel": "Cancelar",
       "send_to_translators": "Enviar a traductores",
       "tab_translated": "Frases traducidas",
       "tab_not_translated": "Oraciones no traducidas",
@@ -1100,8 +1098,12 @@
         "title": "Pagos",
         "history": "Historial",
         "info": "Información del Pago",
+        "payment": "{period} payment",
         "credit_payment": "Con tarjeta de crédito",
-        "coupon_payment": "Con cupón"
+        "coupon_payment": "Con cupón",
+        "submit": "Enviar",
+        "total": "Total:",
+        "no_payments": "Sin pagos"
       },
       "intelligences": {
         "title": "Inteligencias",
@@ -1169,7 +1171,7 @@
     },
     "menu": {
       "hide": "Encogerse",
-      "expand":"Expandir",
+      "expand": "Expandir",
       "created_by": "Criado por",
       "back_text": "Volver",
       "summary": "Resumen",
@@ -1199,10 +1201,11 @@
     "phrase-suggestion": {
       "title": "Generador de frases",
       "subtitle": "Genere hasta cientos de nuevas frases a partir de una sola frase. Puede ser muy útil para mejorar tu inteligencia artificial.",
+      "empty": "No hay frases sugeridas para esta intención",
       "confirm-edit": "Confirmar la edición",
       "cancel-edit": "Cancelar edición",
       "tooltip_alert": "Las palabras sugeridas se generan a través de contextos tomados de Internet, por lo que las sugerencias que huyen del control de nuestro equipo pueden suceder.",
-      "add_a_sentence":"Escriba la oración que desea usar",
+      "add_a_sentence": "Escriba la oración que desea usar",
       "submit": "Enviar frase",
       "select_words_title": "Seleccionar palabras",
       "select_method": "Selecciona el método que se usará para generar las oraciones.",
@@ -1308,8 +1311,8 @@
       "remove_log_button": "Eliminar una oración",
       "select_phrase": "Seleccione una frase",
       "select_all": "Seleccionar todo",
-      "error": "Error",
       "send_to_evaluate": "La intención y la frase ya existen",
+      "error": "Error",
       "add_log": {
         "add": "Agregar",
         "close": "Cerrar"
@@ -1416,7 +1419,8 @@
       "quick_test": {
         "step_0": "<strong> esta es la prueba rápida! </strong> <br> Aquí puede probar rápidamente las frases agregadas a la capacitación.",
         "step_1": "Ingrese su oración de prueba y confirme.",
-        "step_2": "Haga clic aquí para descubrir la relevancia de cada palabra en la oración dentro de la intención elegida."
+        "step_2": "Haga clic aquí para descubrir la relevancia de cada palabra en la oración dentro de la intención elegida.",
+        "step_3": "Click here to see the Raw."
       },
       "inbox": {
         "step_0": "<strong> ¡Esta es la bandeja de entrada! </strong> <br> Aquí puede agregar frases de interacciones de usuarios con su inteligencia en capacitación o pruebas.",
@@ -1470,7 +1474,11 @@
       "cancel": "Cancelar",
       "importar": "Confirmar",
       "import_success": "Importar con éxito.",
-      "import_error": "Ocurrió algo mal, inténtalo de nuevo más tarde."
+      "import_error": "Ocurrió algo mal, inténtalo de nuevo más tarde.",
+      "import_sentences_success_title": "¡Frases importadas con éxito!",
+      "import_sentences_success_message": "Frases importadas para el entrenamiento adicionadas. 😉",
+      "import_sentences_error_title": "Error importando sentencias",
+      "import_sentences_error_message": "Ocurrió algo mal, inténtalo de nuevo más tarde."
     },
     "weni_notification": {
       "title": "BUTTUB ahora es inteligencia artificial Weni.",
@@ -1481,6 +1489,19 @@
     "infinite_scroll": {
       "title": "Cargando"
     }
+  },
+  "upload_area": {
+    "title": {
+      "text": "Arrastre su archivo aquí, o",
+      "highlight": "buscarlo"
+    },
+    "subtitle": "Formatos soportados: ",
+    "invalid": {
+      "subtitle": "Archivo inválido"
+    }
+  },
+  "import_card": {
+    "importing": "Importando..."
   },
   "action_type_selector": {
     "title": "Seleccione el tipo de acción",
@@ -1548,7 +1569,7 @@
                 "placeholder": "Buscar flujos"
               }
             },
-            "flow_already_in_use": "Este flujo ya está vinculado a una acción"
+            "flow_assigned_actions": "Este flujo ya ha sido asignado a {count} acción:\n{actions} | Este flujo ya se ha asignado a {count} acciones:\n{actions}"
           },
           "nominate_action": {
             "title": "Nombre acción",
@@ -1648,7 +1669,7 @@
     "placeholders": {
       "instruction": "Eres gracioso pero no haces bromas",
       "name": "Tainá",
-      "occupation": "Experto en llamas", 
+      "occupation": "Experto en llamas",
       "goal": "Responder preguntas y dar información sobre llamas"
     },
     "instructions": {

@@ -49,6 +49,7 @@ export const Actions = {
       name: data.name,
       prompt: data.prompt,
       type: data.action_type,
+      flow_uuid: data.flow_uuid,
       group:
         templateUuid && Object.values(groups).includes(data.group)
           ? data.group
@@ -89,6 +90,7 @@ export const Actions = {
         content_base,
         fallback,
         group,
+        flow_uuid,
       }) => ({
         uuid,
         name,
@@ -96,6 +98,7 @@ export const Actions = {
         type: action_type,
         editable,
         group: Object.values(groups).includes(group) ? group : 'custom',
+        flow_uuid,
       }),
     );
   },
