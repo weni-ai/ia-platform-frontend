@@ -52,7 +52,7 @@
     />
     <ContentText
       v-if="activeTab === 'text'"
-      v-model="$store.state.Brain.contentText.current"
+      v-model="$store.state.Brain.contentText"
       :isLoading="textLoading"
       class="content-base__content-tab__text"
     />
