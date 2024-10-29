@@ -1,13 +1,10 @@
 import { mount } from '@vue/test-utils';
 import { nextTick, ref } from 'vue';
 import SelectFlow from '../SelectFlow.vue';
-import lodash from 'lodash';
 import { createPinia, setActivePinia } from 'pinia';
 import { Actions } from '@/api/nexus/Actions';
 import { useActionsStore } from '@/store/Actions';
 import i18n from '@/utils/plugins/i18n';
-
-vi.spyOn(lodash, 'debounce').mockImplementation((fn) => fn);
 
 let intersectionObserverCaller;
 let observedElement;

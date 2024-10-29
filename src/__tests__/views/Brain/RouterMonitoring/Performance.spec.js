@@ -40,6 +40,10 @@ describe('RouterMonitoringPerformance.vue', () => {
     });
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Rendering Elements', () => {
     it('renders the title correctly', () => {
       const title = wrapper.find('[data-test="title"]');
@@ -108,7 +112,7 @@ describe('RouterMonitoringPerformance.vue', () => {
 
   describe('Data Fetching', () => {
     it('calls loadMessagesPerformance on component mount', () => {
-      expect(monitoringStore.loadMessagesPerformance).toHaveBeenCalled();
+      expect(monitoringStore.loadMessagesPerformance).toHaveBeenCalledTimes(1);
     });
 
     it('re-fetches data when route query changes', async () => {

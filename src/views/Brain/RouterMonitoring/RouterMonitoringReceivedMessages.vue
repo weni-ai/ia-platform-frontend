@@ -1,6 +1,7 @@
 <template>
   <section class="router-monitoring__received-messages">
     <UnnnicIntelligenceText
+      data-test="title"
       tag="h2"
       family="secondary"
       size="body-lg"
@@ -15,16 +16,19 @@
         v-model="filters.text"
         iconLeft="search"
         :placeholder="$t('router.monitoring.search_message')"
+        data-test="filter-text"
       />
       <UnnnicSelectSmart
         v-model="filters.tag"
         :options="tags"
         orderedByIndex
+        data-test="filter-tag"
       />
     </section>
 
     <UnnnicIntelligenceText
       v-if="showNoMessageReceivedInfo"
+      data-test="no-message-received"
       color="neutral-clean"
       family="secondary"
       size="body-gt"
@@ -37,6 +41,7 @@
       v-model:pagination="pagination"
       hideHeaders
       class="received-messages__table"
+      data-test="messages-table"
       :headers="table.headers"
       :rows="formattedMessagesRows"
       :paginationTotal="monitoringStore.messages.count"
