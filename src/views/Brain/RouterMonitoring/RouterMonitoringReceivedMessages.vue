@@ -201,6 +201,10 @@ watch(
         #{$body-cell}:first-child {
           color: $unnnic-color-neutral-clean;
         }
+        #{$body-cell}:nth-child(2) {
+          padding: $unnnic-spacing-ant 0;
+          margin: 0 -$unnnic-spacing-xs;
+        }
       }
     }
     :deep(.unnnic-tag) {
