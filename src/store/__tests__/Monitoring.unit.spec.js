@@ -1,10 +1,10 @@
 import { setActivePinia, createPinia } from 'pinia';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { useMonitoringStore } from '@/store/Monitoring'; // Adjust the path as needed
-import nexusaiAPI from '@/api/nexusaiAPI.js';
-// import globalStore from '../index.js';
 
-vi.mock('@/api/nexusaiAPI.js'); // Mock the API
+import { useMonitoringStore } from '@/store/Monitoring';
+import nexusaiAPI from '@/api/nexusaiAPI.js';
+
+vi.mock('@/api/nexusaiAPI.js');
 vi.mock('@/store', () => ({
   default: {
     state: {
