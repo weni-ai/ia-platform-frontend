@@ -42,6 +42,7 @@
     <UnnnicInputDatePicker
       v-else-if="showDateFilter"
       v-model="dateFilter"
+      class="filter-date"
       size="sm"
       position="right"
     />
@@ -104,12 +105,17 @@ watch(
 
 <style lang="scss" scoped>
 .header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 9fr 3fr;
   gap: $unnnic-spacing-sm;
   align-items: center;
   justify-content: space-between;
 
   margin-bottom: $unnnic-spacing-md;
+
+  & > *:only-child {
+    grid-column: span 2;
+  }
 
   &__infos {
     display: grid;
@@ -134,5 +140,13 @@ watch(
 .save-button {
   width: 18.5 * $unnnic-font-size;
   margin-left: auto;
+}
+.filter-date {
+  :deep(.unnnic-form) {
+    width: 100%;
+    .unnnic-form-input {
+      width: 100%;
+    }
+  }
 }
 </style>
