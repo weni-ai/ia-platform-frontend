@@ -74,11 +74,11 @@
       "performance": "Desempenho",
       "received_messages": "Mensagens recebidas",
       "success": {
-        "title": "Respostas encontradas",
+        "title": "Resposta encontrada | Respostas encontradas",
         "tooltip": "Porcentagem de mensagens que o agente soube responder com base no seu conhecimento"
       },
       "failed": {
-        "title": "Respostas não encontradas",
+        "title": "Resposta não encontrada | Respostas não encontradas",
         "tooltip": "Porcentagem de mensagens que estavam fora do conhecimento do agente e ele não soube responder"
       },
       "action": {

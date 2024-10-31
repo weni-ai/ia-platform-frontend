@@ -74,11 +74,11 @@
       "performance": "Performance",
       "received_messages": "Received messages",
       "success": {
-        "title": "Answers found",
+        "title": "Answer found | Answers found",
         "tooltip": "Percentage of messages that the agent was able to answer based on their knowledge"
       },
       "failed": {
-        "title": "Answers not found",
+        "title": "Answer not found | Answers not found",
         "tooltip": "Percentage of messages that were outside the agent's knowledge and they were unable to answer"
       },
       "action": {

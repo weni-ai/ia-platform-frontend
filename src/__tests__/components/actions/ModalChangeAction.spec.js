@@ -83,7 +83,8 @@ global.runtimeVariables = {
 const pinia = createTestingPinia({ stubActions: false });
 
 const actionEditable = {
-  uuid: '1234',
+  uuid: 'abcd',
+  flow_uuid: '1234',
   name: 'Action Name',
   description: 'Action Description',
   group: 'custom',
@@ -214,7 +215,7 @@ describe('ModalChangeAction', () => {
           projectUuid: 'test2323test',
           name: 'Action Name Edited',
           prompt: 'Action Description Edited',
-          actionUuid: '1234',
+          actionUuid: 'abcd',
         }),
       );
     });
