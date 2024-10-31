@@ -152,7 +152,8 @@ export default {
       const action = this.items.data.find((action) => action.uuid === uuid);
 
       this.currentActionEditing = {
-        uuid: action.flow_uuid,
+        uuid: action.uuid,
+        flow_uuid: action.flow_uuid,
         type: action.type,
         name: action.name,
         editable: action.editable,
