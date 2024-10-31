@@ -77,9 +77,40 @@ describe('RouterMonitoringPerformance.vue', () => {
       const cardValue = card.find('[data-test="card-value"]');
 
       expect(title.text()).toBe(
-        i18n.global.t(`router.monitoring.${type}.title`),
+        i18n.global.t(`router.monitoring.${type}.title`, { count: 2 }),
       );
-      expect(cardValue.text()).toBe(`${Math.round(value)}%`);
+      expect(cardValue.text()).toBe(`${wrapper.vm.formatLocaleNumber(value)}%`);
+    });
+
+    describe('formatLocaleNumber', () => {
+      const formatLocaleNumber = (num) => wrapper.vm.formatLocaleNumber(num);
+
+      it('should format integer numbers without decimal places', () => {
+        expect(formatLocaleNumber(1000)).toBe('1,000');
+        expect(formatLocaleNumber(500)).toBe('500');
+        expect(formatLocaleNumber(12345)).toBe('12,345');
+      });
+
+      it('should format decimal numbers with one decimal place', () => {
+        expect(formatLocaleNumber(1000.5)).toBe('1,000.5');
+        expect(formatLocaleNumber(500.8)).toBe('500.8');
+        expect(formatLocaleNumber(12345.3)).toBe('12,345.3');
+      });
+
+      it('should handle edge cases', () => {
+        expect(formatLocaleNumber(0)).toBe('0');
+        expect(formatLocaleNumber(-12345.6)).toBe('-12,345.6');
+        expect(formatLocaleNumber(0.0)).toBe('0');
+      });
+
+      it('should use the specified locale for formatting', () => {
+        i18n.global.locale = 'pt-BR';
+
+        expect(formatLocaleNumber(1000)).toBe('1.000');
+        expect(formatLocaleNumber(1000.5)).toBe('1.000,5');
+
+        i18n.global.locale = 'en-US';
+      });
     });
   });
 
