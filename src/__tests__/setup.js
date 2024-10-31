@@ -2,6 +2,7 @@ import { vi } from 'vitest';
 
 import { config } from '@vue/test-utils';
 import i18n from '@/utils/plugins/i18n';
+import lodash from 'lodash';
 import UnnnicSystemPlugin from '@/utils/UnnnicSystemPlugin.js';
 import UnnnicDivider from '@/components/Divider.vue';
 import UnnnicIntelligenceHeader from '@/components/unnnic-intelligence/Header.vue';
@@ -50,3 +51,5 @@ config.global.components = {
   UnnnicIntelligenceHeader,
   UnnnicIntelligenceText,
 };
+
+vi.spyOn(lodash, 'debounce').mockImplementation((fn) => fn);
