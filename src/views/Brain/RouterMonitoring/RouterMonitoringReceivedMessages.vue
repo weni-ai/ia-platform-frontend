@@ -57,33 +57,26 @@ import i18n from '@/utils/plugins/i18n';
 import { useRoute } from 'vue-router';
 import { debounce } from 'lodash';
 
-const ANSWERS_FOUND = i18n.global.t('router.monitoring.filters.answers_found');
-const ANSWERS_NOT_FOUND = i18n.global.t(
-  'router.monitoring.filters.answers_not_found',
-);
-const MESSAGES_TRIGGER_ACTIONS = i18n.global.t(
-  'router.monitoring.filters.messages_that_trigger_actions',
-);
-
 const route = useRoute();
 const monitoringStore = useMonitoringStore();
+const t = (key) => i18n.global.t(key);
 
 const tags = ref([
   {
     value: 'all',
-    label: i18n.global.t('router.monitoring.filters.all_messages'),
+    label: t('router.monitoring.filters.all_messages'),
   },
   {
     value: 'success',
-    label: ANSWERS_FOUND,
+    label: t('router.monitoring.filters.answers_found'),
   },
   {
     value: 'failed',
-    label: ANSWERS_NOT_FOUND,
+    label: t('router.monitoring.filters.answers_not_found'),
   },
   {
     value: 'action_started',
-    label: MESSAGES_TRIGGER_ACTIONS,
+    label: t('router.monitoring.filters.messages_that_trigger_actions'),
   },
 ]);
 const filters = ref({
@@ -114,37 +107,49 @@ const showNoMessageReceivedInfo = computed(
 );
 
 const formattedMessagesRows = computed(() => {
-  const tagComponentProps = {
-    success: {
-      scheme: 'aux-green-500',
-      leftIcon: 'check_circle',
-      text: ANSWERS_FOUND,
-    },
-    failed: {
-      scheme: 'aux-red-500',
-      leftIcon: 'cancel',
-      text: ANSWERS_NOT_FOUND,
-    },
-    action_started: {
-      scheme: 'aux-blue-500',
-      leftIcon: 'bolt',
-      text: MESSAGES_TRIGGER_ACTIONS,
-    },
+  const getMessageTagProps = (
+    type,
+    action_name = t('router.monitoring.action.title'),
+  ) => {
+    if (type === 'success') {
+      return {
+        scheme: 'aux-green-500',
+        leftIcon: 'check_circle',
+        text: t('router.monitoring.success.title'),
+      };
+    }
+    if (type === 'failed') {
+      return {
+        scheme: 'aux-red-500',
+        leftIcon: 'cancel',
+        text: t('router.monitoring.failed.title'),
+      };
+    }
+    if (type === 'action_started') {
+      return {
+        scheme: 'aux-blue-500',
+        leftIcon: 'bolt',
+        text: action_name,
+      };
+    }
   };
-  return monitoringStore.messages.data.map(({ created_at, text, tag }) => ({
-    content: [
-      format(created_at, 'HH:mm'),
-      text,
-      {
-        component: Unnnic.unnnicTag,
-        props: {
-          type: 'default',
-          ...tagComponentProps[tag.toLowerCase()],
+
+  return monitoringStore.messages.data.map(
+    ({ created_at, text, tag, action_name }) => ({
+      content: [
+        format(created_at, 'HH:mm'),
+        text,
+        {
+          component: Unnnic.unnnicTag,
+          props: {
+            type: 'default',
+            ...getMessageTagProps(tag.toLowerCase(), action_name),
+          },
+          events: {},
         },
-        events: {},
-      },
-    ],
-  }));
+      ],
+    }),
+  );
 });
 
 function getReceivedMessages() {

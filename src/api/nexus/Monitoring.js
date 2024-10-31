@@ -28,12 +28,15 @@ export const Monitoring = {
 
       return {
         count,
-        data: results.map(({ id, created_at, message_text, tag }) => ({
-          created_at,
-          id,
-          text: message_text,
-          tag,
-        })),
+        data: results.map(
+          ({ id, created_at, message_text, tag, classification }) => ({
+            created_at,
+            id,
+            text: message_text,
+            tag,
+            action_name: classification,
+          }),
+        ),
       };
     },
 
