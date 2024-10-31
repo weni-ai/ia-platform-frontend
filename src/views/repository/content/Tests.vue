@@ -179,6 +179,8 @@ export default {
     },
   },
 
+  emits: ['messages'],
+
   setup() {
     const brainCustomizationStore = useBrainCustomizationStore();
 
@@ -186,8 +188,6 @@ export default {
       brainCustomizationStore,
     };
   },
-
-  emits: ['messages'],
 
   data() {
     return {

@@ -1,5 +1,6 @@
 import { useActionsStore } from '@/store/Actions';
 import VERBOSE_LANGUAGES from './verbose_languages';
+import i18n from './plugins/i18n';
 
 export const languageListToDict = (list) =>
   list.reduce((current, lang) => {
@@ -19,10 +20,39 @@ export const WENIGPT_OPTIONS = JSON.parse(
 );
 
 export const BRAIN_ROUTES = [
-  { title: 'personalization', page: 'router-personalization', icon: 'person' },
-  { title: 'content', page: 'router-content', icon: 'article' },
-  { title: 'actions', page: 'router-actions', icon: 'bolt' },
-  { title: 'tunings', page: 'router-tunings', icon: 'settings' },
+  {
+    title: 'monitoring',
+    description: i18n.global.t('router.monitoring.description'),
+    page: 'router-monitoring',
+    icon: 'bar_chart',
+    preview: false,
+  },
+  {
+    title: 'personalization',
+    page: 'router-personalization',
+    icon: 'person',
+    preview: true,
+  },
+  {
+    title: 'content',
+    description: i18n.global.t('content_bases.description'),
+    page: 'router-content',
+    icon: 'article',
+    preview: true,
+  },
+  {
+    title: 'actions',
+    description: i18n.global.t('router.actions.description'),
+    page: 'router-actions',
+    icon: 'bolt',
+    preview: true,
+  },
+  {
+    title: 'tunings',
+    page: 'router-tunings',
+    icon: 'settings',
+    preview: true,
+  },
 ];
 
 export const createDownloadAnchor = ({ name, href }) => {

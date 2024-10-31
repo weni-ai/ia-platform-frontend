@@ -1,6 +1,7 @@
 import request from '@/api/nexusaiRequest';
 import forceHttps from '@/api/utils/forceHttps';
 import { Actions } from './nexus/Actions';
+import { Monitoring } from './nexus/Monitoring';
 
 export default {
   question: {
@@ -123,6 +124,8 @@ export default {
         obstructiveErrorProducer,
       });
     },
+
+    monitoring: Monitoring,
 
     actions: Actions,
 

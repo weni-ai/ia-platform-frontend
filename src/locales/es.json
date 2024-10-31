@@ -63,10 +63,36 @@
       "click_here": "ajustes"
     },
     "tabs": {
+      "monitoring": "Monitoreo",
       "personalization": "Personalidad",
       "content": "Conocimiento",
       "actions": "Acciones",
       "tunings": "Ajustes"
+    },
+    "monitoring": {
+      "description": "Sigue los mensajes que recibió tu gente y mira cómo respondieron.",
+      "performance": "Actuación",
+      "received_messages": "Mensajes recibidos",
+      "success": {
+        "title": "Respuesta encontrada | Respuestas encontradas",
+        "tooltip": "Porcentaje de mensajes que el agente pudo responder según su conocimiento"
+      },
+      "failed": {
+        "title": "Respuesta no encontrada | Respuestas no encontradas",
+        "tooltip": "Porcentaje de mensajes que estaban fuera del conocimiento del agente y no pudo responder"
+      },
+      "action": {
+        "title": "Mensajes que desencadenaron acciones",
+        "tooltip": "Porcentaje de mensajes que desencadenaron una acción del agente"
+      },
+      "search_message": "Buscar mensaje",
+      "filters": {
+        "all_messages": "Todos los mensajes",
+        "answers_found": "Respuestas encontradas",
+        "answers_not_found": "Respuestas no encontradas",
+        "messages_that_trigger_actions": "Mensajes que desencadenaron acciones"
+      },
+      "no_message_received": "Ningún mensaje recibido"
     },
     "actions": {
       "title": "Acciones",

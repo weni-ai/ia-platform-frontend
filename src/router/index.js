@@ -89,6 +89,11 @@ const router = createRouter({
       },
       children: [
         {
+          path: 'monitoring',
+          name: 'router-monitoring',
+          component: () => import('../views/Brain/RouterMonitoring/index.vue'),
+        },
+        {
           path: 'personalization',
           name: 'router-personalization',
           component: () => import('../views/Brain/RouterCustomization.vue'),

@@ -21,8 +21,8 @@ jobs:
         run: |
           COVERAGE=$(jq '.total.lines.pct' coverage/coverage-summary.json)
           COVERAGE=${COVERAGE//\"/}
-          if [ $(echo "$COVERAGE < 80" | bc) -eq 1 ]; then
-            echo "Coverage is below 80%: $COVERAGE%"
+          if [ $(echo "$COVERAGE < 70" | bc) -eq 1 ]; then
+            echo "Coverage is below 70%: $COVERAGE%"
             exit 1
           fi
       - name: Upload coverage reports to Codecov

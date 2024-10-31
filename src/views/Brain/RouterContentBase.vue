@@ -6,16 +6,6 @@
     ]"
   >
     <section>
-      <UnnnicIntelligenceText
-        tag="p"
-        family="secondary"
-        size="body-gt"
-        weight="400"
-      >
-        {{ $t('content_bases.description') }}
-      </UnnnicIntelligenceText>
-    </section>
-    <section>
       <UnnnicTab
         :tabs="routerTabs.map((e) => e.page)"
         :activeTab="activeTab"

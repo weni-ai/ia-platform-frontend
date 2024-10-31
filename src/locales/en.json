@@ -63,10 +63,36 @@
       "click_here": "tunings"
     },
     "tabs": {
+      "monitoring": "Monitoring",
       "personalization": "Personality",
       "content": "Knowledge",
       "actions": "Actions",
       "tunings": "Tunings"
+    },
+    "monitoring": {
+      "description": "Follow the messages received by your people and see how they responded.",
+      "performance": "Performance",
+      "received_messages": "Received messages",
+      "success": {
+        "title": "Answer found | Answers found",
+        "tooltip": "Percentage of messages that the agent was able to answer based on their knowledge"
+      },
+      "failed": {
+        "title": "Answer not found | Answers not found",
+        "tooltip": "Percentage of messages that were outside the agent's knowledge and they were unable to answer"
+      },
+      "action": {
+        "title": "Messages that triggered actions",
+        "tooltip": "Percentage of messages that triggered an agent action"
+      },
+      "search_message": "Search message",
+      "filters": {
+        "all_messages": "All messages",
+        "answers_found": "Answers found",
+        "answers_not_found": "Answers not found",
+        "messages_that_trigger_actions": "Messages that triggered actions"
+      },
+      "no_message_received": "No message received"
     },
     "actions": {
       "title": "Actions",
