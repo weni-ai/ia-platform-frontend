@@ -63,7 +63,7 @@
         weight="bold"
         data-test="card-value"
       >
-        {{ Math.round(answer[1].value) }}%
+        {{ formatLocaleNumber(answer[1].value) }}%
       </UnnnicIntelligenceText>
     </section>
   </section>
@@ -80,7 +80,7 @@ const monitoringStore = useMonitoringStore();
 const route = useRoute();
 
 const createAnswer = (key) => ({
-  title: i18n.global.t(`router.monitoring.${key}.title`),
+  title: i18n.global.t(`router.monitoring.${key}.title`, { count: 2 }),
   tooltip: i18n.global.t(`router.monitoring.${key}.tooltip`),
   value: monitoringStore.messages.performance[key],
 });
@@ -97,6 +97,13 @@ const isLoadingPerformance = computed(
 
 function getMessagesPerformance() {
   monitoringStore.loadMessagesPerformance({});
+}
+
+function formatLocaleNumber(num) {
+  return new Intl.NumberFormat(i18n.global.locale, {
+    minimumFractionDigits: num % 1 === 0 ? 0 : 1,
+    maximumFractionDigits: 1,
+  }).format(num);
 }
 
 watch(

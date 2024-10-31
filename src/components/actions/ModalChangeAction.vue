@@ -185,7 +185,7 @@ onBeforeMount(() => {
   name.value = action.name;
   description.value = action.description;
 
-  searchForFlowUuid(action.uuid);
+  searchForFlowUuid(action.flow_uuid);
 });
 
 function close() {
@@ -235,7 +235,7 @@ function openFlowEditor() {
 
   const transformedLink = templateLinkFlowEditor
     .replace('{dashProjectUuid}', store.state.Auth.connectProjectUuid)
-    .replace('{flowUuid}', props.action.uuid);
+    .replace('{flowUuid}', props.action.flow_uuid);
 
   window.open(transformedLink);
 }
