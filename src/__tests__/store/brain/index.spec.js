@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import store from '@/store/brain/index.js';
 import nexusaiAPI from '@/api/nexusaiAPI.js';
-import i18n from '@/utils/plugins/i18n';
+import { createPinia, setActivePinia } from 'pinia';
+import { useBrainCustomizationStore } from '@/store/BrainCustomization';
 
 vi.mock('@/api/nexusaiAPI.js', () => ({
   default: {
@@ -31,6 +32,16 @@ vi.mock('@/utils', () => ({
 }));
 
 vi.mock('@/store/index.js', () => ({
+  state: {
+    Brain: {
+      contentText: {
+        uuid: null,
+        current: '',
+        old: '',
+      },
+    },
+  },
+
   default: {
     watch: vi.fn(),
   },
@@ -63,27 +74,25 @@ const rootState = {
 };
 
 describe('store/brain/index.js', () => {
+  let brainCustomizationStore;
+  let brainCustomizationStoreValidate;
+  let brainCustomizationStoreSave;
+
   beforeEach(() => {
     vi.clearAllMocks();
+
+    setActivePinia(createPinia());
+
+    brainCustomizationStore = useBrainCustomizationStore();
+
+    brainCustomizationStoreValidate = vi.spyOn(
+      brainCustomizationStore,
+      'validate',
+    );
+    brainCustomizationStoreSave = vi.spyOn(brainCustomizationStore, 'save');
   });
 
   describe('getters', () => {
-    it('should return true if brain customization has changed', () => {
-      const state = {
-        agent: {
-          name: { current: 'new-name', old: 'old-name' },
-          role: { current: 'role', old: 'role' },
-          goal: { current: 'goal', old: 'goal' },
-          personality: { current: 'personality', old: 'personality' },
-        },
-        instructions: {
-          current: [{ instruction: 'new-instruction' }],
-          old: [{ instruction: 'old-instruction' }],
-        },
-      };
-      expect(store.getters.hasBrainCustomizationChanged(state)).toBe(true);
-    });
-
     it('should return the correct brain tunings fields', () => {
       const state = {
         tunings: { model: 'WeniGPT' },
@@ -120,15 +129,8 @@ describe('store/brain/index.js', () => {
     });
 
     it('should return true if the save button is disabled due to error fields', () => {
-      const state = {
-        customizationErrorRequiredFields: {
-          name: true,
-          role: false,
-          goal: false,
-        },
-      };
+      const state = {};
       const getters = {
-        hasBrainCustomizationChanged: false,
         hasBrainTuningsChanged: false,
         hasBrainContentTextChanged: false,
       };
@@ -138,43 +140,13 @@ describe('store/brain/index.js', () => {
     });
 
     it('should return false if the save button', () => {
-      const state = {
-        customizationErrorRequiredFields: {
-          name: false,
-        },
-      };
+      const state = {};
       const getters = {
-        hasBrainCustomizationChanged: true,
+        hasBrainTuningsChanged: true,
       };
       expect(store.getters.isBrainSaveButtonDisabled(state, getters)).toBe(
         false,
       );
-    });
-
-    it('should return true if agent properties have changed', () => {
-      const state = {
-        agent: {
-          name: { current: 'new-name', old: 'old-name' },
-          role: { current: 'new-role', old: 'old-role' },
-          goal: { current: 'new-goal', old: 'old-goal' },
-          personality: { current: 'new-personality', old: 'old-personality' },
-        },
-        instructions: { current: [], old: [] },
-      };
-      expect(store.getters.hasBrainCustomizationChanged(state)).toBe(true);
-    });
-
-    it('should return false if no agent properties or instructions have changed', () => {
-      const state = {
-        agent: {
-          name: { current: 'name', old: 'name' },
-          role: { current: 'role', old: 'role' },
-          goal: { current: 'goal', old: 'goal' },
-          personality: { current: 'personality', old: 'personality' },
-        },
-        instructions: { current: [], old: [] },
-      };
-      expect(store.getters.hasBrainCustomizationChanged(state)).toBe(false);
     });
 
     it('should return false if brain content text has not changed', () => {
@@ -186,45 +158,6 @@ describe('store/brain/index.js', () => {
   });
 
   describe('actions', () => {
-    it('should load brain customization and commit values', async () => {
-      nexusaiAPI.router.customization.read.mockResolvedValue({
-        data: { agent: { name: 'name' }, instructions: [] },
-      });
-      const commit = vi.fn();
-      await store.actions.loadBrainCustomization({
-        commit,
-        state: {
-          customizationStatus: 'waitingToLoad',
-        },
-        rootState,
-      });
-      expect(commit).toHaveBeenCalledWith(
-        'setBrainCustomizationInitialValues',
-        { agent: { name: 'name' }, instructions: [] },
-      );
-    });
-
-    it('should load brain customization and commit values if is agent === null', async () => {
-      nexusaiAPI.router.customization.read.mockResolvedValue({
-        data: { agent: null, instructions: [] },
-      });
-      const commit = vi.fn();
-      await store.actions.loadBrainCustomization({
-        commit,
-        state: {
-          customizationStatus: 'waitingToLoad',
-        },
-        rootState,
-      });
-      expect(commit).toHaveBeenCalledWith(
-        'setBrainCustomizationInitialValues',
-        {
-          agent: { name: '', role: '', goal: '', personality: '' },
-          instructions: [],
-        },
-      );
-    });
-
     it('should load brain tunings with tuningsStatus !== waitingToLoad is true', async () => {
       const commit = vi.fn();
       const result = await store.actions.loadBrainTunings({
@@ -258,54 +191,6 @@ describe('store/brain/index.js', () => {
       expect(commit).toHaveBeenCalledWith('setBrainTuningsInitialValues', {
         setup: { name: 'test' },
       });
-    });
-
-    it('should handle errors in loadBrainCustomization action', async () => {
-      nexusaiAPI.router.customization.read.mockRejectedValue(
-        new Error('Failed'),
-      );
-      const commit = vi.fn();
-      await store.actions.loadBrainCustomization({
-        commit,
-        state: {
-          customizationStatus: 'waitingToLoad',
-        },
-        rootState,
-      });
-      expect(rootState.alert).toEqual({
-        type: 'error',
-        text: i18n.global.t('customization.invalid_get_data'),
-      });
-    });
-
-    it('should return undefined in loadBrainCustomization action', async () => {
-      const commit = vi.fn();
-      const result = await store.actions.loadBrainCustomization({
-        commit,
-        state: {
-          customizationStatus: 'notToLoad',
-        },
-        rootState,
-      });
-      expect(result).toBe(undefined);
-    });
-
-    it('should save brain customization and commit values', async () => {
-      const commit = vi.fn();
-      const data = { agent: { name: 'name' }, instructions: [] };
-      nexusaiAPI.router.customization.edit.mockResolvedValue({ data });
-      await store.actions.saveBrainCustomization({
-        commit,
-        state: {
-          agent: { name: { current: 'name' } },
-          instructions: { current: [] },
-        },
-        rootState,
-      });
-      expect(commit).toHaveBeenCalledWith(
-        'setBrainCustomizationInitialValues',
-        data,
-      );
     });
 
     it('should save brain content text when UUID exists', async () => {
@@ -359,6 +244,10 @@ describe('store/brain/index.js', () => {
       store.getters.hasBrainCustomizationChanged = true;
       store.getters.hasBrainTuningsChanged = true;
       store.getters.hasBrainContentTextChanged = true;
+      brainCustomizationStore.name.current = 'Changed';
+      brainCustomizationStore.role.current = 'Changed';
+      brainCustomizationStore.personality.current = 'Changed';
+      brainCustomizationStore.goal.current = 'Changed';
       const dispatch = vi.fn().mockResolvedValue([]);
       await store.actions.saveBrainChanges({
         state: { isSavingChanges: false },
@@ -366,98 +255,12 @@ describe('store/brain/index.js', () => {
         rootState,
         dispatch,
       });
-      expect(dispatch).toHaveBeenCalledWith('validateBrainCustomization');
-      expect(dispatch).toHaveBeenCalledWith('saveBrainCustomization');
+
       expect(dispatch).toHaveBeenCalledWith('saveBrainTunings');
-      expect(dispatch).toHaveBeenCalledWith('saveBrainContentText');
-    });
-    describe('actions', () => {
-      it('should set error state when failing to load brain customization', async () => {
-        nexusaiAPI.router.customization.read.mockRejectedValue(
-          new Error('Failed'),
-        );
-        const commit = vi.fn();
-        await store.actions.loadBrainCustomization({
-          commit,
-          state: { customizationStatus: 'waitingToLoad' },
-          rootState,
-        });
-        expect(rootState.alert.type).toBe('error');
-        expect(rootState.alert.text).toBe(
-          i18n.global.t('customization.invalid_get_data'),
-        );
-      });
-
-      it('should update the status to "loaded" after loading brain customization', async () => {
-        nexusaiAPI.router.customization.read.mockResolvedValue({
-          data: { agent: { name: 'name' }, instructions: [] },
-        });
-        const commit = vi.fn();
-        const state = { customizationStatus: 'waitingToLoad' };
-        await store.actions.loadBrainCustomization({
-          commit,
-          state,
-          rootState,
-        });
-        expect(state.customizationStatus).toBe('loaded');
-      });
-
-      it('should validate brain customization and set error fields', () => {
-        const state = {
-          agent: {
-            name: { current: '' },
-            role: { current: '' },
-            goal: { current: '' },
-          },
-          customizationErrorRequiredFields: {
-            name: false,
-            role: false,
-            goal: false,
-          },
-        };
-        try {
-          store.actions.validateBrainCustomization({ state });
-        } catch (e) {
-          expect(e.tab).toBe('personalization');
-        }
-        expect(state.customizationErrorRequiredFields.name).toBe(true);
-      });
-
-      it('should set tabsWithError when brain customization validation fails', async () => {
-        store.getters.hasBrainCustomizationChanged = true;
-        const dispatch = vi.fn().mockRejectedValue({ tab: 'personalization' });
-        const state = { tabsWithError: null };
-        await store.actions.saveBrainChanges({
-          state,
-          getters: store.getters,
-          rootState,
-          dispatch,
-        });
-        expect(state.tabsWithError).toEqual(['personalization']);
-      });
     });
   });
 
   describe('mutations', () => {
-    it('should set brain customization initial values', () => {
-      const state = {
-        agent: { name: { old: '', current: '' } },
-        instructions: {
-          current: [{ instruction: '' }],
-          old: [{ instruction: '' }],
-        },
-      };
-      store.mutations.setBrainCustomizationInitialValues(state, {
-        agent: { name: 'new-name' },
-        instructions: [],
-      });
-
-      expect(state.agent.name.current).toBe('new-name');
-      expect(state.agent.name.old).toBe('new-name');
-      expect(state.instructions.current).toEqual([{ instruction: '' }]);
-      expect(state.instructions.old).toEqual([{ instruction: '' }]);
-    });
-
     it('should set brain tunings initial values', () => {
       const state = { tunings: {}, tuningsOld: {} };
       store.mutations.setBrainTuningsInitialValues(state, {
@@ -518,31 +321,6 @@ describe('store/brain/index.js', () => {
       const state = { tunings: {} };
       store.mutations.updateTuning(state, { name: 'temperature', value: 0.5 });
       expect(state.tunings.temperature).toBe(0.5);
-    });
-    it('should set brain customization initial values correctly', () => {
-      const state = {
-        agent: {
-          name: { current: '', old: '' },
-          role: { current: '', old: '' },
-          goal: { current: '', old: '' },
-          personality: { current: '', old: '' },
-        },
-        instructions: { current: [], old: [] },
-      };
-      const data = {
-        agent: {
-          name: 'new-name',
-          role: 'new-role',
-          goal: 'new-goal',
-          personality: 'new-personality',
-        },
-        instructions: [],
-      };
-      store.mutations.setBrainCustomizationInitialValues(state, data);
-      expect(state.agent.name.current).toBe('new-name');
-      expect(state.agent.role.current).toBe('new-role');
-      expect(state.agent.goal.current).toBe('new-goal');
-      expect(state.agent.personality.current).toBe('new-personality');
     });
 
     it('should update tuning value correctly', () => {

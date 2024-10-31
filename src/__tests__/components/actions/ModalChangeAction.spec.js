@@ -82,6 +82,20 @@ global.runtimeVariables = {
 
 const pinia = createTestingPinia({ stubActions: false });
 
+const actionEditable = {
+  uuid: 'abcd',
+  flow_uuid: '1234',
+  name: 'Action Name',
+  description: 'Action Description',
+  group: 'custom',
+  editable: true,
+};
+
+const actionNonEditable = {
+  ...actionEditable,
+  editable: false,
+};
+
 describe('ModalChangeAction', () => {
   let wrapper;
 
@@ -89,12 +103,7 @@ describe('ModalChangeAction', () => {
     mount(ModalChangeAction, {
       props: {
         modelValue: true,
-        action: {
-          uuid: '1234',
-          name: 'Action Name',
-          description: 'Action Description',
-          group: 'custom',
-        },
+        action: actionEditable,
       },
 
       global: {
@@ -115,6 +124,22 @@ describe('ModalChangeAction', () => {
     expect(description.wrapperElement.querySelector('textarea').value).toBe(
       'Action Description',
     );
+  });
+
+  it('should disable name input and description textarea if the action is not editable', async () => {
+    wrapper = setup();
+
+    const name = wrapper.find('[data-test="name-input"]');
+    const description = wrapper.findComponent(
+      '[data-test="description-textarea"]',
+    );
+
+    await wrapper.setProps({
+      action: actionNonEditable,
+    });
+
+    expect(name.attributes('disabled')).toBe('true');
+    expect(description.props().disabled).toBe(true);
   });
 
   it('displays the flow name', async () => {
@@ -190,7 +215,7 @@ describe('ModalChangeAction', () => {
           projectUuid: 'test2323test',
           name: 'Action Name Edited',
           prompt: 'Action Description Edited',
-          actionUuid: '1234',
+          actionUuid: 'abcd',
         }),
       );
     });

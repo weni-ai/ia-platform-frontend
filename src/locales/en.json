@@ -5,6 +5,7 @@
   "back": "Back",
   "next": "Next",
   "finish": "Finish",
+  "speed": "Speed",
   "save_changes": "Save changes",
   "announcements": {
     "new_artificial_intelligence_module_is_here": "The new Artificial Intelligence module is here! Explore what's new and learn how to create even more amazing chatbots!"
@@ -62,10 +63,36 @@
       "click_here": "tunings"
     },
     "tabs": {
+      "monitoring": "Monitoring",
       "personalization": "Personality",
       "content": "Knowledge",
       "actions": "Actions",
       "tunings": "Tunings"
+    },
+    "monitoring": {
+      "description": "Follow the messages received by your people and see how they responded.",
+      "performance": "Performance",
+      "received_messages": "Received messages",
+      "success": {
+        "title": "Answer found | Answers found",
+        "tooltip": "Percentage of messages that the agent was able to answer based on their knowledge"
+      },
+      "failed": {
+        "title": "Answer not found | Answers not found",
+        "tooltip": "Percentage of messages that were outside the agent's knowledge and they were unable to answer"
+      },
+      "action": {
+        "title": "Messages that triggered actions",
+        "tooltip": "Percentage of messages that triggered an agent action"
+      },
+      "search_message": "Search message",
+      "filters": {
+        "all_messages": "All messages",
+        "answers_found": "Answers found",
+        "answers_not_found": "Answers not found",
+        "messages_that_trigger_actions": "Messages that triggered actions"
+      },
+      "no_message_received": "No message received"
     },
     "actions": {
       "title": "Actions",
@@ -191,7 +218,8 @@
       "field_changed_to_value": "Parameter {field} changed to {value}",
       "flow_started": "Flow {name} started",
       "flow_finished": "Flow finished",
-      "message_forwarded_to_brain": "Message forwarded to Agent Builder"
+      "message_forwarded_to_brain": "Message forwarded to Agent Builder",
+      "media_and_location_unavailable": "There is no Media and Location action registered"
     }
   },
   "content_bases": {
@@ -699,6 +727,11 @@
         "tests": "Test knowledge bases",
         "tests_subtitle": "Test knowledge bases asking them questions and observing their answers.",
         "preview_tests_placeholder": "Type a message",
+        "preview_tests_attachments": {
+          "photos_or_videos": "Photos and videos",
+          "file": "File",
+          "location": "Location"
+        },
         "tests_placeholder": "Ask a question for the knowledge base...",
         "api": "Integrate this intelligence",
         "api_subtitle": "Our API is compatible with many platforms via API REST integration. To know further, access our <a href='https://docs.ilhasoft.mobi/l/en/content-intelligence/integrating-content-intelligence' target='_blank' class='repository-api__header__subtitle--link'>documentation</a> and the <a href='https://api.bothub.it/#tag/repository' target='_blank' class='repository-api__header__subtitle--link'>API explorer</a>.",
@@ -1485,6 +1518,10 @@
         "title": "Service and support",
         "description": "Actions for customer support and communication adjustments"
       },
+      "media": {
+        "title": "Media and location",
+        "description": "Actions initiated from image, video, audio and user location"
+      },
       "custom": {
         "title": "Customized",
         "description": "Actions to meet specific needs"
@@ -1532,7 +1569,7 @@
                 "placeholder": "Search flow"
               }
             },
-            "flow_already_in_use": "This flow is already linked to an action"
+            "flow_assigned_actions": "This flow has already been assigned to {count} action:\n{actions} | This flow has already been assigned to {count} actions:\n{actions}"
           },
           "nominate_action": {
             "title": "Name action",
@@ -1664,5 +1701,8 @@
     "time_ago_hours": "{count} hour ago | {count} hours ago",
     "time_ago_days": "{count} day ago | {count} days ago",
     "time_ago_months": "{count} month ago | {count} months ago"
+  },
+  "audio_recorder": {
+    "discard_button": "Discard"
   }
 }

@@ -1,12 +1,10 @@
 import { mount } from '@vue/test-utils';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import SelectFlow from '../SelectFlow.vue';
-import lodash from 'lodash';
 import { createPinia, setActivePinia } from 'pinia';
 import { Actions } from '@/api/nexus/Actions';
 import { useActionsStore } from '@/store/Actions';
-
-vi.spyOn(lodash, 'debounce').mockImplementation((fn) => fn);
+import i18n from '@/utils/plugins/i18n';
 
 let intersectionObserverCaller;
 let observedElement;
@@ -41,10 +39,11 @@ const items = {
 };
 
 const alreadyAddedAction = {
-  uuid: '123',
+  uuid: '12345',
   name: 'Action One',
   prompt: 'Action One Description',
   type: 'custom',
+  flow_uuid: '123',
 };
 
 describe('SelectFlow.vue', () => {
@@ -115,26 +114,39 @@ describe('SelectFlow.vue', () => {
 
       selectableFlow.trigger('click');
 
-      expect(wrapper.emitted('update:flowUuid')).toContainEqual(['456']);
-      expect(wrapper.emitted('update:name')).toContainEqual(['Flow Two']);
+      expect(wrapper.emitted('update:flowUuid')).toContainEqual(['123']);
+      expect(wrapper.emitted('update:name')).toContainEqual(['Flow One']);
     });
   });
 
-  describe('when the user wants to select an already added flow', () => {
-    it('should not emit update:flowUuid and update:name', async () => {
+  describe('when the flow has more than one action selected', () => {
+    it('should render actions length, icon, and tooltip with actions names', async () => {
       vi.spyOn(Actions, 'list').mockResolvedValue([alreadyAddedAction]);
-
       const actionsStore = useActionsStore();
       await actionsStore.load();
 
-      const nonSelectableFlow = flows.find((flow) => {
-        return flow.attributes('data-test').endsWith(alreadyAddedAction.uuid);
-      });
+      const actionIcon = wrapper.findComponent(
+        '[data-test="flow-item-actions-icon"]',
+      );
+      expect(actionIcon.exists()).toBe(true);
+      expect(actionIcon.props('icon')).toBe('bolt');
 
-      nonSelectableFlow.trigger('click');
+      const tooltip = wrapper.findComponent(
+        '[data-test="flow-item-actions-tooltip"]',
+      );
+      expect(tooltip.exists()).toBe(true);
+      expect(tooltip.text()).toContain('1');
 
-      expect(wrapper.emitted()).not.toHaveProperty('update:flowUuid');
-      expect(wrapper.emitted()).not.toHaveProperty('update:name');
+      const formattedActions = i18n.global.t(
+        'modals.actions.add.steps.select_flow.flow_assigned_actions',
+        1,
+        {
+          count: 1,
+          actions: 'Action One',
+        },
+      );
+
+      expect(tooltip.props('text')).toBe(formattedActions);
     });
   });
 });

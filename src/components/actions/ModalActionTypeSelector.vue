@@ -104,6 +104,13 @@ const groups = computed(() =>
       ),
     },
     {
+      id: 'media',
+      title: i18n.global.t('action_type_selector.types.media.title'),
+      description: i18n.global.t(
+        'action_type_selector.types.media.description',
+      ),
+    },
+    {
       id: 'custom',
       title: i18n.global.t('action_type_selector.types.custom.title'),
       description: i18n.global.t(

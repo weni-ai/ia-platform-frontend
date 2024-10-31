@@ -30,6 +30,8 @@ const runtimeVariables = (() => ({
   KEYCLOAK_REALM: ('${KEYCLOAK_REALM}' || ''),
   HOTJAR_ID: ('${HOTJAR_ID}' || ''),
   TEMPLATE_LINK_FLOW_EDITOR: '${TEMPLATE_LINK_FLOW_EDITOR}',
+  VITE_ORGS_CAN_CREATE_CONTENT_AI: '${VITE_ORGS_CAN_CREATE_CONTENT_AI}',
+  VITE_USERS_CAN_MONITORING: '${VITE_USERS_CAN_MONITORING}',
   
   get(name){
     return this[name];

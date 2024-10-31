@@ -10,6 +10,9 @@ import Tests from '@/views/repository/content/Tests.vue';
 import nexusaiAPI from '@/api/nexusaiAPI';
 import { expect } from 'vitest';
 import { useRoute } from 'vue-router';
+import { createTestingPinia } from '@pinia/testing';
+
+const pinia = createTestingPinia({ stubActions: false });
 
 const store = createStore({
   state() {
@@ -107,7 +110,7 @@ describe('Brain Component', () => {
 
     wrapper = mount(Brain, {
       global: {
-        plugins: [store],
+        plugins: [store, pinia],
         components: {
           RouterContentBase,
           RouterActions,

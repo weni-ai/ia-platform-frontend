@@ -6,16 +6,6 @@
     ]"
   >
     <section>
-      <UnnnicIntelligenceText
-        tag="p"
-        family="secondary"
-        size="body-gt"
-        weight="400"
-      >
-        {{ $t('content_bases.description') }}
-      </UnnnicIntelligenceText>
-    </section>
-    <section>
       <UnnnicTab
         :tabs="routerTabs.map((e) => e.page)"
         :activeTab="activeTab"
@@ -52,8 +42,8 @@
     />
     <ContentText
       v-if="activeTab === 'text'"
-      v-model="$store.state.Brain.contentText.current"
-      :isLoading="text?.status === 'loading'"
+      v-model="$store.state.Brain.contentText"
+      :isLoading="textLoading"
       class="content-base__content-tab__text"
     />
   </section>
@@ -84,6 +74,9 @@ export default defineComponent({
     textProp: {
       type: Object,
       required: true,
+    },
+    textLoading: {
+      type: Boolean,
     },
   },
   emits: ['update:files'],

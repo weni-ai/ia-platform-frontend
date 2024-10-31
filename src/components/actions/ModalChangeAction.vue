@@ -42,6 +42,7 @@
               'modals.actions.add.steps.describe.inputs.description.placeholder',
             )
           "
+          :disabled="action.editable === false"
           data-test="description-textarea"
         />
       </UnnnicFormElement>
@@ -62,6 +63,7 @@
               'modals.actions.add.steps.nominate_action.inputs.name.placeholder',
             )
           "
+          :disabled="action.editable === false"
           data-test="name-input"
         />
       </UnnnicFormElement>
@@ -183,7 +185,7 @@ onBeforeMount(() => {
   name.value = action.name;
   description.value = action.description;
 
-  searchForFlowUuid(action.uuid);
+  searchForFlowUuid(action.flow_uuid);
 });
 
 function close() {
@@ -233,7 +235,7 @@ function openFlowEditor() {
 
   const transformedLink = templateLinkFlowEditor
     .replace('{dashProjectUuid}', store.state.Auth.connectProjectUuid)
-    .replace('{flowUuid}', props.action.uuid);
+    .replace('{flowUuid}', props.action.flow_uuid);
 
   window.open(transformedLink);
 }
@@ -291,6 +293,14 @@ async function saveAction() {
 
 .form-element + .form-element {
   margin-top: $unnnic-spacing-sm;
+}
+
+.text-area :deep(textarea:disabled) {
+  outline-color: $unnnic-color-neutral-cleanest;
+  background-color: $unnnic-color-neutral-lightest;
+  color: $unnnic-color-neutral-cleanest;
+
+  cursor: not-allowed;
 }
 
 .flow-area {

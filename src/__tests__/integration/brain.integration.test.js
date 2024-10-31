@@ -16,6 +16,19 @@ import { createWebHistory, createRouter } from 'vue-router';
 import Home from '@/views/Home.vue';
 import { createTestingPinia } from '@pinia/testing';
 import { Actions as ActionsAPI } from '@/api/nexus/Actions';
+import { useBrainCustomizationStore } from '@/store/BrainCustomization';
+
+vi.spyOn(nexusaiAPI.router.customization, 'read').mockResolvedValue({
+  data: {
+    agent: {
+      name: '',
+      role: '',
+      personality: '',
+      goal: '',
+    },
+    instructions: [],
+  },
+});
 
 const pinia = createTestingPinia({ stubActions: false });
 
@@ -266,6 +279,7 @@ const removedRequest = vi
 describe('Brain integration', () => {
   let wrapper;
   let dispatchSpy;
+  let brainCustomizationStore;
 
   beforeEach(async () => {
     router.push('/router');
@@ -288,6 +302,8 @@ describe('Brain integration', () => {
         },
       },
     });
+
+    brainCustomizationStore = useBrainCustomizationStore();
   });
 
   test('check if all routes render the correct component when accessed by tabs', async () => {
@@ -318,89 +334,6 @@ describe('Brain integration', () => {
 
     const tuningsComponent = wrapper.findComponent(RouterTunings);
     expect(tuningsComponent.exists()).toBe(true);
-  });
-
-  test('checking that the personalization tab is saving the entries provided and performing the save', async () => {
-    const navigation = wrapper.findAll('[data-test="nav-router"]');
-
-    await navigation.at(0).trigger('click');
-
-    await flushPromises();
-
-    const customizationComponent = wrapper.findComponent(RouterCustomization);
-
-    expect(customizationComponent.exists()).toBe(true);
-
-    const nameInput = wrapper.findComponent('[data-test="input-name"]');
-    const roleInput = wrapper.findComponent('[data-test="input-role"]');
-    const personalitySelect = wrapper.findComponent(
-      '[data-test="select-personality"]',
-    );
-    const goalTextArea = wrapper.findComponent('[data-test="textarea"]');
-
-    await nameInput.setValue('Test Name');
-    await roleInput.setValue('Test Role');
-    await personalitySelect.vm.$emit('update:model-value', [
-      { value: 'Amigável' },
-    ]);
-    await goalTextArea.setValue('Test Goal');
-
-    expect(store.state.Brain.agent.name.current).toBe('Test Name');
-    expect(store.state.Brain.agent.role.current).toBe('Test Role');
-    expect(store.state.Brain.agent.personality.current).toBe('Amigável');
-    expect(store.state.Brain.agent.goal.current).toBe('Test Goal');
-
-    const addButton = wrapper.findComponent(
-      '[data-test="btn-add-instruction"]',
-    );
-
-    await addButton.trigger('click');
-
-    expect(store.state.Brain.instructions.current.length).toBe(1);
-
-    const firstInstructionInput = wrapper.findComponent(
-      '[data-test="instruction-0"]',
-    );
-    await firstInstructionInput.setValue('instruction 01');
-
-    expect(store.state.Brain.instructions.current[0].instruction).toBe(
-      'instruction 01',
-    );
-
-    const deleteButtonFirstInstruction = wrapper.findComponent(
-      '[data-test="btn-delete-inst-0"]',
-    );
-
-    await deleteButtonFirstInstruction.trigger('click');
-
-    const removeModal = wrapper.findComponent('[data-test="remove-modal"]');
-
-    expect(removeModal.exists()).toBe(true);
-
-    const removeInstructionBtn = wrapper.findComponent(
-      '[data-test="btn-remove-inst"]',
-    );
-
-    await removeInstructionBtn.trigger('click');
-
-    expect(store.state.Brain.instructions.current.length).toBe(1);
-
-    await addButton.trigger('click');
-
-    const secondInstInput = wrapper.findComponent(
-      '[data-test="instruction-0"]',
-    );
-    await secondInstInput.setValue('instruction 02');
-
-    expect(store.state.Brain.instructions.current[0].instruction).toBe(
-      'instruction 02',
-    );
-
-    const saveBtn = wrapper.findComponent('.save-button');
-
-    await saveBtn.trigger('click');
-
-    expect(dispatchSpy).toHaveBeenCalledWith('saveBrainChanges');
   });
 
   test('checking that the content base tab is saving the entries provided and performing the save', async () => {
