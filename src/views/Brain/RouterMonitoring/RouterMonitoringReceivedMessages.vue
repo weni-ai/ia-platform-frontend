@@ -36,31 +36,52 @@
     >
       {{ $t('router.monitoring.no_message_received') }}
     </UnnnicIntelligenceText>
-    <UnnnicTableNext
+    <section
       v-else
-      v-model:pagination="pagination"
-      hideHeaders
-      class="received-messages__table"
-      data-test="messages-table"
-      :headers="table.headers"
-      :rows="formattedMessagesRows"
-      :paginationTotal="monitoringStore.messages.count"
-      :paginationInterval="paginationInterval"
-      :isLoading="isTableLoading"
-    />
+      :class="{
+        'received-messages__table': true,
+        'received-messages__table--with-results':
+          !isTableLoading && formattedMessagesRows.length,
+      }"
+    >
+      <UnnnicTableNext
+        v-model:pagination="pagination"
+        hideHeaders
+        :class="{
+          table__list: true,
+          'table__list--history-opened': receivedMessageHistoryId,
+        }"
+        data-test="messages-table"
+        :headers="table.headers"
+        :rows="formattedMessagesRows"
+        :paginationTotal="monitoringStore.messages.count"
+        :paginationInterval="paginationInterval"
+        :isLoading="isTableLoading"
+        @row-click="handleRowClick"
+      />
+
+      <ReceivedMessagesHistory
+        v-if="receivedMessageHistoryId"
+        :id="receivedMessageHistoryId"
+        class="table__history"
+        @close="receivedMessageHistoryId = ''"
+      />
+    </section>
   </section>
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import Unnnic from '@weni/unnnic-system';
 import { format } from 'date-fns';
+import { useRoute } from 'vue-router';
+import { debounce } from 'lodash';
 
 import { useMonitoringStore } from '@/store/Monitoring';
 
+import ReceivedMessagesHistory from './RouterMonitoringReceivedMessagesHistory.vue';
+
 import i18n from '@/utils/plugins/i18n';
-import { useRoute } from 'vue-router';
-import { debounce } from 'lodash';
 
 const route = useRoute();
 const monitoringStore = useMonitoringStore();
@@ -140,7 +161,7 @@ const formattedMessagesRows = computed(() => {
   };
 
   return monitoringStore.messages.data.map(
-    ({ created_at, text, tag, action_name }) => ({
+    ({ created_at, text, tag, action_name, id }) => ({
       content: [
         format(created_at, 'HH:mm'),
         text,
@@ -153,6 +174,7 @@ const formattedMessagesRows = computed(() => {
           events: {},
         },
       ],
+      id,
     }),
   );
 });
@@ -166,6 +188,12 @@ function getReceivedMessages() {
     tag: tagString === 'all' ? '' : tagString,
     text,
   });
+}
+
+const receivedMessageHistoryId = ref('');
+
+function handleRowClick(row) {
+  receivedMessageHistoryId.value = row.id;
 }
 
 watch(
@@ -204,6 +232,8 @@ watch(
   }
 
   .received-messages__table {
+    position: relative;
+
     :deep(.unnnic-table-next__body-row) {
       $body-cell: '.unnnic-table-next__body-cell';
 
@@ -226,6 +256,48 @@ watch(
         white-space: nowrap;
         text-overflow: ellipsis;
       }
+    }
+
+    &--with-results {
+      :deep(.unnnic-table-next__body-row):hover {
+        background-color: $unnnic-color-weni-100;
+
+        cursor: pointer;
+      }
+    }
+
+    .table__list {
+      &--history-opened {
+        overflow: hidden;
+        :deep(.unnnic-table-next__body) {
+          border: $unnnic-border-width-thinner solid
+            $unnnic-color-neutral-cleanest;
+          border-radius: $unnnic-border-radius-sm;
+        }
+        :deep(.unnnic-table-next__body-row) {
+          width: 50%;
+          border-left: 0;
+          border-radius: 0;
+
+          &:first-of-type {
+            border-top: 0;
+          }
+
+          &:last-of-type {
+            border-bottom: 0;
+          }
+        }
+      }
+    }
+
+    .table__history {
+      $paginationButtonHeight: 38px;
+
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 50%;
+      height: calc(100% - $unnnic-spacing-lg - $paginationButtonHeight);
     }
   }
 }

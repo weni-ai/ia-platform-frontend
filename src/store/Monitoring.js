@@ -47,6 +47,18 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     }
   }
 
+  async function loadMessagesHistory({ id }) {
+    try {
+      const response = await nexusaiAPI.router.monitoring.messages.history({
+        projectUuid: connectProjectUuid.value,
+        id,
+      });
+      return response;
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+
   async function loadMessagesPerformance() {
     const { started_day, ended_day } = route.query;
     try {
@@ -72,6 +84,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
   return {
     messages,
     loadMessages,
+    loadMessagesHistory,
     loadMessagesPerformance,
   };
 });

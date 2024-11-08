@@ -40,6 +40,23 @@ export const Monitoring = {
       };
     },
 
+    async history({ projectUuid, id }) {
+      // const {
+      //   data: { results },
+      // } = await request.$http.get(
+      //   `api/${projectUuid}/message_history/?uuid=${id}`,
+      // );
+
+      return {
+        uuid: 'uuid',
+        contact_urn: 'whatsapp:999999999',
+        text: 'como envio meu currículo??',
+        llm_response:
+          'Desculpe, mas essa pergunta está fora do meu escopo de conhecimento. Posso te ajudar com outras dúvidas relacionadas a lhamas? 🦙',
+        llm_response_status: 'failed',
+      };
+    },
+
     async performance({ projectUuid, started_day, ended_day }) {
       const params = cleanParams({
         started_day,
