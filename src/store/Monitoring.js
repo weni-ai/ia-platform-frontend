@@ -22,6 +22,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
       success: 0,
       failed: 0,
     },
+    inspectedAnswer: null,
   });
 
   async function loadMessages({ page, pageInterval, tag, text }) {
@@ -49,13 +50,40 @@ export const useMonitoringStore = defineStore('monitoring', () => {
 
   async function loadMessagesHistory({ id }) {
     try {
-      const response = await nexusaiAPI.router.monitoring.messages.history({
+      messages.inspectedAnswer = null;
+      messages.inspectedAnswer.status = 'loading';
+
+      const {
+        id: responseId,
+        text,
+        status,
+        llm_response,
+        is_approved,
+        contact_urn,
+        groundedness,
+      } = (await nexusaiAPI.router.monitoring.messages.history({
         projectUuid: connectProjectUuid.value,
         id,
-      });
-      return response;
+      })) ?? {};
+
+      const llmStatusMap = {
+        s: 'success',
+        f: 'failed',
+        a: 'action',
+      };
+
+      messages.inspectedAnswer = {
+        id: responseId,
+        text,
+        llm_response_status: llmStatusMap[status.toLowerCase()],
+        llm_response,
+        contact_urn,
+        is_approved,
+        groundedness,
+        status: 'complete',
+      };
     } catch (error) {
-      console.log('error', error);
+      messages.inspectedAnswer.status = 'error';
     }
   }
 
@@ -71,11 +99,11 @@ export const useMonitoringStore = defineStore('monitoring', () => {
       });
 
       messages.performance = {
+        status: 'complete',
         action: response?.action_percentage || 0,
         success: response?.succeed_percentage || 0,
         failed: response?.failed_percentage || 0,
       };
-      messages.performance.status = 'complete';
     } catch (error) {
       messages.performance.status = 'error';
     }

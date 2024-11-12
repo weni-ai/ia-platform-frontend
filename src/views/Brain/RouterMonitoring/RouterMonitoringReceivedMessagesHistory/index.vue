@@ -2,23 +2,27 @@
   <section class="received-messages-history">
     <header class="received-messages-history__header">
       <UnnnicIntelligenceText
+        class="header__urn"
         color="neutral-clean"
         family="secondary"
         size="body-md"
         tag="p"
       >
-        URN of Contact
+        {{ inspectedAnswer.contact_urn }}
       </UnnnicIntelligenceText>
       <UnnnicIcon
         icon="close"
         size="avatar-nano"
         scheme="neutral-darkest"
         clickable
-        @click="$emit('close')"
+        @click="close"
       />
     </header>
     <section class="received-messages-history__messages">
-      <button class="button-load-previous">
+      <button
+        v-if="!isLoadingMessages"
+        class="button-load-previous"
+      >
         <UnnnicIcon
           icon="refresh"
           size="xs"
@@ -34,13 +38,20 @@
           {{ $t('router.monitoring.load_previous_messages') }}
         </UnnnicIntelligenceText>
       </button>
+
+      <QuestionAndAnswer
+        :isLoading="isLoadingMessages"
+        :inspectionData="inspectedAnswer"
+      />
     </section>
   </section>
 </template>
 
 <script setup>
 import { useMonitoringStore } from '@/store/Monitoring';
-import { onMounted } from 'vue';
+import { computed, watch } from 'vue';
+import QuestionAndAnswer from './QuestionAndAnswer.vue';
+import { emit } from 'iframessa';
 
 const props = defineProps({
   id: {
@@ -52,10 +63,29 @@ const props = defineProps({
 defineEmits(['close']);
 
 const monitoringStore = useMonitoringStore();
+const inspectedAnswer = computed(
+  () => monitoringStore.messages.inspectedAnswer,
+);
+const isLoadingMessages = computed(
+  () => inspectedAnswer.value.status === 'loading',
+);
 
-onMounted(() => {
+function loadMessagesHistory() {
   monitoringStore.loadMessagesHistory({ id: props.id });
-});
+}
+
+function close() {
+  emit('close');
+  monitoringStore.messages.inspectedAnswer = null;
+}
+
+watch(
+  () => props.id,
+  () => loadMessagesHistory(),
+  {
+    immediate: true,
+  },
+);
 </script>
 
 <style lang="scss" scoped>
@@ -64,6 +94,7 @@ onMounted(() => {
 
   display: flex;
   flex-direction: column;
+  gap: $unnnic-spacing-xs;
 
   &__header {
     border-bottom: $unnnic-border-width-thinner solid
@@ -75,10 +106,20 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     gap: $unnnic-spacing-xs;
+
+    .header__urn {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &__messages {
     padding: $unnnic-spacing-ant $unnnic-spacing-sm;
+
+    display: flex;
+    flex-direction: column;
+    gap: $unnnic-spacing-xs;
 
     .button-load-previous {
       border: none;

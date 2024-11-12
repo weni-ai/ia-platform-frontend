@@ -79,7 +79,7 @@ import { debounce } from 'lodash';
 
 import { useMonitoringStore } from '@/store/Monitoring';
 
-import ReceivedMessagesHistory from './RouterMonitoringReceivedMessagesHistory.vue';
+import ReceivedMessagesHistory from './RouterMonitoringReceivedMessagesHistory/index.vue';
 
 import i18n from '@/utils/plugins/i18n';
 

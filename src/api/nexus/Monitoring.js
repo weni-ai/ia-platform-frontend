@@ -41,20 +41,11 @@ export const Monitoring = {
     },
 
     async history({ projectUuid, id }) {
-      // const {
-      //   data: { results },
-      // } = await request.$http.get(
-      //   `api/${projectUuid}/message_history/?uuid=${id}`,
-      // );
+      const { data } = await request.$http.get(
+        `api/${projectUuid}/message-detail/${id}`,
+      );
 
-      return {
-        uuid: 'uuid',
-        contact_urn: 'whatsapp:999999999',
-        text: 'como envio meu currículo??',
-        llm_response:
-          'Desculpe, mas essa pergunta está fora do meu escopo de conhecimento. Posso te ajudar com outras dúvidas relacionadas a lhamas? 🦙',
-        llm_response_status: 'failed',
-      };
+      return data;
     },
 
     async performance({ projectUuid, started_day, ended_day }) {
