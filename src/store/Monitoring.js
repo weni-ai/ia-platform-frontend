@@ -22,7 +22,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
       success: 0,
       failed: 0,
     },
-    inspectedAnswer: null,
+    inspectedAnswer: {},
   });
 
   async function loadMessages({ page, pageInterval, tag, text }) {
@@ -48,23 +48,23 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     }
   }
 
-  async function loadMessagesHistory({ id }) {
+  async function loadMessageDetails({ id }) {
     try {
-      messages.inspectedAnswer = null;
       messages.inspectedAnswer.status = 'loading';
 
       const {
-        id: responseId,
+        uuid,
         text,
         status,
         llm_response,
         is_approved,
         contact_urn,
         groundedness,
-      } = (await nexusaiAPI.router.monitoring.messages.history({
-        projectUuid: connectProjectUuid.value,
-        id,
-      })) ?? {};
+      } =
+        (await nexusaiAPI.router.monitoring.messages.detail({
+          projectUuid: connectProjectUuid.value,
+          id,
+        })) ?? {};
 
       const llmStatusMap = {
         s: 'success',
@@ -73,7 +73,8 @@ export const useMonitoringStore = defineStore('monitoring', () => {
       };
 
       messages.inspectedAnswer = {
-        id: responseId,
+        id,
+        uuid,
         text,
         llm_response_status: llmStatusMap[status.toLowerCase()],
         llm_response,
@@ -112,7 +113,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
   return {
     messages,
     loadMessages,
-    loadMessagesHistory,
+    loadMessageDetails,
     loadMessagesPerformance,
   };
 });

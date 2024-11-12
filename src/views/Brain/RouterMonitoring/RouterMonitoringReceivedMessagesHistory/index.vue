@@ -1,5 +1,8 @@
 <template>
-  <section class="received-messages-history">
+  <section
+    v-if="inspectedAnswer.id"
+    class="received-messages-history"
+  >
     <header class="received-messages-history__header">
       <UnnnicIntelligenceText
         class="header__urn"
@@ -50,17 +53,8 @@
 <script setup>
 import { useMonitoringStore } from '@/store/Monitoring';
 import { computed, watch } from 'vue';
+
 import QuestionAndAnswer from './QuestionAndAnswer.vue';
-import { emit } from 'iframessa';
-
-const props = defineProps({
-  id: {
-    type: Number,
-    required: true,
-  },
-});
-
-defineEmits(['close']);
 
 const monitoringStore = useMonitoringStore();
 const inspectedAnswer = computed(
@@ -71,17 +65,20 @@ const isLoadingMessages = computed(
 );
 
 function loadMessagesHistory() {
-  monitoringStore.loadMessagesHistory({ id: props.id });
+  monitoringStore.loadMessageDetails({ id: inspectedAnswer.value.id });
 }
 
 function close() {
-  emit('close');
-  monitoringStore.messages.inspectedAnswer = null;
+  monitoringStore.messages.inspectedAnswer = {};
 }
 
 watch(
-  () => props.id,
-  () => loadMessagesHistory(),
+  () => inspectedAnswer.value.id,
+  (newId) => {
+    if (newId) {
+      loadMessagesHistory();
+    }
+  },
   {
     immediate: true,
   },

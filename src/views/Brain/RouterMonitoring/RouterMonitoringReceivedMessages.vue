@@ -49,7 +49,7 @@
         hideHeaders
         :class="{
           table__list: true,
-          'table__list--history-opened': receivedMessageHistoryId,
+          'table__list--history-opened': inspectedAnswerId,
         }"
         data-test="messages-table"
         :headers="table.headers"
@@ -60,12 +60,7 @@
         @row-click="handleRowClick"
       />
 
-      <ReceivedMessagesHistory
-        v-if="receivedMessageHistoryId"
-        :id="receivedMessageHistoryId"
-        class="table__history"
-        @close="receivedMessageHistoryId = ''"
-      />
+      <ReceivedMessagesHistory class="table__history" />
     </section>
   </section>
 </template>
@@ -182,6 +177,9 @@ const formattedMessagesRows = computed(() => {
 function getReceivedMessages() {
   const { tag, text } = filters.value;
   const tagString = tag[0].value;
+
+  monitoringStore.messages.inspectedAnswer = {};
+
   monitoringStore.loadMessages({
     page: pagination.value,
     pageInterval: paginationInterval.value,
@@ -190,10 +188,12 @@ function getReceivedMessages() {
   });
 }
 
-const receivedMessageHistoryId = ref('');
+const inspectedAnswerId = computed(
+  () => monitoringStore.messages.inspectedAnswer.id,
+);
 
 function handleRowClick(row) {
-  receivedMessageHistoryId.value = row.id;
+  monitoringStore.messages.inspectedAnswer.id = row.id;
 }
 
 watch(

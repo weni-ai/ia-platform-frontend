@@ -40,7 +40,7 @@ export const Monitoring = {
       };
     },
 
-    async history({ projectUuid, id }) {
+    async detail({ projectUuid, id }) {
       const { data } = await request.$http.get(
         `api/${projectUuid}/message-detail/${id}`,
       );
