@@ -232,6 +232,7 @@ watch(
   }
 
   .received-messages__table {
+    height: 100%;
     position: relative;
 
     :deep(.unnnic-table-next__body-row) {
@@ -267,24 +268,34 @@ watch(
     }
 
     .table__list {
+      :deep(.unnnic-table-next__body) {
+        > * {
+          border-color: $unnnic-color-neutral-cleanest;
+        }
+      }
+
       &--history-opened {
+        height: 100%;
+
         overflow: hidden;
+
         :deep(.unnnic-table-next__body) {
+          height: 100%;
+
           border: $unnnic-border-width-thinner solid
             $unnnic-color-neutral-cleanest;
           border-radius: $unnnic-border-radius-sm;
         }
         :deep(.unnnic-table-next__body-row) {
           width: 50%;
-          border-left: 0;
+          border: 0;
           border-radius: 0;
 
-          &:first-of-type {
-            border-top: 0;
-          }
+          border-bottom: $unnnic-border-width-thinner solid
+            $unnnic-color-neutral-cleanest;
 
           &:last-of-type {
-            border-bottom: 0;
+            margin-bottom: -$unnnic-border-width-thinner;
           }
         }
       }
@@ -293,10 +304,14 @@ watch(
     .table__history {
       $paginationButtonHeight: 38px;
 
+      border-left: $unnnic-border-width-thinner solid
+        $unnnic-color-neutral-cleanest;
+
       position: absolute;
       right: 0;
       top: 0;
       width: 50%;
+
       height: calc(100% - $unnnic-spacing-lg - $paginationButtonHeight);
     }
   }
