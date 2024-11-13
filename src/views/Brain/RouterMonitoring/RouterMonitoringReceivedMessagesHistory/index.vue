@@ -4,7 +4,14 @@
     class="received-messages-history"
   >
     <header class="received-messages-history__header">
+      <UnnnicSkeletonLoading
+        v-if="isLoadingMessages"
+        tag="div"
+        width="120px"
+        height="100%"
+      />
       <UnnnicIntelligenceText
+        v-else
         class="header__urn"
         color="neutral-clean"
         family="secondary"

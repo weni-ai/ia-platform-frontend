@@ -113,6 +113,8 @@ const props = defineProps({
   }
 
   &__answer {
+    justify-self: flex-end;
+
     &--success,
     &--action {
       color: $unnnic-color-neutral-white;
