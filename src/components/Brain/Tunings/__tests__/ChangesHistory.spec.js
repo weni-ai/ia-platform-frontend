@@ -90,32 +90,42 @@ describe('ChangesHistory.vue', () => {
     });
   });
 
-  test('formats time correctly using formatTimeSince', () => {
-    const formattedTime = wrapper.vm.formatTimeSince('2024-01-01T00:00:00Z');
-    const now = new Date();
-    const createdAt = new Date('2024-01-01T00:00:00Z');
-    const diffInMinutes = Math.floor((now - createdAt) / 1000 / 60);
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    const diffInDays = Math.floor(diffInHours / 24);
-    const diffInMonths = Math.floor(diffInDays / 30);
+  describe('formatTimeSince', () => {
+    test('formats time correctly for less than 60 minutes', () => {
+      vi.setSystemTime(new Date('2024-01-01T00:59:00Z'));
 
-    if (diffInMinutes < 60) {
+      const formattedTime = wrapper.vm.formatTimeSince('2024-01-01T00:00:00Z');
       expect(formattedTime).toBe(
-        wrapper.vm.$t('time.time_ago_minutes', { count: diffInMinutes }),
+        wrapper.vm.$t('time.time_ago_minutes', { count: 59 }),
       );
-    } else if (diffInHours < 24) {
+    });
+
+    test('formats time correctly for less than 24 hours', () => {
+      vi.setSystemTime(new Date('2024-01-01T23:00:00Z'));
+
+      const formattedTime = wrapper.vm.formatTimeSince('2024-01-01T00:00:00Z');
       expect(formattedTime).toBe(
-        wrapper.vm.$t('time.time_ago_hours', { count: diffInHours }),
+        wrapper.vm.$t('time.time_ago_hours', { count: 23 }),
       );
-    } else if (diffInDays < 30) {
+    });
+
+    test('formats time correctly for less than 30 days', () => {
+      vi.setSystemTime(new Date('2024-01-30T00:00:00Z'));
+
+      const formattedTime = wrapper.vm.formatTimeSince('2024-01-01T00:00:00Z');
       expect(formattedTime).toBe(
-        wrapper.vm.$t('time.time_ago_days', { count: diffInDays }),
+        wrapper.vm.$t('time.time_ago_days', { count: 29 }),
       );
-    } else {
+    });
+
+    test('formats time correctly for more than 30 days', () => {
+      vi.setSystemTime(new Date('2024-03-01T00:00:00Z'));
+
+      const formattedTime = wrapper.vm.formatTimeSince('2024-01-01T00:00:00Z');
       expect(formattedTime).toBe(
-        wrapper.vm.$t('time.time_ago_months', { count: diffInMonths }),
+        wrapper.vm.$t('time.time_ago_months', { count: 2 }),
       );
-    }
+    });
   });
 
   test('handles rendering logic for table rows', () => {
@@ -141,16 +151,61 @@ describe('ChangesHistory.vue', () => {
     expect(wrapper.vm.handleIsRenderIcon(rowWithSingleValue)).toBe(false);
   });
 
-  test('computes noChangesDetected correctly when no rows are present', () => {
+  test('computes noChangesDetected correctly and renders no changes message when noChangesDetected is true', async () => {
     wrapper.vm.currentFilterOption = [{ value: 'all' }];
+
+    await nextTick();
+
     wrapper.vm.table.rows = [];
+    wrapper.vm.isLoading = false;
+
+    await nextTick();
+
     expect(wrapper.vm.noChangesDetected).toBe(true);
+    expect(wrapper.text()).toBe(
+      wrapper.vm.$t('router.tunings.history.no_changes'),
+    );
   });
 
-  test('computes noChangesDetected correctly when rows are present', () => {
+  test('computes noChangesDetected correctly when rows are present', async () => {
     wrapper.vm.currentFilterOption = [{ value: 'all' }];
     wrapper.vm.table.rows = [{}];
+
+    await nextTick();
+
     expect(wrapper.vm.noChangesDetected).toBe(false);
+  });
+
+  test('renders description and filter select when there are changes', async () => {
+    wrapper.vm.currentFilterOption = [{ value: 'Customization' }];
+    wrapper.vm.table.rows = [{ id: 1, content: 'Change 1' }];
+    wrapper.vm.isLoading = false;
+
+    await nextTick();
+    await nextTick();
+
+    expect(wrapper.vm.noChangesDetected).toBe(false);
+
+    expect(wrapper.text()).toContain(
+      wrapper.vm.$t('router.tunings.history.description'),
+    );
+    expect(wrapper.text()).toContain(
+      wrapper.vm.$t('router.tunings.history.sub_description'),
+    );
+
+    const selectFilter = wrapper.findComponent('[data-test="select-filter"]');
+    expect(selectFilter.exists()).toBe(true);
+
+    const table = wrapper.findComponent('[data-test="table"]');
+    expect(table.exists()).toBe(true);
+    expect(table.props('pagination')).toBe(wrapper.vm.pagination);
+    expect(table.props('headers')).toBe(wrapper.vm.table.headers);
+    expect(table.props('rows')).toBe(wrapper.vm.formattedRows);
+    expect(table.props('paginationTotal')).toBe(wrapper.vm.paginationTotal);
+    expect(table.props('paginationInterval')).toBe(
+      wrapper.vm.paginationInterval,
+    );
+    expect(table.props('isLoading')).toBe(wrapper.vm.isLoading);
   });
 
   test('fetches data correctly in getChangesHistoryData', async () => {
