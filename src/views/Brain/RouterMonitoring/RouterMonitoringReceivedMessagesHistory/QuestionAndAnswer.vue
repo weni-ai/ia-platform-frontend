@@ -23,14 +23,38 @@
       >
         {{ inspectionData.text }}
       </p>
+
+      <section
+        v-if="inspectionData.llm.status === 'action'"
+        class="question-and-answer__action-started"
+      >
+        <UnnnicIcon
+          icon="bolt"
+          size="sm"
+          scheme="neutral-cloudy"
+        />
+        <UnnnicIntelligenceText
+          color="neutral-cloudy"
+          family="secondary"
+          size="body-md"
+          tag="p"
+        >
+          {{
+            $t('router.monitoring.activated_the_action', {
+              action: inspectionData.action?.name,
+            })
+          }}
+        </UnnnicIntelligenceText>
+      </section>
       <p
+        v-else
         :class="[
           'question-and-answer__message',
           'question-and-answer__answer',
-          `question-and-answer__answer--${inspectionData.llm_response_status}`,
+          `question-and-answer__answer--${inspectionData.llm.status}`,
         ]"
       >
-        {{ inspectionData.llm_response }}
+        {{ inspectionData.llm.response }}
       </p>
     </template>
   </section>
@@ -99,6 +123,16 @@ const props = defineProps({
       color: $unnnic-color-neutral-darkest;
       background-color: $unnnic-color-aux-red-100;
     }
+  }
+
+  &__action-started {
+    grid-column: 1 / 4;
+    grid-row: 2;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $unnnic-spacing-nano;
   }
 }
 </style>

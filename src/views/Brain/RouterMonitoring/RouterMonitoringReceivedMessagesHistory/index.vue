@@ -22,7 +22,8 @@
       />
     </header>
     <section class="received-messages-history__messages">
-      <button
+      <!-- Temporaly commented for the Continuous Delivery -->
+      <!-- <button
         v-if="!isLoadingMessages"
         class="button-load-previous"
       >
@@ -40,7 +41,7 @@
         >
           {{ $t('router.monitoring.load_previous_messages') }}
         </UnnnicIntelligenceText>
-      </button>
+      </button> -->
 
       <QuestionAndAnswer
         :isLoading="isLoadingMessages"
@@ -60,8 +61,8 @@ const monitoringStore = useMonitoringStore();
 const inspectedAnswer = computed(
   () => monitoringStore.messages.inspectedAnswer,
 );
-const isLoadingMessages = computed(
-  () => inspectedAnswer.value.status === 'loading',
+const isLoadingMessages = computed(() =>
+  ['loading', 'error'].includes(inspectedAnswer.value.status),
 );
 
 function loadMessagesHistory() {

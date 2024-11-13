@@ -52,32 +52,45 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     try {
       messages.inspectedAnswer.status = 'loading';
 
+      const response = await nexusaiAPI.router.monitoring.messages.detail({
+        projectUuid: connectProjectUuid.value,
+        id,
+      });
+
       const {
         uuid,
         text,
         status,
+        actions_started,
+        actions_uuid,
+        actions_type,
         llm_response,
         is_approved,
         contact_urn,
         groundedness,
-      } =
-        (await nexusaiAPI.router.monitoring.messages.detail({
-          projectUuid: connectProjectUuid.value,
-          id,
-        })) ?? {};
+      } = response;
 
       const llmStatusMap = {
         s: 'success',
         f: 'failed',
-        a: 'action',
       };
 
       messages.inspectedAnswer = {
         id,
         uuid,
         text,
-        llm_response_status: llmStatusMap[status.toLowerCase()],
-        llm_response,
+        action: actions_started
+          ? {
+              name: actions_type,
+              uuid: actions_uuid,
+            }
+          : null,
+        llm: {
+          response: llm_response,
+          status: actions_started
+            ? 'action'
+            : llmStatusMap[status.toLowerCase()],
+        },
         contact_urn,
         is_approved,
         groundedness,

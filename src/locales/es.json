@@ -93,7 +93,8 @@
         "messages_that_trigger_actions": "Mensajes que desencadenaron acciones"
       },
       "no_message_received": "Ningún mensaje recibido",
-      "load_previous_messages": "Cargar mensajes anteriores"
+      "load_previous_messages": "Cargar mensajes anteriores",
+      "activated_the_action": "activó la acción de {action}"
     },
     "actions": {
       "title": "Acciones",
