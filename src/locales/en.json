@@ -94,7 +94,8 @@
       },
       "no_message_received": "No message received",
       "load_previous_messages": "Load previous messages",
-      "activated_the_action": "activated the {action} action"
+      "activated_the_action": "activated the {action} action",
+      "error_loading_messages": "Error loading messages"
     },
     "actions": {
       "title": "Actions",

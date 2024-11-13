@@ -94,7 +94,8 @@
       },
       "no_message_received": "Ningún mensaje recibido",
       "load_previous_messages": "Cargar mensajes anteriores",
-      "activated_the_action": "activó la acción de {action}"
+      "activated_the_action": "activó la acción de {action}",
+      "error_loading_messages": "Error al cargar mensajes"
     },
     "actions": {
       "title": "Acciones",

@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 
 import nexusaiAPI from '@/api/nexusaiAPI.js';
 import globalStore from '.';
+import i18n from '@/utils/plugins/i18n';
 
 export const useMonitoringStore = defineStore('monitoring', () => {
   const connectProjectUuid = computed(
@@ -98,6 +99,10 @@ export const useMonitoringStore = defineStore('monitoring', () => {
       };
     } catch (error) {
       messages.inspectedAnswer.status = 'error';
+      globalStore.state.alert = {
+        type: 'error',
+        text: i18n.global.t('router.monitoring.error_loading_messages'),
+      };
     }
   }
 

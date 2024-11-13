@@ -43,6 +43,7 @@ export const Monitoring = {
     async detail({ projectUuid, id }) {
       const { data } = await request.$http.get(
         `api/${projectUuid}/message-detail/${id}`,
+        { hideGenericErrorAlert: true },
       );
 
       return data;
