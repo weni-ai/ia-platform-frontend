@@ -53,10 +53,10 @@
 import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { format, subDays } from 'date-fns';
-import { BRAIN_ROUTES } from '@/utils';
+import useBrainRoutes from '@/composables/useBrainRoutes';
 import { useBrainCustomizationStore } from '@/store/BrainCustomization';
 
-const brainRoutes = ref(BRAIN_ROUTES);
+const brainRoutes = useBrainRoutes();
 const dateFilter = ref({
   start: format(subDays(new Date(), 30), 'yyyy-MM-dd'),
   end: format(new Date(), 'yyyy-MM-dd'),

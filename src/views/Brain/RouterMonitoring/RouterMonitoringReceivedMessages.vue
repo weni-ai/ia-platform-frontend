@@ -67,10 +67,10 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
-import Unnnic from '@weni/unnnic-system';
 import { format } from 'date-fns';
 import { useRoute } from 'vue-router';
 import { debounce } from 'lodash';
+import Unnnic from '@weni/unnnic-system';
 
 import { useMonitoringStore } from '@/store/Monitoring';
 
@@ -115,6 +115,7 @@ const table = ref({
 });
 const pagination = ref(1);
 const paginationInterval = ref(15);
+
 const isTableLoading = computed(
   () => monitoringStore.messages.status === 'loading',
 );
@@ -191,9 +192,29 @@ function getReceivedMessages() {
 const inspectedAnswerId = computed(
   () => monitoringStore.messages.inspectedAnswer.id,
 );
+const inspectedAnswerIndex = computed(() =>
+  monitoringStore.messages.data.findIndex(
+    (message) => message.id === inspectedAnswerId.value,
+  ),
+);
 
 function handleRowClick(row) {
   monitoringStore.messages.inspectedAnswer.id = row.id;
+}
+
+function highlightRow(index) {
+  const rowsElements = document.querySelectorAll(
+    '.unnnic-table-next__body-row',
+  );
+
+  rowsElements.forEach((row) => {
+    row.style.backgroundColor = '';
+  });
+
+  if (rowsElements[index]) {
+    const UNNNIC_COLOR_WENI_100 = '#C6FFF7';
+    rowsElements[index].style.backgroundColor = UNNNIC_COLOR_WENI_100;
+  }
 }
 
 watch(
@@ -203,6 +224,10 @@ watch(
     immediate: true,
   },
 );
+
+watch(inspectedAnswerIndex, (newIndex) => {
+  highlightRow(newIndex);
+});
 
 watch(pagination, () => getReceivedMessages());
 

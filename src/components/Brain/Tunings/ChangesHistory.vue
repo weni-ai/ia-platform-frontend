@@ -30,6 +30,7 @@
       <UnnnicSelectSmart
         v-model:modelValue="currentFilterOption"
         class="select-filter"
+        data-test="select-filter"
         :options="filterOptions"
         orderedByIndex
       />
@@ -42,6 +43,7 @@
       :paginationInterval="paginationInterval"
       :isLoading="isLoading"
       class="changes-history__table"
+      data-test="table"
     />
   </template>
 </template>
