@@ -2,12 +2,14 @@
   <section class="question-and-answer">
     <template v-if="isLoading">
       <UnnnicSkeletonLoading
+        data-testid="skeleton-question"
         class="question-and-answer__skeleton-question"
         tag="div"
         width="100%"
         height="60px"
       />
       <UnnnicSkeletonLoading
+        data-testid="skeleton-answer"
         class="question-and-answer__skeleton-answer"
         tag="div"
         width="100%"
@@ -16,6 +18,7 @@
     </template>
     <template v-else>
       <p
+        data-testid="question"
         :class="[
           'question-and-answer__message',
           'question-and-answer__question',
@@ -27,13 +30,16 @@
       <section
         v-if="inspectionData.llm.status === 'action'"
         class="question-and-answer__action-started"
+        data-testid="action"
       >
         <UnnnicIcon
+          data-testid="action-icon"
           icon="bolt"
           size="sm"
           scheme="neutral-cloudy"
         />
         <UnnnicIntelligenceText
+          data-testid="action-name"
           color="neutral-cloudy"
           family="secondary"
           size="body-md"
@@ -48,6 +54,7 @@
       </section>
       <p
         v-else
+        data-testid="answer"
         :class="[
           'question-and-answer__message',
           'question-and-answer__answer',

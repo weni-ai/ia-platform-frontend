@@ -6,12 +6,14 @@
     <header class="received-messages-history__header">
       <UnnnicSkeletonLoading
         v-if="isLoadingMessages"
+        data-testid="contact-urn-loading"
         tag="div"
         width="120px"
         height="100%"
       />
       <UnnnicIntelligenceText
         v-else
+        data-testid="contact-urn"
         class="header__urn"
         color="neutral-clean"
         family="secondary"
@@ -21,6 +23,7 @@
         {{ inspectedAnswer.contact_urn }}
       </UnnnicIntelligenceText>
       <UnnnicIcon
+        data-testid="close-icon"
         icon="close"
         size="avatar-nano"
         scheme="neutral-darkest"
@@ -51,6 +54,7 @@
       </button> -->
 
       <QuestionAndAnswer
+        data-testid="question-and-answer"
         :isLoading="isLoadingMessages"
         :inspectionData="inspectedAnswer"
       />
@@ -120,6 +124,8 @@ watch(
   }
 
   &__messages {
+    overflow: hidden scroll;
+
     padding: $unnnic-spacing-ant $unnnic-spacing-sm;
 
     display: flex;
