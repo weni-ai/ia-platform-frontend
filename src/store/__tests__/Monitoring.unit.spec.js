@@ -2,13 +2,16 @@ import { setActivePinia, createPinia } from 'pinia';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { useMonitoringStore } from '@/store/Monitoring';
+import globalStore from '@/store';
 import nexusaiAPI from '@/api/nexusaiAPI.js';
+import i18n from '@/utils/plugins/i18n';
 
 vi.mock('@/api/nexusaiAPI.js');
 vi.mock('@/store', () => ({
   default: {
     state: {
       Auth: { connectProjectUuid: '1234' },
+      alert: null,
     },
   },
 }));
@@ -62,6 +65,62 @@ describe('MonitoringStore', () => {
       });
 
       expect(store.messages.status).toBe('error');
+    });
+  });
+
+  describe('loadMessageDetails', () => {
+    it('should load message details successfully', async () => {
+      const mockResponse = {
+        uuid: '12345',
+        text: 'Sample message text',
+        status: 's',
+        actions_started: true,
+        actions_uuid: '12345678',
+        actions_type: 'actionType',
+        llm_response: 'Sample LLM response',
+        is_approved: true,
+        contact_urn: 'urn:12345',
+        groundedness: [],
+      };
+
+      nexusaiAPI.router.monitoring.messages.detail.mockResolvedValue(
+        mockResponse,
+      );
+
+      await store.loadMessageDetails({ id: '123' });
+
+      expect(store.messages.inspectedAnswer.status).toBe('complete');
+      expect(store.messages.inspectedAnswer).toEqual({
+        id: '123',
+        uuid: '12345',
+        text: 'Sample message text',
+        action: {
+          name: 'actionType',
+          uuid: '12345678',
+        },
+        llm: {
+          response: 'Sample LLM response',
+          status: 'action',
+        },
+        contact_urn: 'urn:12345',
+        is_approved: true,
+        groundedness: [],
+        status: 'complete',
+      });
+    });
+
+    it('should handle errors when loading message details', async () => {
+      nexusaiAPI.router.monitoring.messages.detail.mockRejectedValue(
+        new Error('Error'),
+      );
+
+      await store.loadMessageDetails({ id: '123' });
+
+      expect(store.messages.inspectedAnswer.status).toBe('error');
+      expect(globalStore.state.alert).toEqual({
+        type: 'error',
+        text: i18n.global.t('router.monitoring.error_loading_messages'),
+      });
     });
   });
 

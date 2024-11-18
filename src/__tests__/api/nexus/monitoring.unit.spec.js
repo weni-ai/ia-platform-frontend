@@ -86,6 +86,41 @@ describe('Monitoring API', () => {
     });
   });
 
+  describe('messages.detail', () => {
+    it('should return detail data', async () => {
+      const mockResponse = {
+        data: {
+          uuid: '12345',
+          text: 'Sample message text',
+          status: 's',
+          actions_started: true,
+          actions_uuid: '12345678',
+          actions_type: 'actionType',
+          llm_response: 'Sample LLM response',
+          is_approved: true,
+          contact_urn: 'urn:12345',
+          groundedness: [],
+        },
+      };
+
+      request.$http.get.mockResolvedValue(mockResponse);
+
+      const result = await Monitoring.messages.detail({
+        projectUuid: 'test-uuid',
+        id: '123',
+      });
+
+      expect(request.$http.get).toHaveBeenCalledWith(
+        'api/test-uuid/message-detail/123',
+        {
+          hideGenericErrorAlert: true,
+        },
+      );
+
+      expect(result).toEqual(mockResponse.data);
+    });
+  });
+
   describe('messages.performance', () => {
     it('should return performance data', async () => {
       const mockResponse = {
