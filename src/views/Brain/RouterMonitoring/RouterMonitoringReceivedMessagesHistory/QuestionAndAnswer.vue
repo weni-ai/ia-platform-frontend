@@ -52,22 +52,41 @@
           }}
         </UnnnicIntelligenceText>
       </section>
-      <p
+      <section
         v-else
-        data-testid="answer"
-        :class="[
-          'question-and-answer__message',
-          'question-and-answer__answer',
-          `question-and-answer__answer--${inspectionData.llm.status}`,
-        ]"
+        class="question-and-answer__answer"
       >
-        {{ inspectionData.llm.response }}
-      </p>
+        <p
+          data-testid="answer"
+          :class="[
+            'question-and-answer__message',
+            'question-and-answer__answer-text',
+            `question-and-answer__answer-text--${inspectionData.llm.status}`,
+          ]"
+        >
+          {{ inspectionData.llm.response }}
+        </p>
+        <UnnnicButton
+          size="small"
+          :text="$t('router.monitoring.inspect_response.title')"
+          type="secondary"
+          iconLeft="info"
+          @click="isDrawerInspectAnswerOpen = true"
+        />
+        <DrawerInspectAnswer
+          v-model="isDrawerInspectAnswerOpen"
+          :inspectionData="inspectionData"
+        />
+      </section>
     </template>
   </section>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
+import DrawerInspectAnswer from '@/components/Brain/Monitoring/DrawerInspectResponse.vue';
+
 const props = defineProps({
   isLoading: {
     type: Boolean,
@@ -79,6 +98,8 @@ const props = defineProps({
     default: () => {},
   },
 });
+
+const isDrawerInspectAnswerOpen = ref(false);
 </script>
 
 <style lang="scss" scoped>
@@ -120,17 +141,22 @@ const props = defineProps({
   }
 
   &__answer {
-    justify-self: flex-end;
+    display: grid;
+    gap: $unnnic-spacing-nano;
 
-    &--success,
-    &--action {
-      color: $unnnic-color-neutral-white;
-      background-color: $unnnic-color-weni-600;
-    }
+    &-text {
+      justify-self: flex-end;
 
-    &--failed {
-      color: $unnnic-color-neutral-darkest;
-      background-color: $unnnic-color-aux-red-100;
+      &--success,
+      &--action {
+        color: $unnnic-color-neutral-white;
+        background-color: $unnnic-color-weni-600;
+      }
+
+      &--failed {
+        color: $unnnic-color-neutral-darkest;
+        background-color: $unnnic-color-aux-red-100;
+      }
     }
   }
 

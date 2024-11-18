@@ -95,7 +95,11 @@
       "no_message_received": "No message received",
       "load_previous_messages": "Load previous messages",
       "activated_the_action": "activated the {action} action",
-      "error_loading_messages": "Error loading messages"
+      "error_loading_messages": "Error loading messages",
+      "inspect_response": {
+        "title": "Inspect response",
+        "intelligent_agent_response_details": "Intelligent Agent Response Details"
+      }
     },
     "actions": {
       "title": "Actions",
