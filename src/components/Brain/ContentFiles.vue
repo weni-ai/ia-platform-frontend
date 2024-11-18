@@ -132,7 +132,7 @@ import ContentList from '@/components/Brain/ContentBase/ContentList.vue';
 import { reactive, toValue } from 'vue';
 
 const allowedFormats = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'];
-const fileSizeLimitInMegabytes = 250;
+const fileSizeLimitInMegabytes = 50;
 
 export default {
   components: {

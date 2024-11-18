@@ -162,9 +162,9 @@ describe('BasesFormFiles.vue', () => {
     {
       type: 'a file that exceeds limit',
       extension: 'txt',
-      size: 250 * Math.pow(1024, 2) + 1,
+      size: 50 * Math.pow(1024, 2) + 1,
       errorMessage: i18n.global.t('content_bases.files.exceeds_limit', {
-        limitMB: 250,
+        limitMB: 50,
       }),
     },
   ])('when the user upload $type', ({ extension, size, errorMessage }) => {
