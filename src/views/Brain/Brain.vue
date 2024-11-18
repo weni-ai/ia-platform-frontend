@@ -86,7 +86,7 @@ import { useSitesPagination } from '../ContentBases/sitesPagination';
 import BrainSideBar from '@/components/Brain/BrainSideBar.vue';
 import BrainHeader from '@/components/Brain/BrainHeader.vue';
 import i18n from '@/utils/plugins/i18n';
-import { BRAIN_ROUTES } from '@/utils';
+import useBrainRoutes from '@/composables/useBrainRoutes';
 import BrainWarningBar from '@/components/Brain/BrainWarningBar.vue';
 import BrainHeaderPreview from '@/components/Brain/BrainHeaderPreview.vue';
 
@@ -153,9 +153,10 @@ export default {
       contentBaseUuid: contentBaseUuid.value,
     });
 
+    const brainRoutes = useBrainRoutes();
     const showPreview = computed(
       () =>
-        BRAIN_ROUTES.find((mappedRoute) => mappedRoute.page === route.name)
+        brainRoutes.value.find((mappedRoute) => mappedRoute.page === route.name)
           ?.preview,
     );
 

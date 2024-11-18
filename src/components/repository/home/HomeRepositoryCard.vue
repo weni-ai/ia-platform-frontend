@@ -46,11 +46,16 @@
           />
         </UnnnicToolTip>
 
-        <DropdownActions
-          v-if="actions.length"
-          data-test="actions-dropdown"
-          :actions="actions"
-        />
+        <button
+          class="unnnic-card-intelligence__header__buttons__more-actions"
+          @click.stop
+        >
+          <DropdownActions
+            v-if="actions.length"
+            data-test="actions-dropdown"
+            :actions="actions"
+          />
+        </button>
       </section>
     </header>
 
@@ -605,6 +610,12 @@ export default {
             }
           }
         }
+      }
+
+      &__more-actions {
+        background: none;
+        border: none;
+        display: flex;
       }
     }
   }
