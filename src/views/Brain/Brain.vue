@@ -7,10 +7,15 @@
     <section class="repository-base-edit__wrapper">
       <BrainSideBar />
       <div class="repository-base-edit__wrapper__left-side">
-        <section class="content-base__container">
+        <section
+          :class="{
+            'content-base__container': true,
+            'content-base__container--scrollable': isRouteScrollable,
+          }"
+        >
           <BrainHeader />
 
-          <section class="scrollable">
+          <section :class="{ scrollable: !isRouteScrollable }">
             <RouterContentBase
               v-if="route.name === 'router-content'"
               :filesProp="files"
@@ -159,6 +164,9 @@ export default {
         brainRoutes.value.find((mappedRoute) => mappedRoute.page === route.name)
           ?.preview,
     );
+    const isRouteScrollable = computed(
+      () => route.name === 'router-monitoring',
+    );
 
     const refreshPreview = () => {
       refreshPreviewValue.value += 1;
@@ -299,6 +307,7 @@ export default {
       loadContentBase,
       getPreviewMessages,
       previewActions,
+      isRouteScrollable,
     };
   },
 };
@@ -361,9 +370,14 @@ export default {
 
     padding: $unnnic-spacing-sm;
 
-    flex: 1;
+    height: 100%;
+
     display: flex;
     flex-direction: column;
+
+    &--scrollable {
+      overflow-y: scroll;
+    }
   }
 
   &__scrollable {
@@ -526,11 +540,15 @@ export default {
   }
 
   &__wrapper {
-    flex: 1;
+    width: 100%;
+    height: 100%;
+
     display: flex;
 
     &__left-side {
-      flex: 1;
+      height: 100%;
+      width: 100%;
+
       display: flex;
       flex-direction: column;
     }
