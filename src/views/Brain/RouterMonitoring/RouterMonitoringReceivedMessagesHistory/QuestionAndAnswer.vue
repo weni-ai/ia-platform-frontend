@@ -125,7 +125,7 @@ const isDrawerInspectAnswerOpen = ref(false);
     height: fit-content;
     width: fit-content;
 
-    border-radius: $unnnic-border-radius-sm;
+    border-radius: $unnnic-border-radius-md;
 
     padding: $unnnic-spacing-ant;
 

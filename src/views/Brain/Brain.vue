@@ -7,10 +7,15 @@
     <section class="repository-base-edit__wrapper">
       <BrainSideBar />
       <div class="repository-base-edit__wrapper__left-side">
-        <section class="content-base__container">
+        <section
+          :class="{
+            'content-base__container': true,
+            'content-base__container--scrollable': isRouteScrollable,
+          }"
+        >
           <BrainHeader />
 
-          <section class="scrollable">
+          <section :class="{ scrollable: !isRouteScrollable }">
             <RouterContentBase
               v-if="route.name === 'router-content'"
               :filesProp="files"
@@ -86,7 +91,7 @@ import { useSitesPagination } from '../ContentBases/sitesPagination';
 import BrainSideBar from '@/components/Brain/BrainSideBar.vue';
 import BrainHeader from '@/components/Brain/BrainHeader.vue';
 import i18n from '@/utils/plugins/i18n';
-import { BRAIN_ROUTES } from '@/utils';
+import useBrainRoutes from '@/composables/useBrainRoutes';
 import BrainWarningBar from '@/components/Brain/BrainWarningBar.vue';
 import BrainHeaderPreview from '@/components/Brain/BrainHeaderPreview.vue';
 
@@ -153,10 +158,14 @@ export default {
       contentBaseUuid: contentBaseUuid.value,
     });
 
+    const brainRoutes = useBrainRoutes();
     const showPreview = computed(
       () =>
-        BRAIN_ROUTES.find((mappedRoute) => mappedRoute.page === route.name)
+        brainRoutes.value.find((mappedRoute) => mappedRoute.page === route.name)
           ?.preview,
+    );
+    const isRouteScrollable = computed(
+      () => route.name === 'router-monitoring',
     );
 
     const refreshPreview = () => {
@@ -298,6 +307,7 @@ export default {
       loadContentBase,
       getPreviewMessages,
       previewActions,
+      isRouteScrollable,
     };
   },
 };
@@ -360,9 +370,14 @@ export default {
 
     padding: $unnnic-spacing-sm;
 
-    flex: 1;
+    height: 100%;
+
     display: flex;
     flex-direction: column;
+
+    &--scrollable {
+      overflow-y: scroll;
+    }
   }
 
   &__scrollable {
@@ -525,11 +540,15 @@ export default {
   }
 
   &__wrapper {
-    flex: 1;
+    width: 100%;
+    height: 100%;
+
     display: flex;
 
     &__left-side {
-      flex: 1;
+      height: 100%;
+      width: 100%;
+
       display: flex;
       flex-direction: column;
     }

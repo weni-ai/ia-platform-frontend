@@ -34,7 +34,7 @@
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
-import { BRAIN_ROUTES } from '@/utils';
+import useBrainRoutes from '@/composables/useBrainRoutes';
 import SideBarItem from '../Sidebar/SideBarItem.vue';
 import SidebarMenu from '../Sidebar/SidebarMenu.vue';
 
@@ -48,9 +48,10 @@ const brainRoutes = computed(() => {
     ?.split(', ')
     .includes(store.state.User.me.nickname);
 
+  const BRAIN_ROUTES = useBrainRoutes();
   return allowedUser
-    ? BRAIN_ROUTES
-    : BRAIN_ROUTES.filter((route) => route.title !== 'monitoring');
+    ? BRAIN_ROUTES.value
+    : BRAIN_ROUTES.value.filter((route) => route.title !== 'monitoring');
 });
 
 const activeNav = computed(() => {

@@ -113,8 +113,11 @@ export default {
 }
 
 .content-bases-page-container {
+  overflow: hidden;
+
   background-color: $unnnic-color-background-snow;
   min-height: 100vh;
+  height: 100vh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
