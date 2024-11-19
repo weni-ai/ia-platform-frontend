@@ -98,7 +98,9 @@
       "error_loading_messages": "Error loading messages",
       "inspect_response": {
         "title": "Inspect response",
-        "intelligent_agent_response_details": "Intelligent Agent Response Details"
+        "intelligent_agent_response_details": "Intelligent agent response details",
+        "contact_message": "Contact message",
+        "agent_response": "Agent response"
       }
     },
     "actions": {

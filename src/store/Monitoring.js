@@ -94,7 +94,11 @@ export const useMonitoringStore = defineStore('monitoring', () => {
         },
         contact_urn,
         is_approved,
-        groundedness,
+        groundedness: groundedness.map((item) => ({
+          ...item,
+          score: Number(item.score) * 10,
+        })), // To turn into a hundred
+
         status: 'complete',
       };
     } catch (error) {
