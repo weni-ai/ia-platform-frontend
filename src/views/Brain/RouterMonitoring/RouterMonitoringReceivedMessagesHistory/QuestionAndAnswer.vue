@@ -17,15 +17,14 @@
       />
     </template>
     <template v-else>
-      <p
+      <Markdown
         data-testid="question"
         :class="[
           'question-and-answer__message',
           'question-and-answer__question',
         ]"
-      >
-        {{ inspectionData.text }}
-      </p>
+        :content="inspectionData.text"
+      />
 
       <section
         v-if="inspectionData.llm.status === 'action'"
@@ -66,16 +65,16 @@
         v-else
         class="question-and-answer__answer"
       >
-        <p
+        <Markdown
           data-testid="answer"
           :class="[
             'question-and-answer__message',
             'question-and-answer__answer-text',
             `question-and-answer__answer-text--${inspectionData.llm.status}`,
           ]"
-        >
-          {{ inspectionData.llm.response }}
-        </p>
+          :content="inspectionData.llm.response"
+        />
+
         <UnnnicButton
           size="small"
           :text="$t('router.monitoring.inspect_response.title')"
@@ -96,6 +95,7 @@
 import { ref } from 'vue';
 
 import DrawerInspectAnswer from '@/components/Brain/Monitoring/DrawerInspectResponse.vue';
+import Markdown from '@/components/Markdown.vue';
 
 const props = defineProps({
   isLoading: {
