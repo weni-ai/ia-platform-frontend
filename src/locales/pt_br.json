@@ -103,7 +103,9 @@
         "agent_response": "Resposta do agente",
         "rate_the_answer": "Avalie a resposta",
         "i_liked": "Gostei",
-        "i_didnt_like": "Não gostei"
+        "i_didnt_like": "Não gostei",
+        "confidence_percentage": "{percentage}% de confiança",
+        "not_found": "Não encontrado"
       }
     },
     "actions": {

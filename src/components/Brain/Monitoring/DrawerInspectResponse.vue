@@ -37,25 +37,79 @@
           >
             “{{ inspectionData.llm.response }}”
           </p>
-          <section v-else>
-            <template
+          <section
+            v-else
+            class="agent__text-success"
+          >
+            <section class="text-success__sentences">
+              <template
+                v-for="fragment of groundednessFragments"
+                :key="fragment.sentence"
+              >
+                <p
+                  :class="[
+                    'agent__text',
+                    'text-success__text',
+                    `text-success__text--${getReliabilityLevel(fragment)}`,
+                  ]"
+                >
+                  {{ fragment.sentence }}
+                </p>
+              </template>
+            </section>
+            <section
               v-for="fragment of groundednessFragments"
               :key="fragment.sentence"
+              class="text-success__groundedness"
             >
-              <p
-                :class="[
-                  'agent__text',
-                  'agent__text--underlined',
-                  `agent__text--underlined-${getReliabilityLevel(fragment)}`,
-                ]"
-              >
-                {{ fragment.sentence }}
-              </p>
-            </template>
+              <section class="groundedness__source">
+                <span
+                  :class="[
+                    'source__status',
+                    `source__status--${getReliabilityLevel(fragment)}`,
+                  ]"
+                />
+
+                <UnnnicIntelligenceText
+                  v-if="fragment.sources[0].filename"
+                  class="source__filename"
+                  color="neutral-dark"
+                  family="secondary"
+                  size="body-gt"
+                  tag="p"
+                >
+                  {{ fragment.sources[0].filename }}
+                </UnnnicIntelligenceText>
+                <p
+                  v-else
+                  class="source__filename--not-found"
+                >
+                  {{ $t('router.monitoring.inspect_response.not_found') }}
+                </p>
+
+                <UnnnicIntelligenceText
+                  class="source__confidence"
+                  color="neutral-cloudy"
+                  family="secondary"
+                  size="body-gt"
+                  tag="p"
+                >
+                  {{
+                    $t(
+                      'router.monitoring.inspect_response.confidence_percentage',
+                      { percentage: fragment.score },
+                    )
+                  }}
+                </UnnnicIntelligenceText>
+              </section>
+            </section>
           </section>
         </section>
 
-        <ResponseEvaluator :isApproved="inspectionData.is_approved" />
+        <ResponseEvaluator
+          v-if="inspectionData.llm.status !== 'failed'"
+          :isApproved="inspectionData.is_approved"
+        />
       </section>
     </template>
   </UnnnicDrawer>
@@ -134,23 +188,77 @@ function getReliabilityLevel(item) {
       display: inline;
 
       line-height: $unnnic-font-size-body-lg + $unnnic-line-height-md;
+    }
 
-      &--underlined {
-        margin-right: $unnnic-spacing-nano;
+    .agent__text-success {
+      display: grid;
+      gap: $unnnic-spacing-sm;
 
-        text-decoration: underline;
-        text-decoration-color: $unnnic-color-neutral-cleanest;
-        text-decoration-thickness: 3px;
-        text-underline-offset: 4px;
+      .text-success__sentences {
+        .text-success__text {
+          margin-right: $unnnic-spacing-nano;
 
-        &-slightly-reliable {
-          text-decoration-color: $unnnic-color-weni-300;
+          text-decoration: underline;
+          text-decoration-color: $unnnic-color-neutral-cleanest;
+          text-decoration-thickness: 3px;
+          text-underline-offset: 4px;
+
+          &--slightly-reliable {
+            text-decoration-color: $unnnic-color-weni-300;
+          }
+          &--moderately-reliable {
+            text-decoration-color: $unnnic-color-weni-600;
+          }
+          &--highly-reliable {
+            text-decoration-color: $unnnic-color-weni-800;
+          }
         }
-        &-moderately-reliable {
-          text-decoration-color: $unnnic-color-weni-600;
-        }
-        &-highly-reliable {
-          text-decoration-color: $unnnic-color-weni-800;
+      }
+
+      .text-success__groundedness {
+        display: grid;
+        gap: $unnnic-spacing-xs;
+
+        .groundedness__source {
+          display: grid;
+          grid-template-columns: auto auto 1fr;
+          gap: $unnnic-spacing-xs;
+          align-items: center;
+
+          .source__status {
+            width: 10px;
+            height: 10px;
+            border-radius: 10px;
+            background-color: $unnnic-color-neutral-cleanest;
+
+            &--slightly-reliable {
+              background-color: $unnnic-color-weni-300;
+            }
+            &--moderately-reliable {
+              background-color: $unnnic-color-weni-600;
+            }
+            &--highly-reliable {
+              background-color: $unnnic-color-weni-800;
+            }
+          }
+
+          .source__filename {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            &--not-found {
+              color: $unnnic-color-neutral-dark;
+              font-family: $unnnic-font-family-secondary;
+              font-size: $unnnic-font-size-body-gt;
+              line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+              font-style: italic;
+            }
+          }
+
+          .source__confidence {
+            white-space: nowrap;
+          }
         }
       }
     }

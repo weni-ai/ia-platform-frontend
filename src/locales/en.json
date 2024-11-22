@@ -103,7 +103,9 @@
         "agent_response": "Agent response",
         "rate_the_answer": "Rate the answer",
         "i_liked": "I liked",
-        "i_didnt_like": "I didn't like"
+        "i_didnt_like": "I didn't like",
+        "confidence_percentage": "{percentage}% confidence",
+        "not_found": "Not found"
       }
     },
     "actions": {
