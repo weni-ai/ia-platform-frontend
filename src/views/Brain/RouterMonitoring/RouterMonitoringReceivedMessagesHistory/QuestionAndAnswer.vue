@@ -94,7 +94,7 @@
 <script setup>
 import { ref } from 'vue';
 
-import DrawerInspectAnswer from '@/components/Brain/Monitoring/DrawerInspectResponse.vue';
+import DrawerInspectAnswer from '@/components/Brain/Monitoring/DrawerInspectResponse/index.vue';
 import Markdown from '@/components/Markdown.vue';
 
 const props = defineProps({
