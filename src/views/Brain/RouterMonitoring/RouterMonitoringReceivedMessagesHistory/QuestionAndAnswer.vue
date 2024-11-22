@@ -176,7 +176,6 @@ const isDrawerInspectAnswerOpen = ref(false);
 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
     row-gap: $unnnic-spacing-xs;
 
     .action-started__text {
