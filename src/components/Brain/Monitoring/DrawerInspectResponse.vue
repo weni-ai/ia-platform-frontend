@@ -22,7 +22,27 @@
           </UnnnicIntelligenceText>
           <p class="contact__text">“{{ inspectionData.text }}”</p>
         </section>
-        <section class="inspect-response__agent">
+
+        <section
+          v-if="inspectionData.llm.status === 'action'"
+          class="inspect-response__action"
+        >
+          <UnnnicAvatarIcon
+            class="action__icon"
+            size="sm"
+            icon="bolt"
+            scheme="aux-blue"
+          />
+
+          <p class="action__name">
+            {{ inspectionData.action.name }}
+          </p>
+        </section>
+
+        <section
+          v-else
+          class="inspect-response__agent"
+        >
           <UnnnicIntelligenceText
             color="neutral-cloudy"
             family="secondary"
@@ -261,6 +281,23 @@ function getReliabilityLevel(item) {
           }
         }
       }
+    }
+  }
+
+  &__action {
+    border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
+    border-radius: $unnnic-border-radius-sm;
+
+    padding: $unnnic-spacing-xs;
+
+    display: flex;
+    align-items: center;
+    gap: $unnnic-spacing-xs;
+
+    .action__name {
+      color: $unnnic-color-neutral-dark;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
     }
   }
 }

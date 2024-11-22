@@ -32,25 +32,35 @@
         class="question-and-answer__action-started"
         data-testid="action"
       >
-        <UnnnicIcon
-          data-testid="action-icon"
-          icon="bolt"
-          size="sm"
-          scheme="neutral-cloudy"
+        <section class="action-started__text">
+          <UnnnicIcon
+            data-testid="action-icon"
+            icon="bolt"
+            size="sm"
+            scheme="neutral-cloudy"
+          />
+          <UnnnicIntelligenceText
+            data-testid="action-name"
+            color="neutral-cloudy"
+            family="secondary"
+            size="body-md"
+            tag="p"
+          >
+            {{
+              $t('router.monitoring.activated_the_action', {
+                action: inspectionData.action?.name,
+              })
+            }}
+          </UnnnicIntelligenceText>
+        </section>
+        <UnnnicButton
+          class="action-started__inspect-response"
+          size="small"
+          :text="$t('router.monitoring.inspect_response.inspect')"
+          type="secondary"
+          iconLeft="info"
+          @click="isDrawerInspectAnswerOpen = true"
         />
-        <UnnnicIntelligenceText
-          data-testid="action-name"
-          color="neutral-cloudy"
-          family="secondary"
-          size="body-md"
-          tag="p"
-        >
-          {{
-            $t('router.monitoring.activated_the_action', {
-              action: inspectionData.action?.name,
-            })
-          }}
-        </UnnnicIntelligenceText>
       </section>
       <section
         v-else
@@ -73,11 +83,11 @@
           iconLeft="info"
           @click="isDrawerInspectAnswerOpen = true"
         />
-        <DrawerInspectAnswer
-          v-model="isDrawerInspectAnswerOpen"
-          :inspectionData="inspectionData"
-        />
       </section>
+      <DrawerInspectAnswer
+        v-model="isDrawerInspectAnswerOpen"
+        :inspectionData="inspectionData"
+      />
     </template>
   </section>
 </template>
@@ -164,10 +174,24 @@ const isDrawerInspectAnswerOpen = ref(false);
     grid-column: 1 / 4;
     grid-row: 2;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: $unnnic-spacing-nano;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    row-gap: $unnnic-spacing-xs;
+
+    .action-started__text {
+      grid-column: 1 / 5;
+      grid-row: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: $unnnic-spacing-nano;
+    }
+
+    .action-started__inspect-response {
+      grid-column: 2 / 4;
+      grid-row: 2;
+    }
   }
 }
 </style>

@@ -98,6 +98,7 @@
       "error_loading_messages": "Erro ao carregar as mensagens",
       "inspect_response": {
         "title": "Inspecionar resposta",
+        "inspect": "Inspecionar",
         "intelligent_agent_response_details": "Detalhes da resposta do agente inteligente",
         "contact_message": "Mensagem do contato",
         "agent_response": "Resposta do agente",
