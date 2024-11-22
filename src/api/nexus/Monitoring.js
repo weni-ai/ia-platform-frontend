@@ -49,6 +49,15 @@ export const Monitoring = {
       return data;
     },
 
+    async rateAnswer({ projectUuid, id, is_approved }) {
+      const { data } = await request.$http.patch(
+        `api/${projectUuid}/message-detail/${id}`,
+        { is_approved },
+      );
+
+      return data;
+    },
+
     async performance({ projectUuid, started_day, ended_day }) {
       const params = cleanParams({
         started_day,

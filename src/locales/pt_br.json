@@ -100,7 +100,10 @@
         "title": "Inspecionar resposta",
         "intelligent_agent_response_details": "Detalhes da resposta do agente inteligente",
         "contact_message": "Mensagem do contato",
-        "agent_response": "Resposta do agente"
+        "agent_response": "Resposta do agente",
+        "rate_the_answer": "Avalie a resposta",
+        "i_liked": "Gostei",
+        "i_didnt_like": "Não gostei"
       }
     },
     "actions": {

@@ -54,6 +54,8 @@
             </template>
           </section>
         </section>
+
+        <ResponseEvaluator :isApproved="inspectionData.is_approved" />
       </section>
     </template>
   </UnnnicDrawer>
@@ -61,6 +63,8 @@
 
 <script setup>
 import { computed } from 'vue';
+
+import ResponseEvaluator from './ResponseEvaluator.vue';
 
 const props = defineProps({
   modelValue: {

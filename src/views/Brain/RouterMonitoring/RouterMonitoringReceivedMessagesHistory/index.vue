@@ -124,7 +124,7 @@ watch(
   }
 
   &__messages {
-    overflow: hidden scroll;
+    overflow: hidden auto;
 
     padding: $unnnic-spacing-ant $unnnic-spacing-sm;
 
