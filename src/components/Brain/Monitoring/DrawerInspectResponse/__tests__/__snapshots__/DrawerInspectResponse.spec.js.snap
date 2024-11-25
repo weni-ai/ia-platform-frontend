@@ -16,7 +16,7 @@ exports[`DrawerInspectResponse > matches the snapshot 1`] = `
         <section data-v-9f3b4af2="" class="inspect-response">
           <contact-message-stub data-v-9f3b4af2="" text="Test message"></contact-message-stub>
           <action-details-stub data-v-9f3b4af2="" action="[object Object]"></action-details-stub>
-          <agent-response-stub data-v-9f3b4af2="" status="action" inspectiondata="[object Object]" response="Sample response"></agent-response-stub>
+          <!--v-if-->
           <response-evaluator-stub data-v-9f3b4af2="" isapproved="true"></response-evaluator-stub>
         </section>
       </section>

@@ -78,13 +78,37 @@ describe('DrawerInspectResponse', () => {
     expect(actionDetails.exists()).toBe(false);
   });
 
-  it('renders the AgentResponse component with the correct props', () => {
+  it('does not render the AgentResponse component when llm.status is "action"', async () => {
+    const agentResponse = wrapper.findComponent(AgentResponse);
+    expect(agentResponse.exists()).toBe(false);
+  });
+
+  it('conditionally renders the AgentResponse component when llm.status is not "action"', async () => {
+    await wrapper.setProps({
+      inspectionData: {
+        ...inspectionDataMock,
+        llm: { ...inspectionDataMock.llm, status: 'failed' },
+      },
+    });
+    const agentResponse = wrapper.findComponent(AgentResponse);
+    expect(agentResponse.exists()).toBe(true);
+  });
+
+  it('renders the AgentResponse component with the correct props', async () => {
+    const newInspectionDataMock = {
+      ...inspectionDataMock,
+      llm: { ...inspectionDataMock.llm, status: 'failed' },
+    };
+
+    await wrapper.setProps({
+      inspectionData: newInspectionDataMock,
+    });
     const agentResponse = wrapper.findComponent(AgentResponse);
     expect(agentResponse.exists()).toBe(true);
     expect(agentResponse.props()).toMatchObject({
-      status: inspectionDataMock.llm.status,
-      response: inspectionDataMock.llm.response,
-      inspectionData: inspectionDataMock,
+      status: newInspectionDataMock.llm.status,
+      response: newInspectionDataMock.llm.response,
+      inspectionData: newInspectionDataMock,
     });
   });
 
