@@ -1,5 +1,8 @@
 <template>
-  <section class="response-success-groundedness">
+  <section
+    class="response-success-groundedness"
+    data-testid="response-success-groundedness"
+  >
     <TextSentences
       :fragments="groundednessFragments"
       :getReliabilityLevel="getReliabilityLevel"
