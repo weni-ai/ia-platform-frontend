@@ -1,12 +1,21 @@
 <template>
-  <section class="action-details">
+  <section
+    data-testid="action-details-container"
+    class="action-details"
+  >
     <UnnnicAvatarIcon
+      data-testid="action-icon"
       class="action__icon"
       size="sm"
       icon="bolt"
       scheme="aux-blue"
     />
-    <p class="action__name">{{ action.name }}</p>
+    <p
+      data-testid="action-name"
+      class="action__name"
+    >
+      {{ action.name }}
+    </p>
   </section>
 </template>
 

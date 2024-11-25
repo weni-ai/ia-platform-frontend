@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ActionDetails.vue > matches the snapshot 1`] = `
+"<section data-v-2d5e21e2="" data-testid="action-details-container" class="action-details">
+  <anonymous-stub data-v-2d5e21e2="" enabled="true" icon="bolt" size="sm" scheme="aux-blue" filled="false" opacity="true" data-testid="action-icon" class="action__icon"></anonymous-stub>
+  <p data-v-2d5e21e2="" data-testid="action-name" class="action__name">Sample Action</p>
+</section>"
+`;
