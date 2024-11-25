@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TextSentences.vue > matches the snapshot 1`] = `
+"<section data-v-44bdc72e="" data-testid="sentences" class="text-sentences">
+  <p data-v-44bdc72e="" data-testid="sentence-text" class="text-sentences__text text-sentences__text--slightly-reliable">This is slightly reliable.</p>
+  <p data-v-44bdc72e="" data-testid="sentence-text" class="text-sentences__text text-sentences__text--moderately-reliable">This is moderately reliable.</p>
+  <p data-v-44bdc72e="" data-testid="sentence-text" class="text-sentences__text text-sentences__text--highly-reliable">This is highly reliable.</p>
+</section>"
+`;

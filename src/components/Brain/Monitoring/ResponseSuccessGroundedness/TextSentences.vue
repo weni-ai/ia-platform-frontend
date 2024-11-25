@@ -1,10 +1,14 @@
 <template>
-  <section class="text-sentences">
+  <section
+    data-testid="sentences"
+    class="text-sentences"
+  >
     <template
       v-for="fragment in fragments"
       :key="fragment.sentence"
     >
       <p
+        data-testid="sentence-text"
         :class="[
           'text-sentences__text',
           `text-sentences__text--${getReliabilityLevel(fragment)}`,
