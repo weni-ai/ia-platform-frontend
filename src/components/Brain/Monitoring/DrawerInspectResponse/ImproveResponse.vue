@@ -1,6 +1,29 @@
 <template>
   <section class="improve-response">
-    <section class="improve-response__actions">
+    <header
+      v-if="type === 'failed'"
+      class="improve-response__header-failed"
+    >
+      <UnnnicIcon
+        icon="cancel"
+        scheme="aux-red-500"
+        size="sm"
+      />
+      <UnnnicIntelligenceText
+        color="aux-red-500"
+        family="secondary"
+        size="body-gt"
+        tag="p"
+      >
+        {{ $t('router.monitoring.improve_response.agent_unable_respond') }}
+      </UnnnicIntelligenceText>
+    </header>
+    <section
+      :class="[
+        'improve-response__actions',
+        { 'improve-response__actions--with-header': type === 'failed' },
+      ]"
+    >
       <UnnnicIntelligenceText
         color="neutral-cloudy"
         family="secondary"
@@ -44,6 +67,18 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .improve-response {
+  &__header-failed {
+    border-radius: $unnnic-border-radius-sm $unnnic-border-radius-sm 0 0;
+
+    padding: $unnnic-spacing-sm;
+
+    background-color: $unnnic-color-aux-red-100;
+
+    display: flex;
+    gap: $unnnic-spacing-xs;
+    align-items: center;
+  }
+
   &__actions {
     border: $unnnic-border-width-thinner solid $unnnic-color-neutral-soft;
     border-radius: $unnnic-border-radius-sm;
@@ -51,6 +86,11 @@ const props = defineProps({
 
     display: grid;
     gap: $unnnic-spacing-xs;
+
+    &--with-header {
+      border-radius: 0 0 $unnnic-border-radius-sm $unnnic-border-radius-sm;
+      border-top: none;
+    }
 
     .actions__buttons {
       display: grid;
