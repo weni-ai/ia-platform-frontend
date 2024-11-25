@@ -107,6 +107,13 @@
         "i_didnt_like": "Não gostei",
         "confidence_percentage": "{percentage}% de confiança",
         "not_found": "Não encontrado"
+      },
+      "improve_response": {
+        "title": "Aprimorar a resposta",
+        "agent_unable_respond": "O agente não soube responder ao contato",
+        "add_new_content": "Adicionar novo conteúdo",
+        "edit_action": "Editar ação {name}",
+        "add_new_action": "Adicionar nova ação"
       }
     },
     "actions": {

@@ -46,12 +46,20 @@
         />{{ $t('router.monitoring.inspect_response.i_didnt_like') }}
       </button>
     </section>
+
+    <ImproveResponse
+      v-if="isApproved === false"
+      class="response-evaluator__improve-response"
+      type="action"
+    />
   </section>
 </template>
 
 <script setup>
-import { useMonitoringStore } from '@/store/Monitoring';
 import { ref } from 'vue';
+import { useMonitoringStore } from '@/store/Monitoring';
+
+import ImproveResponse from './ImproveResponse.vue';
 
 const props = defineProps({
   isApproved: {
@@ -116,6 +124,10 @@ async function setIsApproved(boolean) {
         font-weight: $unnnic-font-weight-bold;
       }
     }
+  }
+
+  &__improve-response {
+    margin-top: $unnnic-spacing-sm;
   }
 }
 </style>
