@@ -1,5 +1,6 @@
 <template>
   <UnnnicDrawer
+    data-testid="drawer"
     :modelValue="modelValue"
     :title="$t('router.monitoring.inspect_response.title')"
     :description="

@@ -1,0 +1,27 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DrawerInspectResponse > matches the snapshot 1`] = `
+"<aside data-v-9f445947="" data-v-9f3b4af2="" class="unnnic-drawer" data-testid="drawer">
+  <section data-v-9f445947="" class="unnnic-drawer__overlay" data-testid="overlay"></section>
+  <transition-stub data-v-9f445947="" name="drawer" appear="true" persisted="false" css="true">
+    <section data-v-9f445947="" data-testid="drawer-container" class="unnnic-drawer__container unnnic-drawer__container--md">
+      <header data-v-9f445947="" class="unnnic-drawer__header">
+        <section data-v-9f445947="" class="unnnic-drawer__title-container">
+          <h1 data-v-9f445947="" class="unnnic-drawer__title" data-testid="drawer-title">Inspect response</h1>
+          <p data-v-9f445947="" class="unnnic-drawer__description" data-testid="drawer-description">Intelligent agent response details</p>
+        </section>
+        <unnnic-icon-stub data-v-9f445947="" filled="false" next="false" icon="arrow_back" clickable="true" size="avatar-nano" scheme="neutral-darkest" class="unnnic-drawer__close" data-testid="close-icon"></unnnic-icon-stub>
+      </header>
+      <section data-v-9f445947="" class="unnnic-drawer__content">
+        <section data-v-9f3b4af2="" class="inspect-response">
+          <contact-message-stub data-v-9f3b4af2="" text="Test message"></contact-message-stub>
+          <action-details-stub data-v-9f3b4af2="" action="[object Object]"></action-details-stub>
+          <agent-response-stub data-v-9f3b4af2="" status="action" inspectiondata="[object Object]" response="Sample response"></agent-response-stub>
+          <response-evaluator-stub data-v-9f3b4af2="" isapproved="true"></response-evaluator-stub>
+        </section>
+      </section>
+      <!---->
+    </section>
+  </transition-stub>
+</aside>"
+`;
