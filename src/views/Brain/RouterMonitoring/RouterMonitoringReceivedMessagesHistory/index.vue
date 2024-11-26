@@ -56,7 +56,6 @@
       <QuestionAndAnswer
         data-testid="question-and-answer"
         :isLoading="isLoadingMessages"
-        :inspectionData="inspectedAnswer"
       />
     </section>
   </section>

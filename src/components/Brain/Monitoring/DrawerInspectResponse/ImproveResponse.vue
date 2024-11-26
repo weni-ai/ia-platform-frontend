@@ -35,16 +35,21 @@
 
       <section class="actions__buttons">
         <UnnnicButton
-          v-if="type === 'action'"
+          v-if="actionToEdit"
           size="small"
-          :text="$t('router.monitoring.improve_response.edit_action')"
+          :text="
+            $t('router.monitoring.improve_response.edit_action', {
+              name: actionToEdit.name,
+            })
+          "
           type="secondary"
         />
         <UnnnicButton
-          v-if="type === 'failed'"
+          v-else
           size="small"
           :text="$t('router.monitoring.improve_response.add_new_content')"
           type="secondary"
+          @click="isModalAddContentOpen = true"
         />
         <UnnnicButton
           size="small"
@@ -53,16 +58,32 @@
         />
       </section>
     </section>
+
+    <ModalAddContent v-model="isModalAddContentOpen" />
   </section>
 </template>
 
 <script setup>
+import ModalAddContent from '../ModalAddContent/index.vue';
+
+import { computed, ref } from 'vue';
+import { useMonitoringStore } from '@/store/Monitoring';
+
 const props = defineProps({
   type: {
+    type: Boolean,
     required: true,
-    validator: (value) => ['action', 'failed'].includes(value),
+    validator: (value) => ['action', 'failed', 'success'].includes(value),
   },
 });
+
+const monitoringStore = useMonitoringStore();
+
+const actionToEdit = computed(
+  () => monitoringStore.messages.inspectedAnswer?.action,
+);
+
+const isModalAddContentOpen = ref(false);
 </script>
 
 <style scoped lang="scss">

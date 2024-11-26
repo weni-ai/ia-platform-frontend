@@ -9,5 +9,6 @@ exports[`ResponseEvaluator.vue > matches the snapshot 1`] = `
     </button><button data-v-4cf8372f="" data-testid="dislike-button" class="actions__button">
       <icon-stub data-v-4cf8372f="" filled="false" next="false" icon="thumb_down" clickable="false" size="sm" scheme="neutral-cloudy"></icon-stub>I didn't like
     </button></section>
+  <!--v-if-->
 </section>"
 `;
