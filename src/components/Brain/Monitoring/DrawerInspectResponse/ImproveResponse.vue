@@ -70,7 +70,7 @@
       v-if="isModalAddActionOpen"
       v-model="isModalAddActionOpen"
       actionGroup="custom"
-      :actionToEditUuid="actionToEdit.uuid"
+      :actionToEditUuid="actionToEdit?.uuid"
       @previous-step="isModalAddActionOpen = false"
     />
   </section>

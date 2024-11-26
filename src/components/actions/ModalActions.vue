@@ -235,7 +235,9 @@ export default {
   },
 
   mounted() {
-    this.syncDataActionToEdit();
+    if (this.actionToEdit) {
+      this.syncDataActionToEdit();
+    }
   },
 
   methods: {
@@ -281,6 +283,8 @@ export default {
     },
 
     async editAction() {
+      if (!this.actionToEdit) return;
+
       try {
         this.isLoading = true;
         const action = await this.actionsStore.edit({
