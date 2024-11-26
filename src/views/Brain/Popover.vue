@@ -199,6 +199,7 @@ onMounted(() => {
       child.show = () => {
         child.el.style.display = null;
         child.el.style.position = 'fixed';
+        child.el.style.zIndex = '10000';
 
         watcher = watch(
           () => [targetDimensions, child.dimensions],

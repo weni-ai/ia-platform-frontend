@@ -117,7 +117,8 @@
       },
       "modal_add_content": {
         "description": "Agregar contenido para mejorar la respuesta del agente",
-        "add_another_site": "Agregar otro sitio"
+        "add_another_site": "Agregar otro sitio",
+        "success_alert": "Contenido agregado exitosamente"
       }
     },
     "actions": {

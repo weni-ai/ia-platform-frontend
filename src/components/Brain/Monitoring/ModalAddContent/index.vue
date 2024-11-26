@@ -9,9 +9,12 @@
     }"
     :primaryButtonProps="{
       text: $t('finish'),
+      disabled: disableSaveButton,
+      loading: isSavingContents,
     }"
     @update:model-value="$emit('update:modelValue', $event)"
-    @secondary-button-click="$emit('update:modelValue', false)"
+    @secondary-button-click="closeModal"
+    @primary-button-click="saveContents"
   >
     <section class="modal-add-content">
       <UnnnicIntelligenceText
@@ -39,9 +42,15 @@
       </UnnnicTab>
 
       <section class="modal-add-content__content">
-        <AddFilesContent v-show="activeTab === 'files'" />
+        <AddFilesContent
+          v-show="activeTab === 'files'"
+          @update:model-value="contents.files = $event"
+        />
 
-        <AddSitesContent v-show="activeTab === 'sites'" />
+        <AddSitesContent
+          v-show="activeTab === 'sites'"
+          @update:model-value="contents.sites = $event"
+        />
 
         <textarea
           v-show="activeTab === 'text'"
@@ -49,7 +58,7 @@
           :placeholder="$t('content_bases.write_content_placeholder')"
           cols="30"
           rows="10"
-          @input="$emit('update:modelValue', $event.target.value)"
+          @input="contents.text = $event.target.value"
         />
       </section>
     </section>
@@ -57,11 +66,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
+import { useStore } from 'vuex';
+
+import nexusaiAPI from '@/api/nexusaiAPI';
 
 import AddFilesContent from './AddFilesContent.vue';
 import AddSitesContent from './AddSitesContent.vue';
+import { normalizeURL } from '@/utils/sites';
+import i18n from '@/utils/plugins/i18n';
 
+const store = useStore();
 const props = defineProps({
   modelValue: {
     type: Boolean,
@@ -70,6 +85,19 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close', 'update:modelValue']);
+
+const contentBaseUuid = computed(() => store.state.router.contentBaseUuid);
+
+onMounted(async () => {
+  if (contentBaseUuid.value) return;
+
+  const { data } = await nexusaiAPI.router.read({
+    projectUuid: store.state.Auth.connectProjectUuid,
+    obstructiveErrorProducer: true,
+  });
+
+  store.state.router.contentBaseUuid = data.uuid;
+});
 
 const contentTabs = ref([
   { title: 'files', page: 'files' },
@@ -80,6 +108,113 @@ const activeTab = ref(contentTabs.value[0].page);
 const onTabChange = (newTab) => {
   activeTab.value = newTab;
 };
+
+const contents = ref({
+  files: null,
+  sites: null,
+  text: null,
+});
+
+const disableSaveButton = computed(() => {
+  return (
+    !contents.value.files?.length &&
+    !contents.value.sites?.length &&
+    !contents.value.text?.length
+  );
+});
+
+function closeModal() {
+  emit('update:modelValue', false);
+}
+
+async function saveSitesContent() {
+  const { sites } = contents.value;
+  if (!sites?.length) return;
+
+  const treatedSites = sites.map((site) =>
+    reactive({
+      file: null,
+      file_name: null,
+      extension_file: 'site',
+      uuid: `temp-${Math.random() * 1000}`,
+      created_file_name: normalizeURL(site),
+      status: 'uploading',
+    }),
+  );
+
+  Promise.all(
+    treatedSites.map(async (site) => {
+      try {
+        const { data } =
+          await nexusaiAPI.intelligences.contentBases.sites.create({
+            contentBaseUuid: contentBaseUuid.value,
+            link: site.created_file_name,
+          });
+
+        site.uuid = data.uuid;
+        site.status = 'processing';
+      } catch (error) {
+        site.status = 'fail';
+      }
+    }),
+  );
+}
+
+async function saveTextContent() {
+  const { uuid } = store.state.Brain.contentText;
+  const { text } = contents.value;
+
+  if (!text?.length) return;
+
+  const contentTextApi = nexusaiAPI.intelligences.contentBases.texts;
+  const apiMethod = uuid ? contentTextApi.edit : contentTextApi.create;
+
+  const payload = {
+    contentBaseUuid: contentBaseUuid.value,
+    text,
+    ...(uuid && { contentBaseTextUuid: uuid }),
+  };
+
+  const { data: contentBaseTextData } = await apiMethod(payload);
+
+  store.state.Brain.contentText.current = contentBaseTextData.text;
+}
+
+const isSavingContents = ref(false);
+
+async function saveContents() {
+  if (
+    contents.value.files?.length &&
+    !contents.value.sites?.length &&
+    !contents.value.text?.length
+  ) {
+    closeModal();
+    return;
+  }
+
+  isSavingContents.value = true;
+
+  const promises = [];
+
+  if (contents.value.sites?.length) {
+    promises.push(saveSitesContent());
+  }
+
+  if (contents.value.text?.length) {
+    promises.push(saveTextContent());
+  }
+
+  try {
+    await Promise.all(promises);
+    closeModal();
+    store.state.alert = {
+      type: 'success',
+      text: i18n.global.t('router.monitoring.modal_add_content.success_alert'),
+    };
+  } finally {
+    isSavingContents.value = false;
+  }
+}
 </script>
 
 <style scoped lang="scss">

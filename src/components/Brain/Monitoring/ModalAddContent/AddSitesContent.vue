@@ -44,10 +44,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { validURL } from '@/utils/sites';
 
 import StartAddContent from './StartAddContent.vue';
+
+const emit = defineEmits(['update:model-value']);
 
 const sites = ref([]);
 const siteRefs = ref([]);
@@ -60,6 +62,12 @@ const onSiteInput = (event, index) => {
 function addEmptySite() {
   sites.value.push('');
 }
+
+const validSites = computed(() => sites.value.filter((site) => validURL(site)));
+
+watch(validSites, (newSites) => {
+  emit('update:model-value', newSites);
+});
 </script>
 
 <style scoped lang="scss">

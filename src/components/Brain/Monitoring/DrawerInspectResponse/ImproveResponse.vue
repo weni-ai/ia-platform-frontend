@@ -59,7 +59,10 @@
       </section>
     </section>
 
-    <ModalAddContent v-model="isModalAddContentOpen" />
+    <ModalAddContent
+      v-if="isModalAddContentOpen"
+      v-model="isModalAddContentOpen"
+    />
   </section>
 </template>
 

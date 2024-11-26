@@ -117,7 +117,8 @@
       },
       "modal_add_content": {
         "description": "Add content to enhance agent response",
-        "add_another_site": "Add another site"
+        "add_another_site": "Add another site",
+        "success_alert": "Content added successfully"
       }
     },
     "actions": {

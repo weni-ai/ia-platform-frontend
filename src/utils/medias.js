@@ -5,6 +5,8 @@ export const allowedMediaFormats = {
   document: ['.doc', '.docx', '.xls', '.xlsx', '.pdf', '.txt'],
 };
 
+export const fileSizeLimitInMegabytes = 50;
+
 export function getFileExtension(file) {
   const getExtension = (name) => {
     const parts = name.split('.');
