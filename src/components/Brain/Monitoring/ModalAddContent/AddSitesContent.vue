@@ -1,5 +1,5 @@
 <template>
-  <AddContent
+  <StartAddContent
     icon="globe"
     :description="$t('content_bases.sites.title')"
     :subDescription="$t('content_bases.sites.description')"
@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-import AddContent from './AddContent.vue';
+import StartAddContent from './StartAddContent.vue';
 </script>

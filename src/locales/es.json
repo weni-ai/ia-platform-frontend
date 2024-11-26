@@ -114,6 +114,9 @@
         "add_new_content": "Agregar nuevo contenido",
         "edit_action": "Editar acción {name}",
         "add_new_action": "Agregar nueva acción"
+      },
+      "modal_add_content": {
+        "description": "Agregar contenido para mejorar la respuesta del agente"
       }
     },
     "actions": {

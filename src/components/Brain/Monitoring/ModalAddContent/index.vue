@@ -13,33 +13,45 @@
     @update:model-value="$emit('update:modelValue', $event)"
     @secondary-button-click="$emit('update:modelValue', false)"
   >
-    <UnnnicTab
-      :tabs="contentTabs.map((tab) => tab.page)"
-      :activeTab="activeTab"
-      @change="onTabChange"
-    >
-      <template
-        v-for="tab in contentTabs"
-        :key="tab.page"
-        #[`tab-head-${tab.page}`]
+    <section class="modal-add-content">
+      <UnnnicIntelligenceText
+        color="neutral-cloudy"
+        family="secondary"
+        size="body-gt"
+        tag="p"
       >
-        {{ $t(`content_bases.tabs.${tab.title}`) }}
-      </template>
-    </UnnnicTab>
+        {{ $t('router.monitoring.modal_add_content.description') }}
+      </UnnnicIntelligenceText>
 
-    <section class="modal-add-content__content">
-      <AddFilesContent v-show="activeTab === 'files'" />
+      <UnnnicTab
+        class="modal-add-content__tab"
+        :tabs="contentTabs.map((tab) => tab.page)"
+        :activeTab="activeTab"
+        @change="onTabChange"
+      >
+        <template
+          v-for="tab in contentTabs"
+          :key="tab.page"
+          #[`tab-head-${tab.page}`]
+        >
+          {{ $t(`content_bases.tabs.${tab.title}`) }}
+        </template>
+      </UnnnicTab>
 
-      <AddSitesContent v-show="activeTab === 'sites'" />
+      <section class="modal-add-content__content">
+        <AddFilesContent v-show="activeTab === 'files'" />
 
-      <textarea
-        v-show="activeTab === 'text'"
-        class="content__text"
-        :placeholder="$t('content_bases.write_content_placeholder')"
-        cols="30"
-        rows="10"
-        @input="$emit('update:modelValue', $event.target.value)"
-      />
+        <AddSitesContent v-show="activeTab === 'sites'" />
+
+        <textarea
+          v-show="activeTab === 'text'"
+          class="content__text"
+          :placeholder="$t('content_bases.write_content_placeholder')"
+          cols="30"
+          rows="10"
+          @input="$emit('update:modelValue', $event.target.value)"
+        />
+      </section>
     </section>
   </UnnnicModalDialog>
 </template>
@@ -72,6 +84,14 @@ const onTabChange = (newTab) => {
 
 <style scoped lang="scss">
 .modal-add-content {
+  display: flex;
+  flex-direction: column;
+  gap: $unnnic-spacing-sm;
+
+  &__tab {
+    margin-bottom: -$unnnic-spacing-sm;
+  }
+
   &__content {
     border-radius: $unnnic-border-radius-sm;
     border: $unnnic-border-width-thinner solid $unnnic-color-neutral-cleanest;

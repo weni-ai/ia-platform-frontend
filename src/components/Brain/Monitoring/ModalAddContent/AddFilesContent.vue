@@ -1,5 +1,5 @@
 <template>
-  <AddContent
+  <StartAddContent
     :description="$t('content_bases.files.description')"
     :subDescription="removeHTML(supportedFormats)"
     :textAddContent="$t('content_bases.files.browse_file')"
@@ -10,7 +10,7 @@
 import { computed } from 'vue';
 import i18n from '@/utils/plugins/i18n';
 
-import AddContent from './AddContent.vue';
+import StartAddContent from './StartAddContent.vue';
 
 const allowedFormats = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'];
 const fileSizeLimitInMegabytes = 50;
