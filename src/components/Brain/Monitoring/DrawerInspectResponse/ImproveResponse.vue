@@ -55,6 +55,7 @@
           size="small"
           :text="$t('router.monitoring.improve_response.add_new_action')"
           type="secondary"
+          @click="isModalAddActionOpen = true"
         />
       </section>
     </section>
@@ -62,6 +63,13 @@
     <ModalAddContent
       v-if="isModalAddContentOpen"
       v-model="isModalAddContentOpen"
+    />
+
+    <ModalActions
+      v-if="isModalAddActionOpen"
+      v-model="isModalAddActionOpen"
+      actionGroup="custom"
+      @previous-step="isModalAddActionOpen = false"
     />
   </section>
 </template>
@@ -71,6 +79,7 @@ import ModalAddContent from '../ModalAddContent/index.vue';
 
 import { computed, ref } from 'vue';
 import { useMonitoringStore } from '@/store/Monitoring';
+import ModalActions from '@/components/actions/ModalActions.vue';
 
 const props = defineProps({
   type: {
@@ -87,6 +96,7 @@ const actionToEdit = computed(
 );
 
 const isModalAddContentOpen = ref(false);
+const isModalAddActionOpen = ref(false);
 </script>
 
 <style scoped lang="scss">
