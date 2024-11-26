@@ -116,7 +116,8 @@
         "add_new_action": "Add new action"
       },
       "modal_add_content": {
-        "description": "Add content to enhance agent response"
+        "description": "Add content to enhance agent response",
+        "add_another_site": "Add another site"
       }
     },
     "actions": {

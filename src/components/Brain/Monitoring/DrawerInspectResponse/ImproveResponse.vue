@@ -71,7 +71,7 @@ import { useMonitoringStore } from '@/store/Monitoring';
 
 const props = defineProps({
   type: {
-    type: Boolean,
+    type: String,
     required: true,
     validator: (value) => ['action', 'failed', 'success'].includes(value),
   },

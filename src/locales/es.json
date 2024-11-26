@@ -116,7 +116,8 @@
         "add_new_action": "Agregar nueva acción"
       },
       "modal_add_content": {
-        "description": "Agregar contenido para mejorar la respuesta del agente"
+        "description": "Agregar contenido para mejorar la respuesta del agente",
+        "add_another_site": "Agregar otro sitio"
       }
     },
     "actions": {
