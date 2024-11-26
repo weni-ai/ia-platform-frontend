@@ -57,11 +57,12 @@ export const Actions = {
     };
   },
 
-  async edit({ projectUuid, actionUuid, name, prompt }) {
+  async edit({ projectUuid, actionUuid, name, flow_uuid, prompt }) {
     const { data } = await request.$http.patch(
       `api/${projectUuid}/flows/${actionUuid}/`,
       {
         name,
+        flow_uuid,
         prompt,
       },
     );
@@ -69,6 +70,7 @@ export const Actions = {
     return {
       uuid: data.uuid,
       name: data.name,
+      flow_uuid: data.flow_uuid,
       prompt: data.prompt,
     };
   },
