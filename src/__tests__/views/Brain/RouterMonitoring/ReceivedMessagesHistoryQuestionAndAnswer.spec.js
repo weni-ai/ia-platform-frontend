@@ -1,28 +1,47 @@
 import { mount } from '@vue/test-utils';
 
 import QuestionAndAnswer from '@/views/Brain/RouterMonitoring/RouterMonitoringReceivedMessagesHistory/QuestionAndAnswer.vue';
+import { createTestingPinia } from '@pinia/testing';
+import { useMonitoringStore } from '@/store/Monitoring';
+import { nextTick } from 'vue';
+
+const pinia = createTestingPinia({
+  initialState: {
+    monitoring: {
+      messages: {
+        inspectedAnswer: {
+          text: 'Test question',
+          llm: {
+            status: 'success',
+            response: 'Test answer',
+          },
+          action: {
+            name: 'Test Action',
+          },
+        },
+      },
+    },
+  },
+});
 
 describe('Monitoring messages history QuestionAndAnswer component', () => {
   let wrapper;
 
-  const inspectionDataMock = {
-    text: 'Test question',
-    llm: {
-      status: 'success',
-      response: 'Test answer',
-    },
-    action: {
-      name: 'Test Action',
-    },
-  };
+  let monitoringStore = useMonitoringStore();
 
   beforeEach(() => {
     wrapper = mount(QuestionAndAnswer, {
       props: {
         isLoading: false,
-        inspectionData: inspectionDataMock,
       },
+      global: { plugins: [pinia] },
     });
+  });
+
+  it('renders response with appropriate class based on llm status', () => {
+    expect(
+      wrapper.find('.question-and-answer__answer-text--success').text(),
+    ).toBe('Test answer');
   });
 
   it('renders question and response when not loading', () => {
@@ -33,9 +52,8 @@ describe('Monitoring messages history QuestionAndAnswer component', () => {
   });
 
   it('renders action status section when status is "action"', async () => {
-    await wrapper.setProps({
-      inspectionData: { ...inspectionDataMock, llm: { status: 'action' } },
-    });
+    monitoringStore.messages.inspectedAnswer.llm.status = 'action';
+    await nextTick();
 
     expect(wrapper.find('[data-testid="action"]').exists()).toBe(true);
     expect(wrapper.findComponent('[data-testid="action-icon"]').exists()).toBe(
@@ -47,7 +65,7 @@ describe('Monitoring messages history QuestionAndAnswer component', () => {
   });
 
   it('renders loading state correctly', async () => {
-    await wrapper.setProps({ isLoading: true, inspectionData: {} });
+    await wrapper.setProps({ isLoading: true });
 
     expect(wrapper.find('[data-testid="skeleton-question"]').exists()).toBe(
       true,
@@ -55,11 +73,5 @@ describe('Monitoring messages history QuestionAndAnswer component', () => {
     expect(wrapper.find('[data-testid="skeleton-answer"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="question"]').exists()).toBe(false);
     expect(wrapper.find('[data-testid="answer"]').exists()).toBe(false);
-  });
-
-  it('renders response with appropriate class based on llm status', () => {
-    expect(
-      wrapper.find('.question-and-answer__answer-text--success').text(),
-    ).toBe('Test answer');
   });
 });
