@@ -23,11 +23,11 @@
           'question-and-answer__message',
           'question-and-answer__question',
         ]"
-        :content="inspectedAnswer.text"
+        :content="data.text"
       />
 
       <section
-        v-if="inspectedAnswer.llm.status === 'action'"
+        v-if="data.llm.status === 'action'"
         class="question-and-answer__action-started"
         data-testid="action"
       >
@@ -47,7 +47,7 @@
           >
             {{
               $t('router.monitoring.activated_the_action', {
-                action: inspectedAnswer.action?.name,
+                action: data.action?.name,
               })
             }}
           </UnnnicIntelligenceText>
@@ -70,9 +70,9 @@
           :class="[
             'question-and-answer__message',
             'question-and-answer__answer-text',
-            `question-and-answer__answer-text--${inspectedAnswer.llm.status}`,
+            `question-and-answer__answer-text--${data.llm.status}`,
           ]"
-          :content="inspectedAnswer.llm.response"
+          :content="data.llm.response"
         />
 
         <UnnnicButton
@@ -85,33 +85,31 @@
       </section>
       <DrawerInspectAnswer
         v-model="isDrawerInspectAnswerOpen"
-        :inspectionData="inspectedAnswer"
+        :inspectionData="data"
       />
     </template>
   </section>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 import DrawerInspectAnswer from '@/components/Brain/Monitoring/DrawerInspectResponse/index.vue';
 import Markdown from '@/components/Markdown.vue';
-import { useMonitoringStore } from '@/store/Monitoring';
 
 const props = defineProps({
   isLoading: {
     type: Boolean,
     default: true,
   },
+
+  data: {
+    type: Object,
+    required: true,
+  },
 });
 
 const isDrawerInspectAnswerOpen = ref(false);
-
-const monitoringStore = useMonitoringStore();
-
-const inspectedAnswer = computed(
-  () => monitoringStore.messages.inspectedAnswer,
-);
 </script>
 
 <style lang="scss" scoped>

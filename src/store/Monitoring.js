@@ -29,7 +29,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
 
   async function loadMessages({ page, pageInterval, tag, text }) {
     const { started_day, ended_day } = route.query;
-    const currentNewMessages =  [...messages.newMessages]
+    const currentNewMessages = [...messages.newMessages];
 
     try {
       messages.status = 'loading';
@@ -51,6 +51,40 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     } catch (error) {
       messages.status = 'error';
       messages.newMessages = currentNewMessages;
+    }
+  }
+
+  async function loadMessageContext({ id }) {
+    messages.inspectedAnswer.context = {};
+    const setStatus = (status) =>
+      (messages.inspectedAnswer.context.status = status);
+
+    try {
+      setStatus('loading');
+
+      const response =
+        await nexusaiAPI.router.monitoring.messages.getMessageContext({
+          projectUuid: connectProjectUuid.value,
+          id: id,
+        });
+
+      messages.inspectedAnswer.context = response?.map(
+        ({ id, llm_response, tag }) => ({
+          id,
+          llm: { response: llm_response, status: tag },
+        }),
+      );
+
+      setStatus('complete');
+    } catch (error) {
+      setStatus('error');
+
+      globalStore.state.alert = {
+        type: 'error',
+        text: i18n.global.t(
+          'router.monitoring.error_loading_previous_messages',
+        ),
+      };
     }
   }
 
@@ -151,13 +185,14 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     }
   }
 
-  function createNewMessage({message}) {
-    messages.newMessages.push(message)
+  function createNewMessage({ message }) {
+    messages.newMessages.push(message);
   }
 
   return {
     messages,
     loadMessages,
+    loadMessageContext,
     loadMessageDetails,
     loadMessagesPerformance,
     rateAnswer,

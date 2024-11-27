@@ -32,30 +32,12 @@
       />
     </header>
     <section class="received-messages-history__messages">
-      <!-- Temporaly commented for the Continuous Delivery -->
-      <!-- <button
-        v-if="!isLoadingMessages"
-        class="button-load-previous"
-      >
-        <UnnnicIcon
-          icon="refresh"
-          size="xs"
-          scheme="neutral-cloudy"
-          clickable
-        />
-        <UnnnicIntelligenceText
-          color="neutral-cloudy"
-          family="secondary"
-          size="body-md"
-          tag="p"
-        >
-          {{ $t('router.monitoring.load_previous_messages') }}
-        </UnnnicIntelligenceText>
-      </button> -->
+      <MessageContext v-if="!isLoadingMessages" />
 
       <QuestionAndAnswer
         data-testid="question-and-answer"
         :isLoading="isLoadingMessages"
+        :data="inspectedAnswer"
       />
     </section>
   </section>
@@ -65,6 +47,7 @@
 import { useMonitoringStore } from '@/store/Monitoring';
 import { computed, watch } from 'vue';
 
+import MessageContext from './MessageContext.vue';
 import QuestionAndAnswer from './QuestionAndAnswer.vue';
 
 const monitoringStore = useMonitoringStore();
@@ -130,20 +113,6 @@ watch(
     display: flex;
     flex-direction: column;
     gap: $unnnic-spacing-xs;
-
-    .button-load-previous {
-      border: none;
-      background: none;
-
-      margin: auto;
-
-      display: flex;
-      gap: $unnnic-spacing-nano;
-      justify-content: center;
-      align-items: center;
-
-      cursor: pointer;
-    }
   }
 }
 </style>

@@ -96,6 +96,7 @@
       "load_previous_messages": "Carregar mensagens anteriores",
       "activated_the_action": "ativou a ação {action}",
       "error_loading_messages": "Erro ao carregar as mensagens",
+      "error_loading_previous_messages": "Erro ao carregar as mensagens anteriores",
       "inspect_response": {
         "title": "Inspecionar resposta",
         "inspect": "Inspecionar",

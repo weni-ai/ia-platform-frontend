@@ -40,6 +40,15 @@ export const Monitoring = {
       };
     },
 
+    async getMessageContext({ projectUuid, id }) {
+      const { data } = await request.$http.get(
+        `api/${projectUuid}/conversation-context/?log_id=${id}`,
+        { hideGenericErrorAlert: true },
+      );
+
+      return data;
+    },
+
     async detail({ projectUuid, id }) {
       const { data } = await request.$http.get(
         `api/${projectUuid}/message-detail/${id}`,
