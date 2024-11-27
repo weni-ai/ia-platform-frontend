@@ -119,7 +119,8 @@
         "description": "Add content to enhance agent response",
         "add_another_site": "Add another site",
         "success_alert": "Content added successfully"
-      }
+      },
+      "new_messages_load": "{n} new message. Click to load. | {n} new messages. Click to load."
     },
     "actions": {
       "title": "Actions",

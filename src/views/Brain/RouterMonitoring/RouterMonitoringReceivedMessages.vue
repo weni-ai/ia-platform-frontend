@@ -26,41 +26,48 @@
       />
     </section>
 
-    <UnnnicIntelligenceText
-      v-if="showNoMessageReceivedInfo"
-      data-test="no-message-received"
-      color="neutral-clean"
-      family="secondary"
-      size="body-gt"
-      tag="p"
-    >
-      {{ $t('router.monitoring.no_message_received') }}
-    </UnnnicIntelligenceText>
-    <section
-      v-else
-      :class="{
-        'received-messages__table': true,
-        'received-messages__table--with-results':
-          !isTableLoading && formattedMessagesRows.length,
-      }"
-    >
-      <UnnnicTableNext
-        v-model:pagination="pagination"
-        hideHeaders
-        :class="{
-          table__list: true,
-          'table__list--history-opened': inspectedAnswerId,
-        }"
-        data-test="messages-table"
-        :headers="table.headers"
-        :rows="formattedMessagesRows"
-        :paginationTotal="monitoringStore.messages.count"
-        :paginationInterval="paginationInterval"
-        :isLoading="isTableLoading"
-        @row-click="handleRowClick"
+    <section>
+      <NewMessages
+        v-if="monitoringStore.messages.newMessages.length"
+        @load="getNewMessages"
       />
 
-      <ReceivedMessagesHistory class="table__history" />
+      <UnnnicIntelligenceText
+        v-if="showNoMessageReceivedInfo"
+        data-test="no-message-received"
+        color="neutral-clean"
+        family="secondary"
+        size="body-gt"
+        tag="p"
+      >
+        {{ $t('router.monitoring.no_message_received') }}
+      </UnnnicIntelligenceText>
+      <section
+        v-else
+        :class="{
+          'received-messages__table': true,
+          'received-messages__table--with-results':
+            !isTableLoading && formattedMessagesRows.length,
+        }"
+      >
+        <UnnnicTableNext
+          v-model:pagination="pagination"
+          hideHeaders
+          :class="{
+            table__list: true,
+            'table__list--history-opened': inspectedAnswerId,
+          }"
+          data-test="messages-table"
+          :headers="table.headers"
+          :rows="formattedMessagesRows"
+          :paginationTotal="monitoringStore.messages.count"
+          :paginationInterval="paginationInterval"
+          :isLoading="isTableLoading"
+          @row-click="handleRowClick"
+        />
+
+        <ReceivedMessagesHistory class="table__history" />
+      </section>
     </section>
   </section>
 </template>
@@ -74,6 +81,7 @@ import Unnnic from '@weni/unnnic-system';
 
 import { useMonitoringStore } from '@/store/Monitoring';
 
+import NewMessages from './RouterMonitoringNewMessages.vue';
 import ReceivedMessagesHistory from './RouterMonitoringReceivedMessagesHistory/index.vue';
 
 import i18n from '@/utils/plugins/i18n';
@@ -187,6 +195,19 @@ function getReceivedMessages() {
     tag: tagString === 'all' ? '' : tagString,
     text,
   });
+}
+
+function getNewMessages() {
+  pagination.value = 1;
+  monitoringStore.messages.inspectedAnswer = {};
+  resetFilters(); // the request for new messages is made from the filter watch
+}
+
+function resetFilters() {
+  filters.value = {
+    text: '',
+    tag: [tags.value[0]],
+  };
 }
 
 const inspectedAnswerId = computed(

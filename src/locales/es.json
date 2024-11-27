@@ -119,7 +119,8 @@
         "description": "Agregar contenido para mejorar la respuesta del agente",
         "add_another_site": "Agregar otro sitio",
         "success_alert": "Contenido agregado exitosamente"
-      }
+      },
+      "new_messages_load": "{n} mensaje nuevo. Haz clic para cargar. | {n} mensajes nuevos. Haz clic para cargar."
     },
     "actions": {
       "title": "Acciones",

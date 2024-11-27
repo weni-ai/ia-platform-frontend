@@ -29,8 +29,11 @@ export const useMonitoringStore = defineStore('monitoring', () => {
 
   async function loadMessages({ page, pageInterval, tag, text }) {
     const { started_day, ended_day } = route.query;
+    const currentNewMessages =  [...messages.newMessages]
+
     try {
       messages.status = 'loading';
+      messages.newMessages = [];
 
       const { data, count } = await nexusaiAPI.router.monitoring.messages.list({
         projectUuid: connectProjectUuid.value,
@@ -47,6 +50,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
       messages.status = 'complete';
     } catch (error) {
       messages.status = 'error';
+      messages.newMessages = currentNewMessages;
     }
   }
 
