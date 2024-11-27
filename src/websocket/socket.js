@@ -19,12 +19,11 @@ export default class Socket {
     this.#ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       this.pongData = data;
-      if (!data.content) return;
-      const { action } = data;
-      const content = JSON.parse(data.content);
+      if (!data.message) return;
+      const { type } = data;
 
       this.#handlers.forEach(({ message, callback }) => {
-        if (message === action) callback(content);
+        if (message === type) callback(data.message);
       });
     };
   }

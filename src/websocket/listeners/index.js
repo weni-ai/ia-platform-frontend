@@ -1,9 +1,8 @@
-export default ({ ws, app }) => {
-  const createListener = (callback) => (payload) => {
-    callback(payload, {
-      app,
-    });
-  };
+import messagesListener from './messages';
 
-  ws.on('ws', console.log('agent builder ws'));
+
+export default ({ ws }) => {  
+  const createListener = (callback) => (payload) => callback(payload);
+
+  ws.on('ws', createListener(messagesListener.create));
 };

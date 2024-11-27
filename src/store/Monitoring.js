@@ -17,6 +17,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     status: null,
     data: [],
     count: 0,
+    newMessages: [],
     performance: {
       status: null,
       action: 0,
@@ -146,11 +147,16 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     }
   }
 
+  function createNewMessage({message}) {
+    messages.newMessages.push(message)
+  }
+
   return {
     messages,
     loadMessages,
     loadMessageDetails,
     loadMessagesPerformance,
     rateAnswer,
+    createNewMessage,
   };
 });
