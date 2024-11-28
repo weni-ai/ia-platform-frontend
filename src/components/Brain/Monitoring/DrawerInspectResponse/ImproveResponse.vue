@@ -43,7 +43,7 @@
             })
           "
           type="secondary"
-          @click="isModalAddActionOpen = true"
+          @click="openEditModalAction"
         />
         <UnnnicButton
           v-else
@@ -70,7 +70,7 @@
       v-if="isModalAddActionOpen"
       v-model="isModalAddActionOpen"
       actionGroup="custom"
-      :actionToEditUuid="actionToEdit?.uuid"
+      :actionToEditUuid="shouldEditAction ? actionToEdit?.uuid : undefined"
       @previous-step="isModalAddActionOpen = false"
     />
   </section>
@@ -79,7 +79,7 @@
 <script setup>
 import ModalAddContent from '../ModalAddContent/index.vue';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useMonitoringStore } from '@/store/Monitoring';
 import { useActionsStore } from '@/store/Actions';
 
@@ -102,6 +102,18 @@ const actionToEdit = computed(
 
 const isModalAddContentOpen = ref(false);
 const isModalAddActionOpen = ref(false);
+const shouldEditAction = ref(false);
+
+function openEditModalAction() {
+  isModalAddActionOpen.value = true;
+  shouldEditAction.value = true;
+}
+
+watch(isModalAddActionOpen, (newIsModalAddActionOpen) => {
+  if (!newIsModalAddActionOpen) {
+    shouldEditAction.value = false;
+  }
+});
 
 onMounted(() => {
   if (actionsStore.actions.status !== 'complete') {
