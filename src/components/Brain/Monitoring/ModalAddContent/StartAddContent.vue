@@ -6,6 +6,7 @@
       :filled="iconFilled"
       size="xl"
       scheme="neutral-soft"
+      data-testid="icon"
     />
     <section class="add-content__infos">
       <UnnnicIntelligenceText
@@ -13,6 +14,7 @@
         family="secondary"
         size="body-gt"
         tag="p"
+        data-testid="description"
       >
         {{ description }}
       </UnnnicIntelligenceText>
@@ -22,6 +24,7 @@
         family="secondary"
         size="body-md"
         tag="p"
+        data-testid="sub-description"
       >
         {{ subDescription }}
       </UnnnicIntelligenceText>
@@ -31,6 +34,7 @@
       class="add-content__trigger"
       type="secondary"
       iconLeft="add"
+      data-testid="add-button"
       @click="$emit('add')"
     >
       {{ textAddContent }}
