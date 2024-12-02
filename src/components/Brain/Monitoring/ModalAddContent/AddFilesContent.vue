@@ -7,6 +7,7 @@
       <ContentItem
         v-for="file in files.data"
         :key="file.uuid"
+        data-testid="content-item"
         :file="file"
         :compressed="true"
         :clickable="true"
@@ -17,12 +18,14 @@
       <input
         v-show="false"
         ref="browser-file-input"
+        data-testid="input-file"
         type="file"
         :accept="allowedFormats"
         multiple
         @change="inputFile"
       />
       <StartAddContent
+        data-testid="start-add-content"
         :description="$t('content_bases.files.description')"
         :subDescription="removeHTML(supportedFormats)"
         :textAddContent="$t('content_bases.files.browse_file')"
@@ -57,8 +60,6 @@ const files = reactive(
 );
 
 watch(files.data, (newFilesData) => {
-  console.log('newFilesData', newFilesData);
-
   emit('update:model-value', newFilesData);
 });
 
