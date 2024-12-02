@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ImproveResponse.vue > matches the snapshot 1`] = `
+"<section data-v-a6b14f5e="" class="improve-response">
+  <!--v-if-->
+  <section data-v-a6b14f5e="" class="improve-response__actions">
+    <p data-v-ec8da4ad="" data-v-a6b14f5e="" class="unnnic-text unnnic-text--size-body-gt unnnic-text--line-height-md unnnic-text--family-secondary unnnic-text--weight-regular unnnic-text--color-neutral-cloudy">Improve the response</p>
+    <section data-v-a6b14f5e="" class="actions__buttons">
+      <unnnic-button-stub data-v-a6b14f5e="" size="small" text="Add new content" type="secondary" float="false" iconleft="" iconright="" iconcenter="" next="false" disabled="false" loading="false" data-testid="add-content-button"></unnnic-button-stub>
+      <unnnic-button-stub data-v-a6b14f5e="" size="small" text="Add new action" type="secondary" float="false" iconleft="" iconright="" iconcenter="" next="false" disabled="false" loading="false" data-testid="add-action-button"></unnnic-button-stub>
+    </section>
+  </section>
+  <!--v-if-->
+</section>"
+`;
