@@ -29,7 +29,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
 
   async function loadMessages({ page, pageInterval, tag, text }) {
     const { started_day, ended_day } = route.query;
-    const currentNewMessages =  [...messages.newMessages]
+    const currentNewMessages = [...messages.newMessages];
 
     try {
       messages.status = 'loading';
@@ -151,8 +151,8 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     }
   }
 
-  function createNewMessage({message}) {
-    messages.newMessages.push(message)
+  function createNewMessage({ message }) {
+    messages.newMessages.push(message);
   }
 
   return {
