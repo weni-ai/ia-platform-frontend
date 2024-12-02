@@ -3,10 +3,14 @@
     v-if="sites.length"
     class="add-sites-content__sites"
   >
-    <ul class="sites__list">
+    <ul
+      data-testid="sites-list"
+      class="sites__list"
+    >
       <li
         v-for="(site, index) of sites"
         :key="index"
+        data-testid="site-item"
       >
         <UnnnicFormElement
           :label="$t('content_bases.sites.modal.fields.link.label')"
@@ -14,6 +18,7 @@
           <UnnnicInput
             :ref="(el) => (siteRefs[index] = el)"
             v-model="sites[index]"
+            data-testid="site-input"
             :type="!site || validURL(site) ? 'normal' : 'error'"
             :placeholder="
               $t('content_bases.sites.sidebar_add.fields.link.placeholder')
@@ -24,6 +29,7 @@
       </li>
     </ul>
     <UnnnicButton
+      data-testid="add-button"
       type="secondary"
       iconLeft="add"
       :disabled="!validURL(sites.at(-1))"
@@ -35,6 +41,7 @@
 
   <StartAddContent
     v-else
+    data-testid="start-add-content"
     icon="globe"
     :description="$t('content_bases.sites.title')"
     :subDescription="$t('content_bases.sites.description')"

@@ -177,4 +177,33 @@ describe('MonitoringStore', () => {
       expect(store.messages.performance.status).toBe('error');
     });
   });
+
+  describe('rateAnswer', () => {
+    it('should rate answer successfully', async () => {
+      const mockData = {
+        is_approved: true,
+      };
+      nexusaiAPI.router.monitoring.messages.rateAnswer.mockResolvedValue(
+        mockData,
+      );
+
+      await store.rateAnswer(mockData);
+
+      expect(store.messages.inspectedAnswer.is_approved).toBe(true);
+    });
+
+    it('should handle errors', async () => {
+      nexusaiAPI.router.monitoring.messages.rateAnswer.mockRejectedValue(
+        new Error('Error'),
+      );
+
+      await expect(
+        store.rateAnswer({
+          is_approved: true,
+        }),
+      ).rejects.toThrow('Error');
+
+      expect(store.messages.inspectedAnswer.is_approved).toBeUndefined();
+    });
+  });
 });
