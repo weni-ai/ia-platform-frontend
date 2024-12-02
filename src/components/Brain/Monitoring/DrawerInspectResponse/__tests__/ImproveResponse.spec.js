@@ -147,12 +147,9 @@ describe('ImproveResponse.vue', () => {
   it('should reset shouldEditAction when isModalAddActionOpen is closed', async () => {
     wrapper.vm.isModalAddActionOpen = true;
     wrapper.vm.shouldEditAction = true;
-
     await wrapper.vm.$nextTick();
 
-    // Fechar o modal
     wrapper.vm.isModalAddActionOpen = false;
-
     await wrapper.vm.$nextTick();
 
     expect(wrapper.vm.shouldEditAction).toBe(false);
