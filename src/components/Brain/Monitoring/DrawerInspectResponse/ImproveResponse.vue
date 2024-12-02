@@ -74,6 +74,7 @@
     <ModalActions
       v-if="isModalAddActionOpen"
       v-model="isModalAddActionOpen"
+      data-testid="modal-add-action"
       actionGroup="custom"
       :actionToEditUuid="shouldEditAction ? actionToEdit?.uuid : undefined"
       @previous-step="isModalAddActionOpen = false"
