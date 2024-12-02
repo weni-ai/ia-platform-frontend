@@ -3,6 +3,7 @@
     <header
       v-if="type === 'failed'"
       class="improve-response__header-failed"
+      data-testid="header-failed"
     >
       <UnnnicIcon
         icon="cancel"
@@ -36,6 +37,7 @@
       <section class="actions__buttons">
         <UnnnicButton
           v-if="actionToEdit"
+          data-testid="edit-action-button"
           size="small"
           :text="
             $t('router.monitoring.improve_response.edit_action', {
@@ -47,12 +49,14 @@
         />
         <UnnnicButton
           v-else
+          data-testid="add-content-button"
           size="small"
           :text="$t('router.monitoring.improve_response.add_new_content')"
           type="secondary"
           @click="isModalAddContentOpen = true"
         />
         <UnnnicButton
+          data-testid="add-action-button"
           size="small"
           :text="$t('router.monitoring.improve_response.add_new_action')"
           type="secondary"
@@ -64,6 +68,7 @@
     <ModalAddContent
       v-if="isModalAddContentOpen"
       v-model="isModalAddContentOpen"
+      data-testid="modal-add-content"
     />
 
     <ModalActions
