@@ -1,13 +1,14 @@
 <template>
   <section class="router-monitoring">
     <UnnnicDivider
+      data-testid="divider"
       ySpacing="md"
       class="router-monitoring__divider"
     />
 
-    <RouterMonitoringPerformance />
+    <RouterMonitoringPerformance data-testid="performance" />
 
-    <RouterMonitoringReceivedMessages />
+    <RouterMonitoringReceivedMessages data-testid="received-messages" />
   </section>
 </template>
 

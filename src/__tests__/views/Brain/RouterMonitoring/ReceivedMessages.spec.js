@@ -62,6 +62,18 @@ describe('RouterMonitoringReceivedMessages.vue', () => {
       expect(select.exists()).toBe(true);
     });
 
+    it('renders the new messages button when have new messages', async () => {
+      const newMessagesButton = () =>
+        wrapper.findComponent('[data-test="new-messages-button"]');
+
+      expect(newMessagesButton().exists()).toBe(false);
+
+      monitoringStore.messages.newMessages = ['Lorem ispsum'];
+      await wrapper.vm.$nextTick();
+
+      expect(newMessagesButton().exists()).toBe(true);
+    });
+
     it('renders the table when messages are present', async () => {
       const table = wrapper.findComponent('[data-test="messages-table"]');
 

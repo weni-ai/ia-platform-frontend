@@ -1,6 +1,7 @@
 <template>
   <button
     class="router-monitoring-new-messages"
+    data-testid="load-new-messages-button"
     @click="$emit('load')"
   >
     {{

@@ -25,7 +25,7 @@ export default class WebSocketSetup {
 
     this.pingIntervalId = setInterval(() => {
       this.ping();
-    }, this.THIRTY_SECONDS)
+    }, this.THIRTY_SECONDS);
   }
 
   clearPingInterval() {

@@ -206,4 +206,16 @@ describe('MonitoringStore', () => {
       expect(store.messages.inspectedAnswer.is_approved).toBeUndefined();
     });
   });
+
+  describe('createNewMessage', () => {
+    it('should add new message successfully', async () => {
+      expect(store.messages.newMessages.length).toBe(0);
+
+      const messageMock = { message: 'Lorem ipsum' };
+      await store.createNewMessage(messageMock);
+
+      expect(store.messages.newMessages.length).toBe(1);
+      expect(store.messages.newMessages[0]).toBe(messageMock.message);
+    });
+  });
 });
