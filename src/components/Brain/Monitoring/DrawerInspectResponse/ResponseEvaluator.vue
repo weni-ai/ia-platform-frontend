@@ -1,11 +1,13 @@
 <template>
   <section class="response-evaluator">
     <UnnnicDivider
+      data-testid="divider"
       class="response-evaluator__divider"
       ySpacing="md"
     />
 
     <UnnnicIntelligenceText
+      data-testid="rate-the-answer"
       class="response-evaluator__rate-the-answer"
       color="neutral-dark"
       family="secondary"
@@ -17,6 +19,7 @@
 
     <section class="response-evaluator__actions">
       <button
+        data-testid="like-button"
         :class="['actions__button', { 'actions__button--bold': isApproved }]"
         @click="setIsApproved(true)"
       >
@@ -28,6 +31,7 @@
         />{{ $t('router.monitoring.inspect_response.i_liked') }}
       </button>
       <button
+        data-testid="dislike-button"
         :class="[
           'actions__button',
           { 'actions__button--bold': isApproved === false },

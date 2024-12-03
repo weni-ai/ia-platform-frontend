@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AgentResponse.vue > matches the snapshot 1`] = `
+"<section class="inspect-response__agent">
+  <unnnic-intelligence-text-stub size="body-gt" tag="p" family="secondary" lineheight="md" weight="regular" color="neutral-cloudy" data-testid="agent-response-title"></unnnic-intelligence-text-stub>
+  <p data-testid="agent-response-text" class="agent__text"> “Sample agent response” </p>
+  <!--v-if-->
+</section>"
+`;

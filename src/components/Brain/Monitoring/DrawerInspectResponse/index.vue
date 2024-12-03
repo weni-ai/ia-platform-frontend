@@ -1,5 +1,6 @@
 <template>
   <UnnnicDrawer
+    data-testid="drawer"
     :modelValue="modelValue"
     :title="$t('router.monitoring.inspect_response.title')"
     :description="
@@ -13,16 +14,17 @@
       <section class="inspect-response">
         <ContactMessage :text="inspectionData.text" />
         <ActionDetails
-          v-if="inspectionData.llm.status === 'action'"
+          v-if="llmStatus === 'action'"
           :action="inspectionData.action"
         />
         <AgentResponse
-          :status="inspectionData.llm.status"
+          v-if="llmStatus !== 'action'"
+          :status="llmStatus"
           :response="inspectionData.llm.response"
           :inspectionData="inspectionData"
         />
         <ResponseEvaluator
-          v-if="inspectionData.llm.status !== 'failed'"
+          v-if="llmStatus !== 'failed'"
           :isApproved="inspectionData.is_approved"
         />
       </section>
@@ -31,6 +33,8 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 import ContactMessage from './ContactMessage.vue';
 import ActionDetails from './ActionDetails.vue';
 import AgentResponse from './AgentResponse.vue';
@@ -48,6 +52,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:model-value']);
+
+const llmStatus = computed(() => props.inspectionData.llm.status);
 
 function close() {
   emit('update:model-value', false);

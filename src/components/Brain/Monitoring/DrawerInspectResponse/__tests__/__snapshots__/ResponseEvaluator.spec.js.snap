@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ResponseEvaluator.vue > matches the snapshot 1`] = `
+"<section data-v-4cf8372f="" class="response-evaluator">
+  <unnnic-divider-stub data-v-4cf8372f="" yspacing="md" scheme="neutral-soft" data-testid="divider" class="response-evaluator__divider"></unnnic-divider-stub>
+  <unnnic-intelligence-text-stub data-v-4cf8372f="" size="body-gt" tag="p" family="secondary" lineheight="md" weight="regular" color="neutral-dark" data-testid="rate-the-answer" class="response-evaluator__rate-the-answer"></unnnic-intelligence-text-stub>
+  <section data-v-4cf8372f="" class="response-evaluator__actions"><button data-v-4cf8372f="" data-testid="like-button" class="actions__button">
+      <icon-stub data-v-4cf8372f="" next="false" icon="thumb_up" clickable="false" size="sm" scheme="neutral-cloudy"></icon-stub>I liked
+    </button><button data-v-4cf8372f="" data-testid="dislike-button" class="actions__button">
+      <icon-stub data-v-4cf8372f="" filled="false" next="false" icon="thumb_down" clickable="false" size="sm" scheme="neutral-cloudy"></icon-stub>I didn't like
+    </button></section>
+</section>"
+`;

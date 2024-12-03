@@ -1,6 +1,7 @@
 <template>
   <section class="inspect-response__agent">
     <UnnnicIntelligenceText
+      data-testid="agent-response-title"
       color="neutral-cloudy"
       family="secondary"
       size="body-gt"
@@ -10,12 +11,14 @@
     </UnnnicIntelligenceText>
     <p
       v-if="status !== 'success'"
+      data-testid="agent-response-text"
       class="agent__text"
     >
       “{{ response }}”
     </p>
     <ResponseSuccessGroundedness
       v-if="status === 'success'"
+      data-testid="agent-response-success-groundedness"
       :inspectionData="inspectionData"
     />
   </section>

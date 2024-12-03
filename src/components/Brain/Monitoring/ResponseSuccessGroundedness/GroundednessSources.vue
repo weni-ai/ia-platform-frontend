@@ -3,9 +3,11 @@
     v-for="fragment in fragments"
     :key="fragment.sentence"
     class="groundedness-sources"
+    data-testid="source"
   >
     <section class="groundedness-sources__source">
       <span
+        data-testid="source-status"
         :class="[
           'source__status',
           `source__status--${getReliabilityLevel(fragment)}`,
@@ -13,6 +15,7 @@
       />
       <UnnnicIntelligenceText
         v-if="fragment.sources[0].filename"
+        data-testid="source-filename"
         class="source__filename"
         color="neutral-dark"
         family="secondary"
@@ -23,11 +26,13 @@
       </UnnnicIntelligenceText>
       <p
         v-else
+        data-testid="source-filename-not-found"
         class="source__filename--not-found"
       >
         {{ $t('router.monitoring.inspect_response.not_found') }}
       </p>
       <UnnnicIntelligenceText
+        data-testid="source-confidence"
         class="source__confidence"
         color="neutral-cloudy"
         family="secondary"

@@ -1,6 +1,10 @@
 <template>
-  <section class="inspect-response__contact">
+  <section
+    data-testid="contact-message-container"
+    class="inspect-response__contact"
+  >
     <UnnnicIntelligenceText
+      data-testid="contact-message-title"
       color="neutral-cloudy"
       family="secondary"
       size="body-gt"
@@ -8,7 +12,12 @@
     >
       {{ $t('router.monitoring.inspect_response.contact_message') }}:
     </UnnnicIntelligenceText>
-    <p class="contact__text">“{{ text }}”</p>
+    <p
+      data-testid="contact-message-text"
+      class="contact__text"
+    >
+      “{{ text }}”
+    </p>
   </section>
 </template>
 

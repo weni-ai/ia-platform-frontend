@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ResponseSuccessGroundedness > matches the snapshot 1`] = `
+"<section data-v-cd526e99="" class="response-success-groundedness" data-testid="response-success-groundedness">
+  <text-sentences-stub data-v-cd526e99="" fragments="[object Object],[object Object],[object Object]" getreliabilitylevel="[Function]"></text-sentences-stub>
+  <groundedness-sources-stub data-v-cd526e99="" fragments="[object Object],[object Object],[object Object]" getreliabilitylevel="[Function]"></groundedness-sources-stub>
+</section>"
+`;

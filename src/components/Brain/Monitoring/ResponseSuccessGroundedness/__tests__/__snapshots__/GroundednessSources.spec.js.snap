@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GroundednessSources.vue > matches the snapshot 1`] = `
+"<section data-v-4cf29c9a="" class="groundedness-sources" data-testid="source">
+  <section data-v-4cf29c9a="" class="groundedness-sources__source"><span data-v-4cf29c9a="" data-testid="source-status" class="source__status source__status--high"></span>
+    <p data-v-ec8da4ad="" data-v-4cf29c9a="" class="unnnic-text unnnic-text--size-body-gt unnnic-text--line-height-md unnnic-text--family-secondary unnnic-text--weight-regular unnnic-text--color-neutral-dark source__filename source__filename" data-testid="source-filename">source1.pdf</p>
+    <p data-v-ec8da4ad="" data-v-4cf29c9a="" class="unnnic-text unnnic-text--size-body-gt unnnic-text--line-height-md unnnic-text--family-secondary unnnic-text--weight-regular unnnic-text--color-neutral-cloudy source__confidence source__confidence" data-testid="source-confidence">85% confidence</p>
+  </section>
+</section>
+<section data-v-4cf29c9a="" class="groundedness-sources" data-testid="source">
+  <section data-v-4cf29c9a="" class="groundedness-sources__source"><span data-v-4cf29c9a="" data-testid="source-status" class="source__status source__status--moderate"></span>
+    <p data-v-4cf29c9a="" data-testid="source-filename-not-found" class="source__filename--not-found">Not found</p>
+    <p data-v-ec8da4ad="" data-v-4cf29c9a="" class="unnnic-text unnnic-text--size-body-gt unnnic-text--line-height-md unnnic-text--family-secondary unnnic-text--weight-regular unnnic-text--color-neutral-cloudy source__confidence source__confidence" data-testid="source-confidence">70% confidence</p>
+  </section>
+</section>
+<section data-v-4cf29c9a="" class="groundedness-sources" data-testid="source">
+  <section data-v-4cf29c9a="" class="groundedness-sources__source"><span data-v-4cf29c9a="" data-testid="source-status" class="source__status source__status--very-high"></span>
+    <p data-v-ec8da4ad="" data-v-4cf29c9a="" class="unnnic-text unnnic-text--size-body-gt unnnic-text--line-height-md unnnic-text--family-secondary unnnic-text--weight-regular unnnic-text--color-neutral-dark source__filename source__filename" data-testid="source-filename">source3.docx</p>
+    <p data-v-ec8da4ad="" data-v-4cf29c9a="" class="unnnic-text unnnic-text--size-body-gt unnnic-text--line-height-md unnnic-text--family-secondary unnnic-text--weight-regular unnnic-text--color-neutral-cloudy source__confidence source__confidence" data-testid="source-confidence">95% confidence</p>
+  </section>
+</section>"
+`;
