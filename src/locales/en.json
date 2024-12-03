@@ -96,6 +96,7 @@
       "load_previous_messages": "Load previous messages",
       "activated_the_action": "activated the {action} action",
       "error_loading_messages": "Error loading messages",
+      "error_loading_previous_messages": "Error loading previous messages",
       "inspect_response": {
         "title": "Inspect response",
         "inspect": "Inspect",
