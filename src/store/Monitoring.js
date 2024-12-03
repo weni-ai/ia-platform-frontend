@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 
 import nexusaiAPI from '@/api/nexusaiAPI.js';
 import globalStore from '.';
+import i18n from '@/utils/plugins/i18n';
 
 export const useMonitoringStore = defineStore('monitoring', () => {
   const connectProjectUuid = computed(
@@ -22,6 +23,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
       success: 0,
       failed: 0,
     },
+    inspectedAnswer: {},
   });
 
   async function loadMessages({ page, pageInterval, tag, text }) {
@@ -47,6 +49,63 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     }
   }
 
+  async function loadMessageDetails({ id }) {
+    try {
+      messages.inspectedAnswer.status = 'loading';
+
+      const response = await nexusaiAPI.router.monitoring.messages.detail({
+        projectUuid: connectProjectUuid.value,
+        id,
+      });
+
+      const {
+        uuid,
+        text,
+        status,
+        actions_started,
+        actions_uuid,
+        actions_type,
+        llm_response,
+        is_approved,
+        contact_urn,
+        groundedness,
+      } = response;
+
+      const llmStatusMap = {
+        s: 'success',
+        f: 'failed',
+      };
+
+      messages.inspectedAnswer = {
+        id,
+        uuid,
+        text,
+        action: actions_started
+          ? {
+              name: actions_type,
+              uuid: actions_uuid,
+            }
+          : null,
+        llm: {
+          response: llm_response,
+          status: actions_started
+            ? 'action'
+            : llmStatusMap[status.toLowerCase()],
+        },
+        contact_urn,
+        is_approved,
+        groundedness,
+        status: 'complete',
+      };
+    } catch (error) {
+      messages.inspectedAnswer.status = 'error';
+      globalStore.state.alert = {
+        type: 'error',
+        text: i18n.global.t('router.monitoring.error_loading_messages'),
+      };
+    }
+  }
+
   async function loadMessagesPerformance() {
     const { started_day, ended_day } = route.query;
     try {
@@ -59,11 +118,11 @@ export const useMonitoringStore = defineStore('monitoring', () => {
       });
 
       messages.performance = {
+        status: 'complete',
         action: response?.action_percentage || 0,
         success: response?.succeed_percentage || 0,
         failed: response?.failed_percentage || 0,
       };
-      messages.performance.status = 'complete';
     } catch (error) {
       messages.performance.status = 'error';
     }
@@ -72,6 +131,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
   return {
     messages,
     loadMessages,
+    loadMessageDetails,
     loadMessagesPerformance,
   };
 });

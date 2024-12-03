@@ -40,6 +40,15 @@ export const Monitoring = {
       };
     },
 
+    async detail({ projectUuid, id }) {
+      const { data } = await request.$http.get(
+        `api/${projectUuid}/message-detail/${id}`,
+        { hideGenericErrorAlert: true },
+      );
+
+      return data;
+    },
+
     async performance({ projectUuid, started_day, ended_day }) {
       const params = cleanParams({
         started_day,

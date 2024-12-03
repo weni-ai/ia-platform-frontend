@@ -92,7 +92,10 @@
         "answers_not_found": "Answers not found",
         "messages_that_trigger_actions": "Messages that triggered actions"
       },
-      "no_message_received": "No message received"
+      "no_message_received": "No message received",
+      "load_previous_messages": "Load previous messages",
+      "activated_the_action": "activated the {action} action",
+      "error_loading_messages": "Error loading messages"
     },
     "actions": {
       "title": "Actions",
