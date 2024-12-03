@@ -22,6 +22,7 @@ const pinia = createTestingPinia({
         count: 0,
         data: [],
         status: 'loading',
+        inspectedAnswer: {},
       },
     },
   },
@@ -99,6 +100,46 @@ describe('RouterMonitoringReceivedMessages.vue', () => {
 
       const noMessageInfo = wrapper.find('[data-test="no-message-received"]');
       expect(noMessageInfo.exists()).toBe(false);
+    });
+  });
+
+  describe('Table behaviors', () => {
+    it('emits row-click and updates inspectedAnswer.id correctly', async () => {
+      monitoringStore.messages.inspectedAnswer.status = 'loading';
+      const table = wrapper.findComponent('[data-test="messages-table"]');
+      await table.vm.$emit('row-click', { id: 1 });
+
+      expect(monitoringStore.messages.inspectedAnswer.id).toBe(1);
+    });
+
+    it('load the table rows tags correctly for different tags', async () => {
+      monitoringStore.messages = {
+        count: 1,
+        status: 'loaded',
+        data: [{ created_at: new Date(), text: 'Test Message' }],
+        inspectedAnswer: {},
+      };
+
+      const formatedRowProps = () =>
+        wrapper.vm.formattedMessagesRows[0].content[2].props;
+
+      const setDataRowTag = (tag) =>
+        (monitoringStore.messages.data[0].tag = tag);
+
+      setDataRowTag('success');
+
+      expect(formatedRowProps().scheme).toBe('aux-green-500');
+      expect(formatedRowProps().leftIcon).toBe('check_circle');
+
+      setDataRowTag('failed');
+
+      expect(formatedRowProps().scheme).toBe('aux-red-500');
+      expect(formatedRowProps().leftIcon).toBe('cancel');
+
+      setDataRowTag('action_started');
+
+      expect(formatedRowProps().scheme).toBe('aux-blue-500');
+      expect(formatedRowProps().leftIcon).toBe('bolt');
     });
   });
 
