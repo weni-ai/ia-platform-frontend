@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   env: {
-    es2021: true,
+    node: true,
   },
   extends: ['@weni/eslint-config/vue3'],
   rules: {
@@ -12,5 +12,9 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-undef': 'off',
     'vue/valid-attribute-name': 'off',
+  },
+  parserOptions: {
+    parser: 'babel-eslint',
+    ecmaVersion: 2020,
   },
 };

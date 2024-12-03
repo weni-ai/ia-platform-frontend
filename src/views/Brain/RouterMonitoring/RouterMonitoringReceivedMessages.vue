@@ -29,6 +29,7 @@
     <section>
       <NewMessages
         v-if="monitoringStore.messages.newMessages.length"
+        data-test="new-messages-button"
         @load="getNewMessages"
       />
 

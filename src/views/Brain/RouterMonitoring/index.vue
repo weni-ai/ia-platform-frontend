@@ -1,18 +1,19 @@
 <template>
   <section class="router-monitoring">
     <UnnnicDivider
+      data-testid="divider"
       ySpacing="md"
       class="router-monitoring__divider"
     />
 
-    <RouterMonitoringPerformance />
+    <RouterMonitoringPerformance data-testid="performance" />
 
-    <RouterMonitoringReceivedMessages />
+    <RouterMonitoringReceivedMessages data-testid="received-messages" />
   </section>
 </template>
 
 <script setup>
-import WS from '@/websocket/setup'
+import WS from '@/websocket/setup';
 
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
@@ -20,14 +21,17 @@ import { useStore } from 'vuex';
 import RouterMonitoringPerformance from './RouterMonitoringPerformance.vue';
 import RouterMonitoringReceivedMessages from './RouterMonitoringReceivedMessages.vue';
 
-const ws = ref(null);  
+const ws = ref(null);
 const store = useStore();
-const auth = computed(() => store.state.Auth)
+const auth = computed(() => store.state.Auth);
 
 onMounted(() => {
-  ws.value = new WS({ project: auth.value.connectProjectUuid, token: auth.value.token.replace('Bearer ', '') });
+  ws.value = new WS({
+    project: auth.value.connectProjectUuid,
+    token: auth.value.token.replace('Bearer ', ''),
+  });
   ws.value.connect();
-})
+});
 </script>
 
 <style lang="scss" scoped>

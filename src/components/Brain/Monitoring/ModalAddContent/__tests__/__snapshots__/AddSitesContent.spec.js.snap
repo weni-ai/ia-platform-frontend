@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AddSitesContent.vue > matches the snapshot 1`] = `
+"<section data-v-c26a5569="" data-v-c46ee857="" class="add-content" data-testid="start-add-content"><span data-v-76ceda5d="" data-v-c26a5569="" class="material-symbols-rounded unnnic-icon-scheme--neutral-soft unnnic-icon-size--xl material-symbols-rounded--filled add-content__icon" data-testid="icon" translate="no">globe</span>
+  <section data-v-c26a5569="" class="add-content__infos">
+    <p data-v-ec8da4ad="" data-v-c26a5569="" class="unnnic-text unnnic-text--size-body-gt unnnic-text--line-height-md unnnic-text--family-secondary unnnic-text--weight-regular unnnic-text--color-neutral-cloudy" data-testid="description">Enter URLs of websites from which the agent can extract information</p>
+    <p data-v-ec8da4ad="" data-v-c26a5569="" class="unnnic-text unnnic-text--size-body-md unnnic-text--line-height-md unnnic-text--family-secondary unnnic-text--weight-regular unnnic-text--color-neutral-clean text-sub-description text-sub-description" data-testid="sub-description">Make sure the sites are trustworthy and contain relevant data</p>
+  </section><button data-v-ed84dbab="" data-v-c26a5569="" class="add-content__trigger unnnic-button unnnic-button--size-large unnnic-button--secondary add-content__trigger" data-testid="add-button">
+    <!----><span data-v-76ceda5d="" data-v-ed84dbab="" class="material-symbols-rounded unnnic-icon-scheme--neutral-dark unnnic-icon-size--md unnnic-button__icon-left" data-testid="icon-left" translate="no">add</span>
+    <!----><span data-v-ed84dbab="" class="unnnic-button__label" data-testid="button-label">Add website </span>
+    <!---->
+  </button>
+</section>"
+`;

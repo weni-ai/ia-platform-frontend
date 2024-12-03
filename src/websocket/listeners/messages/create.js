@@ -1,7 +1,7 @@
-import { useMonitoringStore } from "@/store/Monitoring";
+import { useMonitoringStore } from '@/store/Monitoring';
 
 export default (message) => {
   const monitoringStore = useMonitoringStore();
-  
-  monitoringStore.createNewMessage({message})
+
+  monitoringStore.createNewMessage({ message });
 };

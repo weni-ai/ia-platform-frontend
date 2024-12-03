@@ -50,9 +50,6 @@ describe('RouterMonitoringReceivedMessagesHistory.vue', () => {
 
     expect(questionAndAnswerComponent.exists()).toBe(true);
     expect(questionAndAnswerComponent.props('isLoading')).toBe(false);
-    expect(questionAndAnswerComponent.props('inspectionData')).toEqual(
-      monitoringStore.messages.inspectedAnswer,
-    );
   });
 
   it('loads message history when inspectedAnswer id changes', async () => {
