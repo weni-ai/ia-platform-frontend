@@ -1,15 +1,16 @@
 import { mount } from '@vue/test-utils';
-
-import QuestionAndAnswer from '@/views/Brain/RouterMonitoring/RouterMonitoringReceivedMessagesHistory/QuestionAndAnswer.vue';
-import { createTestingPinia } from '@pinia/testing';
-import { useMonitoringStore } from '@/store/Monitoring';
 import { nextTick } from 'vue';
 
-const pinia = createTestingPinia({
-  initialState: {
-    monitoring: {
-      messages: {
-        inspectedAnswer: {
+import QuestionAndAnswer from '@/views/Brain/RouterMonitoring/RouterMonitoringReceivedMessagesHistory/QuestionAndAnswer.vue';
+
+describe('Monitoring messages history QuestionAndAnswer component', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = mount(QuestionAndAnswer, {
+      props: {
+        isLoading: false,
+        data: {
           text: 'Test question',
           llm: {
             status: 'success',
@@ -20,21 +21,6 @@ const pinia = createTestingPinia({
           },
         },
       },
-    },
-  },
-});
-
-describe('Monitoring messages history QuestionAndAnswer component', () => {
-  let wrapper;
-
-  let monitoringStore = useMonitoringStore();
-
-  beforeEach(() => {
-    wrapper = mount(QuestionAndAnswer, {
-      props: {
-        isLoading: false,
-      },
-      global: { plugins: [pinia] },
     });
   });
 
@@ -52,7 +38,9 @@ describe('Monitoring messages history QuestionAndAnswer component', () => {
   });
 
   it('renders action status section when status is "action"', async () => {
-    monitoringStore.messages.inspectedAnswer.llm.status = 'action';
+    wrapper.setProps({
+      data: { ...wrapper.vm.data, llm: { status: 'action' } },
+    });
     await nextTick();
 
     expect(wrapper.find('[data-testid="action"]').exists()).toBe(true);
