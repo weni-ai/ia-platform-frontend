@@ -23,8 +23,13 @@
           :response="inspectionData.llm.response"
           :inspectionData="inspectionData"
         />
+
+        <ImproveResponse
+          v-if="llmStatus === 'failed'"
+          type="failed"
+        />
         <ResponseEvaluator
-          v-if="llmStatus !== 'failed'"
+          v-else
           :isApproved="inspectionData.is_approved"
         />
       </section>
@@ -38,6 +43,7 @@ import { computed } from 'vue';
 import ContactMessage from './ContactMessage.vue';
 import ActionDetails from './ActionDetails.vue';
 import AgentResponse from './AgentResponse.vue';
+import ImproveResponse from './ImproveResponse.vue';
 import ResponseEvaluator from './ResponseEvaluator.vue';
 
 const props = defineProps({

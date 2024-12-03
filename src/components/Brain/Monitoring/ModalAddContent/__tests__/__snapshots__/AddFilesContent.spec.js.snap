@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AddFilesContent.vue > matches the snapshot 1`] = `
+"<section data-v-99057710="" class="add-files-content"><input data-v-99057710="" data-testid="input-file" type="file" accept=".pdf,.doc,.docx" multiple="" style="display: none;">
+  <start-add-content-stub data-v-99057710="" description="Upload documents and files that the agent will use to provide answers" subdescription=".pdf, .doc and .docx. 50MB limit per file." icon="text_snippet" iconfilled="true" textaddcontent="Add file" data-testid="start-add-content"></start-add-content-stub>
+</section>"
+`;

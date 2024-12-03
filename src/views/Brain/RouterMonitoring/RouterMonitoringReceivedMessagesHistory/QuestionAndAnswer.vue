@@ -23,11 +23,11 @@
           'question-and-answer__message',
           'question-and-answer__question',
         ]"
-        :content="inspectionData.text"
+        :content="inspectedAnswer.text"
       />
 
       <section
-        v-if="inspectionData.llm.status === 'action'"
+        v-if="inspectedAnswer.llm.status === 'action'"
         class="question-and-answer__action-started"
         data-testid="action"
       >
@@ -47,7 +47,7 @@
           >
             {{
               $t('router.monitoring.activated_the_action', {
-                action: inspectionData.action?.name,
+                action: inspectedAnswer.action?.name,
               })
             }}
           </UnnnicIntelligenceText>
@@ -70,9 +70,9 @@
           :class="[
             'question-and-answer__message',
             'question-and-answer__answer-text',
-            `question-and-answer__answer-text--${inspectionData.llm.status}`,
+            `question-and-answer__answer-text--${inspectedAnswer.llm.status}`,
           ]"
-          :content="inspectionData.llm.response"
+          :content="inspectedAnswer.llm.response"
         />
 
         <UnnnicButton
@@ -85,31 +85,33 @@
       </section>
       <DrawerInspectAnswer
         v-model="isDrawerInspectAnswerOpen"
-        :inspectionData="inspectionData"
+        :inspectionData="inspectedAnswer"
       />
     </template>
   </section>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import DrawerInspectAnswer from '@/components/Brain/Monitoring/DrawerInspectResponse/index.vue';
 import Markdown from '@/components/Markdown.vue';
+import { useMonitoringStore } from '@/store/Monitoring';
 
 const props = defineProps({
   isLoading: {
     type: Boolean,
     default: true,
   },
-
-  inspectionData: {
-    type: Object,
-    default: () => {},
-  },
 });
 
 const isDrawerInspectAnswerOpen = ref(false);
+
+const monitoringStore = useMonitoringStore();
+
+const inspectedAnswer = computed(
+  () => monitoringStore.messages.inspectedAnswer,
+);
 </script>
 
 <style lang="scss" scoped>

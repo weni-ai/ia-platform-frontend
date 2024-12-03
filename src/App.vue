@@ -7,6 +7,7 @@
     <UnnnicAlert
       v-if="alertStore.data.text"
       :key="alertStore.id"
+      class="app-alert"
       v-bind="alertStore.data"
       @close="alertStore.close"
     ></UnnnicAlert>
@@ -14,6 +15,7 @@
     <UnnnicAlert
       v-else-if="$store.state.alert"
       :key="$store.state.alert.text"
+      class="app-alert"
       v-bind="$store.state.alert"
       @close="$store.state.alert = null"
     ></UnnnicAlert>
@@ -298,5 +300,9 @@ a {
 
 .align-items-center {
   align-items: center;
+}
+
+.app-alert {
+  z-index: 100000;
 }
 </style>

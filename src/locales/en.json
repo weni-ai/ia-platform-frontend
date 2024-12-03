@@ -107,6 +107,18 @@
         "i_didnt_like": "I didn't like",
         "confidence_percentage": "{percentage}% confidence",
         "not_found": "Not found"
+      },
+      "improve_response": {
+        "title": "Improve the response",
+        "agent_unable_respond": "The agent was unable to respond to the contact",
+        "add_new_content": "Add new content",
+        "edit_action": "Edit action {name}",
+        "add_new_action": "Add new action"
+      },
+      "modal_add_content": {
+        "description": "Add content to enhance agent response",
+        "add_another_site": "Add another site",
+        "success_alert": "Content added successfully"
       }
     },
     "actions": {
