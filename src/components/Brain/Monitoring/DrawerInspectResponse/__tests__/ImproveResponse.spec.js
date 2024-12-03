@@ -1,12 +1,17 @@
 import { mount } from '@vue/test-utils';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useMonitoringStore } from '@/store/Monitoring';
+import { useActionsStore } from '@/store/Actions';
 import i18n from '@/utils/plugins/i18n';
 
 import ImproveResponse from '../ImproveResponse.vue';
 
 vi.mock('@/store/Monitoring', () => ({
   useMonitoringStore: vi.fn(),
+}));
+
+vi.mock('@/store/Actions', () => ({
+  useActionsStore: vi.fn(),
 }));
 
 const createWrapper = (props = {}) => {
@@ -18,14 +23,22 @@ const createWrapper = (props = {}) => {
     },
   };
 
+  const mockActionsStore = {
+    actions: {
+      status: null,
+    },
+    load: vi.fn(),
+  };
+
   useMonitoringStore.mockReturnValue(mockMonitoringStore);
+  useActionsStore.mockReturnValue(mockActionsStore);
 
   return mount(ImproveResponse, {
     props: {
       type: props.type || 'success',
     },
     global: {
-      stubs: ['UnnnicButton', 'UnnnicIcon', 'ModalAddContent'],
+      stubs: ['UnnnicButton', 'UnnnicIcon', 'ModalAddContent', 'ModalActions'],
     },
   });
 };
@@ -42,6 +55,10 @@ describe('ImproveResponse.vue', () => {
     wrapper.findComponent('[data-testid="add-content-button"]');
   const addActionButton = () =>
     wrapper.findComponent('[data-testid="add-action-button"]');
+  const editActionButton = () =>
+    wrapper.findComponent('[data-testid="edit-action-button"]');
+  const modalAddAction = () =>
+    wrapper.findComponent('[data-testid="modal-add-action"]');
 
   it('matches the snapshot', () => {
     expect(wrapper.html()).toMatchSnapshot();
@@ -91,5 +108,50 @@ describe('ImproveResponse.vue', () => {
     await addContentButton().trigger('click');
 
     expect(modalAddContent().exists()).toBe(true);
+  });
+
+  it('opens the modal when add action button is clicked', async () => {
+    expect(modalAddAction().exists()).toBe(false);
+
+    await addActionButton().trigger('click');
+
+    expect(modalAddAction().exists()).toBe(true);
+  });
+
+  it('should pass actionToEditUuid to ModalActions when shouldEditAction is true', async () => {
+    wrapper = createWrapper({
+      actionToEdit: { name: 'TestEditName', uuid: '123' },
+    });
+
+    await editActionButton().trigger('click');
+    await wrapper.vm.$nextTick();
+
+    expect(modalAddAction().exists()).toBe(true);
+    expect(modalAddAction().props('actionToEditUuid')).toBe(
+      wrapper.vm.actionToEdit?.uuid,
+    );
+  });
+
+  it('should pass undefined to actionToEditUuid when shouldEditAction is false', async () => {
+    wrapper = createWrapper({
+      actionToEdit: { name: 'TestEditName', uuid: '123' },
+    });
+
+    await addActionButton().trigger('click');
+    await wrapper.vm.$nextTick();
+
+    expect(modalAddAction().exists()).toBe(true);
+    expect(modalAddAction().props('actionToEditUuid')).toBe('');
+  });
+
+  it('should reset shouldEditAction when isModalAddActionOpen is closed', async () => {
+    wrapper.vm.isModalAddActionOpen = true;
+    wrapper.vm.shouldEditAction = true;
+    await wrapper.vm.$nextTick();
+
+    wrapper.vm.isModalAddActionOpen = false;
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.shouldEditAction).toBe(false);
   });
 });

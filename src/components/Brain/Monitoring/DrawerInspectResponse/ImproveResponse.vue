@@ -45,6 +45,7 @@
             })
           "
           type="secondary"
+          @click="openEditModalAction"
         />
         <UnnnicButton
           v-else
@@ -59,6 +60,7 @@
           size="small"
           :text="$t('router.monitoring.improve_response.add_new_action')"
           type="secondary"
+          @click="isModalAddActionOpen = true"
         />
       </section>
     </section>
@@ -68,14 +70,26 @@
       v-model="isModalAddContentOpen"
       data-testid="modal-add-content"
     />
+
+    <ModalActions
+      v-if="isModalAddActionOpen"
+      v-model="isModalAddActionOpen"
+      data-testid="modal-add-action"
+      actionGroup="custom"
+      :actionToEditUuid="shouldEditAction ? actionToEdit?.uuid : undefined"
+      @previous-step="isModalAddActionOpen = false"
+    />
   </section>
 </template>
 
 <script setup>
 import ModalAddContent from '../ModalAddContent/index.vue';
 
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useMonitoringStore } from '@/store/Monitoring';
+import { useActionsStore } from '@/store/Actions';
+
+import ModalActions from '@/components/actions/ModalActions.vue';
 
 const props = defineProps({
   type: {
@@ -86,12 +100,32 @@ const props = defineProps({
 });
 
 const monitoringStore = useMonitoringStore();
+const actionsStore = useActionsStore();
 
 const actionToEdit = computed(
   () => monitoringStore.messages.inspectedAnswer?.action,
 );
 
 const isModalAddContentOpen = ref(false);
+const isModalAddActionOpen = ref(false);
+const shouldEditAction = ref(false);
+
+function openEditModalAction() {
+  isModalAddActionOpen.value = true;
+  shouldEditAction.value = true;
+}
+
+watch(isModalAddActionOpen, (newIsModalAddActionOpen) => {
+  if (!newIsModalAddActionOpen) {
+    shouldEditAction.value = false;
+  }
+});
+
+onMounted(() => {
+  if (actionsStore.actions.status !== 'complete') {
+    actionsStore.load();
+  }
+});
 </script>
 
 <style scoped lang="scss">

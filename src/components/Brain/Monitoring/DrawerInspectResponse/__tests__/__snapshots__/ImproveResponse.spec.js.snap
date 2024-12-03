@@ -11,5 +11,6 @@ exports[`ImproveResponse.vue > matches the snapshot 1`] = `
     </section>
   </section>
   <!--v-if-->
+  <!--v-if-->
 </section>"
 `;

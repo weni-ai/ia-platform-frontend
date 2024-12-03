@@ -50,11 +50,12 @@ export const useActionsStore = defineStore('actions', () => {
     return action;
   }
 
-  async function editAction({ uuid, name, prompt }) {
+  async function editAction({ uuid, name, flow_uuid, prompt }) {
     const editedAction = await nexusaiAPI.router.actions.edit({
       projectUuid: connectProjectUuid.value,
       actionUuid: uuid,
       name,
+      flow_uuid,
       prompt,
     });
 
