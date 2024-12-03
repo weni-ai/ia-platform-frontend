@@ -94,7 +94,11 @@ export const useMonitoringStore = defineStore('monitoring', () => {
         },
         contact_urn,
         is_approved,
-        groundedness,
+        groundedness: groundedness?.map((item) => ({
+          ...item,
+          score: Number(item.score) * 10,
+        })), // To turn into a hundred
+
         status: 'complete',
       };
     } catch (error) {
@@ -128,10 +132,25 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     }
   }
 
+  async function rateAnswer({ is_approved }) {
+    try {
+      const response = await nexusaiAPI.router.monitoring.messages.rateAnswer({
+        projectUuid: connectProjectUuid.value,
+        id: messages.inspectedAnswer.id,
+        is_approved,
+      });
+
+      messages.inspectedAnswer.is_approved = response.is_approved;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   return {
     messages,
     loadMessages,
     loadMessageDetails,
     loadMessagesPerformance,
+    rateAnswer,
   };
 });

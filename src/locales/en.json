@@ -95,7 +95,19 @@
       "no_message_received": "No message received",
       "load_previous_messages": "Load previous messages",
       "activated_the_action": "activated the {action} action",
-      "error_loading_messages": "Error loading messages"
+      "error_loading_messages": "Error loading messages",
+      "inspect_response": {
+        "title": "Inspect response",
+        "inspect": "Inspect",
+        "intelligent_agent_response_details": "Intelligent agent response details",
+        "contact_message": "Contact message",
+        "agent_response": "Agent response",
+        "rate_the_answer": "Rate the answer",
+        "i_liked": "I liked",
+        "i_didnt_like": "I didn't like",
+        "confidence_percentage": "{percentage}% confidence",
+        "not_found": "Not found"
+      }
     },
     "actions": {
       "title": "Actions",

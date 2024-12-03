@@ -95,7 +95,19 @@
       "no_message_received": "Ningún mensaje recibido",
       "load_previous_messages": "Cargar mensajes anteriores",
       "activated_the_action": "activó la acción de {action}",
-      "error_loading_messages": "Error al cargar mensajes"
+      "error_loading_messages": "Error al cargar mensajes",
+      "inspect_response": {
+        "title": "Inspeccionar respuesta",
+        "inpect": "Inspeccionar",
+        "intelligent_agent_response_details": "Detalles de la respuesta del agente inteligente",
+        "contact_message": "Mensaje de contacto",
+        "agent_response": "Respuesta del agente",
+        "rate_the_answer": "Califica la respuesta",
+        "i_liked": "Me gustó",
+        "i_didnt_like": "No me gustó",
+        "confidence_percentage": "{percentage}% de confianza",
+        "not_found": "No encontrado"
+      }
     },
     "actions": {
       "title": "Acciones",

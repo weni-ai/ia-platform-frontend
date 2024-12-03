@@ -17,57 +17,86 @@
       />
     </template>
     <template v-else>
-      <p
+      <Markdown
         data-testid="question"
         :class="[
           'question-and-answer__message',
           'question-and-answer__question',
         ]"
-      >
-        {{ inspectionData.text }}
-      </p>
+        :content="inspectionData.text"
+      />
 
       <section
         v-if="inspectionData.llm.status === 'action'"
         class="question-and-answer__action-started"
         data-testid="action"
       >
-        <UnnnicIcon
-          data-testid="action-icon"
-          icon="bolt"
-          size="sm"
-          scheme="neutral-cloudy"
+        <section class="action-started__text">
+          <UnnnicIcon
+            data-testid="action-icon"
+            icon="bolt"
+            size="sm"
+            scheme="neutral-cloudy"
+          />
+          <UnnnicIntelligenceText
+            data-testid="action-name"
+            color="neutral-cloudy"
+            family="secondary"
+            size="body-md"
+            tag="p"
+          >
+            {{
+              $t('router.monitoring.activated_the_action', {
+                action: inspectionData.action?.name,
+              })
+            }}
+          </UnnnicIntelligenceText>
+        </section>
+        <UnnnicButton
+          class="action-started__inspect-response"
+          size="small"
+          :text="$t('router.monitoring.inspect_response.inspect')"
+          type="secondary"
+          iconLeft="info"
+          @click="isDrawerInspectAnswerOpen = true"
         />
-        <UnnnicIntelligenceText
-          data-testid="action-name"
-          color="neutral-cloudy"
-          family="secondary"
-          size="body-md"
-          tag="p"
-        >
-          {{
-            $t('router.monitoring.activated_the_action', {
-              action: inspectionData.action?.name,
-            })
-          }}
-        </UnnnicIntelligenceText>
       </section>
-      <p
+      <section
         v-else
-        data-testid="answer"
-        :class="[
-          'question-and-answer__message',
-          'question-and-answer__answer',
-          `question-and-answer__answer--${inspectionData.llm.status}`,
-        ]"
+        class="question-and-answer__answer"
       >
-        {{ inspectionData.llm.response }}
-      </p>
+        <Markdown
+          data-testid="answer"
+          :class="[
+            'question-and-answer__message',
+            'question-and-answer__answer-text',
+            `question-and-answer__answer-text--${inspectionData.llm.status}`,
+          ]"
+          :content="inspectionData.llm.response"
+        />
+
+        <UnnnicButton
+          size="small"
+          :text="$t('router.monitoring.inspect_response.title')"
+          type="secondary"
+          iconLeft="info"
+          @click="isDrawerInspectAnswerOpen = true"
+        />
+      </section>
+      <DrawerInspectAnswer
+        v-model="isDrawerInspectAnswerOpen"
+        :inspectionData="inspectionData"
+      />
     </template>
   </section>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
+import DrawerInspectAnswer from '@/components/Brain/Monitoring/DrawerInspectResponse/index.vue';
+import Markdown from '@/components/Markdown.vue';
+
 const props = defineProps({
   isLoading: {
     type: Boolean,
@@ -79,6 +108,8 @@ const props = defineProps({
     default: () => {},
   },
 });
+
+const isDrawerInspectAnswerOpen = ref(false);
 </script>
 
 <style lang="scss" scoped>
@@ -120,17 +151,22 @@ const props = defineProps({
   }
 
   &__answer {
-    justify-self: flex-end;
+    display: grid;
+    gap: $unnnic-spacing-nano;
 
-    &--success,
-    &--action {
-      color: $unnnic-color-neutral-white;
-      background-color: $unnnic-color-weni-600;
-    }
+    &-text {
+      justify-self: flex-end;
 
-    &--failed {
-      color: $unnnic-color-neutral-darkest;
-      background-color: $unnnic-color-aux-red-100;
+      &--success,
+      &--action {
+        color: $unnnic-color-neutral-white;
+        background-color: $unnnic-color-weni-600;
+      }
+
+      &--failed {
+        color: $unnnic-color-neutral-darkest;
+        background-color: $unnnic-color-aux-red-100;
+      }
     }
   }
 
@@ -138,10 +174,23 @@ const props = defineProps({
     grid-column: 1 / 4;
     grid-row: 2;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: $unnnic-spacing-nano;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: $unnnic-spacing-xs;
+
+    .action-started__text {
+      grid-column: 1 / 5;
+      grid-row: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: $unnnic-spacing-nano;
+    }
+
+    .action-started__inspect-response {
+      grid-column: 2 / 4;
+      grid-row: 2;
+    }
   }
 }
 </style>

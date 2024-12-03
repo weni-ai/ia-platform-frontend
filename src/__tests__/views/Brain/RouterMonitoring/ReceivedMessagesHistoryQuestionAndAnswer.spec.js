@@ -58,8 +58,8 @@ describe('Monitoring messages history QuestionAndAnswer component', () => {
   });
 
   it('renders response with appropriate class based on llm status', () => {
-    expect(wrapper.find('.question-and-answer__answer--success').text()).toBe(
-      'Test answer',
-    );
+    expect(
+      wrapper.find('.question-and-answer__answer-text--success').text(),
+    ).toBe('Test answer');
   });
 });
