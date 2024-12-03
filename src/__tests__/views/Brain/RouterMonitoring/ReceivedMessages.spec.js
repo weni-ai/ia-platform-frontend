@@ -23,6 +23,7 @@ const pinia = createTestingPinia({
         data: [],
         status: 'loading',
         inspectedAnswer: {},
+        newMessages: [],
       },
     },
   },
@@ -59,6 +60,18 @@ describe('RouterMonitoringReceivedMessages.vue', () => {
 
       const select = wrapper.findComponent('[data-test="filter-tag"]');
       expect(select.exists()).toBe(true);
+    });
+
+    it('renders the new messages button when have new messages', async () => {
+      const newMessagesButton = () =>
+        wrapper.findComponent('[data-test="new-messages-button"]');
+
+      expect(newMessagesButton().exists()).toBe(false);
+
+      monitoringStore.messages.newMessages = ['Lorem ispsum'];
+      await wrapper.vm.$nextTick();
+
+      expect(newMessagesButton().exists()).toBe(true);
     });
 
     it('renders the table when messages are present', async () => {
@@ -114,6 +127,7 @@ describe('RouterMonitoringReceivedMessages.vue', () => {
 
     it('load the table rows tags correctly for different tags', async () => {
       monitoringStore.messages = {
+        ...monitoringStore.messages,
         count: 1,
         status: 'loaded',
         data: [{ created_at: new Date(), text: 'Test Message' }],
@@ -147,6 +161,7 @@ describe('RouterMonitoringReceivedMessages.vue', () => {
     it('calls loadMessages when the filters change', async () => {
       wrapper.vm.filters.text = 'New message';
       await wrapper.vm.$nextTick();
+
       expect(monitoringStore.loadMessages).toHaveBeenCalledTimes(2);
 
       wrapper.vm.filters.tag = [{ value: 'success' }];
