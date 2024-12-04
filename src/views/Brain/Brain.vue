@@ -376,7 +376,7 @@ export default {
     flex-direction: column;
 
     &--scrollable {
-      overflow-y: scroll;
+      overflow-y: auto;
     }
   }
 
@@ -543,7 +543,8 @@ export default {
     width: 100%;
     height: 100%;
 
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
 
     &__left-side {
       height: 100%;
@@ -551,6 +552,8 @@ export default {
 
       display: flex;
       flex-direction: column;
+
+      overflow: hidden;
     }
 
     &__card-test-container {
