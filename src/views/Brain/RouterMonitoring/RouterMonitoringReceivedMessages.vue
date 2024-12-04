@@ -26,11 +26,9 @@
       />
     </section>
 
-    <section
-      v-if="monitoringStore.messages.newMessages.length"
-      class="received-messages__content"
-    >
+    <section class="received-messages__content">
       <NewMessages
+        v-if="monitoringStore.messages.newMessages.length"
         data-test="new-messages-button"
         @load="getNewMessages"
       />

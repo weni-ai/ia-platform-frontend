@@ -130,6 +130,8 @@ export const useMonitoringStore = defineStore('monitoring', () => {
   }
 
   async function loadMessageDetails({ id }) {
+    if (messages.inspectedAnswer.status === 'loading') return;
+
     try {
       messages.inspectedAnswer.status = 'loading';
 
