@@ -46,12 +46,16 @@ function clearHoveredSentence() {
   hoveredSentence.value = null;
 }
 
-function truncateString(str, maxLength = 25) {
-  return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
+function truncateString(string, maxLength = 25) {
+  if (!string) return;
+
+  return string.length > maxLength
+    ? `${string.slice(0, maxLength)}...`
+    : string;
 }
 
 function getTooltipText(fragment) {
-  const truncatedFileName = truncateString(fragment.sources[0].filename);
+  const truncatedFileName = truncateString(fragment.sources?.[0].filename);
   const confidence = i18n.global.t(
     'router.monitoring.inspect_response.confidence_percentage',
     {

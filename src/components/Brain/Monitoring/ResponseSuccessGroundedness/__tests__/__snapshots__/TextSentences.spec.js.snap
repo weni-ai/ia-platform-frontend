@@ -2,8 +2,8 @@
 
 exports[`TextSentences.vue > matches the snapshot 1`] = `
 "<section data-v-44bdc72e="" data-testid="sentences" class="text-sentences">
-  <p data-v-44bdc72e="" data-testid="sentence-text" class="text-sentences__text text-sentences__text--slightly-reliable">This is slightly reliable.</p>
-  <p data-v-44bdc72e="" data-testid="sentence-text" class="text-sentences__text text-sentences__text--moderately-reliable">This is moderately reliable.</p>
-  <p data-v-44bdc72e="" data-testid="sentence-text" class="text-sentences__text text-sentences__text--highly-reliable">This is highly reliable.</p>
+  <div data-v-5b8c172b="" data-v-44bdc72e="" class="unnnic-tooltip text-sentences__text text-sentences__text--slightly-reliable" data-testid="sentence-text">This is slightly reliable.<span data-v-5b8c172b="" class="unnnic-tooltip-label unnnic-tooltip-label-top" data-testid="tooltip-label" style="left: 0px; top: -8px;">Test filename <br data-v-5b8c172b="">(0% confidence) <br data-v-5b8c172b=""><!----></span></div>
+  <div data-v-5b8c172b="" data-v-44bdc72e="" class="unnnic-tooltip text-sentences__text text-sentences__text--moderately-reliable" data-testid="sentence-text">This is moderately reliable.<span data-v-5b8c172b="" class="unnnic-tooltip-label unnnic-tooltip-label-top" data-testid="tooltip-label" style="left: 0px; top: -8px;">Test filename <br data-v-5b8c172b="">(0% confidence) <br data-v-5b8c172b=""><!----></span></div>
+  <div data-v-5b8c172b="" data-v-44bdc72e="" class="unnnic-tooltip text-sentences__text text-sentences__text--highly-reliable" data-testid="sentence-text">This is highly reliable.<span data-v-5b8c172b="" class="unnnic-tooltip-label unnnic-tooltip-label-top" data-testid="tooltip-label" style="left: 0px; top: -8px;">Test filename <br data-v-5b8c172b="">(0% confidence) <br data-v-5b8c172b=""><!----></span></div>
 </section>"
 `;
