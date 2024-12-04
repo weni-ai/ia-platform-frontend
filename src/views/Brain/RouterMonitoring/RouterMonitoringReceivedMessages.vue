@@ -26,9 +26,11 @@
       />
     </section>
 
-    <section>
+    <section
+      v-if="monitoringStore.messages.newMessages.length"
+      class="received-messages__content"
+    >
       <NewMessages
-        v-if="monitoringStore.messages.newMessages.length"
         data-test="new-messages-button"
         @load="getNewMessages"
       />
@@ -91,7 +93,7 @@ const route = useRoute();
 const monitoringStore = useMonitoringStore();
 const t = (key) => i18n.global.t(key);
 
-const tags = ref([
+const tags = computed(() => [
   {
     value: 'all',
     label: t('router.monitoring.filters.all_messages'),
@@ -254,6 +256,13 @@ watch(inspectedAnswerIndex, (newIndex) => {
 watch(pagination, () => getReceivedMessages());
 
 watch(
+  () => i18n.global.locale,
+  () => {
+    filters.value.tag = [tags.value[0]];
+  },
+);
+
+watch(
   () => filters.value.tag,
   () => getReceivedMessages(),
 );
@@ -276,6 +285,10 @@ watch(
     display: grid;
     grid-template-columns: 9fr 3fr;
     gap: $unnnic-spacing-sm;
+  }
+
+  .received-messages__content {
+    min-height: 100%;
   }
 
   .received-messages__table {
