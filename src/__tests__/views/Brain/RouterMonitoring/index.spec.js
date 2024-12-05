@@ -1,9 +1,12 @@
 import { shallowMount } from '@vue/test-utils';
 import { describe, it, expect, vi } from 'vitest';
 import { createStore } from 'vuex';
+import { createTestingPinia } from '@pinia/testing';
+
 import WS from '@/websocket/setup';
 
 import RouterMonitoring from '@/views/Brain/RouterMonitoring/index.vue';
+import { useMonitoringStore } from '@/store/Monitoring';
 
 const store = createStore({
   state() {
@@ -13,6 +16,14 @@ const store = createStore({
         token: 'test-token',
       },
     };
+  },
+});
+
+const pinia = createTestingPinia({
+  initialState: {
+    monitoring: {
+      ws: null,
+    },
   },
 });
 
@@ -27,7 +38,10 @@ describe('RouterMonitoring view', () => {
   let WSMock;
   let connectMock;
 
+  const monitoringStore = useMonitoringStore();
+
   beforeEach(() => {
+    monitoringStore.ws = null;
     connectMock = vi.fn();
     WSMock = vi.fn(() => ({
       connect: connectMock,
@@ -35,7 +49,7 @@ describe('RouterMonitoring view', () => {
     WS.mockImplementation(WSMock);
 
     wrapper = shallowMount(RouterMonitoring, {
-      global: { plugins: [store] },
+      global: { plugins: [store, pinia] },
     });
   });
 
@@ -59,5 +73,15 @@ describe('RouterMonitoring view', () => {
       token: 'test-token',
     });
     expect(connectMock).toHaveBeenCalled();
+  });
+
+  it('does not initialize WebSocket again if already connected', async () => {
+    wrapper.unmount();
+    wrapper = shallowMount(RouterMonitoring, {
+      global: { plugins: [store, pinia] },
+    });
+
+    expect(WSMock).toHaveBeenCalledTimes(1);
+    expect(connectMock).toHaveBeenCalledTimes(1);
   });
 });
