@@ -72,6 +72,8 @@ export const useMonitoringStore = defineStore('monitoring', () => {
     inspectedAnswer: {},
   });
 
+  const ws = reactive(null);
+
   async function loadMessages({ page, pageInterval, tag, text }) {
     const { started_day, ended_day } = route.query;
     const currentNewMessages = [...messages.newMessages];
@@ -196,6 +198,7 @@ export const useMonitoringStore = defineStore('monitoring', () => {
 
   return {
     messages,
+    ws,
     loadMessages,
     loadMessageContext,
     loadMessageDetails,

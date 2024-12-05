@@ -17,6 +17,7 @@ import WS from '@/websocket/setup';
 
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useMonitoringStore } from '@/store/Monitoring';
 
 import RouterMonitoringPerformance from './RouterMonitoringPerformance.vue';
 import RouterMonitoringReceivedMessages from './RouterMonitoringReceivedMessages.vue';
@@ -24,14 +25,21 @@ import RouterMonitoringReceivedMessages from './RouterMonitoringReceivedMessages
 const ws = ref(null);
 const store = useStore();
 const auth = computed(() => store.state.Auth);
+const monitoringStore = useMonitoringStore();
 
-onMounted(() => {
+function connectMonitoringWS() {
+  if (monitoringStore.ws) return;
+
   ws.value = new WS({
     project: auth.value.connectProjectUuid,
     token: auth.value.token.replace('Bearer ', ''),
   });
   ws.value.connect();
-});
+
+  monitoringStore.ws = ws;
+}
+
+onMounted(() => connectMonitoringWS());
 </script>
 
 <style lang="scss" scoped>
