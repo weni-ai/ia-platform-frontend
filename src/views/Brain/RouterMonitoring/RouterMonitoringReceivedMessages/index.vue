@@ -75,15 +75,15 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { format } from 'date-fns';
 import { useRoute } from 'vue-router';
 import { debounce } from 'lodash';
 import Unnnic from '@weni/unnnic-system';
 
 import { useMonitoringStore } from '@/store/Monitoring';
 
-import NewMessages from './RouterMonitoringNewMessages.vue';
-import ReceivedMessagesHistory from './RouterMonitoringReceivedMessagesHistory/index.vue';
+import NewMessages from './NewMessages.vue';
+import MessageTime from './MessageTime.vue';
+import ReceivedMessagesHistory from '../RouterMonitoringReceivedMessagesHistory/index.vue';
 
 import i18n from '@/utils/plugins/i18n';
 
@@ -168,7 +168,12 @@ const formattedMessagesRows = computed(() => {
   return monitoringStore.messages.data.map(
     ({ created_at, text, tag, action_name, id }) => ({
       content: [
-        format(created_at, 'HH:mm'),
+        {
+          component: MessageTime,
+          props: {
+            date: created_at,
+          },
+        },
         text,
         {
           component: Unnnic.unnnicTag,
@@ -196,6 +201,15 @@ function getReceivedMessages() {
     tag: tagString === 'all' ? '' : tagString,
     text,
   });
+}
+
+function filterRequestMessages() {
+  if (pagination.value !== 1) {
+    pagination.value = 1;
+    return;
+  }
+
+  getReceivedMessages();
 }
 
 function getNewMessages() {
@@ -262,13 +276,13 @@ watch(
 
 watch(
   () => filters.value.tag,
-  () => getReceivedMessages(),
+  () => filterRequestMessages(),
 );
 
 watch(
   () => filters.value.text,
   debounce(() => {
-    getReceivedMessages();
+    filterRequestMessages();
   }, 300),
 );
 </script>
@@ -333,6 +347,7 @@ watch(
       }
 
       &--history-opened {
+        min-height: 25vh;
         height: 100%;
 
         overflow: hidden;

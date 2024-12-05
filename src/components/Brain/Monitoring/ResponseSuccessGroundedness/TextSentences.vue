@@ -55,14 +55,16 @@ function truncateString(string, maxLength = 25) {
 }
 
 function getTooltipText(fragment) {
-  const truncatedFileName = truncateString(fragment.sources?.[0].filename);
+  const truncatedFileName = truncateString(fragment.sources?.[0]?.filename);
   const confidence = i18n.global.t(
     'router.monitoring.inspect_response.confidence_percentage',
     {
       percentage: fragment.score,
     },
   );
-  return `${truncatedFileName}\n(${confidence})`;
+  return truncatedFileName
+    ? `${truncatedFileName}\n(${confidence})`
+    : confidence;
 }
 
 function getTextClasses(index, fragment) {

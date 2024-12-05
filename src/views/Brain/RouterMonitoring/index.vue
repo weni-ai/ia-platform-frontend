@@ -20,7 +20,7 @@ import { useStore } from 'vuex';
 import { useMonitoringStore } from '@/store/Monitoring';
 
 import RouterMonitoringPerformance from './RouterMonitoringPerformance.vue';
-import RouterMonitoringReceivedMessages from './RouterMonitoringReceivedMessages.vue';
+import RouterMonitoringReceivedMessages from './RouterMonitoringReceivedMessages/index.vue';
 
 const ws = ref(null);
 const store = useStore();

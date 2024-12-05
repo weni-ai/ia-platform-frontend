@@ -14,7 +14,7 @@
         ]"
       />
       <UnnnicIntelligenceText
-        v-if="fragment.sources[0].filename"
+        v-if="fragment.sources[0]?.filename"
         data-testid="source-filename"
         class="source__filename"
         color="neutral-dark"
@@ -22,7 +22,7 @@
         size="body-gt"
         tag="p"
       >
-        {{ fragment.sources[0].filename }}
+        {{ fragment.sources[0]?.filename }}
       </UnnnicIntelligenceText>
       <p
         v-else
