@@ -48,7 +48,7 @@ const brainRoutes = computed(() => {
       .get('VITE_USERS_CAN_MONITORING')
       ?.split(', ')
       .includes(store.state.User?.me.nickname) ||
-    store.state.User?.me.nickname.includes('@weni.ai');
+    store.state.User?.me.nickname?.includes('@weni.ai');
 
   const BRAIN_ROUTES = useBrainRoutes();
   return allowedUser

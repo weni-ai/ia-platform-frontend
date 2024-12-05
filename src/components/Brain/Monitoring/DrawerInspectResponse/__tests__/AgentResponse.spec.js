@@ -54,19 +54,35 @@ describe('AgentResponse.vue', () => {
     expect(groundedness.exists()).toBe(false);
   });
 
-  it('renders groundedness when status is "success"', () => {
-    wrapper = mountWrapper({ status: 'success' });
+  it('renders the agent response text when groundedness sources are empty', () => {
+    const inspectionData = {
+      groundedness: [{ sources: [] }, { sources: [] }],
+    };
+    wrapper = mountWrapper({ status: 'success', inspectionData });
+    const agentResponse = wrapper.find('[data-testid="agent-response-text"]');
+    expect(agentResponse.exists()).toBe(true);
+    expect(agentResponse.text()).toBe(`“${defaultProps.response}”`);
+  });
+
+  it('renders groundedness when status is "success" and sources are not empty', () => {
+    const inspectionData = {
+      groundedness: [{ sources: ['source1'] }, { sources: [] }],
+    };
+    wrapper = mountWrapper({ status: 'success', inspectionData });
     const groundedness = wrapper.findComponent(
       '[data-testid="agent-response-success-groundedness"]',
     );
     expect(groundedness.exists()).toBe(true);
     expect(groundedness.props()).toMatchObject({
-      inspectionData: defaultProps.inspectionData,
+      inspectionData,
     });
   });
 
-  it('does not render the response text when status is "success"', () => {
-    wrapper = mountWrapper({ status: 'success' });
+  it('does not render the response text when status is "success" and sources are not empty', () => {
+    const inspectionData = {
+      groundedness: [{ sources: ['source1'] }],
+    };
+    wrapper = mountWrapper({ status: 'success', inspectionData });
     const responseText = wrapper.find('[data-testid="agent-response-text"]');
     expect(responseText.exists()).toBe(false);
   });

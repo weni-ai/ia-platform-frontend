@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import { describe } from 'vitest';
 import { createTestingPinia } from '@pinia/testing';
 
-import RouterMonitoringNewMessages from '@/views/Brain/RouterMonitoring/RouterMonitoringNewMessages.vue';
+import RouterMonitoringNewMessages from '@/views/Brain/RouterMonitoring/RouterMonitoringReceivedMessages/NewMessages.vue';
 import i18n from '@/utils/plugins/i18n';
 
 const pinia = createTestingPinia({

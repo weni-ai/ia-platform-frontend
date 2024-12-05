@@ -9,25 +9,27 @@
     >
       {{ $t('router.monitoring.inspect_response.agent_response') }}:
     </UnnnicIntelligenceText>
+    <ResponseSuccessGroundedness
+      v-if="showSuccessGroundedness"
+      data-testid="agent-response-success-groundedness"
+      :inspectionData="inspectionData"
+    />
     <p
-      v-if="status !== 'success'"
+      v-else
       data-testid="agent-response-text"
       class="agent__text"
     >
       “{{ response }}”
     </p>
-    <ResponseSuccessGroundedness
-      v-if="status === 'success'"
-      data-testid="agent-response-success-groundedness"
-      :inspectionData="inspectionData"
-    />
   </section>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 import ResponseSuccessGroundedness from '../ResponseSuccessGroundedness/index.vue';
 
-defineProps({
+const props = defineProps({
   status: {
     type: String,
     required: true,
@@ -41,4 +43,12 @@ defineProps({
     required: true,
   },
 });
+
+const showSuccessGroundedness = computed(
+  () =>
+    props.status === 'success' &&
+    props.inspectionData.groundedness.find(
+      (fragment) => fragment.sources.length,
+    ),
+);
 </script>
