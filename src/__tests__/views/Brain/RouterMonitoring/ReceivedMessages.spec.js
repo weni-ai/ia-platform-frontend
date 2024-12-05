@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import { createRouter, createWebHistory } from 'vue-router';
 import { useMonitoringStore } from '@/store/Monitoring';
 import i18n from '@/utils/plugins/i18n';
-import RouterMonitoringReceivedMessages from '@/views/Brain/RouterMonitoring/RouterMonitoringReceivedMessages.vue';
+import RouterMonitoringReceivedMessages from '@/views/Brain/RouterMonitoring/RouterMonitoringReceivedMessages/index.vue';
 import { createTestingPinia } from '@pinia/testing';
 import { vi } from 'vitest';
 
