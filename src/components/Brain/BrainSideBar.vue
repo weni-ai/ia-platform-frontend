@@ -43,12 +43,14 @@ const route = useRoute();
 const router = useRouter();
 
 const brainRoutes = computed(() => {
+  const userNickname = store.state.User?.me.nickname;
   const allowedUser =
     runtimeVariables
       .get('VITE_USERS_CAN_MONITORING')
       ?.split(', ')
-      .includes(store.state.User?.me.nickname) ||
-    store.state.User?.me.nickname?.includes('@weni.ai');
+      .includes(userNickname) ||
+    userNickname?.includes('@weni.ai') ||
+    userNickname?.includes('@inspiria.studio');
 
   const BRAIN_ROUTES = useBrainRoutes();
   return allowedUser
