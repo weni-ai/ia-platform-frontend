@@ -91,6 +91,7 @@ const actionTypeDescription = computed(
 function updateModel($event) {
   const { value } = $event[0];
 
+  sendLlmToFlow.value = false;
   actionType.value = $event[0]?.type;
   type.value = value;
   templateUuid.value = value;
