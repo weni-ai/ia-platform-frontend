@@ -82,10 +82,10 @@ import Unnnic from '@weni/unnnic-system';
 import { useMonitoringStore } from '@/store/Monitoring';
 
 import NewMessages from './NewMessages.vue';
-import MessageTime from './MessageTime.vue';
 import ReceivedMessagesHistory from '../RouterMonitoringReceivedMessagesHistory/index.vue';
 
 import i18n from '@/utils/plugins/i18n';
+import { format } from 'date-fns';
 
 const route = useRoute();
 const monitoringStore = useMonitoringStore();
@@ -168,12 +168,7 @@ const formattedMessagesRows = computed(() => {
   return monitoringStore.messages.data.map(
     ({ created_at, text, tag, action_name, id }) => ({
       content: [
-        {
-          component: MessageTime,
-          props: {
-            date: created_at,
-          },
-        },
+        `${format(new Date(created_at), 'dd/MM/yyyy')}, ${format(new Date(created_at), 'HH:mm')}`,
         text,
         {
           component: Unnnic.unnnicTag,
