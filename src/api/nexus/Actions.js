@@ -34,7 +34,15 @@ export const Actions = {
     },
   },
 
-  async create({ projectUuid, flowUuid, templateUuid, name, prompt, type }) {
+  async create({
+    projectUuid,
+    flowUuid,
+    templateUuid,
+    name,
+    prompt,
+    type,
+    send_llm_response_to_flow,
+  }) {
     const { data } = await request.$http.post(`api/${projectUuid}/flows/`, {
       uuid: flowUuid,
       action_template_uuid: templateUuid,
@@ -42,6 +50,7 @@ export const Actions = {
       prompt,
       action_type: type,
       fallback: false,
+      send_to_llm: send_llm_response_to_flow,
     });
 
     return {
@@ -50,6 +59,7 @@ export const Actions = {
       prompt: data.prompt,
       type: data.action_type,
       flow_uuid: data.flow_uuid,
+      send_llm_response_to_flow: data.send_to_llm,
       group:
         templateUuid && Object.values(groups).includes(data.group)
           ? data.group

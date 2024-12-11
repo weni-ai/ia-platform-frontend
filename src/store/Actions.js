@@ -35,7 +35,14 @@ export const useActionsStore = defineStore('actions', () => {
     }
   }
 
-  async function addAction({ name, prompt, flowUuid, templateUuid, type }) {
+  async function addAction({
+    name,
+    prompt,
+    flowUuid,
+    templateUuid,
+    type,
+    send_llm_response_to_flow,
+  }) {
     const action = await nexusaiAPI.router.actions.create({
       projectUuid: connectProjectUuid.value,
       name,
@@ -43,6 +50,7 @@ export const useActionsStore = defineStore('actions', () => {
       flowUuid,
       templateUuid,
       type,
+      send_llm_response_to_flow,
     });
 
     actions.data.push(action);
