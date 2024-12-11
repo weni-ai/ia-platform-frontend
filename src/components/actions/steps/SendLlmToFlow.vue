@@ -39,6 +39,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useStore } from 'vuex';
 
 defineEmits(['update:model-value']);
 
@@ -59,10 +60,20 @@ const props = defineProps({
   },
 });
 
+const store = useStore();
+
 const showSendLlmToFlow = computed(() => {
-  return !(
-    ['shopping', 'media'].includes(props.actionGroup) ||
-    props.actionType === 'prompt_guard'
+  const orgAllowedToSee = runtimeVariables
+    .get('VITE_ORGS_ENABLEDS_SEND_LLM_TO_FLOWS')
+    ?.split(', ')
+    .includes(store.state.Auth.connectOrgUuid);
+
+  return (
+    orgAllowedToSee &&
+    !(
+      ['shopping', 'media'].includes(props.actionGroup) ||
+      props.actionType === 'prompt_guard'
+    )
   );
 });
 </script>
