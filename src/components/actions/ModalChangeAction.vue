@@ -120,12 +120,21 @@
         </UnnnicButton>
       </section>
     </section>
+
+    <SendLlmToFlow
+      v-if="isCustom"
+      v-model="sendLlmToFlow"
+      :actionGroup="action.group"
+      :actionType="action.type"
+      class="send-llm-to-flow"
+    />
   </UnnnicModalDialog>
 </template>
 
 <script setup>
 import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
+import SendLlmToFlow from './steps/SendLlmToFlow.vue';
 import { useAlertStore } from '@/store/Alert.js';
 import { useActionsStore } from '@/store/Actions.js';
 import { usePagination } from '@/views/ContentBases/pagination';
@@ -154,6 +163,7 @@ const isSavingAction = ref(false);
 
 const name = ref('');
 const description = ref('');
+const sendLlmToFlow = ref(false);
 
 const linkedFlow = reactive({
   status: null,
@@ -169,13 +179,15 @@ const isSaveButtonActive = computed(() => {
   const fields = {
     name: name.value.trim(),
     description: description.value.trim(),
+    sendLlmToFlow: sendLlmToFlow.value,
   };
 
   return (
     !Object.values(fields).some((value) => !value) &&
     !(
       props.action.name.trim() === fields.name &&
-      props.action.description.trim() === fields.description
+      props.action.description.trim() === fields.description &&
+      props.action.send_llm_response_to_flow === fields.sendLlmToFlow
     )
   );
 });
@@ -184,6 +196,7 @@ onBeforeMount(() => {
   const { action } = props;
   name.value = action.name;
   description.value = action.description;
+  sendLlmToFlow.value = action.send_llm_response_to_flow;
 
   searchForFlowUuid(action.flow_uuid);
 });
@@ -250,6 +263,7 @@ async function saveAction() {
       uuid: actionUuid,
       name: name.value,
       prompt: description.value,
+      send_llm_response_to_flow: sendLlmToFlow.value,
     });
 
     alertStore.add({
@@ -341,5 +355,9 @@ async function saveAction() {
       min-width: 12.5 * $unnnic-font-size;
     }
   }
+}
+
+.send-llm-to-flow {
+  margin-top: $unnnic-spacing-md;
 }
 </style>

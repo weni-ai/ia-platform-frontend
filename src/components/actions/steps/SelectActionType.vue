@@ -29,8 +29,9 @@
     </section>
 
     <SendLlmToFlow
-      v-if="showCheckboxSendLlmToFlow"
       v-model="sendLlmToFlow"
+      :actionGroup="group"
+      :actionType="actionType"
     />
   </section>
 </template>
@@ -86,13 +87,6 @@ const actionTypeModelValue = computed(() =>
 const actionTypeDescription = computed(
   () => currentActionType.value?.description || '',
 );
-
-const showCheckboxSendLlmToFlow = computed(() => {
-  return !(
-    ['shopping', 'media'].includes(props.group) ||
-    actionType.value === 'prompt_guard'
-  );
-});
 
 function updateModel($event) {
   const { value } = $event[0];

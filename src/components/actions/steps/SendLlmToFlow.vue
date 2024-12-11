@@ -1,5 +1,8 @@
 <template>
-  <section class="send-llm-response">
+  <section
+    v-if="showSendLlmToFlow"
+    class="send-llm-response"
+  >
     <UnnnicCheckbox
       :modelValue="modelValue"
       class="send-llm-response__checkbox"
@@ -35,6 +38,8 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 defineEmits(['update:model-value']);
 
 const props = defineProps({
@@ -42,6 +47,23 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+
+  actionGroup: {
+    type: String,
+    required: true,
+  },
+
+  actionType: {
+    type: String,
+    required: true,
+  },
+});
+
+const showSendLlmToFlow = computed(() => {
+  return !(
+    ['shopping', 'media'].includes(props.actionGroup) ||
+    props.actionType === 'prompt_guard'
+  );
 });
 </script>
 

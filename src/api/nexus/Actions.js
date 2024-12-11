@@ -67,13 +67,21 @@ export const Actions = {
     };
   },
 
-  async edit({ projectUuid, actionUuid, name, flow_uuid, prompt }) {
+  async edit({
+    projectUuid,
+    actionUuid,
+    name,
+    flow_uuid,
+    prompt,
+    send_llm_response_to_flow,
+  }) {
     const { data } = await request.$http.patch(
       `api/${projectUuid}/flows/${actionUuid}/`,
       {
         name,
         flow_uuid,
         prompt,
+        send_to_llm: send_llm_response_to_flow,
       },
     );
 
@@ -82,6 +90,7 @@ export const Actions = {
       name: data.name,
       flow_uuid: data.flow_uuid,
       prompt: data.prompt,
+      send_llm_response_to_flow: data.send_to_llm,
     };
   },
 
