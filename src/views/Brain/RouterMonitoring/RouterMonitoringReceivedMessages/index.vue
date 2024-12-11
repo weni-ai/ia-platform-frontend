@@ -78,6 +78,7 @@ import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { debounce } from 'lodash';
 import Unnnic from '@weni/unnnic-system';
+import { format } from 'date-fns';
 
 import { useMonitoringStore } from '@/store/Monitoring';
 
@@ -85,7 +86,6 @@ import NewMessages from './NewMessages.vue';
 import ReceivedMessagesHistory from '../RouterMonitoringReceivedMessagesHistory/index.vue';
 
 import i18n from '@/utils/plugins/i18n';
-import { format } from 'date-fns';
 
 const route = useRoute();
 const monitoringStore = useMonitoringStore();
