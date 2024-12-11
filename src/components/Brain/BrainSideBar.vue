@@ -32,31 +32,14 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import useBrainRoutes from '@/composables/useBrainRoutes';
 import SideBarItem from '../Sidebar/SideBarItem.vue';
 import SidebarMenu from '../Sidebar/SidebarMenu.vue';
 
-const store = useStore();
 const route = useRoute();
 const router = useRouter();
-
-const brainRoutes = computed(() => {
-  const userNickname = store.state.User?.me.nickname;
-  const allowedUser =
-    runtimeVariables
-      .get('VITE_USERS_CAN_MONITORING')
-      ?.split(', ')
-      .includes(userNickname) ||
-    userNickname?.includes('@weni.ai') ||
-    userNickname?.includes('@inspiria.studio');
-
-  const BRAIN_ROUTES = useBrainRoutes();
-  return allowedUser
-    ? BRAIN_ROUTES.value
-    : BRAIN_ROUTES.value.filter((route) => route.title !== 'monitoring');
-});
+const brainRoutes = useBrainRoutes();
 
 const activeNav = computed(() => {
   return brainRoutes.value.find((e) => e.page === route.name)?.page;
