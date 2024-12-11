@@ -1,5 +1,5 @@
 <template>
-  <p :title="formattedTitle">{{ formattedTime }}</p>
+  <p>{{ formattedTime }}</p>
 </template>
 
 <script setup>
@@ -13,9 +13,8 @@ const { date } = defineProps({
   },
 });
 
-const formattedTime = computed(() => format(new Date(date), 'HH:mm'));
-const formattedTitle = computed(
+const formattedTime = computed(
   () =>
-    `${format(new Date(date), 'HH:mm')} | ${format(new Date(date), 'dd/MM/yyyy')}`,
+    `${format(new Date(date), 'dd/MM/yyyy')}, ${format(new Date(date), 'HH:mm')}`,
 );
 </script>
