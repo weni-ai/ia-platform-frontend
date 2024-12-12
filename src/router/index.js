@@ -74,7 +74,7 @@ const router = createRouter({
       name: 'router',
       component: Brain,
       redirect: () => {
-        return { name: 'router-personalization' };
+        return { name: 'router-monitoring' };
       },
       async beforeEnter(_to, _from, next) {
         const { data } = await nexusaiAPI.router.read({
