@@ -182,8 +182,12 @@ const isSaveButtonActive = computed(() => {
     sendLlmToFlow: sendLlmToFlow.value,
   };
 
+  const hasEmptyStringFields = Object.entries(fields)
+    .filter(([_, value]) => typeof value === 'string')
+    .some(([_, value]) => !value);
+
   return (
-    !Object.values(fields).some((value) => !value) &&
+    !hasEmptyStringFields &&
     !(
       props.action.name.trim() === fields.name &&
       props.action.description.trim() === fields.description &&

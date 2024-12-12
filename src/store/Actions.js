@@ -80,6 +80,7 @@ export const useActionsStore = defineStore('actions', () => {
 
     item.name = editedAction.name;
     item.prompt = editedAction.prompt;
+    item.send_llm_response_to_flow = editedAction.send_llm_response_to_flow;
 
     return editedAction;
   }

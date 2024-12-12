@@ -112,6 +112,7 @@ export const Actions = {
         fallback,
         group,
         flow_uuid,
+        send_to_llm,
       }) => ({
         uuid,
         name,
@@ -120,6 +121,7 @@ export const Actions = {
         editable,
         group: Object.values(groups).includes(group) ? group : 'custom',
         flow_uuid,
+        send_llm_response_to_flow: send_to_llm,
       }),
     );
   },
