@@ -71,7 +71,7 @@
       "tunings": "Ajustes"
     },
     "monitoring": {
-      "description": "Acompanhe as mensagens recebidas pelo seu gente e veja como ele respondeu.",
+      "description": "Acompanhe as mensagens recebidas pelo seu agente e veja como ele respondeu.",
       "performance": "Desempenho",
       "received_messages": "Mensagens recebidas",
       "success": {
@@ -1580,7 +1580,7 @@
             },
             "send_response_to_flow": {
               "title": "Enviar resposta do modelo ao fluxo",
-              "tooltip": "Você pode acessar a resposta do modelo através da função no fluxo {'@'}agent.answer"
+              "tooltip": "Utilize {'@'}trigger.params.answer para inserir a resposta do modelo no fluxo"
             }
           },
           "describe": {
