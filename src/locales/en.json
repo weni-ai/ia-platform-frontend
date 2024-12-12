@@ -71,7 +71,7 @@
       "tunings": "Tunings"
     },
     "monitoring": {
-      "description": "Follow the messages received by your people and see how they responded.",
+      "description": "Track messages received by your agent and see how they responded",
       "performance": "Performance",
       "received_messages": "Received messages",
       "success": {
@@ -1580,7 +1580,7 @@
             },
             "send_response_to_flow": {
               "title": "Send model response to flow",
-              "tooltip": "You can access the template response through the function in the {'@'}agent.answer flow"
+              "tooltip": "Use {'@'}trigger.params.answer to insert the template response into the flow"
             }
           },
           "describe": {
