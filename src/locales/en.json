@@ -1577,6 +1577,10 @@
               "description": {
                 "label": "Description of action:"
               }
+            },
+            "send_response_to_flow": {
+              "title": "Send model response to flow",
+              "tooltip": "You can access the template response through the function in the {'@'}agent.answer flow"
             }
           },
           "describe": {

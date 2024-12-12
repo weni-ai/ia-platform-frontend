@@ -1577,6 +1577,10 @@
               "description": {
                 "label": "Descrição da ação:"
               }
+            },
+            "send_response_to_flow": {
+              "title": "Enviar resposta do modelo ao fluxo",
+              "tooltip": "Você pode acessar a resposta do modelo através da função no fluxo {'@'}agent.answer"
             }
           },
           "describe": {
