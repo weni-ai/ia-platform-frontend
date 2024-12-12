@@ -71,7 +71,7 @@
       "tunings": "Ajustes"
     },
     "monitoring": {
-      "description": "Realice un seguimiento de los mensajes recibidos por su agente y vea cómo respondió",
+      "description": "Realice un seguimiento de los mensajes recibidos por su agente y vea cómo respondió.",
       "performance": "Actuación",
       "received_messages": "Mensajes recibidos",
       "success": {

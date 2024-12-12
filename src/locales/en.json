@@ -71,7 +71,7 @@
       "tunings": "Tunings"
     },
     "monitoring": {
-      "description": "Track messages received by your agent and see how they responded",
+      "description": "Track messages received by your agent and see how they responded.",
       "performance": "Performance",
       "received_messages": "Received messages",
       "success": {
