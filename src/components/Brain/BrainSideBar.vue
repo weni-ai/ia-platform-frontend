@@ -22,6 +22,7 @@
           :icon="nav.icon"
           :active="nav.page === activeNav"
           :iconFilled="nav.page === activeNav"
+          :tag="nav.tag"
           data-test="nav-router"
           @click="onNavChange(nav.page)"
         />

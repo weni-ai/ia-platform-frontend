@@ -157,7 +157,7 @@ describe('router', () => {
     });
   });
 
-  it('should redirect /router to router-personalization', async () => {
+  it('should redirect /router to router-monitoring', async () => {
     const to = {};
     const from = {};
     const next = vi.fn();
@@ -166,7 +166,7 @@ describe('router', () => {
 
     expect(next).toHaveBeenCalled();
     expect(router.options.routes[3].redirect()).toStrictEqual({
-      name: 'router-personalization',
+      name: 'router-monitoring',
     });
   });
 

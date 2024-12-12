@@ -76,6 +76,7 @@
         />
 
         <UnnnicButton
+          class="answer__inspect-response"
           size="small"
           :text="$t('router.monitoring.inspect_response.title')"
           type="secondary"
@@ -151,8 +152,12 @@ const isDrawerInspectAnswerOpen = ref(false);
   }
 
   &__answer {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     gap: $unnnic-spacing-nano;
+    width: fit-content;
+    justify-self: end;
 
     &-text {
       justify-self: flex-end;
@@ -167,6 +172,10 @@ const isDrawerInspectAnswerOpen = ref(false);
         color: $unnnic-color-neutral-darkest;
         background-color: $unnnic-color-aux-red-100;
       }
+    }
+
+    .answer__inspect-response {
+      width: 100%;
     }
   }
 

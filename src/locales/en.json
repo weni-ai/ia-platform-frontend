@@ -6,6 +6,7 @@
   "next": "Next",
   "finish": "Finish",
   "speed": "Speed",
+  "new": "New",
   "save_changes": "Save changes",
   "announcements": {
     "new_artificial_intelligence_module_is_here": "The new Artificial Intelligence module is here! Explore what's new and learn how to create even more amazing chatbots!"
@@ -63,7 +64,7 @@
       "click_here": "tunings"
     },
     "tabs": {
-      "monitoring": "Monitoring",
+      "monitoring": "Supervisor",
       "personalization": "Personality",
       "content": "Knowledge",
       "actions": "Actions",
