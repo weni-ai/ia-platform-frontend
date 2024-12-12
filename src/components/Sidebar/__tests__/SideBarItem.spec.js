@@ -53,4 +53,15 @@ describe('SidebarItem', () => {
     expect(label.exists()).toBe(true);
     expect(label.text()).toBe('Test Label');
   });
+
+  test('renders the correct tag text if have tag prop', async () => {
+    const tag = () => wrapper.find('[data-test="sidebar-item-tag"]');
+
+    expect(tag().exists()).toBe(false);
+
+    await wrapper.setProps({ tag: 'Test tag' });
+
+    expect(tag().exists()).toBe(true);
+    expect(tag().text()).toBe('Test tag');
+  });
 });

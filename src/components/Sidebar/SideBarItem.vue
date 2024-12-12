@@ -22,6 +22,7 @@
     <p
       v-if="tag"
       class="side-bar-item__tag"
+      data-test="sidebar-item-tag"
     >
       {{ tag }}
     </p>
