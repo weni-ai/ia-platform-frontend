@@ -64,6 +64,20 @@ describe('ImproveResponse.vue', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
+  it('calls actionsStore.load if actions.status is not complete on mounted', () => {
+    const mockActionsStore = useActionsStore();
+
+    mockActionsStore.actions.status = null;
+    wrapper = createWrapper();
+    expect(mockActionsStore.load).toHaveBeenCalled();
+
+    mockActionsStore.load.mockReset();
+
+    mockActionsStore.actions.status = 'complete';
+    wrapper = createWrapper();
+    expect(mockActionsStore.load).not.toHaveBeenCalled();
+  });
+
   it('renders the failed header when type is "failed"', () => {
     wrapper = createWrapper({ type: 'failed' });
 
@@ -116,6 +130,15 @@ describe('ImproveResponse.vue', () => {
     await addActionButton().trigger('click');
 
     expect(modalAddAction().exists()).toBe(true);
+  });
+
+  it('close the modal when @previous-step at ModalActions is emitted', async () => {
+    await addActionButton().trigger('click');
+    expect(wrapper.vm.isModalAddActionOpen).toBe(true);
+
+    await modalAddAction().vm.$emit('previous-step');
+
+    expect(wrapper.vm.isModalAddActionOpen).toBe(false);
   });
 
   it('should pass actionToEditUuid to ModalActions when shouldEditAction is true', async () => {
