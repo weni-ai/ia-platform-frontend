@@ -67,14 +67,15 @@ describe('ImproveResponse.vue', () => {
   it('calls actionsStore.load if actions.status is not complete on mounted', () => {
     const mockActionsStore = useActionsStore();
 
-    mockActionsStore.actions.status = null;
     wrapper = createWrapper();
+    wrapper.vm.actionsStore.actions.status = null;
     expect(mockActionsStore.load).toHaveBeenCalled();
 
     mockActionsStore.load.mockReset();
 
-    mockActionsStore.actions.status = 'complete';
     wrapper = createWrapper();
+    wrapper.vm.actionsStore.actions.status = 'complete';
+
     expect(mockActionsStore.load).not.toHaveBeenCalled();
   });
 
