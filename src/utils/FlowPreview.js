@@ -91,7 +91,7 @@ export default {
       };
     },
 
-    async previewStart({ languageId, flowUuid, flowName }) {
+    async previewStart({ languageId, flowUuid, flowName, flowParams }) {
       this.preview.flowUuid = flowUuid;
 
       const now = new Date().toISOString();
@@ -120,7 +120,7 @@ export default {
             uuid: flowUuid,
             name: flowName,
           },
-          params: {},
+          params: flowParams || {},
           triggered_on: now,
         },
       };
