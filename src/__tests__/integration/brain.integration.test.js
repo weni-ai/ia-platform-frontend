@@ -1,6 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import Brain from '@/views/Brain/Brain.vue';
+import RouterMonitoring from '@/views/Brain/RouterMonitoring/index.vue';
 import RouterContentBase from '@/views/Brain/RouterContentBase.vue';
 import RouterActions from '@/views/Brain/RouterActions.vue';
 import RouterTunings from '@/views/Brain/RouterTunings.vue';
@@ -134,6 +135,11 @@ const router = createRouter({
         next();
       },
       children: [
+        {
+          path: 'monitoring',
+          name: 'router-monitoring',
+          component: () => import('@/views/Brain/RouterMonitoring/index.vue'),
+        },
         {
           path: 'personalization',
           name: 'router-personalization',
@@ -312,23 +318,23 @@ describe('Brain integration', () => {
 
     const navigation = wrapper.findAll('[data-test="nav-router"]');
 
-    expect(navigation.length).eq(4);
+    expect(navigation.length).eq(5);
 
-    await navigation.at(1).trigger('click');
+    await navigation.at(2).trigger('click');
 
     await flushPromises();
 
     const contentComponent = wrapper.findComponent(RouterContentBase);
     expect(contentComponent.exists()).toBe(true);
 
-    await navigation.at(2).trigger('click');
+    await navigation.at(3).trigger('click');
 
     await flushPromises();
 
     const actionsComponent = wrapper.findComponent(RouterActions);
     expect(actionsComponent.exists()).toBe(true);
 
-    await navigation.at(3).trigger('click');
+    await navigation.at(4).trigger('click');
 
     await flushPromises();
 
@@ -339,7 +345,7 @@ describe('Brain integration', () => {
   test('checking that the content base tab is saving the entries provided and performing the save', async () => {
     const navigation = wrapper.findAll('[data-test="nav-router"]');
 
-    await navigation.at(1).trigger('click');
+    await navigation.at(2).trigger('click');
 
     await flushPromises();
 
@@ -351,7 +357,7 @@ describe('Brain integration', () => {
   test('checking that the actions tab is saving the entries provided and performing the save', async () => {
     const navigation = wrapper.findAll('[data-test="nav-router"]');
 
-    await navigation.at(2).trigger('click');
+    await navigation.at(3).trigger('click');
 
     await flushPromises();
 
