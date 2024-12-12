@@ -83,10 +83,7 @@ export default {
   line-height: $unnnic-font-size-body-gt + $unnnic-line-height-medium;
 
   &--active {
-    background-color: rgba(
-      $unnnic-color-brand-weni,
-      $unnnic-opacity-level-light
-    );
+    background-color: $unnnic-color-background-sky;
     font-weight: $unnnic-font-weight-bold;
   }
 
