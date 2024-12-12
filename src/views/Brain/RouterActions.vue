@@ -148,6 +148,7 @@ export default {
         editable: action.editable,
         description: action.prompt,
         group: action.group,
+        send_llm_response_to_flow: action.send_llm_response_to_flow,
         status: null,
       };
     },

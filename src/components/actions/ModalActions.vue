@@ -26,6 +26,7 @@
       <StepSelectActionType
         v-if="currentStep.name === 'select_action_type'"
         v-model:templateUuid="templateUuid"
+        v-model:sendLlmToFlow="sendLlmToFlow"
         :group="actionGroup"
       />
 
@@ -33,6 +34,7 @@
         v-if="currentStep.name === 'describe'"
         v-model:description="description"
         v-model:actionType="actionType"
+        v-model:sendLlmToFlow="sendLlmToFlow"
       />
 
       <StepSelectFlow
@@ -123,6 +125,7 @@ export default {
       actionType: 'custom',
       flowUuid: '',
       templateUuid: '',
+      sendLlmToFlow: false,
     };
   },
 
@@ -259,12 +262,14 @@ export default {
           ? {
               flowUuid: this.flowUuid,
               templateUuid: this.templateUuid,
+              send_llm_response_to_flow: this.sendLlmToFlow,
             }
           : {
               name: this.name,
               prompt: this.description,
               flowUuid: this.flowUuid,
               type: this.actionType,
+              send_llm_response_to_flow: this.sendLlmToFlow,
             };
 
         const { name } = await this.actionsStore.add(data);

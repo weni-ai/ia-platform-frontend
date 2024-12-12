@@ -1576,6 +1576,10 @@
               "description": {
                 "label": "Descripción de la acción:"
               }
+            },
+            "send_response_to_flow": {
+              "title": "Enviar respuesta del modelo al flujo",
+              "tooltip": "Puede acceder a la respuesta de la plantilla a través de la función en el flujo {'@'}agent.answer"
             }
           },
           "describe": {
