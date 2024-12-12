@@ -1,32 +1,31 @@
 <template>
-  <div
+  <section
     :class="{
-      'unnnic-side-bar-item': true,
-      'unnnic-side-bar-item--active': active,
+      'side-bar-item': true,
+      'side-bar-item--active': active,
       'unnnic--clickable': true,
     }"
     @click="onClick"
   >
-    <UnnnicToolTip
-      :enabled="enableTooltip"
-      :text="text"
-      side="right"
-      data-test="sidebar-item-tooltip"
+    <UnnnicIcon
+      class="side-bar-item__icon"
+      :scheme="active ? 'brand-weni-soft' : 'neutral-cloudy'"
+      size="sm"
+      :icon="icon"
+      :filled="iconFilled"
+      data-test="sidebar-item-icon"
+    />
+    <p class="side-bar-item__label">
+      {{ text }}
+    </p>
+
+    <p
+      v-if="tag"
+      class="side-bar-item__tag"
     >
-      <UnnnicIcon
-        class="unnnic-side-bar-item__icon"
-        :scheme="active ? 'brand-weni-soft' : 'neutral-cloudy'"
-        size="sm"
-        :icon="icon"
-        :filled="iconFilled"
-        data-test="sidebar-item-icon"
-      />
-      <span class="unnnic-side-bar-item__label">
-        {{ text }}
-        <slot />
-      </span>
-    </UnnnicToolTip>
-  </div>
+      {{ tag }}
+    </p>
+  </section>
 </template>
 
 <script>
@@ -52,9 +51,9 @@ export default {
       type: String,
       default: null,
     },
-    enableTooltip: {
-      type: Boolean,
-      default: false,
+    tag: {
+      type: String,
+      default: '',
     },
   },
   emits: ['click'],
@@ -67,15 +66,20 @@ export default {
 </script>
 
 <style lang="scss">
-.unnnic-side-bar-item {
-  display: flex;
-  align-items: center;
-  color: $unnnic-color-neutral-darkest;
+.side-bar-item {
   margin-bottom: $unnnic-spacing-stack-xs;
+
+  border-radius: $unnnic-border-radius-sm;
+
   padding: $unnnic-inset-nano;
+
+  display: flex;
+  gap: $unnnic-spacing-xs;
+  align-items: center;
+
+  color: $unnnic-color-neutral-cloudy;
   font-size: $unnnic-font-size-body-gt;
   font-family: $unnnic-font-family-secondary;
-  border-radius: $unnnic-border-radius-sm;
   line-height: $unnnic-font-size-body-gt + $unnnic-line-height-medium;
 
   &--active {
@@ -87,12 +91,18 @@ export default {
   }
 
   &__icon {
-    margin-right: $unnnic-inline-xs;
     color: $unnnic-color-neutral-cloudy;
 
     &--active {
       color: $unnnic-color-brand-weni;
     }
+  }
+
+  &__tag {
+    color: $unnnic-color-weni-600;
+    font-size: $unnnic-font-size-body-md;
+    font-style: italic;
+    font-weight: $unnnic-font-weight-bold;
   }
 }
 </style>

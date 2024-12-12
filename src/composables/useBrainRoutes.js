@@ -11,6 +11,7 @@ export default function useBrainRoutes() {
       page: 'router-monitoring',
       icon: 'bar_chart',
       preview: false,
+      tag: t('new'),
     },
     {
       title: 'personalization',
