@@ -14,12 +14,21 @@
         data-test="description-textarea"
       />
     </UnnnicFormElement>
+
+    <SendLlmToFlow v-model="sendLlmToFlow" />
   </section>
 </template>
 
 <script setup>
+import SendLlmToFlow from './SendLlmToFlow.vue';
+
 const description = defineModel('description', {
   type: String,
+  required: true,
+});
+
+const sendLlmToFlow = defineModel('sendLlmToFlow', {
+  type: Boolean,
   required: true,
 });
 

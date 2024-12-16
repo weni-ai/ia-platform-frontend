@@ -395,6 +395,7 @@ describe('FlowPreview', () => {
         languageId: 'en',
         flowUuid: mockFlowUuid,
         flowName: 'Test Flow',
+        flowParams: {},
       });
 
       expect(vm.preview.flowUuid).toBe(mockFlowUuid);

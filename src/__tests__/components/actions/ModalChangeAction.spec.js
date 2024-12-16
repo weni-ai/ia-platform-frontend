@@ -89,6 +89,7 @@ const actionEditable = {
   description: 'Action Description',
   group: 'custom',
   editable: true,
+  send_llm_response_to_flow: true,
 };
 
 const actionNonEditable = {

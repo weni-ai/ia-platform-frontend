@@ -71,7 +71,7 @@
       "tunings": "Ajustes"
     },
     "monitoring": {
-      "description": "Sigue los mensajes que recibió tu gente y mira cómo respondieron.",
+      "description": "Realice un seguimiento de los mensajes recibidos por su agente y vea cómo respondió.",
       "performance": "Actuación",
       "received_messages": "Mensajes recibidos",
       "success": {
@@ -1577,6 +1577,10 @@
               "description": {
                 "label": "Descripción de la acción:"
               }
+            },
+            "send_response_to_flow": {
+              "title": "Enviar respuesta del modelo al flujo",
+              "tooltip": "Utilice {'@'}trigger.params.answer para insertar la respuesta del modelo en el flujo"
             }
           },
           "describe": {
