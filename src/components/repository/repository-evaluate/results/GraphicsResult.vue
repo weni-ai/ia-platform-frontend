@@ -170,24 +170,24 @@ export default {
       if (I18n.locale === 'pt-BR') {
         return {
           results:
-            'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#resultados',
+            'https://docs.weni.ai/l/pt/ia/testandosuainteligencia#resultados',
           precision_recall:
-            'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#relat_rios_de_precis_o_e_cobertura_precision_and_recall_reports',
+            'https://docs.weni.ai/l/pt/ia/testandosuainteligencia#relat_rios_de_precis_o_e_revoca_o',
           matrix:
-            'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#matriz_de_confus_o_de_inten_es_intent_confusion_matrix',
+            'https://docs.weni.ai/l/pt/ia/testandosuainteligencia#matriz_de_confus_o_de_inten_es',
           confidence:
-            'https://docs.ilhasoft.mobi/l/pt/testes-categoria/testes#distribui_o_de_confian_a_de_inten_es_intent_confidence_distribuition',
+            'https://docs.weni.ai/l/pt/ia/testandosuainteligencia#distribui_o_de_confian_a_de_inten_es',
         };
       }
       return {
         results:
-          'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#results',
+          'https://docs.weni.ai/l/en/ai/testing-your-intelligence#results',
         precision_recall:
-          'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#precision_and_recall_reports',
+          'https://docs.weni.ai/l/en/ai/testing-your-intelligence#precision_and_recall_reports',
         matrix:
-          'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#intent_confusion_matrix',
+          'https://docs.weni.ai/l/en/ai/testing-your-intelligence#intent_confusion_matrix',
         confidence:
-          'https://docs.ilhasoft.mobi/l/en/testing-category/testing-your-intelligence#intent_confidence_distribution',
+          'https://docs.weni.ai/l/en/ai/testing-your-intelligence#intent_confidence_distribution',
       };
     },
   },
