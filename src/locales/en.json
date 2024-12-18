@@ -6,6 +6,7 @@
   "next": "Next",
   "finish": "Finish",
   "speed": "Speed",
+  "new": "New",
   "save_changes": "Save changes",
   "announcements": {
     "new_artificial_intelligence_module_is_here": "The new Artificial Intelligence module is here! Explore what's new and learn how to create even more amazing chatbots!"
@@ -63,14 +64,14 @@
       "click_here": "tunings"
     },
     "tabs": {
-      "monitoring": "Monitoring",
+      "monitoring": "Supervisor",
       "personalization": "Personality",
       "content": "Knowledge",
       "actions": "Actions",
       "tunings": "Tunings"
     },
     "monitoring": {
-      "description": "Follow the messages received by your people and see how they responded.",
+      "description": "Track messages received by your agent and see how they responded.",
       "performance": "Performance",
       "received_messages": "Received messages",
       "success": {
@@ -1576,6 +1577,10 @@
               "description": {
                 "label": "Description of action:"
               }
+            },
+            "send_response_to_flow": {
+              "title": "Send model response to flow",
+              "tooltip": "Use {'@'}trigger.params.answer to insert the template response into the flow"
             }
           },
           "describe": {

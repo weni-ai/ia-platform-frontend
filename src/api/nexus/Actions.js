@@ -34,7 +34,15 @@ export const Actions = {
     },
   },
 
-  async create({ projectUuid, flowUuid, templateUuid, name, prompt, type }) {
+  async create({
+    projectUuid,
+    flowUuid,
+    templateUuid,
+    name,
+    prompt,
+    type,
+    send_llm_response_to_flow,
+  }) {
     const { data } = await request.$http.post(`api/${projectUuid}/flows/`, {
       uuid: flowUuid,
       action_template_uuid: templateUuid,
@@ -42,6 +50,7 @@ export const Actions = {
       prompt,
       action_type: type,
       fallback: false,
+      send_to_llm: send_llm_response_to_flow,
     });
 
     return {
@@ -50,6 +59,7 @@ export const Actions = {
       prompt: data.prompt,
       type: data.action_type,
       flow_uuid: data.flow_uuid,
+      send_llm_response_to_flow: data.send_to_llm,
       group:
         templateUuid && Object.values(groups).includes(data.group)
           ? data.group
@@ -57,13 +67,21 @@ export const Actions = {
     };
   },
 
-  async edit({ projectUuid, actionUuid, name, flow_uuid, prompt }) {
+  async edit({
+    projectUuid,
+    actionUuid,
+    name,
+    flow_uuid,
+    prompt,
+    send_llm_response_to_flow,
+  }) {
     const { data } = await request.$http.patch(
       `api/${projectUuid}/flows/${actionUuid}/`,
       {
         name,
         flow_uuid,
         prompt,
+        send_to_llm: send_llm_response_to_flow,
       },
     );
 
@@ -72,6 +90,7 @@ export const Actions = {
       name: data.name,
       flow_uuid: data.flow_uuid,
       prompt: data.prompt,
+      send_llm_response_to_flow: data.send_to_llm,
     };
   },
 
@@ -93,6 +112,7 @@ export const Actions = {
         fallback,
         group,
         flow_uuid,
+        send_to_llm,
       }) => ({
         uuid,
         name,
@@ -101,6 +121,7 @@ export const Actions = {
         editable,
         group: Object.values(groups).includes(group) ? group : 'custom',
         flow_uuid,
+        send_llm_response_to_flow: send_to_llm,
       }),
     );
   },

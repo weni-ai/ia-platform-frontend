@@ -389,6 +389,7 @@ export default {
       } = await this.previewStart({
         flowName: flow.name,
         flowUuid: flow.uuid,
+        flowParams: flow.params,
       });
 
       this.treatEvents(answer, events);
@@ -496,7 +497,11 @@ export default {
               },
             });
 
-            this.flowStart(answer, { name: data.name, uuid: data.uuid });
+            this.flowStart(answer, {
+              name: data.name,
+              uuid: data.uuid,
+              params: data.params,
+            });
           } else if (data.type === 'media_and_location_unavailable') {
             answer.status = 'loaded';
             answer.type = data.type;

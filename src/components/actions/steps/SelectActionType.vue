@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="select-action-type">
     <UnnnicFormElement
       class="labels-textarea"
       :label="
@@ -16,7 +16,7 @@
       />
     </UnnnicFormElement>
 
-    <section class="explanation">
+    <section class="select-action-type__explanation">
       <h3 class="explanation__title">
         {{
           $t(
@@ -27,11 +27,18 @@
 
       <p class="explanation__description">{{ actionTypeDescription }}</p>
     </section>
+
+    <SendLlmToFlow
+      v-model="sendLlmToFlow"
+      :actionGroup="group"
+      :actionType="actionType"
+    />
   </section>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
+import SendLlmToFlow from './SendLlmToFlow.vue';
 
 const props = defineProps({
   group: {
@@ -49,7 +56,13 @@ const templateUuid = defineModel('templateUuid', {
   required: true,
 });
 
+const sendLlmToFlow = defineModel('sendLlmToFlow', {
+  type: Boolean,
+  required: true,
+});
+
 const type = ref(null);
+const actionType = ref('');
 
 const types = computed(() => {
   return actionsStore.typesAvailable
@@ -78,6 +91,8 @@ const actionTypeDescription = computed(
 function updateModel($event) {
   const { value } = $event[0];
 
+  sendLlmToFlow.value = false;
+  actionType.value = $event[0]?.type;
   type.value = value;
   templateUuid.value = value;
 }
@@ -90,30 +105,33 @@ function updateModel($event) {
   }
 }
 
-.explanation {
-  margin-top: $unnnic-spacing-md;
+.select-action-type {
+  display: grid;
+  gap: $unnnic-spacing-md;
 
-  h3,
-  p {
-    margin: 0;
-  }
+  &__explanation {
+    h3,
+    p {
+      margin: 0;
+    }
 
-  h3 {
-    color: $unnnic-color-neutral-cloudy;
-    font-family: $unnnic-font-family-secondary;
-    font-weight: $unnnic-font-weight-regular;
-    font-size: $unnnic-font-size-body-gt;
-    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+    h3 {
+      color: $unnnic-color-neutral-cloudy;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-regular;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
 
-    margin-bottom: $unnnic-spacing-nano;
-  }
+      margin-bottom: $unnnic-spacing-nano;
+    }
 
-  p {
-    color: $unnnic-color-neutral-darkest;
-    font-family: $unnnic-font-family-secondary;
-    font-weight: $unnnic-font-weight-regular;
-    font-size: $unnnic-font-size-body-gt;
-    line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+    p {
+      color: $unnnic-color-neutral-darkest;
+      font-family: $unnnic-font-family-secondary;
+      font-weight: $unnnic-font-weight-regular;
+      font-size: $unnnic-font-size-body-gt;
+      line-height: $unnnic-font-size-body-gt + $unnnic-line-height-md;
+    }
   }
 }
 </style>
