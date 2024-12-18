@@ -1,5 +1,6 @@
 <template>
   <UnnnicModalDialog
+    data-testid="modal-add-content"
     :modelValue="modelValue"
     size="lg"
     showCloseIcon
@@ -27,6 +28,7 @@
       </UnnnicIntelligenceText>
 
       <UnnnicTab
+        data-testid="tabs"
         class="modal-add-content__tab"
         :tabs="contentTabs.map((tab) => tab.page)"
         :activeTab="activeTab"
@@ -44,16 +46,19 @@
       <section class="modal-add-content__content">
         <AddFilesContent
           v-show="activeTab === 'files'"
+          data-testid="tab-files"
           @update:model-value="contents.files = $event"
         />
 
         <AddSitesContent
           v-show="activeTab === 'sites'"
+          data-testid="tab-sites"
           @update:model-value="contents.sites = $event"
         />
 
         <textarea
           v-show="activeTab === 'text'"
+          data-testid="tab-text"
           class="content__text"
           :placeholder="$t('content_bases.write_content_placeholder')"
           cols="30"
@@ -115,13 +120,12 @@ const contents = ref({
   text: null,
 });
 
-const disableSaveButton = computed(() => {
-  return (
+const disableSaveButton = computed(
+  () =>
     !contents.value.files?.length &&
     !contents.value.sites?.length &&
-    !contents.value.text?.length
-  );
-});
+    !contents.value.text?.length,
+);
 
 function closeModal() {
   emit('update:modelValue', false);
@@ -144,18 +148,10 @@ async function saveSitesContent() {
 
   Promise.all(
     treatedSites.map(async (site) => {
-      try {
-        const { data } =
-          await nexusaiAPI.intelligences.contentBases.sites.create({
-            contentBaseUuid: contentBaseUuid.value,
-            link: site.created_file_name,
-          });
-
-        site.uuid = data.uuid;
-        site.status = 'processing';
-      } catch (error) {
-        site.status = 'fail';
-      }
+      await nexusaiAPI.intelligences.contentBases.sites.create({
+        contentBaseUuid: contentBaseUuid.value,
+        link: site.created_file_name,
+      });
     }),
   );
 }
