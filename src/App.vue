@@ -1,12 +1,16 @@
 <template>
   <div id="app">
-    <ObstructiveError v-if="$store.state.obstructiveError" />
+    <ObstructiveError
+      v-if="$store.state.obstructiveError"
+      data-testid="obstructive-error"
+    />
 
     <RouterView v-else />
 
     <UnnnicAlert
       v-if="alertStore.data.text"
       :key="alertStore.id"
+      data-testid="alert-pinia"
       class="app-alert"
       v-bind="alertStore.data"
       @close="alertStore.close"
@@ -15,6 +19,7 @@
     <UnnnicAlert
       v-else-if="$store.state.alert"
       :key="$store.state.alert.text"
+      data-testid="alert-vuex"
       class="app-alert"
       v-bind="$store.state.alert"
       @close="$store.state.alert = null"
@@ -22,6 +27,7 @@
 
     <ModalWarn
       v-if="$store.state.modalWarn"
+      data-testid="modal-warn"
       :showModal="!!$store.state.modalWarn"
       :title="$store.state.modalWarn.title"
       :description="$store.state.modalWarn.description"
@@ -37,7 +43,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import I18n from '@/utils/plugins/i18n';
+import i18n from '@/utils/plugins/i18n';
 import store from './store';
 import ModalWarn from './components/ModalWarn.vue';
 import ObstructiveError from './views/ObstructiveError.vue';
@@ -49,7 +55,6 @@ import { useActionsStore } from '@/store/Actions.js';
 export default {
   name: 'App',
   components: {
-    I18n,
     ModalWarn,
     ObstructiveError,
   },
@@ -71,10 +76,10 @@ export default {
   },
   computed: {
     dynamicTitle() {
-      if (I18n.locale === 'pt-BR') {
+      if (i18n.global.locale === 'pt-BR') {
         return 'Weni Inteligência Artificial';
       }
-      if (I18n.locale === 'en-US') {
+      if (i18n.global.locale === 'en-US') {
         return 'Weni Artificial Intelligence';
       }
       return 'Weni Inteligencia Artificial';
@@ -83,10 +88,14 @@ export default {
   watch: {
     '$route.name': {
       handler() {
+        console.log('this.$route.name', this.$route.name);
+
         if (
           this.$route.name !== undefined &&
           isEmpty(this.$store.state.User.me)
         ) {
+          console.log('entrou');
+
           this.profileInfo();
 
           HotjarIdentifyUser({
