@@ -505,6 +505,9 @@ export default {
           } else if (data.type === 'media_and_location_unavailable') {
             answer.status = 'loaded';
             answer.type = data.type;
+          } else if (data.type === 'cancelled') {
+            answer.status = 'loaded';
+            this.messages.splice(index, 1);
           }
         } catch {
           handleError();
