@@ -88,14 +88,10 @@ export default {
   watch: {
     '$route.name': {
       handler() {
-        console.log('this.$route.name', this.$route.name);
-
         if (
           this.$route.name !== undefined &&
           isEmpty(this.$store.state.User.me)
         ) {
-          console.log('entrou');
-
           this.profileInfo();
 
           HotjarIdentifyUser({
