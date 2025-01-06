@@ -41,6 +41,7 @@
               size="sm"
             />
             <UnnnicIntelligenceText
+              class="messages__status"
               color="neutral-cloudy"
               family="secondary"
               weight="regular"
@@ -634,7 +635,7 @@ export default {
 
     $scroll-size: $unnnic-inline-nano;
 
-    overflow: overlay;
+    overflow: hidden overlay;
 
     &__content {
       height: 0;
@@ -716,6 +717,10 @@ export default {
 
       + .messages__change {
         margin-top: -$unnnic-spacing-nano;
+      }
+
+      .messages__status {
+        overflow: hidden;
       }
     }
   }
