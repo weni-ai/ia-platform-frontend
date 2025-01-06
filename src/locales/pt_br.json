@@ -316,6 +316,9 @@
         "not_found": {
           "title": "Não foi possível visualizar o conteúdo do arquivo",
           "description": "Não foi possível localizar o conteúdo do arquivo.<br />Por favor, exclua o arquivo e tente adicioná-lo novamente."
+        },
+        "bedrock": {
+          "title": "A visualização de conteúdo não está disponível"
         }
       }
     },
