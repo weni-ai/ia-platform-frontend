@@ -126,7 +126,7 @@
             />
             <UnnnicButtonIcon
               v-bind="$props"
-              icon="delete-1-1"
+              icon="delete"
               :data-test="`btn-delete-inst-${index}`"
               class="btn-color"
               size="small"
@@ -145,7 +145,7 @@
         :text="$t('customization.instructions.add_instruction_btn')"
         type="tertiary"
         iconLeft="add-1"
-        :disabled="false"
+        :disabled="brain.instructions.current.at(-1)?.instruction === ''"
         @click="addEmptyInstruction"
       />
     </div>
