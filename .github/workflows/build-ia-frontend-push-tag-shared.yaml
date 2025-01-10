@@ -13,32 +13,35 @@ jobs:
     steps:
       - name: Set variables
         run: |
-            TAG="$( echo "${GITHUB_REF}" | cut -d'/' -f3 )"
-            if grep -qs -e '^.*.*-develop' <<< "${TAG}" ; then
-              echo "Found environment: DEVELOP - ${TAG}"
-              echo "MANIFESTS_ENVIRONMENT=develop" | tee "${GITHUB_ENV}"
-            elif grep -qs -e '^.*.*-staging' <<< "${TAG}" ; then
-              echo "Found environment: STAGING - ${TAG}"
-              echo "MANIFESTS_ENVIRONMENT=staging" | tee -a "${GITHUB_ENV}"
-            elif grep -qs -e '^.*.*' <<< "${TAG}" ; then
-              echo "No environment found, assuming: PRODUCTION - ${TAG}"
-              echo "MANIFESTS_ENVIRONMENT=production" | tee -a "${GITHUB_ENV}"
-            else
-              echo 'Not a valid tag. Skipping...'
-              exit 1
-            fi
-            echo "TAG=$TAG" | tee -a "${GITHUB_ENV}"
-            VERSION="${TAG}"
-            echo "VERSION=${VERSION}" | tee -a "${GITHUB_ENV}"
-            echo "COMMIT_SHA=$GITHUB_SHA" | tee -a "${GITHUB_ENV}"
-            echo "IMAGE_TAG=${{ secrets.ECR }}/intelligence:webapp-${TAG}" | tee -a "${GITHUB_ENV}"
-            echo "IMAGE_SOURCE_URL=https://github.com/weni-ai/intelligence-webapp" | tee -a "${GITHUB_ENV}"
-            echo "MANIFESTS_REPOSITORY=weni-ai/kubernetes-manifests-connect" | tee -a "${GITHUB_ENV}"
-            echo "MANIFESTS_APPLICATION=intelligence-webapp" | tee -a "${GITHUB_ENV}"
-            echo "MANIFESTS_PATCH_TARGET=deployment.json" | tee -a "${GITHUB_ENV}"
+          TAG="$( echo "${GITHUB_REF}" | cut -d'/' -f3 )"
+          if grep -qs -e '^.*.*-develop' <<< "${TAG}" ; then
+            echo "Found environment: DEVELOP - ${TAG}"
+            echo "MANIFESTS_ENVIRONMENT=develop" | tee "${GITHUB_ENV}"
+            echo "IMAGE_TAG=${{ secrets.ECR }}/intelligence:webapp-develop" | tee -a "${GITHUB_ENV}"
+          elif grep -qs -e '^.*.*-staging' <<< "${TAG}" ; then
+            echo "Found environment: STAGING - ${TAG}"
+            echo "MANIFESTS_ENVIRONMENT=staging" | tee -a "${GITHUB_ENV}"
+            echo "IMAGE_TAG=${{ secrets.ECR }}/intelligence:webapp-staging" | tee -a "${GITHUB_ENV}"
+          elif grep -qs -e '^.*.*' <<< "${TAG}" ; then
+            echo "No environment found, assuming: PRODUCTION - ${TAG}"
+            echo "MANIFESTS_ENVIRONMENT=production" | tee -a "${GITHUB_ENV}"
+            echo "IMAGE_TAG=${{ secrets.ECR }}/intelligence:webapp-production" | tee -a "${GITHUB_ENV}"
+          else
+            echo 'Not a valid tag. Skipping...'
+            exit 1
+          fi
+          echo "TAG=$TAG" | tee -a "${GITHUB_ENV}"
+          VERSION="${TAG}"
+          echo "VERSION=${VERSION}" | tee -a "${GITHUB_ENV}"
+          echo "COMMIT_SHA=$GITHUB_SHA" | tee -a "${GITHUB_ENV}"
+          echo "IMAGE_TAG=${{ secrets.ECR }}/intelligence:webapp-${TAG}" | tee -a "${GITHUB_ENV}"
+          echo "IMAGE_SOURCE_URL=https://github.com/weni-ai/intelligence-webapp" | tee -a "${GITHUB_ENV}"
+          echo "MANIFESTS_REPOSITORY=weni-ai/kubernetes-manifests-connect" | tee -a "${GITHUB_ENV}"
+          echo "MANIFESTS_APPLICATION=intelligence-webapp" | tee -a "${GITHUB_ENV}"
+          echo "MANIFESTS_PATCH_TARGET=deployment.json" | tee -a "${GITHUB_ENV}"
 
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: "${{env.GITHUB_SHA}}"
           # On non dispatch build not need the repo
@@ -57,7 +60,7 @@ jobs:
           username: ${{ secrets.AWS_ACCESS_KEY_ID_SHARED }}       # Credentials used to push image to ECR repository
           password: ${{ secrets.AWS_SECRET_ACCESS_KEY_SHARED }}
 
-      - name: Build and push - Billing Image
+      - name: Build and push - Intelligence-Webapp Image
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -67,7 +70,9 @@ jobs:
             repository=${{env.IMAGE_SOURCE_URL}}
           file: docker/Dockerfile
           push: true
-          tags: "${{env.IMAGE_TAG}}"
+          tags: |
+            ${{env.IMAGE_TAG}}
+            ${{env.OLD_IMAGE}}
           no-cache: true
 
       - name: Check out Kubernetes Manifests
@@ -82,26 +87,26 @@ jobs:
 
       - name: Update image on deployment
         run: |
-            which jq > /dev/null 2>&1 || ( sudo apt update ; sudo apt install -y jq )
-            # Dep: coreutils
-            verlte() {
-              [ "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
-            }
-            verlt(){
-              [ "$1" = "$2" ] && return 1 || verlte $1 $2
-            }
-            export PROJECT_DIR="${{ env.MANIFESTS_APPLICATION }}"
-            ENV_DIR="kubernetes-manifests/${{ env.MANIFESTS_APPLICATION }}/${MANIFESTS_ENVIRONMENT}"
-            for e in ${ENV_DIR}; do
-              echo "Update ${e}:"
-              if [ ! -d "${e}" ] ; then
-                echo "${e}: Does not exist, skipping"
-              elif [ ! -r "${e}/kustomization.yaml" ] ; then
-                echo "${e}/kustomization.yaml: Does not readable, skipping"
-              elif [ ! -r "${e}/${{ env.MANIFESTS_PATCH_TARGET }}" ] ; then
-                echo "${e}/${{ env.MANIFESTS_PATCH_TARGET }}: Does not readable, skipping"
-              else
-                OLD_IMAGE=$(
+          which jq > /dev/null 2>&1 || ( sudo apt update ; sudo apt install -y jq )
+          # Dep: coreutils
+          verlte() {
+            [ "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
+          }
+          verlt(){
+            [ "$1" = "$2" ] && return 1 || verlte $1 $2
+          }
+          export PROJECT_DIR="${{ env.MANIFESTS_APPLICATION }}"
+          ENV_DIR="kubernetes-manifests/${{ env.MANIFESTS_APPLICATION }}/${MANIFESTS_ENVIRONMENT}"
+          for e in ${ENV_DIR}; do
+            echo "Update ${e}:"
+            if [ ! -d "${e}" ] ; then
+              echo "${e}: Does not exist, skipping"
+            elif [ ! -r "${e}/kustomization.yaml" ] ; then
+              echo "${e}/kustomization.yaml: Does not readable, skipping"
+            elif [ ! -r "${e}/${{ env.MANIFESTS_PATCH_TARGET }}" ] ; then
+              echo "${e}/${{ env.MANIFESTS_PATCH_TARGET }}: Does not readable, skipping"
+            else
+              OLD_IMAGE=$(
                   cat "${e}/${{ env.MANIFESTS_PATCH_TARGET }}" \
                     | jq '.[] | select(.path == "/spec/template/spec/containers/0/image") | .value'
                 )
