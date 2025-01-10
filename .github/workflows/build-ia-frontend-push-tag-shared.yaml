@@ -70,6 +70,8 @@ jobs:
             repository=${{env.IMAGE_SOURCE_URL}}
           file: docker/Dockerfile
           push: true
+          build-args: |
+            OLD_IMAGE=${{env.OLD_IMAGE}}
           tags: |
             ${{env.IMAGE_TAG}}
             ${{env.OLD_IMAGE}}

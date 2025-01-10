@@ -23,7 +23,6 @@ FROM ${OLD_IMAGE} AS old_css
 
 FROM nginxinc/nginx-unprivileged:1.25-alpine
 
-ARG OLD_IMAGE=${OLD_IMAGE}
 ARG KEEP_DAYS
 
 COPY --chown=nginx:nginx docker/nginx.conf /etc/nginx/nginx.conf
