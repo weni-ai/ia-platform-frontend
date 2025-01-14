@@ -1,7 +1,7 @@
 <template>
   <section class="not-found">
     <UnnnicIcon
-      icon="warning"
+      :icon="isProjectUsingBedrock ? 'info' : 'warning'"
       size="avatar-sm"
       scheme="neutral-cleanest"
     />
@@ -13,10 +13,11 @@
       weight="bold"
       marginTop="xs"
     >
-      {{ $t('content_bases.files.preview.not_found.title') }}
+      {{ title }}
     </UnnnicIntelligenceText>
 
     <UnnnicIntelligenceText
+      v-if="!isProjectUsingBedrock"
       color="neutral-cloudy"
       family="secondary"
       size="body-gt"
@@ -26,6 +27,25 @@
     </UnnnicIntelligenceText>
   </section>
 </template>
+
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+import i18n from '@/utils/plugins/i18n';
+
+const store = useStore();
+
+const isProjectUsingBedrock = computed(
+  () => store.state.Brain.tunings.indexer_database?.toLowerCase() === 'bedrock',
+);
+
+const title = computed(() =>
+  isProjectUsingBedrock.value
+    ? i18n.global.t('content_bases.files.preview.bedrock.title')
+    : i18n.global.t('content_bases.files.preview.not_found.title'),
+);
+</script>
 
 <style lang="scss" scoped>
 .not-found {

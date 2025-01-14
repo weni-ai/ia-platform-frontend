@@ -54,6 +54,7 @@
         </section>
         <UnnnicButton
           class="action-started__inspect-response"
+          data-testid="inspect-response-action"
           size="small"
           :text="$t('router.monitoring.inspect_response.inspect')"
           type="secondary"
@@ -77,6 +78,7 @@
 
         <UnnnicButton
           class="answer__inspect-response"
+          data-testid="inspect-response"
           size="small"
           :text="$t('router.monitoring.inspect_response.title')"
           type="secondary"
@@ -86,6 +88,7 @@
       </section>
       <DrawerInspectAnswer
         v-model="isDrawerInspectAnswerOpen"
+        data-testid="drawer-inspect-response"
         :inspectionData="data"
       />
     </template>

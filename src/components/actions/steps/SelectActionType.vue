@@ -12,6 +12,7 @@
         :modelValue="actionTypeModelValue"
         :options="types"
         class="action-selector"
+        orderedByIndex
         @update:model-value="updateModel"
       />
     </UnnnicFormElement>

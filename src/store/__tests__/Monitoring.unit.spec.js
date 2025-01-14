@@ -68,9 +68,78 @@ describe('MonitoringStore', () => {
     });
   });
 
+  describe('loadMessageContext', () => {
+    const mockMessage = {
+      uuid: '12345',
+      text: 'Sample message text',
+      status: 's',
+      actions_started: true,
+      actions_uuid: '12345678',
+      actions_type: 'actionType',
+      llm_response: 'Sample LLM response',
+      is_approved: true,
+      contact_urn: 'urn:12345',
+      groundedness: [],
+    };
+
+    it('should load message context successfully', async () => {
+      const mockData = [
+        {
+          id: '123',
+          ...mockMessage,
+        },
+      ];
+
+      nexusaiAPI.router.monitoring.messages.getMessageContext.mockResolvedValue(
+        mockData,
+      );
+      await store.loadMessageContext({ id: '123' });
+
+      expect(store.messages.inspectedAnswer.context.data).toMatchObject([
+        {
+          uuid: '12345',
+          text: 'Sample message text',
+          action: {
+            name: 'actionType',
+            uuid: '12345678',
+          },
+          llm: {
+            response: 'Sample LLM response',
+            status: 'action',
+          },
+          contact_urn: 'urn:12345',
+          is_approved: true,
+          groundedness: [],
+        },
+      ]);
+      expect(store.messages.inspectedAnswer.context.status).toBe('complete');
+    });
+
+    it('should handle errors when loading message context', async () => {
+      nexusaiAPI.router.monitoring.messages.getMessageContext.mockRejectedValue(
+        new Error('Error'),
+      );
+
+      await store.loadMessageContext({ id: 1 });
+
+      expect(store.messages.inspectedAnswer.context.status).toBe('error');
+      expect(globalStore.state.alert).toEqual({
+        type: 'error',
+        text: i18n.global.t(
+          'router.monitoring.error_loading_previous_messages',
+        ),
+      });
+    });
+
+    it('should set status to loading before making API call', async () => {
+      store.loadMessageContext({ id: 1 });
+      expect(store.messages.inspectedAnswer.context.status).toBe('loading');
+    });
+  });
+
   describe('loadMessageDetails', () => {
     it('should load message details successfully', async () => {
-      const mockResponse = {
+      const mockMessage = {
         uuid: '12345',
         text: 'Sample message text',
         status: 's',
@@ -84,7 +153,7 @@ describe('MonitoringStore', () => {
       };
 
       nexusaiAPI.router.monitoring.messages.detail.mockResolvedValue(
-        mockResponse,
+        mockMessage,
       );
 
       await store.loadMessageDetails({ id: '123' });

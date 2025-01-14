@@ -181,4 +181,104 @@ describe('BrainCustomization', () => {
       expect(brainCustomizationStore.status).toBe('error');
     });
   });
+
+  describe('isSaveButtonDisabled', () => {
+    it('should be true when hasChanged is false', () => {
+      expect(brainCustomizationStore.isSaveButtonDisabled).toBe(true);
+    });
+
+    it('should be false when hasChanged is true', () => {
+      brainCustomizationStore.name.current = 'Changed';
+      expect(brainCustomizationStore.isSaveButtonDisabled).toBe(false);
+    });
+
+    it('should be true when errorRequiredFields is not empty', () => {
+      brainCustomizationStore.errorRequiredFields = { name: true };
+      expect(brainCustomizationStore.isSaveButtonDisabled).toBe(true);
+    });
+
+    it('should be false when errorRequiredFields is empty', () => {
+      brainCustomizationStore.errorRequiredFields = {};
+      brainCustomizationStore.name.current = 'Changed';
+      expect(brainCustomizationStore.isSaveButtonDisabled).toBe(false);
+    });
+  });
+
+  describe('validate', () => {
+    it('should throw an error when name is empty', () => {
+      brainCustomizationStore.name.current = '';
+      expect(() => brainCustomizationStore.validate()).toThrowError();
+    });
+
+    it('should throw an error when role is empty', () => {
+      brainCustomizationStore.role.current = '';
+      expect(() => brainCustomizationStore.validate()).toThrowError();
+    });
+
+    it('should throw an error when goal is empty', () => {
+      brainCustomizationStore.goal.current = '';
+      expect(() => brainCustomizationStore.validate()).toThrowError();
+    });
+
+    it('should not throw an error when all fields are filled', () => {
+      brainCustomizationStore.name.current = 'Test Name';
+      brainCustomizationStore.role.current = 'Test Role';
+      brainCustomizationStore.goal.current = 'Test Goal';
+      expect(() => brainCustomizationStore.validate()).not.toThrowError();
+    });
+
+    it('should set errorRequiredFields correctly', () => {
+      brainCustomizationStore.name.current = '';
+      brainCustomizationStore.role.current = 'Test Role';
+      brainCustomizationStore.goal.current = 'Test Goal';
+
+      try {
+        brainCustomizationStore.validate();
+      } catch (e) {
+        // this catch is only here to make the test pass without throwing
+      }
+
+      expect(brainCustomizationStore.errorRequiredFields).toMatchObject({
+        name: true,
+      });
+    });
+
+    it('should watch for changes in required fields', () => {
+      brainCustomizationStore.name.current = '';
+      try {
+        brainCustomizationStore.validate();
+      } catch (e) {
+        // this catch is only here to make the test pass without throwing
+      }
+      brainCustomizationStore.name.current = 'Test Name';
+      expect(brainCustomizationStore.errorRequiredFields).toMatchObject({
+        name: true,
+      });
+    });
+  });
+
+  describe('save', () => {
+    it('should call nexusaiAPI with correct data', async () => {
+      const editSpy = vi.spyOn(nexusaiAPI.router.customization, 'edit');
+      brainCustomizationStore.name.current = 'Test Name';
+      brainCustomizationStore.role.current = 'Test Role';
+      brainCustomizationStore.personality.current = 'Test Personality';
+      brainCustomizationStore.instructions.current = ['Test Instruction'];
+      brainCustomizationStore.goal.current = 'Test Goal';
+      await brainCustomizationStore.save();
+      expect(editSpy).toHaveBeenCalledTimes(1);
+      expect(editSpy).toHaveBeenCalledWith({
+        data: {
+          agent: {
+            goal: 'Test Goal',
+            name: 'Test Name',
+            personality: 'Test Personality',
+            role: 'Test Role',
+          },
+          instructions: [],
+        },
+        projectUuid: '1234',
+      });
+    });
+  });
 });

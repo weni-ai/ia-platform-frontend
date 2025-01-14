@@ -211,6 +211,10 @@ export default {
       });
 
       routerTunings.value.brainOn = data.brain_on;
+      store.commit('updateTuning', {
+        name: 'indexer_database',
+        value: data.indexer_database,
+      });
     };
 
     const loadContentBase = async () => {

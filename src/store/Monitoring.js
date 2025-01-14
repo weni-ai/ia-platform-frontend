@@ -115,11 +115,10 @@ export const useMonitoringStore = defineStore('monitoring', () => {
           id: id,
         });
 
-      messages.inspectedAnswer.context = response?.map(transformMessageData);
+      messages.inspectedAnswer.context.data =
+        response?.map(transformMessageData);
       setStatus('complete');
     } catch (error) {
-      console.log('error', error);
-
       setStatus('error');
 
       globalStore.state.alert = {
