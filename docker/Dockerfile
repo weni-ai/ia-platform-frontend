@@ -32,9 +32,9 @@ COPY docker/docker-entrypoint.sh /
 COPY --from=builder --chown=nginx:nginx /app/dist /app/config.js.tmpl /usr/share/nginx/html/bothub-webapp/
 COPY --from=old_css --chown=nginx:nginx /usr/share/nginx/html/bothub-webapp/assets/all.tx[t] /usr/share/nginx/html/bothub-webapp/assets/*.css /usr/share/nginx/html/bothub-webapp/assets/
 
-RUN mv /usr/share/nginx/html/bothub-webapp/index.html /usr/share/nginx/html/bothub-webapp/index.html.tmpl \
+RUN mv /usr/share/nginx/html/bothub-webapp/config.js /usr/share/nginx/html/bothub-webapp/config.js.tmpl \
     && cd /usr/share/nginx/html/bothub-webapp/ \
-    && ln -s /tmp/index.html \
+    && ln -s /tmp/config.js \
     && /file_handler.sh css
 
 EXPOSE 8080
