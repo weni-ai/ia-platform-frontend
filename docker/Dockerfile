@@ -19,6 +19,9 @@ COPY . ./
 
 RUN yarn build
 
+RUN ls /app
+RUN ls /app/dist/assets
+
 FROM ${OLD_IMAGE} AS old_css
 
 FROM nginxinc/nginx-unprivileged:1.25-alpine
@@ -32,10 +35,10 @@ COPY docker/docker-entrypoint.sh /
 COPY --from=builder --chown=nginx:nginx /app/dist /app/config.js.tmpl /usr/share/nginx/html/bothub-webapp/
 COPY --from=old_css --chown=nginx:nginx /usr/share/nginx/html/bothub-webapp/assets/all.tx[t] /usr/share/nginx/html/bothub-webapp/assets/*.css /usr/share/nginx/html/bothub-webapp/assets/
 
-RUN mv /usr/share/nginx/html/bothub-webapp/config.js /usr/share/nginx/html/bothub-webapp/config.js.tmpl \
-    && cd /usr/share/nginx/html/bothub-webapp/ \
+RUN cd /usr/share/nginx/html/bothub-webapp/ \
     && ln -s /tmp/config.js \
     && /file_handler.sh css
+#mv /usr/share/nginx/html/bothub-webapp/config.js /usr/share/nginx/html/bothub-webapp/config.js.tmpl \
 
 EXPOSE 8080
 
